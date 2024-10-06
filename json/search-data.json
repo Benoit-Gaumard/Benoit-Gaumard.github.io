@@ -1,0 +1,14 @@
+---
+---
+
+var searchData = [
+    {% for post in site.posts %}
+    {
+        "title": "{{ post.title | downcase }}",
+        "url": "{{ post.url }}",
+        "date": "{{ post.date }}",
+        "categories": "{{ post.categories | join: ' , ' | downcase }}"
+    } {% unless forloop.last %},{% endunless %}
+    {% endfor %}
+
+]

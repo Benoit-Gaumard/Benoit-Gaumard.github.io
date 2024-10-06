@@ -1,0 +1,43 @@
+---
+layout: default
+title: Home
+---
+
+<div class="row">
+    <div id="search-container" class="col-lg-12 center">
+        <div class="card">
+            <input type="text" id="search-input" placeholder="Rechercher ...." />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <ul>
+            <div class="row">
+                {% for post in site.posts %}
+                <div class="card blog-post" data-url="{{ post.url }}">
+                    <div class="card-img-top center">
+                        {% for category in post.categories %}
+                        <img class="card-img-top-item"
+                            src="{{ site.url }}/assets/img/categories/{{ category | replace: ' ', '' | downcase }}.png"
+                            alt="{{ category }}" /> {{ category }}
+                        {% endfor %}
+                    </div>
+                    <div class="card-body center">
+                        <h4 class="card-title">{{ post.title }}</h4>
+
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.date | date: "%b %-d, %Y" }}</h6>
+                        <p class="card-text">{{ post.summary }} </p>
+
+                        <a href="{{ site.baseurl }}{{ post.url }}" class="btn btn-primary btn-lg">Lire</a>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+        </ul>
+    </div>
+</div>
+
+<script src="{{ site.baseUrl }}/js/search.js" type="text/javascript"></script>
+<script src="{{ site.baseUrl }}/json/search-data.json" type="text/javascript"></script>

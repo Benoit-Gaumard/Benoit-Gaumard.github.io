@@ -1,0 +1,18 @@
+---
+layout: default
+---
+
+{%- include breadcrumb.html -%}
+
+<div class="row">
+    <div class="col-lg-8">
+        {%- include article.html -%}
+        
+        {% if page.comments_id %}
+            {% include comments.html issue_id=page.comments_id %}
+        {% endif %}
+    </div>
+
+    {%- include sidebar.html -%}
+
+</div>

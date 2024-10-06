@@ -1,0 +1,36 @@
+---
+layout: default
+title: Catégories
+---
+
+{% assign categories = "" | split: ","  %}
+{% for post in site.posts %}
+{% for category in post.categories %}
+{% assign categories = categories | push: category %}
+{% endfor %}
+{% endfor %}
+
+{% assign sorted_categories = categories | uniq | sort %}
+{% for category in sorted_categories %}
+<a id="{{ category | url_encode }}"></a>
+<div class="card">
+    <div class="card-header">
+        <p class="title">{{ category }}</p>
+    </div>
+    <ul class="posts">
+        {% for post in site.posts %}
+        {% for post_category in post.categories %}
+        {% if post_category == category %}
+        {% assign monthIndex = post.date | date: '%m' | minus: 1 %}
+        <li>
+            <p>
+                {{ post.date | date: '%d' }} {{ site.data.fr.months[monthIndex] }} - <a
+                    href="{{ site.url}}{{ post.url }}">{{ post.title }}</a>
+            </p>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}

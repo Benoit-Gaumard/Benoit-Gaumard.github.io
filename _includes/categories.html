@@ -1,0 +1,6 @@
+{% assign sorted_categories = site.categories | sort %}
+{% for category in sorted_categories %}
+<li class="tag-head">
+    <a href="{{ site.url }}/categories.html#{{ category | first | url_encode }}">{{ category | first }}</a>
+</li>
+{% endfor %}

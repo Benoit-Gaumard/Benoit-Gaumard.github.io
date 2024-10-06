@@ -1,0 +1,61 @@
+---
+layout: news
+title: Articles - Ce qu'il ne fallait pas oublier de lire en décembre 2023
+date: 2024-01-01
+---
+
+Voici un résumé des différents articles que j'ai partagé sur les réseaux sociaux en décembre 2023.
+
+C'est un peu en vrac, mais je vais voir pour essayer de mettre des catégories pour les prochains mois.
+
+- [Generally available: Azure Monitor OpenTelemetry-based Distro for ASP.NET Core Applications](https://azure.microsoft.com/en-us/updates/azure-monitor-opentelemetrybased-distro-for-dotnet-core/?WT.mc_id=AZ-MVP-4039694)
+- [Release Azure Powershell - Az 11.1.0](https://github.com/Azure/azure-powershell/releases/tag/v11.1.0-December2023)
+- [Standard and High-Performance VPN Gateway SKUs will be retired on 30 September 2025](https://azure.microsoft.com/en-us/updates/standard-and-highperformance-vpn-gateway-skus-will-be-retired-on-30-september-2025/?WT.mc_id=AZ-MVP-4039694)
+- [Application Insights Availability Tests TLS 1.3 Enablement](https://azure.microsoft.com/en-us/updates/in-development-application-insights-availability-tests-tls-13-enablement-2/?WT.mc_id=AZ-MVP-4039694)
+- [Microsoft AKS Release - Release 2023-11-05](https://github.com/Azure/AKS/releases/tag/2023-11-05)
+- [Azure Event Grid system topics support for resource management and health resources now in Public Preview](https://azure.microsoft.com/en-us/updates/azure-event-grid-system-topics-support-for-resource-management-and-health-resources-now-in-public-preview/?WT.mc_id=AZ-MVP-4039694)
+- [Migration of Azure Virtual Network injected Azure Data Explorer cluster to Private Endpoints](https://azure.microsoft.com/en-us/updates/adx-vnet-migration/?WT.mc_id=AZ-MVP-4039694)
+- [Azure support plan offer extended to June 30, 2024](https://azure.microsoft.com/en-us/updates/azure-support-plan-offer-extended-063024/?WT.mc_id=AZ-MVP-4039694)
+- [Azure CLI 2.55.0](https://github.com/Azure/azure-cli/releases/tag/azure-cli-2.55.0)
+- [Preview of Durable Functions Extension v3.0.0](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/preview-of-durable-functions-extension-v3-0-0/ba-p/4000452?WT.mc_id=AZ-MVP-4039694)
+- [Public Preview: New AKS cost views for standard and premium tier clusters](https://azure.microsoft.com/en-us/updates/akscostviews/?WT.mc_id=AZ-MVP-4039694)
+- [Generally Available: AKS support for API breaking change detection](https://azure.microsoft.com/en-us/updates/generally-available-aks-support-for-api-breaking-change-detection/?WT.mc_id=AZ-MVP-4039694)
+- [Public preview: Node autoprovision support in AKS](https://azure.microsoft.com/en-us/updates/public-preview-node-autoprovision-support-in-aks/?WT.mc_id=AZ-MVP-4039694)
+- [General Availability: Connection audit logs for Enterprise tier caches for Azure Cache for Redis](https://azure.microsoft.com/en-us/updates/general-availability-connection-audit-logs-for-enterprise-tier-caches-for-azure-cache-for-redis/?WT.mc_id=AZ-MVP-4039694)
+- [Public Preview: Accelerated logs in Azure Database for MySQL - Flexible Server](https://azure.microsoft.com/en-us/updates/public-preview-accelerated-logs-in-azure-database-for-mysql-flexible-server/?WT.mc_id=AZ-MVP-4039694)
+- [Public Preview: Azure Database for PostgreSQL - Flexible Server, enhanced disaster recovery features](https://azure.microsoft.com/en-us/updates/public-preview-azure-database-for-postgresql-flexible-server-enhanced-disaster-recovery-features/?WT.mc_id=AZ-MVP-4039694)
+- [Generally available: PostgreSQL 16 support in Azure Database for PostgreSQL - Flexible Server](https://azure.microsoft.com/en-us/updates/generally-available-postgresql-16-support-in-azure-database-for-postgresql-flexible-server/?WT.mc_id=AZ-MVP-4039694)
+- [Release Azure Powershell - Az 11.1.0](https://github.com/Azure/azure-powershell/releases/tag/v11.1.0-December2023)
+- [Highlights from .NET Conf, Microsoft Ignite, and GitHub Universe](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/highlights-from-net-conf-microsoft-ignite-and-github-universe/ba-p/4001895?WT.mc_id=AZ-MVP-4039694)
+- [General availability: Encryption with customer-managed keys in Azure Health Data Services](https://azure.microsoft.com/en-us/updates/general-availability-encryption-with-customermanaged-keys-in-azure-health-data-services/?WT.mc_id=AZ-MVP-4039694)
+- [This Month In Azure Static Web Apps | November & December 2023](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/this-month-in-azure-static-web-apps-november-amp-december-2023/ba-p/4003736?WT.mc_id=AZ-MVP-4039694)
+- [The countdown is on! Discover resources to upgrade your App Service Environment today](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/the-countdown-is-on-discover-resources-to-upgrade-your-app/ba-p/4002800?WT.mc_id=AZ-MVP-4039694)
+- [General Availability - Snapshots feature of Azure App Configuration](https://azure.microsoft.com/en-us/updates/azureappconfiguration-snapshots-ga/?WT.mc_id=AZ-MVP-4039694)
+- [Azure Event Grid releases public preview support for events from services like Microsoft Entra ID, Microsoft Outlook, and Microsoft Teams.](https://azure.microsoft.com/en-us/updates/event-grid-graph-api-public-preview/?WT.mc_id=AZ-MVP-4039694)
+- [Supercharge collaboration apps with Large Language Models and Azure SignalR Service](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/supercharge-collaboration-apps-with-large-language-models-and/ba-p/4005467?WT.mc_id=AZ-MVP-4039694)
+- [Troubleshoot intermittent connectivity issue in azure app service](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/troubleshoot-intermittent-connectivity-issue-in-azure-app/ba-p/3969841?WT.mc_id=AZ-MVP-4039694)
+- [Delaying Domain Front Block on AFD and CDN services](https://azure.microsoft.com/en-us/updates/delaying-domain-front-block-on-afd-and-cdn-services/?WT.mc_id=AZ-MVP-4039694)
+- [Kubernetes v1.29.0](https://github.com/kubernetes/kubernetes/releases/tag/v1.29.0)
+- [Blog: Kubernetes v1.29: Mandala](https://kubernetes.io/blog/2023/12/13/kubernetes-v1-29-release/)
+- [Azure Bicep Release - v0.24.24](https://github.com/Azure/bicep/releases/tag/v0.24.24)
+- [Blog: Kubernetes 1.29: CSI Storage Resizing Authenticated and Generally Available in v1.29](https://kubernetes.io/blog/2023/12/15/csi-node-expand-secret-support-ga/)
+- [Blog: Kubernetes 1.29: VolumeAttributesClass for Volume Modification](https://kubernetes.io/blog/2023/12/15/kubernetes-1-29-volume-attributes-class/)
+- [Blog: Kubernetes 1.29: Cloud Provider Integrations Are Now Separate Components](https://kubernetes.io/blog/2023/12/14/cloud-provider-integration-changes/)
+- [Container insights recommended alerts (custom metrics) (preview) retirement moving up to 31 May 2024](https://azure.microsoft.com/en-us/updates/container-insights-recommended-alerts-custom-metrics-preview-retirement-moving-up-to-31-may-2024/?WT.mc_id=AZ-MVP-4039694)
+- [Blog: Kubernetes 1.29: New (alpha) Feature, Load Balancer IP Mode for Services](https://kubernetes.io/blog/2023/12/18/kubernetes-1-29-feature-loadbalancer-ip-mode-alpha/)
+- [Blog: Kubernetes 1.29: Single Pod Access Mode for PersistentVolumes Graduates to Stable](https://kubernetes.io/blog/2023/12/18/read-write-once-pod-access-mode-ga/)
+- [Generally Available: Multi-line Logging Feature in Azure Monitor - Container Insights](https://azure.microsoft.com/en-us/updates/multiline-logging/?WT.mc_id=AZ-MVP-4039694)
+- [Generally Available: Azure Chaos Studio supports new faults for Service Bus](https://azure.microsoft.com/en-us/updates/generally-available-azure-chaos-studio-supports-new-faults-for-service-bus/?WT.mc_id=AZ-MVP-4039694)
+- [Generally available: Crash Consistent VM Restore points](https://azure.microsoft.com/en-us/updates/generally-available-crash-consistent-vm-restore-points/?WT.mc_id=AZ-MVP-4039694)
+- [Store and manage medical imaging data with Azure Data Lake Storage (Preview)](https://azure.microsoft.com/en-us/updates/store-and-manage-medical-imaging-data-with-azure-data-lake-storage-preview/?WT.mc_id=AZ-MVP-4039694)
+- [Blog: Kubernetes 1.29: Decoupling taint-manager from node-lifecycle-controller](https://kubernetes.io/blog/2023/12/19/kubernetes-1-29-taint-eviction-controller/)
+- [Blog: Kubernetes 1.29: PodReadyToStartContainers Condition Moves to Beta](https://kubernetes.io/blog/2023/12/19/pod-ready-to-start-containers-condition-now-in-beta/)
+- [Azure Serial Console Attack and Defense - Part 2](https://msrc.microsoft.com/blog/2023/12/azure-serial-console-attack-and-defense-part-2/)
+- [Troubleshooting Guide: Resolving Azure App Services Image Pull Issues from Azure Container Registry](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/troubleshooting-guide-resolving-azure-app-services-image-pull/ba-p/4010201?WT.mc_id=AZ-MVP-4039694)
+- [Azure Container Apps Jobs in a secure Landing Zone](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-container-apps-jobs-in-a-secure-landing-zone/ba-p/4013357?WT.mc_id=AZ-MVP-4039694)
+- [On 31 August 2024, both the update management feature of Azure Automation and the Log Analytics agent it uses will be retired](https://azure.microsoft.com/en-us/updates/updatemanagement-retired-31august2024/?WT.mc_id=AZ-MVP-4039694)
+- [Change tracking and inventory with Log Analytics agent in Azure Automation will be retired on 31 August 2024](https://azure.microsoft.com/en-us/updates/changetrackingwithla-retirement-31august2024/?WT.mc_id=AZ-MVP-4039694)
+- [Contextual logging in Kubernetes 1.29: Better troubleshooting and enhanced logging](https://kubernetes.io/blog/2023/12/20/contextual-logging-in-kubernetes-1-29/)
+- [General availability: Security Update for Application Gateway WAF CVE-2023-50164](https://azure.microsoft.com/en-us/updates/general-availability-security-update-for-application-gateway-waf-cve202350164/?WT.mc_id=AZ-MVP-4039694)
+- [General availability: Security Update for Azure Front Door WAF CVE-2023-50164](https://azure.microsoft.com/en-us/updates/general-availability-security-update-for-azure-front-door-waf-cve202350164/?WT.mc_id=AZ-MVP-4039694)
+

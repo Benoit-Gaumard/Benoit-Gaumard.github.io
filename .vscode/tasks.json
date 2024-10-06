@@ -1,0 +1,70 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build blog",
+            "type": "shell",
+            "identifier": "build",
+            "command": "bundle exec jekyll build"
+        },
+        {
+            "label": "Run local blog",
+            "type": "shell",
+            "dependsOn": "build",
+            "command": "bundle exec jekyll serve --future",
+            "problemMatcher": []
+        },
+        {
+            "label": "Create new article",
+            "type": "shell",
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                    "args": [
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "ByPass",
+                        "-Command"
+                    ]
+                }
+            },
+            "command": "",
+            "args": [
+                {
+                    "value": "$title = Read-Host 'Enter blog post title';",
+                    "quoting": "weak"
+                },
+                {
+                    "value": ".\\utils\\create-new-blogpost.ps1 $title",
+                    "quoting": "weak"
+                }
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate news blog post",
+            "type": "shell",
+            "options": {
+                "shell": {
+                    "executable": "pwsh.exe",
+                    "args": [
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "ByPass",
+                        "-Command"
+                    ]
+                }
+            },
+            "command": "",
+            "args": [
+                {
+                    "value": ".\\utils\\generate-monthly-news.ps1",
+                    "quoting": "weak"
+                }
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

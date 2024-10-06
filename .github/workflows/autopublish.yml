@@ -1,0 +1,20 @@
+name: Auto publish
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 17 * * *'
+  
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: rebuild
+      run: |
+        git config --global user.name 'Gitub Action Bot'
+        git config --global user.email 'wilfried.woivre@users.noreply.github.com'
+        git commit --allow-empty -m "create commit to push new blogposts"
+        git push

@@ -1,0 +1,86 @@
+<meta charset="UTF-8">
+<title>
+    {% if page.layout == 'post' %} {{ site.name }} | {{ page.title }} {% else %} {{ site.name }} | {{ page.title }}
+    {% endif %}
+</title>
+<meta http-equip="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{ site.description }}" />
+<meta name="Author" content="{{ site.author }}">
+<meta name="Content-Language" content="fr">
+<meta http-equiv />
+<meta http-equiv="cache-control" content="Private" />
+<meta http-equiv="Expires" content="600" />
+
+<!-- Facebook -->
+<meta property="og:title"
+    content="{% if page.layout == 'post' %} {{ site.name }} | {{ page.title }} {% else %} {{ site.name }} | {{ page.title }}  {% endif %}" />
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
+<meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+<meta property="og:image" content="{{ site.url }}/assets/img/me200.png" />
+<meta property="og:description" content="{{ site.description }}" />
+
+<!-- Twitter -->
+<meta name="twitter:title"
+    content="{% if page.layout == 'post' %} {{ site.name }} | {{ page.title }} {% else %} {{ site.name }} | {{ page.title }}  {% endif %}" />
+<meta name="twitter:url" content="{{ site.url }}{{ page.url }}" />
+<meta name="twitter:description" content="{% if page.layout == 'post' %} {{ page.content | strip_html | xml_escape
+        | truncate: 100 }} {% else %} {{ site.name }} | {{ site.description }}  {% endif %}" />
+<meta name="twitter:site" content="@wilfriedwoivre" />
+<meta name="twitter:creator" content="@wilfriedwoivre" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="{{ site.url }}/assets/img/me.png" />
+
+<!-- Google -->
+<meta name="google-site-verification" content="7pH8EA1be7NNLnGo9xFrIh_MJsIYTJDaqGzV-2nz-Lk" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+    integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+<link rel="stylesheet" href="{{site.url}}/assets/css/main.css" />
+<link href="{{ site.baseurl }}/assets/css/site.css" rel="stylesheet" type="text/css">
+<link href="{{ site.baseurl }}/assets/img/favicon.ico" rel="icon" type="image/x-icon" />
+<link rel="sitemap" type="application/xml" title="Sitemap" href="{{ site.url }}/sitemap.xml" />
+
+<!-- <script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    ga('create', '{{ site.gaaccount }}', 'auto');
+    ga('send', 'pageview');
+</script> -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPEGQMV0CL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-FPEGQMV0CL');
+</script>
+
+<script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": "Wilfried Woivre",
+      "url": "https://woivre.fr",
+      "address": "",
+      "sameAs": [
+        "https://facebook.com/wilfriedwoivre",
+        "https://twitter.com/wilfriedwoivre",
+        "https://linkedin.com/in/wilfriedwoivre"
+      ]
+    }
+  </script>

@@ -1,0 +1,63 @@
+---
+layout: news
+title: Articles - Ce qu'il ne fallait pas oublier de lire en septembre 2023
+date: 2023-10-01
+---
+
+Voici un résumé des différents articles que j'ai partagé sur les réseaux sociaux en septembre 2023.
+
+C'est un peu en vrac, mais je vais voir pour essayer de mettre des catégories pour les prochains mois.
+
+- [Generally Available: Azure Monitor VM Insights using Azure Monitor Agent](https://azure.microsoft.com/en-us/updates/generally-available-azure-monitor-vm-insights-using-azure-monitor-agent/?WT.mc_id=AZ-MVP-4039694)
+- [Azure Firewall Single-Click Upgrade and Downgrade is now in general availability](https://azure.microsoft.com/en-us/updates/azure-firewall-singleclick-upgrade-and-downgrade-is-now-in-general-availability/?WT.mc_id=AZ-MVP-4039694)
+- [Azure Firewall: Explicit Proxy is now in public preview](https://azure.microsoft.com/en-us/updates/azure-firewall-explicit-proxy-is-now-in-public-preview/?WT.mc_id=AZ-MVP-4039694)
+- [Azure Firewall: Auto-Learn SNAT routes feature is now in public preview](https://azure.microsoft.com/en-us/updates/azure-firewall-autolearn-snat-routes-feature-is-now-in-public-preview/?WT.mc_id=AZ-MVP-4039694)
+- [Public Preview: Azure Log Alerts support for Azure Resource Graph (ARG)](https://azure.microsoft.com/en-us/updates/public-preview-azure-log-alerts-support-for-azure-resource-graph-arg/?WT.mc_id=AZ-MVP-4039694)
+- [Diagnose performance bottlenecks of your web app with Azure Load Testing](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/diagnose-performance-bottlenecks-of-your-web-app-with-azure-load/ba-p/3913615?WT.mc_id=AZ-MVP-4039694)
+- [Application gateway for Containers vs Application Gateway Ingress Controller - What's changed?](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/application-gateway-for-containers-vs-application-gateway/ba-p/3914901?WT.mc_id=AZ-MVP-4039694)
+- [Azure Container Apps Newsletter - August 2023](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-container-apps-newsletter-august-2023/ba-p/3916409?WT.mc_id=AZ-MVP-4039694)
+- [Azure CLI 2.52.0](https://github.com/Azure/azure-cli/releases/tag/azure-cli-2.52.0)
+- [Public Preview: Test Single GraphQL Resolver in Azure API Management Portal](https://azure.microsoft.com/en-us/updates/public-preview-test-single-graphql-resolver-in-azure-api-management-portal/?WT.mc_id=AZ-MVP-4039694)
+- [Release Azure Powershell - Az 10.3.0](https://github.com/Azure/azure-powershell/releases/tag/v10.3.0-September2023)
+- [DNS Zone linking is no longer enforced when creating Azure Database for PostgreSQL - Flexible Server](https://techcommunity.microsoft.com/t5/azure-database-for-postgresql/dns-zone-linking-is-no-longer-enforced-when-creating-azure/ba-p/3911877)
+- [Announcing Notation Azure Key Vault plugin v1.0 for signing container images](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/announcing-notation-azure-key-vault-plugin-v1-0-for-signing/ba-p/3920895?WT.mc_id=AZ-MVP-4039694)
+- [Azure Bicep Release - v0.21.1](https://github.com/Azure/bicep/releases/tag/v0.21.1)
+- [Azure Front Door Standard and Premium support bring your own certificated based domain validation](https://azure.microsoft.com/en-us/updates/azure-front-door-standard-and-premium-support-bring-your-own-certificated-based-domain-validation/?WT.mc_id=AZ-MVP-4039694)
+- [Introducing Graph Semantics in Kusto, a new way to contextualize time series data](https://azure.microsoft.com/en-us/updates/kusto-graph-public-preview/?WT.mc_id=AZ-MVP-4039694)
+- [Generally available: Export Cost Management data to secure storage accounts with firewall](https://azure.microsoft.com/en-us/updates/exportbehindfirewallga/?WT.mc_id=AZ-MVP-4039694)
+- [Azure App Service Limit (3) - Connection Limit (TCP Connection, SNAT and TLS Version)](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-app-service-limit-3-connection-limit-tcp-connection-snat/ba-p/3898841?WT.mc_id=AZ-MVP-4039694)
+- [Generally available: Higher default value for Azure Functions Event Hubs max batch size](https://azure.microsoft.com/en-us/updates/generally-available-higher-default-value-for-azure-functions-event-hubs-max-batch-size/?WT.mc_id=AZ-MVP-4039694)
+- [Public Preview: Configure customer-managed keys on existing Cosmos DB accounts](https://azure.microsoft.com/en-us/updates/public-preview-configure-customermanaged-keys-on-existing-cosmos-db-accounts/?WT.mc_id=AZ-MVP-4039694)
+- [New in Kusto: `.show databases entities` command for viewing tables, functions, and more](https://azure.microsoft.com/en-us/updates/kusto-show-databases-entities/?WT.mc_id=AZ-MVP-4039694)
+- [Tutorials : Integrate Application Gateway with App Service behind Private Endpoint](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/tutorials-integrate-application-gateway-with-app-service-behind/ba-p/3922973?WT.mc_id=AZ-MVP-4039694)
+- [Azure App Service Limit (5) - Memory (Windows)](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-app-service-limit-5-memory-windows/ba-p/3899600?WT.mc_id=AZ-MVP-4039694)
+- [Azure App Service Limit (4) - CPU (Windows)](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-app-service-limit-4-cpu-windows/ba-p/3899579?WT.mc_id=AZ-MVP-4039694)
+- [Azure App Service Limit (2) - Temp File Usage (Windows)](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-app-service-limit-2-temp-file-usage-windows/ba-p/3898783?WT.mc_id=AZ-MVP-4039694)
+- [Azure App Service Limit (1) - Remote Storage (Windows)](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/azure-app-service-limit-1-remote-storage-windows/ba-p/3898758?WT.mc_id=AZ-MVP-4039694)
+- [Preview: Save Azure Backup Recovery Services Agent (MARS) passphrase to Azure Key Vault](https://azure.microsoft.com/en-us/updates/preview-save-azure-backup-recovery-services-agent-mars-passphrase-to-azure-key-vault/?WT.mc_id=AZ-MVP-4039694)
+- [Preview: Cross Region Restore (CRR) for Recovery Services Agent (MARS) using Azure Backup](https://azure.microsoft.com/en-us/updates/preview-mars-crr/?WT.mc_id=AZ-MVP-4039694)
+- [General availability: Sensitive Data Protection for Application Gateway Web Application Firewall](https://azure.microsoft.com/en-us/updates/general-availability-sensitive-data-protection-for-application-gateway-web-application-firewall-logs/?WT.mc_id=AZ-MVP-4039694)
+- [Capturing lifecycle events from your Azure Managed Application deployments](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/capturing-lifecycle-events-from-your-azure-managed-application/ba-p/3902995?WT.mc_id=AZ-MVP-4039694)
+- [Init Containers on Azure Container Apps](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/init-containers-on-azure-container-apps/ba-p/3930333?WT.mc_id=AZ-MVP-4039694)
+- [Automate your load tests with CI/CD in just a few clicks](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/automate-your-load-tests-with-ci-cd-in-just-a-few-clicks/ba-p/3931185?WT.mc_id=AZ-MVP-4039694)
+- [Init Containers in Azure Container Apps : Database Initialization](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/init-containers-in-azure-container-apps-database-initialization/ba-p/3931271?WT.mc_id=AZ-MVP-4039694)
+- [General Availability: Share VM images publicly with community gallery - Azure Compute Gallery feature](https://azure.microsoft.com/en-us/updates/general-availability-share-images-publicly-with-azure-compute-gallery-feature-community-gallery/?WT.mc_id=AZ-MVP-4039694)
+- [Generally Available: Azure Update Manager](https://azure.microsoft.com/en-us/updates/azure-update-manager-ga/?WT.mc_id=AZ-MVP-4039694)
+- [Release Azure Powershell - Az 10.4.0](https://github.com/Azure/azure-powershell/releases/tag/v10.4.0-September2023)
+- [Azure Monitor Data Collection API Retirement](https://azure.microsoft.com/en-us/updates/azure-monitor-data-collection-api-retirement/?WT.mc_id=AZ-MVP-4039694)
+- [Monitoring Azure Policy compliance across your Azure Managed Application deployments](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/monitoring-azure-policy-compliance-across-your-azure-managed/ba-p/3922113?WT.mc_id=AZ-MVP-4039694)
+- [General availability: Domain fronting update on Azure Front Door and Azure CDN](https://azure.microsoft.com/en-us/updates/general-availability-domain-fronting-update-on-azure-front-door-and-azure-cdn/?WT.mc_id=AZ-MVP-4039694)
+- [Azure CLI 2.53.0](https://github.com/Azure/azure-cli/releases/tag/azure-cli-2.53.0)
+- [General availability: Gateway Load Balancer IPv6 Support](https://azure.microsoft.com/en-us/updates/general-availability-gateway-load-balancer-ipv6-support/?WT.mc_id=AZ-MVP-4039694)
+- [Generally Available: Artifact cache for Azure Container Registry](https://azure.microsoft.com/en-us/updates/generally-available-artifact-cache-for-azure-container-registry/?WT.mc_id=AZ-MVP-4039694)
+- [GA: AKS image cleaner](https://azure.microsoft.com/en-us/updates/ga-aks-image-cleaner/?WT.mc_id=AZ-MVP-4039694)
+- [Generally available: Custom partitioning in Azure Synapse Link for Azure Cosmos DB](https://azure.microsoft.com/en-us/updates/generally-available-custom-partitioning-in-azure-synapse-link-for-azure-cosmos-db/?WT.mc_id=AZ-MVP-4039694)
+- [Public Preview: Azure SQL Database free offer](https://azure.microsoft.com/en-us/updates/public-preview-azure-sql-database-free-offer/?WT.mc_id=AZ-MVP-4039694)
+- [Azure Batch pool list usage metrics API will be retired on 30 September 2024](https://azure.microsoft.com/en-us/updates/azure-batch-pool-list-usage-metrics-api-will-be-retired-on-30-september-2024/?WT.mc_id=AZ-MVP-4039694)
+- [Azure Batch task authentication token will be retired on 30 September 2024](https://azure.microsoft.com/en-us/updates/azure-batch-task-authentication-token-will-be-retired-on-30-september-2024/?WT.mc_id=AZ-MVP-4039694)
+- [App Service Environment version 1 and version 2 will be retired on 31 August 2024](https://azure.microsoft.com/en-us/updates/app-service-environment-version-1-and-version-2-will-be-retired-on-31-august-2024-2/?WT.mc_id=AZ-MVP-4039694)
+- [Computer Vision v1.0, v2.0, v2.1, v3.0, and v3.1 APIs will be retired on 13 September 2026](https://azure.microsoft.com/en-us/updates/computer-vision-api-retirements-13-9-2026/?WT.mc_id=AZ-MVP-4039694)
+- [Default outbound access for VMs in Azure will be retired- transition to a new method of internet access](https://azure.microsoft.com/en-us/updates/default-outbound-access-for-vms-in-azure-will-be-retired-transition-to-a-new-method-of-internet-access/?WT.mc_id=AZ-MVP-4039694)
+- [Support for the 1.x version of Azure Functions ends 14 September 2026](https://azure.microsoft.com/en-us/updates/support-for-the-1x-version-of-azure-functions-ends-14-september-2026/?WT.mc_id=AZ-MVP-4039694)
+- [Announcing template-based previews of Azure CLI and Azure PowerShell for Key Vault deployments](https://techcommunity.microsoft.com/t5/azure-tools-blog/announcing-template-based-previews-of-azure-cli-and-azure/ba-p/3933802?WT.mc_id=AZ-MVP-4039694)
+

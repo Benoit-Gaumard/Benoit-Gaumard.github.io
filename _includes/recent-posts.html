@@ -1,0 +1,14 @@
+<div class="sidebar-part">
+    <p class="altcol-title">Articles r&eacute;cents</h1>
+
+        <ul class="recentposts">
+            {% for post in site.posts limit:5 %}
+            {% assign monthIndex = post.date | date: '%m' | minus: 1 %}
+            <li>
+                <p>
+                    {{ post.date | date: '%d' }} {{ site.data.fr.months[monthIndex] }} - <a href="{{ site.url}}{{ post.url }}">{{ post.title }}</a>
+                </p>
+            </li>
+            {% endfor %}
+        </ul>
+</div>

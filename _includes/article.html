@@ -1,0 +1,20 @@
+<article class="card-article card" itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="card-header">
+        <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+        <div class="post-categories">
+            {% if post %} {% assign categories = post.categories %} {% else %} {% assign categories = page.categories %}
+            {% endif %}
+            Categories : {% for category in categories %}
+            <a href="{{ site.url }}/categories.html#{{ category | url_encode }}">
+                <img class="card-img-top-item"
+                    src="{{ site.url }}/assets/img/categories/{{ category | replace: ' ', '' | downcase }}.png"
+                    alt="{{ category }}" /> {{ category }}</a>
+            {% unless forloop.last %}&nbsp;{% endunless %} {% endfor %}
+        </div>
+    </div>
+
+    <div class="card-body" itemprop="articleBody">
+        <br /> <br />
+        {{ content }}
+    </div>
+</article>
