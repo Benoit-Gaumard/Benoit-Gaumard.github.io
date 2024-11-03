@@ -1,6 +1,6 @@
 ---
-title: "2024 11 13 Test Publish" # Title of the blog post.
-date: 2024-11-03T12:23:13+01:00 # Date of post creation.
+title: "2024 11 13 Test Publish2" # Title of the blog post.
+date: 2024-11-03T12:29:13+01:00 # Date of post creation.
 description: "Article description." # Description used for search engine.
 featured: true # Sets if post is a featured post, making appear on the home page side bar.
 draft: true # Sets whether to render this page. Draft of true will not be rendered.
@@ -24,5 +24,3 @@ tags:
 ---
 
 **Insert Lead paragraph here.**
-
-hello test
