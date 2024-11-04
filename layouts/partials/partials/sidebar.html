@@ -35,7 +35,8 @@
 
     {{ if .Site.Params.sidebardisclaimer }}
       <div class="sidebardisclaimer">
-        <h2 class="mt-4">Disclaimer</h2>
+        <h2 class="mt-4">📌 Disclaimer</h2>
+        <div style="border: 2px solid orange; border-radius: 8px; padding: 15px;">
         {{ .Site.Params.disclaimerText }}
       </div>
     {{ end }}
@@ -60,7 +61,7 @@
     {{- $featured := default 8 $s.numberOfFeaturedPosts }}
     {{- $featuredPosts := first $featured (where $posts "Params.featured" true)}}
     {{- with $featuredPosts }}
-    <h2 class="mt-4">{{ T "featured_posts" }}</h2>
+    <h2 class="mt-4">🔖	{{ T "featured_posts" }}</h2>
     <ul>
       {{- range . }}
       <li>
@@ -69,7 +70,7 @@
       {{- end }}
     </ul>
     {{- end }}
-    <h2 class="mt-4">{{ T "recent_posts" }}</h2>
+    <h2 class="mt-4">📅 {{ T "recent_posts" }}</h2>
     <ul class="flex-column">
       {{- $recent := default 8 $s.numberOfRecentPosts }}
       {{- range first $recent ($posts | symdiff $featuredPosts) }}
@@ -82,7 +83,7 @@
     {{- range $key, $value := .Site.Taxonomies }}
     {{- if gt $value 0 }}
     <div>
-      <h2 class="mt-4 taxonomy" id="{{ $key }}-section">{{ T $key }}</h2>
+      <h2 class="mt-4 taxonomy" id="{{ $key }}-section">🏷️ {{ T $key }}</h2>
       <nav class="tags_nav">
         {{- $onPageTags := $.Page.Params.tags }}
         {{- $slicedTags := ($value.ByCount | first $tagsLimit) }}
@@ -119,12 +120,12 @@
     {{- end }}
     {{- end }}
 
-    <h2 class="mt-4">Friends blogs</h2>
-    <ul>
-      <li><a href="https://woivre.com/" class="nav-link">https://woivre.com</a></li>
-      <li><a href="https://blog.stephane-robert.info/" class="nav-link">https://blog.stephane-robert.info</a></li>
-      <li><a href="https://positive-vibes.io/" class="nav-link">https://positive-vibes.io</a></li>
-    </ul>
-
+    <h2 class="mt-4 taxonomy">🌐 Friends blogs</h2>
+    <div style="border: 2px solid rgb(37, 165, 225); border-radius: 8px; padding: 15px;">
+      <a href="https://woivre.com/" class="post_tag button button_translucent">https://woivre.com</a>
+      <a href="https://blog.stephane-robert.info/" class="post_tag button button_translucent">https://blog.stephane-robert.info</a>
+      <a href="https://positive-vibes.io/" class="post_tag button button_translucent">https://positive-vibes.io</a>
+      <a href="https://charotamine.medium.com/" class="post_tag button button_translucent">https://charotamine.medium.com</a>
+  </div>
   </section>
 </aside>

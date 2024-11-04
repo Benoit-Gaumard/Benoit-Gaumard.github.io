@@ -23,7 +23,7 @@ Why I migrated from  Wordpress to Hugo website. Pros and cons.
 <img src="/images/website-migration.png" width="50%" height="50%">
 
 
-# WordPress vs. Hugo: Understanding the Difference and Why Hugo Might Be Right for You
+## WordPress vs. Hugo: Understanding the Difference and Why Hugo Might Be Right for You
 
 Building a website today means choosing between many different tools and platforms. Two popular options—**WordPress** and **Hugo**—offer very different approaches to website creation, each with its strengths and ideal use cases. In this post, we’ll dive into the core differences between WordPress and Hugo and explore why Hugo may be the perfect fit for your needs.
 

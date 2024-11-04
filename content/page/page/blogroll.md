@@ -1,11 +1,28 @@
-# BlogRoll
++++
+author = "Benoit G"
+title = "Blog Roll"
+date = "2024-10-17"
+description = "Blog Roll"
+#featureImage = "/images/rss.svg" # Sets featured image on blog post.
+#featureImageAlt = 'Description of image' # Alternative text for featured image.
+#featureImageCap = 'This is the featured image.' # Caption (optional).
+thumbnail = "/images/rssfeed.png" # Sets thumbnail image appearing inside card on homepage.
+shareImage = "/images/rss.svg" # Designate a separate image for social media sharing.
+codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
+codeLineNumbers = false # Override global value for showing of line numbers within code block.
+figurePositionShow = true # Override global value for showing the figure label.
++++
+
+Here, you'll find useful links
+<!--more-->
+
+<img src="/images/blogroll.png" width="60%" height="60%">
 
 ## Table Of Contents
 
 ## 🆕 New Links To Check
-
+---
 [Back To Top](#table-of-contents)
-
 
 - https://developer.microsoft.com/en-us/graph/graph-explorer
 - https://detective.kusto.io/
@@ -14,6 +31,8 @@
 - https://oai.azure.com/portal
 
 ## 🧠 AI
+---
+[Back To Top](#table-of-contents)
 
 - https://aka.ms/hci-demo
 - https://app.suno.ai/
@@ -23,320 +42,151 @@
 - https://designer.microsoft.com/image-creator?p=Funko+figure+of+a+%5Bmale%5D%2C+%5Bsmiling%5D%2C+called+%5BBen%5D%2C+wearing+%5Ba+white+henley+t-shirt%5D%2C+a+%5Bpull+grey+hoodie+with+logo+blue+%22Azure%22%5D%2C+handing+%5Ba+surface+laptop%5D%2C+%5Bjeans%5D%2C+%5Bwhite+moccasins+and+white+socks%5D%2C+%5Blong+eyelashes%5D%2C+%5Bshort+brown+air%5D.+The+Funko+is+displayed+inside+and+outside+a+limited+edition+%5BGrey+and+blue%5D+Funko+box+with+%5B%22Microsoft%22+text+as+front%5D%2C+allowing+visibility+of+the+figure%2C+typography%2C+3D+render.+White+background"
 
 ## 🏢 Architecture
+---
+[Back To Top](#table-of-contents)
 
 - https://microsoftcloudworkshop.com/
 - https://azure.microsoft.com/en-us/resources/whitepapers/search/?type=WhitePaperResource
 - https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits
 - https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/🔥
-
-
-
-https://learn.microsoft.com/en-us/azure/architecture/framework/" target="_blank" rel="noreferrer noopener">Azure Well-Architected Framework
-
-
-
-https://social.technet.microsoft.com/wiki/contents/articles/630.microsoft-azure-survival-guide.aspx" target="_blank" rel="noreferrer noopener">Azure Survival Guide
-
-
-
-https://social.technet.microsoft.com/wiki/contents/articles/33800.azure-iaas-v2-arm-design-series-azure-subscriptions.aspx" target="_blank" rel="noreferrer noopener">Azure Subscription Design
-
-
-
-https://azure.microsoft.com/en-us/support/legal/offer-details/" target="_blank" rel="noreferrer noopener">Azure Offers
-
-
-
-https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/" target="_blank" rel="noreferrer noopener">Subscription decision guide
-
-
-
-https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles" target="_blank" rel="noreferrer noopener">Azure Built In roles
-
-
-
-https://docs.microsoft.com/en-us/azure/architecture/browse/" target="_blank" rel="noreferrer noopener">Azure Reference Architectures</a>&nbsp;🔥</li>
-
-
-
-https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/antipatterns/antipatterns-to-avoid" target="_blank" rel="noreferrer noopener">Cloud adoption antipatterns
-
-
-
-https://techcommunity.microsoft.com/t5/azure-global/bg-p/AzureCAT" target="_blank" rel="noreferrer noopener">Azure Customer Advisory Team (CAT)
-
-
-
-https://docs.microsoft.com/en-US/troubleshoot/azure/virtual-machines/server-software-support" target="_blank" rel="noreferrer noopener">Azure supported workloads
-
-
-
-https://github.com/lukemurraynz/awesome-azure-architecture" target="_blank" rel="noreferrer noopener">awesome-azure-architecture
-
-
-
-https://docs.microsoft.com/en-us/assessments/?mode=home" target="_blank" rel="noreferrer noopener">Microsoft Assessments
-
-
-
+- https://learn.microsoft.com/en-us/azure/architecture/framework/
+- https://social.technet.microsoft.com/wiki/contents/articles/630.microsoft-azure-survival-guide.aspx
+- https://social.technet.microsoft.com/wiki/contents/articles/33800.azure-iaas-v2-arm-design-series-azure-subscriptions.aspx
+- Azure Offers: https://azure.microsoft.com/en-us/support/legal/offer-details/
+- https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/
+- https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+- Azure Reference Architectures: https://docs.microsoft.com/en-us/azure/architecture/browse/ 🔥
+- Cloud adoption antipatterns: https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/antipatterns/antipatterns-to-avoid
+- Azure Customer Advisory Team (CAT): https://techcommunity.microsoft.com/t5/azure-global/bg-p/AzureCAT
+- Azure supported workloads: https://docs.microsoft.com/en-US/troubleshoot/azure/virtual-machines/server-software-support
+- https://github.com/lukemurraynz/awesome-azure-architecture
+- Microsoft Assessments: https://docs.microsoft.com/en-us/assessments/?mode=home
 https://docsupdatetracker.net/" target="_blank" rel="noreferrer noopener">docsupdatetracker
+- Landing Zone mission-critical: https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-landing-zone
+- Azure Quick Review: https://github.com/Azure/azqr
+- Azure Sandbox: https://learn.microsoft.com/en-us/azure/architecture/guide/azure-sandbox/azure-sandbox
+- Azure Dev Center: https://github.com/Azure-Samples/DevCenter
+- CAF Additionnal resources: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/staying-current?tabs=AdditionalResources#tabpanel_1_AdditionalResources
+- Cloud Adoption Framework Tools and Templates: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools-templates
+- MOAW: https://microsoft.github.io/moaw/
+- Blog Cloud63 Vincent Missonhttps://blog.cloud63.fr/
+- Azure Landing Zone catalog: https://github.com/oliverlabs/alz-catalogue
+- https://blog.zuehlke.cloud/" target="_blank" rel="noreferrer noopener">Azure Talk Blog
+- https://achrafbenalaya.com/" target="_blank" rel="noreferrer noopener">Achraf Ben Alaya
+- https://msazureforpartners.azurewebsites.net/" target="_blank" rel="noreferrer noopener">Azure Docs for partners
 
+## 🅰 ARM
+---
+[Back To Top](#table-of-contents)
 
+- Azure Quickstart Templates: https://azure.microsoft.com/en-us/resources/templates/
+- ARMViz: http://armviz.io/
+- Azure resource explorer: https://resources.azure.com/
+- Rest API Browser: https://docs.microsoft.com/en-us/rest/api/?view=Azure 🔥
 
-https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-landing-zone" target="_blank" rel="noreferrer noopener">Landing Zone mission-critical
+## 👀 Analytics and monitoring
+---
+[Back To Top](#table-of-contents)
 
+- Log Analytics Query Portal: https://portal.loganalytics.io/demo#/query/main" target="_blank" rel="noreferrer noopener">
 
+- https://docs.microsoft.com/en-us/azure/data-explorer/kusto/tools/kusto-explorer" target="_blank" rel="noreferrer noopener">Kusto explorer
 
-https://github.com/Azure/azqr" target="_blank" rel="noreferrer noopener">Azure Quick Review</a>&nbsp;🔥</li>
+- https://devblogs.microsoft.com/devops/monitoring-azure-by-using-grafana-dashboards/" target="_blank" rel="noreferrer noopener">Monitoring Azure by using Grafana dashboards
 
+- https://github.com/microsoft/AzureMonitorCommunity" target="_blank" rel="noreferrer noopener">Azure Monitor Community</a>&nbsp;🔥</li>
 
+- https://trstringer.com/log-analytics-expensive-part-1-discovery/" target="_blank" rel="noreferrer noopener">Log Analytics cost
 
-https://learn.microsoft.com/en-us/azure/architecture/guide/azure-sandbox/azure-sandbox" target="_blank" rel="noreferrer noopener">Azure Sandbox
+- https://blog.smartcloudarchitect.fr/azure-monitoring-certificates" target="_blank" rel="noreferrer noopener">azure-monitoring-certificates
 
+- https://github.com/globalbao/azure-resource-graph" target="_blank" rel="noreferrer noopener">Query collection
 
+- https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-category" target="_blank" rel="noreferrer noopener">Azure Monitor Logs table reference
 
-https://github.com/Azure-Samples/DevCenter" target="_blank" rel="noreferrer noopener">Azure Dev Center
+- https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951" target="_blank" rel="noreferrer noopener">https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951
 
+## 🟦 Azure Active Directory (Entra Id)
+---
+[Back To Top](#table-of-contents)
 
+- https://msit.powerbi.com/view?r=eyJrIjoiODdjOWViZDctMWRhZS00ODUzLWI4MmQtNWM5NjBkZTBkNjFlIiwidCI6IjcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsImMiOjV9" target="_blank" rel="noreferrer noopener">Azure AD where is your data located
 
-https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/staying-current?tabs=AdditionalResources#tabpanel_1_AdditionalResources" target="_blank" rel="noreferrer noopener">CAF Additionnal resources
+- https://account.azure.com/organization" target="_blank" rel="noreferrer noopener">Tenant availability check 1
 
+- https://o365.rocks/" target="_blank" rel="noreferrer noopener">Tenant availability check 2
 
+- https://azure.microsoft.com/en-us/pricing/details/active-directory/" target="_blank" rel="noreferrer noopener">Azure AD pricing
 
-https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools-templates" target="_blank" rel="noreferrer noopener">Cloud Adoption Framework Tools and Templates
+- https://microsoft.com/devicelogin/" target="_blank" rel="noreferrer noopener">Interactive authentication
 
+- http://aad.portal.azure.com/" target="_blank" rel="noreferrer noopener">Azure Active Directory admin center 🔥
 
+- https://github.com/microsoft/azureadexporter/" target="_blank" rel="noreferrer noopener">Azure AD Exporter
 
-https://microsoft.github.io/moaw/" target="_blank" rel="noreferrer noopener">MOAW</a>&nbsp;🔥</li>
+- https://raw.githubusercontent.com/msandbu/azuread/main/AzureAD%20Big%20picture.jpg" target="_blank" rel="noreferrer noopener">Azure AD Big Picture</a>&nbsp;🔥</li>
 
+- https://developer.microsoft.com/en-us/graph/changelog/?search=" target="_blank" rel="noreferrer noopener">Microsoft Graph Changelog
 
+- https://github.com/Cloud-Architekt/AzureAD-Attack-Defense/blob/main/AADSecurityConfigAnalyzer.md" target="_blank" rel="noreferrer noopener">Azure AD Security Config Analyzer (AADSCA)
 
-https://blog.cloud63.fr/" target="_blank" rel="noreferrer noopener">Blog Cloud63 Vincent Misson
+- https://github.com/csandker/Azure-AccessPermissions" target="_blank" rel="noreferrer noopener">Azure-AccessPermissions
 
+- https://jwt.io/" target="_blank" rel="noreferrer noopener">Decode, verify and generate Token
 
+- https://aadinternals.com/osint/" target="_blank" rel="noreferrer noopener">AAD Osint tool
 
-https://github.com/oliverlabs/alz-catalogue" target="_blank" rel="noreferrer noopener">Azure Landing Zone catalog
+- https://myaccount.microsoft.com/groups/groups-i-belong-to" target="_blank" rel="noreferrer noopener">https://myaccount.microsoft.com/groups/groups-i-belong-to
 
+## 💪 Bicep
+---
+[Back To Top](#table-of-contents)
 
+- https://github.com/rchaganti/bicepbookexamples" target="_blank" rel="noreferrer noopener">Bicep from 0 to hero
 
-https://blog.zuehlke.cloud/" target="_blank" rel="noreferrer noopener">Azure Talk Blog
+## 🏅 Certifications
+---
+[Back To Top](#table-of-contents)
 
+- https://aka.ms/TrainCertPoster" target="_blank" rel="noreferrer noopener">Official certifications training poster</a>
 
+- https://learn.microsoft.com/en-us/certifications/" target="_blank" rel="noreferrer noopener">Browse Certifications by roles
 
-https://achrafbenalaya.com/" target="_blank" rel="noreferrer noopener">Achraf Ben Alaya
+- https://docs.microsoft.com/en-us/learn/" target="_blank" rel="noreferrer noopener">Microsoft Learn
 
 
+- https://aka.ms/examdemo" target="_blank" rel="noreferrer noopener">Exam Sandbox, demo the Microsoft exam experience
 
-https://msazureforpartners.azurewebsites.net/" target="_blank" rel="noreferrer noopener">Azure Docs for partners
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="🅰-arm">🅰 ARM<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#%F0%9F%85%B0-arm">​</a></h2>
-<!-- /wp:heading -->
+- https://techcommunity.microsoft.com/t5/microsoft-learn/ct-p/MicrosoftLearn" target="_blank" rel="noreferrer noopener">Microsoft learn community
 
 
-<ul class="wp-block-list">
-https://azure.microsoft.com/en-us/resources/templates/" target="_blank" rel="noreferrer noopener">Azure Quickstart Templates
+- https://learn.microsoft.com/en-us/certifications/practice-assessments-for-microsoft-certifications" target="_blank" rel="noreferrer noopener">Practice Assessments for Microsoft Certifications
 
 
+- https://techcommunity.microsoft.com/t5/microsoft-learn-blog/prep-for-certification-exams-with-free-practice-assessments-on/ba-p/3666866" target="_blank" rel="noreferrer noopener">Practice Assessments for Microsoft Certifications 2
 
-http://armviz.io/" target="_blank" rel="noreferrer noopener">ARMViz
+- https://learn.microsoft.com/en-us/samples/azure-samples/azure-opensource-labs/azure-opensource-labs/" target="_blank" rel="noreferrer noopener">Azure Open Source Labs
 
+## ⛅ Cloud Services Comparison
+---
+[Back To Top](#table-of-contents)
 
+- https://comparecloud.in/" target="_blank" rel="noreferrer noopener">Public Cloud Services Comparison</a>
 
-https://resources.azure.com/" target="_blank" rel="noreferrer noopener">Azure resource explorer
+- https://azureprice.net/" target="_blank" rel="noreferrer noopener">Azure VM Comparison
 
+- https://cloud.google.com/free/docs/aws-azure-gcp-service-comparison?utm_source=google&amp;utm_medium=blog&amp;utm_campaign=FY21-Q2-Product-Mapping-Blog&amp;utm_content=documentation" target="_blank" rel="noreferrer noopener">Compare AWS and Azure services to Google Cloud
 
+- https://docs.microsoft.com/en-us/azure/architecture/aws-professional/services" target="_blank" rel="noreferrer noopener">Compare Azure and AWS services
 
-https://docs.microsoft.com/en-us/rest/api/?view=Azure" target="_blank" rel="noreferrer noopener">Rest API Browser</a>&nbsp;🔥</li>
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-analytics-and-monitoring">👀 Analytics and monitoring<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-analytics-and-monitoring">​</a></h2>
-<!-- /wp:heading -->
+- https://azuremarketplace.microsoft.com/en-us/" target="_blank" rel="noreferrer noopener">Azure MarketPlace
 
+## 🚨 Compliance
+---
+[Back To Top](#table-of-contents)
 
-<ul class="wp-block-list">
-https://portal.loganalytics.io/demo#/query/main" target="_blank" rel="noreferrer noopener">Log Analytics Query Portal
-
-
-
-https://docs.microsoft.com/en-us/azure/data-explorer/kusto/tools/kusto-explorer" target="_blank" rel="noreferrer noopener">Kusto explorer
-
-
-
-https://devblogs.microsoft.com/devops/monitoring-azure-by-using-grafana-dashboards/" target="_blank" rel="noreferrer noopener">Monitoring Azure by using Grafana dashboards
-
-
-
-https://github.com/microsoft/AzureMonitorCommunity" target="_blank" rel="noreferrer noopener">Azure Monitor Community</a>&nbsp;🔥</li>
-
-
-
-https://trstringer.com/log-analytics-expensive-part-1-discovery/" target="_blank" rel="noreferrer noopener">Log Analytics cost
-
-
-
-https://blog.smartcloudarchitect.fr/azure-monitoring-certificates" target="_blank" rel="noreferrer noopener">azure-monitoring-certificates
-
-
-
-https://github.com/globalbao/azure-resource-graph" target="_blank" rel="noreferrer noopener">Query collection
-
-
-
-https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-category" target="_blank" rel="noreferrer noopener">Azure Monitor Logs table reference
-
-
-
-https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951" target="_blank" rel="noreferrer noopener">https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951
-</ul>
-<!-- /wp:list -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-azure-active-directory-entra-id">🟦 Azure Active Directory (Entra Id)<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-azure-active-directory-entra-id">​</a></h2>
-<!-- /wp:heading -->
-
-
-<ul class="wp-block-list">
-https://msit.powerbi.com/view?r=eyJrIjoiODdjOWViZDctMWRhZS00ODUzLWI4MmQtNWM5NjBkZTBkNjFlIiwidCI6IjcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsImMiOjV9" target="_blank" rel="noreferrer noopener">Azure AD where is your data located
-
-
-
-https://account.azure.com/organization" target="_blank" rel="noreferrer noopener">Tenant availability check 1
-
-
-
-https://o365.rocks/" target="_blank" rel="noreferrer noopener">Tenant availability check 2
-
-
-
-https://azure.microsoft.com/en-us/pricing/details/active-directory/" target="_blank" rel="noreferrer noopener">Azure AD pricing
-
-
-
-https://microsoft.com/devicelogin/" target="_blank" rel="noreferrer noopener">Interactive authentication
-
-
-
-http://aad.portal.azure.com/" target="_blank" rel="noreferrer noopener">Azure Active Directory admin center</a>&nbsp;🔥</li>
-
-
-
-https://github.com/microsoft/azureadexporter/" target="_blank" rel="noreferrer noopener">Azure AD Exporter
-
-
-
-https://raw.githubusercontent.com/msandbu/azuread/main/AzureAD%20Big%20picture.jpg" target="_blank" rel="noreferrer noopener">Azure AD Big Picture</a>&nbsp;🔥</li>
-
-
-
-https://developer.microsoft.com/en-us/graph/changelog/?search=" target="_blank" rel="noreferrer noopener">Microsoft Graph Changelog
-
-
-
-https://github.com/Cloud-Architekt/AzureAD-Attack-Defense/blob/main/AADSecurityConfigAnalyzer.md" target="_blank" rel="noreferrer noopener">Azure AD Security Config Analyzer (AADSCA)
-
-
-
-https://github.com/csandker/Azure-AccessPermissions" target="_blank" rel="noreferrer noopener">Azure-AccessPermissions
-
-
-
-https://jwt.io/" target="_blank" rel="noreferrer noopener">Decode, verify and generate Token
-
-
-
-https://aadinternals.com/osint/" target="_blank" rel="noreferrer noopener">AAD Osint tool
-
-
-
-https://myaccount.microsoft.com/groups/groups-i-belong-to" target="_blank" rel="noreferrer noopener">https://myaccount.microsoft.com/groups/groups-i-belong-to
-</ul>
-<!-- /wp:list -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-bicep">💪 Bicep<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-bicep">​</a></h2>
-<!-- /wp:heading -->
-
-
-<ul class="wp-block-list">
-https://github.com/rchaganti/bicepbookexamples" target="_blank" rel="noreferrer noopener">Bicep from 0 to hero
-</ul>
-<!-- /wp:list -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-certifications">🏅 Certifications<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-certifications">​</a></h2>
-<!-- /wp:heading -->
-
-
-<ul class="wp-block-list">
-https://aka.ms/TrainCertPoster" target="_blank" rel="noreferrer noopener">Official certifications training poster</a>&nbsp;🔥</li>
-
-
-
-https://learn.microsoft.com/en-us/certifications/" target="_blank" rel="noreferrer noopener">Browse Certifications by roles
-
-
-
-https://docs.microsoft.com/en-us/learn/" target="_blank" rel="noreferrer noopener">Microsoft Learn
-
-
-
-https://aka.ms/examdemo" target="_blank" rel="noreferrer noopener">Exam Sandbox, demo the Microsoft exam experience
-
-
-
-https://techcommunity.microsoft.com/t5/microsoft-learn/ct-p/MicrosoftLearn" target="_blank" rel="noreferrer noopener">Microsoft learn community
-
-
-
-https://learn.microsoft.com/en-us/certifications/practice-assessments-for-microsoft-certifications" target="_blank" rel="noreferrer noopener">Practice Assessments for Microsoft Certifications
-
-
-
-https://techcommunity.microsoft.com/t5/microsoft-learn-blog/prep-for-certification-exams-with-free-practice-assessments-on/ba-p/3666866" target="_blank" rel="noreferrer noopener">Practice Assessments for Microsoft Certifications 2
-
-
-
-https://learn.microsoft.com/en-us/samples/azure-samples/azure-opensource-labs/azure-opensource-labs/" target="_blank" rel="noreferrer noopener">Azure Open Source Labs
-</ul>
-<!-- /wp:list -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-cloud-services-comparison">⛅ Cloud Services Comparison<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-cloud-services-comparison">​</a></h2>
-<!-- /wp:heading -->
-
-
-<ul class="wp-block-list">
-https://comparecloud.in/" target="_blank" rel="noreferrer noopener">Public Cloud Services Comparison</a>&nbsp;🔥</li>
-
-
-
-https://azureprice.net/" target="_blank" rel="noreferrer noopener">Azure VM Comparison
-
-
-
-https://cloud.google.com/free/docs/aws-azure-gcp-service-comparison?utm_source=google&amp;utm_medium=blog&amp;utm_campaign=FY21-Q2-Product-Mapping-Blog&amp;utm_content=documentation" target="_blank" rel="noreferrer noopener">Compare AWS and Azure services to Google Cloud
-
-
-
-https://docs.microsoft.com/en-us/azure/architecture/aws-professional/services" target="_blank" rel="noreferrer noopener">Compare Azure and AWS services
-
-
-
-https://azuremarketplace.microsoft.com/en-us/" target="_blank" rel="noreferrer noopener">Azure MarketPlace
-</ul>
-<!-- /wp:list -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-compliance">🚨 Compliance<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-compliance">​</a></h2>
-<!-- /wp:heading -->
-
-
-<ul class="wp-block-list">
 https://docs.microsoft.com/en-us/compliance/regulatory/offering-home?view=o365-worldwide" target="_blank" rel="noreferrer noopener">Microsoft compliance offerings
 
 
@@ -354,15 +204,10 @@ https://servicetrust.microsoft.com/" target="_blank" rel="noreferrer noopener">S
 
 
 https://servicetrust.microsoft.com/ComplianceManager/V3#" target="_blank" rel="noreferrer noopener">Compliance Manager portal
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-dashboards">📊 DashBoards<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-dashboards">​</a></h2>
-<!-- /wp:heading -->
+## 📊 DashBoards
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-dashboards">​</a>
 
-
-<ul class="wp-block-list">
 https://techcommunity.microsoft.com/t5/fasttrack-for-azure/azure-orphan-resources/ba-p/3492198" target="_blank" rel="noreferrer noopener">Azure Orphan Resources workbook
 
 
@@ -408,18 +253,11 @@ https://learn.microsoft.com/en-us/azure/advisor/advisor-how-to-plan-migration-wo
 
 
 https://github.com/scautomation/Azure-Inventory-Workbook" target="_blank" rel="noreferrer noopener">Azure Inventory Workbook</a>&nbsp;🔥</li>
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-devops">🚀 DevOps<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-devops">​</a></h2>
-<!-- /wp:heading -->
+🚀 DevOps
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-devops">​</a>
 
-
-<ul class="wp-block-list">
 https://learngitbranching.js.org/" target="_blank" rel="noreferrer noopener">Learn git branching</a>&nbsp;🔥</li>
-
-
 
 https://github.com/vinijmoura/Azure-DevOps" target="_blank" rel="noreferrer noopener">Vinijmoura GitHub Repo
 
@@ -478,15 +316,11 @@ https://landscape.cd.foundation/" target="_blank" rel="noreferrer noopener">Cont
 
 
 https://web.devopstopologies.com/#anti-types" target="_blank" rel="noreferrer noopener">DevOps Anti-Types
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-devops-news">🚀 DevOps News<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-devops-news">​</a></h2>
-<!-- /wp:heading -->
+## 🚀 DevOps News
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-devops-news">​</a>
 
 
-<ul class="wp-block-list">
 https://www.journalduhacker.net/" target="_blank" rel="noreferrer noopener">Le journalduhacker
 
 
@@ -496,11 +330,9 @@ https://news.humancoders.com/" target="_blank" rel="noreferrer noopener">Human C
 
 
 https://dev.to/" target="_blank" rel="noreferrer noopener">Dev.to
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-finops">💵 FinOps<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-finops">​</a></h2>
+
+## 💵 FinOps<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-finops">​</a></h2>
 <!-- /wp:heading -->
 
 
@@ -562,22 +394,12 @@ https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1" target="_blank"
 
 
 https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/optimize-your-azure-costs/ba-p/4064181" target="_blank" rel="noreferrer noopener">Optimize Your Azure Costs</a>&nbsp;🔥</li>
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-fun-images">🤣 Fun Images<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-fun-images">​</a></h2>
-<!-- /wp:heading -->
+🤣 Fun Images<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-fun-images">​</a>
 
-
-<ul class="wp-block-list">
 https://www.goodtechthings.com/" target="_blank" rel="noreferrer noopener">Goodtechthings.com
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-github">🤖 GitHub<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-github">​</a></h2>
-<!-- /wp:heading -->
+🤖 GitHub<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-github">​</a>
 
 
 <ul class="wp-block-list">
@@ -594,18 +416,11 @@ https://www.bitmoji.com/stickers/" target="_blank" rel="noreferrer noopener">Bit
 
 
 https://api.github.com/meta" target="_blank" rel="noreferrer noopener">All IP ranges used by GitHub Actions runners
-</ul>
-<!-- /wp:list -->
-
-<!-- wp:heading -->
-<h2 class="wp-block-heading">🏢 Governance</h2>
-<!-- /wp:heading -->
 
 
-<ul class="wp-block-list">
+## 🏢 Governance
+
 https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-services-resource-providers">Find resource providers by Azure services - Azure Resource Manager | Microsoft Learn</a> 🔥</li>
-
-
 
 https://policyalias.mats.codes/">Azure Policy Aliases (mats.codes)
 
@@ -664,15 +479,10 @@ https://github.com/basvanbennekommsft/Blog-Posts/tree/main/Use%20Azure%20Functio
 
 
 https://azurediagrams.com/" target="_blank" rel="noreferrer noopener">Azure Analytics Architecture Advisor
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-graph-kql">🔍 Graph KQL<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-graph-kql">​</a></h2>
-<!-- /wp:heading -->
+## 🔍 Graph KQL<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-graph-kql">​</a>
 
 
-<ul class="wp-block-list">
 https://github.com/LearningKijo/KQL" target="_blank" rel="noreferrer noopener">KQL - threat hunting hub
 
 
@@ -686,26 +496,16 @@ https://www.kqlsearch.com/" target="_blank" rel="noreferrer noopener">https://ww
 
 
 https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664" target="_blank" rel="noreferrer noopener">https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-ha-and-dr">💥 HA and DR<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-ha-and-dr">​</a></h2>
-<!-- /wp:heading -->
+## 💥 HA and DR
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-ha-and-dr">​</a>
 
 
-<ul class="wp-block-list">
 https://azure.microsoft.com/en-us/global-infrastructure/geographies/" target="_blank" rel="noreferrer noopener">Azure Geographies and regions
-
-
 
 https://docs.microsoft.com/en-us/azure/availability-zones/cross-region-replication-azure" target="_blank" rel="noreferrer noopener">Azure cross regions replication
 
-
-
 https://docs.microsoft.com/en-us/learn/modules/azure-architecture-fundamentals/regions-availability-zones" target="_blank" rel="noreferrer noopener">Azure regions and availability zones
-
-
 
 https://github.com/Azure/BusinessContinuityGuide/releases" target="_blank" rel="noreferrer noopener">Azure Business Continuity Guide
 
@@ -716,12 +516,9 @@ https://azure.microsoft.com/mediahandler/files/resourcefiles/resilience-in-azure
 
 
 https://azure.microsoft.com/mediahandler/files/resourcefiles/infographic-reliability-with-microsoft-azure/InfographicRC2.pdf" target="_blank" rel="noreferrer noopener">Reliability with microsoft Azure Infographic
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-informations">📢 Informations<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-informations">​</a></h2>
-<!-- /wp:heading -->
+## 📢 Informations
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-informations">​</a>
 
 
 <ul class="wp-block-list">
@@ -742,25 +539,16 @@ https://azurefeeds.com/" target="_blank" rel="noreferrer noopener">AzureFeeds
 
 
 https://docs.microsoft.com/en-us/archive/blogs/blogms/official-microsoft-team-blogs-microsoft-blogs" target="_blank" rel="noreferrer noopener">Official Microsoft Team Blogs
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-lighthouse">🔍 LightHouse<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-lighthouse">​</a></h2>
+## 🔍 LightHouse<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-lighthouse">​</a></h2>
 <!-- /wp:heading -->
 
 
 <ul class="wp-block-list">
 https://securecloud.blog/2020/11/13/securing-azure-lighthouse-with-azure-policy-and-azure-privileged-identity-management-for-msps-and-customers/" target="_blank" rel="noreferrer noopener">Securing Azure Lighthouse with Azure Policy and PIM
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-misc">📌 Misc<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-misc">​</a></h2>
-<!-- /wp:heading -->
+## 📌 Misc<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-misc">​</a></h2>
 
-
-<ul class="wp-block-list">
 https://github.com/clarkio/azure-mask" target="_blank" rel="noreferrer noopener">Azure Mask
 
 
@@ -828,12 +616,8 @@ https://github.com/mustafakaya/Azure-Reliability-Checker-Tool" target="_blank" r
 
 
 https://github.com/Azure/migration" target="_blank" rel="noreferrer noopener">Migration Execution Guide
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-network">🌐 Network<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-network">​</a></h2>
-<!-- /wp:heading -->
+## 🌐 Network<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-network">​</a>
 
 
 <ul class="wp-block-list">
@@ -898,15 +682,9 @@ https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expre
 
 
 https://www.microsoft.com/en-us/download/details.aspx?id=56519" target="_blank" rel="noreferrer noopener">Azure IP ranges
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-policies">👮 Policies<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-policies">​</a></h2>
-<!-- /wp:heading -->
+## 👮 Policies<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-policies">​</a>
 
-
-<ul class="wp-block-list">
 https://techcommunity.microsoft.com/t5/microsoft-defender-for-cloud/7-steps-to-author-develop-and-deploy-custom-recommendations-for/ba-p/3166026" target="_blank" rel="noreferrer noopener">Windows using Guest Configuration
 
 
@@ -1400,42 +1178,23 @@ https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools
 
 
 https://lota.cloud/en/bien-taguer/" target="_blank" rel="noreferrer noopener">How to tag your resources on AWS / GCP / Azure?
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-terraform">🟪 Terraform<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-terraform">​</a></h2>
-<!-- /wp:heading -->
+## 🟪 Terraform
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-terraform">​</a>
 
-
-<ul class="wp-block-list">
 https://github.com/Azure/aztfy" target="_blank" rel="noreferrer noopener">aztfy
-
-
 
 https://github.com/Azure/terraform-azurerm-caf-enterprise-scale/wiki" target="_blank" rel="noreferrer noopener">Azure terraform-azurerm-caf-enterprise-scale
 
-
-
 https://github.com/azure/caf-terraform-landingzones" target="_blank" rel="noreferrer noopener">Azure caf-terraform-landingzones
-
-
 
 https://techblog.flaviusdinu.com/terraform-from-0-to-hero-0-i-like-to-start-counting-from-0-maybe-i-enjoy-lists-too-much-72cd0b86ebcd" target="_blank" rel="noreferrer noopener">Terraform from 0 to hero flaviusdinu
 
-
-
 https://github.com/kaysalawu/azure-network-terraform" target="_blank" rel="noreferrer noopener">azure-network-terraform
-
-
 
 https://www.infracost.io/" target="_blank" rel="noreferrer noopener">Infracost
 
-
-
 https://github.com/JohanVanneuville/Azure-Terraform" target="_blank" rel="noreferrer noopener">Johan Vanneuville
-
-
 
 https://build5nines.com/deploy-terraform-using-azure-devops-yaml-pipelines/" target="_blank" rel="noreferrer noopener">Terraform and Azure DevOps pipelines
 
@@ -1454,15 +1213,10 @@ https://azure.github.io/Azure-Verified-Modules/" target="_blank" rel="noreferrer
 
 
 https://github.com/tenable/terrascan" target="_blank" rel="noreferrer noopener">https://github.com/tenable/terrascan
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-terraform-deployment">🛫 Terraform Deployment<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-terraform-deployment">​</a></h2>
-<!-- /wp:heading -->
+## 🛫 Terraform Deployment
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-terraform-deployment">​</a>
 
-
-<ul class="wp-block-list">
 https://www.jorgebernhardt.com/terraform-azure-vnet-hub-spoke/" target="_blank" rel="noreferrer noopener">Deploying terraform-azure-vnet-hub-spoke
 
 
@@ -1488,11 +1242,9 @@ https://github.com/WinOpsDBA/DBAinTheCloud/tree/master/06-vm-extensions" target=
 
 
 https://github.com/nicolgit/hub-and-spoke-playground" target="_blank" rel="noreferrer noopener">https://github.com/nicolgit/hub-and-spoke-playground
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-virtual-machines">💻 Virtual machines<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-virtual-machines">​</a></h2>
+## 💻 Virtual machines
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-virtual-machines">​</a>
 <!-- /wp:heading -->
 
 
@@ -1522,10 +1274,7 @@ https://azure.microsoft.com/en-us/pricing/vm-selector/" target="_blank" rel="nor
 
 
 https://github.com/HolgerWache/MachineConfiguration" target="_blank" rel="noreferrer noopener">Automanage Machine Configuration
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
 <h2 class="wp-block-heading" id="-virtual-machines-scale-set">↗ Virtual Machines Scale Set<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-virtual-machines-scale-set">​</a></h2>
 <!-- /wp:heading -->
 
@@ -1536,12 +1285,9 @@ https://github.com/gbowerman/vmssdashboard" target="_blank" rel="noreferrer noop
 
 
 https://github.com/msleal/asciivmssdashboard" target="_blank" rel="noreferrer noopener">asciivmssdashboard
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-web">🌍 Web<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-web">​</a></h2>
-<!-- /wp:heading -->
+## 🌍 Web
+<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-web">​</a>
 
 
 <ul class="wp-block-list">
@@ -1554,23 +1300,16 @@ https://jsoncrack.com/" target="_blank" rel="noreferrer noopener">jsoncrack
 
 
 https://onaircode.com/html-css-tree-view-examples/" target="_blank" rel="noreferrer noopener">CSS Tree exemple
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-youtube">🎥 Youtube<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-youtube">​</a></h2>
+## 🎥 Youtube<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-youtube">​</a></h2>
 <!-- /wp:heading -->
 
 
 <ul class="wp-block-list">
 https://www.youtube.com/watch?v=xNRI2hScrcw" target="_blank" rel="noreferrer noopener">Théorie en 10mn - Interconnexion de Microsoft Azure avec le monde extérieur
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-wiki-js">📒 Wiki JS<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-wiki-js">​</a></h2>
-<!-- /wp:heading -->
 
+## 📒 Wiki JS<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-wiki-js">​</a>
 
 <ul class="wp-block-list">
 https://blog.devops.dev/100-automated-wiki-deployment-with-terraform-using-microsoft-azure-app-service-docker-based-and-9274e6848181" target="_blank" rel="noreferrer noopener">https://blog.devops.dev/100-automated-wiki-deployment-with-terraform-using-microsoft-azure-app-service-docker-based-and-9274e6848181
@@ -1582,25 +1321,10 @@ https://medium.com/@ivantrevino/100-managed-wiki-deployment-using-microsoft-azur
 
 
 https://www.webfx.com/tools/emoji-cheat-sheet" target="_blank" rel="noreferrer noopener">https://www.webfx.com/tools/emoji-cheat-sheet
-</ul>
-<!-- /wp:list -->
 
-<!-- wp:heading -->
-<h2 class="wp-block-heading" id="-photos">📸 Photos<a href="https://brave-rock-019155e03.4.azurestaticapps.net/blogroll#-photos">​</a></h2>
-<!-- /wp:heading -->
-
+## 📸 Photos
 [Back To Top](#table-of-contents)
 
-
-<ul class="wp-block-list">
-https://dronestock.com/" target="_blank" rel="noreferrer noopener">https://dronestock.com/
-
-
-
-https://www.pexels.com/" target="_blank" rel="noreferrer noopener">https://www.pexels.com/
-
-
-
-https://pixabay.com/" target="_blank" rel="noreferrer noopener">https://pixabay.com/
-</ul>
-<!-- /wp:list -->
+- https://dronestock.com/
+- https://www.pexels.com/
+- https://pixabay.com/

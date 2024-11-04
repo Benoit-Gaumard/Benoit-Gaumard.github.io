@@ -4,6 +4,7 @@ title = "Create your first Hugo website on Windows"
 date = "2024-10-16"
 description = "Test description"
 toc = false
+featured = true
 tags = [
     "hugo"
 ]
