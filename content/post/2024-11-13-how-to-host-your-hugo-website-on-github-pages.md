@@ -70,7 +70,6 @@ The deployment will start after the push
 - Within a few moments, your website will be live at https://<username>.github.io.
 eg. https://Benoit-Gaumard.github.io
 
-
 ## Deploying Your Hugo Website
 
 ### Create an empty file in your local repository.
@@ -112,11 +111,10 @@ Add, commit and push the changes to GitHubgit add . && git commit -m 'creating m
 Watch the workflow in GitHub Actions
 New posts are published at https://username.github.io
 
-``` Bash
-Copy-Item -Path "C:\REPOS\BLOG\hugo-website\bga-new-site\*" -Destination "C:\REPOS\BLOG\Benoit-Gaumard.github.io" -Recurse -Force
-cd C:\REPOS\BLOG\Benoit-Gaumard.github.io
-git add . && git commit -m 'update site' -a && git push
 
+```Bash
+Get-ChildItem -Path "C:\REPOS\BLOG\Benoit-Gaumard.github.io" -Exclude ".git", ".github" -Recurse |
+    Remove-Item -Recurse -Force
 
 Get-ChildItem -Path "C:\REPOS\BLOG\hugo-website\bga-new-site" -Recurse -Exclude ".git" |
     ForEach-Object {
@@ -127,5 +125,6 @@ Get-ChildItem -Path "C:\REPOS\BLOG\hugo-website\bga-new-site" -Recurse -Exclude 
         Copy-Item -Path $_.FullName -Destination $destinationPath -Recurse -Force
     }
 
-
+cd C:\REPOS\BLOG\Benoit-Gaumard.github.io
+git add . && git commit -m 'update site' -a && git push
 ```

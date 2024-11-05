@@ -27,9 +27,9 @@ Feeds are updated automaticaly every day.
 ---
 {{< displayexternalrssfeed url="https://azurefeeds.com/feed/" limit="3">}}
 
-## 🆕 Azure Governance and Management Blog
----
-{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=5581383617566420729&board=AzureGovernanceandManagementBlog" limit="3">}}
+[comment]: # ## 🆕 Azure Governance and Management Blog
+[comment]: # ---
+[comment]: # {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=5581383617566420729&board=AzureGovernanceandManagementBlog" limit="3">}}
 
 ## 🆕 Azure Infrastructure Blog
 ---
@@ -66,3 +66,4 @@ Feeds are updated automaticaly every day.
 ## 🆕 Entra Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/plugins/custom/microsoft/o365/custom-blog-rss?tid=-793512623144765293&board=Identity" limit="3">}}
+
