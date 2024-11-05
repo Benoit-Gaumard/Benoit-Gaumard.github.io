@@ -113,8 +113,14 @@ New posts are published at https://username.github.io
 
 
 ```Bash
-Get-ChildItem -Path "C:\REPOS\BLOG\Benoit-Gaumard.github.io" -Exclude ".git", ".github" -Recurse |
-    Remove-Item -Recurse -Force
+Get-ChildItem -Path "C:\REPOS\BLOG\Benoit-Gaumard.github.io" -Exclude ".git", ".github" |
+    ForEach-Object {
+        if ($_.PSIsContainer) {
+            Remove-Item -Path $_.FullName -Recurse -Force
+        } else {
+            Remove-Item -Path $_.FullName -Force
+        }
+    }
 
 Get-ChildItem -Path "C:\REPOS\BLOG\hugo-website\bga-new-site" -Recurse -Exclude ".git" |
     ForEach-Object {
