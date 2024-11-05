@@ -94,6 +94,8 @@ You new hugo website is up and runnning
 git add . && git commit -m 'new hugo blog' -a && git push
 ```
 
+## Yaml pipeline
+
 ## Publish a new post
 
 Create a new post with
@@ -104,16 +106,22 @@ hugo new content/path/to/content/new_post.md
 Build the site with hugo
 ```
 
+Add, commit and push the changes to GitHub
 ``` Bash
-Add, commit and push the changes to GitHubgit add . && git commit -m 'creating my second post' -a && git push
+git add . && git commit -m 'creating my second post' -a && git push
 ```
 
 Watch the workflow in GitHub Actions
 New posts are published at https://username.github.io
 
+# Automate it
 
-```Bash
-Get-ChildItem -Path "C:\REPOS\BLOG\Benoit-Gaumard.github.io" -Exclude ".git", ".github" |
+```Powershell
+$SourcePath = "C:\REPOS\BLOG\hugo-website\bga-new-site"
+$DestinationPath = "C:\REPOS\BLOG\Benoit-Gaumard.github.io"
+
+# Delete existing folder content
+Get-ChildItem -Path $DestinationPath -Exclude ".git", ".github" |
     ForEach-Object {
         if ($_.PSIsContainer) {
             Remove-Item -Path $_.FullName -Recurse -Force
@@ -122,15 +130,25 @@ Get-ChildItem -Path "C:\REPOS\BLOG\Benoit-Gaumard.github.io" -Exclude ".git", ".
         }
     }
 
-Get-ChildItem -Path "C:\REPOS\BLOG\hugo-website\bga-new-site" -Recurse -Exclude ".git" |
+# Get all items in the source path, excluding .git and .gity
+Get-ChildItem -Path $SourcePath -Recurse -Exclude ".git", ".gity" |
     ForEach-Object {
-        $destinationPath = $_.FullName -replace [regex]::Escape("C:\REPOS\BLOG\hugo-website\bga-new-site"), "C:\REPOS\BLOG\Benoit-Gaumard.github.io"
-        if (!(Test-Path -Path (Split-Path -Path $destinationPath -Parent))) {
-            New-Item -ItemType Directory -Path (Split-Path -Path $destinationPath -Parent) -Force
+        # Adjust the destination path for each item
+        $targetPath = $_.FullName -replace [regex]::Escape($SourcePath), $DestinationPath
+
+        # Ensure that the destination directory exists
+        if ($_.PSIsContainer) {
+            # Create directory if it's a folder
+            if (!(Test-Path -Path $targetPath)) {
+                New-Item -ItemType Directory -Path $targetPath -Force
+            }
+        } else {
+            # Copy files
+            Copy-Item -Path $_.FullName -Destination $targetPath -Force
         }
-        Copy-Item -Path $_.FullName -Destination $destinationPath -Recurse -Force
     }
 
+# Commit and deploy
 cd C:\REPOS\BLOG\Benoit-Gaumard.github.io
 git add . && git commit -m 'update site' -a && git push
 ```
