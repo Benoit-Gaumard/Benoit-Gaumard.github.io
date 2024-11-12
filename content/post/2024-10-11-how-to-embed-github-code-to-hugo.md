@@ -23,8 +23,6 @@ This article explains how to embed your GitHub code in your Hugo website using a
 
 <img src="/images/githubtest.png" width="50%" height="50%">
 
-# Embed you GitHub code to Hugo using a shortcode
-
 ## Create the shortcode
 
 Let’s create a new shortcode. In your Hugo site’s layouts/shortcodes directory (if the folder shortcodes does not exist create it manually), create a file called embedgithubcode.html and paste the following:

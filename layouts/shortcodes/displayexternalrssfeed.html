@@ -1,13 +1,13 @@
 {{ if .Get "url" }}
   {{ $url := .Get "url" }}
   {{ $limit := .Get "limit" }}
-{{ with resources.GetRemote $url | transform.Unmarshal }}
-  <ul>
-    {{ range first $limit .channel.item }}
-    <li >
-      <p style="padding: 1px;">{{ .pubDate }}: <a href="{{ .link }}">{{ .title }}</a></p>
-    </li>
-    {{ end }}
-  </ul>
-{{ end }}
+  {{ with resources.GetRemote $url | transform.Unmarshal }}
+    <ul>
+      {{ range first $limit .channel.item }}
+      <li>
+        <p style="padding: 1px;">{{ .pubDate }}: <a href="{{ .link }}">{{ .title }}</a></p>
+      </li>
+      {{ end }}
+    </ul>
+  {{ end }}
 {{ end }}

@@ -16,5 +16,14 @@ figurePositionShow = true # Override global value for showing the figure label.
 Here, you'll find the most recent updates from various websites.
 <!--more-->
 
-<img src="/images/rssfeed.png" width="60%" height="60%">
+<img src="/images/rssfeed.png" width="50%" height="50%">
+
+{{% notice info "Info" %}}
+3 latest posts from various blogs.
+Feeds are updated automaticaly every day.
+{{% /notice %}}
+
+## 🆕 Azure Feeds Blog
+---
+{{< displayexternalrssfeed url="https://azurefeeds.com/feed/" limit="3">}}
 

@@ -1,6 +1,6 @@
 +++
 author = "Benoit G"
-title = "Create your first Hugo website on Windows"
+title = "Create your first Hugo website locally on Windows"
 date = "2024-10-16"
 description = "Test description"
 toc = false
