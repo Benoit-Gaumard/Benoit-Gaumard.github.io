@@ -12,7 +12,7 @@ featureImageAlt: 'Description of image' # Alternative text for featured image.
 featureImageCap: 'This is the featured image.' # Caption (optional).
 thumbnail: "/images/path/thumbnail.png" # Sets thumbnail image appearing inside card on homepage.
 shareImage: "/images/path/share.png" # Designate a separate image for social media sharing.
-codeMaxLines: 10 # Override global value for how many lines within a code block before auto-collapsing.
+codeMaxLines: 50 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers: false # Override global value for showing of line numbers within code block.
 figurePositionShow: true # Override global value for showing the figure label.
 categories:

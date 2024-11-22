@@ -7,6 +7,8 @@ toc = true
 tags = [
     "cloud", "azure", "cost optimization"
 ]
+categories = ["Azure"
+]
 #featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

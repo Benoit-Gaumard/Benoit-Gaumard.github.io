@@ -3,17 +3,10 @@ author = "Hugo Authors"
 title = "Guia de Sintaxe Markdown"
 date = "2019-03-11"
 description = "Um artigo simples para demonstrar a sintaxe básica de Markdown e como formatar elementos HTML."
-featured = true
+featured = false
 tags = [
-    "markdown",
-    "css",
-    "html",
-    "temas",
-    "destacado"
 ]
 categories = [
-    "temas",
-    "sintaxe",
 ]
 series = ["Guia de Temas"]
 aliases = ["migrar-de-jekyl"]

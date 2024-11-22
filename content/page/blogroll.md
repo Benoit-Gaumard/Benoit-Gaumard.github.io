@@ -3,6 +3,7 @@ author = "Benoit G"
 title = "Blog Roll"
 date = "2024-10-17"
 description = "Blog Roll"
+toc = true
 #featureImage = "/images/rss.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
@@ -184,84 +185,75 @@ https://docsupdatetracker.net/">docsupdatetracker
 [Back To Top](#table-of-contents)
 
 - Learn git branching: https://learngitbranching.js.org/ 🔥
-
 - Vinijmoura GitHub Repo: https://github.com/vinijmoura/Azure-DevOps
-
 - Azure DevOps Labs: https://azuredevopslabs.com/
-
 - Azure DevOps Demo Generator: https://azuredevopsdemogenerator.azurewebsites.net/
-
 - Azure DevOps Organization: https://aex.dev.azure.com/🔥
-
-- https://github.com/bregman-arie/devops-resources">Devops Resources
-
-- http://www.devopsbookmarks.com/cloud-paas">Devops Bookmark
-
-- https://roadmap.sh/">Devops roadmap
-
-- https://github.com/milanm/azure-cheat-sheet">The Microsoft Azure Developer's Cheat Sheet
-
-- https://github.com/stephrobert/awesome-french-devops/">awesome-french-devops
-
-- https://johnlokerse.dev/2023/05/24/secret-scanning-in-azure-devops-with-defender-for-devops/">Secret scanning in Azure DevOps
-
-- https://landscape.cncf.io/">CNCF Cloud Native Interactive Landscape
-
-- https://www.conventionalcommits.org/">https://www.conventionalcommits.org/
-
-- https://digital.ai/learn/devsecops-periodic-table/">devsecops-periodic-table
-
-- https://landscape.cd.foundation/">Continuous Delivery Landscape
-
-- https://web.devopstopologies.com/#anti-types">DevOps Anti-Types
+- Devops Resources: https://github.com/bregman-arie/devops-resources
+- Devops Bookmark: http://www.devopsbookmarks.com/cloud-paas
+- Devops roadmap: https://roadmap.sh/
+- The Microsoft Azure Developer's Cheat Sheet: https://github.com/milanm/azure-cheat-sheet
+- awesome-french-devops: https://github.com/stephrobert/awesome-french-devops/
+- Secret scanning in Azure DevOps: https://johnlokerse.dev/2023/05/24/secret-scanning-in-azure-devops-with-defender-for-devops/
+- CNCF Cloud Native Interactive Landscape: https://landscape.cncf.io/
+- https://www.conventionalcommits.org/: https://www.conventionalcommits.org/
+- devsecops-periodic-table: https://digital.ai/learn/devsecops-periodic-table/
+- Continuous Delivery Landscape: https://landscape.cd.foundation/
+- DevOps Anti-Types: https://web.devopstopologies.com/#anti-types
 
 ## 🚀 DevOps News
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://www.journalduhacker.net/">Le journalduhacker
-- https://news.humancoders.com/">Human Coders News
-- https://dev.to/">Dev.to
+- [Le journalduhacker](https://www.journalduhacker.net/)
+- [Human Coders News](https://news.humancoders.com/)
+- [Dev.to](https://dev.to/)
 
+## 📅 Events
+---
+
+[Back To Top](#table-of-contents)
+
+-[Developers Events](https://developers.events/)
 
 ## 💵 FinOps
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://azure.microsoft.com/en-us/pricing/tco/calculator/">Total Cost of Ownership (TCO) Calculator
-- https://azure.microsoft.com/en-us/pricing/calculator/">Azure Pricing calculator</a>&nbsp;🔥
-- https://docs.microsoft.com/fr-fr/archive/blogs/girishp/strategies-to-realizing-cost-savings-in-azure">Strategies to realizing Cost Savings in Azure
-- https://github.com/Azure/AzureBudgetAlert-in-Teams">Budget Alert in Teams
-- https://github.com/helderpinto/AzureOptimizationEngine">Azure Optimization Engine (AOE)
-- https://techcommunity.microsoft.com/t5/microsoft-defender-for-cloud/microsoft-defender-for-cloud-price-estimation-dashboard/ba-p/3247622">Microsoft Defender for Cloud Price Estimation Dashboard
-- https://docs.microsoft.com/en-us/azure/architecture/framework/cost/overview">Cost optimization pillar
-- ttps://github.com/chris-bowman/Azure-Cost-Reporting/tree/main/Power%20BI%20Report">Azure Cost Reporting PBI
-- https://techcommunity.microsoft.com/t5/azure-architecture-blog/codename-project-bose-calculate-azure-cost-of-an-enterprise-by/ba-p/3741295">Project Bose: Cost of an Enterprise by cost centers, divisions, projects
-- https://techcommunity.microsoft.com/t5/fasttrack-for-azure/the-azure-finops-guide/ba-p/3704132">The Azure FinOps guide</a>&nbsp;🔥
-- https://github.com/mivano/azure-cost-cli">Azure Cost Cli</a>&nbsp;🔥
-- https://azure.microsoft.com/en-us/resources/finops-with-azure-bringing-finops-to-life-through-organizational-and-cultural-alignment/">FinOps whitepaper
-- https://www.serverless360.com/blog/what-causes-azure-costs-to-increase">What causes Azure costs to increase
-- https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1">https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/optimize-your-azure-costs/ba-p/4064181">Optimize Your Azure Costs</a>&nbsp;🔥
+- [Total Cost of Ownership (TCO) Calculator](https://azure.microsoft.com/en-us/pricing/tco/calculator/)
+- [Azure Pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) 🔥
+- [Strategies to realizing Cost Savings in Azure](https://docs.microsoft.com/fr-fr/archive/blogs/girishp/strategies-to-realizing-cost-savings-in-azure)
+- [Budget Alert in Teams](https://github.com/Azure/AzureBudgetAlert-in-Teams)
+- [Azure Optimization Engine (AOE)](https://github.com/helderpinto/AzureOptimizationEngine)
+- [Microsoft Defender for Cloud Price Estimation Dashboard](https://techcommunity.microsoft.com/t5/microsoft-defender-for-cloud/microsoft-defender-for-cloud-price-estimation-dashboard/ba-p/3247622)
+- [Cost optimization pillar](https://docs.microsoft.com/en-us/azure/architecture/framework/cost/overview)
+- [Azure Cost Reporting PBI](https://github.com/chris-bowman/Azure-Cost-Reporting/tree/main/Power%20BI%20Report)
+- [Project Bose: Cost of an Enterprise by cost centers, divisions, projects](https://techcommunity.microsoft.com/t5/azure-architecture-blog/codename-project-bose-calculate-azure-cost-of-an-enterprise-by/ba-p/3741295)
+- [The Azure FinOps guide](https://techcommunity.microsoft.com/t5/fasttrack-for-azure/the-azure-finops-guide/ba-p/3704132) 🔥
+- [Azure Cost Cli](https://github.com/mivano/azure-cost-cli) 🔥
+- [FinOps whitepaper](https://azure.microsoft.com/en-us/resources/finops-with-azure-bringing-finops-to-life-through-organizational-and-cultural-alignment/)
+- [What causes Azure costs to increase](https://www.serverless360.com/blog/what-causes-azure-costs-to-increase)
+- [https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1](https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1)
+- [Optimize Your Azure Costs](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/optimize-your-azure-costs/ba-p/4064181) 🔥
 
 🤣 Fun Images
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://www.goodtechthings.com/">Goodtechthings.com
+- [Goodtechthings.com](https://www.goodtechthings.com/)
 
 🤖 GitHub
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md">GitHub emoji cheat sheet</a>&nbsp;🔥
-- https://myoctocat.com/build-your-octocat/">Build your own octocat
-- https://www.bitmoji.com/stickers/">Bitmoji
-- https://api.github.com/meta">All IP ranges used by GitHub Actions runners
+- [GitHub emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md) 🔥
+- [Build your own octocat](https://myoctocat.com/build-your-octocat/)
+- [Bitmoji](https://www.bitmoji.com/stickers/)
+- [All IP ranges used by GitHub Actions runners](https://api.github.com/meta)
 
 
 ## 🏢 Governance
@@ -269,69 +261,55 @@ https://docsupdatetracker.net/">docsupdatetracker
 
 [Back To Top](#table-of-contents)
 
-- https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-services-resource-providers">Find resource providers by Azure services - Azure Resource Manager | Microsoft Learn</a> 🔥
-- https://policyalias.mats.codes/">Azure Policy Aliases (mats.codes)
-- https://www.azadvertizer.net/">AzAdvertizer</a>&nbsp;🔥
-- https://github.com/JulianHayward/Azure-MG-Sub-Governance-Reporting">AzGovViz
-- https://github.com/Azure/ccodashboard">Continuous Cloud Optimization (CCO)</a>&nbsp;🔥
-- https://github.com/ASCI">AzureSecurityCenterInventory
-- https://github.com/microsoft/ARI">Azure Resource Inventory (ARI)
-- https://github.com/PrateekKumarSingh/AzViz">Azure Visualizer (AzViz)
-- https://powershell.today/2022/02/new-diagrams.net-diagram/">New (diagrams.net) diagram
-- https://github.com/jkstant/AzureRACIToolkit">Azure Raci toolkit
-- https://github.com/microsoft/CloudAdoptionFramework/tree/master/ready/AzNamingTool">Azure Naming Tool
-- https://justinoconnor.codes/2022/08/19/azure-periodic-table-of-resource-naming-convention-shorthands/">Azure Periodic Table of Resource Naming Convention</a>&nbsp;🔥
-- https://www.devjev.nl/posts/2022/the-perfect-azure-naming-convention/">The perfect Azure naming convention
-- https://juniortoexpert.com/fr/convention-de-denomination-des-variables/">Variables naming convention
-- https://github.com/basvanbennekommsft/Blog-Posts/tree/main/Use%20Azure%20Functions%20to%20remove%20Unauthorized%20Role%20Assignments">remove Unauthorized Role Assignments
-- https://azurediagrams.com/">Azure Analytics Architecture Advisor
+- [Find resource providers by Azure services - Azure Resource Manager | Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-services-resource-providers) 🔥
+- [Azure Policy Aliases (mats.codes)](https://policyalias.mats.codes/)
+- [AzAdvertizer](https://www.azadvertizer.net/) 🔥
+- [AzGovViz](https://github.com/JulianHayward/Azure-MG-Sub-Governance-Reporting)
+- [Continuous Cloud Optimization (CCO)](https://github.com/Azure/ccodashboard) 🔥
+- [AzureSecurityCenterInventory](https://github.com/ASCI)
+- [Azure Resource Inventory (ARI)](https://github.com/microsoft/ARI)
+- [Azure Visualizer (AzViz)](https://github.com/PrateekKumarSingh/AzViz)
+- [New (diagrams.net) diagram](https://powershell.today/2022/02/new-diagrams.net-diagram/)
+- [Azure Raci toolkit](https://github.com/jkstant/AzureRACIToolkit)
+- [Azure Naming Tool](https://github.com/microsoft/CloudAdoptionFramework/tree/master/ready/AzNamingTool)
+- [Azure Periodic Table of Resource Naming Convention](https://justinoconnor.codes/2022/08/19/azure-periodic-table-of-resource-naming-convention-shorthands/) 🔥
+- [The perfect Azure naming convention](https://www.devjev.nl/posts/2022/the-perfect-azure-naming-convention/)
+- [Variables naming convention](https://juniortoexpert.com/fr/convention-de-denomination-des-variables/)
+- [remove Unauthorized Role Assignments](https://github.com/basvanbennekommsft/Blog-Posts/tree/main/Use%20Azure%20Functions%20to%20remove%20Unauthorized%20Role%20Assignments)
+- [Azure Analytics Architecture Advisor](https://azurediagrams.com/)
 
 ## 🔍 Graph KQL
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://github.com/LearningKijo/KQL">KQL - threat hunting hub
-- https://kql-search-2.vercel.app/">https://kql-search-2.vercel.app/
-- https://www.kqlsearch.com/">https://www.kqlsearch.com/
-- https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664">https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664
+- [KQL - threat hunting hub](https://github.com/LearningKijo/KQL)
+- [https://kql-search-2.vercel.app/](https://kql-search-2.vercel.app/)
+- [https://www.kqlsearch.com/](https://www.kqlsearch.com/)
+- [https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664](https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664)
 
 ## 💥 HA and DR
 ---
 
 [Back To Top](#table-of-contents)
 
-
-- https://azure.microsoft.com/en-us/global-infrastructure/geographies/">Azure Geographies and regions
-
-- https://docs.microsoft.com/en-us/azure/availability-zones/cross-region-replication-azure">Azure cross regions replication
-
-- https://docs.microsoft.com/en-us/learn/modules/azure-architecture-fundamentals/regions-availability-zones">Azure regions and availability zones
-
-- https://github.com/Azure/BusinessContinuityGuide/releases">Azure Business Continuity Guide
-
-
-
-- https://azure.microsoft.com/mediahandler/files/resourcefiles/resilience-in-azure-whitepaper/Resilience%20in%20Azure.pdf">https://azure.microsoft.com/mediahandler/files/resourcefiles/resilience-in-azure-whitepaper/Resilience%20in%20Azure.pdf
-
-
-
-- https://azure.microsoft.com/mediahandler/files/resourcefiles/infographic-reliability-with-microsoft-azure/InfographicRC2.pdf">Reliability with microsoft Azure Infographic
+- [Azure Geographies and regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/)
+- [Azure cross regions replication](https://docs.microsoft.com/en-us/azure/availability-zones/cross-region-replication-azure)
+- [Azure regions and availability zones](https://docs.microsoft.com/en-us/learn/modules/azure-architecture-fundamentals/regions-availability-zones)
+- [Azure Business Continuity Guide](https://github.com/Azure/BusinessContinuityGuide/releases)
+- [Resilience in Azure](https://azure.microsoft.com/mediahandler/files/resourcefiles/resilience-in-azure-whitepaper/Resilience%20in%20Azure.pdf)
+- [Reliability with microsoft Azure Infographic](https://azure.microsoft.com/mediahandler/files/resourcefiles/infographic-reliability-with-microsoft-azure/InfographicRC2.pdf)
 
 ## 📢 Informations
 ---
 
 [Back To Top](#table-of-contents)
 
-
--https://azure.microsoft.com/en-us/updates/">Azure Updates</a>&nbsp;🔥
-
--https://azureinfohub.azurewebsites.net/">Azure Info Hub
-
-- https://azureweekly.info/">Azure Weekly
-
-- https://azurefeeds.com/">AzureFeeds
-- https://docs.microsoft.com/en-us/archive/blogs/blogms/official-microsoft-team-blogs-microsoft-blogs">Official Microsoft Team Blogs
+- [Azure Updates](https://azure.microsoft.com/en-us/updates/) 🔥
+- [Azure Info Hub](https://azureinfohub.azurewebsites.net/)
+- [Azure Weekly](https://azureweekly.info/)
+- [AzureFeeds](https://azurefeeds.com/)
+- [Microsoft Blogs by products](https://techcommunity.microsoft.com/Blogs)
 
 ## 🔍 LightHouse
 ---
@@ -339,88 +317,57 @@ https://docsupdatetracker.net/">docsupdatetracker
 [Back To Top](#table-of-contents)
 
 
-- https://securecloud.blog/2020/11/13/securing-azure-lighthouse-with-azure-policy-and-azure-privileged-identity-management-for-msps-and-customers/">Securing Azure Lighthouse with Azure Policy and PIM
+- [Securing Azure Lighthouse with Azure Policy and PIM](https://securecloud.blog/2020/11/13/securing-azure-lighthouse-with-azure-policy-and-azure-privileged-identity-management-for-msps-and-customers/)
 
 ## 📌 Misc
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://github.com/clarkio/azure-mask">Azure Mask
-
-- https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-raspberry-pi-web-simulator-get-started">Raspberry Simulator for IOT Hub
-
-- https://sqlflow.gudusoft.com/#/">sqlflow
-
-- https://nuagedemots.co/">Nuage de mots
-
-- https://wiki-tech.io/">Wiki Tech
-
-- https://microsoft.github.io/AzureTipsAndTricks/">Azure Tips and Tricks
-
-- https://login.microsoftonline.com/error">Code Error
-
-- https://quickref.me/">quickref cheatsheets and quick references
-
-- https://login.microsoftonline.com/logout.srf">https://login.microsoftonline.com/logout.srf
-
-- https://login.microsoftonline.com/login.srf">https://login.microsoftonline.com/login.srf
-
-- https://cheatography.com/">https://cheatography.com/
-
-- https://www.commontools.org/">https://www.commontools.org/
-
-- https://www.serverlesslibrary.net/">Azure serverless community library
+- [Azure Mask](https://github.com/clarkio/azure-mask)
+- [Raspberry Simulator for IOT Hub](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-raspberry-pi-web-simulator-get-started)
+- [sqlflow](https://sqlflow.gudusoft.com/#/)
+- [Nuage de mots](https://nuagedemots.co/)
+- [Wiki Tech](https://wiki-tech.io/)
+- [Azure Tips and Tricks](https://microsoft.github.io/AzureTipsAndTricks/)
+- [Code Error](https://login.microsoftonline.com/error)
+- [quickref cheatsheets and quick references](https://quickref.me/)
+- [https://login.microsoftonline.com/logout.srf](https://login.microsoftonline.com/logout.srf)
+- [https://login.microsoftonline.com/login.srf](https://login.microsoftonline.com/login.srf)
+- [https://cheatography.com/](https://cheatography.com/)
+- [https://www.commontools.org/](https://www.commontools.org/)
+- [Azure serverless community library](https://www.serverlesslibrary.net/)
 
 ⏩ Move or migration
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzResourceMoveSupport">https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzResourceMoveSupport
-
-- https://github.com/mustafakaya/Azure-Reliability-Checker-Tool">https://github.com/mustafakaya/Azure-Reliability-Checker-Tool
-
-- https://github.com/Azure/migration">Migration Execution Guide
+- [https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzResourceMoveSupport](https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzResourceMoveSupport)
+- [https://github.com/mustafakaya/Azure-Reliability-Checker-Tool](https://github.com/mustafakaya/Azure-Reliability-Checker-Tool)
+- [Migration Execution Guide](https://github.com/Azure/migration)
 
 ## 🌐 Network
 ---
 
 [Back To Top](#table-of-contents)
 
-- https://azureipranges.azurewebsites.net/">https://azureipranges.azurewebsites.net/</a>&nbsp;🔥
-
-- https://techcommunity.microsoft.com/t5/azure-networking-blog/the-azure-networking-map/ba-p/3706001">https://techcommunity.microsoft.com/t5/azure-networking-blog/the-azure-networking-map/ba-p/3706001
-
-
-- https://github.com/sergiomarotco/">Network-segmentation-cheat-sheet
-
-- https://github.com/Azure/Azure-Network-Security">https://github.com/Azure/Azure-Network-Security
-
-- https://github.com/nehalineogi/azure-networking">https://github.com/nehalineogi/azure-networking
-
-- https://github.com/Azure/ipam">https://github.com/Azure/ipam
-
-- https://www.submarinecablemap.com/">https://www.submarinecablemap.com/
-
-- https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzVNETOverlap">https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzVNETOverlap
-
-- https://github.com/mattfeltonma/azure-network-journey">https://github.com/mattfeltonma/azure-network-journey
-
-- https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway">https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway
-
-- https://learn.microsoft.com/en-us/answers/questions/774683/using-azure-firewall-with-web-application-behind-w">https://learn.microsoft.com/en-us/answers/questions/774683/using-azure-firewall-with-web-application-behind-w
-
-
-- https://blog.cellenza.com/cloud-2/comment-deployer-une-architecture-hub-and-spoke-avec-azure-firewall/">https://blog.cellenza.com/cloud-2/comment-deployer-une-architecture-hub-and-spoke-avec-azure-firewall/</a>)
-
-- https://github.com/nicolgit/azure-firewall-mon">https://github.com/nicolgit/azure-firewall-mon</a>)&nbsp;🔥
-
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/quick-start-guide-to-azure-private-endpoints-with-aks-amp/ba-p/3943803">https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/quick-start-guide-to-azure-private-endpoints-with-aks-amp/ba-p/3943803
-
-- https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expressroute-private-peering-to-address/ba-p/4081850">https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expressroute-private-peering-to-address/ba-p/4081850
-
-- https://www.microsoft.com/en-us/download/details.aspx?id=56519">Azure IP ranges
+- [https://azureipranges.azurewebsites.net/](https://azureipranges.azurewebsites.net/) 🔥
+- [https://techcommunity.microsoft.com/t5/azure-networking-blog/the-azure-networking-map/ba-p/3706001](https://techcommunity.microsoft.com/t5/azure-networking-blog/the-azure-networking-map/ba-p/3706001)
+- [Network-segmentation-cheat-sheet](https://github.com/sergiomarotco/)
+- [https://github.com/Azure/Azure-Network-Security](https://github.com/Azure/Azure-Network-Security)
+- [https://github.com/nehalineogi/azure-networking](https://github.com/nehalineogi/azure-networking)
+- [https://github.com/Azure/ipam](https://github.com/Azure/ipam)
+- [https://www.submarinecablemap.com/](https://www.submarinecablemap.com/)
+- [https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzVNETOverlap](https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzVNETOverlap)
+- [https://github.com/mattfeltonma/azure-network-journey](https://github.com/mattfeltonma/azure-network-journey)
+- [https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway)
+- [https://learn.microsoft.com/en-us/answers/questions/774683/using-azure-firewall-with-web-application-behind-w](https://learn.microsoft.com/en-us/answers/questions/774683/using-azure-firewall-with-web-application-behind-w)
+- [https://blog.cellenza.com/cloud-2/comment-deployer-une-architecture-hub-and-spoke-avec-azure-firewall/](https://blog.cellenza.com/cloud-2/comment-deployer-une-architecture-hub-and-spoke-avec-azure-firewall/) 🔥
+- [https://github.com/nicolgit/azure-firewall-mon](https://github.com/nicolgit/azure-firewall-mon) 🔥
+- [https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/quick-start-guide-to-azure-private-endpoints-with-aks-amp/ba-p/3943803](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/quick-start-guide-to-azure-private-endpoints-with-aks-amp/ba-p/3943803)
+- [https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expressroute-private-peering-to-address/ba-p/4081850](https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expressroute-private-peering-to-address/ba-p/4081850)
+- [Azure IP ranges](https://www.microsoft.com/en-us/download/details.aspx?id=56519)
 
 ## 👮 Policies
 ---
@@ -527,148 +474,54 @@ https://docsupdatetracker.net/">docsupdatetracker
 
 [Back To Top](#table-of-contents)
 
-
-https://arcanecode.com/2020/12/14/iterate-over-a-hashtable-in-powershell/">https://arcanecode.com/2020/12/14/iterate-over-a-hashtable-in-powershell/
-
-
-
-https://codewithme.cloud/posts/2023/08/list-azure-role-assignments-with-powershell/">Gain insights into your Azure role assignments on subscription level
+- [Iterate over a hashtable in PowerShell](https://arcanecode.com/2020/12/14/iterate-over-a-hashtable-in-powershell/)
+- [Gain insights into your Azure role assignments on subscription level](https://codewithme.cloud/posts/2023/08/list-azure-role-assignments-with-powershell/)
 
 ## 🧱 Routing and NVA
 ---
 
 [Back To Top](#table-of-contents)
 
-https://nwktimes.blogspot.com/2023/05/azure-nva-redundancy-part-I.html">https://nwktimes.blogspot.com/2023/05/azure-nva-redundancy-part-I.html
-
-https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke">https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke</a>)&nbsp;🔥&nbsp;🔥
-
-https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/">https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</a>)&nbsp;🔥&nbsp;🔥
-
-https://medium.com/@andragabr/enabling-direct-onprem-site-access-to-azure-private-vmss-resources-via-internal-load-balancer-a-118f13f4ca18">https://medium.com/@andragabr/enabling-direct-onprem-site-access-to-azure-private-vmss-resources-via-internal-load-balancer-a-118f13f4ca18
+- [Azure NVA Redundancy Part I](https://nwktimes.blogspot.com/2023/05/azure-nva-redundancy-part-I.html)
+- [Hub-Spoke Architecture](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) 🔥🔥
+- [Connect Azure with On-Prem Network Part 1](https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/) 🔥🔥
+- [Enabling Direct On-Prem Site Access to Azure Private VMSS Resources via Internal Load Balancer](https://medium.com/@andragabr/enabling-direct-onprem-site-access-to-azure-private-vmss-resources-via-internal-load-balancer-a-118f13f4ca18)
 
 ## 💀 Security
 ---
 
 [Back To Top](#table-of-contents)
 
-https://docs.microsoft.com/en-us/security/cybersecurity-reference-architecture/mcra">Microsoft Cybersecurity Reference Architectures (MCRA)</a>&nbsp;🔥
-
-
-
-https://github.com/nccgroup/azucar">Azucar
-
-
-
-https://github.com/nccgroup/ScoutSuite">ScoutSuite
-
-
-
-https://github.com/azsk/DevOpsKit-docs">Secure DevOps Kit
-
-
-
-https://github.com/cyberark/SkyArk">Skyark
-
-
-
-https://github.com/NetSPI/MicroBurst">MicroBurst
-
-
-
-https://github.com/Azure/Stormspotter">Stormspotter
-
-
-
-https://github.com/Azure/Cloud-Katana">Cloud Katana
-
-
-
-https://center-for-threat-informed-defense.github.io/security-stack-mappings/Azure/README.html">Azure Security Control Mappings to MITRE ATT&amp;CK®
-
-
-
-https://github.com/darkquasar/AzureHunter">Azure Hunter
-
-
-
-https://msrc.microsoft.com/update-guide/vulnerability">Microsoft Security Response Center (MSRC)
-
-
-
-https://github.com/Azure/review-checklists">Azure Review CheckList</a>&nbsp;🔥
-
-
-
-https://github.com/aquasecurity/cloud-security-remediation-guides">CloudSploit Security Remediation Guides
-
-
-
-https://notsosecure.com/identifying-exploiting-leaked-azure-storage-keys">Identifying &amp; Exploiting Leaked Azure Storage Keys
-
-
-
-https://github.com/hashishrajan/cloud-security-vulnerabilities">cloud security vulnerabilities
-
-
-
-<li>[Windows AppLocker Bypass] regsvr32.exe /s /u /i:test.sct scrobj.dll
-
-
-
-https://github.com/microsoft/Cybersecurity-jobs-skills-workshop">Cybersecurity-jobs-skills-workshop
-
-
-
-https://book.hacktricks.xyz/welcome/readme">HackTricks
-
-
-
-https://github.com/Thialala/automatic-secrets-rotation">Azure Secret Rotation
-
-
-
-https://github.com/beurtschipper/Depix">Depix is a tool for recovering passwords from pixelized screenshots
-
-
-
-https://github.com/snooppr/snoop/blob/master/README.fr.md">Snoop
-
-
-
-https://resources.azure.com/api/token?plaintext=true">Get Azure bearer token
-
-
-
-https://www.arachni-scanner.com/">Arachni Web application security scanner
-
-
-
-https://github.com/Lissy93/web-check">OSINT web-check
-
-
-
-https://www.hackthebox.com/">Hack The Box
-
-
-
-https://www.root-me.org/">Root Me
-
-
-
-https://github.com/dafthack/GraphRunner">GraphRunner
-
-
-
-https://buckets.grayhatwarfare.com/">Open bucket and storage account
-
-
-
-https://github.com/labyrinthinesecurity/silhouette">Labyrinthinesecurity silhouette
-
-
-
-https://web-check.xyz/">https://web-check.xyz/
+- [Microsoft Cybersecurity Reference Architectures (MCRA)](https://docs.microsoft.com/en-us/security/cybersecurity-reference-architecture/mcra) 🔥
+- [Azucar](https://github.com/nccgroup/azucar)
+- [ScoutSuite](https://github.com/nccgroup/ScoutSuite)
+- [Secure DevOps Kit](https://github.com/azsk/DevOpsKit-docs)
+- [Skyark](https://github.com/cyberark/SkyArk)
+- [MicroBurst](https://github.com/NetSPI/MicroBurst)
+- [Stormspotter](https://github.com/Azure/Stormspotter)
+- [Cloud Katana](https://github.com/Azure/Cloud-Katana)
+- [Azure Security Control Mappings to MITRE ATT&amp;CK®](https://center-for-threat-informed-defense.github.io/security-stack-mappings/Azure/README.html)
+- [Azure Hunter](https://github.com/darkquasar/AzureHunter)
+- [Microsoft Security Response Center (MSRC)](https://msrc.microsoft.com/update-guide/vulnerability)
+- [Azure Review CheckList](https://github.com/Azure/review-checklists) 🔥
+- [CloudSploit Security Remediation Guides](https://github.com/aquasecurity/cloud-security-remediation-guides)
+- [Identifying &amp; Exploiting Leaked Azure Storage Keys](https://notsosecure.com/identifying-exploiting-leaked-azure-storage-keys)
+- [cloud security vulnerabilities](https://github.com/hashishrajan/cloud-security-vulnerabilities)
+- Windows AppLocker Bypass: regsvr32.exe /s /u /i:test.sct scrobj.dll
+- [Cybersecurity-jobs-skills-workshop](https://github.com/microsoft/Cybersecurity-jobs-skills-workshop)
+- [HackTricks](https://book.hacktricks.xyz/welcome/readme)
+- [Azure Secret Rotation](https://github.com/Thialala/automatic-secrets-rotation)
+- [Depix is a tool for recovering passwords from pixelized screenshots](https://github.com/beurtschipper/Depix)
+- [Snoop](https://github.com/snooppr/snoop/blob/master/README.fr.md)
+- [Get Azure bearer token](https://resources.azure.com/api/token?plaintext=true)
+- [Arachni Web application security scanner](https://www.arachni-scanner.com/)
+- [OSINT web-check](https://github.com/Lissy93/web-check)
+- [Hack The Box](https://www.hackthebox.com/)
+- [Root Me](https://www.root-me.org/)
+- [GraphRunner](https://github.com/dafthack/GraphRunner)
+- [Open bucket and storage account](https://buckets.grayhatwarfare.com/)
+- [Labyrinthinesecurity silhouette](https://github.com/labyrinthinesecurity/silhouette)
+- [https://web-check.xyz/](https://web-check.xyz/)
 
 ## 📝 Services
 ---
@@ -676,60 +529,20 @@ https://web-check.xyz/">https://web-check.xyz/
 [Back To Top](#table-of-contents)
 
 
-
-https://azurecharts.com/">Azure Charts</a>&nbsp;🔥
-
-
-
-https://azureperiodic.data3.com/">Azure Periodic table
-
-
-
-https://azureservices.io/">Azure Services io
-
-
-
-https://github.com/azure-deprecation/dashboard/issues">Azure Deprecation DashBoard
-
-
-
-https://azurecharts.com/timeboards/deprecations">Azure Charts Deprecations</a>&nbsp;🔥
-
-
-
-https://azurecharts.com/timeboards/arrivals">Azure Charts Arrivals</a>&nbsp;🔥
-
-
-
-https://status.azure.com/">Azure Status</a>&nbsp;🔥
-
-
-
-https://azure.status.microsoft/en-us/status">New Azure Status</a>&nbsp;🔥
-
-
-
-https://infrastructuremap.microsoft.com/">Azure Infrastructure Map</a>&nbsp;🔥
-
-
-
-http://azurespeedtest.azurewebsites.net/">Azure Speed Test 2.0
-
-
-
-https://github.com/devblackops/AzSpeedTest">AzSpeedTest Powershell
-
-
-
-https://www.azurespeed.com/">AzureSpeed
-
-
-
-https://azure.microsoft.com/en-us/support/legal/sla/summary/">SLA for Azure services
-
-
-
-https://uptime.is/">SLA Calculator
+- [Azure Charts](https://azurecharts.com/)&nbsp;🔥
+- [Azure Periodic table](https://azureperiodic.data3.com/)
+- [Azure Services io](https://azureservices.io/)
+- [Azure Deprecation DashBoard](https://github.com/azure-deprecation/dashboard/issues)
+- [Azure Charts Deprecations](https://azurecharts.com/timeboards/deprecations)&nbsp;🔥
+- [Azure Charts Arrivals](https://azurecharts.com/timeboards/arrivals)&nbsp;🔥
+- [Azure Status](https://status.azure.com/)&nbsp;🔥
+- [New Azure Status](https://azure.status.microsoft/en-us/status)&nbsp;🔥
+- [Azure Infrastructure Map](https://infrastructuremap.microsoft.com/)&nbsp;🔥
+- [Azure Speed Test 2.0](http://azurespeedtest.azurewebsites.net/)
+- [AzSpeedTest Powershell](https://github.com/devblackops/AzSpeedTest)
+- [AzureSpeed](https://www.azurespeed.com/)
+- [SLA for Azure services](https://azure.microsoft.com/en-us/support/legal/sla/summary/)
+- [SLA Calculator](https://uptime.is/)
 
 ## ✍ Stencils and icons
 ---
@@ -737,31 +550,18 @@ https://uptime.is/">SLA Calculator
 [Back To Top](#table-of-contents)
 
 - [Official Microsoft Azure Cloud and AI Symbol / Icon Set - SVG - Pointer](https://www.microsoft.com/en-us/download/details.aspx?id=41937)
-
 - [sandroasp Icon Set](https://github.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/tree/master/Azure)
-
 - [David-Summers Icon Set](https://github.com/David-Summers/Azure-Design) 🔥
-
 - [Azure Docs collection](http://code.benco.io/icon-collection/azure-docs/)
-
 - [Azure Icons collection](http://code.benco.io/icon-collection/azure-icons/) 🔥
-
 - [Azure Patterns collection](http://code.benco.io/icon-collection/azure-patterns/)
-
 - [Azure cds Collection](http://code.benco.io/icon-collection/azure-cds/)
-
 - [ContentCollateral](https://github.com/mrpaulandrew/ContentCollateral)
-
 - [Azure Icons Libraries for Diagrams.net (Draw.io)](https://pacodelacruz.io/azure-icons-library-diagrams-net) 🔥
-
 - [Azure architecture SVG icons](https://learn.microsoft.com/en-us/azure/architecture/icons/) 🔥
-
 - [Diagram as code](https://irom.info/blog/2023/09/04/diagrams-as-code)
-
 - [Azure Design Studio](https://github.com/chunliu/AzureDesignStudio)
-
 - [Azure glyphs and icons](https://azure.microsoft.com/en-us/patterns/styles/glyphs-icons/)
-
 - [Draw.io Azure infrastructure diagrams](https://techcommunity.microsoft.com/t5/microsoft-developer-community/draw-io-azure-infrastructure-diagrams-through-code-like-an/ba-p/4071316)
 
 ## 🪴 Sustainability

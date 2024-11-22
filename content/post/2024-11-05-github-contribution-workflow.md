@@ -7,6 +7,8 @@ toc = true
 tags = [
     "productivity", "tools", "diagrams"
 ]
+categories = ["GitHub"
+]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

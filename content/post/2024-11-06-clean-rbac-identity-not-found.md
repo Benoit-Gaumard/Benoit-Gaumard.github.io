@@ -5,7 +5,9 @@ date = "2024-11-06"
 description = ""
 toc = true
 tags = [
-    "kql"
+    "RBAC"
+]
+categories = ["Azure"
 ]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.

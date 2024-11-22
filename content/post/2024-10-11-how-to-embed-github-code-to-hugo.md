@@ -6,7 +6,8 @@ description = "Test description"
 toc = false
 tags = [
     "hugo",
-    "shortcode"
+]
+categories = ["GitHub"
 ]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.

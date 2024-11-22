@@ -9,6 +9,8 @@ tags = [
   "hugo",
   "github"
 ]
+categories = ["Hugo"
+]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
