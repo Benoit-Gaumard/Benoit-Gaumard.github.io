@@ -4,6 +4,7 @@ title = "✨ Optimize and Reduce Costs in Azure"
 date = "2024-09-11"
 description = "Learn how to optimize and reduce costs in Azure with practical tips and strategies."
 toc = true
+featured = true
 tags = [
     "cloud", "azure", "cost optimization"
 ]
