@@ -32,6 +32,9 @@ Many organizations struggle with how they want their cloud home to look, often s
 ## Cloud home
 ---
 
+![Cloud Home14](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/c5974213-bcba-4920-ae57-2049f626432b.png)
+
+
 ## Critical Design Areas
 ---
 
@@ -51,6 +54,7 @@ Many organizations struggle with how they want their cloud home to look, often s
 ---
 
 - Built-In vs custom
+- Audit / Deny / If Not exist
 
 ## Automation
 ---
@@ -68,6 +72,7 @@ Many organizations struggle with how they want their cloud home to look, often s
 ---
 
 - Define a naming convention before any deployment
+- Exemple of naming convention
 
 ## Tagging
 ---
@@ -77,9 +82,15 @@ Many organizations struggle with how they want their cloud home to look, often s
 ## Network
 ---
 
+- Hub and spoke topology
 - Ip adress plan
-
+- Peering
 - IPAM
+
+## VMS
+---
+
+- NAT
 
 ## Extra tools
 ---

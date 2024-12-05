@@ -14,81 +14,82 @@ codeLineNumbers = false # Override global value for showing of line numbers with
 figurePositionShow = true # Override global value for showing the figure label.
 +++
 
-Here, you'll find useful links
+This section offers a curated collection of helpful links, providing resources and tools to enhance your understanding and make your experience more productive.
 <!--more-->
 
 <img src="/images/blogroll.png" width="50%" height="50%">
 
-## Table Of Contents
 
 ## 🆕 New Links To Check
 ---
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
-- https://developer.microsoft.com/en-us/graph/graph-explorer
-- https://detective.kusto.io/
-- https://gettenantpartitionweb.azurewebsites.net/
-- https://dataexplorer.azure.com/
-- https://oai.azure.com/portal
+- Blog Cloud63 Vincent Misson https://blog.cloud63.fr/
+- Azure Talk Blog: https://blog.zuehlke.cloud/
+- Achraf Ben Alaya: https://achrafbenalaya.com/
 
 ## 🧠 AI
 ---
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
-- https://aka.ms/hci-demo
-- https://app.suno.ai/
-- https://designer.microsoft.com/
+- [Interactive collection of the 18 Guidelines for Human-AI Interaction](https://aka.ms/hci-demo)
+- [Funko Pop prompt](https://designer.microsoft.com/image-creator?p=Funko+figure+of+a+%5Bmale%5D%2C+%5Bsmiling%5D%2C+called+%5BBen%5D%2C+wearing+%5Ba+white+henley+t-shirt%5D%2C+a+%5Bpull+grey+hoodie+with+logo+blue+%22Azure%22%5D%2C+handing+%5Ba+surface+laptop%5D%2C+%5Bjeans%5D%2C+%5Bwhite+moccasins+and+white+socks%5D%2C+%5Blong+eyelashes%5D%2C+%5Bshort+brown+air%5D.+The+Funko+is+displayed+inside+and+outside+a+limited+edition+%5BGrey+and+blue%5D+Funko+box+with+%5B%22Microsoft%22+text+as+front%5D%2C+allowing+visibility+of+the+figure%2C+typography%2C+3D+render.+White+background")
+- https://oai.azure.com/portal
+
+### 🧠 AI (Images)
+---
+[Back To Top](#documentTop)
+
+- https://designer.microsoft.com/ 🔥
 - https://www.bing.com/images/create
-- https://github.com/LouisShark/chatgpt_system_prompt
-- https://designer.microsoft.com/image-creator?p=Funko+figure+of+a+%5Bmale%5D%2C+%5Bsmiling%5D%2C+called+%5BBen%5D%2C+wearing+%5Ba+white+henley+t-shirt%5D%2C+a+%5Bpull+grey+hoodie+with+logo+blue+%22Azure%22%5D%2C+handing+%5Ba+surface+laptop%5D%2C+%5Bjeans%5D%2C+%5Bwhite+moccasins+and+white+socks%5D%2C+%5Blong+eyelashes%5D%2C+%5Bshort+brown+air%5D.+The+Funko+is+displayed+inside+and+outside+a+limited+edition+%5BGrey+and+blue%5D+Funko+box+with+%5B%22Microsoft%22+text+as+front%5D%2C+allowing+visibility+of+the+figure%2C+typography%2C+3D+render.+White+background"
+
+### 🧠 AI (Music)
+---
+[Back To Top](#documentTop)
+
+- https://app.suno.ai/
+
 
 ## 🏢 Architecture
 ---
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
-- https://microsoftcloudworkshop.com/
-- https://azure.microsoft.com/en-us/resources/whitepapers/search/?type=WhitePaperResource
+- [Free Ebooks and whitepapers](https://azure.microsoft.com/en-us/resources/whitepapers/search/?type=WhitePaperResource)
 - https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits
-- https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/🔥
-- https://learn.microsoft.com/en-us/azure/architecture/framework/
+- [Cloud Adoption Framework CAF](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/)🔥
+- [Well Architected Framework WAF](https://learn.microsoft.com/en-us/azure/architecture/framework/)🔥
 - https://social.technet.microsoft.com/wiki/contents/articles/630.microsoft-azure-survival-guide.aspx
 - https://social.technet.microsoft.com/wiki/contents/articles/33800.azure-iaas-v2-arm-design-series-azure-subscriptions.aspx
-- Azure Offers: https://azure.microsoft.com/en-us/support/legal/offer-details/
+- [Azure Offers](https://azure.microsoft.com/en-us/support/legal/offer-details/)
 - https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/
 - https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
-- Azure Reference Architectures: https://docs.microsoft.com/en-us/azure/architecture/browse/ 🔥
-- Cloud adoption antipatterns: https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/antipatterns/antipatterns-to-avoid
-- Azure Customer Advisory Team (CAT): https://techcommunity.microsoft.com/t5/azure-global/bg-p/AzureCAT
+- [Azure Reference Architectures](https://docs.microsoft.com/en-us/azure/architecture/browse/) 🔥
+- [Cloud adoption antipatterns](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/antipatterns/antipatterns-to-avoid)
 - Azure supported workloads: https://docs.microsoft.com/en-US/troubleshoot/azure/virtual-machines/server-software-support
-- https://github.com/lukemurraynz/awesome-azure-architecture
-- Microsoft Assessments: https://docs.microsoft.com/en-us/assessments/?mode=home
-https://docsupdatetracker.net/">docsupdatetracker
+- Microsoft Assessments and review : https://docs.microsoft.com/en-us/assessments/?mode=home 🔥
+- https://docsupdatetracker.net/">docsupdatetracker
 - Landing Zone mission-critical: https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-landing-zone
 - Azure Quick Review: https://github.com/Azure/azqr
 - Azure Sandbox: https://learn.microsoft.com/en-us/azure/architecture/guide/azure-sandbox/azure-sandbox
 - Azure Dev Center: https://github.com/Azure-Samples/DevCenter
 - CAF Additionnal resources: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/staying-current?tabs=AdditionalResources#tabpanel_1_AdditionalResources
 - Cloud Adoption Framework Tools and Templates: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools-templates
-- MOAW: https://microsoft.github.io/moaw/
-- Blog Cloud63 Vincent Missonhttps://blog.cloud63.fr/
+- MOAW: https://microsoft.github.io/moaw/ 🔥
 - Azure Landing Zone catalog: https://github.com/oliverlabs/alz-catalogue
-- Azure Talk Blog: https://blog.zuehlke.cloud/
-- Achraf Ben Alaya: https://achrafbenalaya.com/
-- Azure Docs for partners: https://msazureforpartners.azurewebsites.net/
 
 ## 🅰 ARM
 ---
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
-- Azure Quickstart Templates: https://azure.microsoft.com/en-us/resources/templates/
-- ARMViz: http://armviz.io/
-- Azure resource explorer: https://resources.azure.com/
-- Rest API Browser: https://docs.microsoft.com/en-us/rest/api/?view=Azure 🔥
+- [Azure Quickstart Templates](https://azure.microsoft.com/en-us/resources/templates/)
+- [ARMViz](http://armviz.io/)
+- [Azure resource explorer](https://resources.azure.com/)
+- [Rest API Browser](https://docs.microsoft.com/en-us/rest/api/?view=Azure)🔥
 
 ## 👀 Analytics and monitoring
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Log Analytics Query Portal: https://portal.loganalytics.io/demo#/query/main
 - Kusto explorer: https://docs.microsoft.com/en-us/azure/data-explorer/kusto/tools/kusto-explorer
@@ -96,17 +97,17 @@ https://docsupdatetracker.net/">docsupdatetracker
 - Azure Monitor Community: https://github.com/microsoft/AzureMonitorCommunity🔥
 - Log Analytics cost: https://trstringer.com/log-analytics-expensive-part-1-discovery/
 - azure-monitoring-certificates: https://blog.smartcloudarchitect.fr/azure-monitoring-certificates
-- Query collection: https://github.com/globalbao/azure-resource-graph
 - Azure Monitor Logs table reference: https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-category
-- https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951
+- AMBA: https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951
 
 ## 🟦 Azure Active Directory (Entra Id)
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Tenant availability check 1: https://account.azure.com/organization
 - Tenant availability check 2: https://o365.rocks/
+- https://gettenantpartitionweb.azurewebsites.net/
 - Interactive authentication: https://microsoft.com/devicelogin/
 - Azure Active Directory admin center: http://aad.portal.azure.com/🔥
 - Azure AD Exporter: https://github.com/microsoft/azureadexporter/
@@ -115,20 +116,22 @@ https://docsupdatetracker.net/">docsupdatetracker
 - Azure AD Security Config Analyzer (AADSCA): https://github.com/Cloud-Architekt/AzureAD-Attack-Defense/blob/main/AADSecurityConfigAnalyzer.md
 - Azure-AccessPermissions: https://github.com/csandker/Azure-AccessPermissions
 - Decode, verify and generate Token: https://jwt.io/
-- AAD Osint tool: AAD Osint toolhttps://aadinternals.com/osint/
+- AAD Osint tool: https://aadinternals.com/osint/ 🔥
 - https://myaccount.microsoft.com/groups/groups-i-belong-to
 
 ## 💪 Bicep
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
-- https://github.com/rchaganti/bicepbookexamples">Bicep from 0 to hero
+- Bicep from 0 to hero: https://github.com/rchaganti/bicepbookexamples
+- Convert ARM to Bicep online: https://bicep.kwitantie.app/
+- Bicep playground: https://azure.github.io/bicep/
 
 ## 🏅 Certifications
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Official certifications training poster: https://aka.ms/TrainCertPoster
 - Browse Certifications by roles: https://learn.microsoft.com/en-us/certifications/
@@ -139,21 +142,23 @@ https://docsupdatetracker.net/">docsupdatetracker
 - Practice Assessments for Microsoft Certifications 2: https://techcommunity.microsoft.com/t5/microsoft-learn-blog/prep-for-certification-exams-with-free-practice-assessments-on/ba-p/3666866
 - Azure Open Source Labs: https://learn.microsoft.com/en-us/samples/azure-samples/azure-opensource-labs/azure-opensource-labs/
 
+
+
 ## ⛅ Cloud Services Comparison
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Public Cloud Services Comparison: https://comparecloud.in/
 - Azure VM Comparison: https://azureprice.net/
 - Compare AWS and Azure services to Google Cloud https://cloud.google.com/free/docs/aws-azure-gcp-service-comparison?utm_source=google&amp;utm_medium=blog&amp;utm_campaign=FY21-Q2-Product-Mapping-Blog&amp;utm_content=documentation
-- https://docs.microsoft.com/en-us/azure/architecture/aws-professional/services">Compare Azure and AWS services
+- https://docs.microsoft.com/en-us/azure/architecture/aws-professional/services Compare Azure and AWS services
 - Azure MarketPlace: https://azuremarketplace.microsoft.com/en-us/
 
 ## 🚨 Compliance
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Microsoft compliance offerings: https://docs.microsoft.com/en-us/compliance/regulatory/offering-home?view=o365-worldwide
 - Microsoft Privacy Statement: https://privacy.microsoft.com/en-us/privacystatement
@@ -161,10 +166,26 @@ https://docsupdatetracker.net/">docsupdatetracker
 - Service trust portal: https://servicetrust.microsoft.com/
 - Compliance Manager portal: https://servicetrust.microsoft.com/ComplianceManager/V3#
 
+
+## 📊 DNS
+---
+
+[Back To Top](#documentTop)
+
+- https://blog.teknews.cloud/network/2024/10/27/Back_tobasics_About_Private_DNS_Resolver.html
+
+
+## 📊 Data
+---
+
+[Back To Top](#documentTop)
+
+- Azure Data Explorer https://dataexplorer.azure.com/
+
 ## 📊 DashBoards
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Azure Orphan Resources workbook: https://techcommunity.microsoft.com/t5/fasttrack-for-azure/azure-orphan-resources/ba-p/3492198
 - Network Security Dashboard for Microsoft Defender for Cloud: https://github.com/Azure/Microsoft-Defender-for-Cloud/tree/main/Workbooks/Network%20Security%20Dashboard
@@ -178,25 +199,25 @@ https://docsupdatetracker.net/">docsupdatetracker
 - Cloud Roles and Operations Management DashBoard: https://github.com/Azure/cloud-rolesandops
 - Azure Service Retirement Workbook: https://learn.microsoft.com/en-us/azure/advisor/advisor-how-to-plan-migration-workloads-service-retirement
 - Azure Inventory Workbook: https://github.com/scautomation/Azure-Inventory-Workbook 🔥
+- https://github.com/4R9UN/Cloud-Events/tree/main
 
 ## 🚀 DevOps
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - Learn git branching: https://learngitbranching.js.org/ 🔥
-- Vinijmoura GitHub Repo: https://github.com/vinijmoura/Azure-DevOps
 - Azure DevOps Labs: https://azuredevopslabs.com/
 - Azure DevOps Demo Generator: https://azuredevopsdemogenerator.azurewebsites.net/
 - Azure DevOps Organization: https://aex.dev.azure.com/🔥
 - Devops Resources: https://github.com/bregman-arie/devops-resources
-- Devops Bookmark: http://www.devopsbookmarks.com/cloud-paas
+- Devops Bookmark: https://www.devopsbookmarks.org/
 - Devops roadmap: https://roadmap.sh/
 - The Microsoft Azure Developer's Cheat Sheet: https://github.com/milanm/azure-cheat-sheet
 - awesome-french-devops: https://github.com/stephrobert/awesome-french-devops/
 - Secret scanning in Azure DevOps: https://johnlokerse.dev/2023/05/24/secret-scanning-in-azure-devops-with-defender-for-devops/
 - CNCF Cloud Native Interactive Landscape: https://landscape.cncf.io/
-- https://www.conventionalcommits.org/: https://www.conventionalcommits.org/
+- https://www.conventionalcommits.org/
 - devsecops-periodic-table: https://digital.ai/learn/devsecops-periodic-table/
 - Continuous Delivery Landscape: https://landscape.cd.foundation/
 - DevOps Anti-Types: https://web.devopstopologies.com/#anti-types
@@ -204,7 +225,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🚀 DevOps News
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Le journalduhacker](https://www.journalduhacker.net/)
 - [Human Coders News](https://news.humancoders.com/)
@@ -213,14 +234,14 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 📅 Events
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
--[Developers Events](https://developers.events/)
+- [Developers Events](https://developers.events/) 🔥
 
 ## 💵 FinOps
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Total Cost of Ownership (TCO) Calculator](https://azure.microsoft.com/en-us/pricing/tco/calculator/)
 - [Azure Pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) 🔥
@@ -237,18 +258,20 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [What causes Azure costs to increase](https://www.serverless360.com/blog/what-causes-azure-costs-to-increase)
 - [https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1](https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1)
 - [Optimize Your Azure Costs](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/optimize-your-azure-costs/ba-p/4064181) 🔥
+- https://microsoft.github.io/finops-toolkit/
 
-🤣 Fun Images
+🤣 Fun
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Goodtechthings.com](https://www.goodtechthings.com/)
+- [geekprank](https://geekprank.com/)
 
 🤖 GitHub
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [GitHub emoji cheat sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md) 🔥
 - [Build your own octocat](https://myoctocat.com/build-your-octocat/)
@@ -259,7 +282,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🏢 Governance
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Find resource providers by Azure services - Azure Resource Manager | Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-services-resource-providers) 🔥
 - [Azure Policy Aliases (mats.codes)](https://policyalias.mats.codes/)
@@ -274,24 +297,30 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [Azure Naming Tool](https://github.com/microsoft/CloudAdoptionFramework/tree/master/ready/AzNamingTool)
 - [Azure Periodic Table of Resource Naming Convention](https://justinoconnor.codes/2022/08/19/azure-periodic-table-of-resource-naming-convention-shorthands/) 🔥
 - [The perfect Azure naming convention](https://www.devjev.nl/posts/2022/the-perfect-azure-naming-convention/)
-- [Variables naming convention](https://juniortoexpert.com/fr/convention-de-denomination-des-variables/)
 - [remove Unauthorized Role Assignments](https://github.com/basvanbennekommsft/Blog-Posts/tree/main/Use%20Azure%20Functions%20to%20remove%20Unauthorized%20Role%20Assignments)
 - [Azure Analytics Architecture Advisor](https://azurediagrams.com/)
 
 ## 🔍 Graph KQL
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [KQL - threat hunting hub](https://github.com/LearningKijo/KQL)
 - [https://kql-search-2.vercel.app/](https://kql-search-2.vercel.app/)
 - [https://www.kqlsearch.com/](https://www.kqlsearch.com/)
 - [https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664](https://techcommunity.microsoft.com/t5/azure-governance-and-management/announcing-authorizationresources-in-azure-resource-graph/ba-p/3813912?WT.mc_id=DT-MVP-5001664)
+- [Microsoft Kusto Detective Agency Contest](https://detective.kusto.io/)
+- Query collection: https://github.com/globalbao/azure-resource-graph
+- https://github.com/tyconsulting/AzureResourceGraph/tree/master/Queries
+
+## 🔍 Graph
+
+- https://developer.microsoft.com/en-us/graph/graph-explorer
 
 ## 💥 HA and DR
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure Geographies and regions](https://azure.microsoft.com/en-us/global-infrastructure/geographies/)
 - [Azure cross regions replication](https://docs.microsoft.com/en-us/azure/availability-zones/cross-region-replication-azure)
@@ -299,11 +328,13 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [Azure Business Continuity Guide](https://github.com/Azure/BusinessContinuityGuide/releases)
 - [Resilience in Azure](https://azure.microsoft.com/mediahandler/files/resourcefiles/resilience-in-azure-whitepaper/Resilience%20in%20Azure.pdf)
 - [Reliability with microsoft Azure Infographic](https://azure.microsoft.com/mediahandler/files/resourcefiles/infographic-reliability-with-microsoft-azure/InfographicRC2.pdf)
+- https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/VMRegionZonalAvailability
+
 
 ## 📢 Informations
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure Updates](https://azure.microsoft.com/en-us/updates/) 🔥
 - [Azure Info Hub](https://azureinfohub.azurewebsites.net/)
@@ -314,7 +345,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🔍 LightHouse
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 
 - [Securing Azure Lighthouse with Azure Policy and PIM](https://securecloud.blog/2020/11/13/securing-azure-lighthouse-with-azure-policy-and-azure-privileged-identity-management-for-msps-and-customers/)
@@ -322,7 +353,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 📌 Misc
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure Mask](https://github.com/clarkio/azure-mask)
 - [Raspberry Simulator for IOT Hub](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-raspberry-pi-web-simulator-get-started)
@@ -335,13 +366,13 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [https://login.microsoftonline.com/logout.srf](https://login.microsoftonline.com/logout.srf)
 - [https://login.microsoftonline.com/login.srf](https://login.microsoftonline.com/login.srf)
 - [https://cheatography.com/](https://cheatography.com/)
-- [https://www.commontools.org/](https://www.commontools.org/)
 - [Azure serverless community library](https://www.serverlesslibrary.net/)
+- Microsoft MVP's Map : https://mvpsglobe.web.app/
 
 ⏩ Move or migration
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzResourceMoveSupport](https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell/AzResourceMoveSupport)
 - [https://github.com/mustafakaya/Azure-Reliability-Checker-Tool](https://github.com/mustafakaya/Azure-Reliability-Checker-Tool)
@@ -350,7 +381,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🌐 Network
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [https://azureipranges.azurewebsites.net/](https://azureipranges.azurewebsites.net/) 🔥
 - [https://techcommunity.microsoft.com/t5/azure-networking-blog/the-azure-networking-map/ba-p/3706001](https://techcommunity.microsoft.com/t5/azure-networking-blog/the-azure-networking-map/ba-p/3706001)
@@ -368,97 +399,49 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/quick-start-guide-to-azure-private-endpoints-with-aks-amp/ba-p/3943803](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/quick-start-guide-to-azure-private-endpoints-with-aks-amp/ba-p/3943803)
 - [https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expressroute-private-peering-to-address/ba-p/4081850](https://techcommunity.microsoft.com/t5/azure-networking-blog/understanding-expressroute-private-peering-to-address/ba-p/4081850)
 - [Azure IP ranges](https://www.microsoft.com/en-us/download/details.aspx?id=56519)
+- https://visualsubnetcalc.com/#
+- https://azureipranges.azurewebsites.net/
 
 ## 👮 Policies
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
-- https://techcommunity.microsoft.com/t5/microsoft-defender-for-cloud/7-steps-to-author-develop-and-deploy-custom-recommendations-for/ba-p/3166026">Windows using Guest Configuration
-
-- https://github.com/Azure/enterprise-azure-policy-as-code">Azure Policy As Code
-
-- https://medium.com/microsoftazure/devsecops-policy-as-code-with-azure-pipelines-86cc1e27f03c">Policy-as-code with Azure Pipelines
-
-- https://techcommunity.microsoft.com/t5/microsoft-defender-for-cloud/policy-distribution-dashboard-for-microsoft-defender-for-cloud/ba-p/3264712">Policy Distribution Dashboard for Microsoft Defender for Cloud
-
-- https://github.com/rjygraham/AzurePolicy/tree/main/Samples">Ryan Graham GitHub Repo
-
-- https://github.com/tyconsulting/azurepolicy">tyconsulting GitHub Repo
-
-- https://github.com/Azure/Community-Policy">Azure Community Policy GitHub Repo</a>&nbsp;🔥
-
-- https://www.cloudsma.com/2021/10/build-azure-policy-compliance-workbook/">Azure Policy Compliance WorkBook
-
+- https://github.com/Azure/enterprise-azure-policy-as-code Azure Policy As Code
+- https://medium.com/microsoftazure/devsecops-policy-as-code-with-azure-pipelines-86cc1e27f03c Policy-as-code with Azure Pipelines
+- https://techcommunity.microsoft.com/t5/microsoft-defender-for-cloud/policy-distribution-dashboard-for-microsoft-defender-for-cloud/ba-p/3264712 Policy Distribution Dashboard for Microsoft Defender for Cloud
+- https://github.com/rjygraham/AzurePolicy/tree/main/Samples Ryan Graham GitHub Repo
+- https://github.com/tyconsulting/azurepolicy tyconsulting GitHub Repo
+- https://github.com/Azure/Community-Policy" Azure Community Policy GitHub Repo🔥
+- https://www.cloudsma.com/2021/10/build-azure-policy-compliance-workbook/ Azure Policy Compliance WorkBook
 - https://github.com/globalbao/awesome-azure-policy">AWESOME-Azure-Policy
-
-- https://github.com/JimGBritt/AzurePolicy/tree/master/AzureMonitor/Scripts">Azure Diagnostics Policy Generator
-
+- https://github.com/JimGBritt/AzurePolicy/tree/master/AzureMonitor/Scripts Azure Diagnostics Policy Generator
 - https://www.cloudpartner.fi/?p=7015">Configure centralized policy management
-
-- https://policyalias.mats.codes/">Policies Aliases List
-
-- https://purple.telstra.com/blog/azure-policy-as-code-with-terraform-part-1">Terraform policies as code</a>&nbsp;🔥
-
-- https://github.com/globalbao/azure-policy-as-code/tree/main">Terraform policies as code repo</a>&nbsp;🔥
-
-- https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/cloud-scale-analytics/eslz-policies">CAF Policies</a>&nbsp;🔥
-
-- https://blog.tyang.org/2023/09/30/natively0monitoring-azure-policy-compliance-states-in-azure-monitor-2023-edition/">https://blog.tyang.org/2023/09/30/natively0monitoring-azure-policy-compliance-states-in-azure-monitor-2023-edition/
-
-- https://andrewmatveychuk.com/how-to-validate-azure-tags/">https://andrewmatveychuk.com/how-to-validate-azure-tags/
-
--
-- https://medium.com/@geralexgr/azure-policy-require-specific-tags-on-resources-72b911f6c725">https://medium.com/@geralexgr/azure-policy-require-specific-tags-on-resources-72b911f6c725
-
-- https://www.blueboxes.co.uk/working-with-tags-in-azure-resource-graph-explorer">https://www.blueboxes.co.uk/working-with-tags-in-azure-resource-graph-explorer
-
-- https://github.com/fawohlsc/azure-policy-testing">https://github.com/fawohlsc/azure-policy-testing
-
-
-
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/azure-policy-recommended-practices/ba-p/3798024?WT.mc_id=DT-MVP-5001664">https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/azure-policy-recommended-practices/ba-p/3798024?WT.mc_id=DT-MVP-5001664
-
-
-
-- https://azure.github.io/enterprise-azure-policy-as-code">https://azure.github.io/enterprise-azure-policy-as-code
-
-
-
-- https://github.com/Azure/enterprise-azure-policy-as-code">https://github.com/Azure/enterprise-azure-policy-as-code
-
-
-
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/azure-enterprise-policy-as-code-a-new-approach/ba-p/3607843">https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/azure-enterprise-policy-as-code-a-new-approach/ba-p/3607843
-
-
-
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/infrastructure-as-code-testing-with-azure-policy/ba-p/3921765?WT.mc_id=DT-MVP-5001664">https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/infrastructure-as-code-testing-with-azure-policy/ba-p/3921765?WT.mc_id=DT-MVP-5001664
-
-
-
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/cost-governance-with-azure-policy/ba-p/3791888?WT.mc_id=DT-MVP-5001664">https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/cost-governance-with-azure-policy/ba-p/3791888?WT.mc_id=DT-MVP-5001664
-
-
-
-- https://techcommunity.microsoft.com/t5/azure-network-security-blog/enforcing-and-managing-azure-ddos-protection-with-azure-policy/ba-p/3933172?WT.mc_id=DT-MVP-5001664">https://techcommunity.microsoft.com/t5/azure-network-security-blog/enforcing-and-managing-azure-ddos-protection-with-azure-policy/ba-p/3933172?WT.mc_id=DT-MVP-5001664
-
-
-
-- https://techcommunity.microsoft.com/t5/fasttrack-for-azure/azure-policy-for-azure-container-apps-yes-please/ba-p/3775200?WT.mc_id=DT-MVP-5001664">https://techcommunity.microsoft.com/t5/fasttrack-for-azure/azure-policy-for-azure-container-apps-yes-please/ba-p/3775200?WT.mc_id=DT-MVP-5001664
-
-
-
-- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/infrastructure-as-code-testing-with-azure-policy/ba-p/3921765">https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/infrastructure-as-code-testing-with-azure-policy/ba-p/3921765
-
-
-
-- https://jeffbrown.tech/azure-policy-resource-lock/">https://jeffbrown.tech/azure-policy-resource-lock/
+- https://policyalias.mats.codes/ Policies Aliases List 🔥
+- https://purple.telstra.com/blog/azure-policy-as-code-with-terraform-part-1 Terraform policies as code 🔥
+- https://github.com/globalbao/azure-policy-as-code/tree/mainTerraform policies as code repo🔥
+- https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/cloud-scale-analytics/eslz-policies CAF Policies 🔥
+- https://blog.tyang.org/2023/09/30/natively0monitoring-azure-policy-compliance-states-in-azure-monitor-2023-edition/
+- https://andrewmatveychuk.com/how-to-validate-azure-tags/
+- https://medium.com/@geralexgr/azure-policy-require-specific-tags-on-resources-72b911f6c725
+- https://www.blueboxes.co.uk/working-with-tags-in-azure-resource-graph-explorer
+- https://github.com/fawohlsc/azure-policy-testing
+- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/azure-policy-recommended-practices/ba-p/3798024?WT.mc_id=DT-MVP-5001664
+- https://azure.github.io/enterprise-azure-policy-as-code
+- https://github.com/Azure/enterprise-azure-policy-as-code
+- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/azure-enterprise-policy-as-code-a-new-approach/ba-p/3607843
+- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/infrastructure-as-code-testing-with-azure-policy/ba-p/3921765?WT.mc_id=DT-MVP-5001664
+- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/cost-governance-with-azure-policy/ba-p/3791888?WT.mc_id=DT-MVP-5001664
+- https://techcommunity.microsoft.com/t5/azure-network-security-blog/enforcing-and-managing-azure-ddos-protection-with-azure-policy/ba-p/3933172?WT.mc_id=DT-MVP-5001664
+- https://techcommunity.microsoft.com/t5/fasttrack-for-azure/azure-policy-for-azure-container-apps-yes-please/ba-p/3775200?WT.mc_id=DT-MVP-5001664
+- https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/infrastructure-as-code-testing-with-azure-policy/ba-p/3921765
+- https://jeffbrown.tech/azure-policy-resource-lock/
+- https://techcommunity.microsoft.com/blog/azureinfrastructureblog/deny-inbound-nsg-rule-creation-via-azure-policy/4241803
 
 ## 🌐 Portals
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure Preview portal](https://preview.portal.azure.com/)
 - [Azure RC portal](https://rc.portal.azure.com/)
@@ -472,15 +455,16 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🅿 Powershell
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Iterate over a hashtable in PowerShell](https://arcanecode.com/2020/12/14/iterate-over-a-hashtable-in-powershell/)
 - [Gain insights into your Azure role assignments on subscription level](https://codewithme.cloud/posts/2023/08/list-azure-role-assignments-with-powershell/)
+- https://github.com/ElanShudnow/AzureCode/tree/main/PowerShell
 
 ## 🧱 Routing and NVA
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure NVA Redundancy Part I](https://nwktimes.blogspot.com/2023/05/azure-nva-redundancy-part-I.html)
 - [Hub-Spoke Architecture](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) 🔥🔥
@@ -490,7 +474,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 💀 Security
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Microsoft Cybersecurity Reference Architectures (MCRA)](https://docs.microsoft.com/en-us/security/cybersecurity-reference-architecture/mcra) 🔥
 - [Azucar](https://github.com/nccgroup/azucar)
@@ -522,11 +506,16 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [Open bucket and storage account](https://buckets.grayhatwarfare.com/)
 - [Labyrinthinesecurity silhouette](https://github.com/labyrinthinesecurity/silhouette)
 - [https://web-check.xyz/](https://web-check.xyz/)
+- EDR telemetry https://www.edr-telemetry.com/
+- https://github.com/intuitem/ciso-assistant-community
+- https://web-check.as93.net/
+- https://maester.dev/
+
 
 ## 📝 Services
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 
 - [Azure Charts](https://azurecharts.com/)&nbsp;🔥
@@ -547,7 +536,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## ✍ Stencils and icons
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Official Microsoft Azure Cloud and AI Symbol / Icon Set - SVG - Pointer](https://www.microsoft.com/en-us/download/details.aspx?id=41937)
 - [sandroasp Icon Set](https://github.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/tree/master/Azure)
@@ -563,18 +552,19 @@ https://docsupdatetracker.net/">docsupdatetracker
 - [Azure Design Studio](https://github.com/chunliu/AzureDesignStudio)
 - [Azure glyphs and icons](https://azure.microsoft.com/en-us/patterns/styles/glyphs-icons/)
 - [Draw.io Azure infrastructure diagrams](https://techcommunity.microsoft.com/t5/microsoft-developer-community/draw-io-azure-infrastructure-diagrams-through-code-like-an/ba-p/4071316)
+- https://www.svgrepo.com/
 
 ## 🪴 Sustainability
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Microsoft Emissions Impact Dashboard](https://azure.microsoft.com/es-es/blog/empowering-cloud-sustainability-with-the-microsoft-emissions-impact-dashboard/)
 
 ## 🧑‍🚒 Support
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure Support plans](https://azure.microsoft.com/en-us/support/plans/)
 - [Azure community support](https://docs.microsoft.com/en-us/answers/products/azure?product=all)
@@ -583,8 +573,9 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🔖 Tags
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
+- [Tag support for Azure resources](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-support) 🔥
 - [Taggable resources](https://github.com/tfitzmac/resource-capabilities/blob/main/tag-support.csv) 🔥
 - [Develop your naming and tagging strategy for Azure resources](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming)
 - [Naming and tagging conventions tracking template](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools-templates#ready)
@@ -593,7 +584,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🟪 Terraform
 ---
 
-- [Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [aztfy](https://github.com/Azure/aztfy)
 - [Azure terraform-azurerm-caf-enterprise-scale](https://github.com/Azure/terraform-azurerm-caf-enterprise-scale/wiki)
@@ -611,7 +602,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🛫 Terraform Deployment
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Deploying terraform-azure-vnet-hub-spoke](https://www.jorgebernhardt.com/terraform-azure-vnet-hub-spoke/)
 - [Deploying azurefirewall-hub-spoke-demo](https://github.com/mddazure/azurefirewall-hub-spoke-demo)
@@ -624,7 +615,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 💻 Virtual machines
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Azure VM sizes](<https://docs.microsoft.com/en-us/azure/virtual-machines/sizes-general>)
 - [Start / Stop VMs 1](<https://automys.com/library/asset/scheduled-virtual-machine-shutdown-startup-microsoft-azure>)
@@ -637,7 +628,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## ↗ Virtual Machines Scale Set
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [vmssdashboard](https://github.com/gbowerman/vmssdashboard)
 - [asciivmssdashboard](https://github.com/msleal/asciivmssdashboard)
@@ -645,7 +636,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🌍 Web
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Whirl CSS](https://whirl.netlify.app/)
 - [jsoncrack](https://jsoncrack.com/)
@@ -654,7 +645,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 🎥 Youtube
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Théorie en 10mn - Interconnexion de Microsoft Azure avec le monde extérieur](https://www.youtube.com/watch?v=xNRI2hScrcw)
 
@@ -662,7 +653,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 📒 Wiki JS
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [100% Automated Wiki Deployment with Terraform](https://blog.devops.dev/100-automated-wiki-deployment-with-terraform-using-microsoft-azure-app-service-docker-based-and-9274e6848181)
 - [100% Managed Wiki Deployment](https://medium.com/@ivantrevino/100-managed-wiki-deployment-using-microsoft-azure-app-service-docker-based-and-azure-database-871a6abe8a6c)
@@ -671,7 +662,7 @@ https://docsupdatetracker.net/">docsupdatetracker
 ## 📸 Photos
 ---
 
-[Back To Top](#table-of-contents)
+[Back To Top](#documentTop)
 
 - [Dronestock](https://dronestock.com/)
 - [Pexels](https://www.pexels.com/)

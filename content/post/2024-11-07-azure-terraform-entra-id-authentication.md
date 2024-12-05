@@ -11,7 +11,7 @@ categories = ["Terraform"
 #featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/azure-cost-optimization.png" # Sets thumbnail image appearing inside card on homepage.
+thumbnail = "/images/terraform.svg" # Sets thumbnail image appearing inside card on homepage.
 #shareImage = "/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
@@ -21,7 +21,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
 <!--more-->
 
-<img src="/images/azure-cost-optimization.png" width="50%" height="50%">
+<img src="/images/terraform.svg">
 
 AzureRM provider and the remote backend require authentication. The best practice is to disable storage account access key and enable Entra Id (Azure AD) authentication.
 

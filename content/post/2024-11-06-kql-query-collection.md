@@ -526,3 +526,73 @@ Kustoresourcecontainers
 | summarize count() by tostring(managementgroups.displayName)
 | order by count_ desc
 ```
+
+## ⭐ Tags
+
+### Resources without tag
+```kql
+resourcecontainers
+| where type != "microsoft.management/managementgroups"
+| mv-expand bagexpansion=array tags
+| where isempty(tags)
+```
+
+### Resources with specific tags and expand tag names/values to individual rows
+```kql
+resourcecontainers
+| where type != "microsoft.management/managementgroups"
+| mvexpand parsejson(tags)
+| extend tagname = tostring(bag_keys(tags)[0])
+| extend tagvalue = tostring(tags[tagname])
+| project  name,id,type,location,subscriptionId,tagname,tagvalue
+| union (resources
+| mvexpand parsejson(tags)
+| extend tagname = tostring(bag_keys(tags)[0])
+| extend tagvalue = tostring(tags[tagname])
+| project name,id,type,location,subscriptionId,tagname,tagvalue)
+| where tagname == "Environment" or tagname == "Owner"
+```
+
+### Resources not containing a specific tag
+```kql
+resourcecontainers
+| where tags !contains 'Environment'
+```
+
+### Resources not containing a tag and count
+```kql
+resourcecontainers
+| where tags !contains 'Environment'
+| project name, resourceGroup, subscriptionId, location, tags
+| summarize count () by subscriptionId
+```
+
+### All tags for resources
+```kql
+resourcecontainers
+| project  name,type,location,subscriptionId,tags
+| union (resources | project name,type,location,subscriptionId,tags)
+```
+
+### Count for a specific tag key
+```kql
+ResourceContainers
+| where type =~ 'microsoft.resources/subscriptions/resourcegroups'
+| mvexpand tags
+| extend tagKey = tostring(bag_keys(tags)[0])
+| extend tagValue = tostring(tags[tagKey])
+| where tagKey == "Environment"
+| summarize count() by tagValue
+| order by ['count_'] desc
+```
+
+### TEST
+```kql
+resources
+| where type =~ 'Microsoft.Compute/virtualMachines'
+| mvexpand tags
+| extend tagKey = tostring(bag_keys(tags)[0])
+| extend tagValue = tostring(tags[tagKey])
+| where tagKey hasprefix "creat"  and tagKey hasprefix "cr"
+| project name, tags, tagKey, tagValue
+```

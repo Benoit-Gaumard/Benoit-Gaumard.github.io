@@ -1,6 +1,6 @@
 +++
 title = "About"
-description = "Hugo, the world's fastest framework for building websites"
+description = "About Me"
 date = "2019-02-28"
 aliases = ["about-us", "about-hugo", "contact"]
 author = "Hugo Authors"
@@ -9,9 +9,9 @@ author = "Hugo Authors"
 ## Intro
 ---
 
-Hello,
+Hi there,
 
-I’m Benoit Gaumard, a Cloud Consultant and Architect with a focus on Microsoft Azure and related services. As part of the Microsoft company, I’m passionate about cloud architecture, automation, infrastructure as code (IaC), DevOps, and cloud-native solutions. I created this blog to share insights and knowledge about Microsoft technologies.
+My name is **Benoit Gaumard**, a Cloud Consultant and Architect with a focus on Microsoft Azure and related services. As part of the Microsoft company, I’m passionate about cloud architecture, automation, infrastructure as code (IaC), DevOps, and cloud-native solutions. I created this blog to share insights and knowledge about Microsoft technologies.
 
 Here, I share my experiences and learning, which serves as both a personal reference and a learning tool. I’d love to connect and discuss how I might support your needs!
 
@@ -24,17 +24,21 @@ This is a personal blog. The views expressed here are my own and do not reflect 
 
 Some of the technologies I work with:
 
-- Microsoft Azure
-- Microsoft Entra Id
-- Infrastructure as Code (Terraform/Bicep)
-- Azure DevOps / GitHub Action
-- PowerShell
-- Active Directory, Windows Servers and other Microsoft technologies
+- _>__ Public Cloud (Microsoft Azure)
+- _>__ Hybrid Cloud (Microsoft Azure Stack Hub)
+- _>__ Governance (Cloud Adoption Framework, Landing zones, Policies)
+- _>__ Entra Id (Multi tenancy)
+- _>__ Automation (Azure automation, Azure functions, Powershell DSC, Pipelines)
+- _>__ Infrastructure as Code (ARM, Terraform, Bicep)
+- _>__ DevOps (Azure DevOps, GitHub Actions)
+- _>__ Languages (PowerShell, Python, Bash)
+- _>__ On Prem Background (Active Directory, Windows Server, Hyper-V, SCVMM, SCCM, ...)
+- And so many things ...
 
 ## Get in touch
 ---
 
-If you have a project in mind, or just want to connect? You can find me on LinkedIn. Feel free to drop a message, and let’s explore the possibilities together!
+If you have a project in mind, or just want to connect? You can find me on [LinkedIn](https://www.linkedin.com/in/benoit-gaumard/). Feel free to drop a message, and let’s explore the possibilities together!
 
 ## Achievements and Certifications
 ---
@@ -48,5 +52,6 @@ If you have a project in mind, or just want to connect? You can find me on Linke
 | DevOps Engineer Expert| AZ-400                      | <center><img src="/images/badges/az-400-badge.png" width="20%"></center> |
 | Azure Security Engineer Associate| AZ-500                     | <center><img src="/images/badges/az-500-badge.png" width="20%"></center> |
 | Azure Network Engineer Associate| AZ-700                      | <center><img src="/images/badges/az-700-badge.png" width="20%"></center>|
+| Security, Compliance, and Identity Fundamentals| SC-900                      | In Progress ...|
 
 I wish you an excellent visit!

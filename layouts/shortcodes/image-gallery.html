@@ -1,0 +1,39 @@
+<div class="image-gallery">
+  {{ $galleryDir := .Get "gallery_dir" }}
+  {{ $images := readDir (printf "static%s" $galleryDir) }}
+  {{ range $images }}
+    {{ if .IsDir }}
+      {{ continue }}
+    {{ end }}
+    <div class="image-item">
+      <a href="{{ printf "%s/%s" $galleryDir .Name | relURL }}" data-lightbox="gallery" data-title="{{ .Name }}" target="_blank">
+        <img src="{{ printf "%s/%s" $galleryDir .Name | relURL }}" alt="{{ .Name }}">
+      </a>
+    </div>
+  {{ end }}
+</div>
+
+<style>
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.image-item a {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.image-item a:hover {
+  transform: scale(1.05);
+}
+</style>
