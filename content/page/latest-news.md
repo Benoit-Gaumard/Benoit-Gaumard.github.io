@@ -1,6 +1,6 @@
 +++
 author = "Benoit G"
-title = "Latest news"
+title = "Latest Azure news"
 date = "2024-10-17"
 description = "Latest News"
 #featureImage = "/images/rss.svg" # Sets featured image on blog post.
@@ -13,7 +13,7 @@ codeLineNumbers = false # Override global value for showing of line numbers with
 figurePositionShow = true # Override global value for showing the figure label.
 +++
 
-In this section, you’ll discover the most recent updates and insights gathered from a diverse range of websites, ensuring you stay informed about the latest trends, news, and developments about Azure.
+In this section, you’ll discover the most recent updates and insights about **Azure** gathered from a diverse range of websites, ensuring you stay informed about the latest trends, news, and developments about Azure.
 <!--more-->
 
 <img src="/images/rssfeed.png" width="50%" height="50%">

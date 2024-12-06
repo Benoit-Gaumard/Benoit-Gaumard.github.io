@@ -3,8 +3,10 @@ title = "About"
 description = "About Me"
 date = "2019-02-28"
 aliases = ["about-us", "about-hugo", "contact"]
-author = "Hugo Authors"
+author = "Benoit G"
 +++
+
+<img src="/images/Benoit.png" width="20%" height="20%">
 
 ## Intro
 ---
