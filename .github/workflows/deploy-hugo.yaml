@@ -62,6 +62,8 @@ jobs:
             --baseURL "benoit-gaumard.io"
       - name: Create CNAME file with custom domain
         run: echo 'benoit-gaumard.io' > ./public/CNAME  # Add custom domain to CNAME file
+        - name: Create CNAME file with custom domain
+        run: echo 'benoit-gaumard.io' > ./static/CNAME  # Add custom domain to CNAME file
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
