@@ -251,10 +251,13 @@
     <h2 class="mt-4">📅 Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="http://localhost:1313/post/2024-12-06-terraform-vs-bicep/" class="nav-link" title="Terraform vs Bicep, the match">Terraform vs Bicep, the match</a>
+      </li>
+      <li>
         <a href="http://localhost:1313/post/2024-12-02-display-github-secrets-for-debug/" class="nav-link" title="Display GitHub secrets for debug">Display GitHub secrets for debug</a>
       </li>
       <li>
-        <a href="http://localhost:1313/post/2024-11-13-azure-tags-remove-old-resources/" class="nav-link" title="Azure Tags remove old resources">Azure Tags remove old resources</a>
+        <a href="http://localhost:1313/post/2024-11-13-remove-old-resources-based-on-tags/" class="nav-link" title="Remove old Azure resources based on tags">Remove old Azure resources based on tags</a>
       </li>
       <li>
         <a href="http://localhost:1313/post/2024-11-13-search-azure-policy-aliases/" class="nav-link" title="Search Azure policy aliases and sends output to an interactive table">Search Azure policy aliases and sends output to an interactive table</a>
@@ -266,13 +269,10 @@
         <a href="http://localhost:1313/post/2024-11-06-call-azure-api-with-powershell/" class="nav-link" title="Call Azure API with Powershell">Call Azure API with Powershell</a>
       </li>
       <li>
-        <a href="http://localhost:1313/post/2024-11-06-clean-rbac-identity-not-found/" class="nav-link" title="Clean RBAC Identity not found">Clean RBAC Identity not found</a>
-      </li>
-      <li>
         <a href="http://localhost:1313/post/2024-11-13-how-to-delegate-a-domain-to-azure-dns/" class="nav-link" title="How to delegate a domain to Azure DNS">How to delegate a domain to Azure DNS</a>
       </li>
       <li>
-        <a href="http://localhost:1313/post/2024-11-07-azure-subscription-switcher/" class="nav-link" title="Azure subscription switcher">Azure subscription switcher</a>
+        <a href="http://localhost:1313/post/2024-11-06-clean-rbac-identity-not-found/" class="nav-link" title="RBAC delete role assignments with &#39;Identity not found&#39;">RBAC delete role assignments with 'Identity not found'</a>
       </li>
     </ul>
     <div>
@@ -280,7 +280,12 @@
       <nav class="tags_nav">
         <a href='http://localhost:1313/categories/azure/' class="post_tag button button_translucent" title="azure">
           AZURE
-          <span class="button_tally">10</span>
+          <span class="button_tally">13</span>
+        </a>
+        
+        <a href='http://localhost:1313/categories/tools/' class="post_tag button button_translucent" title="tools">
+          TOOLS
+          <span class="button_tally">5</span>
         </a>
         
         <a href='http://localhost:1313/categories/github/' class="post_tag button button_translucent" title="github">
@@ -290,16 +295,6 @@
         
         <a href='http://localhost:1313/categories/hugo/' class="post_tag button button_translucent" title="hugo">
           HUGO
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='http://localhost:1313/categories/terraform/' class="post_tag button button_translucent" title="terraform">
-          TERRAFORM
-          <span class="button_tally">2</span>
-        </a>
-        
-        <a href='http://localhost:1313/categories/tools/' class="post_tag button button_translucent" title="tools">
-          TOOLS
           <span class="button_tally">2</span>
         </a>
         
@@ -314,13 +309,18 @@
           <span class="button_tally">4</span>
         </a>
         
-        <a href='http://localhost:1313/tags/diagrams/' class="post_tag button button_translucent" title="diagrams">
-          DIAGRAMS
+        <a href='http://localhost:1313/tags/github/' class="post_tag button button_translucent" title="github">
+          GITHUB
           <span class="button_tally">3</span>
         </a>
         
         <a href='http://localhost:1313/tags/productivity/' class="post_tag button button_translucent" title="productivity">
           PRODUCTIVITY
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='http://localhost:1313/tags/terraform/' class="post_tag button button_translucent" title="terraform">
+          TERRAFORM
           <span class="button_tally">3</span>
         </a>
         
@@ -334,19 +334,19 @@
           <span class="button_tally">2</span>
         </a>
         
-        <a href='http://localhost:1313/tags/azure/' class="post_tag button button_translucent" title="azure">
-          AZURE
+        <a href='http://localhost:1313/tags/diagrams/' class="post_tag button button_translucent" title="diagrams">
+          DIAGRAMS
           <span class="button_tally">2</span>
         </a>
         
-        <a href='http://localhost:1313/tags/cloud/' class="post_tag button button_translucent" title="cloud">
-          CLOUD
+        <a href='http://localhost:1313/tags/powershell/' class="post_tag button button_translucent" title="powershell">
+          POWERSHELL
           <span class="button_tally">2</span>
         </a>
         
-        <a href='http://localhost:1313/tags/github/' class="post_tag button button_translucent" title="github">
-          GITHUB
-          <span class="button_tally">2</span>
+        <a href='http://localhost:1313/tags/bicep/' class="post_tag button button_translucent" title="bicep">
+          BICEP
+          <span class="button_tally">1</span>
         </a>
         
         <a href='http://localhost:1313/tags/cost-optimization/' class="post_tag button button_translucent" title="cost optimization">
@@ -356,6 +356,11 @@
         
         <a href='http://localhost:1313/tags/dns/' class="post_tag button button_translucent" title="dns">
           DNS
+          <span class="button_tally">1</span>
+        </a>
+        
+        <a href='http://localhost:1313/tags/entra-id/' class="post_tag button button_translucent" title="entra id">
+          ENTRA ID
           <span class="button_tally">1</span>
         </a>
         
@@ -369,16 +374,6 @@
           <span class="button_tally">1</span>
         </a>
         
-        <a href='http://localhost:1313/tags/policies/' class="post_tag button button_translucent" title="policies">
-          POLICIES
-          <span class="button_tally">1</span>
-        </a>
-        
-        <a href='http://localhost:1313/tags/rbac/' class="post_tag button button_translucent" title="rbac">
-          RBAC
-          <span class="button_tally">1</span>
-        </a>
-        
         
         <br>
         <div class="post_tags_toggle button">All Tags</div>
@@ -389,11 +384,7 @@
             </a>
             
             
-            <a href='http://localhost:1313/tags/azure/' class=" post_tag button button_translucent" data-position=2 title="azure">AZURE<span class="button_tally">2</span>
-            </a>
-            
-            
-            <a href='http://localhost:1313/tags/cloud/' class=" post_tag button button_translucent" data-position=2 title="cloud">CLOUD<span class="button_tally">2</span>
+            <a href='http://localhost:1313/tags/bicep/' class=" post_tag button button_translucent" data-position=1 title="bicep">BICEP<span class="button_tally">1</span>
             </a>
             
             
@@ -401,7 +392,7 @@
             </a>
             
             
-            <a href='http://localhost:1313/tags/diagrams/' class=" post_tag button button_translucent" data-position=3 title="diagrams">DIAGRAMS<span class="button_tally">3</span>
+            <a href='http://localhost:1313/tags/diagrams/' class=" post_tag button button_translucent" data-position=2 title="diagrams">DIAGRAMS<span class="button_tally">2</span>
             </a>
             
             
@@ -409,7 +400,11 @@
             </a>
             
             
-            <a href='http://localhost:1313/tags/github/' class=" post_tag button button_translucent" data-position=2 title="github">GITHUB<span class="button_tally">2</span>
+            <a href='http://localhost:1313/tags/entra-id/' class=" post_tag button button_translucent" data-position=1 title="entra id">ENTRA ID<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='http://localhost:1313/tags/github/' class=" post_tag button button_translucent" data-position=3 title="github">GITHUB<span class="button_tally">3</span>
             </a>
             
             
@@ -429,6 +424,10 @@
             </a>
             
             
+            <a href='http://localhost:1313/tags/powershell/' class=" post_tag button button_translucent" data-position=2 title="powershell">POWERSHELL<span class="button_tally">2</span>
+            </a>
+            
+            
             <a href='http://localhost:1313/tags/productivity/' class=" post_tag button button_translucent" data-position=3 title="productivity">PRODUCTIVITY<span class="button_tally">3</span>
             </a>
             
@@ -445,7 +444,7 @@
             </a>
             
             
-            <a href='http://localhost:1313/tags/terraform/' class=" post_tag button button_translucent" data-position=1 title="terraform">TERRAFORM<span class="button_tally">1</span>
+            <a href='http://localhost:1313/tags/terraform/' class=" post_tag button button_translucent" data-position=3 title="terraform">TERRAFORM<span class="button_tally">3</span>
             </a>
             
             
@@ -466,11 +465,12 @@
 
     <div style="border: 2px solid rgb(37, 165, 225); border-radius: 8px; padding: 15px;">
       <ul>
-      <li><a href="https://woivre.com/" class="post_tag button button_translucent">https://woivre.com</a></li>
-      <li><a href="https://blog.stephane-robert.info/" class="post_tag button button_translucent">https://blog.stephane-robert.info</a></li>
+      <li><a href="https://woivre.com/" class="post_tag button button_translucent">Wilfried Woivre</a></li>
+      <li><a href="https://blog.stephane-robert.info/" class="post_tag button button_translucent">Stéphane Robert</a></li>
       <li><a href="https://positive-vibes.io/" class="post_tag button button_translucent">https://positive-vibes.io</a></li>
-      <li><a href="https://charotamine.medium.com/" class="post_tag button button_translucent">https://charotamine.medium.com</a></li>
-      <li><a href="https://akril.net/" class="post_tag button button_translucent">https://akril.net</a></li>
+      <li><a href="https://charotamine.medium.com/" class="post_tag button button_translucent">Amine Charot</a></li>
+      <li><a href="https://akril.net/" class="post_tag button button_translucent">Thibault Gibard</a></li>
+      <li><a href="https://blog.xmi.fr/" class="post_tag button button_translucent">Xavier Mignot</a></li>
       </ul>
       <p>Don't hesitate to reach me if you want your website here.</p>
   </div>

@@ -5,9 +5,9 @@ date = "2024-09-11"
 description = "Learn how to optimize and reduce costs in Azure with practical tips and strategies."
 toc = true
 tags = [
-    "terraform"
+    "Terraform"
 ]
-categories = ["Terraform"
+categories = ["Azure", "Tools"
 ]
 #featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.

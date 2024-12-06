@@ -5,7 +5,7 @@ date = "2024-11-05"
 description = "Discover the benefits of integrating Draw.io with VS Code for seamless diagram creation."
 toc = true
 tags = [
-    "productivity", "tools", "diagrams"
+    "productivity", "tools", "powershell"
 ]
 categories = ["Azure"
 ]

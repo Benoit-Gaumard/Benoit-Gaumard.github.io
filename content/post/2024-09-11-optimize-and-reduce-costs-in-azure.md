@@ -6,14 +6,14 @@ description = "Learn how to optimize and reduce costs in Azure with practical ti
 toc = true
 featured = true
 tags = [
-    "cloud", "azure", "cost optimization"
+    "cost optimization"
 ]
 categories = ["Azure"
 ]
 #featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/azure-cost-optimization.png" # Sets thumbnail image appearing inside card on homepage.
+thumbnail = "/images/cost-management.svg" # Sets thumbnail image appearing inside card on homepage.
 #shareImage = "/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
@@ -23,7 +23,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
 <!--more-->
 
-<img src="/images/azure-cost-optimization.png" width="50%" height="50%">
+<img src="/images/cost-management.svg">
 
 Throughout my various assignments, I have often heard: "It doesn't matter, I'm not the one paying." If you have ever taken an Azure subscription with a pay-as-you-go offer, you know that it is essential to control usage costs. Whether for personal use, an SME, or a large group, Azure cost optimization should be part of your cloud strategy.
 

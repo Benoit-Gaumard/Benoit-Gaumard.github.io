@@ -5,7 +5,7 @@ date = "2024-11-06"
 description = ""
 toc = true
 tags = [
-    "API"
+    "API", "Powershell"
 ]
 categories = ["Azure"
 ]

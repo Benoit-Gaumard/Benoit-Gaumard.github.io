@@ -1,18 +1,18 @@
 +++
 author = "Benoit G"
-title = "Azure Tags remove old resources"
+title = "Remove old Azure resources based on tags"
 date = "2024-11-13"
 description = "Learn how to optimize and reduce costs in Azure with practical tips and strategies."
 toc = true
 tags = [
-    "cloud", "azure", "tags"
+    "tags"
 ]
 categories = ["Azure"
 ]
 #featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/identity-not-found.png" # Sets thumbnail image appearing inside card on homepage.
+thumbnail = "/images/Tags.svg" # Sets thumbnail image appearing inside card on homepage.
 #shareImage = "/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
 codeMaxLines = 50 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
@@ -22,7 +22,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
 <!--more-->
 
-<img src="/images/identity-not-found.png" width="50%" height="50%">
+<img src="/images/Tags.svg">
 
 ### Introduction
 ---
