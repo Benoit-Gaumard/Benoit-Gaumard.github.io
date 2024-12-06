@@ -59,7 +59,7 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "benoit-gaumard.io"
       - name: Create CNAME file with custom domain
         run: echo 'benoit-gaumard.io' > ./public/CNAME  # Add custom domain to CNAME file
       - name: Upload artifact
@@ -71,7 +71,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: benoit-gaumard.io
     runs-on: ubuntu-latest
     needs: build
     steps:
