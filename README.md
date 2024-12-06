@@ -1,4 +1,3 @@
 # Welcome
 
-Welcome to my personnal web site based on Hugo
-
+Welcome to my personal website built with Hugo.

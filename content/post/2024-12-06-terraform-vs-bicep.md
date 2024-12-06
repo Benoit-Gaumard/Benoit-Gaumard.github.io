@@ -10,7 +10,7 @@ tags = [
 ]
 categories = ["Azure", "Tools"
 ]
-featureImage = "/images/bicep.svg" # Sets featured image on blog post.
+#featureImage = "/images/bicep.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
 thumbnail = "/images/bicep.svg" # Sets thumbnail image appearing inside card on homepage.

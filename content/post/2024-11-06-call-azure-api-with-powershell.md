@@ -14,7 +14,7 @@ categories = ["Azure"
 #featureImageCap = 'This is the featured image.' # Caption (optional).
 thumbnail = "/images/rest-api.jpeg" # Sets thumbnail image appearing inside card on homepage.
 #shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
-codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
+#codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
 +++
