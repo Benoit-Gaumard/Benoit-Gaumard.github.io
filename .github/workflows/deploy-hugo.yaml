@@ -60,6 +60,9 @@ jobs:
             --gc \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: Create CNAME file with custom domain
+        run: echo 'benoit-gaumard.io' > ./public/CNAME  # Add custom domain to CNAME file
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
