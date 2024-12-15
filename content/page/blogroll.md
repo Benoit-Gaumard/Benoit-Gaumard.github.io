@@ -347,8 +347,15 @@ This section offers a curated collection of helpful links, providing resources a
 
 [Back To Top](#documentTop)
 
-
 - [Securing Azure Lighthouse with Azure Policy and PIM](https://securecloud.blog/2020/11/13/securing-azure-lighthouse-with-azure-policy-and-azure-privileged-identity-management-for-msps-and-customers/)
+
+## 🔍 Licensing
+---
+
+[Back To Top](#documentTop)
+
+- https://m365maps.com/ 🔥
+- https://m365insights.org/ 🔥
 
 ## 📌 Misc
 ---
@@ -401,6 +408,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Azure IP ranges](https://www.microsoft.com/en-us/download/details.aspx?id=56519)
 - https://visualsubnetcalc.com/#
 - https://azureipranges.azurewebsites.net/
+- IPAM: https://github.com/netbox-community/netbox
 
 ## 👮 Policies
 ---
