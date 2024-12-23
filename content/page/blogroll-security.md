@@ -5,3 +5,5 @@
 - Powershell Empire : https://www.powershellempire.com/
 - Security checks : https://www.malwarearchaeology.com/cheat-sheets/
 - Identifying & Exploiting Leaked Azure Storage Keys : https://www.notsosecure.com/identifying-exploiting-leaked-azure-storage-keys/
+- MFA demo: https://woodgroveemployee.azurewebsites.net/landing
+- Open Source vulnerability scanner : https://github.com/projectdiscovery/nuclei

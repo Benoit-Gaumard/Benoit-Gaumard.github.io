@@ -8,7 +8,7 @@ featured = false
 tags = [
     "Hugo"
 ]
-categories = ["Tools"
+categories = ["Hugo"
 ]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.

@@ -8,8 +8,7 @@ draft = false
 tags = [
     "Terraform", "Bicep"
 ]
-categories = ["Azure", "Tools"
-]
+categories = ["Azure"]
 #featureImage = "/images/bicep.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

@@ -259,6 +259,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1](https://github.com/microsoft/finops-toolkit/releases/tag/v0.1.1)
 - [Optimize Your Azure Costs](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/optimize-your-azure-costs/ba-p/4064181) 🔥
 - https://microsoft.github.io/finops-toolkit/
+- [Apply AHB at Scale](https://techcommunity.microsoft.com/blog/modernizationbestpracticesblog/apply-azure-hybrid-benefits-at-scale-for-azure-sql/3969339)
 
 🤣 Fun
 ---
@@ -296,6 +297,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Azure Raci toolkit](https://github.com/jkstant/AzureRACIToolkit)
 - [Azure Naming Tool](https://github.com/microsoft/CloudAdoptionFramework/tree/master/ready/AzNamingTool)
 - [Azure Periodic Table of Resource Naming Convention](https://justinoconnor.codes/2022/08/19/azure-periodic-table-of-resource-naming-convention-shorthands/) 🔥
+- Naming convention initiative: https://github.com/matthiasguentert/azure-naming-convention-initiative 🔥
 - [The perfect Azure naming convention](https://www.devjev.nl/posts/2022/the-perfect-azure-naming-convention/)
 - [remove Unauthorized Role Assignments](https://github.com/basvanbennekommsft/Blog-Posts/tree/main/Use%20Azure%20Functions%20to%20remove%20Unauthorized%20Role%20Assignments)
 - [Azure Analytics Architecture Advisor](https://azurediagrams.com/)
@@ -341,6 +343,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Azure Weekly](https://azureweekly.info/)
 - [AzureFeeds](https://azurefeeds.com/)
 - [Microsoft Blogs by products](https://techcommunity.microsoft.com/Blogs)
+- https://bonjourlafuite.eu.org/
 
 ## 🔍 LightHouse
 ---
@@ -356,6 +359,12 @@ This section offers a curated collection of helpful links, providing resources a
 
 - https://m365maps.com/ 🔥
 - https://m365insights.org/ 🔥
+
+## 📌 Mind Maps
+---
+
+[Back To Top](#documentTop)
+- https://squasta.github.io/
 
 ## 📌 Misc
 ---
@@ -409,6 +418,7 @@ This section offers a curated collection of helpful links, providing resources a
 - https://visualsubnetcalc.com/#
 - https://azureipranges.azurewebsites.net/
 - IPAM: https://github.com/netbox-community/netbox
+- https://blog.cloudtrooper.net/
 
 ## 👮 Policies
 ---

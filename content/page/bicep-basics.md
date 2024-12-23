@@ -1,0 +1,1 @@
+az bicep decompile -f <file_name>
