@@ -1,25 +1,59 @@
 +++
 title = "About"
-description = "Hugo, the world's fastest framework for building websites"
+description = "About Me"
 date = "2019-02-28"
 aliases = ["about-us", "about-hugo", "contact"]
-author = "Hugo Authors"
+author = "Benoit G"
 +++
 
-Written in Go, Hugo is an open source static site generator available under the [Apache Licence 2.0.](https://github.com/gohugoio/hugo/blob/master/LICENSE) Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.
+<img src="/images/Benoit.png" width="20%" height="20%">
 
-Hugo makes use of a variety of open source projects including:
+## Intro
+---
 
-* https://github.com/yuin/goldmark
-* https://github.com/alecthomas/chroma
-* https://github.com/muesli/smartcrop
-* https://github.com/spf13/cobra
-* https://github.com/spf13/viper
+Hi there,
 
-Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single page applications or even a website with thousands of pages.
+My name is **Benoit Gaumard**, a Cloud Consultant and Architect with a focus on Microsoft Azure and related services. As part of the Microsoft company, I’m passionate about cloud architecture, automation, infrastructure as code (IaC), DevOps, and cloud-native solutions. I created this blog to share insights and knowledge about Microsoft technologies.
 
-Hugo is for people who want to hand code their own website without worrying about setting up complicated runtimes, dependencies and databases.
+Here, I share my experiences and learning, which serves as both a personal reference and a learning tool. I’d love to connect and discuss how I might support your needs!
 
-Websites built with Hugo are extremely fast, secure and can be deployed anywhere including, AWS, GitHub Pages, Heroku, Netlify and any other hosting provider.
+Based in Paris, France, I work and live with a focus on cloud solutions.
 
-Learn more and contribute on [GitHub](https://github.com/gohugoio).
+This is a personal blog. The views expressed here are my own and do not reflect those of my employer. All content is for informational purposes only. I am not liable for any errors, omissions, or unavailability of the information provided.
+
+## Skills
+---
+
+Some of the technologies I work with:
+
+- _>__ Public Cloud (Microsoft Azure)
+- _>__ Hybrid Cloud (Microsoft Azure Stack Hub)
+- _>__ Governance (Cloud Adoption Framework, Landing zones, Policies)
+- _>__ Entra Id (Multi tenancy)
+- _>__ Automation (Azure automation, Azure functions, Powershell DSC, Pipelines)
+- _>__ Infrastructure as Code (ARM, Terraform, Bicep)
+- _>__ DevOps (Azure DevOps, GitHub Actions)
+- _>__ Languages (PowerShell, Python, Bash)
+- _>__ On Prem Background (Active Directory, Windows Server, Hyper-V, SCVMM, SCCM, ...)
+- And so many things ...
+
+## Get in touch
+---
+
+If you have a project in mind, or just want to connect? You can find me on [LinkedIn](https://www.linkedin.com/in/benoit-gaumard/). Feel free to drop a message, and let’s explore the possibilities together!
+
+## Achievements and Certifications
+---
+
+| Title                           | Name                        | Badge                                                   |
+|---------------------------------|-----------------------------|---------------------------------------------------------|
+| Azure AI Fundamentals| AI-900                      | <center><img src="/images/badges/ai-900-badge.png" width="20%"></center> |
+| Azure Fundamentals| AZ-900                      | <center><img src="/images/badges/az-900-badge.png" width="20%"></center> |
+| Azure Administrator Associate| AZ-104                      | <center><img src="/images/badges/az-104-badge.png" width="20%"></center> |
+| Azure Solutions Architect Expert| AZ-300                      | <center><img src="/images/badges/az-305-badge.png" width="20%"></center>|
+| DevOps Engineer Expert| AZ-400                      | <center><img src="/images/badges/az-400-badge.png" width="20%"></center> |
+| Azure Security Engineer Associate| AZ-500                     | <center><img src="/images/badges/az-500-badge.png" width="20%"></center> |
+| Azure Network Engineer Associate| AZ-700                      | <center><img src="/images/badges/az-700-badge.png" width="20%"></center>|
+| Security, Compliance, and Identity Fundamentals| SC-900                      | In Progress ...|
+
+I wish you an excellent visit!
