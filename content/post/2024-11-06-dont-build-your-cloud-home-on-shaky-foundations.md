@@ -32,7 +32,7 @@ Many organizations struggle with how they want their cloud home to look, often s
 ## Cloud home
 ---
 
-![Cloud Home14](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/c5974213-bcba-4920-ae57-2049f626432b.png)
+<img src="/images/cloud-home.png" width="50%" height="50%">
 
 
 ## Critical Design Areas
