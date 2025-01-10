@@ -54,6 +54,7 @@ If you have a project in mind, or just want to connect? You can find me on [Link
 | DevOps Engineer Expert| AZ-400                      | <center><img src="/images/badges/az-400-badge.png" width="20%"></center> |
 | Azure Security Engineer Associate| AZ-500                     | <center><img src="/images/badges/az-500-badge.png" width="20%"></center> |
 | Azure Network Engineer Associate| AZ-700                      | <center><img src="/images/badges/az-700-badge.png" width="20%"></center>|
-| Security, Compliance, and Identity Fundamentals| SC-900                      | In Progress ...|
+| Security, Compliance, and Identity Fundamentals| SC-900                      | <center><img src="/images/badges/sc-900-badge.png" width="20%"></center>|
+| Microsoft Cybersecurity Architect| SC-100                      | SC-100 In progress ...|
 
 I wish you an excellent visit!
