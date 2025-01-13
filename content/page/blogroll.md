@@ -221,6 +221,7 @@ This section offers a curated collection of helpful links, providing resources a
 - devsecops-periodic-table: https://digital.ai/learn/devsecops-periodic-table/
 - Continuous Delivery Landscape: https://landscape.cd.foundation/
 - DevOps Anti-Types: https://web.devopstopologies.com/#anti-types
+- https://rios.engineer/🔥
 
 ## 🚀 DevOps News
 ---
@@ -268,6 +269,8 @@ This section offers a curated collection of helpful links, providing resources a
 
 - [Goodtechthings.com](https://www.goodtechthings.com/)
 - [geekprank](https://geekprank.com/)
+- Doom Web: https://www.emaxilde.net/assets/games/doom/doom.html
+
 
 🤖 GitHub
 ---
@@ -419,6 +422,7 @@ This section offers a curated collection of helpful links, providing resources a
 - https://azureipranges.azurewebsites.net/
 - IPAM: https://github.com/netbox-community/netbox
 - https://blog.cloudtrooper.net/
+- https://trippy.rs/
 
 ## 👮 Policies
 ---
@@ -535,7 +539,6 @@ This section offers a curated collection of helpful links, providing resources a
 
 [Back To Top](#documentTop)
 
-
 - [Azure Charts](https://azurecharts.com/)&nbsp;🔥
 - [Azure Periodic table](https://azureperiodic.data3.com/)
 - [Azure Services io](https://azureservices.io/)
@@ -550,6 +553,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [AzureSpeed](https://www.azurespeed.com/)
 - [SLA for Azure services](https://azure.microsoft.com/en-us/support/legal/sla/summary/)
 - [SLA Calculator](https://uptime.is/)
+- https://downdetector.fr/
 
 ## ✍ Stencils and icons
 ---
