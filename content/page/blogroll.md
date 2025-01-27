@@ -67,7 +67,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Cloud adoption antipatterns](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/antipatterns/antipatterns-to-avoid)
 - Azure supported workloads: https://docs.microsoft.com/en-US/troubleshoot/azure/virtual-machines/server-software-support
 - Microsoft Assessments and review : https://docs.microsoft.com/en-us/assessments/?mode=home 🔥
-- https://docsupdatetracker.net/">docsupdatetracker
+- Docs Update Tracker: https://docsupdatetracker.net/
 - Landing Zone mission-critical: https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-landing-zone
 - Azure Quick Review: https://github.com/Azure/azqr
 - Azure Sandbox: https://learn.microsoft.com/en-us/azure/architecture/guide/azure-sandbox/azure-sandbox
@@ -222,6 +222,7 @@ This section offers a curated collection of helpful links, providing resources a
 - Continuous Delivery Landscape: https://landscape.cd.foundation/
 - DevOps Anti-Types: https://web.devopstopologies.com/#anti-types
 - https://rios.engineer/🔥
+- https://explainshell.com/
 
 ## 🚀 DevOps News
 ---
@@ -299,7 +300,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [New (diagrams.net) diagram](https://powershell.today/2022/02/new-diagrams.net-diagram/)
 - [Azure Raci toolkit](https://github.com/jkstant/AzureRACIToolkit)
 - [Azure Naming Tool](https://github.com/microsoft/CloudAdoptionFramework/tree/master/ready/AzNamingTool)
-- [Azure Periodic Table of Resource Naming Convention](https://justinoconnor.codes/2022/08/19/azure-periodic-table-of-resource-naming-convention-shorthands/) 🔥
+- [Azure Periodic Table of Resource Naming Convention](https://www.azureperiodictable.com/) 🔥
 - Naming convention initiative: https://github.com/matthiasguentert/azure-naming-convention-initiative 🔥
 - [The perfect Azure naming convention](https://www.devjev.nl/posts/2022/the-perfect-azure-naming-convention/)
 - [remove Unauthorized Role Assignments](https://github.com/basvanbennekommsft/Blog-Posts/tree/main/Use%20Azure%20Functions%20to%20remove%20Unauthorized%20Role%20Assignments)
