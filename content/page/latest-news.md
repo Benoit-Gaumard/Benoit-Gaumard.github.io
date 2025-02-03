@@ -46,3 +46,7 @@ Feeds are updated automaticaly every day.
 ## 🆕 Azure Network Security Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureNetworkSecurityBlog" limit="3">}}
+
+## 🆕 Azure Storage Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureStorageBlog" limit="3">}}
