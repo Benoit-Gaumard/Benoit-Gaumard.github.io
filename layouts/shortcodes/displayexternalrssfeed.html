@@ -3,7 +3,7 @@
   {{ $limit := .Get "limit" }}
   {{ with resources.GetRemote $url | transform.Unmarshal }}
     <ul>
-      {{ range first (min (len .channel.item) $limit) .channel.item }}
+      {{ range first $limit .channel.item }}
       <li>
         <p style="padding: 1px;">{{ dateFormat "Mon, 02 Jan 2006" .pubDate }}: <a href="{{ .link }}">{{ .title }}</a></p>
       </li>
