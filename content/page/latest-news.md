@@ -66,3 +66,7 @@ Feeds are updated automaticaly every day.
 ## 🆕 Startups at Microsoft Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=StartupsatMicrosoftBlog" limit="3">}}
+
+## 🆕 Entra Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft-entra-blog" limit="3">}}
