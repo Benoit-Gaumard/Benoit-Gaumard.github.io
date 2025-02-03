@@ -576,6 +576,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Azure glyphs and icons](https://azure.microsoft.com/en-us/patterns/styles/glyphs-icons/)
 - [Draw.io Azure infrastructure diagrams](https://techcommunity.microsoft.com/t5/microsoft-developer-community/draw-io-azure-infrastructure-diagrams-through-code-like-an/ba-p/4071316)
 - https://www.svgrepo.com/
+- https://az-icons.com/
 
 ## 🪴 Sustainability
 ---

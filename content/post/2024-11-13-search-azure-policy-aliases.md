@@ -54,8 +54,7 @@ $AvailableAliases = @()
 
 Foreach ($Namespace in $SelectedNamespaces)
 {
-   $AvailableAliases += (Get-AzPolicyAlias -NamespaceMatch $Namespace).Aliases | Select-Object
-   Name, DefaultPath
+   $AvailableAliases += (Get-AzPolicyAlias -NamespaceMatch $Namespace).Aliases | Select-Object Name, DefaultPath
 }
 
 # List all aliases available in the selected namespaces
