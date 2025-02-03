@@ -26,3 +26,15 @@ Feeds are updated automaticaly every day.
 ## 🆕 Azure Feeds Blog
 ---
 {{< displayexternalrssfeed url="https://azurefeeds.com/feed/" limit="3">}}
+
+## 🆕 Azure Governance and Management Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureGovernanceandManagementBlog" limit="3">}}
+
+## 🆕 Azure Infrastructure Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureInfrastructureBlog" limit="3">}}
+
+## 🆕 Azure Architecture Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureArchitectureBlog" limit="3">}}
