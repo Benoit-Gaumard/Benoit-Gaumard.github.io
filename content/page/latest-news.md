@@ -58,3 +58,11 @@ Feeds are updated automaticaly every day.
 ## 🆕 Azure FinOps Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FinOpsBlog" limit="3">}}
+
+## 🆕 Core Infrastructure and Security Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=CoreInfrastructureandSecurityBlog" limit="3">}}
+
+## 🆕 Startups at Microsoft Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=StartupsatMicrosoftBlog" limit="3">}}
