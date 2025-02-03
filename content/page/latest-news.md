@@ -50,3 +50,7 @@ Feeds are updated automaticaly every day.
 ## 🆕 Azure Storage Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureStorageBlog" limit="3">}}
+
+## 🆕 Azure Tools Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureToolsBlog" limit="3">}}
