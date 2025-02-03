@@ -54,3 +54,7 @@ Feeds are updated automaticaly every day.
 ## 🆕 Azure Tools Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureToolsBlog" limit="3">}}
+
+## 🆕 Azure FinOps Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FinOpsBlog" limit="3">}}
