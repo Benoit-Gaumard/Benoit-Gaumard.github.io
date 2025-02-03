@@ -38,3 +38,11 @@ Feeds are updated automaticaly every day.
 ## 🆕 Azure Architecture Blog
 ---
 {{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureArchitectureBlog" limit="3">}}
+
+## 🆕 Azure Networking Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=NetworkingBlog" limit="3">}}
+
+## 🆕 Azure Network Security Blog
+---
+{{< displayexternalrssfeed url="https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureNetworkSecurityBlog" limit="3">}}
