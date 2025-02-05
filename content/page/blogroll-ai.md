@@ -21,7 +21,7 @@ This section offers a curated collection of helpful links, providing resources a
 
 # BlogRoll AI
 
--[this-person-does-not-exist](https://thispersondoesnotexist.com/)
+- [this-person-does-not-exist](https://thispersondoesnotexist.com/)
 - fakenamegenerator.com
 - https://brouteurs.krbk.dev/pcs
 - https://www.onoff.app/

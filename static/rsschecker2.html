@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure RSS Feeds</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #0078D4; }
+        .feed-container { margin-bottom: 20px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; background: #f9f9f9; position: relative; }
+        .feed-item { margin-bottom: 15px; }
+        .feed-item a { text-decoration: none; color: #0078D4; font-weight: bold; }
+        .feed-item a:hover { text-decoration: underline; }
+        .add-feed { margin-bottom: 20px; }
+        textarea, button { padding: 10px; width: 100%; }
+        button { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 10px; padding: 12px; }
+        button:hover { background: #005a9e; }
+        .remove-btn {top: 10px; right: 10px; background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; }
+        .remove-btn:hover { background: #cc0000; }
+        .local-storage-container { margin-top: 20px; margin-bottom: 20px; padding: 15px; background: #e9e9e9; border: 1px solid #ccc; border-radius: 8px; }
+        .accordion { background-color: #0078D4; color: white; cursor: pointer; padding: 10px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; transition: 0.4s; }
+        .accordion:hover { background-color: #005a9e; } .panel { padding: 0 18px; display: none; background-color: white; overflow: hidden; }
+
+
+    </style>
+</head>
+<body>
+
+    <h1>Latest Azure Topics</h1>
+
+    <!-- Multi-Line Feed Input Section -->
+    <div class="add-feed">
+        <textarea id="feed-urls" rows="4" placeholder="Enter RSS Feed URLs (one per line)"></textarea>
+        <button onclick="addFeeds()">Add Feeds</button>
+    </div>
+
+    <!-- Display Current Local Storage Content -->
+    <div class="local-storage-container">
+
+        <button class="accordion">Show/Hide Feeds</button>
+
+        <div class="panel">
+            <h3>Current Feeds in browser Local Storage:</h3>
+            <pre id="local-storage-content">No custom feeds added yet.</pre>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const acc = document.querySelector(".accordion");
+            const panel = document.querySelector(".panel");
+
+            acc.addEventListener("click", () => {
+                panel.style.display = panel.style.display === "block" ? "none" : "block";
+            });
+        });
+    </script>
+
+    <div id="rss-feeds"></div>
+
+    <script>
+        const defaultFeeds = [
+            { name: "Azure Update", url: "https://www.microsoft.com/releasecommunications/api/v2/azure/rss" },
+            { name: "Azure Feeds", url: "https://azurefeeds.com/feed/" },
+            { name: "Azure Governance & Management", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureGovernanceandManagementBlog" },
+            { name: "Azure Infrastructure", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureInfrastructureBlog" }
+        ];
+
+        let feeds = [];
+
+        function loadFeeds() {
+            const savedFeeds = JSON.parse(localStorage.getItem("rssFeeds"));
+            feeds = savedFeeds && savedFeeds.length > 0 ? savedFeeds : [...defaultFeeds];
+            document.getElementById("rss-feeds").innerHTML = "";
+            feeds.forEach(feed => fetchRSSFeed(feed));
+            updateLocalStorageDisplay(); // Update the display of local storage content
+        }
+
+        async function fetchRSSFeed(feed) {
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === "ok") {
+                    const container = document.getElementById("rss-feeds");
+
+                    // Check if this feed has already been added
+                    if (document.getElementById(`feed-${btoa(feed.url)}`)) return;
+
+                    let feedSection = document.createElement("div");
+                    feedSection.className = "feed-container";
+                    feedSection.id = `feed-${btoa(feed.url)}`;
+                    feedSection.innerHTML = `<h2>From: <a href="${feed.url}" target="_blank">${feed.name}</a></h2>`;
+
+                    // Add "Remove" button only for custom feeds
+                    if (!defaultFeeds.some(f => f.url === feed.url)) {
+                        let removeButton = document.createElement("button");
+                        removeButton.className = "remove-btn";
+                        removeButton.innerText = "Remove";
+                        removeButton.onclick = () => removeFeed(feed.url); // Attach remove function here
+                        feedSection.appendChild(removeButton);
+                    }
+
+                    // Display the last 3 items
+                    const lastItems = data.items.slice(0, 5).map(item => `
+                        <div class="feed-item">
+                            <p><small>${new Date(item.pubDate).toDateString()}: </small><a href="${item.link}" target="_blank">${item.title}</a></p>
+                        </div>
+                    `).join('');
+
+                    feedSection.innerHTML += lastItems;
+                    container.appendChild(feedSection);
+                }
+            } catch (error) {
+                console.error(`Error fetching RSS feed: ${feed.name}`, error);
+            }
+        }
+
+        function addFeeds() {
+            const input = document.getElementById("feed-urls");
+            const newFeedUrls = input.value.trim().split("\n").map(url => url.trim()).filter(url => url !== "");
+
+            if (newFeedUrls.length === 0) {
+                alert("Please enter at least one valid RSS feed URL.");
+                return;
+            }
+
+            newFeedUrls.forEach(url => {
+                if (!feeds.some(feed => feed.url === url)) {
+                    const newFeed = { name: `Custom Feed ${feeds.length + 1}`, url: url };
+                    feeds.push(newFeed);
+                    fetchRSSFeed(newFeed);
+                }
+            });
+
+            localStorage.setItem("rssFeeds", JSON.stringify(feeds));
+            input.value = "";
+            updateLocalStorageDisplay(); // Update the display of local storage content after adding feeds
+        }
+
+        function removeFeed(url) {
+
+            console.log(`remove ${url}`);
+            // Remove feed from the list
+            feeds = feeds.filter(feed => feed.url !== url);
+
+            // Update localStorage
+            localStorage.setItem("rssFeeds", JSON.stringify(feeds));
+
+            // Remove the feed section from DOM
+            const feedElement = document.getElementById(`feed-${btoa(url)}`);
+            if (feedElement) {
+                feedElement.remove();
+            }
+
+            updateLocalStorageDisplay(); // Update the display of local storage content after removing a feed
+        }
+
+        function updateLocalStorageDisplay() {
+            const storageContent = document.getElementById("local-storage-content");
+            if (feeds.length === 0) {
+                storageContent.textContent = "No custom feeds added yet.";
+            } else {
+                storageContent.textContent = JSON.stringify(feeds, null, 2);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadFeeds);
+    </script>
+
+</body>
+</html>

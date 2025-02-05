@@ -76,6 +76,7 @@ This section offers a curated collection of helpful links, providing resources a
 - Cloud Adoption Framework Tools and Templates: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools-templates
 - MOAW: https://microsoft.github.io/moaw/ 🔥
 - Azure Landing Zone catalog: https://github.com/oliverlabs/alz-catalogue
+- https://azureanimations.github.io/ 🔥
 
 ## 🅰 ARM
 ---
@@ -118,6 +119,7 @@ This section offers a curated collection of helpful links, providing resources a
 - Decode, verify and generate Token: https://jwt.io/
 - AAD Osint tool: https://aadinternals.com/osint/ 🔥
 - https://myaccount.microsoft.com/groups/groups-i-belong-to
+- https://cyberchef.org/ (Decode JWT tokens and more) 🔥
 
 ## 💪 Bicep
 ---
@@ -262,6 +264,9 @@ This section offers a curated collection of helpful links, providing resources a
 - [Optimize Your Azure Costs](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/optimize-your-azure-costs/ba-p/4064181) 🔥
 - https://microsoft.github.io/finops-toolkit/
 - [Apply AHB at Scale](https://techcommunity.microsoft.com/blog/modernizationbestpracticesblog/apply-azure-hybrid-benefits-at-scale-for-azure-sql/3969339)
+- https://rios.engineer/get-azure-cost-estimates-in-azure-devops-pr-comments-with-bicep/
+
+
 
 🤣 Fun
 ---
@@ -376,6 +381,7 @@ This section offers a curated collection of helpful links, providing resources a
 [Back To Top](#documentTop)
 
 - [Azure Mask](https://github.com/clarkio/azure-mask)
+- https://chromewebstore.google.com/detail/az-mask/amobeamdmdnloajcaiomgegpakjdiacm?hl=en-US
 - [Raspberry Simulator for IOT Hub](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-raspberry-pi-web-simulator-get-started)
 - [sqlflow](https://sqlflow.gudusoft.com/#/)
 - [Nuage de mots](https://nuagedemots.co/)
@@ -388,6 +394,9 @@ This section offers a curated collection of helpful links, providing resources a
 - [https://cheatography.com/](https://cheatography.com/)
 - [Azure serverless community library](https://www.serverlesslibrary.net/)
 - Microsoft MVP's Map : https://mvpsglobe.web.app/
+- https://www.bullshitor.com/
+- https://www.emaxilde.net/assets/games/doom/doom.html
+
 
 ⏩ Move or migration
 ---
@@ -423,7 +432,8 @@ This section offers a curated collection of helpful links, providing resources a
 - https://azureipranges.azurewebsites.net/
 - IPAM: https://github.com/netbox-community/netbox
 - https://blog.cloudtrooper.net/
-- https://trippy.rs/
+- https://trippy.rs/ (Network Diag Tool)
+- https://blog.cloudtrooper.net/2025/01/22/private-link-reality-bites-your-routes-could-be-lying/
 
 ## 👮 Policies
 ---
