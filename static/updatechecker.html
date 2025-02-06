@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️ Azure RSS News from RSS feeds</title>
+    <title>❤️ Latest Azure Updates from RSS Feeds</title>
     <style>
         /* Basic styling for the page */
         body { font-family: Arial, sans-serif; padding: 10px; line-height: 1.2em; }
@@ -49,7 +49,15 @@
     </style>
 </head>
 <body>
-    <h1>Latest Azure news from RSS feeds</h1>
+    <h1>Latest Azure Updates from RSS Feeds</h1>
+
+    <p>Stay informed with the latest Azure updates by following RSS feeds from the most important official sources, sorted by publication date. You can also personalize your experience by adding custom RSS feeds to match your specific interests.</p>
+
+    <p>Follow the RSS feeds available on Microsoft Blogs <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">here</a>.</p>
+
+
+    <hr>
+
     <div class="dark-mode-toggle">
         <!-- Dark mode toggle switch -->
         <label class="dark-mode-slider">
@@ -63,7 +71,7 @@
 
     <!-- Dropdown to select number of items per feed -->
     <div class="add-feed">
-        <label for="items-per-feed">Items per feed:</label>
+        <label for="items-per-feed">Items to display per feed:</label>
         <select id="items-per-feed" onchange="loadFeeds()">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -157,6 +165,7 @@
         async function fetchRSSFeed(feed, index) {
             const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz'; // Usage restricted to this domain only
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&api_key=${apiKey}&count=1000`;
+            //const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
             const itemsPerFeed = document.getElementById("items-per-feed").value;
 
             try {
@@ -172,7 +181,7 @@
                 let feedSection = document.createElement("div");
                 feedSection.className = "feed-container";
                 feedSection.id = `feed-${btoa(feed.url)}`;
-                feedSection.innerHTML = `<h4>${index}. ${customFeeds.some(customFeed => customFeed.url === feed.url) ? 'Custom ' : ''} - ${data.feed.title} From: <a href="${feed.url}" target="_blank">${feed.name}</a> (Total items: ${data.items.length})</h4>`;
+                feedSection.innerHTML = `<h4>${customFeeds.some(customFeed => customFeed.url === feed.url) ? 'Custom -' : ''} ${data.feed.title} - From: <a href="${feed.url}" target="_blank">${feed.name}</a> - (Total items found: ${data.items.length})</h4>`;
 
                 // Sort items by publication date
                 const sortedItems = data.items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
@@ -206,7 +215,7 @@
                 return;
             }
 
-            if (customFeeds.length + newFeedUrls.length > 100) {
+            if (customFeeds.length + newFeedUrls.length > 10) {
                 alert("You can add a maximum of 10 custom feeds.");
                 return;
             }
@@ -262,6 +271,8 @@
         // Load feeds when the document is ready
         document.addEventListener("DOMContentLoaded", loadFeeds);
     </script>
+
+<hr>
 
     <footer>
         <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
