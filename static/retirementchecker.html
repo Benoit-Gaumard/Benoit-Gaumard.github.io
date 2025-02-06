@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure RSS News from RSS feeds</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 10px; line-height: 1.2em; }
+        h1 { color: #0078D4; display: inline-block; }
+        .dark-mode-toggle { float: right; }
+        .dark-mode-slider { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .dark-mode-slider input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #0078D4; }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .feed-container { margin-bottom: 10px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; }
+        .feed-item { margin-bottom: 2px; font-size: 0.9em; }
+        .feed-item a { text-decoration: none; color: #0078D4; font-weight: bold; }
+        .feed-item a:hover { text-decoration: underline; }
+        .feed-item p { margin: 3px; }
+        .add-feed { margin-bottom: 10px; }
+        textarea, button { padding: 5px; width: 100%; box-sizing: border-box; }
+        .add-btn { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; }
+        .add-btn:hover { background: #005a9e; }
+        .local-storage-container { margin-top: 10px; margin-bottom: 10px; padding: 10px; background: #e9e9e9; border: 1px solid #ccc; border-radius: 4px; }
+        .accordion { background-color: #0078D4; color: white; cursor: pointer; padding: 8px; width: 100%; border: none; text-align: center; outline: none; transition: 0.4s; }
+        .accordion:hover { background-color: #005a9e; }
+        .panel { padding: 0 10px; display: none; background-color: white; overflow: hidden; }
+        .clear-btn { background: #ff4d4d; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; width: 100%; }
+        .clear-btn:hover { background: #cc0000; }
+        .show-btn { background: #f59221; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; width: 100%; margin-bottom: 10px; }
+        .show-btn:hover { background: #f0860e; }
+        footer { text-align: center; margin-top: 20px; padding: 10px; }
+        body.dark-mode { background-color: #121212; color: #ffffff; }
+        body.dark-mode .feed-container { background: #333333; border-color: #555555; }
+        body.dark-mode .local-storage-container { background: #333333; border-color: #555555; }
+        body.dark-mode .accordion { background-color: #333333; }
+        body.dark-mode .accordion:hover { background-color: #555555; }
+        .icon {position: absolute;top: 50%;transform: translateY(-50%);font-size: 18px;transition: .4s;}
+        .sun {left: 10px;}
+        .moon {right: 10px;opacity: 0;}
+        input:checked + .slider .sun {opacity: 0;}
+        input:checked + .slider .moon {opacity: 1;}
+        .dropdown { position: relative;}
+        .dropdown-content {background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; }
+        .dropdown-content label { display: block; padding: 8px 16px; cursor: pointer; }
+        .dropdown-content label:hover { background-color: #f1f1f1; }
+        .dropdown:hover .dropdown-content { display: block; }
+    </style>
+</head>
+<body>
+    <h1>Latest Azure news from RSS feeds</h1>
+    <div class="dark-mode-toggle">
+        <label class="dark-mode-slider">
+            <input type="checkbox" id="dark-mode-checkbox" onclick="toggleDarkMode()">
+            <span class="slider">
+                <span class="icon sun">☀️</span>
+                <span class="icon moon">🌙</span>
+            </span>
+        </label>
+    </div>
+
+    <!-- Multiselect Dropdown for Categories -->
+    <div class="dropdown add-feed">
+        <label for="categories">Select categories:</label>
+        <div id="category-dropdown" class="dropdown-content">
+            <label><input type="checkbox" value="Retirements" checked> Retirements</label>
+            <label><input type="checkbox" value="Security"> Security</label>
+            <label><input type="checkbox" value="Features"> Features</label>
+        </div>
+    </div>
+
+    <!-- Dropdown to select number of items per feed -->
+    <div class="add-feed">
+        <label for="items-per-feed">Items per feed:</label>
+        <select id="items-per-feed" onchange="loadFeeds()">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+
+
+    <div id="rss-feeds"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
+            if (localStorage.getItem("darkMode") === "enabled") {
+                document.body.classList.add("dark-mode");
+                darkModeCheckbox.checked = true;
+            }
+
+            // Add event listeners to category checkboxes
+            const categoryCheckboxes = document.querySelectorAll("#category-dropdown input[type='checkbox']");
+            categoryCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", loadFeeds);
+            });
+
+            loadFeeds();
+        });
+
+        const feed = { name: "Azure Update", url: "https://www.microsoft.com/releasecommunications/api/v2/azure/rss" };
+
+        async function loadFeeds() {
+            document.getElementById("rss-feeds").innerHTML = "";
+            fetchRSSFeed(feed);
+        }
+
+        async function fetchRSSFeed(feed) {
+            const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&api_key=${apiKey}&count=1000`;
+            const itemsPerFeed = document.getElementById("items-per-feed").value;
+            const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === "ok") {
+                    const container = document.getElementById("rss-feeds");
+                    const sortedItems = data.items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+                    selectedCategories.forEach(category => {
+                        const categoryItems = sortedItems.filter(item => item.categories.includes(category));
+
+                        if (categoryItems.length > 0) {
+                            let categoryDiv = document.createElement("div");
+                            categoryDiv.className = "feed-container";
+                            categoryDiv.innerHTML = `<h2>${data.feed.title} - ${category} (${categoryItems.length} items) - From: <a href="${feed.url}" target="_blank">${feed.name}</a></h2>`;
+                            categoryDiv.innerHTML += categoryItems.slice(0, itemsPerFeed).map(item => `
+                                <div class="feed-item">
+                                    <p><small>
+                                        ${new Date() - new Date(item.pubDate) < 2 * 24 * 60 * 60 * 1000 ? '🟢' : '🔵'} ${new Date(item.pubDate).toDateString()}
+                                        <span>(${Math.floor((new Date() - new Date(item.pubDate)) / (1000 * 60 * 60 * 24))} days ago)</span>
+                                        : </small>
+                                        <a href="${item.link}" target="_blank">${item.title}</a></p>
+                                </div>
+                            `).join('');
+                            container.appendChild(categoryDiv);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(`Error fetching RSS feed: ${feed.name}`, error);
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkMode", "enabled");
+            } else {
+                localStorage.removeItem("darkMode");
+            }
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
+    </footer>
+</body>
+</html>
