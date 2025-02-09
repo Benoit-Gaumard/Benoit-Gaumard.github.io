@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏷️ Tags supports</title>
+    <title>🌐 Ip Ranges</title>
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -46,12 +46,12 @@
         footer { text-align: center; margin-top: 20px; padding: 10px; }
     </style>
 </head>
-<body class="dark-mode"></body>
+<body>
 
     <div class="dark-mode-toggle">
         <!-- Dark mode toggle switch -->
         <label class="dark-mode-slider">
-            <input type="checkbox" id="dark-mode-checkbox" onclick="toggleDarkMode()" checked>
+            <input type="checkbox" id="dark-mode-checkbox" onclick="toggleDarkMode()">
             <span class="slider">
                 <span class="icon sun">☀️</span>
                 <span class="icon moon">🌙</span>
@@ -59,39 +59,18 @@
         </label>
     </div>
 
-    <h1>🏷️ Tags supports</h1>
+    <h1>🌐 Ip Ranges</h1>
     <p>This page describes whether a resource type supports tags.</p>
-    <p>CSv file is comming from <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-support" target="_blank">here</a>.</p>
+    <p>CSv file is comming from <a href="https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250203.json" target="_blank">here</a>.</p>
     <hr>
 
     <div class="container">
         <h2>CSV Data from URL</h2>
         <p>
-            <label for="resourceTypeFilter">Filter by Resource Type:</label>
-            <select id="resourceTypeFilter">
-                <option value="">All</option>
-            </select>
-        </p>
-        <p>
-            <label for="providerNameFilter">Filter by Provider Name:</label>
-            <select id="providerNameFilter">
-                <option value="">All</option>
-            </select>
-        </p>
-        <p>
-            <label for="supportsTagsFilter">Filter by Supports Tags:</label>
-            <select id="supportsTagsFilter">
-                <option value="">All</option>
-                <option value="TRUE">TRUE</option>
-                <option value="FALSE">FALSE</option>
-            </select>
-        </p>
-        <p>
-            <label for="costReportFilter">Filter by Cost Report:</label>
-            <select id="costReportFilter">
-                <option value="">All</option>
-                <option value="TRUE">TRUE</option>
-                <option value="FALSE">FALSE</option>
+            <label for="valueNameFilter">Filter by Value Name:</label>
+            <input type="text" id="valueNameSearch" placeholder="Search...">
+            <select id="valueNameFilter">
+            <option value="">All</option>
             </select>
         </p>
 
@@ -102,7 +81,6 @@
             <tbody></tbody>
         </table>
     </div>
-
 
     <!-- Display Feeds -->
     <div id="rss-feeds"></div>
@@ -133,15 +111,11 @@
         };
 
         $(document).ready(function() {
-            const csvUrl = "https://raw.githubusercontent.com/tfitzmac/resource-capabilities/master/tag-support.csv";
+            const jsonUrl = "https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250203.json";
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
 
-            $.get(csvUrl, function(data) {
-                let rows = data.split("\n").map(row => row.split(","));
-
-                // Remove the last row if it is blank
-                if (rows[rows.length - 1].every(cell => cell.trim() === "")) {
-                    rows.pop();
-                }
+            $.getJSON(proxyUrl + jsonUrl, function(data) {
+                const rows = data.values;
 
                 // Get table references
                 const tableHead = document.querySelector("#csvTable thead");
@@ -154,27 +128,49 @@
                 if (rows.length > 0) {
                     // Create table header
                     const headerRow = document.createElement("tr");
-                    rows[0].forEach(header => {
+                    const headers = new Set();
+
+                    // Collect all unique headers excluding the main properties field
+                    rows.forEach(row => {
+                        Object.keys(row).forEach(header => {
+                            if (header !== 'properties') {
+                                headers.add(header.trim());
+                            }
+                        });
+                        if (row.properties) {
+                            Object.keys(row.properties).forEach(prop => {
+                                headers.add(prop);
+                            });
+                        }
+                    });
+
+                    headers.forEach(header => {
                         const th = document.createElement("th");
-                        th.textContent = header.trim();
+                        th.textContent = header;
                         headerRow.appendChild(th);
                     });
+
                     tableHead.appendChild(headerRow);
+
+                    // Create table body
+                    rows.forEach(row => {
+                        const tr = document.createElement("tr");
+                        headers.forEach(header => {
+                            const td = document.createElement("td");
+                            const cell = row.properties?.[header] || row[header];
+                            if (typeof cell === 'object') {
+                                td.textContent = JSON.stringify(cell, null, 2);
+                            } else {
+                                td.textContent = cell ? cell.toString().trim() : "";
+                            }
+                            tr.appendChild(td);
+                        });
+                        tableBody.appendChild(tr);
+                    });
                 }
 
-                // Create table body
-                rows.slice(1).forEach(row => {
-                    const tr = document.createElement("tr");
-                    row.forEach(cell => {
-                        const td = document.createElement("td");
-                        td.textContent = cell.trim();
-                        tr.appendChild(td);
-                    });
-                    tableBody.appendChild(tr);
-                });
-
                 // Initialize DataTable only if there are rows
-                if (rows.length > 1) {
+                if (rows.length > 0) {
                     const dataTable = $("#csvTable").DataTable({
                         destroy: true, // Remove previous instance
                         responsive: true,
@@ -187,65 +183,38 @@
                         }
                     });
 
-                    // Populate the resource type filter dropdown
-                    const resourceTypeFilter = document.getElementById("resourceTypeFilter");
-                    const resourceTypes = [...new Set(rows.slice(1).map(row => row[0].trim()))];
-                    resourceTypes.forEach(resourceType => {
+                    // Populate the value name filter dropdown
+                    const valueNameFilter = document.getElementById("valueNameFilter");
+                    const valueNames = [...new Set(rows.map(row => row.name.trim()))];
+                    valueNames.forEach(valueName => {
                         const option = document.createElement("option");
-                        option.value = resourceType;
-                        option.textContent = resourceType;
-                        resourceTypeFilter.appendChild(option);
+                        option.value = valueName;
+                        option.textContent = valueName;
+                        valueNameFilter.appendChild(option);
                     });
 
-                    // Populate the provider name filter dropdown
-                    const providerNameFilter = document.getElementById("providerNameFilter");
-                    const providerNames = [...new Set(rows.slice(1).map(row => row[1].trim()))];
-                    providerNames.forEach(providerName => {
-                        const option = document.createElement("option");
-                        option.value = providerName;
-                        option.textContent = providerName;
-                        providerNameFilter.appendChild(option);
-                    });
-
-                    // Filter table based on selected resource type
-                    resourceTypeFilter.addEventListener("change", function() {
-                        const selectedResourceType = this.value;
-                        if (selectedResourceType) {
-                            dataTable.column(0).search("^" + selectedResourceType + "$", true, false).draw();
-                        } else {
-                            dataTable.column(0).search("").draw();
-                        }
-                    });
-
-                    // Filter table based on selected provider name
-                    providerNameFilter.addEventListener("change", function() {
-                        const selectedProviderName = this.value;
-                        if (selectedProviderName) {
-                            dataTable.column(1).search("^" + selectedProviderName + "$", true, false).draw();
+                    // Filter table based on selected value name
+                    valueNameFilter.addEventListener("change", function() {
+                        const selectedValueName = this.value;
+                        if (selectedValueName) {
+                            dataTable.column(1).search("^" + selectedValueName + "$", true, false).draw();
                         } else {
                             dataTable.column(1).search("").draw();
                         }
                     });
 
-                    // Filter table based on supports tags
-                    const supportsTagsFilter = document.getElementById("supportsTagsFilter");
-                    supportsTagsFilter.addEventListener("change", function() {
-                        const selectedSupportsTags = this.value;
-                        if (selectedSupportsTags) {
-                            dataTable.column(2).search("^" + selectedSupportsTags + "$", true, false).draw();
-                        } else {
-                            dataTable.column(2).search("").draw();
-                        }
-                    });
-
-                    // Filter table based on cost report
-                    const costReportFilter = document.getElementById("costReportFilter");
-                    costReportFilter.addEventListener("change", function() {
-                        const selectedCostReport = this.value;
-                        if (selectedCostReport) {
-                            dataTable.column(3).search("^" + selectedCostReport + "$", true, false).draw();
-                        } else {
-                            dataTable.column(3).search("").draw();
+                    // Search within the value name filter dropdown
+                    const valueNameSearch = document.getElementById("valueNameSearch");
+                    valueNameSearch.addEventListener("input", function() {
+                        const searchTerm = this.value.toLowerCase();
+                        const options = valueNameFilter.options;
+                        for (let i = 0; i < options.length; i++) {
+                            const option = options[i];
+                            if (option.text.toLowerCase().includes(searchTerm)) {
+                                option.style.display = "";
+                            } else {
+                                option.style.display = "none";
+                            }
                         }
                     });
                 }

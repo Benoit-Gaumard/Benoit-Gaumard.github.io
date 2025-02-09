@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐙 GitHub Ip Ranges</title>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
+    <style>
+        /* Basic styling for the page */
+        body { font-family: Arial, sans-serif; padding: 10px;}
+        h1 { color: #0078D4; display: inline-block; }
+        h4 { color: #0078D4; display: inline-block; margin-top: 2px; margin-bottom: 2px;}
+        a { color: #1e90ff; }
+        a:hover { color: #63a4ff; }
+
+        .icon {position: absolute;top: 50%;transform: translateY(-50%);font-size: 18px;transition: .4s;}
+        .sun {left: 5px;}
+        .moon {right: 4px;opacity: 0;}
+        input:checked + .slider .sun {opacity: 0;}
+        input:checked + .slider .moon {opacity: 1;}
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #0078D4; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .dark-mode-toggle { float: right; }
+        .dark-mode-slider { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .dark-mode-slider input { opacity: 0; width: 0; height: 0; }
+
+        .go-top-btn { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; border-radius: 4px; display: none; }
+        .go-top-btn:hover { background: #005a9e; }
+
+        body.dark-mode a { color: #1e90ff; }
+        body.dark-mode a:hover { color: #63a4ff; }
+
+        body.dark-mode { background-color: #121212; color: #ffffff; }
+        body.dark-mode .feed-container { background: #333333; border-color: #555555; }
+        body.dark-mode .local-storage-container { background: #333333; border-color: #555555; }
+        body.dark-mode .accordion { background-color: #333333; }
+        body.dark-mode .accordion:hover { background-color: #555555; }
+
+
+        div.dt-buttons { border-radius: 3px; float: none;}
+
+        footer { text-align: center; margin-top: 20px; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="dark-mode-toggle">
+        <!-- Dark mode toggle switch -->
+        <label class="dark-mode-slider">
+            <input type="checkbox" id="dark-mode-checkbox" onclick="toggleDarkMode()">
+            <span class="slider">
+                <span class="icon sun">☀️</span>
+                <span class="icon moon">🌙</span>
+            </span>
+        </label>
+    </div>
+
+    <h1>🐙 GitHub Ip Ranges</h1>
+    <p>This page describes whether a resource type supports tags.</p>
+    <p>CSV file is coming from <a href="https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20250203.json" target="_blank">here</a>.</p>
+    <hr>
+
+    <!-- JSON Content -->
+    <div id="json-content"></div>
+
+    <!-- Go to Top Button -->
+    <button class="go-top-btn" id="go-top-btn" onclick="scrollToTop()">⬆️ Go to Top</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onscroll = function() {
+            const goTopBtn = document.getElementById('go-top-btn');
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                goTopBtn.style.display = 'block';
+            } else {
+                goTopBtn.style.display = 'none';
+            }
+        };
+
+        document.getElementById('go-top-btn').addEventListener('click', scrollToTop);
+
+        fetch('https://api.github.com/meta')
+            .then(response => response.json())
+            .then(data => {
+                const jsonContent = document.getElementById('json-content');
+                const table = document.createElement('table');
+                table.id = 'dataTable';
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                const headerRow = document.createElement('tr');
+
+                const createHeader = (text) => {
+                    const th = document.createElement('th');
+                    th.textContent = text;
+                    return th;
+                };
+
+                const createRow = (key, value) => {
+                    const row = document.createElement('tr');
+                    const cellKey = document.createElement('td');
+                    const cellValue = document.createElement('td');
+
+                    cellKey.textContent = key;
+                    if (Array.isArray(value)) {
+                        cellValue.textContent = value.join(', ');
+                    } else if (typeof value === 'object' && value !== null) {
+                        const subTable = document.createElement('table');
+                        subTable.style.width = '100%';
+                        subTable.style.borderCollapse = 'collapse';
+                        for (const [subKey, subValue] of Object.entries(value)) {
+                            const subRow = createRow(subKey, subValue);
+                            subTable.appendChild(subRow);
+                        }
+                        cellValue.appendChild(subTable);
+                    } else {
+                        cellValue.textContent = value;
+                    }
+
+                    row.appendChild(cellKey);
+                    row.appendChild(cellValue);
+                    return row;
+                };
+
+                const keysToHide = ['verifiable_password_authentication', 'ssh_key_fingerprints', 'ssh_keys'];
+
+                headerRow.appendChild(createHeader('Key'));
+                headerRow.appendChild(createHeader('Value'));
+                thead.appendChild(headerRow);
+
+                for (const [key, value] of Object.entries(data)) {
+                    if (!keysToHide.includes(key)) {
+                        if (key === 'domains' && Array.isArray(value)) {
+                            value.forEach(domain => {
+                                for (const [subKey, subValue] of Object.entries(domain)) {
+                                    tbody.appendChild(createRow(`domains.${subKey}`, subValue));
+                                }
+                            });
+                        } else {
+                            tbody.appendChild(createRow(key, value));
+                        }
+                    }
+                }
+
+                table.appendChild(thead);
+                table.appendChild(tbody);
+                jsonContent.appendChild(table);
+
+                $(document).ready(function() {
+                    $('#dataTable').DataTable({
+                        "paging": true,
+                        "select": true,
+                        "rowReorder": true,
+                        "colReorder": true,
+                        "keys": true,
+                        "autoFill": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "info": true,
+                        "lengthMenu": [
+                            [1,10, 25, 50, -1],
+                            [1,10, 25, 50, "All"]
+                        ],
+                        "pageLength": 50,
+                        "autoWidth": true,
+                        "responsive": true,
+                        "lengthChange": true,
+                        "autoWidth": false,
+                        "dom": 'Blfrtip',
+                        "buttons": [
+                        {
+                            extend: 'csv',
+                            text: 'CSV',
+                        },
+                        {
+                            extend: 'copy',
+                            text: 'Copy',
+                        },
+                        {
+                            extend: 'pdf',
+                            text: 'PDF',},
+                        {
+                            extend: 'excel',
+                            text: 'Excel',
+                        },
+                        {
+                            extend: 'print',
+                            text: 'Print',
+                        }
+                        ]
+                    });
+                });
+
+                // Set the width of the go-to-top button to match the table's width
+                const tableWidth = $("#json-content").width();
+                $("#go-top-btn").css("width", tableWidth);
+
+            })
+            .catch(error => console.error('Error fetching JSON:', error));
+    </script>
+
+    <!-- Footer -->
+    <hr>
+    <footer>
+        <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>

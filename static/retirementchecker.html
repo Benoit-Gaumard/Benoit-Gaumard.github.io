@@ -3,55 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure RSS News from RSS feeds</title>
+    <title>⏰ Azure retirements updates from RSS feeds</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 10px; line-height: 1.2em; }
+        /* Basic styling for the page */
+        body { font-family: Arial, sans-serif; padding: 10px;}
         h1 { color: #0078D4; display: inline-block; }
-        .dark-mode-toggle { float: right; }
-        .dark-mode-slider { position: relative; display: inline-block; width: 60px; height: 34px; }
-        .dark-mode-slider input { opacity: 0; width: 0; height: 0; }
+        h4 { color: #0078D4; display: inline-block; margin-top: 2px; margin-bottom: 2px;}
+        a { color: #1e90ff; }
+        a:hover { color: #63a4ff; }
+
+        .icon {position: absolute;top: 50%;transform: translateY(-50%);font-size: 18px;transition: .4s;}
+        .sun {left: 5px;}
+        .moon {right: 4px;opacity: 0;}
+        input:checked + .slider .sun {opacity: 0;}
+        input:checked + .slider .moon {opacity: 1;}
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #0078D4; }
         input:checked + .slider:before { transform: translateX(26px); }
+
+        .dark-mode-toggle { float: right; }
+        .dark-mode-slider { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .dark-mode-slider input { opacity: 0; width: 0; height: 0; }
+
         .feed-container { margin-bottom: 10px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; }
         .feed-item { margin-bottom: 2px; font-size: 0.9em; }
         .feed-item a { text-decoration: none; color: #0078D4; font-weight: bold; }
         .feed-item a:hover { text-decoration: underline; }
         .feed-item p { margin: 3px; }
         .add-feed { margin-bottom: 10px; }
-        textarea, button { padding: 5px; width: 100%; box-sizing: border-box; }
-        .add-btn { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; }
-        .add-btn:hover { background: #005a9e; }
+        textarea, button { padding: 5px; width: 100%; box-sizing: border-box; border-radius: 4px}
+
         .local-storage-container { margin-top: 10px; margin-bottom: 10px; padding: 10px; background: #e9e9e9; border: 1px solid #ccc; border-radius: 4px; }
         .accordion { background-color: #0078D4; color: white; cursor: pointer; padding: 8px; width: 100%; border: none; text-align: center; outline: none; transition: 0.4s; }
         .accordion:hover { background-color: #005a9e; }
-        .panel { padding: 0 10px; display: none; background-color: white; overflow: hidden; }
-        .clear-btn { background: #ff4d4d; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; width: 100%; }
+        .panel { padding: 0 10px; display: none; overflow: hidden; }
+
+        .add-btn { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; border-radius: 4px}
+        .add-btn:hover { background: #005a9e; }
+        .clear-btn { background: #ff4d4d; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; width: 100%; border-radius: 4px}
         .clear-btn:hover { background: #cc0000; }
-        .show-btn { background: #f59221; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; width: 100%; margin-bottom: 10px; }
+        .show-btn { background: #f59221; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; width: 100%; margin-bottom: 10px; border-radius: 4px}
         .show-btn:hover { background: #f0860e; }
-        footer { text-align: center; margin-top: 20px; padding: 10px; }
+        .go-top-btn { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 5px; padding: 8px; border-radius: 4px}
+        .go-top-btn:hover { background: #005a9e; }
+
+        body.dark-mode a { color: #1e90ff; }
+        body.dark-mode a:hover { color: #63a4ff; }
+
         body.dark-mode { background-color: #121212; color: #ffffff; }
         body.dark-mode .feed-container { background: #333333; border-color: #555555; }
         body.dark-mode .local-storage-container { background: #333333; border-color: #555555; }
         body.dark-mode .accordion { background-color: #333333; }
         body.dark-mode .accordion:hover { background-color: #555555; }
-        .icon {position: absolute;top: 50%;transform: translateY(-50%);font-size: 18px;transition: .4s;}
-        .sun {left: 10px;}
-        .moon {right: 10px;opacity: 0;}
-        input:checked + .slider .sun {opacity: 0;}
-        input:checked + .slider .moon {opacity: 1;}
-        .dropdown { position: relative;}
-        .dropdown-content {background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; }
-        .dropdown-content label { display: block; padding: 8px 16px; cursor: pointer; }
-        .dropdown-content label:hover { background-color: #f1f1f1; }
-        .dropdown:hover .dropdown-content { display: block; }
+
+        footer { text-align: center; margin-top: 20px; padding: 10px; }
+
+        /* Hide the Go to Top button by default */
+        .go-top-btn.hidden { display: none; }
     </style>
 </head>
 <body>
-    <h1>Latest Azure news from RSS feeds</h1>
+
     <div class="dark-mode-toggle">
+        <!-- Dark mode toggle switch -->
         <label class="dark-mode-slider">
             <input type="checkbox" id="dark-mode-checkbox" onclick="toggleDarkMode()">
             <span class="slider">
@@ -60,6 +75,11 @@
             </span>
         </label>
     </div>
+
+    <h1>⏰ Azure retirements updates from RSS feeds</h1>
+    <p>Stay informed with the latest Azure features retirements.</p>
+    <p>This page is using Azure Updates retirements services <a href="https://azure.microsoft.com/en-us/updates?filters=%5B%22Retirements%22%5D" target="_blank">here</a>.</p>
+    <hr>
 
     <!-- Multiselect Dropdown for Categories -->
     <div class="dropdown add-feed">
@@ -73,23 +93,28 @@
 
     <!-- Dropdown to select number of items per feed -->
     <div class="add-feed">
-        <label for="items-per-feed">Items per feed:</label>
+        <label for="items-per-feed">Items to display per feed:</label>
         <select id="items-per-feed" onchange="loadFeeds()">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3" selected>3</option>
-            <option value="4">4</option>
             <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
             <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="40">50</option>
         </select>
     </div>
 
+    <!-- Total Feeds Counter -->
+    <h4><div id="total-feeds-counter">Total Categories: 0</div></h4>
 
+    <!-- Display Feeds -->
     <div id="rss-feeds"></div>
+
+    <!-- Go to Top Button -->
+    <button class="go-top-btn hidden" id="go-top-btn" onclick="scrollToTop()">⬆️ Go to Top</button>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -106,6 +131,9 @@
             });
 
             loadFeeds();
+
+            // Show or hide the Go to Top button based on scroll position
+            window.addEventListener("scroll", toggleGoTopButton);
         });
 
         const feed = { name: "Azure Update", url: "https://www.microsoft.com/releasecommunications/api/v2/azure/rss" };
@@ -113,6 +141,10 @@
         async function loadFeeds() {
             document.getElementById("rss-feeds").innerHTML = "";
             fetchRSSFeed(feed);
+
+            // Update total categories counter
+            const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
+            document.getElementById("total-feeds-counter").innerText = `Total Categories: ${selectedCategories.length}`;
         }
 
         async function fetchRSSFeed(feed) {
@@ -135,7 +167,7 @@
                         if (categoryItems.length > 0) {
                             let categoryDiv = document.createElement("div");
                             categoryDiv.className = "feed-container";
-                            categoryDiv.innerHTML = `<h2>${data.feed.title} - ${category} (${categoryItems.length} items) - From: <a href="${feed.url}" target="_blank">${feed.name}</a></h2>`;
+                            categoryDiv.innerHTML = `<h4>${data.feed.title} - ${category} - <a href="${feed.url}" target="_blank">${feed.name}</a> - (${categoryItems.length} items)</h4>`;
                             categoryDiv.innerHTML += categoryItems.slice(0, itemsPerFeed).map(item => `
                                 <div class="feed-item">
                                     <p><small>
@@ -162,8 +194,23 @@
                 localStorage.removeItem("darkMode");
             }
         }
+
+        function toggleGoTopButton() {
+            const goTopBtn = document.getElementById("go-top-btn");
+            if (document.documentElement.scrollTop > 100) {
+                goTopBtn.classList.remove("hidden");
+            } else {
+                goTopBtn.classList.add("hidden");
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 
+    <!-- Footer -->
+    <hr>
     <footer>
         <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
     </footer>
