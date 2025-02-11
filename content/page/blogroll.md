@@ -434,6 +434,8 @@ This section offers a curated collection of helpful links, providing resources a
 - https://blog.cloudtrooper.net/
 - https://trippy.rs/ (Network Diag Tool)
 - https://blog.cloudtrooper.net/2025/01/22/private-link-reality-bites-your-routes-could-be-lying/
+- https://github.com/1tayH/noisy (Generates random HTTP/DNS traffic noise in the background)
+- https://az-mdv.az.vupti.me/ Azure Migrate Network Flows Analysis 🔥🔥🔥
 
 ## 👮 Policies
 ---
