@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⏰ Latest Azure retirements updates</title>
+    <title>🌐 Blogs</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -92,7 +92,12 @@
 
         /* Footer */
         footer { text-align: center; font-size: 14px;}
+
     </style>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
 
@@ -110,31 +115,10 @@
         </div>
 
         <!-- Title -->
-        <h2>⏰ Latest Azure retirements updates <img src="C:\REPOS\BLOG\hugo-website\bga-new-site\static\images\azure.svg"></h2>
+        <h2>🌐 Blogs</h2>
         <p><small>Stay informed with Azure retirements updates from Microsoft announced <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">here.</a></small></p>
     </div>
     <hr>
-
-
-
-    <!-- Dropdown to select days old -->
-    <div class="display-feed">
-        <small>
-            <label for="days-per-feed">Show items from last:</label>
-            <select id="days-per-feed" onchange="loadFeeds()">
-                <option value="1">1 day</option>
-                <option value="2">2 days</option>
-                <option value="3">3 days</option>
-                <option value="5">5 days</option>
-                <option value="7" selected>7 days</option>
-                <option value="14">14 days</option>
-                <option value="30">30 days</option>
-                <option value="60">60 days</option>
-                <option value="90">90 days</option>
-                <option value="180">180 days</option>
-            </select>
-        </small>
-    </div>
 
     <!-- Multiselect Dropdown for Categories -->
     <div class="display-feed">
@@ -153,121 +137,70 @@
     <!-- Display Feeds -->
     <div id="rss-feeds"></div>
 
+    <!-- CSV Data Table -->
+    <div id="csv-table" style="margin-top: 20px; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr style="background-color: #0078D4; color: white;">
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Name</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">URL</th>
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Category</th>
+                </tr>
+            </thead>
+            <tbody id="csv-content"></tbody>
+        </table>
+    </div>
+
+    <script>
+    // Dark mode toggle function
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    // Check for saved dark mode preference
+    document.addEventListener('DOMContentLoaded', () => {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('dark-mode-checkbox').checked = true;
+        }
+    });
+
+fetch('https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/dev/BlogsListCSV.csv')
+    .then(response => response.text())
+    .then(data => {
+        const rows = data.split('\n').slice(1);
+        const tbody = document.getElementById('csv-content');
+        rows.forEach(row => {
+            if (row.trim()) {
+                const [name, url, category] = row.split(',').map(cell => cell.trim());
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${name}</td>
+                    <td><a href="${url}" target="_blank">${url}</a></td>
+                    <td>${category}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        });
+        // Initialize DataTable after the data is loaded
+        $(document).ready(function() {
+            $('#csv-table table').DataTable({
+                pageLength: 25,
+                order: [[0, 'asc']],
+                responsive: true
+            });
+        });
+    })
+    .catch(error => console.error('Error fetching CSV:', error));
+    </script>
+
+
     <!-- Go to Top Button -->
     <button class="go-top-btn hidden" id="go-top-btn" onclick="scrollToTop()">⬆️ Go to Top</button>
 
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
-            if (localStorage.getItem("darkMode") === "enabled") {
-                document.body.classList.add("dark-mode");
-                darkModeCheckbox.checked = true;
-            }
-
-            // Add event listeners to category checkboxes
-            const categoryCheckboxes = document.querySelectorAll("#category-dropdown input[type='checkbox']");
-            categoryCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener("change", loadFeeds);
-            });
-
-            loadFeeds();
-
-            // Show or hide the Go to Top button based on scroll position
-            window.addEventListener("scroll", toggleGoTopButton);
-        });
-
-        const feed = { name: "Azure Update", url: "https://www.microsoft.com/releasecommunications/api/v2/azure/rss" };
-        let totalFeedsLoaded = 0;
-
-        async function loadFeeds() {
-            document.getElementById("rss-feeds").innerHTML = "";
-            totalFeedsLoaded = 0; // Reset the counter before loading feeds
-            fetchRSSFeed(feed);
-
-            // Update total categories counter
-            const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
-            document.getElementById("total-feeds-counter").innerText = `Total Categories: ${selectedCategories.length}`;
-        }
-
-async function fetchRSSFeed(feed) {
-    const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&api_key=${apiKey}&count=1000`;
-    const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
-
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-
-        if (data.status === "ok") {
-            const container = document.getElementById("rss-feeds");
-            const daysToShow = parseInt(document.getElementById('days-per-feed').value);
-            const cutoffDate = new Date();
-            cutoffDate.setDate(cutoffDate.getDate() - daysToShow);
-            const sortedItems = data.items
-                .filter(item => {
-                    const itemDate = new Date(item.pubDate);
-                    const itemCategories = item.categories || [];
-                    return itemDate >= cutoffDate && // Only show items newer than the selected days
-                           itemCategories.some(cat => selectedCategories.includes(cat)); // Filter by selected categories
-                })
-                .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-            const itemsToShow = sortedItems;
-
-            itemsToShow.forEach(item => {
-                const itemDiv = document.createElement("p");
-                const timeDiff = new Date() - new Date(item.pubDate);
-                const daysOld = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                let indicator = '🟢'; // less than 2 days
-                if (daysOld > 30) {
-                    indicator = '🔴'; // older than 30 days
-                } else if (daysOld > 2) {
-                    indicator = '🔵'; // older than 2 days
-                }
-
-                itemDiv.innerHTML = `<small>${indicator} ${new Date(item.pubDate).toDateString()} (${daysOld} days ago):
-                    <a href="${item.link}" target="_blank">${item.title}</a>
-                    - ${data.feed.title}
-                    </small>`;
-                container.appendChild(itemDiv);
-            });
-
-            // - <a href="${feed.url}" target="_blank">${feed.name}</a>
-            // - ${feed.category}
-
-            totalFeedsLoaded++;
-            document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
-        }
-    } catch (error) {
-        console.error(`Error fetching RSS feed: ${feed.name}`, error);
-    }
-}
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            if (document.body.classList.contains("dark-mode")) {
-                localStorage.setItem("darkMode", "enabled");
-            } else {
-                localStorage.removeItem("darkMode");
-            }
-        }
-
-        function toggleGoTopButton() {
-            const goTopBtn = document.getElementById("go-top-btn");
-            if (document.documentElement.scrollTop > 100) {
-                goTopBtn.classList.remove("hidden");
-            } else {
-                goTopBtn.classList.add("hidden");
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-
-
-</script>
 
     <!-- Footer -->
     <hr>

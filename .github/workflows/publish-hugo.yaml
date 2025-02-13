@@ -1,13 +1,14 @@
 name: Deploy Hugo site to Pages2
 
 on:
-#  push:
-#    branches:
-#      - master # Set a branch to deploy
-  # schedule:
-  #   # Every day at 10:00 UTC
-  #   - cron: '0 10 * * *'
-  workflow_dispatch:
+  #  push:
+  #    branches:
+  #      - main # Set a branch to deploy
+    # schedule:
+    #   # Every day at 10:00 UTC
+    #   - cron: '0 10 * * *'
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
 
 jobs:
   deploy:
@@ -32,4 +33,4 @@ jobs:
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_branch: gh-pages
-          cname: vuptime.io
+          cname: benoit-gaumard.io

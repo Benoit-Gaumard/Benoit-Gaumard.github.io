@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⏰ Latest Azure retirements updates</title>
+    <title>🆕 Azure Updates</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -110,11 +110,10 @@
         </div>
 
         <!-- Title -->
-        <h2>⏰ Latest Azure retirements updates <img src="C:\REPOS\BLOG\hugo-website\bga-new-site\static\images\azure.svg"></h2>
-        <p><small>Stay informed with Azure retirements updates from Microsoft announced <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">here.</a></small></p>
+        <h2>🆕 Azure Updates <img src="/images/azure.svg" alt="Azure logo"></h2>
+        <p><small>Stay informed with Azure updates from Microsoft announced <a href="https://azure.microsoft.com/en-us/updates/" target="_blank">here.</a></small></p>
     </div>
     <hr>
-
 
 
     <!-- Dropdown to select days old -->
@@ -137,14 +136,78 @@
     </div>
 
     <!-- Multiselect Dropdown for Categories -->
-    <div class="display-feed">
-        <small>
-            <!-- Category dropdown label -->
-            <label for="category-dropdown"></label>
+    <div class="add-feed">
+        <div class="dropdown add-feed">
             <div id="category-dropdown" class="dropdown-content">
-                <label style="display: none;"><input type="checkbox" value="Retirements" checked> Retirements</label>
+                <button class="categories-btn" onclick="toggleDropdown()">📚 Show/Hide selected categories (<span id="selected-count">0</span>)</button>
+                <div id="category-content" style="display: none;">
+                    <div id="category-buttons">
+                        <button class="select-all-categories-btn" onclick="selectAllCategories()">Select All</button>
+                        <button class="unselect-all-categories-btn" onclick="unselectAllCategories()">Unselect All</button>
+                    </div>
+                    <ul class="category-list"></ul>
+                </div>
             </div>
-        </small>
+        </div>
+
+                <script>
+                async function loadCategories() {
+                    const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
+                    const feedUrl = "https://www.microsoft.com/releasecommunications/api/v2/azure/rss";
+                    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=${apiKey}&count=1000`;
+
+                    try {
+                        const response = await fetch(apiUrl);
+                        const data = await response.json();
+                        if (data.status === "ok") {
+                            const categories = [...new Set(data.items.flatMap(item => item.categories || []))].sort();
+                            const categoriesList = document.querySelector('.category-list');
+                            categoriesList.innerHTML = categories.map(category =>
+                                `<label><input type="checkbox" value="${category}" checked> ${category}</label><br>`
+                            ).join('');
+                            loadFeeds(); // Refresh feeds after categories are loaded
+                        }
+                    } catch (error) {
+                        console.error('Error loading categories:', error);
+                    }
+                }
+
+                function updateSelectedCount() {
+                    const selectedCount = document.querySelectorAll('.category-list input:checked').length;
+                    document.getElementById('selected-count').textContent = selectedCount;
+                }
+
+                function selectAllCategories() {
+                    document.querySelectorAll('.category-list input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = true;
+                    });
+                    updateSelectedCount();
+                    loadFeeds();
+                }
+
+                function unselectAllCategories() {
+                    document.querySelectorAll('.category-list input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    updateSelectedCount();
+                    loadFeeds();
+                }
+
+                function toggleDropdown() {
+                    const content = document.getElementById('category-content');
+                    content.style.display = content.style.display === 'none' ? 'block' : 'none';
+                }
+
+                // Add event listener to update count when checkboxes change
+                document.addEventListener('change', function(e) {
+                    if (e.target.matches('.category-list input[type="checkbox"]')) {
+                        updateSelectedCount();
+                    }
+                });
+
+                document.addEventListener('DOMContentLoaded', loadCategories);
+                </script>
+            </div>
     </div>
 
     <!-- Total Feeds Counter -->
@@ -213,9 +276,7 @@ async function fetchRSSFeed(feed) {
                 })
                 .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-            const itemsToShow = sortedItems;
-
-            itemsToShow.forEach(item => {
+            sortedItems.forEach(item => {
                 const itemDiv = document.createElement("p");
                 const timeDiff = new Date() - new Date(item.pubDate);
                 const daysOld = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
