@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏷️ Latest Updates from RSS by feeds</title>
+    <title>🏷️ Latest feeds updates by categories</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -97,7 +97,7 @@
         </div>
 
         <!-- Title -->
-        <h2>🏷️ Latest updates from RSS by feeds</h2>
+        <h2>🏷️ Latest feeds updates by categories</h2>
         <p><small>Stay informed with Azure updates from official sources. Add custom RSS feeds to match your interests.</small></p>
         <p><small>Additional RSS feeds available on Microsoft blogs <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">here</a>.</small></p>
     </div>
@@ -124,28 +124,47 @@
 
     <!-- Multi-Line Feed Input Section -->
     <div class="add-feed">
-        <!-- Multiselect Dropdown for Categories -->
         <div class="dropdown add-feed">
             <div id="category-dropdown" class="dropdown-content">
                 <button class="categories-btn" onclick="toggleDropdown()">📚 Show/Hide selected categories (<span id="selected-count">0</span>)</button>
-                    <ul class="category-list" style="display: none;"></ul>
+                <div id="category-content" style="display: none;">
+                    <div id="category-buttons">
+                        <button class="select-all-categories-btn" onclick="selectAllCategories()">Select All</button>
+                        <button class="unselect-all-categories-btn" onclick="unselectAllCategories()">Unselect All</button>
+                    </div>
+                    <ul class="category-list"></ul>
+                </div>
             </div>
         </div>
+
         <script>
-            document.addEventListener("DOMContentLoaded", () => {
+            // Function to toggle dropdown visibility
+            function toggleDropdown() {
+            const categoryContent = document.getElementById('category-content');
+            categoryContent.style.display = categoryContent.style.display === 'none' ? 'block' : 'none';
+            }
+
+            // Function to update the selected categories count
+            function updateSelectedCount() {
+            const checkedCategories = document.querySelectorAll('.category-list input[type="checkbox"]:checked');
+            document.getElementById('selected-count').textContent = checkedCategories.length;
+            }
+
+            document.addEventListener("DOMContentLoaded", async () => {
+            await loadDefaultFeeds(); // Wait for default feeds to load
             const categoryDropdown = document.querySelector('.category-list');
             const categories = [...new Set(defaultFeeds.map(feed => feed.category)), "custom"];
 
             // Count feeds per category including custom feeds
             const categoryCount = categories.reduce((acc, category) => {
-            if (category === "custom") {
+                if (category === "custom") {
                 // Get custom feeds from localStorage
                 const savedFeeds = JSON.parse(localStorage.getItem("rssFeeds")) || [];
                 acc[category] = savedFeeds.length;
-            } else {
+                } else {
                 acc[category] = defaultFeeds.filter(feed => feed.category === category).length;
-            }
-            return acc;
+                }
+                return acc;
             }, {});
 
             // Update custom feeds count display
@@ -158,13 +177,13 @@
             const initialCategories = savedCategories || categories;
 
             categoryDropdown.innerHTML = categories.map(category => `
-            <li><label><input type="checkbox" value="${category}"
-            ${initialCategories.includes(category) ? 'checked' : ''}> ${category} (${categoryCount[category]})</label></li>
+                <li><label><input type="checkbox" value="${category}"
+                ${initialCategories.includes(category) ? 'checked' : ''}> ${category} (${categoryCount[category]})</label></li>
             `).join('');
 
             // If first time, save all categories to localStorage
             if (!savedCategories) {
-            localStorage.setItem('selectedCategories', JSON.stringify(categories));
+                localStorage.setItem('selectedCategories', JSON.stringify(categories));
             }
 
             // Update initial count
@@ -172,76 +191,17 @@
 
             const checkboxes = document.querySelectorAll('#category-dropdown input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
+                checkbox.addEventListener('change', () => {
                 const selectedCategories = Array.from(checkboxes)
-                .filter(cb => cb.checked)
-                .map(cb => cb.value);
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
                 localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
                 updateSelectedCount();
                 loadFeeds();
+                });
             });
             });
-            });
-
-            function updateSelectedCount() {
-            const checkboxes = document.querySelectorAll('#category-dropdown input[type="checkbox"]');
-            const selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-            document.getElementById('selected-count').textContent = selectedCount;
-            }
-
-            function toggleDropdown() {
-            const categoryList = document.querySelector('.category-list');
-
-            // Remove existing buttons first
-            const existingButtons = document.querySelectorAll('.select-all-categories-btn, .unselect-all-categories-btn');
-            existingButtons.forEach(button => button.remove());
-
-            if (categoryList.style.display === 'none') {
-                categoryList.style.display = 'block';
-
-                // Create Select All button
-                const selectButton = document.createElement('button');
-                selectButton.className = 'select-all-categories-btn';
-                selectButton.onclick = selectAll;
-                selectButton.textContent = 'Select All';
-
-                // Create Unselect All button
-                const unselectButton = document.createElement('button');
-                unselectButton.className = 'unselect-all-categories-btn';
-                unselectButton.onclick = unselectAll;
-                unselectButton.textContent = 'Unselect All';
-
-                // Add buttons before the category list
-                categoryList.parentNode.insertBefore(selectButton, categoryList);
-                categoryList.parentNode.insertBefore(unselectButton, categoryList);
-
-            } else {
-                categoryList.style.display = 'none';
-            }
-            }
-
-            function selectAll() {
-            const checkboxes = document.querySelectorAll('#category-dropdown input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = true;
-            });
-            const categories = [...new Set(defaultFeeds.map(feed => feed.category)), "custom"];
-            localStorage.setItem('selectedCategories', JSON.stringify(categories));
-            updateSelectedCount();
-            loadFeeds();
-            }
-
-            function unselectAll() {
-            const checkboxes = document.querySelectorAll('#category-dropdown input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            localStorage.setItem('selectedCategories', JSON.stringify([]));
-            updateSelectedCount();
-            loadFeeds();
-            }
         </script>
-
 
         <!-- Display Current Local Storage Content -->
         <button class="show-btn accordion">👀 Show/Hide custom feeds (<span id="custom-feeds-count">0</span>)</button>
@@ -260,8 +220,8 @@
     </div>
 
     <!-- Total Feeds Counter -->
-    <p></p><h4><div id="total-feeds-counter">Total feeds parsed : 0</div></h4>
-    <small>🟢 Less than 2 days 🔵 Older than 2 days 🔴 Older than 30 days</small></p>
+    <h4><div id="total-feeds-counter">Total feeds parsed : 0</div></h4>
+    <p><small>🟢 Less than 2 days 🔵 Older than 2 days 🔴 Older than 30 days</small></p>
 
     <!-- Display Feeds -->
     <div id="rss-feeds"></div>
@@ -298,209 +258,30 @@
         });
 
         // Default RSS feeds
-        const defaultFeeds = [
-        { name: "AIPlatform Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AIPlatformBlog", category: "AI" },
-        { name: "Azure AI Services blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Azure-AI-Services-blog", category: "AI" },
-        { name: "Machine Learning Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MachineLearningBlog", category: "Others" },
-        { name: "ANZUpdates", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ANZUpdates", category: "Others" },
-        { name: "Access Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AccessBlog", category: "Identity Storage Identity" },
-        { name: "Analyticson Azure", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AnalyticsonAzure", category: "Analytics" },
-        { name: "Appson Azure Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AppsonAzureBlog", category: "Others" },
-        { name: "Ask Perf", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AskPerf", category: "Others" },
-        { name: "Ask DS", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AskDS", category: "Others" },
-        { name: "Azure Arc Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureArcBlog", category: "Arc" },
-        { name: "Azure Architecture Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureArchitectureBlog", category: "Architecture Arc" },
-        { name: "Azure Communication Services Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureCommunicationServicesBlog", category: "Others" },
-        { name: "Azure Compute", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureCompute", category: "Cloud Infrastructure" },
-        { name: "Azure Confidential Computing Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureConfidentialComputingBlog", category: "Others" },
-        { name: "Azure Cosmos DBSupport Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureCosmosDBSupportBlog", category: "Data" },
-        { name: "Azure Data Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureDataBlog", category: "Data" },
-        { name: "Azure Data Explorer", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureDataExplorer", category: "Data" },
-        { name: "Azure Data Factory Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureDataFactoryBlog", category: "Data" },
-        { name: "Azure DBSupport", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureDBSupport", category: "Others" },
-        { name: "ADfor My SQL", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ADforMySQL", category: "Data" },
-        { name: "ADfor Postgre SQL", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ADforPostgreSQL", category: "Data" },
-        { name: "Azure Essentialsfor Partnersblog board", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureEssentialsforPartnersblog-board", category: "Partner" },
-        { name: "Azure Federal Developer Connect", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureFederalDeveloperConnect", category: "Development Tools" },
-        { name: "Azure Governanceand Management Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureGovernanceandManagementBlog", category: "Others" },
-        { name: "Azure High Performance Computing Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureHighPerformanceComputingBlog", category: "Others" },
-        { name: "Azure Infra Gurus", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureInfraGurus", category: "Cloud Infrastructure" },
-        { name: "Azure Infrastructure Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureInfrastructureBlog", category: "Cloud Infrastructure" },
-        { name: "Integrationson Azure Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IntegrationsonAzureBlog", category: "Others" },
-        { name: "Azure Lab Services Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureLabServicesBlog", category: "Others" },
-        { name: "Azure Maps Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureMapsBlog", category: "Others" },
-        { name: "Azure Migration Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureMigrationBlog", category: "Others" },
-        { name: "Azure Network Security Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureNetworkSecurityBlog", category: "Cloud Infrastructure Security" },
-        { name: "Azure Networking Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureNetworkingBlog", category: "Cloud Infrastructure" },
-        { name: "Azure Observability Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureObservabilityBlog", category: "Others" },
-        { name: "Azure Paa SBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzurePaaSBlog", category: "Others" },
-        { name: "Azure SQLBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureSQLBlog", category: "Data" },
-        { name: "Service Fabric", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Service-Fabric", category: "Data" },
-        { name: "Azure Space Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureSpaceBlog", category: "Others" },
-        { name: "Azure Stack Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureStackBlog", category: "Cloud Infrastructure" },
-        { name: "Azure Storage Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureStorageBlog", category: "Cloud Infrastructure Storage" },
-        { name: "Azure Synapse Analytics Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureSynapseAnalyticsBlog", category: "Analytics Data" },
-        { name: "Azure Tools Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureToolsBlog", category: "Others" },
-        { name: "Azure Virtual Desktop Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureVirtualDesktopBlog", category: "Windows Collaboration" },
-        { name: "Azurefor ISVand Startups Technical Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureforISVandStartupsTechnicalBlog", category: "Others" },
-        { name: "Ads APIBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AdsAPIBlog", category: "Others" },
-        { name: "Community News Desk", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=CommunityNewsDesk", category: "Others" },
-        { name: "Configuration Manager Archive", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ConfigurationManagerArchive", category: "Arc" },
-        { name: "Configuration Manager Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ConfigurationManagerBlog", category: "Others" },
-        { name: "Containers", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Containers", category: "Containers AI" },
-        { name: "Core Infrastructureand Security Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=CoreInfrastructureandSecurityBlog", category: "Cloud Infrastructure Security" },
-        { name: "Corporate Communications Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Corporate_Communications_Blog", category: "Others" },
-        { name: "Data Architecture Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DataArchitectureBlog", category: "Architecture Arc Data" },
-        { name: "DSTBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DSTBlog", category: "Others" },
-        { name: "Desenvolvedores BR", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DesenvolvedoresBR", category: "Others" },
-        { name: "Device Management Microsoft", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DeviceManagementMicrosoft", category: "Others" },
-        { name: "Driving Adoption Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DrivingAdoptionBlog", category: "Others" },
-        { name: "Education Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=EducationBlog", category: "Others" },
-        { name: "Educator Developer Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=EducatorDeveloperBlog", category: "Development Tools" },
-        { name: "Edutech", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Edutech", category: "Others" },
-        { name: "Excel Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ExcelBlog", category: "Others" },
-        { name: "Exchange", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Exchange", category: "Productivity" },
-        { name: "FSLogix Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FSLogix-Blog", category: "Others" },
-        { name: "Failover Clustering", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FailoverClustering", category: "Cloud Infrastructure AI" },
-        { name: "Fast Track App Assure", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FastTrackAppAssure", category: "Fast Track" },
-        { name: "Fast Track Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FastTrackBlog", category: "Fast Track" },
-        { name: "Fast Trackfor Azure Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FastTrackforAzureBlog", category: "Fast Track" },
-        { name: "Fin Ops Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FinOpsBlog", category: "Finops" },
-        { name: "Green Tech Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=GreenTechBlog", category: "Sustainability" },
-        { name: "Hardware Dev Center", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=HardwareDevCenter", category: "Others" },
-        { name: "Healthcare And Life Sciences Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=HealthcareAndLifeSciencesBlog", category: "Others" },
-        { name: "IIS Support Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IIS-Support-Blog", category: "Others" },
-        { name: "ILTCommunication Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ILTCommunicationBlog", category: "Others" },
-        { name: "ITOps Talk Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ITOpsTalkBlog", category: "ITOps" },
-        { name: "Io TBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IoTBlog", category: "Others" },
-        { name: "Intune Customer Success", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IntuneCustomerSuccess", category: "Endpoints" },
-        { name: "Italy ISVChronicles", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ItalyISVChronicles", category: "Italy" },
-        { name: "Microsoft Cloud City Italy", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftCloudCityItaly", category: "Cloud Infrastructure Italy" },
-        { name: "Italy News Events", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ItalyNewsEvents", category: "Italy" },
-        { name: "Kumppanifoorumi", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Kumppanifoorumi", category: "Finland" },
-        { name: "Linuxand Open Source Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=LinuxandOpenSourceBlog", category: "Others" },
-        { name: "M365GCCHCommunity Hubblog board", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=M365GCCHCommunityHubblog-board", category: "Microsoft 365" },
-        { name: "Manufacturing", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Manufacturing", category: "Others" },
-        { name: "Marketplace Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Marketplace-Blog", category: "Others" },
-        { name: "Mediaat Microsoft Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MediaatMicrosoftBlog", category: "Others" },
-        { name: "Messagingon Azure Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MessagingonAzureBlog", category: "Others" },
-        { name: "Microsoft Edge Insider", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftEdgeInsider", category: "Windows Collaboration" },
-        { name: "Microsoft 365 Archive Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft_365_Archive_Blog", category: "Arc Microsoft 365" },
-        { name: "Microsoft 365 Backup Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft_365_Backup_Blog", category: "Microsoft 365" },
-        { name: "microsoft 365blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft_365blog", category: "Microsoft 365" },
-        { name: "Microsoft365Copilot Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft365CopilotBlog", category: "Microsoft 365 Productivity AI" },
-        { name: "Microsoft Copilotfor Finance Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftCopilotforFinanceBlog", category: "AI" },
-        { name: "Microsoft365Insider Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft365InsiderBlog", category: "Microsoft 365 Productivity" },
-        { name: "Office365Business Apps Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Office365BusinessAppsBlog", category: "Office Microsoft 365 Productivity" },
-        { name: "Viva Sales Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=VivaSales-Blog", category: "Collaboration" },
-        { name: "Microsoft Copilot Service Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftCopilotService-Blog", category: "AI" },
-        { name: "Microsoft Data Migration", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftDataMigration", category: "Data" },
-        { name: "Defender External Attack Surface Mgmt Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DefenderExternalAttackSurfaceMgmtBlog", category: "Security Windows Collaboration" },
-        { name: "Defender Threat Intelligence", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=DefenderThreatIntelligence", category: "Security" },
-        { name: "Vulnerability Management", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Vulnerability-Management", category: "Others" },
-        { name: "Microsoft Threat Protection Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftThreatProtectionBlog", category: "Security" },
-        { name: "Microsoft Defender Cloud Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftDefenderCloudBlog", category: "Cloud Infrastructure Security" },
-        { name: "Microsoft Defender ATPBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftDefenderATPBlog", category: "Security" },
-        { name: "Microsoft Defender Io TBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftDefenderIoTBlog", category: "Security" },
-        { name: "Microsoft Defenderfor Office365Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftDefenderforOffice365Blog", category: "Security Office Microsoft 365 Productivity" },
-        { name: "Azure Dev Community Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureDevCommunityBlog", category: "Others" },
-        { name: "Microsoft Device Ecosystem Platform Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftDeviceEcosystemPlatformBlog", category: "Others" },
-        { name: "microsoft entra blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft-entra-blog", category: "Identity" },
-        { name: "Identity", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Identity", category: "Security Identity Identity" },
-        { name: "Microsoft Forms Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftFormsBlog", category: "Productivity" },
-        { name: "Microsoft Graph Data Connect for Share Po", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft_Graph_Data_Connect_for_SharePo", category: "Data" },
-        { name: "Microsoft Industry Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftIndustryBlog", category: "Others" },
-        { name: "microsoftintuneblog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoftintuneblog", category: "Endpoints" },
-        { name: "Microsoft Endpoint Manager Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftEndpointManagerBlog", category: "Others" },
-        { name: "Microsoft Learn Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftLearnBlog", category: "Others" },
-        { name: "mvp blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=mvp-blog", category: "Others" },
-        { name: "Microsoft Managed Desktop", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftManagedDesktop", category: "Windows Collaboration" },
-        { name: "Microsoft Mechanics Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftMechanicsBlog", category: "Others" },
-        { name: "Microsoft Mission Critical Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftMissionCriticalBlog", category: "Others" },
-        { name: "One Drive Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=OneDriveBlog", category: "Productivity" },
-        { name: "microsoft priva blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft-priva-blog", category: "Others" },
-        { name: "Azure Purview Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzurePurviewBlog", category: "Security" },
-        { name: "Intelligent Search Discovery Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IntelligentSearch_DiscoveryBlog", category: "Arc" },
-        { name: "Microsoft Security Baselines", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft-Security-Baselines", category: "Security" },
-        { name: "microsoft security blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft-security-blog", category: "Security" },
-        { name: "Security Copilot Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SecurityCopilotBlog", category: "Security AI" },
-        { name: "Microsoft Security Experts", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftSecurityExperts", category: "Security" },
-        { name: "Microsoft Sentinel Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftSentinelBlog", category: "Security" },
-        { name: "SPBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SPBlog", category: "Others" },
-        { name: "Stream Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=StreamBlog", category: "Others" },
-        { name: "Teams Free Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=TeamsFreeBlog", category: "Productivity" },
-        { name: "Microsoft Teams Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftTeamsBlog", category: "Productivity" },
-        { name: "Microsoft Teams Community Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftTeamsCommunityBlog", category: "Productivity" },
-        { name: "Microsoft Teams Support", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftTeamsSupport", category: "Productivity" },
-        { name: "To Do Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=To-DoBlog", category: "Others" },
-        { name: "Microsoft USBBlog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftUSBBlog", category: "Others" },
-        { name: "Microsoft Viva Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftVivaBlog", category: "Collaboration" },
-        { name: "The Mixed Reality Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=TheMixedRealityBlog", category: "Others" },
-        { name: "mixed reality link", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=mixed-reality-link", category: "Others" },
-        { name: "Mixed Reality Partners Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MixedRealityPartnersBlog", category: "Partner" },
-        { name: "modern service management blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=modern-service-management-blog", category: "Others" },
-        { name: "Modern Work App Consult", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ModernWorkAppConsult", category: "Others" },
-        { name: "Modernization Best Practices Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ModernizationBestPracticesBlog", category: "Others" },
-        { name: "General News Updates Netherlands", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=GeneralNewsUpdatesNetherlands", category: "Others" },
-        { name: "Networking Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=NetworkingBlog", category: "Cloud Infrastructure" },
-        { name: "Newsfrom Microsoft Norway", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=NewsfromMicrosoftNorway", category: "Norway" },
-        { name: "Nonprofit Techies", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=NonprofitTechies", category: "Others" },
-        { name: "Novidadesdo MCPP", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=NovidadesdoMCPP", category: "Portugal" },
-        { name: "Office EOS", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=OfficeEOS", category: "Office Productivity" },
-        { name: "Onboarding Portugal", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=OnboardingPortugal", category: "Portugal" },
-        { name: "Oracleon Azure Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=OracleonAzureBlog", category: "Others" },
-        { name: "Outlook", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Outlook", category: "Outlook" },
-        { name: "Outlook Global Customer Service", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=OutlookGlobalCustomerService", category: "Outlook" },
-        { name: "Partner Marketingasa Serviceblog board", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PartnerMarketingasaServiceblog-board", category: "Partner" },
-        { name: "Partner Updates Austria", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PartnerUpdatesAustria", category: "Partner" },
-        { name: "Partner Updates Denmark Iceland", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PartnerUpdatesDenmarkIceland", category: "Partner Denmark" },
-        { name: "Partner Updates Switzerland", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PartnerUpdatesSwitzerland", category: "Partner" },
-        { name: "Partner News", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PartnerNews", category: "Partner" },
-        { name: "Partner Updates Ireland", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PartnerUpdates-Ireland", category: "Partner" },
-        { name: "Planner Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PlannerBlog", category: "Others" },
-        { name: "Project Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ProjectBlog", category: "Others" },
-        { name: "Project Support", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=ProjectSupport", category: "Others" },
-        { name: "Public Sector Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=PublicSectorBlog", category: "Others" },
-        { name: "SAPApplications", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SAPApplications", category: "Others" },
-        { name: "SQLServer", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SQLServer", category: "Data" },
-        { name: "SSIS", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SSIS", category: "Data" },
-        { name: "SQLServer Support", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SQLServerSupport", category: "Data" },
-        { name: "Microsoft Securityand Compliance", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftSecurityandCompliance", category: "Security" },
-        { name: "Share Point Embedded", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SharePoint_Embedded", category: "Productivity" },
-        { name: "Share Point Premium Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SharePoint_Premium_Blog", category: "Productivity" },
-        { name: "Share Point Dsc", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SharePointDsc", category: "Productivity" },
-        { name: "Skype for Business Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Skype_for_Business_Blog", category: "Productivity" },
-        { name: "Skypefor Business Ignite Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SkypeforBusinessIgniteBlog", category: "Productivity" },
-        { name: "Small Basic", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SmallBasic", category: "Others" },
-        { name: "Microsoft365Business Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Microsoft365BusinessBlog", category: "Microsoft 365 Productivity" },
-        { name: "join the specialization community", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=join-the-specialization-community", category: "Others" },
-        { name: "Startupsat Microsoft Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=StartupsatMicrosoftBlog", category: "Others" },
-        { name: "File CAB", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=FileCAB", category: "Others" },
-        { name: "Student Developer Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=StudentDeveloperBlog", category: "Development Tools" },
-        { name: "Surface ITPro", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SurfaceITPro", category: "Windows Collaboration" },
-        { name: "Sysinternals Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Sysinternals-Blog", category: "Others" },
-        { name: "System Center Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=SystemCenterBlog", category: "Others" },
-        { name: "Weekly Roundup Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=WeeklyRoundupBlog", category: "Others" },
-        { name: "Azurefor Operators Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=AzureforOperatorsBlog", category: "Others" },
-        { name: "Testing Spot Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=TestingSpotBlog", category: "Others" },
-        { name: "Virtualization", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Virtualization", category: "Cloud Infrastructure Virtualization" },
-        { name: "Viva Amplify Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Amplify_Blog", category: "Collaboration" },
-        { name: "Viva Connections Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Connections_Blog", category: "Collaboration" },
-        { name: "Viva Engage Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Engage_Blog", category: "Collaboration" },
-        { name: "Viva Glint Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Glint_Blog", category: "Collaboration" },
-        { name: "Viva Glint Partnersblog board", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Glint_Partnersblog-board", category: "Partner Collaboration" },
-        { name: "Viva Goals Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=VivaGoalsBlog", category: "Collaboration" },
-        { name: "Viva Insights Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Insights_Blog", category: "Collaboration" },
-        { name: "Viva Learning Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Learning_Blog", category: "Collaboration" },
-        { name: "Viva Pulse Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=VivaPulse-Blog", category: "Collaboration" },
-        { name: "Viva Topics Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Viva_Topics_Blog", category: "Collaboration" },
-        { name: "Win HECOnline Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=WinHECOnlineBlog", category: "Others" },
-        { name: "Windows Admin Center Blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Windows-Admin-Center-Blog", category: "Windows" },
-        { name: "Windows Driver Dev", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=WindowsDriverDev", category: "Windows" },
-        { name: "Windows Hardware Certification", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=WindowsHardwareCertification", category: "Windows" },
-        { name: "Windows ITPro blog", url: "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=Windows-ITPro-blog", category: "Windows" },
+        // Fetch and parse CSV file to populate defaultFeeds
+        let defaultFeeds = [];
 
-        ];
+        async function loadDefaultFeeds() {
+            try {
+            const response = await fetch('https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/dev/BlogsListCSV.csv');
+            const csvText = await response.text();
+
+            // Parse CSV (assuming format: name,url,category)
+            const rows = csvText.split('\n').slice(1); // Skip header row
+            defaultFeeds = rows
+                .filter(row => row.trim())
+                .map(row => {
+                const [name, url, category] = row.split(',').map(field => field.trim());
+                return { name, url, category };
+                });
+
+            loadFeeds(); // Load feeds after CSV is parsed
+            } catch (error) {
+            console.error('Error loading CSV:', error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadDefaultFeeds);
 
         let customFeeds = [];
         let totalFeedsLoaded = 0;
@@ -638,10 +419,32 @@
                 localStorage.removeItem("darkMode");
             }
         }
-
         // Scroll to top of the page
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Select all categories
+        function selectAllCategories() {
+            const checkboxes = document.querySelectorAll('.category-list input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            const selectedCategories = Array.from(checkboxes).map(cb => cb.value);
+            localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+            updateSelectedCount();
+            loadFeeds();
+        }
+
+        // Unselect all categories
+        function unselectAllCategories() {
+            const checkboxes = document.querySelectorAll('.category-list input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            localStorage.setItem('selectedCategories', JSON.stringify([]));
+            updateSelectedCount();
+            loadFeeds();
         }
 
         // Load feeds when the document is ready

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⏰ Retirement</title>
+    <title>⏰ Latest Azure retirements updates</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -110,30 +110,12 @@
         </div>
 
         <!-- Title -->
-        <h2>⏰ Retirements</h2>
-        <p><small>Stay informed with updates from Microsoft official sources. Add custom RSS feeds to match your interests.</small></p>
-        <p><small>Additional RSS feeds available on Microsoft blogs <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">here</a>.</small></p>
+        <h2>⏰ Latest Azure retirements updates <img src="C:\REPOS\BLOG\hugo-website\bga-new-site\static\images\azure.svg"></h2>
+        <p><small>Stay informed with Azure retirements updates from Microsoft announced <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">here.</a></small></p>
     </div>
     <hr>
 
-    <!-- Dropdown to select number of items per feed -->
-    <div class="display-feed">
-        <small>
-            <label for="items-per-feed">Items to display per feed:</label>
-            <select id="items-per-feed" onchange="loadFeeds()">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10" selected>10</option>
-            </select>
-        </small>
-    </div>
+
 
     <!-- Dropdown to select days old -->
     <div class="display-feed">
@@ -157,9 +139,10 @@
     <!-- Multiselect Dropdown for Categories -->
     <div class="display-feed">
         <small>
-            <label for="category-dropdown">Select categories:</label>
+            <!-- Category dropdown label -->
+            <label for="category-dropdown"></label>
             <div id="category-dropdown" class="dropdown-content">
-                <label><input type="checkbox" value="Retirements" checked> Retirements</label>
+                <label style="display: none;"><input type="checkbox" value="Retirements" checked> Retirements</label>
             </div>
         </small>
     </div>
@@ -230,7 +213,7 @@ async function fetchRSSFeed(feed) {
                 })
                 .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-            const itemsToShow = sortedItems.slice(0, parseInt(document.getElementById('items-per-feed').value));
+            const itemsToShow = sortedItems;
 
             itemsToShow.forEach(item => {
                 const itemDiv = document.createElement("p");
