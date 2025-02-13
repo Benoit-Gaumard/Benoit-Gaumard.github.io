@@ -2,14 +2,14 @@
 name: Deploy Hugo site to Pages
 
 on:
-  #  push:
-  #    branches:
-  #      - main # Set a branch to deploy
-    # schedule:
-    #   # Every day at 10:00 UTC
-    #   - cron: '0 10 * * *'
-    # Allows you to run this workflow manually from the Actions tab
-    workflow_dispatch:
+  push:
+    branches:
+      - main # Set a branch to deploy
+  # schedule:
+  #   # Every day at 10:00 UTC
+  #   - cron: '0 10 * * *'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -74,13 +74,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Create CNAME file
+        run: echo "benoit-gaumard.io" > ./public/CNAME
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Deploy CNAME
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          cname: benoit-gaumard.io
