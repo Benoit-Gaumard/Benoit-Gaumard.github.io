@@ -9,11 +9,11 @@ tags = [
     "Network", "Security"
 ]
 categories = ["Azure"]
-#featureImage = "/images/Network-Security-Groups.svg" # Sets featured image on blog post.
+featureImage = "/images/Network-Security-Groups.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
 thumbnail = "/images/Network-Security-Groups.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/Network-Security-Groups.svg" # Designate a separate image for social media sharing.
+shareImage = "/images/Network-Security-Groups.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -22,7 +22,6 @@ figurePositionShow = true # Override global value for showing the figure label.
 Do you want to restrict access to your Web App to specific users or groups within your organization? (which is by default enabled for all the users in the tenant).
 <!--more-->
 
-<img src="/images/Network-Security-Groups.svg">
 
 Network security perimeter (NSP) allows organizations to define a logical network isolation boundary for PaaS resources (for example, Azure Storage account and SQL Database server) that are deployed outside your organization’s virtual networks. It restricts public network access to PaaS resources within the perimeter; access can be exempted by using explicit access rules for public inbound and outbound.
 

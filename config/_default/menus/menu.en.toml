@@ -3,29 +3,71 @@
   url = ""
   weight = -110
 
+# Submenus are done this way: parent -> identifier
 [[main]]
-  name = "BlogRoll"
-  url = "page/blogroll/"
+  name = "BlogRolls"
+  identifier = "BlogRolls"
   weight = -109
-
 [[main]]
-  name = "BlogRoll Sec"
+  parent = "BlogRolls"
+  name = "General"
+  url = "page/blogroll/"
+  weight = 1
+[[main]]
+  parent = "BlogRolls"
+  name = "Security"
   url = "page/blogroll-security/"
-  weight = -108
-
+  weight = 2
 [[main]]
-  name = "BlogRoll AI"
+  parent = "BlogRolls"
+  name = "AI"
   url = "page/blogroll-ai/"
-  weight = -107
+  weight = 3
+
+# Submenus are done this way: parent -> identifier
+[[main]]
+  name = "Tools"
+  identifier = "Tools"
+  weight = -108
+[[main]]
+  parent = "Tools"
+  name = "Blogs RSS Updates by days"
+  url = "https://benoit-gaumard.io/tools/rss-updates-by-days.html"
+  weight = 1
+[[main]]
+  parent = "Tools"
+  name = "Blogs RSS Updates by categories"
+  url = "https://benoit-gaumard.io/tools/rss-updates-by-cats.html"
+  weight = 2
+[[main]]
+  parent = "Tools"
+  name = "Azure retirements updates"
+  url = "https://benoit-gaumard.io/tools/azure-retirements.html"
+  weight = 3
+[[main]]
+  parent = "Tools"
+  name = "Azure retirements updates"
+  url = "https://benoit-gaumard.io/tools/azure-retirements.html"
+  weight = 4
+[[main]]
+  parent = "Tools"
+  name = "All Azure updates"
+  url = "https://benoit-gaumard.io/tools/azure-updates-all.html"
+  weight = 5
 
 [[main]]
-  name = "Latest Azure News"
-  url = "page/latest-news/"
-  weight = -106
+  name = "Latest Azure updates"
+  url = "https://benoit-gaumard.io/tools/azure-updates-all.html"
+  weight = -107
 
 [[main]]
   name = "Fun Zone"
   url = "page/funzone/"
+  weight = -106
+
+  [[main]]
+  name = "About Me"
+  url = "about/"
   weight = -105
 
 # Submenus are done this way: parent -> identifier
@@ -41,11 +83,6 @@
 #  parent = "Links"
 #  name = "Twitter"
 #  url = "https://twitter.com/"
-
-[[main]]
-  name = "About Me"
-  url = "about/"
-  weight = -104
 
 # social menu links
 

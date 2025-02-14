@@ -9,11 +9,11 @@ tags = [
     "Database", "Security", "PHP"
 ]
 categories = ["Azure"]
-#featureImage = "/images/SQL-Database.svg" # Sets featured image on blog post.
-#featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
+featureImage = "/images/SQL-Database.svg" # Sets featured image on blog post.
+featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
 thumbnail = "/images/SQL-Database.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/SQL-Database.svg" # Designate a separate image for social media sharing.
+shareImage = "/images/SQL-Database.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -22,9 +22,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 You can connect to your Azure SQL Database or Azure Database for MySQL using a Managed Identity in PHP. This approach removes the necessity of storing usernames and passwords in your code. Authentication is managed by Entra ID, previously known as Azure Active Directory (AAD).
 <!--more-->
 
-<img src="/images/SQL-Database.svg">
-
-![Architecture Diagram](https://learn.microsoft.com/en-us/azure/app-service/media/tutorial-connect-msi-sql-database/architecture.png)
+![](https://learn.microsoft.com/en-us/azure/app-service/media/tutorial-connect-msi-sql-database/architecture.png)
 
 https://techcommunity.microsoft.com/blog/appsonazureblog/how-to-access-azure-sql-database-with-managed-identity-in-php-in-app-service/4129014
 

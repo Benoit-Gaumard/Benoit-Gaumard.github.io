@@ -9,11 +9,11 @@ tags = [
     "Entra Id", "Web App"
 ]
 categories = ["Azure"]
-#featureImage = "/images/entra-id.svg" # Sets featured image on blog post.
+featureImage = "/images/entra-id.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
 thumbnail = "/images/entra-id.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/entra-id.svg" # Designate a separate image for social media sharing.
+shareImage = "/images/entra-id.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -21,8 +21,6 @@ figurePositionShow = true # Override global value for showing the figure label.
 
 Do you want to restrict access to your Web App to specific users or groups within your organization? (which is by default enabled for all the users in the tenant).
 <!--more-->
-
-<img src="/images/entra-id.svg">
 
 This post will guide you on how to use Microsoft Entra ID to secure your web app by managing authentication and authorization for users or security groups.
 
