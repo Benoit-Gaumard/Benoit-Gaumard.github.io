@@ -1,6 +1,6 @@
 +++
 author = "Benoit G"
-title = "Access Azure SQL database with managed identity in PHP on App Service"
+title = "App Service (PHP) access to Azure SQL database with managed identity"
 date = "2025-02-12"
 description = ""
 toc = false
