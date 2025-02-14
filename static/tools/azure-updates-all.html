@@ -217,8 +217,7 @@
     <div id="rss-feeds"></div>
 
     <!-- Go to Top Button -->
-    <button class="go-top-btn hidden" id="go-top-btn" onclick="scrollToTop()">⬆️ Go to Top</button>
-
+    <button class="go-top-btn" id="go-top-btn" onclick="scrollToTop()">⬆️ Go to top</button>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -236,8 +235,15 @@
 
             loadFeeds();
 
-            // Show or hide the Go to Top button based on scroll position
-            window.addEventListener("scroll", toggleGoTopButton);
+            // Show or hide the "Go to Top" button based on scroll position
+            window.addEventListener("scroll", () => {
+                const goTopBtn = document.getElementById("go-top-btn");
+                if (window.scrollY > 200) {
+                    goTopBtn.style.display = "block";
+                } else {
+                    goTopBtn.style.display = "none";
+                }
+            });
         });
 
         const feed = { name: "Azure Update", url: "https://www.microsoft.com/releasecommunications/api/v2/azure/rss" };
@@ -299,34 +305,24 @@ async function fetchRSSFeed(feed) {
 
             totalFeedsLoaded++;
             document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
-        }
-    } catch (error) {
-        console.error(`Error fetching RSS feed: ${feed.name}`, error);
-    }
-}
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            if (document.body.classList.contains("dark-mode")) {
-                localStorage.setItem("darkMode", "enabled");
-            } else {
-                localStorage.removeItem("darkMode");
+                }
+            } catch (error) {
+                console.error('Error fetching RSS feed:', error);
             }
         }
 
         function toggleGoTopButton() {
             const goTopBtn = document.getElementById("go-top-btn");
             if (document.documentElement.scrollTop > 100) {
-                goTopBtn.classList.remove("hidden");
+                goTopBtn.style.display = "block";
             } else {
-                goTopBtn.classList.add("hidden");
+                goTopBtn.style.display = "none";
             }
         }
 
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-
 
 </script>
 
