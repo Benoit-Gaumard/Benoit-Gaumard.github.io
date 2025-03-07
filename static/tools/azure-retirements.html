@@ -91,7 +91,7 @@
         .go-top-btn:hover { background: #005a9e; }
 
         /* Footer */
-        footer { text-align: center; font-size: 14px;}
+        footer { text-align: center; font-size: 12px;}
     </style>
 </head>
 <body>
@@ -111,7 +111,7 @@
 
         <!-- Title -->
         <h2>⏰ Azure retirements <img src="/images/azure-mini.svg" alt="Azure logo"></h2>
-        <p><small>Stay informed with Azure retirements updates from Microsoft announcements <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">here.</a></small></p>
+        <p><small>Stay updated on Azure retirements with a single page featuring the latest announcements from <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">Azure Updates.</a></small></p>
     </div>
     <hr>
 
@@ -120,7 +120,7 @@
     <!-- Dropdown to select days old -->
     <div class="display-feed">
         <small>
-            <label for="days-per-feed">Show items from last:</label>
+            <label for="days-per-feed">Show updates from the last:</label>
             <select id="days-per-feed" onchange="loadFeeds()">
                 <option value="1">1 day</option>
                 <option value="2">2 days</option>
@@ -148,7 +148,10 @@
     </div>
 
     <!-- Total Feeds Counter -->
-    <h4><div id="total-feeds-counter">Total Categories: 0</div></h4>
+    <!--<h4><div id="total-feeds-counter">Total Categories: 0</div></h4>-->
+
+    <!-- Total Feeds Counter -->
+    <p><small>🟢 Less than 2 days 🔵 Older than 2 days 🔴 Older than 30 days</small></p>
 
     <!-- Display Feeds -->
     <div id="rss-feeds"></div>
@@ -192,8 +195,8 @@
             fetchRSSFeed(feed);
 
             // Update total categories counter
-            const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
-            document.getElementById("total-feeds-counter").innerText = `Total Categories: ${selectedCategories.length}`;
+            //const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
+            //document.getElementById("total-feeds-counter").innerText = `Total Categories: ${selectedCategories.length}`;
         }
 
 async function fetchRSSFeed(feed) {
@@ -234,7 +237,7 @@ async function fetchRSSFeed(feed) {
 
                 itemDiv.innerHTML = `<small>${indicator} ${new Date(item.pubDate).toDateString()} (${daysOld} days ago):
                     <a href="${item.link}" target="_blank">${item.title}</a>
-                    - ${data.feed.title}
+                    - Source: ${data.feed.title}
                     </small>`;
                 container.appendChild(itemDiv);
             });
@@ -242,8 +245,8 @@ async function fetchRSSFeed(feed) {
             // - <a href="${feed.url}" target="_blank">${feed.name}</a>
             // - ${feed.category}
 
-            totalFeedsLoaded++;
-            document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
+            //totalFeedsLoaded++;
+            //document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
         }
     } catch (error) {
         console.error(`Error fetching RSS feed: ${feed.name}`, error);
@@ -277,7 +280,14 @@ async function fetchRSSFeed(feed) {
     <hr>
     <footer>
         <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
-        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a> Infra and DevOps Consultant @ Microsoft</p>
+        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a>
+        - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
+        </p>
+        <p>
+        If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
+        </p>
+
     </footer>
 </body>
 </html>
+
