@@ -107,6 +107,9 @@ PDO (PHP Data Objects) is a database access layer in PHP that provides a uniform
 Using a managed identity to connect your frontend application (WebApp) to your backend SQL database eliminates the need for hardcoded usernames and passwords. This approach enhances security by leveraging Azure's identity management, ensuring that credentials are automatically managed and rotated.
 
 🔥 Advantages of Using Managed Identity
+
 ✅ No hardcoded credentials in code.
+
 ✅ Automatically rotates tokens for security.
+
 ✅ Works across Azure services (VMs, App Service, Functions,etc).

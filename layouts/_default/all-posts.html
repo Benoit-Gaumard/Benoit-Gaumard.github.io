@@ -1,0 +1,28 @@
+{{- define "main" }}
+{{- $s := .Site.Params }}
+{{- $p := .Params }}
+{{- $scratch := newScratch }}
+
+<div class="{{ if ne $p.singleColumn true }}grid-inverse {{ end }}wrap content">
+  <article class="post_content">
+    {{- $t := .Title }}
+    <h1 class="post_title">{{ $t | markdownify }}</h1>
+    <div class="post_body">
+      <h3 class="page-title">Published by date</h3>
+      <ul class="post-list">
+        {{ $counter := 0 }}
+        {{ range .Site.RegularPages }}
+          {{ $counter = add $counter 1 }}
+          <li class="post-item">
+            {{ $counter }}. <a href="{{ .RelPermalink }}" class="post-link">{{ .Title }}</a> -
+            <span class="post-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  </article>
+  {{- if ( ne $p.sidebar false ) }}
+    {{- partial "sidebar" . }}
+  {{ end }}
+</div>
+{{- end }}

@@ -5,11 +5,8 @@ date = "2024-10-16"
 description = "Test description"
 toc = false
 featured = false
-tags = [
-    "Hugo"
-]
-categories = ["Hugo"
-]
+tags = ["Hugo"]
+categories = ["Hugo"]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

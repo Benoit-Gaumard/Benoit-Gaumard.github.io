@@ -4,11 +4,8 @@ title = "From Wordpress to Hugo website"
 date = "2024-10-16"
 description = "Test description"
 toc = false
-tags = [
-    "hugo"
-]
-categories = ["hugo"
-]
+tags = ["hugo"]
+categories = ["hugo"]
 #featureImage = "/images/website-migration.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

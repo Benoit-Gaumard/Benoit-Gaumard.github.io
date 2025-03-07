@@ -120,6 +120,7 @@ This section offers a curated collection of helpful links, providing resources a
 - AAD Osint tool: https://aadinternals.com/osint/ 🔥
 - https://myaccount.microsoft.com/groups/groups-i-belong-to
 - https://cyberchef.org/ (Decode JWT tokens and more) 🔥
+- https://graphpermissions.merill.net/permission/ 🔥🔥🔥
 
 ## 💪 Bicep
 ---
@@ -396,7 +397,11 @@ This section offers a curated collection of helpful links, providing resources a
 - Microsoft MVP's Map : https://mvpsglobe.web.app/
 - https://www.bullshitor.com/
 - https://www.emaxilde.net/assets/games/doom/doom.html
-
+- GUID generator: https://guidgenerator.com/
+- https://quoootes.com/
+- https://miniwebtool.com/random-quote-generator/
+- https://quozio.com/
+- https://varnz.ai/ai-quote-generator
 
 ⏩ Move or migration
 ---
@@ -436,6 +441,8 @@ This section offers a curated collection of helpful links, providing resources a
 - https://blog.cloudtrooper.net/2025/01/22/private-link-reality-bites-your-routes-could-be-lying/
 - https://github.com/1tayH/noisy (Generates random HTTP/DNS traffic noise in the background)
 - https://az-mdv.az.vupti.me/ Azure Migrate Network Flows Analysis 🔥🔥🔥
+- https://blog.nillsf.com/index.php/2018/11/06/azure-paas-services-connected-to-your-vnet/ VNET Injection vs Service Endpoints
+- https://github.com/jokob-sk/NetAlertX
 
 ## 👮 Policies
 ---

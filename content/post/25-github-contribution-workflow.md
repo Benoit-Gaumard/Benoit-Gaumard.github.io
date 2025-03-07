@@ -1,19 +1,16 @@
 +++
 author = "Benoit G"
 title = "GitHub contribution workflow"
-date = "2024-11-05"
-description = "Discover the benefits of integrating Draw.io with VS Code for seamless diagram creation."
+date = "2025-02-26"
+description = ""
 toc = true
-tags = [
-    "GitHub", "productivity", "tools", "diagrams"
-]
-categories = ["GitHub"
-]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
-#featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
-#featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/githubtest.png" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+tags = ["GitHub", "Productivity"]
+categories = ["GitHub"]
+featureImage = "/images/github-color.svg" # Sets featured image on blog post.
+#featureImageAlt = "" # Alternative text for featured image.
+#featureImageCap = "" # Caption (optional).
+thumbnail = "/images/github-color.svg" # Sets thumbnail image appearing inside card on homepage.
+shareImage = "" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -22,27 +19,26 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or to contribute to an existing GitHub project you are on the right page.
 <!--more-->
 
-<img src="/images/githubtest.png" width="50%" height="50%">
-
-## Scenarios
+## Contribution scenarios
 ---
 
-You can contribute on a GitHub project by making contributions on various topics:
+You can contribute to a GitHub project in several ways:
 
-- Report a bug
-- Submit a fix
-- Propose new features
-- Become a maintainer
+- Reporting bugs
+- Submitting fixes
+- Proposing new features
+- Becoming a maintainer
 - ...
 
 ## Main principles
 ---
 
-- The main branch is locked, no direct commit possible.
-- Each developer work in their own branch from main
-- Developer do a pull request
-- Once PR is validated, the code is merged
-- A release is created
+- The main branch is protected, preventing direct commits.
+- Developers work in their own branches derived from the main branch.
+- Developers submit pull requests for their changes.
+- Once a pull request is approved, the code is merged.
+- A release is then created.
+- The new code is deployed via a deployment pipeline.
 
 Here is the main contribution workflow:
 
@@ -53,8 +49,8 @@ Here is the main contribution workflow:
 
 ### 0. Prerequisites
 
-- You must have Git installed on your computer: Git - Downloads (git-scm.com)
-- A code editor like Visual Studio Code: Visual Studio Code - Code Editing. Redefined
+- Ensure Git is installed on your machine: [Git Downloads](https://git-scm.com/downloads)
+- Have a code editor (IDE) ready, such as [Visual Studio Code](https://code.visualstudio.com/)
 
 ### 1. Pull the latest changes from upstream into your local repository
 
@@ -75,7 +71,8 @@ Before you start making any changes to your local files, it's a good practice to
 Use the following command to "pull" any changes from the "master" branch of the "upstream" into your local repository.
 
 ```Bash
-git pull upstream master
+# If the default branch is "main"
+git pull upstream main
 ```
 
 {{% notice note "Note " %}}
@@ -84,41 +81,58 @@ If the project repository uses "main" instead of "master" for its default branch
 
 ### 2. Create a new branch
 
+**See the Branch Naming convention page here::**
+
 Rather than making changes to the project's "master" branch, it's a good practice to instead create your own branch. This creates an environment for your work that is isolated from the master branch.
 
 Use this command to create a new branch and then immediately switch to it. The name of the branch should briefly describe what you are working on, and should not contain any spaces.
 
-Bashgit checkout -b my_new_feature
+```Bash
+git checkout -b my_new_feature
+```
 
 For example, I used git checkout -b doc-fixes because I was making some small fixes to the documentation.
 
 To show your local branches, use this command :
 
-Bashgit branch
+```Bash
+git branch
+```
 
 You should see your new branch as well as "master", and your new branch should have an asterisk next to it to indicate that it's "checked out" (meaning that you're working in it).
 
 ### 3. Make changes in your local repository​
-4.
-Use a text editor or IDE like Microsoft VS Code to make the changes you planned to the files in your local repository. Because you checked out a branch in the previous step, any edits you make will only affect that branch.
 
-Download VS Code here: Visual Studio Code
+Open a text editor or IDE such as Visual Studio Code to implement the changes you have planned in your local repository. Since you checked out a branch in the previous step, any modifications you make will be confined to that branch.
+
+You can download Visual Studio Code here: [Visual Studio Code](https://code.visualstudio.com/)
 
 ### 4. Commit your changes​
 
+**See the Commit convention page here::**
+
 After you make a set of changes, use the following command to stage your changes.
 
-Bashgit branch
+```Bash
+git branch
+```
+
+Add all changes
+```Bash
+git add .
+```
+
 
 The description of your commit must be clear, explicit and understandable to anyone, example :
 
-Bashgit commit -m "fix: typos in set_config docstring"
-
+```Bash
+git commit -m "fix: typos in set_config docstring"
+```
 
 {{% notice note "Note " %}}
 This commit message might be included in a changelog.
 
-Commit messages must be standardized: Conventional Commits
+Commit messages must be standardized: [Conventional Commits](https://www.conventionalcommits.org/)
 
     - feat: my new feature description
     - release: my new realease description
@@ -131,7 +145,11 @@ If you are making multiple sets of changes, it's a good practice to make a commi
 ### 5. Push changes to your branch​
 When you are done making all of your changes, upload these changes to your branch using :
 
-Bashgit push origin my_new_feature
+
+
+```Bash
+git push origin my_new_feature
+```
 
 This command "pushes" your changes to the "my_new_feature" branch of the "origin" (which is your fork on GitHub).
 
@@ -159,11 +177,19 @@ Before merging, the code should be reviewed by peers, code review involves one o
 
 ### 8. Merge to the main branch​
 
-Congratulations! Your code has been reviewed and merged into the main branch. It can be reused by someone to make a new contribution.
+Congratulations! Your code has been successfully reviewed and merged into the main branch. It is now available for others to build upon for future contributions.
 
-## Golden rules
+## 9. Golden rules
 ---
 
-- 1 - Commit each day
-- 2 - Adopt a naming convention for your commits (eg. feat: for a new feature, fix: for a bug fix)
-- 3 - Enhance security in your code with the principle of least privilege
+✅ Commit each day
+
+✅ Never commit directly to the main branch and always protect it
+
+✅ Adopt a naming convention for your branches (eg. feat: for a new feature, fix: for a bug fix)
+
+✅ Adopt a naming convention for your commits (eg. feat: for a new feature, fix: for a bug fix)
+
+✅ Enhance security in your code with the principle of least privilege
+
+✅ All should be deleted an recreated otherwise it's not IAC
