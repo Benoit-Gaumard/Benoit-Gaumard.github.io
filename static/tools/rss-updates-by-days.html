@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📅 Blogs RSS feeds updates by days</title>
+    <title>📅 Microsoft Blogs updates by days</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -110,8 +110,8 @@
         </div>
 
         <!-- Title -->
-        <h2>📅 Blogs RSS feeds updates by days <img src="/images/rss-mini.svg" alt="RSS logo"></h2>
-        <p><small>This page displays updates from various Microsoft blogs RSS feeds <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">here</a>.</small></p>
+        <h2>📅 Microsoft Blogs updates by days <img src="/images/rss-mini.svg" alt="RSS logo"></h2>
+        <p><small>This page displays updates from various Microsoft blogs RSS feeds from <a href="https://benoit-gaumard.io/tools/blogs-rss-feeds.html" target="_blank">here</a>.</small></p>
         <p><small>Select categories or add your custom RSS feeds to match your interests.</small></p>
     </div>
     <hr>
@@ -269,7 +269,7 @@
     </div>
 
     <!-- Total Feeds Counter -->
-    <p><h4><div id="total-feeds-counter">Total feeds parsed : 0</div></h4>
+    <p><h4><div id="total-feeds-counter"></div></h4>
     <small>🟢 Less than 2 days 🔵 Older than 2 days 🔴 Older than 30 days</small></p>
 
     <!-- Display Feeds -->
@@ -345,7 +345,8 @@
                               customFeeds.filter(feed => selectedCategories.includes(feed.category)).length;
 
             // Update initial counter
-            document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeeds} (0 items)`;
+            document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeeds}
+            0 item(s) found`;
 
             if (selectedCategories.length > 0) {
                 defaultFeeds.filter(feed => selectedCategories.includes(feed.category))
@@ -403,7 +404,8 @@
             // - <a href="${feed.url}" target="_blank">${feed.name}</a>
 
             totalFeedsLoaded++;
-            document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
+            document.getElementById("total-feeds-counter").textContent =`Total feeds parsed: ${totalFeedsLoaded} - ${container.childElementCount} item(s) found`;
+
         }
         } catch (error) {
         console.error(`Error fetching RSS feed: ${feed.name}`, error);
@@ -465,7 +467,12 @@
     <hr>
     <footer>
         <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
-        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a> Infra and DevOps Consultant @ Microsoft</p>
+        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a>
+        - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
+        </p>
+        <p>
+        If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
+        </p>
     </footer>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⏰ Azure retirements</title>
+    <title>⏰ Azure retirements updates</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -110,12 +110,10 @@
         </div>
 
         <!-- Title -->
-        <h2>⏰ Azure retirements <img src="/images/azure-mini.svg" alt="Azure logo"></h2>
-        <p><small>Stay updated on Azure retirements with a single page featuring the latest announcements from <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">Azure Updates.</a></small></p>
+        <h2>⏰ Azure retirements updates<img src="/images/azure-mini.svg" alt="Azure logo"></h2>
+        <p><small>Stay updated on Azure retirements updates with a single page featuring the latest announcements from  <a href="https://azure.microsoft.com/en-us/updates/?filters=%5B%22Retirements%22%5D" target="_blank">Azure Updates.</a></small></p>
     </div>
     <hr>
-
-
 
     <!-- Dropdown to select days old -->
     <div class="display-feed">
@@ -148,7 +146,7 @@
     </div>
 
     <!-- Total Feeds Counter -->
-    <!--<h4><div id="total-feeds-counter">Total Categories: 0</div></h4>-->
+    <h4><div id="total-feeds-counter"></div></h4>
 
     <!-- Total Feeds Counter -->
     <p><small>🟢 Less than 2 days 🔵 Older than 2 days 🔴 Older than 30 days</small></p>
@@ -247,6 +245,7 @@ async function fetchRSSFeed(feed) {
 
             //totalFeedsLoaded++;
             //document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
+            document.getElementById("total-feeds-counter").textContent = `${container.childElementCount} item(s) found`;
         }
     } catch (error) {
         console.error(`Error fetching RSS feed: ${feed.name}`, error);
@@ -286,8 +285,6 @@ async function fetchRSSFeed(feed) {
         <p>
         If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
         </p>
-
     </footer>
 </body>
 </html>
-

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🆕 Azure Updates</title>
+    <title>🆕 All Azure updates</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         /* Basic styling for the page */
@@ -91,7 +91,7 @@
         .go-top-btn:hover { background: #005a9e; }
 
         /* Footer */
-        footer { text-align: center; font-size: 14px;}
+        footer { text-align: center; font-size: 12px;}
     </style>
 </head>
 <body>
@@ -110,8 +110,8 @@
         </div>
 
         <!-- Title -->
-        <h2>🆕 Azure Updates <img src="/images/azure-mini.svg" alt="Azure logo"></h2>
-        <p><small>Stay informed with Azure updates from Microsoft announced <a href="https://azure.microsoft.com/en-us/updates/" target="_blank">here.</a></small></p>
+        <h2>🆕 All Azure updates <img src="/images/azure-mini.svg" alt="Azure logo"></h2>
+        <p><small>Stay updated on Azure updates with a single page featuring the latest announcements from <a href="https://azure.microsoft.com/en-us/updates/" target="_blank">Azure Updates.</a></small></p>
     </div>
     <hr>
 
@@ -119,7 +119,7 @@
     <!-- Dropdown to select days old -->
     <div class="display-feed">
         <small>
-            <label for="days-per-feed">Show items from last:</label>
+            <label for="days-per-feed">Show updates from the last:</label>
             <select id="days-per-feed" onchange="loadFeeds()">
                 <option value="1">1 day</option>
                 <option value="2">2 days</option>
@@ -149,69 +149,74 @@
                 </div>
             </div>
         </div>
+    </div>
+    <script>
+        async function loadCategories() {
+            const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
+            const feedUrl = "https://www.microsoft.com/releasecommunications/api/v2/azure/rss";
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=${apiKey}&count=1000`;
 
-                <script>
-                async function loadCategories() {
-                    const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
-                    const feedUrl = "https://www.microsoft.com/releasecommunications/api/v2/azure/rss";
-                    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=${apiKey}&count=1000`;
-
-                    try {
-                        const response = await fetch(apiUrl);
-                        const data = await response.json();
-                        if (data.status === "ok") {
-                            const categories = [...new Set(data.items.flatMap(item => item.categories || []))].sort();
-                            const categoriesList = document.querySelector('.category-list');
-                            categoriesList.innerHTML = categories.map(category =>
-                                `<label><input type="checkbox" value="${category}" checked> ${category}</label><br>`
-                            ).join('');
-                            loadFeeds(); // Refresh feeds after categories are loaded
-                        }
-                    } catch (error) {
-                        console.error('Error loading categories:', error);
-                    }
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                if (data.status === "ok") {
+                    const categories = [...new Set(data.items.flatMap(item => item.categories || []))].sort();
+                    const categoriesList = document.querySelector('.category-list');
+                    categoriesList.innerHTML = categories.map(category =>
+                        `<label><input type="checkbox" value="${category}" checked> ${category}</label><br>`
+                    ).join('');
+                    updateSelectedCount(); // Update the selected count after categories are loaded
+                    loadFeeds(); // Refresh feeds after categories are loaded
                 }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
 
-                function updateSelectedCount() {
-                    const selectedCount = document.querySelectorAll('.category-list input:checked').length;
-                    document.getElementById('selected-count').textContent = selectedCount;
-                }
+        function updateSelectedCount() {
+            const selectedCount = document.querySelectorAll('.category-list input:checked').length;
+            document.getElementById('selected-count').textContent = selectedCount;
+        }
 
-                function selectAllCategories() {
-                    document.querySelectorAll('.category-list input[type="checkbox"]').forEach(checkbox => {
-                        checkbox.checked = true;
-                    });
-                    updateSelectedCount();
-                    loadFeeds();
-                }
+        function selectAllCategories() {
+            document.querySelectorAll('.category-list input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateSelectedCount();
+            loadFeeds();
+        }
 
-                function unselectAllCategories() {
-                    document.querySelectorAll('.category-list input[type="checkbox"]').forEach(checkbox => {
-                        checkbox.checked = false;
-                    });
-                    updateSelectedCount();
-                    loadFeeds();
-                }
+        function unselectAllCategories() {
+            document.querySelectorAll('.category-list input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectedCount();
+            loadFeeds();
+        }
 
-                function toggleDropdown() {
-                    const content = document.getElementById('category-content');
-                    content.style.display = content.style.display === 'none' ? 'block' : 'none';
-                }
+        function toggleDropdown() {
+            const content = document.getElementById('category-content');
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
 
-                // Add event listener to update count when checkboxes change
-                document.addEventListener('change', function(e) {
-                    if (e.target.matches('.category-list input[type="checkbox"]')) {
-                        updateSelectedCount();
-                    }
-                });
+        // Add event listener to update count when checkboxes change
+        document.addEventListener('change', function(e) {
+            if (e.target.matches('.category-list input[type="checkbox"]')) {
+                updateSelectedCount();
+            }
+        });
 
-                document.addEventListener('DOMContentLoaded', loadCategories);
-                </script>
+        document.addEventListener('DOMContentLoaded', loadCategories);
+    </script>
+
             </div>
     </div>
 
     <!-- Total Feeds Counter -->
-    <h4><div id="total-feeds-counter">Total Categories: 0</div></h4>
+    <h4><div id="total-feeds-counter"></div></h4>
+
+    <!-- Total Feeds Counter -->
+    <p><small>🟢 Less than 2 days 🔵 Older than 2 days 🔴 Older than 30 days</small></p>
 
     <!-- Display Feeds -->
     <div id="rss-feeds"></div>
@@ -265,7 +270,7 @@
 
             // Update total categories counter
             const selectedCategories = Array.from(document.querySelectorAll("#category-dropdown input:checked")).map(input => input.value);
-            document.getElementById("total-feeds-counter").innerText = `Total Categories: ${selectedCategories.length}`;
+            //document.getElementById("total-feeds-counter").innerText = `Total Categories: ${selectedCategories.length}`;
         }
 
 async function fetchRSSFeed(feed) {
@@ -304,16 +309,17 @@ async function fetchRSSFeed(feed) {
 
                 itemDiv.innerHTML = `<small>${indicator} ${new Date(item.pubDate).toDateString()} (${daysOld} days ago):
                     <a href="${item.link}" target="_blank">${item.title}</a>
-                    - ${data.feed.title}
+                    - Source: ${data.feed.title}
                     </small>`;
                 container.appendChild(itemDiv);
             });
 
-            // - <a href="${feed.url}" target="_blank">${feed.name}</a>
-            // - ${feed.category}
+                    // - <a href="${feed.url}" target="_blank">${feed.name}</a>
+                    // - ${feed.category}
 
-            totalFeedsLoaded++;
-            document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
+                    totalFeedsLoaded++;
+                    //document.getElementById("total-feeds-counter").textContent = `Total feeds parsed: ${totalFeedsLoaded} (${container.childElementCount} items)`;
+                    document.getElementById("total-feeds-counter").textContent = `${container.childElementCount} item(s) found`;
                 }
             } catch (error) {
                 console.error('Error fetching RSS feed:', error);
@@ -339,7 +345,12 @@ async function fetchRSSFeed(feed) {
     <hr>
     <footer>
         <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
-        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a> Infra and DevOps Consultant @ Microsoft</p>
+        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a>
+        - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
+        </p>
+        <p>
+        If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
+        </p>
     </footer>
 </body>
 </html>
