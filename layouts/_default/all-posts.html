@@ -14,8 +14,7 @@
         {{ range .Site.RegularPages }}
           {{ $counter = add $counter 1 }}
           <li class="post-item">
-            {{ $counter }}. <a href="{{ .RelPermalink }}" class="post-link">{{ .Title }}</a> -
-            <span class="post-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+            {{ $counter }}. <a href="{{ .RelPermalink }}" class="post-link">{{ .Title }}</a> {{- partial "post-meta" . }}
           </li>
         {{ end }}
       </ul>

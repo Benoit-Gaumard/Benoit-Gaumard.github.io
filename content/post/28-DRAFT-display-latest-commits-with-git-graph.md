@@ -4,9 +4,9 @@ title = "Display latest commits with Git Graph"
 date = "2025-02-26"
 description = ""
 toc = false
-draft = true
-tags = ["GitHub", "Productivity"]
-categories = ["GitHub"]
+draft = false
+tags = ["Git", "Productivity"]
+categories = ["Git"]
 featureImage = "/images/github-color.svg" # Sets featured image on blog post.
 #featureImageAlt = "" # Alternative text for featured image.
 #featureImageCap = "" # Caption (optional).
@@ -17,12 +17,12 @@ codeLineNumbers = false # Override global value for showing of line numbers with
 figurePositionShow = true # Override global value for showing the figure label.
 +++
 
-If you want to create your own or to contribute to an existing GitHub project you are on the right page.
+A stylish way to showcase the latest commits from a repository.
 <!--more-->
 
 ## Display latest commits with git graph
 ---
 
 ```Bash
-git log --graph --oneline --all --decorate --topo-order --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)<%an>%Creset' --abbrev-commit --date=relative
+git log --graph --oneline --all --decorate --topo-order --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)<%an>%Creset' --abbrev-commit --date=relative -n 20
 ```

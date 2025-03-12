@@ -35,77 +35,77 @@ git config --global user.name "Your Name"
 git config --global user.email "email@email.com"
 ```
 
-Clone a repo:
+Clone a repo
 ---
 
 ```Bash
 git clone https://github.com/Benoit-Gaumard/ProjectName
 ```
 
-Get the current branch:
+Get the current branch
 ---
 
 ```Bash
 git status
 ```
 
-Add a folder:
+Add a folder
 ---
 
 ```Bash
 git add .
 ```
 
-Create a commit (Local):
+Create a commit (Local)
 ---
 
 ```Bash
 git commit -m "feat: bga first commit"
 ```
 
-Push modifications to the remote branch:
+Push modifications to the remote branch
 ---
 
 ```Bash
 git push
 ```
 
-Get the last version of the repo from the remote branch:
+Get the last version of the repo from the remote branch
 ---
 
 ```Bash
 git pull
 ```
 
-Change branch:
+Change branch
 ---
 
 ```Bash
 git checkout mybranch
 ```
 
-List local branches:
+List local branches
 ---
 
 ```Bash
 git branch
 ```
 
-List remote branches:
+List remote branches
 ---
 
 ```Bash
 git branch -r
 ```
 
-List local and remote branches:
+List local and remote branches
 ---
 
 ```Bash
 git branch -a
 ```
 
-Delete a branch (Local):
+Delete a branch (Local)
 ---
 
 ```Bash
@@ -113,7 +113,7 @@ git branch -d my-branch-name
 git branch -D my-branch-name
 ```
 
-Configure repo:
+Configure repo
 ---
 
 ```Bash
@@ -121,14 +121,14 @@ git config –global user.name "Your Name"
 git config –global user.email you@example.com
 ```
 
-Display repo config:
+Display repo config
 ---
 
 ```Bash
 git config --global --list
 ```
 
-Logs:
+Logs
 ---
 
 ```Bash
@@ -136,7 +136,7 @@ git log -v
 git log -p
 ```
 
-Create a branch (local):
+Create a branch (local)
 ---
 
 ```Bash
@@ -144,14 +144,14 @@ git branch my-new-branch
 git checkout -b feat-azure-functions
 ```
 
-Delete branch (Local):
+Delete branch (Local)
 ---
 
 ```Bash
 git branch -d my-branch
 ```
 
-Delete branch (Remote):
+Delete branch (Remote)
 ---
 
 ```Bash

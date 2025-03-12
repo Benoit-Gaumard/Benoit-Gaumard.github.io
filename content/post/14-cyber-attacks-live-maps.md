@@ -4,11 +4,8 @@ title = "Cyber attacks live maps"
 date = "2024-11-03"
 description = "Test description"
 toc = false
-tags = [
-  "security"
-]
-categories = ["Tools"
-]
+tags = ["Security"]
+categories = ["Tools"]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

@@ -4,11 +4,8 @@ title = "Call Azure API with Powershell"
 date = "2024-11-06"
 description = ""
 toc = true
-tags = [
-    "API", "Powershell"
-]
-categories = ["Azure"
-]
+tags = ["API", "Powershell"]
+categories = ["Azure"]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).

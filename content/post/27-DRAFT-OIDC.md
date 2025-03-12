@@ -17,9 +17,14 @@ codeLineNumbers = false # Override global value for showing of line numbers with
 figurePositionShow = true # Override global value for showing the figure label.
 +++
 
-If you want to create your own or to contribute to an existing GitHub project you are on the right page.
+The objective is to set up a GitHub Actions workflow from scratch in a newly created GitHub repository, enabling authentication to Azure via OpenID Connect, eliminating the need for secret credentials.
 <!--more-->
 
-# Commit naming convention
+OpenID Connect (OIDC) extends the OAuth 2.0 authorization protocol for use as another authentication protocol. You can use OIDC to enable single sign-on (SSO) between your OAuth-enabled applications by using a security token called an ID token.
 
-## 1. Use a Consistent Format
+More informations here:
+
+OpenID Connect (OIDC) on the Microsoft identity platform - Microsoft identity platform | Microsoft Learn
+Configuring OpenID Connect in Azure - GitHub Docs
+
+Authenticating via a User Assigned Managed Identity using OpenID Connect for Terraform / Bicep to provision or deploy Azure resources within a GitHub Actions workflows.
