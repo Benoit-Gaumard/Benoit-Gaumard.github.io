@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azure Release Updates</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
     <style>
         :root {
             --azure-blue: #0078D4;
@@ -516,10 +517,10 @@
 <body id="top">
     <header class="header">
         <a href="#" class="logo">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <path d="M20 0L37.3205 10V30L20 40L2.67949 30V10L20 0Z" fill="#FFFFFF"/>
-                <path d="M15 8L30 16V32L15 40L0 32V16L15 8Z" fill="#FFFFFF" fill-opacity="0.3"/>
-            </svg>
+
+
+            <img src="https://az-icons.com/export/icons/556908e1303da79aaa38f8ba1b0f0dcd.svg" alt="Azure Logo" width="40" height="40">
+
             <span class="logo-text">Azure Release Updates</span>
         </a>
         <div class="search-container">
@@ -562,8 +563,8 @@
     </header>
 
     <main class="main-content">
-        <h1>Latest updates from Azure RSS feeds</h1>
-        <p class="subtitle">Stay informed with updates from Microsoft official sources.</p>
+        <h1>All Azure updates</h1>
+        <p class="subtitle">Stay updated on Azure updates with a single page featuring the latest announcements from <a href="https://azure.microsoft.com/en-us/updates/" target="_blank">Azure Updates.</a></p>
 
         <div class="feed-legend">
             <div class="legend-item">
@@ -580,6 +581,19 @@
             </div>
         </div>
 
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477"
+        crossorigin="anonymous"></script>
+   <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="-gw-3+1f-3d+2z"
+        data-ad-client="ca-pub-6636684537203477"
+        data-ad-slot="5272174838"></ins>
+   <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+   </script>
+
+
         <div class="meta-info">
             <span id="feedCount">Loading feed items...</span>
         </div>
@@ -589,7 +603,6 @@
         </div>
     </main>
 
-    <hr>
 
     <footer class="footer">
         <p>&copy; 2025 - Built with <span class="heart">❤️</span>  - All Rights Reserved</p>
@@ -878,9 +891,11 @@
                         <div class="feed-item-indicator">${getAgeIndicator(item.age)}</div>
                         <div class="feed-item-content">
                             <div class="feed-item-title">
+<span class="feed-item-date">${formattedDate} (${item.age} days ago)</span>
+
                                 <a href="${item.link}" target="_blank">${item.title}</a>
                             </div>
-                            <div class="feed-item-date">${formattedDate} (${item.age} days ago)</div>
+
                             <div class="feed-item-description">${item.description}</div>
                             ${categoryTags}
                         </div>
