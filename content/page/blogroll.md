@@ -19,55 +19,30 @@ This section offers a curated collection of helpful links, providing resources a
 
 <img src="/images/blogroll.png" width="50%" height="50%">
 
-
-## 🆕 New Links To Check
+## 👀 New Links To Check
 ---
 [Back To Top](#documentTop)
 
-- Blog Cloud63 Vincent Misson https://blog.cloud63.fr/
 - Azure Talk Blog: https://blog.zuehlke.cloud/
-- Achraf Ben Alaya: https://achrafbenalaya.com/
 
-## 🧠 AI
----
-[Back To Top](#documentTop)
-
-- [Interactive collection of the 18 Guidelines for Human-AI Interaction](https://aka.ms/hci-demo)
-- [Funko Pop prompt](https://designer.microsoft.com/image-creator?p=Funko+figure+of+a+%5Bmale%5D%2C+%5Bsmiling%5D%2C+called+%5BBen%5D%2C+wearing+%5Ba+white+henley+t-shirt%5D%2C+a+%5Bpull+grey+hoodie+with+logo+blue+%22Azure%22%5D%2C+handing+%5Ba+surface+laptop%5D%2C+%5Bjeans%5D%2C+%5Bwhite+moccasins+and+white+socks%5D%2C+%5Blong+eyelashes%5D%2C+%5Bshort+brown+air%5D.+The+Funko+is+displayed+inside+and+outside+a+limited+edition+%5BGrey+and+blue%5D+Funko+box+with+%5B%22Microsoft%22+text+as+front%5D%2C+allowing+visibility+of+the+figure%2C+typography%2C+3D+render.+White+background")
-- https://oai.azure.com/portal
-
-### 🧠 AI (Images)
----
-[Back To Top](#documentTop)
-
-- https://designer.microsoft.com/ 🔥
-- https://www.bing.com/images/create
-
-### 🧠 AI (Music)
----
-[Back To Top](#documentTop)
-
-- https://app.suno.ai/
-
-
-## 🏢 Architecture
+## 🏗️ Architecture
 ---
 [Back To Top](#documentTop)
 
 - [Free Ebooks and whitepapers](https://azure.microsoft.com/en-us/resources/whitepapers/search/?type=WhitePaperResource)
-- https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits
+- Azure services limits: https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits ⭐
 - [Cloud Adoption Framework CAF](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/)🔥
 - [Well Architected Framework WAF](https://learn.microsoft.com/en-us/azure/architecture/framework/)🔥
 - https://social.technet.microsoft.com/wiki/contents/articles/630.microsoft-azure-survival-guide.aspx
 - https://social.technet.microsoft.com/wiki/contents/articles/33800.azure-iaas-v2-arm-design-series-azure-subscriptions.aspx
-- [Azure Offers](https://azure.microsoft.com/en-us/support/legal/offer-details/)
+- Azure offers details: https://azure.microsoft.com/en-us/support/legal/offer-details/ ⭐
 - https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/
 - https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 - [Azure Reference Architectures](https://docs.microsoft.com/en-us/azure/architecture/browse/) 🔥
 - [Cloud adoption antipatterns](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/antipatterns/antipatterns-to-avoid)
 - Azure supported workloads: https://docs.microsoft.com/en-US/troubleshoot/azure/virtual-machines/server-software-support
 - Microsoft Assessments and review : https://docs.microsoft.com/en-us/assessments/?mode=home 🔥
-- Docs Update Tracker: https://docsupdatetracker.net/
+- Docs Update Tracker: https://docsupdatetracker.net/ ⭐⭐⭐
 - Landing Zone mission-critical: https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-landing-zone
 - Azure Quick Review: https://github.com/Azure/azqr
 - Azure Sandbox: https://learn.microsoft.com/en-us/azure/architecture/guide/azure-sandbox/azure-sandbox
@@ -76,7 +51,7 @@ This section offers a curated collection of helpful links, providing resources a
 - Cloud Adoption Framework Tools and Templates: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/resources/tools-templates
 - MOAW: https://microsoft.github.io/moaw/ 🔥
 - Azure Landing Zone catalog: https://github.com/oliverlabs/alz-catalogue
-- https://azureanimations.github.io/ 🔥
+- https://azureanimations.github.io/ ⭐⭐⭐
 
 ## 🅰 ARM
 ---
@@ -85,7 +60,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Azure Quickstart Templates](https://azure.microsoft.com/en-us/resources/templates/)
 - [ARMViz](http://armviz.io/)
 - [Azure resource explorer](https://resources.azure.com/)
-- [Rest API Browser](https://docs.microsoft.com/en-us/rest/api/?view=Azure)🔥
+- [Rest API Browser](https://docs.microsoft.com/en-us/rest/api/?view=Azure) ⭐⭐⭐
 
 ## 👀 Analytics and monitoring
 ---
@@ -101,7 +76,7 @@ This section offers a curated collection of helpful links, providing resources a
 - Azure Monitor Logs table reference: https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-category
 - AMBA: https://techcommunity.microsoft.com/t5/azure-governance-and-management/azure-monitor-baseline-alerts-amba-for-azure-landing-zone-alz-is/ba-p/3936951
 
-## 🟦 Azure Active Directory (Entra Id)
+## 🟦 Entra Id (Azure Active Directory)
 ---
 
 [Back To Top](#documentTop)
@@ -175,17 +150,17 @@ This section offers a curated collection of helpful links, providing resources a
 
 [Back To Top](#documentTop)
 
-- https://blog.teknews.cloud/network/2024/10/27/Back_tobasics_About_Private_DNS_Resolver.html
+- Private DNS Resolver: https://blog.teknews.cloud/network/2024/10/27/Back_tobasics_About_Private_DNS_Resolver.html
 
 
-## 📊 Data
+## 📚 Data
 ---
 
 [Back To Top](#documentTop)
 
 - Azure Data Explorer https://dataexplorer.azure.com/
 
-## 📊 DashBoards
+## 📈 DashBoards
 ---
 
 [Back To Top](#documentTop)
@@ -279,7 +254,7 @@ This section offers a curated collection of helpful links, providing resources a
 - Doom Web: https://www.emaxilde.net/assets/games/doom/doom.html
 
 
-🤖 GitHub
+🐙 GitHub
 ---
 
 [Back To Top](#documentTop)
@@ -290,7 +265,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [All IP ranges used by GitHub Actions runners](https://api.github.com/meta)
 
 
-## 🏢 Governance
+## 🏛️ Governance
 ---
 
 [Back To Top](#documentTop)
@@ -512,47 +487,6 @@ This section offers a curated collection of helpful links, providing resources a
 - [Hub-Spoke Architecture](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) 🔥🔥
 - [Connect Azure with On-Prem Network Part 1](https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/) 🔥🔥
 - [Enabling Direct On-Prem Site Access to Azure Private VMSS Resources via Internal Load Balancer](https://medium.com/@andragabr/enabling-direct-onprem-site-access-to-azure-private-vmss-resources-via-internal-load-balancer-a-118f13f4ca18)
-
-## 💀 Security
----
-
-[Back To Top](#documentTop)
-
-- [Microsoft Cybersecurity Reference Architectures (MCRA)](https://docs.microsoft.com/en-us/security/cybersecurity-reference-architecture/mcra) 🔥
-- [Azucar](https://github.com/nccgroup/azucar)
-- [ScoutSuite](https://github.com/nccgroup/ScoutSuite)
-- [Secure DevOps Kit](https://github.com/azsk/DevOpsKit-docs)
-- [Skyark](https://github.com/cyberark/SkyArk)
-- [MicroBurst](https://github.com/NetSPI/MicroBurst)
-- [Stormspotter](https://github.com/Azure/Stormspotter)
-- [Cloud Katana](https://github.com/Azure/Cloud-Katana)
-- [Azure Security Control Mappings to MITRE ATT&amp;CK®](https://center-for-threat-informed-defense.github.io/security-stack-mappings/Azure/README.html)
-- [Azure Hunter](https://github.com/darkquasar/AzureHunter)
-- [Microsoft Security Response Center (MSRC)](https://msrc.microsoft.com/update-guide/vulnerability)
-- [Azure Review CheckList](https://github.com/Azure/review-checklists) 🔥
-- [CloudSploit Security Remediation Guides](https://github.com/aquasecurity/cloud-security-remediation-guides)
-- [Identifying &amp; Exploiting Leaked Azure Storage Keys](https://notsosecure.com/identifying-exploiting-leaked-azure-storage-keys)
-- [cloud security vulnerabilities](https://github.com/hashishrajan/cloud-security-vulnerabilities)
-- Windows AppLocker Bypass: regsvr32.exe /s /u /i:test.sct scrobj.dll
-- [Cybersecurity-jobs-skills-workshop](https://github.com/microsoft/Cybersecurity-jobs-skills-workshop)
-- [HackTricks](https://book.hacktricks.xyz/welcome/readme)
-- [Azure Secret Rotation](https://github.com/Thialala/automatic-secrets-rotation)
-- [Depix is a tool for recovering passwords from pixelized screenshots](https://github.com/beurtschipper/Depix)
-- [Snoop](https://github.com/snooppr/snoop/blob/master/README.fr.md)
-- [Get Azure bearer token](https://resources.azure.com/api/token?plaintext=true)
-- [Arachni Web application security scanner](https://www.arachni-scanner.com/)
-- [OSINT web-check](https://github.com/Lissy93/web-check)
-- [Hack The Box](https://www.hackthebox.com/)
-- [Root Me](https://www.root-me.org/)
-- [GraphRunner](https://github.com/dafthack/GraphRunner)
-- [Open bucket and storage account](https://buckets.grayhatwarfare.com/)
-- [Labyrinthinesecurity silhouette](https://github.com/labyrinthinesecurity/silhouette)
-- [https://web-check.xyz/](https://web-check.xyz/)
-- EDR telemetry https://www.edr-telemetry.com/
-- https://github.com/intuitem/ciso-assistant-community
-- https://web-check.as93.net/
-- https://maester.dev/
-
 
 ## 📝 Services
 ---
