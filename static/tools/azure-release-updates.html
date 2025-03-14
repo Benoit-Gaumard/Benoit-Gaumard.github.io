@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Release Updates</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
+    <style>
+        :root {
+            --azure-blue: #0078D4;
+            --azure-dark-blue: #0063B1;
+            --azure-light-blue: #50B0F9;
+            --text-gray: #666666;
+            --background-blue: #EEF3F8;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --footer-bg: #ffffff;
+            --retirement-red: #d44000;
+            --linkedin-blue: #0077b5;
+            --twitter-blue: #1da1f2;
+            --facebook-blue: #1877f2;
+            --reddit-orange: #ff4500;
+            --success-green: #28a745;
+            --filter-bg: rgba(255, 255, 255, 0.9);
+            --filter-border: rgba(255, 255, 255, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --background-blue: #1a1a2e;
+            --card-bg: #2a2a3e;
+            --text-color: #e0e0e0;
+            --text-gray: #a0a0a0;
+            --border-color: #444444;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --footer-bg: #2a2a3e;
+            --retirement-red: #ff6b47;
+            --success-green: #4cd964;
+            --filter-bg: rgba(42, 42, 62, 0.9);
+            --filter-border: rgba(68, 68, 68, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--background-blue);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+        }
+
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            /*max-width: 1200px;*/
+            /* margin: 0 auto;*/
+            background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Search wrapper for collapsible search */
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-width: 40px; /* Ensure the wrapper is at least as wide as the button */
+        }
+
+        .search-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            color: white;
+            transition: background-color 0.3s;
+            z-index: 2;
+            position: relative; /* Ensure it's positioned properly */
+        }
+
+        .search-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .search-input {
+            width: 0;
+            padding: 8px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            z-index: 1;
+            visibility: hidden; /* Hide it completely initially */
+        }
+
+        .search-input.active {
+            width: 250px;
+            padding: 8px 16px 8px 40px; /* Add padding for the icon */
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: white;
+            background-color: white;
+        }
+
+        .filter-dropdown {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+        }
+
+        /* Multi-select dropdown styles */
+        .multiselect {
+            position: relative;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .multiselect-toggle {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .multiselect-toggle:after {
+            content: "▼";
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .multiselect-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .multiselect-dropdown.show {
+            display: block;
+        }
+
+        .multiselect-search {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+
+        .multiselect-search input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .multiselect-actions {
+            display: flex;
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+
+        .multiselect-actions button {
+            flex: 1;
+            padding: 4px 8px;
+            background: var(--azure-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 2px;
+        }
+
+        .multiselect-actions button:hover {
+            background: var(--azure-dark-blue);
+        }
+
+        .multiselect-option {
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .multiselect-option:hover {
+            background-color: rgba(0, 120, 212, 0.1);
+        }
+
+        .multiselect-option input {
+            margin-right: 10px;
+        }
+
+        .multiselect-option label {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .multiselect-selected-count {
+            background: var(--azure-blue);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        /* Theme toggle styles - updated for 3 options */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .theme-toggle-group {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .theme-toggle-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            color: white;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+
+        .theme-toggle-button.active {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle-button:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .theme-toggle-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        .theme-toggle-button:hover .theme-toggle-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Social sharing styles */
+        .social-share {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .social-share-label {
+            /*font-size: 14px;*/
+            color: var(--text-gray);
+            margin-right: 5px;
+        }
+
+        .social-share-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .social-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .social-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .social-button.linkedin {
+            background-color: var(--linkedin-blue);
+            color: white;
+        }
+
+        .social-button.twitter {
+            background-color: var(--twitter-blue);
+            color: white;
+        }
+
+        .social-button.facebook {
+            background-color: var(--facebook-blue);
+            color: white;
+        }
+
+        .social-button.reddit {
+            background-color: var(--reddit-orange);
+            color: white;
+        }
+
+        .social-button.email {
+            background-color: var(--text-gray);
+            color: white;
+        }
+
+        .social-button.copy {
+            background-color: var(--azure-blue);
+            color: white;
+        }
+
+        .copy-tooltip {
+            position: absolute;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+            white-space: nowrap;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Reaction system styles */
+        .reaction-container {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .reaction-question {
+            font-size: 16px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+
+        .reaction-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--azure-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            gap: 8px;
+        }
+
+        .reaction-button:hover {
+            background-color: var(--azure-dark-blue);
+            transform: translateY(-2px);
+        }
+
+        .reaction-button:disabled {
+            background-color: var(--success-green);
+            cursor: default;
+        }
+
+        .reaction-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .reaction-count {
+            margin-left: 15px;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .reaction-thanks {
+            margin-left: 15px;
+            font-size: 14px;
+            color: var(--success-green);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .reaction-thanks.show {
+            opacity: 1;
+        }
+
+        /* Retirement filter styles - updated for dark mode compatibility */
+        .retirement-filter {
+            display: flex;
+            align-items: center;
+            background-color: var(--filter-bg);
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            border: 1px solid var(--filter-border);
+            cursor: pointer;
+        }
+
+        .retirement-filter input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .retirement-filter label {
+            color: var(--retirement-red);
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .retirement-filter label::before {
+            content: "⚠️";
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: var(--text-gray);
+        }
+
+        .meta-info a {
+            color: var(--azure-blue);
+            text-decoration: none;
+        }
+
+        .meta-info a:hover {
+            text-decoration: underline;
+        }
+
+        .feed-legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            padding: 0px 12px;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-gray);
+        }
+
+        .feed-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feed-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .feed-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .feed-item-indicator {
+            flex-shrink: 0;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .feed-item-content {
+            flex: 1;
+        }
+
+        .feed-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            /*margin-bottom: 8px;*/
+            color: var(--text-color);
+            /*display: flex;*/
+            flex-direction: column;
+        }
+
+        .feed-item-title a {
+            color: var(--azure-blue);
+            text-decoration: none;
+        }
+
+        .feed-item-title a:hover {
+            text-decoration: underline;
+        }
+
+        .feed-item-date {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .feed-item-description {
+            font-size: 15px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, margin-bottom 0.3s ease-out;
+            margin-bottom: 0;
+        }
+
+        .feed-item.expanded .feed-item-description {
+            max-height: 1000px;
+            margin-bottom: 10px;
+        }
+
+        .feed-item-toggle {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--azure-blue);
+            transition: transform 0.3s;
+        }
+
+        .feed-item.expanded .feed-item-toggle {
+            transform: rotate(180deg);
+        }
+
+        .feed-item-category {
+            display: inline-block;
+            background-color: var(--azure-blue);
+            color: white;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-right: 5px;
+            margin-top: 10px;
+        }
+
+        .feed-item-category.retirement {
+            background-color: var(--retirement-red);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: var(--text-gray);
+        }
+
+        hr {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-gray);
+            font-size: 14px;
+            background-color: var(--footer-bg);
+            margin-top: 30px;
+            box-shadow: 0 -2px 10px var(--shadow-color);
+        }
+
+        .footer .heart {
+            color: #e25555;
+        }
+
+        /* Go to top button */
+        .go-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--azure-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+
+        .go-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .go-to-top:hover {
+            background: var(--azure-dark-blue);
+        }
+
+        .go-to-top svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        [data-theme="dark"] .preloader {
+            background-color: rgba(26, 26, 46, 0.8);
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 120, 212, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--azure-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                border-radius: 0;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-wrapper {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .search-input.active {
+                width: calc(100% - 50px);
+            }
+
+            .theme-toggle {
+                margin-left: 0;
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+
+            .meta-info {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .feed-legend {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .multiselect {
+                width: 100%;
+            }
+
+            .go-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .reaction-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .reaction-button {
+                align-self: flex-start;
+            }
+
+            .reaction-count, .reaction-thanks {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body id="top">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <header class="header">
+        <a href="#" class="logo">
+            <img src="/images/aru-logo.png" alt="Azure Logo" width="40" height="40">
+            <span class="logo-text">Azure Release Updates</span>
+        </a>
+        <div class="search-container">
+
+
+            <select class="filter-dropdown" id="dayFilter">
+                <option value="1">Last 1 day</option>
+                <option value="2">Last 2 days</option>
+                <option value="3">Last 3 days</option>
+                <option value="5">Last 5 days</option>
+                <option value="7" selected>Last 7 days</option>
+                <option value="15">Last 15 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="60">Last 60 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="180">Last 180 days</option>
+                <option value="all">All updates</option>
+            </select>
+            <div class="multiselect" id="categoryMultiselect">
+                <button class="multiselect-toggle">
+                    <span>Categories</span>
+                    <span class="multiselect-selected-count" style="display: none;">0</span>
+                </button>
+                <div class="multiselect-dropdown">
+                    <div class="multiselect-actions">
+                        <button id="selectAllCategories">Select All</button>
+                        <button id="clearAllCategories">Clear All</button>
+                    </div>
+                    <div class="multiselect-options">
+                        <!-- Categories will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible search input -->
+            <div class="search-wrapper">
+                <button class="search-toggle" id="searchToggle" aria-label="Toggle search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search updates">
+            </div>
+        </div>
+
+        <!-- Updated theme toggle with 3 options -->
+        <div class="theme-toggle">
+            <div class="theme-toggle-group">
+                <button class="theme-toggle-button" id="systemTheme" aria-label="System theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span class="theme-toggle-tooltip">System</span>
+                </button>
+                <button class="theme-toggle-button" id="lightTheme" aria-label="Light theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="theme-toggle-tooltip">Light</span>
+                </button>
+                <button class="theme-toggle-button" id="darkTheme" aria-label="Dark theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span class="theme-toggle-tooltip">Dark</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <p class="subtitle">Stay updated on Azure updates with a single page featuring the latest announcements from <a href="https://azure.microsoft.com/en-us/updates/" target="_blank">Azure Updates.</a>
+        </p>
+
+        <!-- Social sharing buttons -->
+        <div class="social-share">
+            <span class="social-share-label">Share:</span>
+            <div class="social-share-buttons">
+                <button class="social-button linkedin" aria-label="Share on LinkedIn" onclick="shareOnLinkedIn()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </button>
+                <button class="social-button twitter" aria-label="Share on Twitter" onclick="shareOnTwitter()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button facebook" aria-label="Share on Facebook" onclick="shareOnFacebook()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button reddit" aria-label="Share on Reddit" onclick="shareOnReddit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8.5 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path>
+                        <path d="M7 13.5c.5 1.5 2.5 2.5 5 2.5s4.5-1 5-2.5"></path>
+                        <path d="M17 7c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.6-1.1-.2-2.3-.2-3.4-.1l-.8-2.5 2.5.5c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.5 0-1 .3-1.3.7l-3-.6-1 3c-1.1 0-2.3.1-3.4.4-.4-.4-.9-.6-1.4-.6-1.1 0-2 .9-2 2 0 .8.5 1.5 1.2 1.8-.1.5-.1 1.1 0 1.6C4.5 15.2 8 17 12 17s7.5-1.8 9.8-4.6c.1-.5.1-1.1.1-1.6.6-.3 1.1-1 1.1-1.8z"></path>
+                    </svg>
+                </button>
+                <button class="social-button email" aria-label="Share via Email" onclick="shareViaEmail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </button>
+                <div style="position: relative;">
+                    <button class="social-button copy" aria-label="Copy Link" onclick="copyLink()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                    <div class="copy-tooltip" id="copyTooltip">Link copied!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reaction system -->
+         <!--
+        <div class="reaction-container">
+            <div class="reaction-question">Is this website useful?</div>
+            <button class="reaction-button" id="thumbsUpButton">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+                </svg>
+                <span>Yes, it's helpful!</span>
+            </button>
+            <div class="reaction-count" id="reactionCount">0 people found this helpful</div>
+            <div class="reaction-thanks" id="reactionThanks">Thank you for your feedback!</div>
+        </div>-->
+
+        <div class="meta-info">
+            <span id="feedCount"><strong>Loading feed items...</strong></span>
+        </div>
+
+        <div class="feed-legend">
+            <div class="legend-item">
+                <span>🟢</span>
+                <span>Less than 2 days</span>
+            </div>
+            <div class="legend-item">
+                <span>🔵</span>
+                <span>Older than 2 days</span>
+            </div>
+            <div class="legend-item">
+                <span>🔴</span>
+                <span>Older than 30 days</span>
+            </div>
+        </div>
+
+        <div class="retirement-filter">
+            <input type="checkbox" id="retirementFilter">
+            <label for="retirementFilter">Show Retirements Only</label>
+        </div>
+
+        <div id="feedItems" class="feed-items">
+            <div class="loading">Loading RSS feed...</div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 - Built with <span class="heart">❤️</span>  - All Rights Reserved</p>
+        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a>
+        - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
+        </p>
+        <p>
+        If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
+        </p>
+    </footer>
+
+    <a href="#top" class="go-to-top" id="goToTop" aria-label="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </a>
+
+    <script>
+        // Preloader functionality
+        const preloader = document.getElementById('preloader');
+
+        // Theme toggle functionality - updated for 3 options
+        const systemThemeBtn = document.getElementById('systemTheme');
+        const lightThemeBtn = document.getElementById('lightTheme');
+        const darkThemeBtn = document.getElementById('darkTheme');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Function to set active theme button
+        function setActiveThemeButton(themeMode) {
+            // Remove active class from all buttons
+            systemThemeBtn.classList.remove('active');
+            lightThemeBtn.classList.remove('active');
+            darkThemeBtn.classList.remove('active');
+
+            // Add active class to selected button
+            if (themeMode === 'system') {
+                systemThemeBtn.classList.add('active');
+            } else if (themeMode === 'light') {
+                lightThemeBtn.classList.add('active');
+            } else if (themeMode === 'dark') {
+                darkThemeBtn.classList.add('active');
+            }
+        }
+
+        // Function to apply theme
+        function applyTheme(themeMode) {
+            if (themeMode === 'system') {
+                // Use system preference
+                if (prefersDarkScheme.matches) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                }
+            } else if (themeMode === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+
+            // Set active button
+            setActiveThemeButton(themeMode);
+
+            // Save preference
+            localStorage.setItem('themeMode', themeMode);
+        }
+
+        // Check for saved theme preference or default to system
+        const savedThemeMode = localStorage.getItem('themeMode') || 'system';
+
+        // Apply initial theme
+        applyTheme(savedThemeMode);
+
+        // Add event listeners to theme buttons
+        systemThemeBtn.addEventListener('click', () => applyTheme('system'));
+        lightThemeBtn.addEventListener('click', () => applyTheme('light'));
+        darkThemeBtn.addEventListener('click', () => applyTheme('dark'));
+
+        // Listen for system preference changes when in system mode
+        prefersDarkScheme.addEventListener('change', (e) => {
+            if (localStorage.getItem('themeMode') === 'system') {
+                applyTheme('system');
+            }
+        });
+
+        // Reaction system functionality
+        //const thumbsUpButton = document.getElementById('thumbsUpButton');
+        //const reactionCount = document.getElementById('reactionCount');
+        //const reactionThanks = document.getElementById('reactionThanks');
+
+        // Check if user has already voted
+        //const hasVoted = localStorage.getItem('azureUpdatesVoted') === 'true';
+
+        // Get current vote count from localStorage or default to 0
+        //let voteCount = parseInt(localStorage.getItem('azureUpdatesVoteCount') || '0');
+
+        // Update the vote count display
+        //reactionCount.textContent = `${voteCount} ${voteCount === 1 ? 'person' : 'people'} found this helpful`;
+
+        // If user has already voted, disable the button and show thanks message
+        //if (hasVoted) {
+        //    thumbsUpButton.disabled = true;
+        //    reactionThanks.classList.add('show');
+        //}
+
+        // Add click event to thumbs up button
+        //thumbsUpButton.addEventListener('click', function() {
+        //    if (!hasVoted) {
+        //        // Increment vote count
+        //        voteCount++;
+
+                // Save to localStorage
+        //        localStorage.setItem('azureUpdatesVoted', 'true');
+        //        localStorage.setItem('azureUpdatesVoteCount', voteCount.toString());
+
+                // Update UI
+        //        reactionCount.textContent = `${voteCount} ${voteCount === 1 ? 'person' : 'people'} found this helpful`;
+        //       thumbsUpButton.disabled = true;
+
+                // Show thanks message
+        //        reactionThanks.classList.add('show');
+        //    }
+        //});
+
+        // Search toggle functionality
+        const searchToggle = document.getElementById('searchToggle');
+        const searchInput = document.getElementById('searchInput');
+
+        // Toggle search input when search icon is clicked
+        searchToggle.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent event from bubbling up
+            searchInput.classList.toggle('active');
+            if (searchInput.classList.contains('active')) {
+                // Focus the search input when opened
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            }
+            console.log('Search toggle clicked, active:', searchInput.classList.contains('active'));
+        });
+
+        // Close search input when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && event.target !== searchToggle) {
+                searchInput.classList.remove('active');
+            }
+        });
+
+        // Close search input when pressing Escape key
+        searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                searchInput.classList.remove('active');
+                searchToggle.focus();
+            }
+        });
+
+        // Go to top button functionality
+        const goToTopButton = document.getElementById('goToTop');
+
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                goToTopButton.classList.add('visible');
+            } else {
+                goToTopButton.classList.remove('visible');
+            }
+        });
+
+        // Multiselect dropdown functionality
+        const multiselect = document.getElementById('categoryMultiselect');
+        const multiselectToggle = multiselect.querySelector('.multiselect-toggle');
+        const multiselectDropdown = multiselect.querySelector('.multiselect-dropdown');
+        const multiselectOptions = multiselect.querySelector('.multiselect-options');
+        const multiselectSelectedCount = multiselect.querySelector('.multiselect-selected-count');
+        const selectAllBtn = document.getElementById('selectAllCategories');
+        const clearAllBtn = document.getElementById('clearAllCategories');
+        const retirementFilter = document.getElementById('retirementFilter');
+
+        // Toggle dropdown
+        multiselectToggle.addEventListener('click', function() {
+            multiselectDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!multiselect.contains(event.target)) {
+                multiselectDropdown.classList.remove('show');
+            }
+        });
+
+        // Select all categories
+        selectAllBtn.addEventListener('click', function() {
+            const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateSelectedCount();
+            filterAndDisplayFeedItems();
+        });
+
+        // Clear all categories
+        clearAllBtn.addEventListener('click', function() {
+            const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectedCount();
+            filterAndDisplayFeedItems();
+        });
+
+        // Update selected count
+        function updateSelectedCount() {
+            const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]');
+            const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+
+            if (selectedCount > 0) {
+                multiselectSelectedCount.textContent = selectedCount;
+                multiselectSelectedCount.style.display = 'inline-flex';
+                multiselectToggle.querySelector('span:first-child').textContent = 'Categories';
+            } else {
+                multiselectSelectedCount.style.display = 'none';
+                multiselectToggle.querySelector('span:first-child').textContent = 'All Categories';
+            }
+        }
+
+        // Social sharing functionality
+        function shareOnLinkedIn() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareOnReddit() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareViaEmail() {
+            const url = window.location.href;
+            const title = document.title;
+            const subject = encodeURIComponent(`Check out this Azure Updates page: ${title}`);
+            const body = encodeURIComponent(`I thought you might be interested in this Azure Updates page: ${url}`);
+            const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+            window.location.href = mailtoUrl;
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const tooltip = document.getElementById('copyTooltip');
+                tooltip.classList.add('show');
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // RSS Feed functionality
+        const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz'; // Can be use by to this domain only ;)
+        const originalFeedUrl = 'https://www.microsoft.com/releasecommunications/api/v2/azure/rss';
+        const rss2jsonUrl = 'https://api.rss2json.com/v1/api.json';
+        const feedItemsContainer = document.getElementById('feedItems');
+        const feedCountElement = document.getElementById('feedCount');
+        const dayFilterDropdown = document.getElementById('dayFilter');
+
+        let allFeedItems = [];
+        let allCategories = new Set();
+        let hasRetirementCategory = false;
+
+        // Function to fetch and parse RSS feed using RSS2JSON
+        async function fetchRSSFeed() {
+            try {
+                // Use RSS2JSON service
+                const response = await fetch(`${rss2jsonUrl}?rss_url=${encodeURIComponent(originalFeedUrl)}&api_key=${apiKey}&count=1000`);
+                const data = await response.json();
+
+                if (data.status !== 'ok') {
+                    throw new Error('Failed to fetch RSS feed');
+                }
+
+                // Extract feed items from JSON response
+                allFeedItems = data.items.map(item => {
+                    const title = item.title || '';
+                    const link = item.link || '';
+                    const description = item.description || '';
+                    const pubDate = new Date(item.pubDate);
+
+                    // Extract categories
+                    const categories = item.categories || [];
+
+                    // Check if this item has the Retirements category
+                    const hasRetirement = categories.some(cat =>
+                        cat.toLowerCase() === 'retirements' ||
+                        cat.toLowerCase() === 'retirement'
+                    );
+
+                    // Add categories to the set of all categories
+                    categories.forEach(category => {
+                        if (category) {
+                            allCategories.add(category);
+
+                            // Check if we have a retirement category
+                            if (category.toLowerCase() === 'retirements' || category.toLowerCase() === 'retirement') {
+                                hasRetirementCategory = true;
+                            }
+                        }
+                    });
+
+                    return {
+                        title,
+                        link,
+                        description,
+                        pubDate,
+                        age: getDaysSincePublication(pubDate),
+                        categories,
+                        hasRetirement
+                    };
+                });
+
+                // Populate category multiselect
+                populateCategoryMultiselect();
+
+                // Update feed count
+                feedCountElement.innerHTML = `<strong>${allFeedItems.length} updates found</strong>`;
+
+                // Display feed items
+                filterAndDisplayFeedItems();
+
+                // Hide preloader
+                preloader.classList.add('hidden');
+
+                // If no retirement category exists, hide the retirement filter
+                if (!hasRetirementCategory) {
+                    document.querySelector('.retirement-filter').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error fetching RSS feed:', error);
+                feedItemsContainer.innerHTML = `<div class="loading">Error loading RSS feed. Please try again later.</div>`;
+                feedCountElement.innerHTML = `<strong>Error loading feed</strong>`;
+
+                // Hide preloader even on error
+                preloader.classList.add('hidden');
+            }
+        }
+
+        // Populate category multiselect
+        function populateCategoryMultiselect() {
+            multiselectOptions.innerHTML = '';
+
+            // Sort categories alphabetically
+            const sortedCategories = Array.from(allCategories).sort();
+
+            sortedCategories.forEach(category => {
+                const optionId = `category-${category.replace(/\s+/g, '-').toLowerCase()}`;
+
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'multiselect-option';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = optionId;
+                checkbox.value = category;
+                checkbox.checked = true; // Default to all selected
+
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                label.textContent = category;
+
+                optionDiv.appendChild(checkbox);
+                optionDiv.appendChild(label);
+
+                multiselectOptions.appendChild(optionDiv);
+
+                // Add event listener to checkbox
+                checkbox.addEventListener('change', function() {
+                    updateSelectedCount();
+                    filterAndDisplayFeedItems();
+                });
+            });
+
+            // Update selected count
+            updateSelectedCount();
+        }
+
+        // Calculate days since publication
+        function getDaysSincePublication(pubDate) {
+            const now = new Date();
+            const diffTime = Math.abs(now - pubDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Get indicator based on age
+        function getAgeIndicator(age) {
+            if (age <= 2) return '🟢';
+            if (age <= 30) return '🔵';
+            return '🔴';
+        }
+
+        // Get selected categories
+        function getSelectedCategories() {
+            const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]:checked');
+            return Array.from(checkboxes).map(checkbox => checkbox.value);
+        }
+
+        // Toggle feed item expansion
+        function setupFeedItemToggle() {
+            const feedItems = document.querySelectorAll('.feed-item');
+
+            feedItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Don't toggle if clicking on a link
+                    if (e.target.tagName === 'A') {
+                        return;
+                    }
+
+                    this.classList.toggle('expanded');
+                });
+            });
+        }
+
+        // Filter and display feed items
+        function filterAndDisplayFeedItems() {
+            const dayFilter = parseInt(dayFilterDropdown.value);
+            const selectedCategories = getSelectedCategories();
+            const searchTerm = searchInput.value.toLowerCase();
+            const showRetirementsOnly = retirementFilter.checked;
+
+            let filteredItems = allFeedItems;
+
+            // Apply day filter
+            if (dayFilter && dayFilter !== 'all') {
+                filteredItems = filteredItems.filter(item => item.age <= dayFilter);
+            }
+
+            // Apply retirement filter if checked
+            if (showRetirementsOnly) {
+                filteredItems = filteredItems.filter(item => item.hasRetirement);
+            }
+            // Otherwise apply normal category filter (if any categories are selected)
+            else if (selectedCategories.length > 0) {
+                filteredItems = filteredItems.filter(item =>
+                    item.categories && item.categories.some(cat => selectedCategories.includes(cat))
+                );
+            }
+
+            // Apply search filter
+            if (searchTerm) {
+                filteredItems = filteredItems.filter(item =>
+                    item.title.toLowerCase().includes(searchTerm) ||
+                    item.description.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Update feed count
+            feedCountElement.innerHTML = `<strong>${filteredItems.length} updates found</strong>`;
+
+            // Display items
+            if (filteredItems.length === 0) {
+                feedItemsContainer.innerHTML = `<div class="loading">No updates found matching your criteria.</div>`;
+                return;
+            }
+
+            feedItemsContainer.innerHTML = filteredItems.map(item => {
+                const formattedDate = item.pubDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                // Create category tags
+                const categoryTags = item.categories && item.categories.length > 0
+                    ? `<div>${item.categories.map(cat => {
+                        const isRetirement = cat.toLowerCase() === 'retirements' || cat.toLowerCase() === 'retirement';
+                        return `<span class="feed-item-category ${isRetirement ? 'retirement' : ''}">${cat}</span>`;
+                    }).join('')}</div>`
+                    : '';
+
+                return `
+                    <div class="feed-item">
+                        <div class="feed-item-indicator">${getAgeIndicator(item.age)}</div>
+                        <div class="feed-item-content">
+                            <div class="feed-item-title">
+                                <span class="feed-item-date">${formattedDate} (${item.age} days ago)</span>
+                                <a href="${item.link}" target="_blank">${item.title}</a>
+                            </div>
+                            <div class="feed-item-description">${item.description} ...
+                                ${categoryTags}</div>
+                        </div>
+                        <div class="feed-item-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Set up click handlers for the feed items
+            setupFeedItemToggle();
+        }
+
+        // Event listeners
+        dayFilterDropdown.addEventListener('change', filterAndDisplayFeedItems);
+        searchInput.addEventListener('input', filterAndDisplayFeedItems);
+        retirementFilter.addEventListener('change', function() {
+            // When retirement filter is checked, disable the category multiselect
+            if (this.checked) {
+                multiselect.style.opacity = '0.5';
+                multiselect.style.pointerEvents = 'none';
+            } else {
+                multiselect.style.opacity = '1';
+                multiselect.style.pointerEvents = 'auto';
+            }
+            filterAndDisplayFeedItems();
+        });
+
+        // Initial fetch
+        fetchRSSFeed();
+    </script>
+</body>
+</html>
