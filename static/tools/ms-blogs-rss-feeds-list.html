@@ -627,7 +627,7 @@
     </header>
 
     <main class="main-content">
-        <p class="subtitle">This page presents a list of Microsoft blog details sourced from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community blogs</a> extracted <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv" target="_blank">here.</a></p>
+        <p class="subtitle">A list of Microsoft blogs details sourced from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community blogs</a> extracted <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv" target="_blank">here.</a></p>
         <!-- Social sharing buttons -->
         <div class="social-share">
             <span class="social-share-label">Share:</span>
@@ -698,7 +698,6 @@
                         <th>Name</th>
                         <th>Feed</th>
                         <th>Category</th>
-                        <th>Description</th>
                         <th>Link</th>
                         <th>Latest Item Date</th>
                     </tr>
@@ -706,7 +705,7 @@
                 <tbody>
                     <!-- Data will be loaded dynamically -->
                     <tr>
-                        <td colspan="6" class="loading">Loading data...</td>
+                        <td colspan="5" class="loading">Loading data...</td>
                     </tr>
                 </tbody>
             </table>
@@ -1068,7 +1067,6 @@
                             nameValue,
                             url,
                             category,
-                            feedTitle,
                             feedLink,
                             displayDate,
                             rawDate // Add raw date as a hidden column for sorting
@@ -1083,7 +1081,6 @@
                                 { title: "Name" },
                                 { title: "Feed" },
                                 { title: "Category" },
-                                { title: "Description" },
                                 { title: "Link" },
                                 {
                                     title: "Last Item Date",
@@ -1092,7 +1089,7 @@
                                             return data; // Return the HTML with formatting
                                         }
                                         // For sorting/filtering, use the raw date value
-                                        return row[6] || 0; // Use the raw date timestamp or 0 if not available
+                                        return row[5] || 0; // Use the raw date timestamp or 0 if not available
                                     }
                                 },
                                 {
@@ -1101,7 +1098,7 @@
                                 }
                             ],
                             // Set default order to Last Item Date column (descending)
-                            order: [[5, 'desc']], // Order by Last Item Date in descending order (newest first)
+                            order: [[4, 'desc']], // Order by Last Item Date in descending order (newest first)
                             // Rest of DataTable configuration remains the same
                             paging: true,
                             select: true,
@@ -1157,7 +1154,7 @@
                 },
                 error: function(error) {
                     console.error('Error loading CSV:', error);
-                    $('#blogsTable tbody').html('<tr><td colspan="6">Error loading data. Please try again later.</td></tr>');
+                    $('#blogsTable tbody').html('<tr><td colspan="5">Error loading data. Please try again later.</td></tr>');
                     if (preloader) preloader.classList.add('hidden');
                 }
             });
