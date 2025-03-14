@@ -260,7 +260,7 @@
         }
 
         .main-content {
-            /*max-width: 1200px;*/
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             flex: 1;
@@ -627,7 +627,7 @@
     </header>
 
     <main class="main-content">
-        <p class="subtitle">A list of Microsoft blogs RSS feeds from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community blogs</a> extracted <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv" target="_blank">here.</a></p>
+        <p class="subtitle">This page presents a list of Microsoft blog details sourced from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community blogs</a> extracted <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv" target="_blank">here.</a></p>
         <!-- Social sharing buttons -->
         <div class="social-share">
             <span class="social-share-label">Share:</span>
@@ -779,7 +779,7 @@
         const preloader = document.getElementById('preloader');
 
         // RSS2JSON API Key
-        const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
+        const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz'; // Can be used by to this domain only ;)
         const rss2jsonUrl = 'https://api.rss2json.com/v1/api.json';
 
         // Theme toggle functionality
@@ -1000,7 +1000,7 @@
                 header: true,
                 skipEmptyLines: true,
                 complete: async function(results) {
-                    console.log("CSV Data:", results.data);
+                    //console.log("CSV Data:", results.data);
 
                     // Process the data with RSS feed information
                     const processedData = [];
