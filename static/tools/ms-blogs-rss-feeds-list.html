@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <!-- DataTables Buttons CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <!-- jQuery - Make sure jQuery is loaded before any scripts that use it -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         :root {
             --azure-blue: #0078D4;
@@ -258,7 +260,7 @@
         }
 
         .main-content {
-            max-width: 1200px;
+            /*max-width: 1200px;*/
             margin: 0 auto;
             padding: 20px;
             flex: 1;
@@ -268,6 +270,30 @@
             color: var(--text-gray);
             font-size: 18px;
             margin-bottom: 20px;
+        }
+
+        /* Feed legend styles */
+        .feed-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            background-color: var(--card-bg);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .legend-item span:first-child {
+            font-size: 16px;
         }
 
         /* DataTable styling */
@@ -525,6 +551,31 @@
                 min-width: 80px;
                 margin-right: 0 !important;
             }
+
+            .feed-legend {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Add styles for days ago display */
+        .days-ago {
+            font-weight: bold;
+            margin-left: 5px;
+            color: var(--text-gray);
+        }
+
+        /* Add different colors for different time periods */
+        .recent {
+            color: #2ecc71; /* Green for recent */
+        }
+
+        .medium {
+            color: #3498db; /* Blue for medium */
+        }
+
+        .old {
+            color: #e74c3c; /* Red for old */
         }
     </style>
 </head>
@@ -576,8 +627,7 @@
     </header>
 
     <main class="main-content">
-        <p class="subtitle">A list of Microsoft blogs RSS feeds from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Techcommunity blogs.</a></p>
-
+        <p class="subtitle">A list of Microsoft blogs RSS feeds from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community blogs</a> extracted <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv" target="_blank">here.</a></p>
         <!-- Social sharing buttons -->
         <div class="social-share">
             <span class="social-share-label">Share:</span>
@@ -625,19 +675,38 @@
             </div>
         </div>
 
+        <!-- Feed legend -->
+        <div class="feed-legend">
+            <div class="legend-item">
+                <span>🟢</span>
+                <span>Less than 2 days</span>
+            </div>
+            <div class="legend-item">
+                <span>🔵</span>
+                <span>Older than 2 days</span>
+            </div>
+            <div class="legend-item">
+                <span>🔴</span>
+                <span>Older than 30 days</span>
+            </div>
+        </div>
+
         <div class="table-container">
             <table id="blogsTable" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>URL</th>
+                        <th>Feed</th>
                         <th>Category</th>
+                        <th>Description</th>
+                        <th>Link</th>
+                        <th>Latest Item Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Data will be loaded dynamically -->
                     <tr>
-                        <td colspan="3" class="loading">Loading data...</td>
+                        <td colspan="6" class="loading">Loading data...</td>
                     </tr>
                 </tbody>
             </table>
@@ -660,8 +729,7 @@
         </svg>
     </a>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Load all scripts at the end of the body -->
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <!-- DataTables Buttons JS -->
@@ -673,9 +741,18 @@
     <!-- PapaParse for CSV parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Your custom script - Make sure this is after all other scripts -->
     <script>
         // Preloader functionality
         const preloader = document.getElementById('preloader');
+
+        // RSS2JSON API Key
+        const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz';
+        const rss2jsonUrl = 'https://api.rss2json.com/v1/api.json';
 
         // Theme toggle functionality
         const systemThemeBtn = document.getElementById('systemTheme');
@@ -729,9 +806,9 @@
         applyTheme(savedThemeMode);
 
         // Add event listeners to theme buttons
-        systemThemeBtn.addEventListener('click', () => applyTheme('system'));
-        lightThemeBtn.addEventListener('click', () => applyTheme('light'));
-        darkThemeBtn.addEventListener('click', () => applyTheme('dark'));
+        if (systemThemeBtn) systemThemeBtn.addEventListener('click', () => applyTheme('system'));
+        if (lightThemeBtn) lightThemeBtn.addEventListener('click', () => applyTheme('light'));
+        if (darkThemeBtn) darkThemeBtn.addEventListener('click', () => applyTheme('dark'));
 
         // Listen for system preference changes when in system mode
         prefersDarkScheme.addEventListener('change', (e) => {
@@ -800,8 +877,93 @@
             });
         }
 
-        // CSV loading and DataTable initialization
-        $(document).ready(function() {
+        // Function to format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } catch (e) {
+                return 'Invalid Date';
+            }
+        }
+
+        // Function to get date status indicator
+        function getDateStatusIndicator(dateString) {
+            if (!dateString || dateString === 'N/A' || dateString === 'Invalid Date') {
+                return '❓'; // Unknown date
+            }
+
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 2) {
+                return '🟢'; // Less than 2 days
+            } else if (diffDays <= 30) {
+                return '🔵'; // Older than 2 days but less than 30 days
+            } else {
+                return '🔴'; // Older than 30 days
+            }
+        }
+
+        // Function to calculate days ago
+        function getDaysAgo(dateString) {
+            if (!dateString || dateString === 'N/A' || dateString === 'Invalid Date') {
+                return '';
+            }
+
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let cssClass = '';
+            if (diffDays <= 2) {
+                cssClass = 'recent';
+            } else if (diffDays <= 30) {
+                cssClass = 'medium';
+            } else {
+                cssClass = 'old';
+            }
+
+            if (diffDays === 0) {
+                return `<span class="days-ago ${cssClass}">today</span>`;
+            } else if (diffDays === 1) {
+                return `<span class="days-ago ${cssClass}">1 day ago</span>`;
+            } else {
+                return `<span class="days-ago ${cssClass}">${diffDays} days ago</span>`;
+            }
+        }
+
+        // Function to fetch RSS feed data using rss2json with API key
+        async function fetchRSSFeed(url) {
+            if (!url) return null;
+
+            try {
+                const response = await fetch(`${rss2jsonUrl}?rss_url=${encodeURIComponent(url)}&api_key=${apiKey}&count=1000`);
+                const data = await response.json();
+
+                if (data.status !== 'ok') {
+                    console.error('Error fetching RSS feed:', data.message);
+                    return null;
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Error fetching RSS feed:', error);
+                return null;
+            }
+        }
+
+        // Wait for the document to be fully loaded before initializing
+        document.addEventListener('DOMContentLoaded', function() {
             const csvUrl = 'https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv';
 
             // Fetch and parse CSV
@@ -809,11 +971,14 @@
                 download: true,
                 header: true,
                 skipEmptyLines: true,
-                complete: function(results) {
-                    console.log("CSV Data:", results.data); // Log the data to see the actual structure
+                complete: async function(results) {
+                    console.log("CSV Data:", results.data);
 
-                    // Process the data
-                    const data = results.data.map(row => {
+                    // Process the data with RSS feed information
+                    const processedData = [];
+
+                    // Process each row sequentially to avoid too many simultaneous requests
+                    for (const row of results.data) {
                         // Get the URL value, checking for different possible column names
                         const urlValue = row.url || row.URL || row.Url || row.link || row.Link || '';
 
@@ -823,83 +988,170 @@
                         // Get the category value, checking for different possible column names
                         const categoryValue = row.category || row.Category || row.categories || row.Categories || row.type || row.Type || '';
 
-                        // Format the URL as a clickable link
-                        const url = urlValue ? `<a href="${urlValue}" target="_blank">${urlValue}</a>` : '';
+                        // Format the URL as a clickable link with "Feed Link" text
+                        const url = urlValue ? `<a href="${urlValue}" target="_blank">Feed Link</a>` : '';
 
                         // Format the category as a badge
                         const category = categoryValue ? `<span class="category-badge">${categoryValue}</span>` : '';
 
-                        return [
+                        // Fetch RSS feed data
+                        let feedTitle = 'N/A';
+                        let feedLink = 'N/A';
+                        let latestItemDate = 'N/A';
+                        let formattedLatestItemDate = 'N/A';
+                        let rawDate = null; // Store the raw date for sorting
+
+                        if (urlValue) {
+                            const feedData = await fetchRSSFeed(urlValue);
+
+                            if (feedData) {
+                                feedTitle = feedData.feed.title || 'N/A';
+                                feedLink = feedData.feed.link ? `<a href="${feedData.feed.link}" target="_blank">Blog Link</a>` : 'N/A';
+
+                                if (feedData.items && feedData.items.length > 0) {
+                                    // Find the latest item date
+                                    let latestDate = new Date(0); // Start with epoch
+
+                                    for (const item of feedData.items) {
+                                        if (item.pubDate) {
+                                            const itemDate = new Date(item.pubDate);
+                                            if (itemDate > latestDate) {
+                                                latestDate = itemDate;
+                                            }
+                                        }
+                                    }
+
+                                    if (latestDate.getTime() > 0) { // If we found a valid date
+                                        latestItemDate = latestDate;
+                                        formattedLatestItemDate = formatDate(latestDate);
+                                        rawDate = latestDate.getTime(); // Store timestamp for sorting
+                                    }
+                                }
+                            }
+                        }
+
+                        // Add status indicator and days ago to the latest item date
+                        const dateIndicator = getDateStatusIndicator(latestItemDate);
+                        const daysAgo = getDaysAgo(latestItemDate);
+                        // Format the display date with the indicator, date, and days ago
+                        const displayDate = `${dateIndicator} ${formattedLatestItemDate} ${daysAgo}`;
+
+                        processedData.push([
                             nameValue,
                             url,
-                            category
-                        ];
-                    });
+                            category,
+                            feedTitle,
+                            feedLink,
+                            displayDate,
+                            rawDate // Add raw date as a hidden column for sorting
+                        ]);
+                    }
 
                     // Initialize DataTable
-                    $('#blogsTable').DataTable({
-                        data: data,
-                        columns: [
-                            { title: "Name" },
-                            { title: "URL" },
-                            { title: "Category" }
-                        ],
-                        paging: true,
-                        select: true,
-                        rowReorder: true,
-                        colReorder: true,
-                        keys: true,
-                        autoFill: true,
-                        lengthChange: true,
-                        searching: true,
-                        ordering: true,
-                        info: true,
-                        lengthMenu: [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                        ],
-                        pageLength: -1,
-                        autoWidth: true,
-                        responsive: true,
-                        dom: 'Blfrtip',
-                        buttons: [
-                            {
-                                extend: 'copy',
-                                text: 'Copy',
-                                className: 'btn-copy',
-                                titleAttr: 'Copy to clipboard'
+                    if ($.fn.DataTable) {
+                        $('#blogsTable').DataTable({
+                            data: processedData,
+                            columns: [
+                                { title: "Name" },
+                                { title: "Feed" },
+                                { title: "Category" },
+                                { title: "Description" },
+                                { title: "Link" },
+                                {
+                                    title: "Last Item Date",
+                                    render: function(data, type, row) {
+                                        if (type === 'display') {
+                                            return data; // Return the HTML with formatting
+                                        }
+                                        // For sorting/filtering, use the raw date value
+                                        return row[6] || 0; // Use the raw date timestamp or 0 if not available
+                                    }
+                                },
+                                {
+                                    // Hidden column for raw date (for sorting)
+                                    visible: false
+                                }
+                            ],
+                            // Set default order to Last Item Date column (descending)
+                            order: [[5, 'desc']], // Order by Last Item Date in descending order (newest first)
+                            // Rest of DataTable configuration remains the same
+                            paging: true,
+                            select: true,
+                            rowReorder: true,
+                            colReorder: true,
+                            keys: true,
+                            autoFill: true,
+                            lengthChange: true,
+                            searching: true,
+                            ordering: true,
+                            info: true,
+                            lengthMenu: [
+                            [10, 25, 50, -1],
+                            [10, 25, 50, "All"]
+                            ],
+                            pageLength: -1,
+                            autoWidth: true,
+                            responsive: true,
+                            dom: 'Blfrtip',
+                            buttons: [
+                                {
+                                    extend: 'copy',
+                                    text: 'Copy',
+                                    className: 'btn-copy',
+                                    titleAttr: 'Copy to clipboard'
+                                },
+                                {
+                                    extend: 'csv',
+                                    text: 'CSV',
+                                    className: 'btn-csv',
+                                    titleAttr: 'Export as CSV'
+                                },
+                                {
+                                    extend: 'excel',
+                                    text: 'Excel',
+                                    className: 'btn-excel',
+                                    titleAttr: 'Export as Excel'
+                                }
+                            ],
+                            language: {
+                                search: "🔍 Search:",
+                                lengthMenu: "Show _MENU_ entries",
+                                info: "Showing _START_ to _END_ of _TOTAL_ entries"
                             },
-                            {
-                                extend: 'csv',
-                                text: 'CSV',
-                                className: 'btn-csv',
-                                titleAttr: 'Export as CSV'
-                            },
-                            {
-                                extend: 'excel',
-                                text: 'Excel',
-                                className: 'btn-excel',
-                                titleAttr: 'Export as Excel'
+                            initComplete: function() {
+                                // Hide preloader when table is ready
+                                if (preloader) preloader.classList.add('hidden');
                             }
-                        ],
-                        language: {
-                            search: "🔍 Search:",
-                            lengthMenu: "Show _MENU_ entries",
-                            info: "Showing _START_ to _END_ of _TOTAL_ entries"
-                        },
-                        initComplete: function() {
-                            // Hide preloader when table is ready
-                            preloader.classList.add('hidden');
-                        }
-                    });
+                        });
+                    } else {
+                        console.error('DataTable is not initialized. jQuery or DataTable might not be loaded properly.');
+                    }
                 },
                 error: function(error) {
                     console.error('Error loading CSV:', error);
-                    $('#blogsTable tbody').html('<tr><td colspan="3">Error loading data. Please try again later.</td></tr>');
-                    preloader.classList.add('hidden');
+                    $('#blogsTable tbody').html('<tr><td colspan="6">Error loading data. Please try again later.</td></tr>');
+                    if (preloader) preloader.classList.add('hidden');
                 }
             });
         });
+
+        // Firebase configuration - Updated with actual project details
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJjJUZJrMFnDJBixZnKNdUvXPOAW4XMpY", // Keeping placeholder API key
+            authDomain: "azure-release-updates.firebaseapp.com",
+            databaseURL: "https://azure-release-updates-default-rtdb.europe-west1.firebasedatabase.app/", // Updated with actual DB URL
+            projectId: "azure-release-updates", // Updated with actual project ID
+            storageBucket: "azure-release-updates.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:1234567890abcdef"
+        };
+
+        // Initialize Firebase
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            const database = firebase.database();
+            const reactionsRef = database.ref('reactions');
+        }
     </script>
 </body>
 </html>
