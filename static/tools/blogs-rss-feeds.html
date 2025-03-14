@@ -3,240 +3,649 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌐 Microsoft Blogs</title>
-
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-
-
+    <title>Microsoft blogs RSS feeds</title>
     <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/favicon-32x32.png">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <style>
-        /* Basic styling for the page */
-        body { font-family: Arial, sans-serif; padding: 10px;}
-        h1 { color: #0078D4; }
-        h2 { color: #0078D4; margin-top: 2px; margin-bottom: 2px;}
-        h4 { color: #0078D4; margin-top: 2px; margin-bottom: 2px;}
-        a { color: #1e90ff; }
-        a:hover { color: #63a4ff; }
-        p { margin-top: 4px; margin-bottom: 4px; }
+        :root {
+            --azure-blue: #0078D4;
+            --azure-dark-blue: #0063B1;
+            --azure-light-blue: #50B0F9;
+            --text-gray: #666666;
+            --background-blue: #EEF3F8;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --footer-bg: #ffffff;
+            --filter-bg: rgba(255, 255, 255, 0.9);
+            --filter-border: rgba(255, 255, 255, 0.3);
+            --table-header-bg: #f8f9fa;
+            --table-row-hover: #f5f5f5;
+            --table-border: #dee2e6;
+            --linkedin-blue: #0077b5;
+            --twitter-blue: #1da1f2;
+            --facebook-blue: #1877f2;
+            --reddit-orange: #ff4500;
+            --button-bg: #f8f9fa;
+            --button-hover: #e9ecef;
+        }
 
-        /* Slider for dark mode */
-        .icon {position: absolute;top: 50%;transform: translateY(-50%);font-size: 18px;transition: .4s;}
-        .sun {left: 5px;}
-        .moon {right: 4px;opacity: 0;}
-        input:checked + .slider .sun {opacity: 0;}
-        input:checked + .slider .moon {opacity: 1;}
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #0078D4; }
-        input:checked + .slider:before { transform: translateX(26px); }
-        .dark-mode-toggle { float: right; }
-        .dark-mode-slider { position: relative; display: inline-block; width: 60px; height: 34px; }
-        .dark-mode-slider input { opacity: 0; width: 0; height: 0; }
+        [data-theme="dark"] {
+            --background-blue: #1a1a2e;
+            --card-bg: #2a2a3e;
+            --text-color: #e0e0e0;
+            --text-gray: #a0a0a0;
+            --border-color: #444444;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --footer-bg: #2a2a3e;
+            --filter-bg: rgba(42, 42, 62, 0.9);
+            --filter-border: rgba(68, 68, 68, 0.5);
+            --table-header-bg: #2c2c40;
+            --table-row-hover: #3a3a50;
+            --table-border: #444444;
+            --button-bg: #3a3a50;
+            --button-hover: #4a4a60;
+        }
 
-        body.dark-mode a { color: #1e90ff; }
-        body.dark-mode a:hover { color: #63a4ff; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
 
-        body.dark-mode { background-color: #121212; color: #ffffff; }
-        body.dark-mode .feed-container { background: #333333; border-color: #555555; }
-        body.dark-mode .local-storage-container { background: #333333; border-color: #555555; }
-        body.dark-mode .accordion { background-color: #333333; }
-        body.dark-mode .accordion:hover { background-color: #555555; }
+        html {
+            scroll-behavior: smooth;
+        }
 
-        /* Containers */
-        .feed-container {margin-bottom: 10px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; }
-        .feed-item {margin-bottom: 2px; font-size: 0.9em; }
-        .feed-item a { text-decoration: none; color: #0078D4; font-weight: bold; }
-        .feed-item a:hover {text-decoration: underline; }
-        .feed-item p { margin: 4px; }
-        .display-feed {margin-bottom: 4px; }
-        .add-feed {margin-bottom: 4px; }
+        body {
+            background-color: var(--background-blue);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+        }
 
-        /* RSS Feeds container */
-        #rss-feeds {
-            margin-top: 10px;
-            border: 1px solid #ddd;
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Theme toggle styles */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .theme-toggle-group {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .theme-toggle-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            color: white;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+
+        .theme-toggle-button.active {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle-button:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .theme-toggle-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
             border-radius: 4px;
-            background: #f9f9f9;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
         }
 
-        body.dark-mode #rss-feeds {
-            background: #333333;
-            border-color: #555555;
+        .theme-toggle-button:hover .theme-toggle-tooltip {
+            opacity: 1;
+            visibility: visible;
         }
 
-        /* Accordion */
-        .local-storage-container { margin-top: 10px; margin-bottom: 10px; padding: 10px; background: #e9e9e9; border: 1px solid #ccc; border-radius: 4px; }
-        .accordion { background-color: #0078D4; color: white; cursor: pointer; width: 100%; border: none; text-align: center; outline: none; transition: 0.4s; }
-        .accordion:hover { background-color: #005a9e; }
-        .panel {display: none; overflow: hidden; }
+        /* Social sharing styles */
+        .social-share {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
 
-        /* Buttons */
-        /*textarea, button {width: 100%; box-sizing: border-box; border-radius: 4px; margin-top: 4px;}*/
+        .social-share-label {
+            color: var(--text-gray);
+            margin-right: 5px;
+        }
 
-        .add-btn { background: #0078D4; color: white; border: none; cursor: pointer; border-radius: 4px; margin-bottom: 4px;}
-        .add-btn:hover { background: #005a9e; }
+        .social-share-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
 
-        .clear-btn { background: #ff4d4d; color: white; border: none; cursor: pointer; border-radius: 4px}
-        .clear-btn:hover { background: #cc0000; }
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
 
-        .show-btn { background: #f59221; color: white; border: none; cursor: pointer; border-radius: 4px; margin-bottom: 4px;}
-        .show-btn:hover { background: #f38302; }
+        .social-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
 
-        .categories-btn { background: #8d908d; color: white; border: none; cursor: pointer; border-radius: 4px; margin-top: 4px;}
-        .categories-btn:hover { background: #5c5e5c; }
+        .social-button svg {
+            width: 18px;
+            height: 18px;
+        }
 
-        .select-all-categories-btn { background: #6b25b1; color: white; border: none; cursor: pointer; border-radius: 4px; width: 20%; margin-top:6px; margin-right: 10px;}
-        .select-all-categories-btn:hover { background: #6b25b1; width: 20%; margin-right: 10px;}
+        .social-button.linkedin {
+            background-color: var(--linkedin-blue);
+            color: white;
+        }
 
-        .unselect-all-categories-btn { background: #6b25b1; color: white; border: none; cursor: pointer; margin-top:4px; border-radius: 6px; width: 20%}
-        .unselect-all-categories-btn:hover { background: #6b25b1; width: 20%}
+        .social-button.twitter {
+            background-color: var(--twitter-blue);
+            color: white;
+        }
 
-        .go-top-btn { background: #0078D4; color: white; border: none; cursor: pointer; margin-top: 4px; border-radius: 4px; display: none; }
-        .go-top-btn:hover { background: #005a9e; }
+        .social-button.facebook {
+            background-color: var(--facebook-blue);
+            color: white;
+        }
 
-        /* .csv-table, button{ border-radius: 3px; float: none;}*/
-        .csv-table.button {box-sizing: border-box; border-radius: 3px; margin-top: 3px; float: none;}
+        .social-button.reddit {
+            background-color: var(--reddit-orange);
+            color: white;
+        }
 
-        /* Footer */
-        footer { text-align: center; font-size: 12px;}
+        .social-button.email {
+            background-color: var(--text-gray);
+            color: white;
+        }
 
+        .social-button.copy {
+            background-color: var(--azure-blue);
+            color: white;
+        }
+
+        .copy-tooltip {
+            position: absolute;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+            white-space: nowrap;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* DataTable styling */
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        /* Custom DataTables styling */
+        table.dataTable {
+            width: 100% !important;
+            border-collapse: collapse;
+            color: var(--text-color);
+            border: 1px solid var(--table-border);
+        }
+
+        table.dataTable thead th {
+            background-color: var(--table-header-bg);
+            color: var(--text-color);
+            border-bottom: 2px solid var(--table-border);
+            padding: 10px;
+        }
+
+        table.dataTable tbody td {
+            padding: 10px;
+            border-bottom: 1px solid var(--table-border);
+        }
+
+        table.dataTable tbody tr:hover {
+            background-color: var(--table-row-hover);
+        }
+
+        table.dataTable a {
+            color: var(--azure-blue);
+            text-decoration: none;
+        }
+
+        table.dataTable a:hover {
+            text-decoration: underline;
+        }
+
+        /* DataTables search and pagination */
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 6px 10px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 5px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            margin-top: 15px;
+            color: var(--text-color);
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: var(--azure-blue) !important;
+            color: white !important;
+            border: 1px solid var(--azure-blue);
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: var(--table-row-hover) !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-color);
+        }
+
+        /* DataTables Buttons styling */
+        .dt-buttons {
+            margin-bottom: 15px;
+        }
+
+        .dt-button {
+            background-color: var(--button-bg) !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 4px !important;
+            padding: 6px 12px !important;
+            margin-right: 5px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 1px 3px var(--shadow-color) !important;
+        }
+
+        .dt-button:hover {
+            background-color: var(--button-hover) !important;
+            box-shadow: 0 2px 5px var(--shadow-color) !important;
+        }
+
+        .dt-button:active {
+            box-shadow: inset 0 1px 3px var(--shadow-color) !important;
+        }
+
+        /* Loading indicator */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: var(--text-gray);
+        }
+
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        [data-theme="dark"] .preloader {
+            background-color: rgba(26, 26, 46, 0.8);
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 120, 212, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--azure-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-gray);
+            font-size: 14px;
+            background-color: var(--footer-bg);
+            margin-top: 30px;
+            box-shadow: 0 -2px 10px var(--shadow-color);
+        }
+
+        .footer .heart {
+            color: #e25555;
+        }
+
+        /* Go to top button */
+        .go-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--azure-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+
+        .go-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .go-to-top:hover {
+            background: var(--azure-dark-blue);
+        }
+
+        .go-to-top svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Category badge */
+        .category-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            background-color: var(--azure-blue);
+            color: white;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                border-radius: 0;
+            }
+
+            .theme-toggle {
+                margin-left: 0;
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+
+            .table-container {
+                padding: 10px;
+            }
+
+            .go-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .dt-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+                margin-bottom: 10px;
+            }
+
+            .dt-button {
+                flex: 1;
+                min-width: 80px;
+                margin-right: 0 !important;
+            }
+        }
     </style>
-
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css">
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script> -->
 </head>
-<body>
+<body id="top">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="spinner"></div>
+    </div>
 
-    <!-- Header-->
-    <div class="header-section">
-        <!-- Dark mode toggle switch -->
-        <div class="dark-mode-toggle">
-            <label class="dark-mode-slider">
-                <input type="checkbox" id="dark-mode-checkbox" onclick="toggleDarkMode()">
-                <span class="slider">
-                    <span class="icon sun">☀️</span>
-                    <span class="icon moon">🌙</span>
-                </span>
-            </label>
+    <header class="header">
+        <a href="#" class="logo">
+            <img src="/images/blogs-rss.png" alt="Rss Logo" width="40" height="40">
+            <span class="logo-text">Microsoft blogs RSS feeds</span>
+        </a>
+
+        <!-- Theme toggle with 3 options -->
+        <div class="theme-toggle">
+            <div class="theme-toggle-group">
+                <button class="theme-toggle-button" id="systemTheme" aria-label="System theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span class="theme-toggle-tooltip">System</span>
+                </button>
+                <button class="theme-toggle-button" id="lightTheme" aria-label="Light theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="theme-toggle-tooltip">Light</span>
+                </button>
+                <button class="theme-toggle-button" id="darkTheme" aria-label="Dark theme">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span class="theme-toggle-tooltip">Dark</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <p class="subtitle">A list of Microsoft blogs RSS feeds from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Techcommunity blogs.</a></p>
+
+        <!-- Social sharing buttons -->
+        <div class="social-share">
+            <span class="social-share-label">Share:</span>
+            <div class="social-share-buttons">
+                <button class="social-button linkedin" aria-label="Share on LinkedIn" onclick="shareOnLinkedIn()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </button>
+                <button class="social-button twitter" aria-label="Share on Twitter" onclick="shareOnTwitter()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button facebook" aria-label="Share on Facebook" onclick="shareOnFacebook()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button reddit" aria-label="Share on Reddit" onclick="shareOnReddit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8.5 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path>
+                        <path d="M7 13.5c.5 1.5 2.5 2.5 5 2.5s4.5-1 5-2.5"></path>
+                        <path d="M17 7c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.6-1.1-.2-2.3-.2-3.4-.1l-.8-2.5 2.5.5c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.5 0-1 .3-1.3.7l-3-.6-1 3c-1.1 0-2.3.1-3.4.4-.4-.4-.9-.6-1.4-.6-1.1 0-2 .9-2 2 0 .8.5 1.5 1.2 1.8-.1.5-.1 1.1 0 1.6C4.5 15.2 8 17 12 17s7.5-1.8 9.8-4.6c.1-.5.1-1.1.1-1.6.6-.3 1.1-1 1.1-1.8z"></path>
+                    </svg>
+                </button>
+                <button class="social-button email" aria-label="Share via Email" onclick="shareViaEmail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </button>
+                <div style="position: relative;">
+                    <button class="social-button copy" aria-label="Copy Link" onclick="copyLink()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                    <div class="copy-tooltip" id="copyTooltip">Link copied!</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Title -->
-        <h2>🌐 Microsoft Blogs</h2>
-        <p><small>A list of Microsoft blogs RSS feeds from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Techcommunity blogs</a>.</small></p>
-    </div>
+        <div class="table-container">
+            <table id="blogsTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>URL</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded dynamically -->
+                    <tr>
+                        <td colspan="3" class="loading">Loading data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 
-    <!-- Display Feeds -->
-    <div id="rss-feeds"></div>
-
-    <!-- CSV Data Table -->
-    <div id="csv-table" style="margin-top: 20px; overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-            <thead>
-                <tr style="background-color: #0078D4; color: white;">
-                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Name</th>
-                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">RSS Feed URL</th>
-                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Category</th>
-                </tr>
-            </thead>
-            <tbody id="csv-content"></tbody>
-        </table>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-
-
-    <script>
-    // Dark mode toggle function
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDarkMode);
-    }
-
-    // Check for saved dark mode preference
-    document.addEventListener('DOMContentLoaded', () => {
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            document.getElementById('dark-mode-checkbox').checked = true;
-        }
-    });
-
-    fetch('https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv')
-        .then(response => response.text())
-        .then(data => {
-            const rows = data.split('\n').slice(1);
-            const tbody = document.getElementById('csv-content');
-            rows.forEach(row => {
-                if (row.trim()) {
-                    const [name, url, category] = row.split(',').map(cell => cell.trim());
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${name}</td>
-                        <td><a href="${url}" target="_blank">${url}</a></td>
-                        <td>${category}</td>
-                    `;
-                    tbody.appendChild(tr);
-                }
-            });
-            // Initialize DataTable after the data is loaded
-            $(document).ready(function() {
-                $('#csv-table table').DataTable({
-                    paging: true,
-                    select: true,
-                    rowReorder: true,
-                    colReorder: true,
-                    keys: true,
-                    autoFill: true,
-                    lengthChange: true,
-                    searching: true,
-                    ordering: true,
-                    info: true,
-                    lengthMenu: [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ],
-                    pageLength: -1,
-                    autoWidth: true,
-                responsive: true,
-                    lengthChange: true,
-                    autoWidth: false,
-                    dom: 'Blfrtip',
-                    buttons: [{
-                            extend: 'copy',
-                        },
-                        {
-                            extend: 'csv',
-                        },
-                        {
-                            extend: 'excel',
-                        }
-                    ],
-                        language: {
-                            search: "🔍 Search:",
-                            lengthMenu: "Show _MENU_ entries",
-                            info: "Showing _START_ to _END_ of _TOTAL_ entries"
-                        }
-                });
-            });
-        })
-        .catch(error => console.error('Error fetching CSV:', error));
-    </script>
-
-    <!-- Footer -->
-    <hr>
-    <footer>
-        <p>&copy; 2025 - Built with ❤️ - All Rights Reserved</p>
+    <footer class="footer">
+        <p>&copy; 2025 - Built with <span class="heart">❤️</span> - All Rights Reserved</p>
         <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a>
         - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
         </p>
@@ -244,5 +653,253 @@
         If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
         </p>
     </footer>
+
+    <a href="#top" class="go-to-top" id="goToTop" aria-label="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </a>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <!-- JSZip - required for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Buttons HTML5 export -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <script>
+        // Preloader functionality
+        const preloader = document.getElementById('preloader');
+
+        // Theme toggle functionality
+        const systemThemeBtn = document.getElementById('systemTheme');
+        const lightThemeBtn = document.getElementById('lightTheme');
+        const darkThemeBtn = document.getElementById('darkTheme');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Function to set active theme button
+        function setActiveThemeButton(themeMode) {
+            // Remove active class from all buttons
+            systemThemeBtn.classList.remove('active');
+            lightThemeBtn.classList.remove('active');
+            darkThemeBtn.classList.remove('active');
+
+            // Add active class to selected button
+            if (themeMode === 'system') {
+                systemThemeBtn.classList.add('active');
+            } else if (themeMode === 'light') {
+                lightThemeBtn.classList.add('active');
+            } else if (themeMode === 'dark') {
+                darkThemeBtn.classList.add('active');
+            }
+        }
+
+        // Function to apply theme
+        function applyTheme(themeMode) {
+            if (themeMode === 'system') {
+                // Use system preference
+                if (prefersDarkScheme.matches) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                }
+            } else if (themeMode === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+
+            // Set active button
+            setActiveThemeButton(themeMode);
+
+            // Save preference
+            localStorage.setItem('themeMode', themeMode);
+        }
+
+        // Check for saved theme preference or default to system
+        const savedThemeMode = localStorage.getItem('themeMode') || 'system';
+
+        // Apply initial theme
+        applyTheme(savedThemeMode);
+
+        // Add event listeners to theme buttons
+        systemThemeBtn.addEventListener('click', () => applyTheme('system'));
+        lightThemeBtn.addEventListener('click', () => applyTheme('light'));
+        darkThemeBtn.addEventListener('click', () => applyTheme('dark'));
+
+        // Listen for system preference changes when in system mode
+        prefersDarkScheme.addEventListener('change', (e) => {
+            if (localStorage.getItem('themeMode') === 'system') {
+                applyTheme('system');
+            }
+        });
+
+        // Go to top button functionality
+        const goToTopButton = document.getElementById('goToTop');
+
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                goToTopButton.classList.add('visible');
+            } else {
+                goToTopButton.classList.remove('visible');
+            }
+        });
+
+        // Social sharing functionality
+        function shareOnLinkedIn() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareOnReddit() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const shareUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
+            window.open(shareUrl, '_blank');
+        }
+
+        function shareViaEmail() {
+            const url = window.location.href;
+            const title = document.title;
+            const subject = encodeURIComponent(`Check out this Blogs List: ${title}`);
+            const body = encodeURIComponent(`I thought you might be interested in this collection of blogs: ${url}`);
+            const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+            window.location.href = mailtoUrl;
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const tooltip = document.getElementById('copyTooltip');
+                tooltip.classList.add('show');
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // CSV loading and DataTable initialization
+        $(document).ready(function() {
+            const csvUrl = 'https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/BlogsList.csv';
+
+            // Fetch and parse CSV
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    console.log("CSV Data:", results.data); // Log the data to see the actual structure
+
+                    // Process the data
+                    const data = results.data.map(row => {
+                        // Get the URL value, checking for different possible column names
+                        const urlValue = row.url || row.URL || row.Url || row.link || row.Link || '';
+
+                        // Get the name value, checking for different possible column names
+                        const nameValue = row.name || row.Name || row.title || row.Title || '';
+
+                        // Get the category value, checking for different possible column names
+                        const categoryValue = row.category || row.Category || row.categories || row.Categories || row.type || row.Type || '';
+
+                        // Format the URL as a clickable link
+                        const url = urlValue ? `<a href="${urlValue}" target="_blank">${urlValue}</a>` : '';
+
+                        // Format the category as a badge
+                        const category = categoryValue ? `<span class="category-badge">${categoryValue}</span>` : '';
+
+                        return [
+                            nameValue,
+                            url,
+                            category
+                        ];
+                    });
+
+                    // Initialize DataTable
+                    $('#blogsTable').DataTable({
+                        data: data,
+                        columns: [
+                            { title: "Name" },
+                            { title: "URL" },
+                            { title: "Category" }
+                        ],
+                        paging: true,
+                        select: true,
+                        rowReorder: true,
+                        colReorder: true,
+                        keys: true,
+                        autoFill: true,
+                        lengthChange: true,
+                        searching: true,
+                        ordering: true,
+                        info: true,
+                        lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                        ],
+                        pageLength: -1,
+                        autoWidth: true,
+                        responsive: true,
+                        dom: 'Blfrtip',
+                        buttons: [
+                            {
+                                extend: 'copy',
+                                text: 'Copy',
+                                className: 'btn-copy',
+                                titleAttr: 'Copy to clipboard'
+                            },
+                            {
+                                extend: 'csv',
+                                text: 'CSV',
+                                className: 'btn-csv',
+                                titleAttr: 'Export as CSV'
+                            },
+                            {
+                                extend: 'excel',
+                                text: 'Excel',
+                                className: 'btn-excel',
+                                titleAttr: 'Export as Excel'
+                            }
+                        ],
+                        language: {
+                            search: "🔍 Search:",
+                            lengthMenu: "Show _MENU_ entries",
+                            info: "Showing _START_ to _END_ of _TOTAL_ entries"
+                        },
+                        initComplete: function() {
+                            // Hide preloader when table is ready
+                            preloader.classList.add('hidden');
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error loading CSV:', error);
+                    $('#blogsTable tbody').html('<tr><td colspan="3">Error loading data. Please try again later.</td></tr>');
+                    preloader.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
