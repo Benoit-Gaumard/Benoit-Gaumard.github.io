@@ -738,19 +738,12 @@
         <span class="logo-text">Microsoft blogs RSS feeds list</span>
     </a>
 
-    <!-- Theme toggle with 3 options -->
+    <!-- Theme toggle with single button -->
     <div class="theme-toggle">
         <div class="theme-toggle-group">
-            <button class="theme-toggle-button" id="systemTheme" aria-label="System theme">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-                <span class="theme-toggle-tooltip">System</span>
-            </button>
-            <button class="theme-toggle-button" id="lightTheme" aria-label="Light theme">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="theme-toggle-button active" id="themeToggle" aria-label="Toggle theme">
+                <!-- Icon will be set by JavaScript -->
+                <svg xmlns="http://www.w3.org/2000/svg" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle>
                     <line x1="12" y1="1" x2="12" y2="3"></line>
                     <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -761,13 +754,7 @@
                     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                 </svg>
-                <span class="theme-toggle-tooltip">Light</span>
-            </button>
-            <button class="theme-toggle-button" id="darkTheme" aria-label="Dark theme">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-                <span class="theme-toggle-tooltip">Dark</span>
+                <span class="theme-toggle-tooltip" id="themeTooltip">Dark Mode</span>
             </button>
         </div>
     </div>
@@ -775,7 +762,7 @@
 
 <main class="main-content">
 
-    <p class="subtitle">Microsoft provides a variety of blogs on <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community</a>, but keeping track of them all can be challenging. This page consolidates all Microsoft blogs and their latest activity (recently published articles) through their RSS feeds, providing a clear and streamlined overview.</a>
+    <p class="subtitle">Microsoft provides a variety of blogs on <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community</a>,but keeping track of them all can be challenging. This page consolidates all Microsoft blogs and their latest activity (recently published articles) through their RSS feeds, providing a clear and streamlined overview.</a>
     Source blogs list is available <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/ms-blogs-list.csv" target="_blank">here.</a>
     </p>
 
@@ -1124,7 +1111,7 @@
             // Updated DataTable configuration for buttons and length menu
             dom: 'Blfrtip', // Added 'l' for length menu
             buttons: [
-                'copy', 'csv', 'excel', 'colvis'
+                'copy','csv', 'excel', 'colvis'
             ],
             lengthMenu: [
                 [10, 25, 50, -1],
@@ -1231,35 +1218,69 @@
     }
 
     // Theme handling
-    function setTheme(theme) {
-        const systemThemeBtn = document.getElementById('systemTheme');
-        const lightThemeBtn = document.getElementById('lightTheme');
-        const darkThemeBtn = document.getElementById('darkTheme');
+    function toggleTheme() {
+        const themeIcon = document.getElementById('themeIcon');
+        const themeTooltip = document.getElementById('themeTooltip');
 
-        // Remove active class from all buttons
-        systemThemeBtn.classList.remove('active');
-        lightThemeBtn.classList.remove('active');
-        darkThemeBtn.classList.remove('active');
-
-        if (theme === 'system') {
-            systemThemeBtn.classList.add('active');
-
-            // Check system preference
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.body.setAttribute('data-theme', 'dark');
-            } else {
-                document.body.removeAttribute('data-theme');
-            }
-
-            localStorage.setItem('theme', 'system');
-        } else if (theme === 'dark') {
-            darkThemeBtn.classList.add('active');
-            document.body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            lightThemeBtn.classList.add('active');
+        if (document.body.hasAttribute('data-theme')) {
+            // Currently dark, switch to light
             document.body.removeAttribute('data-theme');
             localStorage.setItem('theme', 'light');
+
+            // Change to sun icon
+            themeIcon.innerHTML = `
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            `;
+            themeTooltip.textContent = 'Dark Mode';
+        } else {
+            // Currently light, switch to dark
+            document.body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+
+            // Change to moon icon
+            themeIcon.innerHTML = `
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            `;
+            themeTooltip.textContent = 'Light Mode';
+        }
+    }
+
+    // Initialize theme from localStorage
+    function initTheme() {
+        const themeIcon = document.getElementById('themeIcon');
+        const themeTooltip = document.getElementById('themeTooltip');
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            // Set moon icon
+            themeIcon.innerHTML = `
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            `;
+            themeTooltip.textContent = 'Light Mode';
+        } else {
+            document.body.removeAttribute('data-theme');
+            // Set sun icon
+            themeIcon.innerHTML = `
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            `;
+            themeTooltip.textContent = 'Dark Mode';
         }
     }
 
@@ -1326,26 +1347,14 @@
         loadData();
 
         // Set up theme toggle
-        document.getElementById('systemTheme').addEventListener('click', () => setTheme('system'));
-        document.getElementById('lightTheme').addEventListener('click', () => setTheme('light'));
-        document.getElementById('darkTheme').addEventListener('click', () => setTheme('dark'));
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-        // Initialize theme from localStorage or default to system
-        const savedTheme = localStorage.getItem('theme') || 'system';
-        setTheme(savedTheme);
+        // Initialize theme
+        initTheme();
 
         // Set up go to top button
         document.getElementById('goToTop').addEventListener('click', scrollToTop);
         window.addEventListener('scroll', handleScroll);
-
-        // Check for system theme changes
-        if (window.matchMedia) {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-                if (localStorage.getItem('theme') === 'system') {
-                    setTheme('system');
-                }
-            });
-        }
 
         // Add mobile detection
         function checkMobileView() {
