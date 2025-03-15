@@ -1,10 +1,11 @@
 +++
 author = "Benoit G"
 title = "Git basics"
-date = "2025-02-28"
+date = "2024-02-28"
 description = ""
 toc = true
 draft = false
+featured = true
 tags = ["Git", "Productivity"]
 categories = ["Git"]
 featureImage = "/images/git.svg" # Sets featured image on blog post.

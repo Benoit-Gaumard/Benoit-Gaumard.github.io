@@ -4,6 +4,7 @@ title = "GitHub contribution workflow"
 date = "2025-02-26"
 description = ""
 toc = true
+featured = true
 tags = ["GitHub", "Productivity"]
 categories = ["GitHub"]
 featureImage = "/images/github-color.svg" # Sets featured image on blog post.

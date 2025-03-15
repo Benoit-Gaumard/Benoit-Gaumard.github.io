@@ -1,7 +1,7 @@
 +++
 author = "Benoit G"
 title = "GitHub branch naming convention"
-date = "2025-02-26"
+date = "2024-02-26"
 description = ""
 toc = true
 tags = ["GitHub", "Productivity"]
