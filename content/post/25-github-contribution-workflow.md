@@ -1,6 +1,6 @@
 +++
 author = "Benoit G"
-title = "GitHub contribution workflow"
+title = "✨ GitHub contribution workflow"
 date = "2025-02-26"
 description = ""
 toc = true

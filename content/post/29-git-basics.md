@@ -1,6 +1,6 @@
 +++
 author = "Benoit G"
-title = "Git basics"
+title = "✨ Git basics"
 date = "2024-02-28"
 description = ""
 toc = true
