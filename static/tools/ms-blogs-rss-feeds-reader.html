@@ -819,19 +819,12 @@
             </div>
         </div>
 
-        <!-- Theme toggle with 3 options -->
+        <!-- Theme toggle with single button -->
         <div class="theme-toggle">
             <div class="theme-toggle-group">
-                <button class="theme-toggle-button" id="systemTheme" aria-label="System theme">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                    <span class="theme-toggle-tooltip">System</span>
-                </button>
-                <button class="theme-toggle-button" id="lightTheme" aria-label="Light theme">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button class="theme-toggle-button active" id="themeToggle" aria-label="Toggle theme">
+                    <!-- Icon will be set by JavaScript -->
+                    <svg xmlns="http://www.w3.org/2000/svg" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -842,13 +835,7 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                    <span class="theme-toggle-tooltip">Light</span>
-                </button>
-                <button class="theme-toggle-button" id="darkTheme" aria-label="Dark theme">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <span class="theme-toggle-tooltip">Dark</span>
+                    <span class="theme-toggle-tooltip" id="themeTooltip">Dark Mode</span>
                 </button>
             </div>
         </div>
@@ -879,6 +866,7 @@
                     </svg>
                 </button>
                 <button class="social-button reddit" aria-label="Share on Reddit" onclick="shareOnReddit()">
+                    <svg xmlns="http://  aria-label="Share on Reddit" onclick="shareOnReddit()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M8.5 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path>
@@ -978,67 +966,72 @@
         const preloader = document.getElementById('preloader');
 
         // Theme toggle functionality
-        const systemThemeBtn = document.getElementById('systemTheme');
-        const lightThemeBtn = document.getElementById('lightTheme');
-        const darkThemeBtn = document.getElementById('darkTheme');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeTooltip = document.getElementById('themeTooltip');
         const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
-        // Function to set active theme button
-        function setActiveThemeButton(themeMode) {
-            // Remove active class from all buttons
-            systemThemeBtn.classList.remove('active');
-            lightThemeBtn.classList.remove('active');
-            darkThemeBtn.classList.remove('active');
+        // Function to toggle theme
+        function toggleTheme() {
+            if (document.documentElement.hasAttribute('data-theme')) {
+                // Currently dark, switch to light
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
 
-            // Add active class to selected button
-            if (themeMode === 'system') {
-                systemThemeBtn.classList.add('active');
-            } else if (themeMode === 'light') {
-                lightThemeBtn.classList.add('active');
-            } else if (themeMode === 'dark') {
-                darkThemeBtn.classList.add('active');
+                // Change to sun icon
+                themeIcon.innerHTML = `
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                `;
+                themeTooltip.textContent = 'Dark Mode';
+            } else {
+                // Currently light, switch to dark
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+
+                // Change to moon icon
+                themeIcon.innerHTML = `
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                `;
+                themeTooltip.textContent = 'Light Mode';
             }
         }
 
-        // Function to apply theme
-        function applyTheme(themeMode) {
-            if (themeMode === 'system') {
-                // Use system preference
-                if (prefersDarkScheme.matches) {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                } else {
-                    document.documentElement.removeAttribute('data-theme');
-                }
-            } else if (themeMode === 'dark') {
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
+                // Set moon icon
+                themeIcon.innerHTML = `
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                `;
+                themeTooltip.textContent = 'Light Mode';
             } else {
                 document.documentElement.removeAttribute('data-theme');
+                // Set sun icon
+                themeIcon.innerHTML = `
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                `;
+                themeTooltip.textContent = 'Dark Mode';
             }
-
-            // Set active button
-            setActiveThemeButton(themeMode);
-
-            // Save preference
-            localStorage.setItem('themeMode', themeMode);
         }
-
-        // Check for saved theme preference or default to system
-        const savedThemeMode = localStorage.getItem('themeMode') || 'system';
-
-        // Apply initial theme
-        applyTheme(savedThemeMode);
-
-        // Add event listeners to theme buttons
-        systemThemeBtn.addEventListener('click', () => applyTheme('system'));
-        lightThemeBtn.addEventListener('click', () => applyTheme('light'));
-        darkThemeBtn.addEventListener('click', () => applyTheme('dark'));
-
-        // Listen for system preference changes when in system mode
-        prefersDarkScheme.addEventListener('change', (e) => {
-            if (localStorage.getItem('themeMode') === 'system') {
-                applyTheme('system');
-            }
-        });
 
         // Search toggle functionality
         const searchToggle = document.getElementById('searchToggle');
@@ -1266,14 +1259,10 @@
                     skipEmptyLines: true,
                     complete: function(results) {
                         feedSources = results.data.map(row => {
-                            // Get the URL value, checking for different possible column names
-                            const urlValue = row.url || row.URL || row.Url || row.link || row.Link || '';
-
-                            // Get the name value, checking for different possible column names
-                            const nameValue = row.name || row.Name || row.title || row.Title || '';
-
-                            // Get the category value, checking for different possible column names
-                            const categoryValue = row.category || row.Category || row.categories || row.Categories || row.type || row.Type || '';
+                            // Use the specific column names: "Name", "Category", "Feed"
+                            const nameValue = row.Name || '';
+                            const categoryValue = row.Category || '';
+                            const feedValue = row.Feed || '';
 
                             // Add to categories set if not empty
                             if (categoryValue) {
@@ -1287,7 +1276,7 @@
 
                             return {
                                 name: nameValue,
-                                url: urlValue,
+                                url: feedValue,
                                 category: categoryValue
                             };
                         });
@@ -1600,6 +1589,10 @@
         // Event listeners
         dayFilterDropdown.addEventListener('change', filterAndDisplayFeedItems);
         searchInput.addEventListener('input', filterAndDisplayFeedItems);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Initialize theme
+        initTheme();
 
         // Initial fetch
         fetchCSV();
