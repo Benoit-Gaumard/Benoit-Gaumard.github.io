@@ -344,6 +344,11 @@
         max-width: 180px;
     }
 
+    table.dataTable .days-column {
+        max-width: 80px;
+        text-align: center;
+    }
+
     /* Responsive adjustments for mobile */
     @media (max-width: 768px) {
         table.dataTable tbody td {
@@ -367,6 +372,10 @@
 
         table.dataTable .date-column {
             max-width: 120px;
+        }
+
+        table.dataTable .days-column {
+            max-width: 60px;
         }
 
         /* Adjust category badge for mobile */
@@ -765,7 +774,11 @@
 </header>
 
 <main class="main-content">
-    <p class="subtitle">A list of Microsoft blogs details sourced from <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community blogs</a> extracted <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/ms-blogs-list.csv" target="_blank">here.</a></p>
+
+    <p class="subtitle">Microsoft provides a variety of blogs on <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community</a>, but keeping track of them all can be challenging. This page consolidates all Microsoft blogs and their latest activity (recently published articles) through their RSS feeds, providing a clear and streamlined overview.</a>
+    Source blogs list is available <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/ms-blogs-list.csv" target="_blank">here.</a>
+    </p>
+
     <!-- Social sharing buttons -->
     <div class="social-share">
         <span class="social-share-label">Share:</span>
@@ -836,7 +849,8 @@
                     <th>Category</th>
                     <th>Feed</th>
                     <th>Link</th>
-                    <th>Last Item Date</th>
+                    <th>Last Date</th>
+                    <th>Last Day</th>
                 </tr>
             </thead>
             <tbody>
@@ -875,11 +889,6 @@
       alt="hit counter"
       referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
       <!-- End of Statcounter Code -->
-  </p>
-
-  <p>
-  <a href='https://www.free-counters.org/'>free HitCounter</a> <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=487cbe0cc1bffc76241045d668a70e784e0b4dff'></script>
-  <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1315461/t/1"></script>
   </p>
 
 </footer>
@@ -971,8 +980,8 @@
         }
     }
 
-    // Function to format date with days ago and indicator
-    function formatDateWithDaysAgo(date) {
+    // Function to format date with indicator
+    function formatDate(date) {
         if (!date) return 'N/A';
 
         const now = new Date();
@@ -999,7 +1008,10 @@
             day: 'numeric'
         });
 
-        return `<span class="${colorClass}" data-days="${diffDays}">${indicator}</span> ${formattedDate} <span class="days-ago">(${diffDays} days ago)</span>`;
+        return {
+            formattedDate: `<span class="${colorClass}" data-days="${diffDays}">${indicator}</span> ${formattedDate}`,
+            diffDays: diffDays
+        };
     }
 
     // Function to parse CSV data
@@ -1069,7 +1081,7 @@
                     }
                 },
                 {
-                    data: 'LastItemDate',
+                    data: 'LastDate',
                     className: 'date-column',
                     render: function(data, type, row) {
                         if (type === 'display') {
@@ -1083,10 +1095,32 @@
                         }
                         return data;
                     }
+                },
+                {
+                    data: 'LastDay',
+                    className: 'days-column',
+                    render: function(data, type, row) {
+                        if (type === 'display') {
+                            if (data === 'N/A') return data;
+
+                            let colorClass = '';
+                            if (data <= 7) {
+                                colorClass = 'recent';
+                            } else if (data <= 30) {
+                                colorClass = 'medium';
+                            } else {
+                                colorClass = 'old';
+                            }
+
+                            return `<span class="${colorClass}">${data} d ago</span>`;
+                        }
+                        // For sorting, use the numeric value
+                        return data === 'N/A' ? 9999 : parseInt(data, 10);
+                    }
                 }
             ],
-            // Set default order to Last Item Date column (ascending by days - most recent first)
-            order: [[4, 'asc']], // Order by Last Item Date with most recent first
+            // Set default order to Last Day column (ascending by days - most recent first)
+            order: [[5, 'asc']], // Order by Last Day with most recent first
             // Updated DataTable configuration for buttons and length menu
             dom: 'Blfrtip', // Added 'l' for length menu
             buttons: [
@@ -1099,7 +1133,7 @@
             pageLength: -1, // Show all entries by default
             responsive: true,
             language: {
-                search: "🔍 Filter:",
+                search: "🔍 Search:",
                 lengthMenu: "Show _MENU_ entries",
                 info: "Showing _START_ to _END_ of _TOTAL_ feeds",
                 infoEmpty: "Showing 0 to 0 of 0 feeds",
@@ -1143,12 +1177,17 @@
                     if (item.Feed) {
                         try {
                             const feedData = await fetchRSSFeed(item.Feed);
+
+                            // Format the date and get days ago
+                            const dateInfo = feedData.lastItemDate ? formatDate(feedData.lastItemDate) : { formattedDate: 'N/A', diffDays: 'N/A' };
+
                             return {
                                 Name: item.Name || '',
                                 Category: item.Category || '',
                                 Feed: item.Feed || '',
                                 Link: feedData.link || '',
-                                LastItemDate: feedData.lastItemDate ? formatDateWithDaysAgo(feedData.lastItemDate) : 'N/A'
+                                LastDate: dateInfo.formattedDate,
+                                LastDay: dateInfo.diffDays
                             };
                         } catch (error) {
                             console.error(`Error processing feed ${item.Feed}:`, error);
@@ -1157,7 +1196,8 @@
                                 Category: item.Category || '',
                                 Feed: item.Feed || '',
                                 Link: '',
-                                LastItemDate: 'N/A'
+                                LastDate: 'N/A',
+                                LastDay: 'N/A'
                             };
                         }
                     } else {
@@ -1166,7 +1206,8 @@
                             Category: item.Category || '',
                             Feed: '',
                             Link: '',
-                            LastItemDate: 'N/A'
+                            LastDate: 'N/A',
+                            LastDay: 'N/A'
                         };
                     }
                 });
@@ -1180,7 +1221,7 @@
             }
 
             // Restore table container and initialize DataTable
-            tableContainer.innerHTML = '<table id="feedsTable" class="display" style="width:100%"><thead><tr><th>Name</th><th>Category</th><th>Feed</th><th>Link</th><th>Last Item Date</th></tr></thead><tbody></tbody></table>';
+            tableContainer.innerHTML = '<table id="feedsTable" class="display" style="width:100%"><thead><tr><th>Name</th><th>Category</th><th>Feed</th><th>Link</th><th>Last Date</th><th>Last Day</th></tr></thead><tbody></tbody></table>';
             initializeDataTable(processedData);
         } catch (error) {
             console.error('Error loading data:', error);
