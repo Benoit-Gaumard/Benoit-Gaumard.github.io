@@ -298,6 +298,7 @@
     }
 
     table.dataTable tbody td {
+        font-size: 14px;
         padding: 8px;
         border-bottom: 1px solid var(--table-border);
         white-space: nowrap;
@@ -347,56 +348,6 @@
     table.dataTable .days-column {
         max-width: 80px;
         text-align: center;
-    }
-
-    /* Responsive adjustments for mobile */
-    @media (max-width: 768px) {
-        table.dataTable tbody td {
-            padding: 6px;
-            font-size: 14px;
-            max-width: 100px;
-        }
-
-        table.dataTable .name-column {
-            max-width: 120px;
-        }
-
-        table.dataTable .category-column {
-            max-width: 80px;
-        }
-
-        table.dataTable .feed-column,
-        table.dataTable .link-column {
-            max-width: 70px;
-        }
-
-        table.dataTable .date-column {
-            max-width: 120px;
-        }
-
-        table.dataTable .days-column {
-            max-width: 60px;
-        }
-
-        /* Adjust category badge for mobile */
-        .category-badge {
-            padding: 2px 6px;
-            font-size: 10px;
-        }
-
-        /* Adjust days ago display for mobile */
-        .days-ago {
-            font-size: 12px;
-        }
-    }
-
-    /* For very small screens */
-    @media (max-width: 480px) {
-        table.dataTable tbody td {
-            padding: 4px;
-            font-size: 12px;
-            max-width: 80px;
-        }
     }
 
     table.dataTable a {
@@ -594,11 +545,6 @@
             border-radius: 0;
         }
 
-        .theme-toggle {
-            margin-left: 0;
-            margin-top: 10px;
-            align-self: flex-end;
-        }
 
         .table-container {
             padding: 10px;
@@ -668,62 +614,6 @@
         font-size: 1.2em;
     }
 
-    /* Add these additional styles for mobile optimization */
-
-    /* Mobile-specific DataTable styling */
-    .mobile-view table.dataTable tbody td {
-        padding: 6px 4px;
-    }
-
-    .mobile-view .dataTables_length,
-    .mobile-view .dataTables_filter {
-        text-align: left;
-        float: none;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .mobile-view .dataTables_filter input {
-        width: 100%;
-        margin-left: 0;
-        box-sizing: border-box;
-    }
-
-    .mobile-view .dt-buttons {
-        text-align: center;
-        float: none;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-bottom: 15px;
-    }
-
-    .mobile-view .dt-button {
-        flex: 1;
-        padding: 8px 5px !important;
-        font-size: 12px !important;
-    }
-
-    /* Improve table container for mobile */
-    @media (max-width: 768px) {
-        .table-container {
-            padding: 10px 5px;
-            margin: 0 -10px; /* Negative margin to expand the container */
-            width: calc(100% + 20px);
-            border-radius: 0;
-        }
-
-        /* Make the table take full width on mobile */
-        .table-container table {
-            width: 100% !important;
-        }
-
-        /* Adjust the main content padding for mobile */
-        .main-content {
-            padding: 15px 10px;
-        }
-    }
 </style>
 </head>
 <body id="top">
@@ -835,7 +725,6 @@
                     <th>Name</th>
                     <th>Category</th>
                     <th>Feed</th>
-                    <th>Link</th>
                     <th>Last Date</th>
                     <th>Last Day</th>
                 </tr>
@@ -1027,97 +916,113 @@
         dataTable = $('#feedsTable').DataTable({
             data: data,
             columns: [
-                {
-                    data: 'Name',
-                    className: 'name-column',
-                    render: function(data, type, row) {
-                        if (type === 'display') {
-                            return `<span data-full-text="${data}">${data}</span>`;
-                        }
-                        return data;
+            {
+                data: 'Name',
+                className: 'name-column',
+                render: function(data, type, row) {
+                    if (type === 'display') {
+                        // Add the link to the Name column
+                        return row.Link ?
+                            `<a href="${row.Link}" target="_blank" data-full-text="${data}">${data}</a>` :
+                            `<span data-full-text="${data}">${data}</span>`;
                     }
-                },
-                {
-                    data: 'Category',
-                    className: 'category-column',
-                    render: function(data, type, row) {
-                        if (type === 'display') {
-                            return `<span class="category-badge" data-full-text="${data}">${data}</span>`;
-                        }
-                        return data;
-                    }
-                },
-                {
-                    data: 'Feed',
-                    className: 'feed-column',
-                    render: function(data, type, row) {
-                        if (type === 'display') {
-                            return data ? `<a href="${data}" target="_blank" data-full-text="${data}">RSS Feed</a>` : '';
-                        }
-                        return data;
-                    }
-                },
-                {
-                    data: 'Link',
-                    className: 'link-column',
-                    render: function(data, type, row) {
-                        if (type === 'display') {
-                            return data ? `<a href="${data}" target="_blank" data-full-text="${data}">Blog Link</a>` : '';
-                        }
-                        return data;
-                    }
-                },
-                {
-                    data: 'LastDate',
-                    className: 'date-column',
-                    render: function(data, type, row) {
-                        if (type === 'display') {
-                            return data;
-                        }
-                        // For sorting, extract the days ago value
-                        if (type === 'sort') {
-                            // Extract days for sorting - lower number (more recent) should be first
-                            const match = data.match(/data-days="(\d+)"/);
-                            return match ? parseInt(match[1], 10) : 9999; // Default to a high number for N/A
-                        }
-                        return data;
-                    }
-                },
-                {
-                    data: 'LastDay',
-                    className: 'days-column',
-                    render: function(data, type, row) {
-                        if (type === 'display') {
-                            if (data === 'N/A') return data;
-
-                            let colorClass = '';
-                            if (data <= 7) {
-                                colorClass = 'recent';
-                            } else if (data <= 30) {
-                                colorClass = 'medium';
-                            } else {
-                                colorClass = 'old';
-                            }
-
-                            return `<span class="${colorClass}">${data} d ago</span>`;
-                        }
-                        // For sorting, use the numeric value
-                        return data === 'N/A' ? 9999 : parseInt(data, 10);
-                    }
+                    return data;
                 }
-            ],
+            },
+            {
+                data: 'Category',
+                className: 'category-column',
+                render: function(data, type, row) {
+                    if (type === 'display') {
+                        return `<span class="category-badge" data-full-text="${data}">${data}</span>`;
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'Feed',
+                className: 'feed-column',
+                render: function(data, type, row) {
+                    if (type === 'display') {
+                        return data ? `<a href="${data}" target="_blank" data-full-text="${data}">RSS Feed</a>` : '';
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'LastDate',
+                className: 'date-column',
+                render: function(data, type, row) {
+                    if (type === 'display') {
+                        return data;
+                    }
+                    // For sorting, extract the days ago value
+                    if (type === 'sort') {
+                        // Extract days for sorting - lower number (more recent) should be first
+                        const match = data.match(/data-days="(\d+)"/);
+                        return match ? parseInt(match[1], 10) : 9999; // Default to a high number for N/A
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'LastDay',
+                className: 'days-column',
+                render: function(data, type, row) {
+                    if (type === 'display') {
+                        if (data === 'N/A') return data;
+
+                        let colorClass = '';
+                        if (data <= 7) {
+                            colorClass = 'recent';
+                        } else if (data <= 30) {
+                            colorClass = 'medium';
+                        } else {
+                            colorClass = 'old';
+                        }
+
+                        return `<span class="${colorClass}">${data} d ago</span>`;
+                    }
+                    // For sorting, use the numeric value
+                    return data === 'N/A' ? 9999 : parseInt(data, 10);
+                }
+            }
+        ],
             // Set default order to Last Day column (ascending by days - most recent first)
-            order: [[5, 'asc']], // Order by Last Day with most recent first
+            order: [[4, 'asc']], // Order by Last Day with most recent first
             // Updated DataTable configuration for buttons and length menu
             dom: 'Blfrtip', // Added 'l' for length menu
             buttons: [
-                'copy','csv', 'excel', 'colvis'
+                {
+                    extend: 'copy',
+                    text: 'Copy',
+                },
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Columns'
+                }
             ],
             lengthMenu: [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
             ],
             pageLength: -1, // Show all entries by default
+            paging: true,
+            select: true,
+            rowReorder: true,
+            colReorder: true,
+            keys: true,
+            autoFill: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: true,
             responsive: true,
             // Custom language settings
             language: {
@@ -1128,10 +1033,6 @@
                 infoFiltered: "(filtered from _MAX_ total feeds)"
             },
             initComplete: function() {
-                // Check if mobile view
-                if (window.innerWidth <= 768) {
-                    $('.dataTables_wrapper').addClass('mobile-view');
-                }
 
                 // Hide preloader
                 document.getElementById('preloader').classList.add('hidden');
@@ -1209,7 +1110,7 @@
             }
 
             // Restore table container and initialize DataTable
-            tableContainer.innerHTML = '<table id="feedsTable" class="display" style="width:100%"><thead><tr><th>Name</th><th>Category</th><th>Feed</th><th>Link</th><th>Last Date</th><th>Last Day</th></tr></thead><tbody></tbody></table>';
+            tableContainer.innerHTML = '<table id="feedsTable" class="display" style="width:100%"><thead><tr><th>Name</th><th>Category</th><th>Feed</th><th>Last Date</th><th>Last Day</th></tr></thead><tbody></tbody></table>';
             initializeDataTable(processedData);
         } catch (error) {
             console.error('Error loading data:', error);
@@ -1357,24 +1258,6 @@
         document.getElementById('goToTop').addEventListener('click', scrollToTop);
         window.addEventListener('scroll', handleScroll);
 
-        // Add mobile detection
-        function checkMobileView() {
-            if (window.innerWidth <= 768) {
-                document.body.classList.add('mobile-view');
-                if (dataTable) {
-                    $('.dataTables_wrapper').addClass('mobile-view');
-                }
-            } else {
-                document.body.classList.remove('mobile-view');
-                if (dataTable) {
-                    $('.dataTables_wrapper').removeClass('mobile-view');
-                }
-            }
-        }
-
-        // Check on load and resize
-        checkMobileView();
-        window.addEventListener('resize', checkMobileView);
     });
 </script>
 </body>

@@ -293,8 +293,9 @@
         .theme-toggle {
             display: flex;
             align-items: center;
-            margin-left: 10px;
+            /*margin-left: 10px;*/
         }
+
 
         .theme-toggle-group {
             display: flex;
@@ -631,7 +632,7 @@
             border-radius: 8px;
             padding: 10px;
             display: flex;
-            gap: 15px;
+            gap: 5px;
             box-shadow: 0 2px 4px var(--shadow-color);
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
@@ -645,7 +646,7 @@
 
         .feed-item-indicator {
             flex-shrink: 0;
-            font-size: 20px;
+            font-size: 18px;
             line-height: 1;
         }
 
@@ -654,7 +655,7 @@
         }
 
         .feed-item-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             /*margin-bottom: 8px;*/
             color: var(--text-color);
@@ -663,6 +664,7 @@
         }
 
         .feed-item-title a {
+            font-size: 14px;
             color: var(--azure-blue);
             text-decoration: none;
         }
@@ -678,7 +680,7 @@
         }
 
         .feed-item-description {
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-gray);
             line-height: 1.5;
             max-height: 0;
@@ -693,7 +695,7 @@
         }
 
         .feed-item-toggle {
-            position: absolute;
+            /*position: absolute;*/
             right: 15px;
             top: 15px;
             width: 24px;
@@ -847,12 +849,6 @@
                 width: calc(100% - 50px);
             }
 
-            .theme-toggle {
-                margin-left: 0;
-                margin-top: 10px;
-                align-self: flex-end;
-            }
-
             .meta-info {
                 flex-direction: column;
                 gap: 10px;
@@ -903,7 +899,14 @@
             <img src="/images/aru-logo.png" alt="Azure Logo" width="40" height="40">
             <span class="logo-text">Azure Release Updates</span>
         </a>
+
+
+
+
         <div class="search-container">
+
+
+
 
 
             <select class="filter-dropdown" id="dayFilter">
@@ -945,20 +948,23 @@
                 </button>
                 <input type="text" class="search-input" id="searchInput" placeholder="Search updates">
             </div>
+
+            <!-- Theme toggle with single button -->
+            <div class="theme-toggle">
+                <div class="theme-toggle-group">
+                    <button class="theme-toggle-button active" id="themeToggle" aria-label="Toggle theme">
+                        <!-- Icon will be set by JavaScript -->
+                        <svg xmlns="http://www.w3.org/2000/svg" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Icon path will be set by JavaScript -->
+                        </svg>
+                        <span class="theme-toggle-tooltip" id="themeTooltip">Dark Mode</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Theme toggle with single button -->
-        <div class="theme-toggle">
-            <div class="theme-toggle-group">
-                <button class="theme-toggle-button active" id="themeToggle" aria-label="Toggle theme">
-                    <!-- Icon will be set by JavaScript -->
-                    <svg xmlns="http://www.w3.org/2000/svg" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <!-- Icon path will be set by JavaScript -->
-                    </svg>
-                    <span class="theme-toggle-tooltip" id="themeTooltip">Dark Mode</span>
-                </button>
-            </div>
-        </div>
+
     </header>
 
     <main class="main-content">
