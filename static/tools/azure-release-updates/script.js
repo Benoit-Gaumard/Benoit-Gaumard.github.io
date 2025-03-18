@@ -1,5 +1,5 @@
 // Your RSS2JSON API key
-const RSS2JSON_API_KEY = "yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz"
+const RSS2JSON_API_KEY = "yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz" // Public Key restricted to this domain ;)
 
 // Original feed URL
 const originalFeedUrl = 'https://www.microsoft.com/releasecommunications/api/v2/azure/rss';
