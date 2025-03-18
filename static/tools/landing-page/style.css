@@ -1,0 +1,606 @@
+/* ===== CSS VARIABLES =====
+ * CSS custom properties (variables) for consistent theming across the application.
+ * Using CSS variables allows for easy theme switching and maintenance.
+ * The light theme is defined in :root and serves as the default.
+ * Colors follow Microsoft's design system with Azure blue as the primary color.
+ */
+/* Light theme variables */
+:root {
+    --azure-blue: #0078d4; /* Microsoft's primary blue color */
+    --azure-dark-blue: #0063b1; /* Darker shade for hover states and gradients */
+    --azure-light-blue: #50b0f9; /* Lighter shade for gradients and accents */
+    --text-gray: #666666; /* Secondary text color */
+    --background-blue: #eef3f8; /* Light blue background for the page */
+    --card-bg: #ffffff; /* White background for cards and containers */
+    --text-color: #333333; /* Primary text color */
+    --border-color: #dddddd; /* Light gray for borders */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    --footer-bg: #ffffff; /* White background for footer */
+    --filter-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent background for filters */
+    --filter-border: rgba(255, 255, 255, 0.3); /* Semi-transparent border for filters */
+    --linkedin-blue: #0077b5; /* LinkedIn brand color */
+    --twitter-blue: #1da1f2; /* Twitter brand color */
+    --facebook-blue: #1877f2; /* Facebook brand color */
+    --reddit-orange: #ff4500; /* Reddit brand color */
+    --button-bg: #f8f9fa; /* Light gray background for buttons */
+    --button-hover: #e9ecef; /* Slightly darker gray for button hover */
+  }
+
+  /* Dark theme variables
+   * These variables override the light theme when the [data-theme="dark"] attribute is applied to the body.
+   * The dark theme uses deeper blues and grays for a comfortable night-time viewing experience.
+   */
+  [data-theme="dark"] {
+    --background-blue: #1a1a2e; /* Deep blue background for dark mode */
+    --card-bg: #2a2a3e; /* Darker blue for cards and containers */
+    --text-color: #e0e0e0; /* Light gray for primary text */
+    --text-gray: #a0a0a0; /* Medium gray for secondary text */
+    --border-color: #444444; /* Medium gray for borders */
+    --shadow-color: rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+    --footer-bg: #2a2a3e; /* Darker blue for footer */
+    --filter-bg: rgba(42, 42, 62, 0.9); /* Semi-transparent dark blue for filters */
+    --filter-border: rgba(68, 68, 68, 0.5); /* Semi-transparent border for filters */
+    --button-bg: #3a3a50; /* Dark blue for buttons */
+    --button-hover: #4a4a60; /* Slightly lighter blue for button hover */
+  }
+
+  /* ===== GLOBAL STYLES =====
+   * Base styles that apply to all elements in the document.
+   * These styles establish the foundation for the entire application.
+   * The box-sizing property ensures padding doesn't affect element width calculations.
+   * Smooth transitions are applied for theme switching to prevent jarring visual changes.
+   */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  html {
+    scroll-behavior: smooth; /* Enables smooth scrolling for anchor links and JavaScript scrolling */
+  }
+
+  body {
+    background-color: var(--background-blue);
+    min-height: 100vh; /* Ensures the body fills at least the entire viewport height */
+    display: flex;
+    flex-direction: column; /* Allows footer to stick to bottom with flex-grow on main content */
+    color: var(--text-color);
+    width: 100%;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+  }
+
+  /* ===== HEADER STYLES =====
+   * Styles for the top navigation bar/header of the application.
+   * The header uses a gradient background with the Microsoft Azure blue colors.
+   * It includes the logo, title, and theme toggle button.
+   * The rounded bottom corners and shadow give it a modern, elevated appearance.
+   */
+  .header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
+    border-radius: 0 0 8px 8px; /* Rounded corners only at the bottom */
+    box-shadow: 0 2px 10px var(--shadow-color);
+    width: 100%;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-text {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for better readability on the gradient */
+  }
+
+  /* ===== THEME TOGGLE STYLES =====
+   * Controls for switching between light and dark modes.
+   * The toggle is designed as a circular button with icon that changes based on the current theme.
+   * Includes a tooltip that appears on hover to indicate the button's function.
+   * The semi-transparent background helps it blend with the header while remaining visible.
+   */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .theme-toggle-group {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white for a subtle background */
+    border-radius: 30px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border for depth */
+  }
+
+  .theme-toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%; /* Circular button */
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: white;
+    transition: background-color 0.3s;
+    position: relative; /* For positioning the tooltip */
+  }
+
+  .theme-toggle-button.active {
+    background-color: rgba(0, 0, 0, 0.2); /* Darker background when active */
+  }
+
+  .theme-toggle-button:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1); /* Lighter background on hover when not active */
+  }
+
+  .theme-toggle-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .theme-toggle-tooltip {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%); /* Center the tooltip horizontally */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 10;
+  }
+
+  .theme-toggle-button:hover .theme-toggle-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ===== MAIN CONTENT STYLES =====
+   * Styles for the main content area of the page.
+   * Uses a max-width to ensure readability on larger screens.
+   * The flex: 1 property ensures the main content expands to fill available space,
+   * pushing the footer to the bottom of the page.
+   */
+  .main-content {
+    width: 100%;
+    max-width: 1200px; /* Limits width on larger screens for better readability */
+    margin: 0 auto; /* Centers the content horizontally */
+    padding: 15px;
+    flex: 1; /* Allows the main content to expand and push footer to bottom */
+    box-sizing: border-box;
+  }
+
+  .subtitle {
+    color: var(--text-gray);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  /* ===== HERO SECTION STYLES =====
+   * Styles for the hero section at the top of the landing page.
+   * Features a large heading and subtitle to introduce the page.
+   */
+  .hero-section {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+  }
+
+  .hero-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--azure-blue);
+  }
+
+  /* ===== SITES SHOWCASE STYLES =====
+   * Styles for the cards that showcase each site.
+   * Each card has an image, title, description, tags, and a button.
+   * Cards are arranged in a responsive grid that adapts to different screen sizes.
+   */
+  .sites-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .site-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .site-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+  }
+
+  .site-card-image {
+    height: 200px;
+    overflow: hidden;
+    background-color: var(--azure-light-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .site-card:hover .card-image {
+    transform: scale(1.05);
+  }
+
+  .site-card-content {
+    padding: 20px;
+  }
+
+  .site-card-content h2 {
+    margin-bottom: 10px;
+    color: var(--azure-blue);
+  }
+
+  .site-card-content p {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .site-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .tag {
+    background-color: var(--azure-light-blue);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  .site-card-button {
+    display: inline-block;
+    background-color: var(--azure-blue);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+
+  .site-card-button:hover {
+    background-color: var(--azure-dark-blue);
+  }
+
+  /* ===== ABOUT SECTION STYLES =====
+   * Styles for the about section that describes the tools.
+   * Includes a heading, paragraphs, and a list of features.
+   */
+  .about-section {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    margin-bottom: 30px;
+  }
+
+  .about-section h2 {
+    color: var(--azure-blue);
+    margin-bottom: 15px;
+  }
+
+  .about-section p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+
+  .features-list {
+    list-style-type: none;
+    padding-left: 10px;
+  }
+
+  .features-list li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .feature-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+
+  /* ===== SOCIAL SHARING STYLES =====
+   * Buttons for sharing the page on various social media platforms.
+   * Each button has the brand color of its respective platform.
+   * The buttons are designed as circles with icons for a clean, modern look.
+   * Includes hover effects that lift the buttons slightly for visual feedback.
+   */
+  .social-share {
+    display: flex;
+    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+    gap: 10px;
+    margin-bottom: 30px;
+    align-items: center;
+  }
+
+  .social-share-label {
+    color: var(--text-gray);
+    margin-right: 5px;
+  }
+
+  .social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%; /* Circular buttons */
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+
+  .social-button:hover {
+    transform: translateY(-2px); /* Slight lift effect on hover */
+    box-shadow: 0 4px 8px var(--shadow-color); /* Stronger shadow on hover */
+  }
+
+  .social-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Social button specific colors - each uses the official brand color */
+  .social-button.linkedin {
+    background-color: var(--linkedin-blue);
+    color: white;
+  }
+
+  .social-button.twitter {
+    background-color: var(--twitter-blue);
+    color: white;
+  }
+
+  .social-button.facebook {
+    background-color: var(--facebook-blue);
+    color: white;
+  }
+
+  .social-button.email {
+    background-color: var(--text-gray);
+    color: white;
+  }
+
+  .social-button.copy {
+    background-color: var(--azure-blue);
+    color: white;
+    position: relative;
+  }
+
+  /* Copy link tooltip - appears when the copy button is clicked */
+  .copy-tooltip {
+    position: absolute;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 100;
+    white-space: nowrap;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .copy-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ===== FOOTER STYLES =====
+   * Styles for the page footer.
+   * The footer contains copyright information, author details, and links.
+   * It has a subtle shadow at the top to create separation from the main content.
+   * The heart symbol is colored red for a touch of personality.
+   */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-gray);
+    font-size: 14px;
+    background-color: var(--footer-bg);
+    margin-top: 30px;
+    box-shadow: 0 -2px 10px var(--shadow-color); /* Shadow at the top */
+    width: 100%;
+  }
+
+  .footer .heart {
+    color: #e25555; /* Red heart symbol */
+  }
+
+  .footer a {
+    color: var(--azure-blue);
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  .footer p {
+    margin-bottom: 10px;
+  }
+
+  /* ===== GO TO TOP BUTTON =====
+   * A floating button that appears when the user scrolls down the page.
+   * Clicking the button smoothly scrolls the page back to the top.
+   * The button is hidden by default and becomes visible when scrolling down.
+   * Uses the Azure blue color to match the theme.
+   */
+  .go-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--azure-blue);
+    color: white;
+    border-radius: 50%; /* Circular button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+    z-index: 1000; /* Ensures it appears above other content */
+  }
+
+  .go-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .go-to-top:hover {
+    background: var(--azure-dark-blue); /* Darker blue on hover */
+  }
+
+  .go-to-top svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* ===== LOADING INDICATORS =====
+   * Styles for loading indicators that appear while data is being fetched.
+   * Includes both a text-based loading message and a spinner animation.
+   * The preloader covers the entire screen during initial load.
+   * The spinner uses a border animation to create a rotating effect.
+   */
+  /* Preloader overlay - covers the entire screen during initial load */
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensures it appears above all other content */
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  /* Adjust preloader background for dark theme */
+  [data-theme="dark"] .preloader {
+    background-color: rgba(26, 26, 46, 0.8); /* Semi-transparent dark blue */
+  }
+
+  .preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Spinner animation - creates a rotating circle */
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(0, 120, 212, 0.2); /* Light Azure blue */
+    border-radius: 50%;
+    border-top-color: var(--azure-blue); /* Solid Azure blue for the spinning part */
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ===== RESPONSIVE STYLES =====
+   * Media queries for different screen sizes to ensure the page looks good on all devices.
+   * Adjusts layout, font sizes, and spacing for smaller screens.
+   */
+  @media (max-width: 768px) {
+    /* Header adjustments */
+    .header {
+      flex-direction: column;
+      padding: 15px;
+    }
+
+    .logo {
+      margin-bottom: 10px;
+    }
+
+    /* Hero section adjustments */
+    .hero-section {
+      padding: 20px 10px;
+    }
+
+    .hero-section h1 {
+      font-size: 1.8rem;
+    }
+
+    /* Sites showcase adjustments */
+    .sites-showcase {
+      grid-template-columns: 1fr;
+    }
+
+    /* About section adjustments */
+    .about-section {
+      padding: 20px;
+    }
+
+    /* Go to top button adjustments */
+    .go-to-top {
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+

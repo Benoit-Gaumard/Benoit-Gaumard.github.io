@@ -73,11 +73,13 @@ Many organizations struggle with how they want their cloud home to look, often s
 
 - Define a naming convention before any deployment
 - Exemple of naming convention
+- Implement a naming policy to enforce the naming convention, ensuring consistency and preventing deviations or poor practices.
 
 ## Tagging
 ---
 
 - Main tags (Env, CreationDate, ...)
+- Implement a tagging policy to enforce the naming convention, ensuring consistency and preventing deviations or poor practices.
 
 ## Network
 ---

@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Open Graph / LinkedIn sharing meta tags -->
+    <meta property="og:title" content="Microsoft blogs RSS feeds reader">
+    <meta property="og:description" content="Stay updated on Microsoft blogs and their latest activity (recently published articles) through their RSS feeds.">
+    <meta property="og:image" content="https://benoit-gaumard.io/images/rss-reader.png">
+    <meta property="og:url" content="https://benoit-gaumard.io/tools/ms-blogs-rss-feeds-reader/index.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card meta tags (also used by some platforms) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Microsoft blogs RSS feeds reader">
+    <meta name="twitter:description" content="Stay updated on Microsoft blogs and their latest activity (recently published articles) through their RSS feeds.">
+    <meta name="twitter:image" content="https://benoit-gaumard.io/images/rss-reader.png">
+
+    <title>Microsoft blogs RSS feeds reader</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/rss-feeds-reader-favicon-32x32.png">
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body id="top">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+
+        <!-- Logo -->
+        <a href="#" class="logo">
+            <img src="/images/rss-reader.png" alt="Reader Logo" width="40" height="40">
+            <span class="logo-text">Microsoft blogs RSS feeds reader</span>
+        </a>
+
+        <!-- Search -->
+        <div class="search-container">
+
+            <!-- Last Days -->
+            <select class="filter-dropdown" id="dayFilter">
+                <option value="1" selected>Last 1 day</option>
+                <option value="2">Last 2 days</option>
+                <option value="3">Last 3 days</option>
+                <option value="5">Last 5 days</option>
+                <option value="7">Last 7 days</option>
+                <option value="15">Last 15 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="60">Last 60 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="180">Last 180 days</option>
+                <option value="all">All updates</option>
+            </select>
+
+            <!-- Categories -->
+            <div class="multiselect" id="categoryMultiselect">
+                <button class="multiselect-toggle">
+                    <span>Categories</span>
+                    <span class="multiselect-selected-count" style="display: none;">0</span>
+                </button>
+                <div class="multiselect-dropdown">
+                    <div class="multiselect-actions">
+                        <button id="selectAllCategories">Select All</button>
+                        <button id="clearAllCategories">Clear All</button>
+                    </div>
+                    <div class="multiselect-options">
+                        <!-- Categories will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Source filter dropdown -->
+            <div class="multiselect" id="sourceMultiselect">
+                <button class="multiselect-toggle">
+                    <span>Sources</span>
+                    <span class="multiselect-selected-count" style="display: none;">0</span>
+                </button>
+                <div class="multiselect-dropdown">
+                    <div class="multiselect-actions">
+                        <button id="selectAllSources">Select All</button>
+                        <button id="clearAllSources">Clear All</button>
+                    </div>
+                    <div class="multiselect-options">
+                        <!-- Sources will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible search input -->
+            <div class="search-wrapper">
+                <button class="search-toggle" id="searchToggle" aria-label="Toggle search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search updates">
+            </div>
+
+        <!-- Theme toggle with single button -->
+        <div class="theme-toggle">
+            <div class="theme-toggle-group">
+                <button class="theme-toggle-button active" id="themeToggle" aria-label="Toggle theme">
+                    <!-- Icon will be set by JavaScript -->
+                    <svg xmlns="http://www.w3.org/2000/svg" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="theme-toggle-tooltip" id="themeTooltip">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+
+        </div>
+
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+        <p class="subtitle">Microsoft provides a variety of blogs on <a href="https://techcommunity.microsoft.com/Blogs" target="_blank">Tech Community</a> but keeping track of them all can be challenging. This page consolidates all Microsoft blogs and their latest published articles through their RSS feeds, providing a clear and streamlined overview.</a>
+            Source blogs list is available <a href="https://raw.githubusercontent.com/Benoit-Gaumard/Benoit-Gaumard.github.io/refs/heads/main/static/tools/ms-blogs-list.json" target="_blank">here.</a> This page also offers the best way to stay up to date with the latest announcements.
+        </p>
+
+
+        <!-- Social sharing buttons -->
+        <div class="social-share">
+            <span class="social-share-label">Share:</span>
+            <div class="social-share-buttons">
+                <button class="social-button linkedin" aria-label="Share on LinkedIn" onclick="shareOnLinkedIn()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </button>
+                <button class="social-button twitter" aria-label="Share on Twitter" onclick="shareOnTwitter()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button facebook" aria-label="Share on Facebook" onclick="shareOnFacebook()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button reddit" aria-label="Share on Reddit" onclick="shareOnReddit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8.5 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path>
+                        <path d="M7 13.5c.5 1.5 2.5 2.5 5 2.5s4.5-1 5-2.5"></path>
+                        <path d="M17 7c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.6-1.1-.2-2.3-.2-3.4-.1l-.8-2.5 2.5.5c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.5 0-1 .3-1.3.7l-3-.6-1 3c-1.1 0-2.3.1-3.4.4-.4-.4-.9-.6-1.4-.6-1.1 0-2 .9-2 2 0 .8.5 1.5 1.2 1.8-.1.5-.1 1.1 0 1.6C4.5 15.2 8 17 12 17s7.5-1.8 9.8-4.6c.1-.5.1-1.1.1-1.6.6-.3 1.1-1 1.1-1.8z"></path>
+                    </svg>
+                </button>
+                <button class="social-button email" aria-label="Share via Email" onclick="shareViaEmail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </button>
+                <div style="position: relative;">
+                    <button class="social-button copy" aria-label="Copy Link" onclick="copyLink()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                    <div class="copy-tooltip" id="copyTooltip">Link copied!</div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Feed legend -->
+    <div class="feed-legend" id="feed-legend">
+        <div class="legend-item">
+            <span class="recent">●</span>
+            <span>Recent (< 7 days)</span>
+        </div>
+        <div class="legend-item">
+            <span class="medium">●</span>
+            <span>Medium (7-30 days)</span>
+        </div>
+        <div class="legend-item">
+            <span class="old">●</span>
+            <span>Old (> 30 days)</span>
+        </div>
+    </div>
+
+        <!-- Feed count -->
+        <div class="meta-info">
+            <span id="feedCount"><strong>Loading feed items...</strong></span>
+        </div>
+
+        <!-- Load page -->
+        <div id="feedItems" class="feed-items">
+            <div class="loading">Loading RSS feeds...</div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 - Built with <span class="heart">❤️</span> - All Rights Reserved</p>
+        <p>By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a>
+        - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
+        </p>
+        <p>
+        If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
+        </p>
+    </footer>
+
+    <!-- Go to top -->
+    <a href="#top" class="go-to-top" id="goToTop" aria-label="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </a>
+
+    <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- PapaParse for CSV parsing (no longer needed but keeping for compatibility) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="./script.js"></script>
+</body>
+</html>

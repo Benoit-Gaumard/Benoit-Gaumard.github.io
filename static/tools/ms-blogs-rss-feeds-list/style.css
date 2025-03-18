@@ -6,792 +6,792 @@
  */
 /* Light theme variables */
 :root {
-    --azure-blue: #0078d4; /* Microsoft's primary blue color */
-    --azure-dark-blue: #0063b1; /* Darker shade for hover states and gradients */
-    --azure-light-blue: #50b0f9; /* Lighter shade for gradients and accents */
-    --text-gray: #666666; /* Secondary text color */
-    --background-blue: #eef3f8; /* Light blue background for the page */
-    --card-bg: #ffffff; /* White background for cards and containers */
-    --text-color: #333333; /* Primary text color */
-    --border-color: #dddddd; /* Light gray for borders */
-    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    --footer-bg: #ffffff; /* White background for footer */
-    --filter-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent background for filters */
-    --filter-border: rgba(255, 255, 255, 0.3); /* Semi-transparent border for filters */
-    --table-header-bg: #f8f9fa; /* Light gray background for table headers */
-    --table-row-hover: #f5f5f5; /* Light gray for table row hover */
-    --table-border: #dee2e6; /* Light gray for table borders */
-    --linkedin-blue: #0077b5; /* LinkedIn brand color */
-    --twitter-blue: #1da1f2; /* Twitter brand color */
-    --facebook-blue: #1877f2; /* Facebook brand color */
-    --reddit-orange: #ff4500; /* Reddit brand color */
-    --button-bg: #f8f9fa; /* Light gray background for buttons */
-    --button-hover: #e9ecef; /* Slightly darker gray for button hover */
-  }
+  --azure-blue: #0078d4; /* Microsoft's primary blue color */
+  --azure-dark-blue: #0063b1; /* Darker shade for hover states and gradients */
+  --azure-light-blue: #50b0f9; /* Lighter shade for gradients and accents */
+  --text-gray: #666666; /* Secondary text color */
+  --background-blue: #eef3f8; /* Light blue background for the page */
+  --card-bg: #ffffff; /* White background for cards and containers */
+  --text-color: #333333; /* Primary text color */
+  --border-color: #dddddd; /* Light gray for borders */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  --footer-bg: #ffffff; /* White background for footer */
+  --filter-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent background for filters */
+  --filter-border: rgba(255, 255, 255, 0.3); /* Semi-transparent border for filters */
+  --table-header-bg: #f8f9fa; /* Light gray background for table headers */
+  --table-row-hover: #f5f5f5; /* Light gray for table row hover */
+  --table-border: #dee2e6; /* Light gray for table borders */
+  --linkedin-blue: #0077b5; /* LinkedIn brand color */
+  --twitter-blue: #1da1f2; /* Twitter brand color */
+  --facebook-blue: #1877f2; /* Facebook brand color */
+  --reddit-orange: #ff4500; /* Reddit brand color */
+  --button-bg: #f8f9fa; /* Light gray background for buttons */
+  --button-hover: #e9ecef; /* Slightly darker gray for button hover */
+}
 
-  /* Dark theme variables
-   * These variables override the light theme when the [data-theme="dark"] attribute is applied to the body.
-   * The dark theme uses deeper blues and grays for a comfortable night-time viewing experience.
-   */
-  [data-theme="dark"] {
-    --background-blue: #1a1a2e; /* Deep blue background for dark mode */
-    --card-bg: #2a2a3e; /* Darker blue for cards and containers */
-    --text-color: #e0e0e0; /* Light gray for primary text */
-    --text-gray: #a0a0a0; /* Medium gray for secondary text */
-    --border-color: #444444; /* Medium gray for borders */
-    --shadow-color: rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
-    --footer-bg: #2a2a3e; /* Darker blue for footer */
-    --filter-bg: rgba(42, 42, 62, 0.9); /* Semi-transparent dark blue for filters */
-    --filter-border: rgba(68, 68, 68, 0.5); /* Semi-transparent border for filters */
-    --table-header-bg: #2c2c40; /* Dark blue for table headers */
-    --table-row-hover: #3a3a50; /* Slightly lighter blue for table row hover */
-    --table-border: #444444; /* Medium gray for table borders */
-    --button-bg: #3a3a50; /* Dark blue for buttons */
-    --button-hover: #4a4a60; /* Slightly lighter blue for button hover */
-  }
+/* Dark theme variables
+ * These variables override the light theme when the [data-theme="dark"] attribute is applied to the body.
+ * The dark theme uses deeper blues and grays for a comfortable night-time viewing experience.
+ */
+[data-theme="dark"] {
+  --background-blue: #1a1a2e; /* Deep blue background for dark mode */
+  --card-bg: #2a2a3e; /* Darker blue for cards and containers */
+  --text-color: #e0e0e0; /* Light gray for primary text */
+  --text-gray: #a0a0a0; /* Medium gray for secondary text */
+  --border-color: #444444; /* Medium gray for borders */
+  --shadow-color: rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+  --footer-bg: #2a2a3e; /* Darker blue for footer */
+  --filter-bg: rgba(42, 42, 62, 0.9); /* Semi-transparent dark blue for filters */
+  --filter-border: rgba(68, 68, 68, 0.5); /* Semi-transparent border for filters */
+  --table-header-bg: #2c2c40; /* Dark blue for table headers */
+  --table-row-hover: #3a3a50; /* Slightly lighter blue for table row hover */
+  --table-border: #444444; /* Medium gray for table borders */
+  --button-bg: #3a3a50; /* Dark blue for buttons */
+  --button-hover: #4a4a60; /* Slightly lighter blue for button hover */
+}
 
-  /* ===== GLOBAL STYLES =====
-   * Base styles that apply to all elements in the document.
-   * These styles establish the foundation for the entire application.
-   * The box-sizing property ensures padding doesn't affect element width calculations.
-   * Smooth transitions are applied for theme switching to prevent jarring visual changes.
-   */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
-  }
+/* ===== GLOBAL STYLES =====
+ * Base styles that apply to all elements in the document.
+ * These styles establish the foundation for the entire application.
+ * The box-sizing property ensures padding doesn't affect element width calculations.
+ * Smooth transitions are applied for theme switching to prevent jarring visual changes.
+ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
 
-  html {
-    scroll-behavior: smooth; /* Enables smooth scrolling for anchor links and JavaScript scrolling */
-  }
+html {
+  scroll-behavior: smooth; /* Enables smooth scrolling for anchor links and JavaScript scrolling */
+}
 
-  body {
-    background-color: var(--background-blue);
-    min-height: 100vh; /* Ensures the body fills at least the entire viewport height */
-    display: flex;
-    flex-direction: column; /* Allows footer to stick to bottom with flex-grow on main content */
-    color: var(--text-color);
-    width: 100%;
-    overflow-x: hidden; /* Prevents horizontal scrolling */
-  }
+body {
+  background-color: var(--background-blue);
+  min-height: 100vh; /* Ensures the body fills at least the entire viewport height */
+  display: flex;
+  flex-direction: column; /* Allows footer to stick to bottom with flex-grow on main content */
+  color: var(--text-color);
+  width: 100%;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+}
 
-  /* ===== HEADER STYLES =====
-   * Styles for the top navigation bar/header of the application.
-   * The header uses a gradient background with the Microsoft Azure blue colors.
-   * It includes the logo, title, and theme toggle button.
-   * The rounded bottom corners and shadow give it a modern, elevated appearance.
-   */
+/* ===== HEADER STYLES =====
+ * Styles for the top navigation bar/header of the application.
+ * The header uses a gradient background with the Microsoft Azure blue colors.
+ * It includes the logo, title, and theme toggle button.
+ * The rounded bottom corners and shadow give it a modern, elevated appearance.
+ */
+.header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
+  border-radius: 0 0 8px 8px; /* Rounded corners only at the bottom */
+  box-shadow: 0 2px 10px var(--shadow-color);
+  width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-text {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for better readability on the gradient */
+}
+
+/* ===== THEME TOGGLE STYLES =====
+ * Controls for switching between light and dark modes.
+ * The toggle is designed as a circular button with icon that changes based on the current theme.
+ * Includes a tooltip that appears on hover to indicate the button's function.
+ * The semi-transparent background helps it blend with the header while remaining visible.
+ */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-group {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white for a subtle background */
+  border-radius: 30px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border for depth */
+}
+
+.theme-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%; /* Circular button */
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: white;
+  transition: background-color 0.3s;
+  position: relative; /* For positioning the tooltip */
+}
+
+.theme-toggle-button.active {
+  background-color: rgba(0, 0, 0, 0.2); /* Darker background when active */
+}
+
+.theme-toggle-button:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.1); /* Lighter background on hover when not active */
+}
+
+.theme-toggle-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle-tooltip {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%); /* Center the tooltip horizontally */
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.theme-toggle-button:hover .theme-toggle-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== SOCIAL SHARING STYLES =====
+ * Buttons for sharing the page on various social media platforms.
+ * Each button has the brand color of its respective platform.
+ * The buttons are designed as circles with icons for a clean, modern look.
+ * Includes hover effects that lift the buttons slightly for visual feedback.
+ */
+.social-share {
+  display: flex;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.social-share-label {
+  color: var(--text-gray);
+  margin-right: 5px;
+}
+
+.social-share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%; /* Circular buttons */
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.social-button:hover {
+  transform: translateY(-2px); /* Slight lift effect on hover */
+  box-shadow: 0 4px 8px var(--shadow-color); /* Stronger shadow on hover */
+}
+
+.social-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Social button specific colors - each uses the official brand color */
+.social-button.linkedin {
+  background-color: var(--linkedin-blue);
+  color: white;
+}
+
+.social-button.twitter {
+  background-color: var(--twitter-blue);
+  color: white;
+}
+
+.social-button.facebook {
+  background-color: var(--facebook-blue);
+  color: white;
+}
+
+.social-button.reddit {
+  background-color: var(--reddit-orange);
+  color: white;
+}
+
+.social-button.email {
+  background-color: var(--text-gray);
+  color: white;
+}
+
+.social-button.copy {
+  background-color: var(--azure-blue);
+  color: white;
+}
+
+/* Copy link tooltip - appears when the copy button is clicked */
+.copy-tooltip {
+  position: absolute;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  z-index: 100;
+  white-space: nowrap;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.copy-tooltip.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== MAIN CONTENT STYLES =====
+ * Styles for the main content area of the page.
+ * Uses a max-width to ensure readability on larger screens.
+ * The flex: 1 property ensures the main content expands to fill available space,
+ * pushing the footer to the bottom of the page.
+ */
+.main-content {
+  width: 100%;
+  max-width: 1200px; /* Limits width on larger screens for better readability */
+  margin: 0 auto; /* Centers the content horizontally */
+  padding: 15px;
+  flex: 1; /* Allows the main content to expand and push footer to bottom */
+  box-sizing: border-box;
+}
+
+.subtitle {
+  color: var(--text-gray);
+  margin-bottom: 20px;
+}
+
+/* ===== DATATABLE STYLING =====
+ * Styles for the DataTables jQuery plugin that displays the RSS feeds.
+ * The table is contained in a card-like container with rounded corners and shadow.
+ * Includes styles for the table headers, cells, and various DataTables components.
+ * Cell content is truncated with ellipsis when it exceeds the maximum width.
+ */
+.dt-length {
+  margin-bottom: 15px;
+}
+
+.dt-search {
+  margin-bottom: 15px;
+}
+
+.table-container {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  margin-bottom: 20px;
+  overflow-x: auto; /* Enables horizontal scrolling for wide tables */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Table base styles - ensures consistent appearance */
+table.dataTable {
+  width: 100% !important;
+  border-collapse: collapse;
+  color: var(--text-color);
+  border: 1px solid var(--table-border);
+  table-layout: auto;
+}
+
+/* Table header styles - slightly different background for visual separation */
+table.dataTable thead th {
+  background-color: var(--table-header-bg);
+  color: var(--text-color);
+  border-bottom: 2px solid var(--table-border);
+  padding: 10px;
+}
+
+/* Table cell styles - includes text truncation with ellipsis */
+table.dataTable tbody td {
+  font-size: 14px;
+  padding: 8px;
+  border-bottom: 1px solid var(--table-border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adds ... when text overflows */
+  max-width: 150px;
+  position: relative; /* For tooltip positioning */
+}
+
+/* Tooltip for truncated content - shows full text on hover */
+table.dataTable tbody td:hover::after {
+  content: attr(data-full-text); /* Uses the data-full-text attribute as content */
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 5px 8px;
+  z-index: 100;
+  white-space: normal; /* Allows text to wrap in the tooltip */
+  max-width: 300px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  font-size: 14px;
+  pointer-events: none; /* Prevents the tooltip from interfering with mouse events */
+}
+
+/* Column specific widths - optimized for different content types */
+table.dataTable .name-column {
+  max-width: 200px; /* Wider for blog names */
+}
+
+table.dataTable .category-column {
+  max-width: 120px;
+}
+
+table.dataTable .feed-column,
+table.dataTable .link-column {
+  max-width: 100px;
+}
+
+table.dataTable .date-column {
+  max-width: 180px;
+}
+
+table.dataTable .days-column {
+  max-width: 80px;
+  text-align: center;
+}
+
+/* Table link styles - uses the Azure blue color for consistency */
+table.dataTable a {
+  color: var(--azure-blue);
+  text-decoration: none;
+}
+
+table.dataTable a:hover {
+  text-decoration: underline;
+}
+
+/* ===== DATATABLE CONTROLS STYLING =====
+ * Styles for the DataTables search, pagination, and length menu controls.
+ * These controls allow users to filter, page through, and adjust the number of visible rows.
+ * The styles are designed to match the overall theme of the application.
+ * Includes custom styling for the search input, length selector, and pagination buttons.
+ */
+/* Search input - styled to match the theme */
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 6px 10px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  margin-bottom: 15px;
+  width: 100%;
+  max-width: 250px;
+}
+
+/* Length selector - controls how many rows are displayed */
+.dataTables_wrapper .dataTables_length select {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 5px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+/* Info and pagination - shows current page info and navigation */
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+  margin-top: 15px;
+  color: var(--text-color);
+}
+
+/* Pagination buttons - styled to match the theme */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--card-bg);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: var(--azure-blue) !important;
+  color: white !important;
+  border: 1px solid var(--azure-blue);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: var(--table-row-hover) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color);
+}
+
+/* ===== DATATABLE BUTTONS STYLING =====
+ * Styles for the DataTables Buttons extension.
+ * These buttons allow users to export data in various formats (copy, Excel) and toggle column visibility.
+ * The buttons are styled to match the overall theme of the application.
+ * Includes hover and active states for better user feedback.
+ */
+.dt-buttons {
+  float: left;
+}
+
+.dt-button {
+  background-color: var(--button-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 4px !important;
+  padding: 6px 12px !important;
+  margin-right: 5px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px var(--shadow-color) !important;
+}
+
+.dt-button:hover {
+  background-color: var(--button-hover) !important;
+  box-shadow: 0 2px 5px var(--shadow-color) !important;
+}
+
+.dt-button:active {
+  box-shadow: inset 0 1px 3px var(--shadow-color) !important; /* Inset shadow for pressed effect */
+}
+
+/* ===== LOADING INDICATORS =====
+ * Styles for loading indicators that appear while data is being fetched.
+ * Includes both a text-based loading message and a spinner animation.
+ * The preloader covers the entire screen during initial load.
+ * The spinner uses a border animation to create a rotating effect.
+ */
+/* Text loading indicator - appears in the table container */
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: var(--text-gray);
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Preloader overlay - covers the entire screen during initial load */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensures it appears above all other content */
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+/* Adjust preloader background for dark theme */
+[data-theme="dark"] .preloader {
+  background-color: rgba(26, 26, 46, 0.8); /* Semi-transparent dark blue */
+}
+
+.preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Spinner animation - creates a rotating circle */
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(0, 120, 212, 0.2); /* Light Azure blue */
+  border-radius: 50%;
+  border-top-color: var(--azure-blue); /* Solid Azure blue for the spinning part */
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== FOOTER STYLES =====
+ * Styles for the page footer.
+ * The footer contains copyright information, author details, and links.
+ * It has a subtle shadow at the top to create separation from the main content.
+ * The heart symbol is colored red for a touch of personality.
+ */
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-gray);
+  font-size: 14px;
+  background-color: var(--footer-bg);
+  margin-top: 30px;
+  box-shadow: 0 -2px 10px var(--shadow-color); /* Shadow at the top */
+  width: 100%;
+}
+
+.footer .heart {
+  color: #e25555; /* Red heart symbol */
+}
+
+/* ===== GO TO TOP BUTTON =====
+ * A floating button that appears when the user scrolls down the page.
+ * Clicking the button smoothly scrolls the page back to the top.
+ * The button is hidden by default and becomes visible when scrolling down.
+ * Uses the Azure blue color to match the theme.
+ */
+.go-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: var(--azure-blue);
+  color: white;
+  border-radius: 50%; /* Circular button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+  z-index: 1000; /* Ensures it appears above other content */
+}
+
+.go-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.go-to-top:hover {
+  background: var(--azure-dark-blue); /* Darker blue on hover */
+}
+
+.go-to-top svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ===== CATEGORY AND FEED STYLING =====
+ * Styles for category badges and feed status indicators.
+ * Category badges are small, rounded labels that display the blog category.
+ * Feed status indicators use color coding to show how recently a blog was updated.
+ * The legend explains the color coding system to users.
+ */
+/* Category badge - small, rounded label for blog categories */
+.category-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  background-color: var(--azure-blue);
+  color: white;
+  margin-right: 5px;
+}
+
+/* Days ago display - shows how many days since the last update */
+.days-ago {
+  font-weight: bold;
+  margin-left: 5px;
+  color: var(--text-gray);
+}
+
+/* Time period color indicators - color coding for update recency */
+.recent {
+  color: #2ecc71; /* Green for recent updates (less than 7 days) */
+}
+
+.medium {
+  color: #3498db; /* Blue for medium updates (7-30 days) */
+}
+
+.old {
+  color: #e74c3c; /* Red for old updates (more than 30 days) */
+}
+
+/* Feed legend styles - explains the color coding system */
+.feed-legend {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-item span:first-child {
+  font-size: 1.2em; /* Larger dot for better visibility */
+}
+
+/* ===== RESPONSIVE DATATABLE STYLES =====
+ * Styles for the responsive features of DataTables.
+ * When the table is too wide for the screen, DataTables collapses rows into expandable sections.
+ * These styles ensure the responsive view is properly formatted and readable.
+ */
+.dtr-details {
+  width: 100%;
+}
+
+/* ===== MOBILE OPTIMIZATIONS =====
+ * Responsive styles for smaller screens (tablets and phones).
+ * These adjustments ensure the application is usable and looks good on mobile devices.
+ * Includes changes to layout, sizing, and positioning of various elements.
+ * The media query targets screens with a maximum width of 768px (typical tablet width).
+ */
+@media (max-width: 768px) {
+  /* Header adjustments - stack elements vertically */
   .header {
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
-    border-radius: 0 0 8px 8px; /* Rounded corners only at the bottom */
-    box-shadow: 0 2px 10px var(--shadow-color);
+    flex-direction: column;
+    border-radius: 0; /* Remove rounded corners on mobile */
+  }
+
+  /* Search container adjustments - full width for better usability */
+  .search-container {
+    flex-direction: column;
+  }
+
+  .search-wrapper {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .search-input.active {
+    width: calc(100% - 50px);
+  }
+
+  /* Meta info adjustments - stack elements vertically */
+  .meta-info {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  /* Feed legend adjustments - stack items vertically */
+  .feed-legend {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Multiselect adjustments - full width for better usability */
+  .multiselect {
     width: 100%;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
+  /* Go to top button adjustments - smaller and closer to edge */
+  .go-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
   }
 
-  .logo-text {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow for better readability on the gradient */
+  /* Table container adjustments - extend to edges for more space */
+  .table-container {
+    padding: 10px;
+    margin-left: -5px;
+    margin-right: -5px;
+    width: calc(100% + 10px);
+    border-radius: 0; /* Remove rounded corners on mobile */
   }
 
-  /* ===== THEME TOGGLE STYLES =====
-   * Controls for switching between light and dark modes.
-   * The toggle is designed as a circular button with icon that changes based on the current theme.
-   * Includes a tooltip that appears on hover to indicate the button's function.
-   * The semi-transparent background helps it blend with the header while remaining visible.
-   */
-  .theme-toggle {
-    display: flex;
-    align-items: center;
-  }
-
-  .theme-toggle-group {
-    display: flex;
-    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white for a subtle background */
-    border-radius: 30px;
-    padding: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border for depth */
-  }
-
-  .theme-toggle-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%; /* Circular button */
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-    color: white;
-    transition: background-color 0.3s;
-    position: relative; /* For positioning the tooltip */
-  }
-
-  .theme-toggle-button.active {
-    background-color: rgba(0, 0, 0, 0.2); /* Darker background when active */
-  }
-
-  .theme-toggle-button:hover:not(.active) {
-    background-color: rgba(255, 255, 255, 0.1); /* Lighter background on hover when not active */
-  }
-
-  .theme-toggle-button svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .theme-toggle-tooltip {
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%); /* Center the tooltip horizontally */
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s, visibility 0.2s;
-  }
-
-  .theme-toggle-button:hover .theme-toggle-tooltip {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* ===== SOCIAL SHARING STYLES =====
-   * Buttons for sharing the page on various social media platforms.
-   * Each button has the brand color of its respective platform.
-   * The buttons are designed as circles with icons for a clean, modern look.
-   * Includes hover effects that lift the buttons slightly for visual feedback.
-   */
-  .social-share {
-    display: flex;
-    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
-    gap: 10px;
-    margin-bottom: 10px;
-    align-items: center;
-  }
-
-  .social-share-label {
-    color: var(--text-gray);
-    margin-right: 5px;
-  }
-
-  .social-share-buttons {
+  /* DataTable buttons adjustments - wrap and resize for better fit */
+  .dt-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .social-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%; /* Circular buttons */
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px var(--shadow-color);
-  }
-
-  .social-button:hover {
-    transform: translateY(-2px); /* Slight lift effect on hover */
-    box-shadow: 0 4px 8px var(--shadow-color); /* Stronger shadow on hover */
-  }
-
-  .social-button svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  /* Social button specific colors - each uses the official brand color */
-  .social-button.linkedin {
-    background-color: var(--linkedin-blue);
-    color: white;
-  }
-
-  .social-button.twitter {
-    background-color: var(--twitter-blue);
-    color: white;
-  }
-
-  .social-button.facebook {
-    background-color: var(--facebook-blue);
-    color: white;
-  }
-
-  .social-button.reddit {
-    background-color: var(--reddit-orange);
-    color: white;
-  }
-
-  .social-button.email {
-    background-color: var(--text-gray);
-    color: white;
-  }
-
-  .social-button.copy {
-    background-color: var(--azure-blue);
-    color: white;
-  }
-
-  /* Copy link tooltip - appears when the copy button is clicked */
-  .copy-tooltip {
-    position: absolute;
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    box-shadow: 0 2px 8px var(--shadow-color);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-    z-index: 100;
-    white-space: nowrap;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .copy-tooltip.show {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* ===== MAIN CONTENT STYLES =====
-   * Styles for the main content area of the page.
-   * Uses a max-width to ensure readability on larger screens.
-   * The flex: 1 property ensures the main content expands to fill available space,
-   * pushing the footer to the bottom of the page.
-   */
-  .main-content {
-    width: 100%;
-    max-width: 1200px; /* Limits width on larger screens for better readability */
-    margin: 0 auto; /* Centers the content horizontally */
-    padding: 15px;
-    flex: 1; /* Allows the main content to expand and push footer to bottom */
-    box-sizing: border-box;
-  }
-
-  .subtitle {
-    color: var(--text-gray);
-    margin-bottom: 20px;
-  }
-
-  /* ===== DATATABLE STYLING =====
-   * Styles for the DataTables jQuery plugin that displays the RSS feeds.
-   * The table is contained in a card-like container with rounded corners and shadow.
-   * Includes styles for the table headers, cells, and various DataTables components.
-   * Cell content is truncated with ellipsis when it exceeds the maximum width.
-   */
-  .dt-length {
-    margin-bottom: 15px;
-  }
-
-  .dt-search {
-    margin-bottom: 15px;
-  }
-
-  .table-container {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 4px var(--shadow-color);
-    margin-bottom: 20px;
-    overflow-x: auto; /* Enables horizontal scrolling for wide tables */
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Table base styles - ensures consistent appearance */
-  table.dataTable {
-    width: 100% !important;
-    border-collapse: collapse;
-    color: var(--text-color);
-    border: 1px solid var(--table-border);
-    table-layout: auto;
-  }
-
-  /* Table header styles - slightly different background for visual separation */
-  table.dataTable thead th {
-    background-color: var(--table-header-bg);
-    color: var(--text-color);
-    border-bottom: 2px solid var(--table-border);
-    padding: 10px;
-  }
-
-  /* Table cell styles - includes text truncation with ellipsis */
-  table.dataTable tbody td {
-    font-size: 14px;
-    padding: 8px;
-    border-bottom: 1px solid var(--table-border);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adds ... when text overflows */
-    max-width: 150px;
-    position: relative; /* For tooltip positioning */
-  }
-
-  /* Tooltip for truncated content - shows full text on hover */
-  table.dataTable tbody td:hover::after {
-    content: attr(data-full-text); /* Uses the data-full-text attribute as content */
-    position: absolute;
-    left: 0;
-    top: 100%;
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 5px 8px;
-    z-index: 100;
-    white-space: normal; /* Allows text to wrap in the tooltip */
-    max-width: 300px;
-    box-shadow: 0 2px 5px var(--shadow-color);
-    font-size: 14px;
-    pointer-events: none; /* Prevents the tooltip from interfering with mouse events */
-  }
-
-  /* Column specific widths - optimized for different content types */
-  table.dataTable .name-column {
-    max-width: 200px; /* Wider for blog names */
-  }
-
-  table.dataTable .category-column {
-    max-width: 120px;
-  }
-
-  table.dataTable .feed-column,
-  table.dataTable .link-column {
-    max-width: 100px;
-  }
-
-  table.dataTable .date-column {
-    max-width: 180px;
-  }
-
-  table.dataTable .days-column {
-    max-width: 80px;
-    text-align: center;
-  }
-
-  /* Table link styles - uses the Azure blue color for consistency */
-  table.dataTable a {
-    color: var(--azure-blue);
-    text-decoration: none;
-  }
-
-  table.dataTable a:hover {
-    text-decoration: underline;
-  }
-
-  /* ===== DATATABLE CONTROLS STYLING =====
-   * Styles for the DataTables search, pagination, and length menu controls.
-   * These controls allow users to filter, page through, and adjust the number of visible rows.
-   * The styles are designed to match the overall theme of the application.
-   * Includes custom styling for the search input, length selector, and pagination buttons.
-   */
-  /* Search input - styled to match the theme */
-  .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 6px 10px;
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    margin-bottom: 15px;
-    width: 100%;
-    max-width: 250px;
-  }
-
-  /* Length selector - controls how many rows are displayed */
-  .dataTables_wrapper .dataTables_length select {
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 5px;
-    background-color: var(--card-bg);
-    color: var(--text-color);
-  }
-
-  /* Info and pagination - shows current page info and navigation */
-  .dataTables_wrapper .dataTables_info,
-  .dataTables_wrapper .dataTables_paginate {
-    margin-top: 15px;
-    color: var(--text-color);
-  }
-
-  /* Pagination buttons - styled to match the theme */
-  .dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: var(--text-color) !important;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background-color: var(--card-bg);
-  }
-
-  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: var(--azure-blue) !important;
-    color: white !important;
-    border: 1px solid var(--azure-blue);
-  }
-
-  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: var(--table-row-hover) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--border-color);
-  }
-
-  /* ===== DATATABLE BUTTONS STYLING =====
-   * Styles for the DataTables Buttons extension.
-   * These buttons allow users to export data in various formats (copy, Excel) and toggle column visibility.
-   * The buttons are styled to match the overall theme of the application.
-   * Includes hover and active states for better user feedback.
-   */
-  .dt-buttons {
-    float: left;
+    gap: 5px;
+    margin-bottom: 10px;
   }
 
   .dt-button {
-    background-color: var(--button-bg) !important;
-    color: var(--text-color) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 4px !important;
-    padding: 6px 12px !important;
-    margin-right: 5px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    box-shadow: 0 1px 3px var(--shadow-color) !important;
+    flex: 1;
+    min-width: 80px;
+    margin-right: 0 !important;
+    padding: 6px 8px !important;
+    font-size: 12px !important;
   }
 
-  .dt-button:hover {
-    background-color: var(--button-hover) !important;
-    box-shadow: 0 2px 5px var(--shadow-color) !important;
-  }
-
-  .dt-button:active {
-    box-shadow: inset 0 1px 3px var(--shadow-color) !important; /* Inset shadow for pressed effect */
-  }
-
-  /* ===== LOADING INDICATORS =====
-   * Styles for loading indicators that appear while data is being fetched.
-   * Includes both a text-based loading message and a spinner animation.
-   * The preloader covers the entire screen during initial load.
-   * The spinner uses a border animation to create a rotating effect.
-   */
-  /* Text loading indicator - appears in the table container */
-  .loading {
-    text-align: center;
-    padding: 40px;
-    font-size: 18px;
-    color: var(--text-gray);
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-color);
-  }
-
-  /* Preloader overlay - covers the entire screen during initial load */
-  .preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ensures it appears above all other content */
-    transition: opacity 0.5s, visibility 0.5s;
-  }
-
-  /* Adjust preloader background for dark theme */
-  [data-theme="dark"] .preloader {
-    background-color: rgba(26, 26, 46, 0.8); /* Semi-transparent dark blue */
-  }
-
-  .preloader.hidden {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  /* Spinner animation - creates a rotating circle */
-  .spinner {
-    width: 60px;
-    height: 60px;
-    border: 5px solid rgba(0, 120, 212, 0.2); /* Light Azure blue */
-    border-radius: 50%;
-    border-top-color: var(--azure-blue); /* Solid Azure blue for the spinning part */
-    animation: spin 1s ease-in-out infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  /* ===== FOOTER STYLES =====
-   * Styles for the page footer.
-   * The footer contains copyright information, author details, and links.
-   * It has a subtle shadow at the top to create separation from the main content.
-   * The heart symbol is colored red for a touch of personality.
-   */
-  .footer {
-    text-align: center;
-    padding: 20px;
-    color: var(--text-gray);
-    font-size: 14px;
-    background-color: var(--footer-bg);
-    margin-top: 30px;
-    box-shadow: 0 -2px 10px var(--shadow-color); /* Shadow at the top */
-    width: 100%;
-  }
-
-  .footer .heart {
-    color: #e25555; /* Red heart symbol */
-  }
-
-  /* ===== GO TO TOP BUTTON =====
-   * A floating button that appears when the user scrolls down the page.
-   * Clicking the button smoothly scrolls the page back to the top.
-   * The button is hidden by default and becomes visible when scrolling down.
-   * Uses the Azure blue color to match the theme.
-   */
-  .go-to-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: var(--azure-blue);
-    color: white;
-    border-radius: 50%; /* Circular button */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
-    z-index: 1000; /* Ensures it appears above other content */
-  }
-
-  .go-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .go-to-top:hover {
-    background: var(--azure-dark-blue); /* Darker blue on hover */
-  }
-
-  .go-to-top svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* ===== CATEGORY AND FEED STYLING =====
-   * Styles for category badges and feed status indicators.
-   * Category badges are small, rounded labels that display the blog category.
-   * Feed status indicators use color coding to show how recently a blog was updated.
-   * The legend explains the color coding system to users.
-   */
-  /* Category badge - small, rounded label for blog categories */
-  .category-badge {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    background-color: var(--azure-blue);
-    color: white;
-    margin-right: 5px;
-  }
-
-  /* Days ago display - shows how many days since the last update */
-  .days-ago {
-    font-weight: bold;
-    margin-left: 5px;
-    color: var(--text-gray);
-  }
-
-  /* Time period color indicators - color coding for update recency */
-  .recent {
-    color: #2ecc71; /* Green for recent updates (less than 7 days) */
-  }
-
-  .medium {
-    color: #3498db; /* Blue for medium updates (7-30 days) */
-  }
-
-  .old {
-    color: #e74c3c; /* Red for old updates (more than 30 days) */
-  }
-
-  /* Feed legend styles - explains the color coding system */
-  .feed-legend {
-    display: flex;
-    gap: 20px;
+  /* DataTable controls adjustments - full width and better spacing */
+  .dataTables_wrapper .dataTables_filter,
+  .dataTables_wrapper .dataTables_length {
+    text-align: left;
     margin-bottom: 10px;
-    align-items: center;
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .legend-item span:first-child {
-    font-size: 1.2em; /* Larger dot for better visibility */
-  }
-
-  /* ===== RESPONSIVE DATATABLE STYLES =====
-   * Styles for the responsive features of DataTables.
-   * When the table is too wide for the screen, DataTables collapses rows into expandable sections.
-   * These styles ensure the responsive view is properly formatted and readable.
-   */
-  .dtr-details {
     width: 100%;
   }
 
-  /* ===== MOBILE OPTIMIZATIONS =====
-   * Responsive styles for smaller screens (tablets and phones).
-   * These adjustments ensure the application is usable and looks good on mobile devices.
-   * Includes changes to layout, sizing, and positioning of various elements.
-   * The media query targets screens with a maximum width of 768px (typical tablet width).
-   */
-  @media (max-width: 768px) {
-    /* Header adjustments - stack elements vertically */
-    .header {
-      flex-direction: column;
-      border-radius: 0; /* Remove rounded corners on mobile */
-    }
-
-    /* Search container adjustments - full width for better usability */
-    .search-container {
-      flex-direction: column;
-    }
-
-    .search-wrapper {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-
-    .search-input.active {
-      width: calc(100% - 50px);
-    }
-
-    /* Meta info adjustments - stack elements vertically */
-    .meta-info {
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    /* Feed legend adjustments - stack items vertically */
-    .feed-legend {
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    /* Multiselect adjustments - full width for better usability */
-    .multiselect {
-      width: 100%;
-    }
-
-    /* Go to top button adjustments - smaller and closer to edge */
-    .go-to-top {
-      bottom: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-    }
-
-    /* Table container adjustments - extend to edges for more space */
-    .table-container {
-      padding: 10px;
-      margin-left: -5px;
-      margin-right: -5px;
-      width: calc(100% + 10px);
-      border-radius: 0; /* Remove rounded corners on mobile */
-    }
-
-    /* DataTable buttons adjustments - wrap and resize for better fit */
-    .dt-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 10px;
-    }
-
-    .dt-button {
-      flex: 1;
-      min-width: 80px;
-      margin-right: 0 !important;
-      padding: 6px 8px !important;
-      font-size: 12px !important;
-    }
-
-    /* DataTable controls adjustments - full width and better spacing */
-    .dataTables_wrapper .dataTables_filter,
-    .dataTables_wrapper .dataTables_length {
-      text-align: left;
-      margin-bottom: 10px;
-      width: 100%;
-    }
-
-    .dataTables_wrapper .dataTables_filter input {
-      width: 100%;
-      max-width: none;
-      margin-left: 0;
-    }
-
-    .dataTables_wrapper .dataTables_length select {
-      width: 100%;
-      max-width: 120px;
-    }
-
-    .dataTables_wrapper .dataTables_info,
-    .dataTables_wrapper .dataTables_paginate {
-      text-align: center;
-      float: none;
-      display: block;
-      margin: 10px 0;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      padding: 0.3em 0.6em; /* Smaller padding for pagination buttons */
-    }
-
-    /* Responsive child rows adjustments - better formatting for collapsed rows */
-    table.dataTable > tbody > tr.child ul.dtr-details {
-      width: 100%;
-    }
-
-    table.dataTable > tbody > tr.child span.dtr-title {
-      min-width: 30%; /* Ensures title takes up enough space */
-    }
+  .dataTables_wrapper .dataTables_filter input {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
   }
+
+  .dataTables_wrapper .dataTables_length select {
+    width: 100%;
+    max-width: 120px;
+  }
+
+  .dataTables_wrapper .dataTables_info,
+  .dataTables_wrapper .dataTables_paginate {
+    text-align: center;
+    float: none;
+    display: block;
+    margin: 10px 0;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.3em 0.6em; /* Smaller padding for pagination buttons */
+  }
+
+  /* Responsive child rows adjustments - better formatting for collapsed rows */
+  table.dataTable > tbody > tr.child ul.dtr-details {
+    width: 100%;
+  }
+
+  table.dataTable > tbody > tr.child span.dtr-title {
+    min-width: 30%; /* Ensures title takes up enough space */
+  }
+}

@@ -447,4 +447,3 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("goToTop").addEventListener("click", scrollToTop)
   window.addEventListener("scroll", handleScroll)
 })
-
