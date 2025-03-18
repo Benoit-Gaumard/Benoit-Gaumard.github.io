@@ -1,236 +1,13 @@
-// Preloader functionality
-const preloader = document.getElementById('preloader');
+// Your RSS2JSON API key
+const RSS2JSON_API_KEY = "yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz"
 
-// Theme toggle functionality
-const themeToggle = document.getElementById('themeToggle');
-const themeIcon = document.getElementById('themeIcon');
-const themeTooltip = document.getElementById('themeTooltip');
-const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-// Function to toggle theme
-function toggleTheme() {
-    if (document.documentElement.hasAttribute('data-theme')) {
-        // Currently dark, switch to light
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-
-        // Change to sun icon
-        themeIcon.innerHTML = `
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        `;
-        themeTooltip.textContent = 'Dark Mode';
-    } else {
-        // Currently light, switch to dark
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-
-        // Change to moon icon
-        themeIcon.innerHTML = `
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        `;
-        themeTooltip.textContent = 'Light Mode';
-    }
-}
-
-// Initialize theme from localStorage
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        // Set moon icon
-        themeIcon.innerHTML = `
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        `;
-        themeTooltip.textContent = 'Light Mode';
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-        // Set sun icon
-        themeIcon.innerHTML = `
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        `;
-        themeTooltip.textContent = 'Dark Mode';
-    }
-}
-
-// Add event listener to theme toggle button
-themeToggle.addEventListener('click', toggleTheme);
-
-// Initialize theme
-initTheme();
-
-// Search toggle functionality
-const searchToggle = document.getElementById('searchToggle');
-const searchInput = document.getElementById('searchInput');
-
-// Toggle search input when search icon is clicked
-searchToggle.addEventListener('click', function(event) {
-    event.stopPropagation(); // Prevent event from bubbling up
-    searchInput.classList.toggle('active');
-    if (searchInput.classList.contains('active')) {
-        // Focus the search input when opened
-        setTimeout(() => {
-            searchInput.focus();
-        }, 300);
-    }
-    console.log('Search toggle clicked, active:', searchInput.classList.contains('active'));
-});
-
-// Close search input when clicking outside
-document.addEventListener('click', function(event) {
-    if (!searchInput.contains(event.target) && event.target !== searchToggle) {
-        searchInput.classList.remove('active');
-    }
-});
-
-// Close search input when pressing Escape key
-searchInput.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        searchInput.classList.remove('active');
-        searchToggle.focus();
-    }
-});
-
-// Go to top button functionality
-const goToTopButton = document.getElementById('goToTop');
-
-// Show/hide button based on scroll position
-window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 300) {
-        goToTopButton.classList.add('visible');
-    } else {
-        goToTopButton.classList.remove('visible');
-    }
-});
-
-// Multiselect dropdown functionality
-const multiselect = document.getElementById('categoryMultiselect');
-const multiselectToggle = multiselect.querySelector('.multiselect-toggle');
-const multiselectDropdown = multiselect.querySelector('.multiselect-dropdown');
-const multiselectOptions = multiselect.querySelector('.multiselect-options');
-const multiselectSelectedCount = multiselect.querySelector('.multiselect-selected-count');
-const selectAllBtn = document.getElementById('selectAllCategories');
-const clearAllBtn = document.getElementById('clearAllCategories');
-const retirementFilter = document.getElementById('retirementFilter');
-
-// Toggle dropdown
-multiselectToggle.addEventListener('click', function() {
-    multiselectDropdown.classList.toggle('show');
-});
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(event) {
-    if (!multiselect.contains(event.target)) {
-        multiselectDropdown.classList.remove('show');
-    }
-});
-
-// Select all categories
-selectAllBtn.addEventListener('click', function() {
-    const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = true;
-    });
-    updateSelectedCount();
-    filterAndDisplayFeedItems();
-});
-
-// Clear all categories
-clearAllBtn.addEventListener('click', function() {
-    const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    updateSelectedCount();
-    filterAndDisplayFeedItems();
-});
-
-// Update selected count
-function updateSelectedCount() {
-    const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]');
-    const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
-
-    if (selectedCount > 0) {
-        multiselectSelectedCount.textContent = selectedCount;
-        multiselectSelectedCount.style.display = 'inline-flex';
-        multiselectToggle.querySelector('span:first-child').textContent = 'Categories';
-    } else {
-        multiselectSelectedCount.style.display = 'none';
-        multiselectToggle.querySelector('span:first-child').textContent = 'All Categories';
-    }
-}
-
-// Social sharing functionality
-function shareOnLinkedIn() {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(document.title);
-    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
-    window.open(shareUrl, '_blank');
-}
-
-function shareOnTwitter() {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(document.title);
-    const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
-    window.open(shareUrl, '_blank');
-}
-
-function shareOnFacebook() {
-    const url = encodeURIComponent(window.location.href);
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-    window.open(shareUrl, '_blank');
-}
-
-function shareOnReddit() {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(document.title);
-    const shareUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
-    window.open(shareUrl, '_blank');
-}
-
-function shareViaEmail() {
-    const url = window.location.href;
-    const title = document.title;
-    const subject = encodeURIComponent(`Check out this Azure Updates page: ${title}`);
-    const body = encodeURIComponent(`I thought you might be interested in this Azure Updates page: ${url}`);
-    const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
-    window.location.href = mailtoUrl;
-}
-
-function copyLink() {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-        const tooltip = document.getElementById('copyTooltip');
-        tooltip.classList.add('show');
-        setTimeout(() => {
-            tooltip.classList.remove('show');
-        }, 2000);
-    });
-}
-
-// RSS Feed functionality
-const apiKey = 'yzkycign0wt3c7nnvsrriqffk6fcv1uk1bzsqtlz'; // Can be used by to this domain only ;)
+// Original feed URL
 const originalFeedUrl = 'https://www.microsoft.com/releasecommunications/api/v2/azure/rss';
 const rss2jsonUrl = 'https://api.rss2json.com/v1/api.json';
 const feedItemsContainer = document.getElementById('feedItems');
 const feedCountElement = document.getElementById('feedCount');
 const dayFilterDropdown = document.getElementById('dayFilter');
+const preloader = document.getElementById('preloader'); // Declare preloader
 
 let allFeedItems = [];
 let allCategories = new Set();
@@ -240,7 +17,7 @@ let hasRetirementCategory = false;
 async function fetchRSSFeed() {
     try {
         // Use RSS2JSON service
-        const response = await fetch(`${rss2jsonUrl}?rss_url=${encodeURIComponent(originalFeedUrl)}&api_key=${apiKey}&count=1000`);
+        const response = await fetch(`${rss2jsonUrl}?rss_url=${encodeURIComponent(originalFeedUrl)}&api_key=${RSS2JSON_API_KEY}&count=1000`);
         const data = await response.json();
 
         if (data.status !== 'ok') {
@@ -314,6 +91,7 @@ async function fetchRSSFeed() {
 
 // Populate category multiselect
 function populateCategoryMultiselect() {
+    const multiselectOptions = document.querySelector('.multiselect-options');
     multiselectOptions.innerHTML = '';
 
     // Sort categories alphabetically
@@ -351,11 +129,21 @@ function populateCategoryMultiselect() {
     updateSelectedCount();
 }
 
-// Calculate days since publication
+// Calculate days since publication - improved version
 function getDaysSincePublication(pubDate) {
     const now = new Date();
-    const diffTime = Math.abs(now - pubDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // Reset the time portion to compare dates only
+    const pubDateOnly = new Date(pubDate);
+    pubDateOnly.setHours(0, 0, 0, 0);
+
+    const nowDateOnly = new Date(now);
+    nowDateOnly.setHours(0, 0, 0, 0);
+
+    // Calculate the difference in days
+    const diffTime = Math.abs(nowDateOnly - pubDateOnly);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
     return diffDays;
 }
 
@@ -368,8 +156,25 @@ function getAgeIndicator(age) {
 
 // Get selected categories
 function getSelectedCategories() {
-    const checkboxes = multiselectOptions.querySelectorAll('input[type="checkbox"]:checked');
+    const checkboxes = document.querySelectorAll('.multiselect-options input[type="checkbox"]:checked');
     return Array.from(checkboxes).map(checkbox => checkbox.value);
+}
+
+// Update selected count
+function updateSelectedCount() {
+    const checkboxes = document.querySelectorAll('.multiselect-options input[type="checkbox"]');
+    const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+    const multiselectSelectedCount = document.querySelector('.multiselect-selected-count');
+    const multiselectToggle = document.querySelector('.multiselect-toggle');
+
+    if (selectedCount > 0) {
+        multiselectSelectedCount.textContent = selectedCount;
+        multiselectSelectedCount.style.display = 'inline-flex';
+        multiselectToggle.querySelector('span:first-child').textContent = 'Categories';
+    } else {
+        multiselectSelectedCount.style.display = 'none';
+        multiselectToggle.querySelector('span:first-child').textContent = 'All Categories';
+    }
 }
 
 // Toggle feed item expansion
@@ -392,7 +197,9 @@ function setupFeedItemToggle() {
 function filterAndDisplayFeedItems() {
     const dayFilter = parseInt(dayFilterDropdown.value);
     const selectedCategories = getSelectedCategories();
+    const searchInput = document.getElementById('searchInput');
     const searchTerm = searchInput.value.toLowerCase();
+    const retirementFilter = document.getElementById('retirementFilter');
     const showRetirementsOnly = retirementFilter.checked;
 
     let filteredItems = allFeedItems;
@@ -437,6 +244,9 @@ function filterAndDisplayFeedItems() {
             day: 'numeric'
         });
 
+        // Display "Today" instead of "0 days ago"
+        const ageDisplay = item.age === 0 ? "Today" : `${item.age} days ago`;
+
         // Create category tags
         const categoryTags = item.categories && item.categories.length > 0
             ? `<div>${item.categories.map(cat => {
@@ -450,7 +260,7 @@ function filterAndDisplayFeedItems() {
                 <div class="feed-item-indicator">${getAgeIndicator(item.age)}</div>
                 <div class="feed-item-content">
                     <div class="feed-item-title">
-                        <span class="feed-item-date">${formattedDate} (${item.age} days ago)</span>
+                        <span class="feed-item-date">${formattedDate} (${ageDisplay})</span>
                         <a href="${item.link}" target="_blank">${item.title}</a>
                     </div>
                     <div class="feed-item-description">${item.description} ...
@@ -469,6 +279,204 @@ function filterAndDisplayFeedItems() {
     setupFeedItemToggle();
 }
 
+// Social sharing functionality
+function shareOnLinkedIn() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+    window.open(shareUrl, '_blank');
+}
+
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+    window.open(shareUrl, '_blank');
+}
+
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    window.open(shareUrl, '_blank');
+}
+
+function shareOnReddit() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    const shareUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
+    window.open(shareUrl, '_blank');
+}
+
+function shareViaEmail() {
+    const url = window.location.href;
+    const title = document.title;
+    const subject = encodeURIComponent(`Check out this Azure Updates page: ${title}`);
+    const body = encodeURIComponent(`I thought you might be interested in this Azure Updates page: ${url}`);
+    const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+    window.location.href = mailtoUrl;
+}
+
+function copyLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        const tooltip = document.getElementById('copyTooltip');
+        tooltip.classList.add('show');
+        setTimeout(() => {
+            tooltip.classList.remove('show');
+        }, 2000);
+    });
+}
+
+// Theme toggle functionality
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const themeTooltip = document.getElementById('themeTooltip');
+
+// Function to toggle theme
+function toggleTheme() {
+    if (document.documentElement.hasAttribute('data-theme')) {
+        // Currently dark, switch to light
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+
+        // Change to sun icon
+        themeIcon.innerHTML = `
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        `;
+        themeTooltip.textContent = 'Dark Mode';
+    } else {
+        // Currently light, switch to dark
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+
+        // Change to moon icon
+        themeIcon.innerHTML = `
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        `;
+        themeTooltip.textContent = 'Light Mode';
+    }
+}
+
+// Initialize theme from localStorage
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        // Set moon icon
+        themeIcon.innerHTML = `
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        `;
+        themeTooltip.textContent = 'Light Mode';
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        // Set sun icon
+        themeIcon.innerHTML = `
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        `;
+        themeTooltip.textContent = 'Dark Mode';
+    }
+}
+
+// Go to top button functionality
+const goToTopButton = document.getElementById('goToTop');
+
+// Show/hide button based on scroll position
+window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 300) {
+        goToTopButton.classList.add('visible');
+    } else {
+        goToTopButton.classList.remove('visible');
+    }
+});
+
+// Multiselect dropdown functionality
+const multiselect = document.getElementById('categoryMultiselect');
+const multiselectToggle = multiselect.querySelector('.multiselect-toggle');
+const multiselectDropdown = multiselect.querySelector('.multiselect-dropdown');
+const selectAllBtn = document.getElementById('selectAllCategories');
+const clearAllBtn = document.getElementById('clearAllCategories');
+const retirementFilter = document.getElementById('retirementFilter');
+
+// Toggle dropdown
+multiselectToggle.addEventListener('click', function() {
+    multiselectDropdown.classList.toggle('show');
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    if (!multiselect.contains(event.target)) {
+        multiselectDropdown.classList.remove('show');
+    }
+});
+
+// Select all categories
+selectAllBtn.addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('.multiselect-options input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+    updateSelectedCount();
+    filterAndDisplayFeedItems();
+});
+
+// Clear all categories
+clearAllBtn.addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('.multiselect-options input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    updateSelectedCount();
+    filterAndDisplayFeedItems();
+});
+
+// Search toggle functionality
+const searchToggle = document.getElementById('searchToggle');
+const searchInput = document.getElementById('searchInput');
+
+// Toggle search input when search icon is clicked
+searchToggle.addEventListener('click', function(event) {
+    event.stopPropagation(); // Prevent event from bubbling up
+    searchInput.classList.toggle('active');
+    if (searchInput.classList.contains('active')) {
+        // Focus the search input when opened
+        setTimeout(() => {
+            searchInput.focus();
+        }, 300);
+    }
+});
+
+// Close search input when clicking outside
+document.addEventListener('click', function(event) {
+    if (!searchInput.contains(event.target) && event.target !== searchToggle) {
+        searchInput.classList.remove('active');
+    }
+});
+
+// Close search input when pressing Escape key
+searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        searchInput.classList.remove('active');
+        searchToggle.focus();
+    }
+});
+
 // Event listeners
 dayFilterDropdown.addEventListener('change', filterAndDisplayFeedItems);
 searchInput.addEventListener('input', filterAndDisplayFeedItems);
@@ -484,5 +492,13 @@ retirementFilter.addEventListener('change', function() {
     filterAndDisplayFeedItems();
 });
 
+// Add event listener to theme toggle button
+themeToggle.addEventListener('click', toggleTheme);
+
+// Initialize theme
+initTheme();
+
 // Initial fetch
-fetchRSSFeed();
+document.addEventListener('DOMContentLoaded', function() {
+    fetchRSSFeed();
+});
