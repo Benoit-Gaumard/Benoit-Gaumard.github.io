@@ -1,0 +1,508 @@
+:root {
+    --azure-blue: #0078D4;
+    --azure-dark-blue: #0063B1;
+    --azure-light-blue: #50B0F9;
+    --text-gray: #666666;
+    --background-blue: #EEF3F8;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --footer-bg: #ffffff;
+    --success-green: #28a745;
+    --warning-orange: #fd7e14;
+    --danger-red: #dc3545;
+    --neutral-purple: #6f42c1;
+}
+
+/* Dark mode variables */
+.dark {
+    --azure-blue: #0078D4;
+    --azure-dark-blue: #0063B1;
+    --azure-light-blue: #50B0F9;
+    --text-gray: #aaaaaa;
+    --background-blue: #1a1a1a;
+    --card-bg: #2a2a2a;
+    --text-color: #f0f0f0;
+    --border-color: #444444;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --footer-bg: #2a2a2a;
+    --success-green: #28a745;
+    --warning-orange: #fd7e14;
+    --danger-red: #dc3545;
+    --neutral-purple: #8a63d2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--background-blue);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    position: relative;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo-text {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1;
+}
+
+.subtitle {
+    color: var(--text-gray);
+    margin-bottom: 20px;
+}
+
+.subtitle a {
+    color: var(--azure-blue);
+    text-decoration: none;
+}
+
+.subtitle a:hover {
+    text-decoration: underline;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: var(--text-gray);
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-gray);
+    font-size: 14px;
+    background-color: var(--footer-bg);
+    margin-top: 30px;
+    box-shadow: 0 -2px 10px var(--shadow-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer .heart {
+    color: #e25555;
+}
+
+.footer a {
+    color: var(--azure-blue);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.social-share {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.social-share-label {
+    color: var(--text-gray);
+    margin-right: 5px;
+}
+
+.social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.social-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.social-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.social-button.linkedin {
+    background-color: #0077b5;
+    color: white;
+}
+
+.social-button.twitter {
+    background-color: #1da1f2;
+    color: white;
+}
+
+.social-button.facebook {
+    background-color: #1877f2;
+    color: white;
+}
+
+.social-button.reddit {
+    background-color: #ff4500;
+    color: white;
+}
+
+.social-button.email {
+    background-color: var(--text-gray);
+    color: white;
+}
+
+.social-button.copy {
+    background-color: var(--azure-blue);
+    color: white;
+}
+
+.copy-tooltip {
+    position: absolute;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 100;
+    white-space: nowrap;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.copy-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tag-yes {
+    color: var(--success-green);
+    font-weight: bold;
+}
+
+.tag-no {
+    color: var(--danger-red);
+    font-weight: bold;
+}
+
+.tag-partial {
+    color: var(--warning-orange);
+    font-weight: bold;
+}
+
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 200px;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    padding: 15px;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+.stat-taggable .stat-number {
+    color: var(--success-green);
+}
+
+.stat-not-taggable .stat-number {
+    color: var(--danger-red);
+}
+
+.stat-cost-report .stat-number {
+    color: var(--azure-blue);
+}
+
+.stat-no-cost-report .stat-number {
+    color: var(--neutral-purple);
+}
+
+table.dataTable {
+    width: 100% !important;
+    color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_length {
+    color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_length select {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_info {
+    padding-top: 15px;
+    color: var(--text-color);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-left: 5px;
+    color: var(--text-color) !important;
+    background-color: var(--card-bg);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--azure-blue);
+    color: white !important;
+    border-color: var(--azure-blue);
+}
+
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.dark .preloader {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(0, 120, 212, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--azure-blue);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================================================
+   THEME TOGGLE STYLES
+   Styles for the light/dark theme toggle button
+   ========================================================================== */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.theme-toggle-group {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.theme-toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: white;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+.theme-toggle-button.active {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-button:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tooltip for theme toggle */
+.theme-toggle-tooltip {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.theme-toggle-button:hover .theme-toggle-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==========================================================================
+   GO TO TOP BUTTON
+   Styles for the floating "back to top" button
+   ========================================================================== */
+.go-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--azure-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+    z-index: 1000;
+    border: none; /* Added for button element */
+}
+
+.go-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.go-to-top:hover {
+    background: var(--azure-dark-blue);
+}
+
+.go-to-top svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 0;
+    }
+
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+    }
+
+    .stats-container {
+        flex-direction: column;
+    }
+
+    .go-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+}

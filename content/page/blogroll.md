@@ -263,6 +263,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [Build your own octocat](https://myoctocat.com/build-your-octocat/)
 - [Bitmoji](https://www.bitmoji.com/stickers/)
 - [All IP ranges used by GitHub Actions runners](https://api.github.com/meta)
+- OIDC : https://techwatching.dev/posts/scripting-azure-ready-github-repository
 
 
 ## 🏛️ Governance
@@ -329,6 +330,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [AzureFeeds](https://azurefeeds.com/)
 - [Microsoft Blogs by products](https://techcommunity.microsoft.com/Blogs)
 - https://bonjourlafuite.eu.org/
+- https://azurefeeds.bmeurl.co/123F59FB 🔥🔥🔥
 
 ## 🔍 LightHouse
 ---
@@ -419,6 +421,13 @@ This section offers a curated collection of helpful links, providing resources a
 - https://blog.nillsf.com/index.php/2018/11/06/azure-paas-services-connected-to-your-vnet/ VNET Injection vs Service Endpoints
 - https://github.com/jokob-sk/NetAlertX
 
+- Azure function VNet integration: https://dearsi-mocha.github.io/cloudsauce/2020/04/23/azure-function-vnet/ 🔥
+- Inspector Gadget : https://github.com/jelledruyts/InspectorGadget 🔥
+- Azure function VNet integration: https://dev.to/rokicool/azure-function-app-flex-conumption-in-private-vnet-via-iac-1j62
+
+- Web app private link with Azure SQL DB and storage: https://learn.microsoft.com/en-us/samples/azure/azure-quickstart-templates/web-app-regional-vnet-private-endpoint-sql-storage/
+- Authenticating Azure Function App: https://medium.com/@sumindaniro/azure-function-app-as-the-backend-api-for-webapps-reactjs-c6a6ce26246
+
 ## 👮 Policies
 ---
 
@@ -487,6 +496,16 @@ This section offers a curated collection of helpful links, providing resources a
 - [Hub-Spoke Architecture](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) 🔥🔥
 - [Connect Azure with On-Prem Network Part 1](https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/) 🔥🔥
 - [Enabling Direct On-Prem Site Access to Azure Private VMSS Resources via Internal Load Balancer](https://medium.com/@andragabr/enabling-direct-onprem-site-access-to-azure-private-vmss-resources-via-internal-load-balancer-a-118f13f4ca18)
+
+
+## 💻 Remote Desktop and AVD
+---
+
+[Back To Top](#documentTop)
+
+- https://client.wvd.microsoft.com/arm/webclient/index.html
+- https://rdweb.wvd.microsoft.com/
+
 
 ## 📝 Services
 ---
@@ -575,6 +594,7 @@ This section offers a curated collection of helpful links, providing resources a
 - [How to run PowerShell scripts on Azure VMs with Terraform](https://techcommunity.microsoft.com/t5/itops-talk-blog/how-to-run-powershell-scripts-on-azure-vms-with-terraform/ba-p/3827573)
 - [https://azure.github.io/Azure-Verified-Modules/](https://azure.github.io/Azure-Verified-Modules/)
 - [https://github.com/tenable/terrascan](https://github.com/tenable/terrascan)
+- Azure Federated Identity Guide https://waynegoosen.com/post/azure-federated-identity-credentials-terraform-github-actions-guide/ 🔥
 
 ## 🛫 Terraform Deployment
 ---

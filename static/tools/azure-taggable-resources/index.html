@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Open Graph / LinkedIn sharing meta tags -->
+    <meta property="og:title" content="Azure Taggable Resources">
+    <meta property="og:description" content="Find out which Azure resources support tags and which ones pass tags to cost reports.">
+    <meta property="og:image" content="https://benoit-gaumard.io/images/aru-logo.png">
+    <meta property="og:url" content="https://benoit-gaumard.io/tools/azure-taggable-resources/index.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card meta tags (also used by some platforms) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Azure Taggable Resources">
+    <meta name="twitter:description" content="Find out which Azure resources support tags and which ones pass tags to cost reports.">
+    <meta name="twitter:image" content="https://benoit-gaumard.io/images/aru-logo.png">
+
+    <title>Azure Taggable Resources</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://benoit-gaumard.io/icons/aru-logo-favicon-32x32.png">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+    <!-- Custom CSS - Fixed filename -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body id="top">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <!-- Logo -->
+        <a href="#" class="logo">
+            <img src="https://azure.microsoft.com/favicon.ico" alt="Azure Logo" width="40" height="40">
+            <span class="logo-text">Azure Taggable Resources</span>
+        </a>
+
+        <!-- Theme toggle with single button -->
+        <div class="theme-toggle">
+            <div class="theme-toggle-group">
+                <button class="theme-toggle-button active" id="themeToggle" aria-label="Toggle theme">
+                    <!-- Icon will be set by JavaScript -->
+                    <svg xmlns="http://www.w3.org/2000/svg" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Icon path will be set by JavaScript -->
+                    </svg>
+                    <span class="theme-toggle-tooltip" id="themeTooltip">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+        <p class="subtitle">Find out which Azure resources support tags and which ones pass tags to cost reports. Data sourced from <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-support" target="_blank">Tag support for Azure resources</a>.</p>
+
+        <!-- Social sharing buttons -->
+        <div class="social-share">
+            <span class="social-share-label">Share:</span>
+            <div class="social-share-buttons">
+                <button class="social-button linkedin" aria-label="Share on LinkedIn" onclick="shareOnLinkedIn()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </button>
+                <button class="social-button twitter" aria-label="Share on Twitter" onclick="shareOnTwitter()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button facebook" aria-label="Share on Facebook" onclick="shareOnFacebook()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </button>
+                <button class="social-button reddit" aria-label="Share on Reddit" onclick="shareOnReddit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8.5 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path>
+                        <path d="M7 13.5c.5 1.5 2.5 2.5 5 2.5s4.5-1 5-2.5"></path>
+                        <path d="M17 7c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.6-1.1-.2-2.3-.2-3.4-.1l-.8-2.5 2.5.5c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.5 0-1 .3-1.3.7l-3-.6-1 3c-1.1 0-2.3.1-3.4.4-.4-.4-.9-.6-1.4-.6-1.1 0-2 .9-2 2 0 .8.5 1.5 1.2 1.8-.1.5-.1 1.1 0 1.6C4.5 15.2 8 17 12 17s7.5-1.8 9.8-4.6c.1-.5.1-1.1.1-1.6.6-.3 1.1-1 1.1-1.8z"></path>
+                    </svg>
+                </button>
+                <button class="social-button email" aria-label="Share via Email" onclick="shareViaEmail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </button>
+                <div style="position: relative;">
+                    <button class="social-button copy" aria-label="Copy Link" onclick="copyLink()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                    <div class="copy-tooltip" id="copyTooltip">Link copied!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats cards -->
+        <div class="stats-container" id="statsContainer">
+            <div class="stat-card stat-taggable">
+                <div class="stat-number" id="taggableCount">-</div>
+                <div class="stat-label">Resources that support tags</div>
+            </div>
+            <div class="stat-card stat-not-taggable">
+                <div class="stat-number" id="notTaggableCount">-</div>
+                <div class="stat-label">Resources that don't support tags</div>
+            </div>
+            <div class="stat-card stat-cost-report">
+                <div class="stat-number" id="costReportCount">-</div>
+                <div class="stat-label">Resources that pass tags to cost reports</div>
+            </div>
+            <div class="stat-card stat-no-cost-report">
+                <div class="stat-number" id="noCostReportCount">-</div>
+                <div class="stat-label">Resources that don't pass tags to cost reports</div>
+            </div>
+        </div>
+
+        <!-- Data table -->
+        <div class="card">
+            <table id="resourceTable" class="display responsive nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Provider Name</th>
+                        <th>Resource Type</th>
+                        <th>Supports Tags</th>
+                        <th>Supports Cost Report Tag</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="4" class="loading">Loading resource data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            &copy; 2025 - Built with <span class="heart">❤️</span> - All Rights Reserved
+        </p>
+        <p>
+            By <a href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank">Benoit G</a> - Infra and DevOps consultant <a href="https://benoit-gaumard.io/" target="_blank">https://benoit-gaumard.io/</a>
+        </p>
+        <p>
+            If you have any suggestions or improvements, feel free to <a href="https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new" target="_blank">open an issue</a>.
+        </p>
+    </footer>
+
+    <!-- Go to top - Changed to button for consistency with JS -->
+    <button class="go-to-top" id="goToTop" aria-label="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- jQuery and DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="./script.js"></script>
+</body>
+</html>

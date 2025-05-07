@@ -66,6 +66,7 @@ WHERE DP.type IN ('S','X','E')
 ```
 
 Replace your-managed-identity-name with the actual name of your managed identity.
+Usually it is the Web App name
 
 ## Connect to Azure SQL Database with PDO
 ---

@@ -1,0 +1,812 @@
+/* ==========================================================================
+   CSS VARIABLES - THEME COLORS
+   Define color schemes for both light and dark themes
+   ========================================================================== */
+   :root {
+    /* Main Azure brand colors */
+    --azure-blue: #0078d4;
+    --azure-dark-blue: #0063b1;
+    --azure-light-blue: #50b0f9;
+
+    /* Light theme colors */
+    --text-gray: #666666;
+    --background-blue: #eef3f8;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --footer-bg: #ffffff;
+
+    /* Status and notification colors */
+    --retirement-red: #d44000;
+    --success-green: #28a745;
+
+    /* Social media colors */
+    --linkedin-blue: #0077b5;
+    --twitter-blue: #1da1f2;
+    --facebook-blue: #1877f2;
+    --reddit-orange: #ff4500;
+
+    /* UI element colors */
+    --filter-bg: rgba(255, 255, 255, 0.9);
+    --filter-border: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Dark theme color overrides */
+  [data-theme="dark"] {
+    --background-blue: #1a1a2e;
+    --card-bg: #2a2a3e;
+    --text-color: #e0e0e0;
+    --text-gray: #a0a0a0;
+    --border-color: #444444;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --footer-bg: #2a2a3e;
+    --retirement-red: #ff6b47;
+    --success-green: #4cd964;
+    --filter-bg: rgba(42, 42, 62, 0.9);
+    --filter-border: rgba(68, 68, 68, 0.5);
+  }
+
+  /* ==========================================================================
+     BASE STYLES
+     Global styles and resets
+     ========================================================================== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  html {
+    scroll-behavior: smooth; /* Enable smooth scrolling for anchor links */
+  }
+
+  body {
+    background-color: var(--background-blue);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+  }
+
+  /* ==========================================================================
+     HEADER STYLES
+     Styles for the top navigation bar and logo
+     ========================================================================== */
+  .header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(to bottom, var(--azure-dark-blue) 0%, var(--azure-blue) 60%, var(--azure-light-blue) 100%);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+  }
+
+  /* Logo and branding */
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-text {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ==========================================================================
+     THEME TOGGLE STYLES
+     Styles for the light/dark theme toggle button
+     ========================================================================== */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+
+  .theme-toggle-group {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .theme-toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: white;
+    transition: background-color 0.3s;
+    position: relative;
+  }
+
+  .theme-toggle-button.active {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .theme-toggle-button:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .theme-toggle-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Tooltip for theme toggle */
+  .theme-toggle-tooltip {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+
+  .theme-toggle-button:hover .theme-toggle-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ==========================================================================
+     SOCIAL SHARING STYLES
+     Styles for social media sharing buttons
+     ========================================================================== */
+  .social-share {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .social-share-label {
+    color: var(--text-gray);
+    margin-right: 5px;
+  }
+
+  .social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Generic social button style */
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+
+  .social-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+  }
+
+  .social-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Specific social platform colors */
+  .social-button.linkedin {
+    background-color: var(--linkedin-blue);
+    color: white;
+  }
+
+  .social-button.twitter {
+    background-color: var(--twitter-blue);
+    color: white;
+  }
+
+  .social-button.facebook {
+    background-color: var(--facebook-blue);
+    color: white;
+  }
+
+  .social-button.email {
+    background-color: var(--text-gray);
+    color: white;
+  }
+
+  .social-button.copy {
+    background-color: var(--azure-blue);
+    color: white;
+  }
+
+  /* Copy link tooltip */
+  .copy-tooltip {
+    position: absolute;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 100;
+    white-space: nowrap;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .copy-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ==========================================================================
+     CATEGORY MENU STYLES - REDESIGNED
+     Styles for the horizontal category menu with separators
+     ========================================================================== */
+  .category-menu-container {
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .category-menu {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-shadow: 0 3px 10px var(--shadow-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    /* Remove max-height and overflow to eliminate scrollbar */
+    overflow: visible;
+    border: 1px solid var(--border-color);
+  }
+
+  .category-menu-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .category-menu-link {
+    color: var(--azure-blue);
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .category-menu-link:hover {
+    background-color: rgba(0, 120, 212, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .category-menu-link.active {
+    background-color: var(--azure-blue);
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 120, 212, 0.3);
+  }
+
+  .category-count {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-left: 4px;
+    font-weight: normal;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+
+  .category-menu-link.active .category-count {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .category-menu-separator {
+    color: var(--text-gray);
+    margin: 0 2px;
+    opacity: 0.5;
+  }
+
+  .category-menu-toggle {
+    display: none;
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-color);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .category-menu-toggle svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s;
+  }
+
+  .category-menu-toggle.active svg {
+    transform: rotate(180deg);
+  }
+
+  /* ==========================================================================
+     MAIN CONTENT STYLES
+     Styles for the main content area and typography
+     ========================================================================== */
+  .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1;
+  }
+
+  .subtitle {
+    color: var(--text-gray);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* Blog section styles */
+  .blog-section {
+    margin-top: 20px;
+  }
+
+  .blog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .blog-title {
+    font-size: 24px;
+    color: var(--text-color);
+  }
+
+  .blog-legend {
+    color: var(--text-gray);
+    font-size: 14px;
+  }
+
+  /* Blog controls styles */
+  .blog-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sort-dropdown,
+  .category-dropdown {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px var(--shadow-color);
+  }
+
+  .sort-dropdown:focus,
+  .category-dropdown:focus {
+    outline: none;
+    border-color: var(--azure-blue);
+  }
+
+  /* Category filter styles */
+  .category-filter {
+    margin: 15px 0;
+    padding: 10px 15px;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ==========================================================================
+     FEED ITEMS STYLES
+     Styles for the feed items and their components
+     ========================================================================== */
+  .feed-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* Individual feed item */
+  .feed-item {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .feed-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+  }
+
+  /* Feed item components */
+  .feed-item-content {
+    flex: 1;
+  }
+
+  .feed-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .feed-item-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 5px;
+  }
+
+  .feed-item-title a {
+    color: var(--azure-blue);
+    text-decoration: none;
+    transition: color 0.2s, text-decoration 0.2s, opacity 0.2s;
+  }
+
+  .feed-item-title a:hover {
+    text-decoration: underline;
+  }
+
+  .feed-item-author {
+    font-size: 14px;
+    color: var(--text-gray);
+  }
+
+  .feed-item-description {
+    font-size: 14px;
+    color: var(--text-gray);
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+
+  /* Star button */
+  .star-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 24px;
+    line-height: 1;
+    transition: color 0.2s;
+    padding: 5px;
+  }
+
+  .star-button.favorite {
+    color: #ffd700;
+  }
+
+  .star-button:hover {
+    transform: scale(1.1);
+  }
+
+  /* Category tags */
+  .feed-item-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .feed-item-category {
+    display: inline-block;
+    background-color: var(--azure-blue);
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+
+  /* Error message styles */
+  .error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+
+  [data-theme="dark"] .error-message {
+    background-color: #4a1515;
+    color: #ff8a80;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: var(--text-gray);
+    font-style: italic;
+  }
+
+  /* Loading state */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: var(--text-gray);
+  }
+
+  /* ==========================================================================
+     FOOTER STYLES
+     Styles for the page footer
+     ========================================================================== */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-gray);
+    font-size: 14px;
+    background-color: var(--footer-bg);
+    margin-top: 30px;
+    box-shadow: 0 -2px 10px var(--shadow-color);
+  }
+
+  .footer p {
+    margin-bottom: 10px;
+  }
+
+  .footer a {
+    color: var(--azure-blue);
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  .footer .heart {
+    color: #e25555;
+  }
+
+  /* ==========================================================================
+     GO TO TOP BUTTON
+     Styles for the floating "back to top" button
+     ========================================================================== */
+  .go-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--azure-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+    z-index: 1000;
+  }
+
+  .go-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .go-to-top:hover {
+    background: var(--azure-dark-blue);
+  }
+
+  .go-to-top svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* ==========================================================================
+     PRELOADER STYLES
+     Styles for the loading spinner shown before content loads
+     ========================================================================== */
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  [data-theme="dark"] .preloader {
+    background-color: rgba(26, 26, 46, 0.8);
+  }
+
+  .preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(0, 120, 212, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--azure-blue);
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ==========================================================================
+     RESPONSIVE STYLES
+     Media queries for responsive design on smaller screens
+     ========================================================================== */
+  @media (max-width: 768px) {
+    /* Header adjustments for mobile */
+    .header {
+      flex-direction: column;
+      align-items: stretch;
+      border-radius: 0;
+    }
+
+    /* Content adjustments for mobile */
+    .blog-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .feed-item-header {
+      flex-direction: column;
+    }
+
+    .star-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+
+    /* Button adjustments for mobile */
+    .go-to-top {
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .theme-toggle {
+      top: 10px;
+      right: 10px;
+    }
+
+    .blog-controls {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .category-filter {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .sort-dropdown,
+    .category-dropdown {
+      width: 100%;
+    }
+
+    /* Category menu responsive styles */
+    .category-menu {
+      display: none;
+      padding: 15px;
+      max-height: 300px;
+      overflow-y: auto; /* Only show scrollbar on mobile if needed */
+    }
+
+    .category-menu.show {
+      display: flex;
+    }
+
+    .category-menu-toggle {
+      display: flex;
+    }
+
+    .category-menu-item {
+      margin: 4px 0;
+    }
+
+    .category-menu-separator {
+      display: none; /* Hide separators on mobile */
+    }
+  }
+
+  /* Broken link styles */
+  .link-broken {
+    color: #d44000 !important;
+    text-decoration: line-through !important;
+    opacity: 0.8;
+    position: relative;
+  }
+
+  .link-unknown {
+    color: #888 !important;
+  }
+
+  .broken-link-indicator {
+    font-size: 14px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  /* Dark theme adjustments for broken links */
+  [data-theme="dark"] .link-broken {
+    color: #ff6b47 !important;
+  }
+
+  [data-theme="dark"] .link-unknown {
+    color: #aaa !important;
+  }
+
