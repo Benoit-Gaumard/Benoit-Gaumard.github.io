@@ -1,7 +1,7 @@
 +++
 author = "Benoit G"
 title = "How to delegate a domain to Azure DNS"
-date = "2024-11-06"
+date = "2025-12-16"
 description = ""
 toc = true
 tags = [
@@ -9,109 +9,197 @@ tags = [
 ]
 categories = ["Azure"
 ]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
-#featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
+#featureImage = "/images/azure-dns-zone.png" # Sets featured image on blog post.
+#featureImageAlt = '' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/rest-api.jpeg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/images/azure-dns-zone.png" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/images/azure-dns-zone.png" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
 +++
 
-If you want to create your own or to contribute to an existing GitHub project you are on the right page.
+How to delegate a domain to Azure DNS.
 <!--more-->
 
-## 1. Contexte
+
+## 1. Intro
 ---
 
-Je possède un nom de domaine benoitgaumard.fr qui permet d’afficher le site que vous visitez 🙂
+Azure DNS allows you to host a DNS domain and manage the DNS zone records. To host your domain in Azure, the zone must be created in Azure and delegated to Azure's authoritative DNS servers with a domain registrar. Azure DNS isn't a domain registrar.
 
-La gestion de la zone DNS pour ce domaine est effectuée par le registrar chez qui j’ai acheté le nom de domaine, en l’occurrence OVH.
+- What is DNS delegation:
+https://learn.microsoft.com/en-us/azure/dns/dns-domain-delegation
 
-Si je me connecte à l’interface OVH, je peux gérer ma zone DNS et y ajouter n’importe quel type d’enregistrement (A, CNAME, NS, MX, TXT, etc) en cas de besoin.
+- Host your domain in Azure DNS: https://learn.microsoft.com/en-us/azure/dns/dns-delegate-domain-azure-dns
 
-Pour différentes applications hébergées dans Azure, j’ai régulièrement besoin de créer de nouvelles entrées, afin que mes applications puissent s’afficher avec un nom de domaine de type : http://monapp1.benoitgaumard.fr, http://monapp2.benoitgaumard.fr, etc
-
-
-Pour cela je dois donc effectuer la configuration en allant dans deux interfaces différentes (Portails), celui d’Azure : https://portal.azure.com et celui d’OVH : https://www.ovh.com/manager
-
-Le but de cet article est de montrer comment centraliser la gestion de cette zone dans Azure DNS en faisant une délégation de zone.
-
-## 2. Création d’une nouvelle zone DNS publique dans Azure
+## 1. Context
 ---
 
-Azure DNS vous permet d’héberger une zone DNS et de gérer les enregistrements DNS pour un domaine dans Azure. Pour que les requêtes DNS d’un domaine atteignent Azure DNS, le domaine doit être délégué à Azure DNS à partir du domaine parent. Azure DNS n’est pas le bureau d’enregistrement (Registrar) de ce domaine.
+I own a domain name, quickquotemaker.io, which is used to display the website you are currently visiting 🙂
 
-Se connecter au portail Azure et rechercher DNS Zone dans le Marketplace.
-Cliquer Sur Create.
-Spécifier un resource group existant ou en créer un nouveau.
-Dans le champs Name indiquer le nom de la zone DNS à créer.
-Choisir l’emplacement du groupe de resource (West Europe)
-Ajouter des Tags si nécéssaire
-Cliquer sur Create
+The DNS zone management for this domain is handled by the registrar where I purchased the domain name, in this case **OVH**.
 
-Note: Pour information Azure vous autorise à créer n’importe quel nom de zone (Ex : Microsoft.com, Google.fr, toto.local) même si vous n’êtes pas le propriétaire. Cependant pour la gérer et ajouter de nouveaux enregistrements il faut en être le propriétaire.
+<img src="/images/dns-delegation/domain-names.png" width="50%" height="50%">
 
-Pour gérer la zone, Azure met à disposition par défaut 4 Name Server (NS) afin d’assurer une redondance en cas de panne.
+If I log in to the OVH interface, I can manage my DNS zone and add any type of record as needed (A, CNAME, NS, MX, TXT, etc.).
 
-Note: Copier les noms des serveurs NS dans un coin, ils serviront pour effectuer la délégation dans le portail OVH.
+<img src="/images/dns-delegation/dns-entries.png" width="50%" height="50%">
 
-## 3. Déléguer le domaine
+For various applications hosted in Azure, I regularly need to create new DNS entries so that my applications can be accessed using domain names such as:
+
+- http://myapp1.quickquotemaker.io
+- http://myapp2.quickquotemaker.io
+- etc.
+
+To do this, I currently have to configure DNS settings in two different interfaces (portals):
+- The Azure portal: https://portal.azure.com
+- The OVH portal: https://www.ovh.com/manager
+
+The goal of this article is to show how to centralize DNS zone management in Azure DNS by delegating the zone.
+
+## 2. Creating a new Public DNS Zone in Azure
 ---
 
-Maintenant que la zone DNS est créée et que nous disposons des serveurs de noms, il faut mettre à jour le domaine parent avec les serveurs de noms Azure DNS. Chaque bureau d’enregistrement (registrar) a ses propres outils (Portail, etc) de gestion DNS pour modifier les enregistrements de serveur de noms pour un domaine.
+Azure DNS allows you to host a DNS zone and manage DNS records for a domain directly in Azure. For DNS queries for a domain to reach Azure DNS, the domain must be delegated to Azure DNS from the parent domain. **Azure DNS is not the domain registrar.**
 
-- Retourner dans le portail OVH.
-- Aller dans le menu DNS Servers.
-- Supprimer les entrées de type NS OVH.
-- Ajouter les 4 serveurs NS Azure (Supprimer le point final).
-- Cliquer sur Apply Configuration.
+Steps:
 
-Note: Attention vos sites et services associés à votre nom de domaine (mail, ftp,etc) ne seront plus accessibles le temps de la manipulation.
+- Sign in to the Azure portal and search for DNS Zone in the Marketplace.
+<img src="/images/dns-delegation/azure-dns-zone.png" width="50%" height="50%">
+- Click Create.
+<img src="/images/dns-delegation/create-dns-zone.png" width="50%" height="50%">
 
-## 4. Créer les enregistrements DNS
+- Select an existing resource group or create a new one.
+- In the Name field, enter the DNS zone name to create.
+- Choose the resource group location (West Europe).
+- Add tags if necessary.
+- Click Create.
+<img src="/images/dns-delegation/new-dns-zone.png" width="50%" height="50%">
+
+{{% notice note "Note " %}}
+Azure allows you to create a DNS zone with any name (e.g., microsoft.com, google.fr, toto.local), even if you are not the owner. However, to actually manage the zone and add records, you must be the domain owner.
+{{% /notice %}}
+
+To manage the zone, Azure provides four Name Servers (NS) by default to ensure redundancy in case of failure.
+
+<img src="/images/dns-delegation/azure-ns-servers.png" width="50%" height="50%">
+
+
+{{% notice note "Note " %}}
+Copy the NS server names and keep them handy — they will be required to configure the delegation in the OVH portal.
+{{% /notice %}}
+
+## 3. Delegate the Domain
 ---
 
-Maintenant Azure DNS est en charge de gérer cette zone, il va donc falloir recréer les enregistrement adéquats (A, CNAME, NS, MX, TXT, etc) afin que le service revienne à la normale et que votre si web s’affiche par exemple.
+Now that the DNS zone is created and we have the name servers, we need to update the parent domain with the Azure DNS name servers. Each registrar has its own tools (portal, etc.) for managing DNS and modifying name server records.
 
-Pour que mon site s’affiche, le premier enregistrement à créer dans Azure DNS est un enregistrement de type A pointant vers l’IP publique de mon site web fournie par OVH.
+Steps in OVH:
 
-Dans Azure DNS, cliquer sur Record set.
+- Go back to the OVH portal.
 
-- Laisser le champs Name vide ou taper @ (Correspond à la racine du site).
-- Sélectionner un enregistrement de type A.
-- Laisser le TTL par défaut.
-- Ajouter l’adresse IP publique du site web.
+- Navigate to the DNS Servers menu.
 
-Une fois l’entrée nous obtenons ceci :
+- Click Modify DNS Servers
+<img src="/images/dns-delegation/modify-dns-servers.png" width="50%" height="50%">
+
+- Select Use my own DNS and add the 4 Azure name Servers
+- Add the four Azure DNS name servers (remove the trailing dot).
+
+<img src="/images/dns-delegation/add-new-ns.png" width="50%" height="50%">
+
+<img src="/images/dns-delegation/add-azure-dns.png" width="50%" height="50%">
+
+- Remove the existing OVH NS entries.
+<img src="/images/dns-delegation/remove-ovh-ns.png" width="50%" height="50%">
 
 
-Nous allons maintenant crée une entrée www de type CNAME qui pointe vers la racine du site.
+Click Apply Configuration.
+<img src="/images/dns-delegation/apply-ovh-dns-config.png" width="50%" height="50%">
 
-## 5. Tester la délégation
+DNS Servers for the zone are now Azure DNS Servers
+
+<img src="/images/dns-delegation/custom-dns-servers.png" width="50%" height="50%">
+
+{{% notice note "Note " %}}
+Be careful — your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.
+{{% /notice %}}
+
+## 4. Create DNS Records
 ---
 
-Une fois la délégation effectuée, vous pouvez vérifier qu’elle fonctionne à l’aide d’un outil tel que nslookup pour interroger la zone. Vous devrez peut-être patienter 10 minutes ou plus une fois la délégation effectuée avant de pouvoir vérifier qu’elle fonctionne. La propagation des modifications dans le système DNS peut prendre du temps.
+**Now that Azure DNS is responsible for managing the zone**,
+All administratistes tasks should be done on Azure now.
 
-Il est inutile de spécifier les serveurs de noms Azure DNS. Si la délégation est correctement configurée, le processus de résolution DNS normal détecte automatiquement les serveurs de noms Azure.
+First, You need to recreate the appropriate DNS records (A, CNAME, NS, MX, TXT, etc.) so that services return to normal and, for example, your website is displayed correctly.
+
+To display my website, the first record to create in Azure DNS is an A record pointing to the public IP address of my website provided by OVH.
+
+- In Azure DNS, click Record set:
+
+- Leave the Name field empty or enter @ (this corresponds to the root of the domain).
+
+- Select record type A.
+
+- Leave the default TTL.
+
+- Add the public IP address of the website.
+<img src="/images/dns-delegation/add-record-set.png" width="50%" height="50%">
+
+- Once the record is created, you should see the corresponding entry.
+<img src="/images/dns-delegation/new-record-set.png" width="50%" height="50%">
 
 
-À partir d’une invite de commandes, saisir la commande nslookup comme dans l’exemple suivant :
+- Next, create a www record of type CNAME pointing to the root domain.
+<img src="/images/dns-delegation/cname-record.png" width="50%" height="50%">
 
-nslookup -type=SOA benoitgaumard.fr
-Vérifier que la réponse ressemble à la sortie nslookup suivante :
+## 5. Test the Delegation
+---
+
+Once the delegation is complete, you can verify that it works using a tool such as nslookup or https://www.zonemaster.net/ to query the zone. You may need to wait 10 minutes or more after delegation before verification. DNS propagation can take some time.
+
+There is no need to explicitly specify the Azure DNS name servers. If the delegation is configured correctly, the standard DNS resolution process will automatically detect the Azure name servers.
+
+From a command prompt, run the following commands:
+
+- Clear the cache first
+
+```bash
+ipconfig /flushdns
+```
+<img src="/images/dns-delegation/flush-dns.png" width="50%" height="50%">
 
 
-Pour afficher les serveurs de noms, taper la commande suivante :
+- Then check the SOA with this command
 
-nslookup -type=NS benoitgaumard.fr
-Vérifier que la réponse ressemble à la sortie nslookup suivante :
+```bash
+nslookup -type=SOA quickquotemaker.io
+```
 
-Autre test avec un enregistrement de type www :
+Verify that the response looks like the expected nslookup output.
 
-Le site est maintenant joignable via les 2 urls et la gestion des entrées DNS s’effectue directement dans le portail Azure.
+- To display the name servers, run:
 
-Note: Conseil ajoutez un lock de type Delete sur votre resource group DNS afin déviter que celui-ci ne soit supprimé accidentellement.
+```bash
+nslookup -type=NS quickquotemaker.io
+```
 
-Enjoy !
+<img src="/images/dns-delegation/ns-command.png" width="50%" height="50%">
+
+
+Verify that the response matches the Azure DNS name servers.
+
+Another test can be performed using the www record.
+
+The site is now accessible via both URLs, and DNS record management is performed directly from the Azure portal.
+
+All DNS management actions add / delete records, etc should be done onbly from azure
+
+{{% notice note "Note " %}}
+Wait for the DNS replication.
+Recommendation — add a Delete lock on your DNS resource group to prevent accidental deletion.
+
+{{% /notice %}}
+
+Enjoy! 🚀

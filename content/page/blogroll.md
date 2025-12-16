@@ -24,20 +24,6 @@ This section offers a curated collection of helpful links, providing resources a
 [Back To Top](#documentTop)
 
 - Azure Talk Blog: https://blog.zuehlke.cloud/
-- https://cidr.xyz/
-- https://davidsantiago.fr/
-- https://tutorialsdojo.com/
-- https://xkcd.com/1319/
-- https://cocallaw.com/
-- https://brave-rock-019155e03.4.azurestaticapps.net/
-- https://azcaptain.azurewebsites.net/LandingZone.html
-- https://azure.github.io/Azure-Verified-Modules/
-- https://fr.camelcamelcamel.com/
-- https://www.azureman.com/
-- https://azuredoctor.fr/
-- https://github.com/nehalineogi/azure-networking/tree/main
-- https://medium.com/@arnaud.tincelin
-- https://rozemuller.com/avd-automation-cocktail-avd-automated-with-azure-cli/
 
 ## 🏗️ Architecture
 ---
