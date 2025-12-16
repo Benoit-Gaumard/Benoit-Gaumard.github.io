@@ -1,3 +1,3 @@
-# Hello world 👋
+# Hello
 
-This repository offers a website based on Hugo.
+Deployment is in progress ... 🚀

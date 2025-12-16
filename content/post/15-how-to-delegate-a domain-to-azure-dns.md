@@ -28,7 +28,9 @@ How to delegate a domain to Azure DNS.
 
 Azure DNS allows you to host a DNS domain and manage the DNS zone records. To host your domain in Azure, the zone must be created in Azure and delegated to Azure's authoritative DNS servers with a domain registrar.
 
+{{% notice note "Note " %}}
 **Azure DNS isn't a domain registrar, you must buy your domain name first from a registrar like GoDaddy, OHV, CloudFlare, etc.**
+{{% /notice %}}
 
 The official documentation is available here:
 
@@ -105,7 +107,7 @@ To manage the zone, Azure provides four Name Servers (NS) by default to ensure r
 Copy the NS server names and keep them handy, they will be required to configure the delegation in the OVH portal.
 {{% /notice %}}
 
-## 3. Delegate the Domain
+## 3. Delegate the domain
 ---
 
 Now that the DNS zone is created and we have the name servers, we need to update the parent domain with the Azure DNS name servers. Each registrar has its own tools (portal, etc.) for managing DNS and modifying name server records.
@@ -143,7 +145,7 @@ Click **Apply Configuration**.
 Be careful, your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.
 {{% /notice %}}
 
-## 4. Create DNS Records
+## 4. Create DNS records
 ---
 
 {{% notice note "Note " %}}
@@ -174,7 +176,7 @@ To display my website, the first record to create in Azure DNS is an **A** recor
 
 <img src="/images/dns-delegation/cname-record.png" width="50%" height="50%">
 
-## 5. Test the Delegation
+## 5. Test the delegation
 ---
 
 Once the delegation is complete, you can verify that it works using a tool such as nslookup or https://www.zonemaster.net/ to query the zone. You may need to wait 10 minutes or more after delegation before verification. DNS propagation can take some time.
