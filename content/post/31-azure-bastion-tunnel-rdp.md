@@ -16,22 +16,30 @@ codeLineNumbers = false # Override global value for showing of line numbers with
 figurePositionShow = true # Override global value for showing the figure label.
 +++
 
+Connect directly to your Azure virtual machines using the native RDP client through Bastion.
+<!--more-->
+
+## Introduction
+---
+
 Azure Bastion is a fully managed PaaS service that provides secure and seamless RDP/SSH connectivity to your virtual machines directly over TLS from the Azure portal, or via the native SSH or RDP client already installed on your local computer.
 
 Official documentation is available here: https://learn.microsoft.com/en-us/azure/bastion/bastion-overview
 
-## Introduction
-
 Native client support is a feature in Azure Bastion, which allows users to use native SSH and RDP programs to connect to Bastion instead of using the Azure Bastion web interface.
 
 ## Prequisites
-Bastion
+---
+
+- Azure Bastion deployed
 
 {{% notice note "Note " %}}
 Native client support must be enabled on Bastion to create the tunnel.
 {{% /notice %}}
 
 ## Azure Bastion Native Client Support
+---
+
 Instead of logging in through the Azure Portal, Azure Bastion now allows users to connect using their native RDP or SSH clients.
 
 Go to **Bastion** --> **Settings** --> **Configuration** --> **Native client support**.
@@ -42,6 +50,7 @@ Go to **Bastion** --> **Settings** --> **Configuration** --> **Native client sup
 
 
 ## Create the RDP tunnel
+---
 
 Open a terminal:
 
@@ -79,13 +88,19 @@ az network bastion tunnel --name $BastionName `
 
 <img src="/images/bastion/bastion-tunnel.png" width="50%" height="50%">
 
-Open RDP connection to the VM
+Open RDP connection to the VM:
 
 ```Bash
 mstsc /v:127.0.0.1:50022
 ```
 
 <img src="/images/bastion/mstsc.png" width="50%" height="50%">
+
+<img src="/images/bastion/rdp1.png" width="50%" height="50%">
+
+<img src="/images/bastion/rdp2.png" width="50%" height="50%">
+
+<img src="/images/bastion/rdp3.png" width="50%" height="50%">
 
 You should now be connected to the target VM through the Azure Bastion tunnel. You can use this connection to manage the VM as needed.
 
