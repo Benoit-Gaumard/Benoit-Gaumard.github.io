@@ -46,9 +46,6 @@ Go to **Bastion** --> **Settings** --> **Configuration** --> **Native client sup
 
 <img src="/images/bastion/native-client-support.png" width="50%" height="50%">
 
-<img src="/images/policy-alias-search/policy-alias-search-1.png" width="50%" height="50%">
-
-
 ## Create the RDP tunnel
 ---
 
@@ -62,13 +59,14 @@ az account set --subscription <your_subscription_id>
 Define your variables to target the VM to connect to:
 
 ```Bash
-$BastionName = "bstitwodgwc01"
-$BastionRG = "rg-itwo-d-gwc-network"
+$BastionName = "bstbga01"
+$BastionRG = "rg-bst"
 $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/providers/Microsoft.Compute/virtualMachines/vmapp001"
 ```
 
 {{% notice note "Note " %}}
 To get the VM resoure Id go to:
+
 **Virtual machines** --> **Select Your VM** --> **Overview** --> **JSON View** --> **Copy the Resource ID**.
 
 <img src="/images/bastion/resource-json.png" width="50%" height="50%">
