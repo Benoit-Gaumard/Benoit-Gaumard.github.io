@@ -39,6 +39,9 @@ Go to **Bastion** --> **Settings** --> **Configuration** --> **Native client sup
 
 <img src="/images/bastion/native-client-support.png" width="50%" height="50%">
 
+<img src="/images/policy-alias-search/policy-alias-search-1.png" width="50%" height="50%">
+
+
 ## Create the RDP tunnel
 
 Open a terminal:
