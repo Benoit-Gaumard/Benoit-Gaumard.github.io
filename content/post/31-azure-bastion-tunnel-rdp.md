@@ -6,20 +6,15 @@ description = ""
 toc = false
 tags = ["bastion"]
 categories = ["Bastion"]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
+#featureImage = "/images/bastion/bastion.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/Policy.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/images/bastion/bastion.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/images/bastion/bastion.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
 +++
-
-If you want to create your own or to contribute to an existing GitHub project you are on the right page.
-<!--more-->
-
-<img src="/images/Policy.svg">
 
 Azure Bastion is a fully managed PaaS service that provides secure and seamless RDP/SSH connectivity to your virtual machines directly over TLS from the Azure portal, or via the native SSH or RDP client already installed on your local computer.
 
