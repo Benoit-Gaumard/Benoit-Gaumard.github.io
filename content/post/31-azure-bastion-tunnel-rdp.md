@@ -1,6 +1,6 @@
 +++
 author = "Benoit G"
-title = "Bastion"
+title = "Connect Azure VM using the native RDP client through Bastion"
 date = "2026-03-06"
 description = ""
 toc = false
