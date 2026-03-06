@@ -1,14 +1,12 @@
 +++
 author = "Benoit G"
-title = "Search Azure policy aliases and sends output to an interactive table"
-date = "2024-11-13"
-description = "Search Azure policy aliases and sends output to an interactive table"
-toc = false
-tags = [
-    "policies"
-]
-categories = ["Azure"
-]
+title = "Bastion"
+date = "2026-03-06"
+description = ""
+toc = true
+draft = false
+tags = ["Azure", "Bastion"]
+categories = ["Bastion"]
 #featureImage = "/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
