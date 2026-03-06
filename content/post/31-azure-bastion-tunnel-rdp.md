@@ -2,7 +2,7 @@
 author = "Benoit G"
 title = "Connect Azure VM using the native RDP client through Bastion"
 date = "2026-03-06"
-description = ""
+description = "Connect Azure VM using the native RDP client through Bastion"
 toc = false
 tags = ["bastion"]
 categories = ["Bastion"]
