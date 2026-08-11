@@ -182,6 +182,20 @@
     }
     input::placeholder { color: var(--cp-text-muted); }
 
+    .source-disclaimer {
+      margin: 0 0 1rem;
+      padding: .875rem 1rem;
+      border-left: 3px solid var(--cp-accent);
+      border-radius: 0 6px 6px 0;
+      background: var(--cp-panel);
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      line-height: 1.5;
+    }
+    .source-disclaimer strong { color: var(--cp-text); }
+    .source-disclaimer a { margin-left: .25rem; }
+    .source-disclaimer a[hidden] { display: none; }
+
     .results-bar {
       display: flex;
       align-items: center;
@@ -452,6 +466,12 @@
         </div>
       </div>
 
+      <p class="source-disclaimer" id="sourceDisclaimer">
+        <strong>Disclaimer:</strong>
+        <span id="sourceDisclaimerText">All icons are sourced from multiple repositories and are the property of their respective owners. Please refer to their terms of use.</span>
+        <a id="sourceDisclaimerLink" href="" target="_blank" rel="noopener noreferrer" hidden>View source</a>
+      </p>
+
       <div class="results-bar" aria-live="polite">
         <p id="resultCount">Loading icons...</p>
         <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
@@ -489,6 +509,24 @@
 
   <script>
     const DEFAULT_PAGE_SIZE = 50;
+    const SOURCE_DISCLAIMERS = {
+      "": {
+        text: "All icons are sourced from multiple repositories and are the property of their respective owners. Please refer to their terms of use.",
+        url: ""
+      },
+      "Microsoft": {
+        text: "All icons are sourced from Official Azure Icons and are the property of their respective owners. Please refer to their terms of use.",
+        url: "https://learn.microsoft.com/en-us/azure/architecture/icons/"
+      },
+      "Ben Coleman": {
+        text: "All icons are sourced from Ben Coleman - CDS and are the property of their respective owners. Please refer to their terms of use.",
+        url: "https://github.com/benc-uk/icon-collection/tree/master/azure-icons"
+      },
+      "Sandro": {
+        text: "All icons are sourced from Sandro - Icons and are the property of their respective owners. Please refer to their terms of use.",
+        url: "https://github.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/tree/master/Azure/SVG"
+      }
+    };
     const state = { icons: [], filtered: [], visible: DEFAULT_PAGE_SIZE, pageSize: DEFAULT_PAGE_SIZE, selectedIcon: null };
     const elements = {
       search: document.getElementById("search"),
@@ -498,6 +536,8 @@
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
+      sourceDisclaimerText: document.getElementById("sourceDisclaimerText"),
+      sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
       clearFilters: document.getElementById("clearFilters"),
       loadMore: document.getElementById("loadMore"),
       dialog: document.getElementById("previewDialog"),
@@ -611,6 +651,13 @@
           const label = category.replace(/\b\w/g, (letter) => letter.toUpperCase());
           elements.category.append(new Option(`${label} (${categoryCounts.get(category).toLocaleString()})`, category));
         });
+    }
+
+    function updateSourceDisclaimer() {
+      const disclaimer = SOURCE_DISCLAIMERS[elements.source.value] || SOURCE_DISCLAIMERS[""];
+      elements.sourceDisclaimerText.textContent = disclaimer.text;
+      elements.sourceDisclaimerLink.href = disclaimer.url;
+      elements.sourceDisclaimerLink.hidden = !disclaimer.url;
     }
 
     function openPreview(icon) {
@@ -729,6 +776,7 @@
     });
     elements.source.addEventListener("change", () => {
       populateCategories();
+      updateSourceDisclaimer();
       applyFilters();
     });
     elements.category.addEventListener("change", applyFilters);
@@ -742,6 +790,7 @@
       elements.source.value = "";
       elements.category.value = "";
       populateCategories();
+      updateSourceDisclaimer();
       applyFilters();
       elements.search.focus();
     });
