@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse and download a curated gallery of Azure SVG icons.">
+  <title>Azure SVG Icon Gallery | Benoit Gaumard</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background-color: var(--cp-bg);
+      background-image:
+        linear-gradient(var(--cp-border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--cp-border) 1px, transparent 1px);
+      background-size: 3rem 3rem;
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, footer {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      color: var(--cp-text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand-mark { color: var(--cp-accent); }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro {
+      max-width: 52rem;
+      margin-bottom: 2rem;
+    }
+    .eyebrow {
+      margin: 0 0 .5rem;
+      color: var(--cp-accent);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .intro-text {
+      max-width: 44rem;
+      margin: 1rem 0 0;
+      color: var(--cp-text-muted);
+      font-size: 1.05rem;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 4.75rem;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: minmax(14rem, 1fr) minmax(11rem, .35fr) minmax(9rem, .25fr);
+      gap: .75rem;
+      margin-bottom: 1rem;
+      padding: .75rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      backdrop-filter: blur(12px);
+    }
+    .field { position: relative; }
+    .field label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    input, select {
+      width: 100%;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .75rem;
+    }
+    input::placeholder { color: var(--cp-text-muted); }
+
+    .results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: var(--cp-text-muted);
+      font-size: .9rem;
+    }
+    .results-bar p { margin: 0; }
+    .clear-button {
+      border: 0;
+      background: transparent;
+      color: var(--cp-link);
+      cursor: pointer;
+      padding: .25rem;
+    }
+    .clear-button[hidden] { display: none; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+      gap: .75rem;
+    }
+    .icon-card {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 8rem auto auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      transition: border-color .18s ease, transform .18s ease;
+    }
+    .icon-card:hover {
+      border-color: var(--cp-accent);
+      transform: translateY(-2px);
+    }
+    .preview-button {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--cp-border);
+      background:
+        linear-gradient(45deg, var(--cp-surface-soft) 25%, transparent 25%) 0 0 / 1rem 1rem,
+        linear-gradient(45deg, transparent 75%, var(--cp-surface-soft) 75%) 0 0 / 1rem 1rem,
+        linear-gradient(45deg, transparent 75%, var(--cp-surface-soft) 75%) .5rem -.5rem / 1rem 1rem,
+        linear-gradient(45deg, var(--cp-surface-soft) 25%, var(--cp-surface) 25%) .5rem -.5rem / 1rem 1rem;
+      cursor: zoom-in;
+    }
+    .preview-button img {
+      width: 4.75rem;
+      height: 4.75rem;
+      object-fit: contain;
+    }
+    .card-copy { min-width: 0; padding: .75rem .75rem .5rem; }
+    .icon-name {
+      min-height: 2.5em;
+      margin: 0;
+      overflow: hidden;
+      color: var(--cp-text);
+      font-size: .875rem;
+      font-weight: 650;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .category {
+      margin: .375rem 0 0;
+      overflow: hidden;
+      color: var(--cp-text-muted);
+      font-size: .72rem;
+      text-overflow: ellipsis;
+      text-transform: capitalize;
+      white-space: nowrap;
+    }
+    .download-link {
+      display: flex;
+      min-height: 2.5rem;
+      align-items: center;
+      justify-content: center;
+      margin: .25rem .75rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      color: var(--cp-text);
+      font-size: .8rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+    .download-link:hover {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent-hover);
+    }
+
+    .empty-state, .error-state {
+      grid-column: 1 / -1;
+      padding: 4rem 1rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-panel);
+      text-align: center;
+    }
+    .empty-state h2, .error-state h2 { margin: 0; font-size: 1.25rem; }
+    .empty-state p, .error-state p { margin: .5rem 0 0; color: var(--cp-text-muted); }
+    .load-more-wrap { display: flex; justify-content: center; padding-top: 2rem; }
+    .load-more {
+      min-height: 2.75rem;
+      padding: .625rem 1.25rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .load-more:hover { background: var(--cp-accent-hover); }
+    .load-more[hidden] { display: none; }
+
+    dialog {
+      width: min(42rem, calc(100% - 2rem));
+      max-height: calc(100vh - 2rem);
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      box-shadow: var(--cp-shadow);
+    }
+    dialog::backdrop { background: var(--cp-overlay); backdrop-filter: blur(6px); }
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .dialog-header h2 { min-width: 0; margin: 0; font-size: 1.05rem; }
+    .close-button {
+      width: 2.5rem;
+      height: 2.5rem;
+      flex: 0 0 auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+    .dialog-preview {
+      display: grid;
+      min-height: 20rem;
+      place-items: center;
+      padding: 2rem;
+      background: var(--cp-surface-soft);
+    }
+    .dialog-preview img { width: min(16rem, 70vw); height: min(16rem, 70vw); object-fit: contain; }
+    .dialog-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .dialog-meta { min-width: 0; color: var(--cp-text-muted); font-size: .8rem; text-transform: capitalize; }
+    .dialog-download {
+      flex: 0 0 auto;
+      padding: .625rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .dialog-download:hover { background: var(--cp-accent-hover); }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1.5rem 2rem;
+      border-top: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: .8rem;
+    }
+
+    @media (max-width: 48rem) {
+      .toolbar { position: static; grid-template-columns: 1fr 1fr; }
+      .toolbar .search-field { grid-column: 1 / -1; }
+      .gallery { grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, footer { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
+      .toolbar .search-field { grid-column: auto; }
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+      .icon-card { grid-template-rows: 7rem auto auto; }
+      .dialog-footer, footer { align-items: stretch; flex-direction: column; }
+      .dialog-download { text-align: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .icon-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><span class="brand-mark">B.</span>G / Icons</a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/blog/">Blog</a>
+        <a href="/">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">SVG library</p>
+      <h1 id="page-title">Azure icon gallery</h1>
+      <p class="intro-text">Find the right Azure service icon, preview it at full size, and download the original SVG for your diagrams and documentation.</p>
+    </section>
+
+    <section aria-label="Icon browser">
+      <div class="toolbar">
+        <div class="field search-field">
+          <label for="search">Search icons</label>
+          <input id="search" type="search" placeholder="Search by service or category..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category"><option value="">All categories</option></select>
+        </div>
+        <div class="field">
+          <label for="sort">Sort</label>
+          <select id="sort">
+            <option value="name-asc">Name A-Z</option>
+            <option value="name-desc">Name Z-A</option>
+            <option value="category">Category</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="results-bar" aria-live="polite">
+        <p id="resultCount">Loading icons...</p>
+        <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+      </div>
+
+      <div class="gallery" id="gallery" aria-busy="true"></div>
+      <div class="load-more-wrap">
+        <button class="load-more" id="loadMore" type="button" hidden>Show more icons</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Original SVG files, ready to download.</span>
+    <span id="libraryCount"></span>
+  </footer>
+
+  <dialog id="previewDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-header">
+      <h2 id="dialogTitle"></h2>
+      <button class="close-button" id="closeDialog" type="button" aria-label="Close preview">&times;</button>
+    </div>
+    <div class="dialog-preview"><img id="dialogImage" alt=""></div>
+    <div class="dialog-footer">
+      <span class="dialog-meta" id="dialogCategory"></span>
+      <a class="dialog-download" id="dialogDownload" download>Download SVG</a>
+    </div>
+  </dialog>
+
+  <script>
+    const PAGE_SIZE = 96;
+    const state = { icons: [], filtered: [], visible: PAGE_SIZE };
+    const elements = {
+      search: document.getElementById("search"),
+      category: document.getElementById("category"),
+      sort: document.getElementById("sort"),
+      gallery: document.getElementById("gallery"),
+      resultCount: document.getElementById("resultCount"),
+      libraryCount: document.getElementById("libraryCount"),
+      clearFilters: document.getElementById("clearFilters"),
+      loadMore: document.getElementById("loadMore"),
+      dialog: document.getElementById("previewDialog"),
+      dialogTitle: document.getElementById("dialogTitle"),
+      dialogImage: document.getElementById("dialogImage"),
+      dialogCategory: document.getElementById("dialogCategory"),
+      dialogDownload: document.getElementById("dialogDownload"),
+      closeDialog: document.getElementById("closeDialog"),
+    };
+
+    function assetUrl(path) {
+      return `export/${path.split("/").map(encodeURIComponent).join("/")}`;
+    }
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function createCard(icon) {
+      const card = document.createElement("article");
+      card.className = "icon-card";
+
+      const preview = document.createElement("button");
+      preview.className = "preview-button";
+      preview.type = "button";
+      preview.setAttribute("aria-label", `Preview ${icon.name}`);
+      preview.addEventListener("click", () => openPreview(icon));
+
+      const image = document.createElement("img");
+      image.src = assetUrl(icon.path);
+      image.alt = "";
+      image.loading = "lazy";
+      image.decoding = "async";
+      preview.append(image);
+
+      const copy = document.createElement("div");
+      copy.className = "card-copy";
+      const title = document.createElement("h2");
+      title.className = "icon-name";
+      title.textContent = icon.name;
+      title.title = icon.name;
+      const category = document.createElement("p");
+      category.className = "category";
+      category.textContent = icon.category;
+      copy.append(title, category);
+
+      const download = document.createElement("a");
+      download.className = "download-link";
+      download.href = assetUrl(icon.path);
+      download.download = icon.path.split("/").at(-1);
+      download.textContent = "Download SVG";
+      download.setAttribute("aria-label", `Download ${icon.name} as SVG`);
+
+      card.append(preview, copy, download);
+      return card;
+    }
+
+    function render() {
+      elements.gallery.replaceChildren();
+      const visibleIcons = state.filtered.slice(0, state.visible);
+
+      if (!visibleIcons.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML = "<h2>No icons found</h2><p>Try another keyword or clear the category filter.</p>";
+        elements.gallery.append(empty);
+      } else {
+        const fragment = document.createDocumentFragment();
+        visibleIcons.forEach((icon) => fragment.append(createCard(icon)));
+        elements.gallery.append(fragment);
+      }
+
+      const total = state.filtered.length;
+      elements.resultCount.textContent = `${total.toLocaleString()} icon${total === 1 ? "" : "s"} found`;
+      elements.loadMore.hidden = state.visible >= total;
+      elements.loadMore.textContent = `Show more (${Math.min(PAGE_SIZE, total - state.visible)})`;
+      elements.clearFilters.hidden = !elements.search.value && !elements.category.value;
+      elements.gallery.setAttribute("aria-busy", "false");
+    }
+
+    function applyFilters() {
+      const query = normalize(elements.search.value.trim());
+      const selectedCategory = elements.category.value;
+      state.filtered = state.icons.filter((icon) => {
+        const matchesQuery = !query || normalize(`${icon.name} ${icon.category}`).includes(query);
+        return matchesQuery && (!selectedCategory || icon.category === selectedCategory);
+      });
+
+      const sort = elements.sort.value;
+      state.filtered.sort((left, right) => {
+        if (sort === "name-desc") return right.name.localeCompare(left.name);
+        if (sort === "category") return left.category.localeCompare(right.category) || left.name.localeCompare(right.name);
+        return left.name.localeCompare(right.name);
+      });
+      state.visible = PAGE_SIZE;
+      render();
+    }
+
+    function openPreview(icon) {
+      const url = assetUrl(icon.path);
+      elements.dialogTitle.textContent = icon.name;
+      elements.dialogImage.src = url;
+      elements.dialogImage.alt = `${icon.name} preview`;
+      elements.dialogCategory.textContent = icon.category;
+      elements.dialogDownload.href = url;
+      elements.dialogDownload.download = icon.path.split("/").at(-1);
+      elements.dialog.showModal();
+    }
+
+    function showError() {
+      elements.gallery.setAttribute("aria-busy", "false");
+      elements.resultCount.textContent = "Unable to load the icon library";
+      const error = document.createElement("div");
+      error.className = "error-state";
+      error.innerHTML = "<h2>The gallery could not be loaded</h2><p>Please refresh the page or try again later.</p>";
+      elements.gallery.replaceChildren(error);
+    }
+
+    async function initialize() {
+      try {
+        const response = await fetch("icons.json");
+        if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
+        state.icons = await response.json();
+        state.filtered = [...state.icons];
+        const categories = [...new Set(state.icons.map((icon) => icon.category))]
+          .sort((left, right) => left.localeCompare(right));
+        categories.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category;
+          option.textContent = category.replace(/\b\w/g, (letter) => letter.toUpperCase());
+          elements.category.append(option);
+        });
+        elements.libraryCount.textContent = `${state.icons.length.toLocaleString()} icons across ${categories.length} categories`;
+        applyFilters();
+      } catch (error) {
+        console.error(error);
+        showError();
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilters, 100);
+    });
+    elements.category.addEventListener("change", applyFilters);
+    elements.sort.addEventListener("change", applyFilters);
+    elements.clearFilters.addEventListener("click", () => {
+      elements.search.value = "";
+      elements.category.value = "";
+      applyFilters();
+      elements.search.focus();
+    });
+    elements.loadMore.addEventListener("click", () => {
+      state.visible += PAGE_SIZE;
+      render();
+    });
+    elements.closeDialog.addEventListener("click", () => elements.dialog.close());
+    elements.dialog.addEventListener("click", (event) => {
+      if (event.target === elements.dialog) elements.dialog.close();
+    });
+
+    initialize();
+  </script>
+</body>
+</html>

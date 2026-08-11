@@ -66,7 +66,11 @@ jobs:
             --baseURL "${{ steps.pages.outputs.base_url }}/blog/" \
             --destination public/blog
           cp ../index.html public/index.html
-          cp static/CNAME public/CNAME
+          cp ../CNAME public/CNAME
+          mkdir -p public/icons
+          cp ../icons/index.html public/icons/index.html
+          cp -R ../icons/export public/icons/export
+          node ../icons/generate-manifest.mjs public/icons/icons.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

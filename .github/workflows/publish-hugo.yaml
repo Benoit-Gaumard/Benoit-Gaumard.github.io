@@ -37,7 +37,11 @@ jobs:
           rm -rf public
           hugo --minify --destination public/blog
           cp ../index.html public/index.html
-          cp static/CNAME public/CNAME
+          cp ../CNAME public/CNAME
+            mkdir -p public/icons
+            cp ../icons/index.html public/icons/index.html
+            cp -R ../icons/export public/icons/export
+            node ../icons/generate-manifest.mjs public/icons/icons.json
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
