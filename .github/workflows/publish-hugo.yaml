@@ -32,7 +32,12 @@ jobs:
           extended: true
 
       - name: Build
-        run: hugo --minify
+        run: |
+          rm -rf public
+          hugo --minify --destination public/blog
+          cp static/index.html public/index.html
+          cp static/CNAME public/CNAME
+            cp -R static/icons static/images static/logos static/tools public/
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

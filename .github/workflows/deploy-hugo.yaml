@@ -57,10 +57,15 @@ jobs:
           HUGO_ENVIRONMENT: production
           TZ: UTC
         run: |
+          rm -rf public
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "${{ steps.pages.outputs.base_url }}/blog/" \
+            --destination public/blog
+          cp static/index.html public/index.html
+          cp static/CNAME public/CNAME
+          cp -R static/icons static/images static/logos static/tools public/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
