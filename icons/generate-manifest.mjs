@@ -1,4 +1,4 @@
-import { readdir, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -25,9 +25,14 @@ function displayName(filename) {
     .trim();
 }
 
-const icons = (await findSvgFiles(iconsDirectory))
-  .filter((file) => file.toLowerCase().endsWith(".svg"))
-  .map((file) => {
+const svgFiles = (await findSvgFiles(iconsDirectory))
+  .filter((file) => file.toLowerCase().endsWith(".svg"));
+
+const icons = (await Promise.all(svgFiles.map(async (file) => {
+    const content = await readFile(file, "utf8");
+    const openingTag = content.match(/<svg\b[^>]*>/i)?.[0];
+    if (!openingTag || !/\sxmlns=["']http:\/\/www\.w3\.org\/2000\/svg["']/i.test(openingTag)) return null;
+
     const path = relative(iconsDirectory, file).split(sep).join("/");
     const pathSegments = path.split("/");
     return {
@@ -36,8 +41,9 @@ const icons = (await findSvgFiles(iconsDirectory))
       category: pathSegments[1],
       path,
     };
-  })
+  })))
+  .filter(Boolean)
   .sort((left, right) => left.name.localeCompare(right.name));
 
 await writeFile(outputPath, `${JSON.stringify(icons)}\n`, "utf8");
-console.log(`Generated ${icons.length} icons in ${outputPath}`);
+console.log(`Generated ${icons.length} icons (${svgFiles.length - icons.length} skipped) in ${outputPath}`);

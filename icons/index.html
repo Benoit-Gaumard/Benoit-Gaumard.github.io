@@ -209,7 +209,7 @@
     .icon-card {
       min-width: 0;
       display: grid;
-      grid-template-rows: 8rem auto auto;
+      grid-template-rows: 8rem auto;
       border: 1px solid var(--cp-border);
       border-radius: 8px;
       overflow: hidden;
@@ -261,25 +261,6 @@
       text-transform: capitalize;
       white-space: nowrap;
     }
-    .download-link {
-      display: flex;
-      min-height: 2.5rem;
-      align-items: center;
-      justify-content: center;
-      margin: .25rem .75rem .75rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 6px;
-      color: var(--cp-text);
-      font-size: .8rem;
-      font-weight: 650;
-      text-decoration: none;
-    }
-    .download-link:hover {
-      border-color: var(--cp-accent);
-      background: var(--cp-accent-soft);
-      color: var(--cp-accent-hover);
-    }
-
     .empty-state, .error-state {
       grid-column: 1 / -1;
       padding: 4rem 1rem;
@@ -412,7 +393,7 @@
       .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
       .toolbar .search-field { grid-column: auto; }
       .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
-      .icon-card { grid-template-rows: 7rem auto auto; }
+      .icon-card { grid-template-rows: 7rem auto; }
       .dialog-footer, footer { align-items: stretch; flex-direction: column; }
       .dialog-actions { grid-template-columns: 1fr 1fr; }
       .dialog-status { text-align: left; }
@@ -554,6 +535,7 @@
       image.alt = "";
       image.loading = "lazy";
       image.decoding = "async";
+      image.addEventListener("error", () => card.remove(), { once: true });
       preview.append(image);
 
       const copy = document.createElement("div");
@@ -567,14 +549,7 @@
       category.textContent = icon.category;
       copy.append(title, category);
 
-      const download = document.createElement("a");
-      download.className = "download-link";
-      download.href = assetUrl(icon.path);
-      download.download = icon.path.split("/").at(-1);
-      download.textContent = "Download SVG";
-      download.setAttribute("aria-label", `Download ${icon.name} as SVG`);
-
-      card.append(preview, copy, download);
+      card.append(preview, copy);
       return card;
     }
 
