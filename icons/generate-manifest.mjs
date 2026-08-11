@@ -29,9 +29,11 @@ const icons = (await findSvgFiles(iconsDirectory))
   .filter((file) => file.toLowerCase().endsWith(".svg"))
   .map((file) => {
     const path = relative(iconsDirectory, file).split(sep).join("/");
+    const pathSegments = path.split("/");
     return {
-      name: displayName(path.split("/").at(-1)),
-      category: path.split("/")[0],
+      name: displayName(pathSegments.at(-1)),
+      source: pathSegments[0],
+      category: pathSegments[1],
       path,
     };
   })

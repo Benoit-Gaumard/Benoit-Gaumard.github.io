@@ -149,7 +149,7 @@
       top: 4.75rem;
       z-index: 10;
       display: grid;
-      grid-template-columns: minmax(14rem, 1fr) minmax(11rem, .35fr) minmax(9rem, .25fr);
+      grid-template-columns: minmax(14rem, 1fr) repeat(2, minmax(10rem, .35fr)) minmax(7rem, .2fr);
       gap: .75rem;
       margin-bottom: 1rem;
       padding: .75rem;
@@ -351,16 +351,44 @@
       padding: 1rem;
     }
     .dialog-meta { min-width: 0; color: var(--cp-text-muted); font-size: .8rem; text-transform: capitalize; }
-    .dialog-download {
-      flex: 0 0 auto;
+    .dialog-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(8.5rem, 1fr));
+      gap: .5rem;
+    }
+    .dialog-action {
+      display: inline-flex;
+      min-height: 2.5rem;
+      align-items: center;
+      justify-content: center;
       padding: .625rem 1rem;
+      border: 1px solid var(--cp-border-strong);
       border-radius: 6px;
-      background: var(--cp-accent);
-      color: var(--cp-accent-fg);
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
       font-weight: 700;
       text-decoration: none;
     }
-    .dialog-download:hover { background: var(--cp-accent-hover); }
+    .dialog-action:hover {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent-hover);
+    }
+    .dialog-action.primary {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .dialog-action.primary:hover { background: var(--cp-accent-hover); }
+    .dialog-status {
+      min-height: 1.25rem;
+      margin: -.5rem 1rem 1rem;
+      color: var(--cp-text-muted);
+      font-size: .8rem;
+      text-align: right;
+    }
+    .dialog-status.error { color: var(--cp-danger); }
 
     footer {
       display: flex;
@@ -386,7 +414,8 @@
       .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
       .icon-card { grid-template-rows: 7rem auto auto; }
       .dialog-footer, footer { align-items: stretch; flex-direction: column; }
-      .dialog-download { text-align: center; }
+      .dialog-actions { grid-template-columns: 1fr 1fr; }
+      .dialog-status { text-align: left; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -419,15 +448,25 @@
           <input id="search" type="search" placeholder="Search by service or category..." autocomplete="off" spellcheck="false">
         </div>
         <div class="field">
+          <label for="source">Icons Source</label>
+          <select id="source">
+            <option value="">Icons Source: All</option>
+            <option value="Microsoft">Microsoft</option>
+            <option value="Ben Coleman">Ben Coleman</option>
+            <option value="Sandro">Sandro</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="category">Category</label>
           <select id="category"><option value="">All categories</option></select>
         </div>
         <div class="field">
-          <label for="sort">Sort</label>
-          <select id="sort">
-            <option value="name-asc">Name A-Z</option>
-            <option value="name-desc">Name Z-A</option>
-            <option value="category">Category</option>
+          <label for="perPage">Per page</label>
+          <select id="perPage">
+            <option value="50">Per page: 50</option>
+            <option value="100">Per page: 100</option>
+            <option value="200">Per page: 200</option>
+            <option value="all">Per page: All</option>
           </select>
         </div>
       </div>
@@ -457,17 +496,24 @@
     <div class="dialog-preview"><img id="dialogImage" alt=""></div>
     <div class="dialog-footer">
       <span class="dialog-meta" id="dialogCategory"></span>
-      <a class="dialog-download" id="dialogDownload" download>Download SVG</a>
+      <div class="dialog-actions">
+        <a class="dialog-action primary" id="downloadSvg" download>Download SVG</a>
+        <button class="dialog-action" id="downloadPng" type="button">Download PNG</button>
+        <button class="dialog-action" id="copySvg" type="button">Copy SVG</button>
+        <button class="dialog-action" id="copyPng" type="button">Copy PNG</button>
+      </div>
     </div>
+    <p class="dialog-status" id="dialogStatus" role="status" aria-live="polite"></p>
   </dialog>
 
   <script>
-    const PAGE_SIZE = 96;
-    const state = { icons: [], filtered: [], visible: PAGE_SIZE };
+    const DEFAULT_PAGE_SIZE = 50;
+    const state = { icons: [], filtered: [], visible: DEFAULT_PAGE_SIZE, pageSize: DEFAULT_PAGE_SIZE, selectedIcon: null };
     const elements = {
       search: document.getElementById("search"),
+      source: document.getElementById("source"),
       category: document.getElementById("category"),
-      sort: document.getElementById("sort"),
+      perPage: document.getElementById("perPage"),
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
@@ -477,7 +523,11 @@
       dialogTitle: document.getElementById("dialogTitle"),
       dialogImage: document.getElementById("dialogImage"),
       dialogCategory: document.getElementById("dialogCategory"),
-      dialogDownload: document.getElementById("dialogDownload"),
+      downloadSvg: document.getElementById("downloadSvg"),
+      downloadPng: document.getElementById("downloadPng"),
+      copySvg: document.getElementById("copySvg"),
+      copyPng: document.getElementById("copyPng"),
+      dialogStatus: document.getElementById("dialogStatus"),
       closeDialog: document.getElementById("closeDialog"),
     };
 
@@ -546,38 +596,122 @@
       const total = state.filtered.length;
       elements.resultCount.textContent = `${total.toLocaleString()} icon${total === 1 ? "" : "s"} found`;
       elements.loadMore.hidden = state.visible >= total;
-      elements.loadMore.textContent = `Show more (${Math.min(PAGE_SIZE, total - state.visible)})`;
-      elements.clearFilters.hidden = !elements.search.value && !elements.category.value;
+      if (!elements.loadMore.hidden) {
+        elements.loadMore.textContent = `Show more (${Math.min(state.pageSize, total - state.visible)})`;
+      }
+      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value;
       elements.gallery.setAttribute("aria-busy", "false");
     }
 
     function applyFilters() {
       const query = normalize(elements.search.value.trim());
+      const selectedSource = elements.source.value;
       const selectedCategory = elements.category.value;
       state.filtered = state.icons.filter((icon) => {
-        const matchesQuery = !query || normalize(`${icon.name} ${icon.category}`).includes(query);
-        return matchesQuery && (!selectedCategory || icon.category === selectedCategory);
+        const matchesQuery = !query || normalize(`${icon.name} ${icon.source} ${icon.category}`).includes(query);
+        return matchesQuery
+          && (!selectedSource || icon.source === selectedSource)
+          && (!selectedCategory || icon.category === selectedCategory);
       });
 
-      const sort = elements.sort.value;
-      state.filtered.sort((left, right) => {
-        if (sort === "name-desc") return right.name.localeCompare(left.name);
-        if (sort === "category") return left.category.localeCompare(right.category) || left.name.localeCompare(right.name);
-        return left.name.localeCompare(right.name);
-      });
-      state.visible = PAGE_SIZE;
+      state.filtered.sort((left, right) => left.name.localeCompare(right.name));
+      state.visible = state.pageSize;
       render();
+    }
+
+    function populateCategories() {
+      const selectedSource = elements.source.value;
+      const categoryCounts = new Map();
+      state.icons
+        .filter((icon) => !selectedSource || icon.source === selectedSource)
+        .forEach((icon) => {
+          categoryCounts.set(icon.category, (categoryCounts.get(icon.category) || 0) + 1);
+        });
+
+      const total = [...categoryCounts.values()].reduce((sum, count) => sum + count, 0);
+      elements.category.replaceChildren(new Option(`All categories (${total.toLocaleString()})`, ""));
+      [...categoryCounts.keys()]
+        .sort((left, right) => left.localeCompare(right))
+        .forEach((category) => {
+          const label = category.replace(/\b\w/g, (letter) => letter.toUpperCase());
+          elements.category.append(new Option(`${label} (${categoryCounts.get(category).toLocaleString()})`, category));
+        });
     }
 
     function openPreview(icon) {
       const url = assetUrl(icon.path);
+      state.selectedIcon = icon;
       elements.dialogTitle.textContent = icon.name;
       elements.dialogImage.src = url;
       elements.dialogImage.alt = `${icon.name} preview`;
-      elements.dialogCategory.textContent = icon.category;
-      elements.dialogDownload.href = url;
-      elements.dialogDownload.download = icon.path.split("/").at(-1);
+      elements.dialogCategory.textContent = `${icon.source} / ${icon.category}`;
+      elements.downloadSvg.href = url;
+      elements.downloadSvg.download = icon.path.split("/").at(-1);
+      setDialogStatus("");
       elements.dialog.showModal();
+    }
+
+    function setDialogStatus(message, isError = false) {
+      elements.dialogStatus.textContent = message;
+      elements.dialogStatus.classList.toggle("error", isError);
+    }
+
+    function selectedFileName(extension) {
+      return state.selectedIcon.path.split("/").at(-1).replace(/\.svg$/i, `.${extension}`);
+    }
+
+    async function getSelectedSvg() {
+      if (!state.selectedIcon) throw new Error("No icon selected");
+      const response = await fetch(assetUrl(state.selectedIcon.path));
+      if (!response.ok) throw new Error(`Icon request failed: ${response.status}`);
+      return response.text();
+    }
+
+    async function svgToPngBlob(svg) {
+      const documentNode = new DOMParser().parseFromString(svg, "image/svg+xml");
+      const svgNode = documentNode.documentElement;
+      const viewBox = (svgNode.getAttribute("viewBox") || "").split(/[ ,]+/).map(Number);
+      const sourceWidth = viewBox.length === 4 && viewBox[2] > 0 ? viewBox[2] : parseFloat(svgNode.getAttribute("width")) || 512;
+      const sourceHeight = viewBox.length === 4 && viewBox[3] > 0 ? viewBox[3] : parseFloat(svgNode.getAttribute("height")) || 512;
+      const scale = 1024 / Math.max(sourceWidth, sourceHeight);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(sourceWidth * scale));
+      canvas.height = Math.max(1, Math.round(sourceHeight * scale));
+
+      const blobUrl = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+      try {
+        const image = new Image();
+        image.src = blobUrl;
+        await image.decode();
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        return await new Promise((resolve, reject) => {
+          canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG conversion failed")), "image/png");
+        });
+      } finally {
+        URL.revokeObjectURL(blobUrl);
+      }
+    }
+
+    function downloadBlob(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+    }
+
+    async function runDialogAction(action, successMessage) {
+      setDialogStatus("Working...");
+      try {
+        await action();
+        setDialogStatus(successMessage);
+      } catch (error) {
+        console.error(error);
+        setDialogStatus(error.name === "NotAllowedError" ? "Clipboard permission was denied." : error.message, true);
+      }
     }
 
     function showError() {
@@ -595,15 +729,17 @@
         if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
         state.icons = await response.json();
         state.filtered = [...state.icons];
-        const categories = [...new Set(state.icons.map((icon) => icon.category))]
-          .sort((left, right) => left.localeCompare(right));
-        categories.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category;
-          option.textContent = category.replace(/\b\w/g, (letter) => letter.toUpperCase());
-          elements.category.append(option);
+        const sourceCounts = new Map();
+        state.icons.forEach((icon) => {
+          sourceCounts.set(icon.source, (sourceCounts.get(icon.source) || 0) + 1);
         });
-        elements.libraryCount.textContent = `${state.icons.length.toLocaleString()} icons across ${categories.length} categories`;
+        [...elements.source.options].forEach((option) => {
+          const count = option.value ? sourceCounts.get(option.value) || 0 : state.icons.length;
+          const label = option.value || "Icons Source: All";
+          option.textContent = `${label} (${count.toLocaleString()})`;
+        });
+        populateCategories();
+        elements.libraryCount.textContent = `${state.icons.length.toLocaleString()} icons across ${elements.category.options.length - 1} categories`;
         applyFilters();
       } catch (error) {
         console.error(error);
@@ -616,18 +752,40 @@
       clearTimeout(searchTimer);
       searchTimer = setTimeout(applyFilters, 100);
     });
+    elements.source.addEventListener("change", () => {
+      populateCategories();
+      applyFilters();
+    });
     elements.category.addEventListener("change", applyFilters);
-    elements.sort.addEventListener("change", applyFilters);
+    elements.perPage.addEventListener("change", () => {
+      state.pageSize = elements.perPage.value === "all" ? Number.POSITIVE_INFINITY : Number(elements.perPage.value);
+      state.visible = state.pageSize;
+      render();
+    });
     elements.clearFilters.addEventListener("click", () => {
       elements.search.value = "";
+      elements.source.value = "";
       elements.category.value = "";
+      populateCategories();
       applyFilters();
       elements.search.focus();
     });
     elements.loadMore.addEventListener("click", () => {
-      state.visible += PAGE_SIZE;
+      state.visible += state.pageSize;
       render();
     });
+    elements.downloadSvg.addEventListener("click", () => setDialogStatus("SVG downloaded."));
+    elements.downloadPng.addEventListener("click", () => runDialogAction(async () => {
+      const png = await svgToPngBlob(await getSelectedSvg());
+      downloadBlob(png, selectedFileName("png"));
+    }, "PNG downloaded."));
+    elements.copySvg.addEventListener("click", () => runDialogAction(async () => {
+      await navigator.clipboard.writeText(await getSelectedSvg());
+    }, "SVG copied to clipboard."));
+    elements.copyPng.addEventListener("click", () => runDialogAction(async () => {
+      const png = await svgToPngBlob(await getSelectedSvg());
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+    }, "PNG copied to clipboard."));
     elements.closeDialog.addEventListener("click", () => elements.dialog.close());
     elements.dialog.addEventListener("click", (event) => {
       if (event.target === elements.dialog) elements.dialog.close();
