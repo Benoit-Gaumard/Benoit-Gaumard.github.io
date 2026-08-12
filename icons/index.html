@@ -115,6 +115,32 @@
       font-size: 1.05rem;
     }
 
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      margin-bottom: 1rem;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+    }
+    .breadcrumb-link {
+      border: 0;
+      background: transparent;
+      color: var(--cp-link);
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+    }
+    .breadcrumb-link:hover { text-decoration: underline; }
+    .breadcrumb-link[disabled] {
+      color: var(--cp-text);
+      font-weight: 650;
+      cursor: default;
+      text-decoration: none;
+    }
+    .breadcrumb-separator { color: var(--cp-border-strong); }
+    .breadcrumb-category { color: var(--cp-text); font-weight: 650; }
+
     .toolbar {
       position: sticky;
       top: 4.75rem;
@@ -569,6 +595,12 @@
     </section>
 
     <section aria-label="Icon browser">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <button class="breadcrumb-link" id="breadcrumbSource" type="button">All</button>
+        <span class="breadcrumb-separator" aria-hidden="true">&rsaquo;</span>
+        <span class="breadcrumb-category" id="breadcrumbCategory">All</span>
+      </nav>
+
       <div class="toolbar">
         <div class="field search-field">
           <label for="search">Search icons</label>
@@ -720,6 +752,8 @@
       currentYear: document.getElementById("currentYear"),
       sourceDisclaimerText: document.getElementById("sourceDisclaimerText"),
       sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
+      breadcrumbSource: document.getElementById("breadcrumbSource"),
+      breadcrumbCategory: document.getElementById("breadcrumbCategory"),
       favoritesFilter: document.getElementById("favoritesFilter"),
       clearFilters: document.getElementById("clearFilters"),
       pagination: document.getElementById("pagination"),
@@ -903,6 +937,15 @@
       elements.sourceDisclaimerLink.hidden = !disclaimer.url;
     }
 
+    function updateBreadcrumb() {
+      const categoryLabel = elements.category.value
+        ? elements.category.value.replace(/\b\w/g, (letter) => letter.toUpperCase())
+        : "All";
+      elements.breadcrumbSource.textContent = elements.source.value || "All";
+      elements.breadcrumbSource.disabled = !elements.category.value;
+      elements.breadcrumbCategory.textContent = categoryLabel;
+    }
+
     function openPreview(icon) {
       const url = assetUrl(icon.path);
       state.selectedIcon = icon;
@@ -1009,6 +1052,7 @@
         });
         populateCategories();
         elements.libraryCount.textContent = `${state.icons.length.toLocaleString()} icons across ${elements.category.options.length - 1} categories`;
+        updateBreadcrumb();
         applyFilters();
       } catch (error) {
         console.error(error);
@@ -1024,9 +1068,18 @@
     elements.source.addEventListener("change", () => {
       populateCategories();
       updateSourceDisclaimer();
+      updateBreadcrumb();
       applyFilters();
     });
-    elements.category.addEventListener("change", applyFilters);
+    elements.category.addEventListener("change", () => {
+      updateBreadcrumb();
+      applyFilters();
+    });
+    elements.breadcrumbSource.addEventListener("click", () => {
+      elements.category.value = "";
+      updateBreadcrumb();
+      applyFilters();
+    });
     elements.favoritesFilter.addEventListener("click", () => {
       state.favoritesOnly = !state.favoritesOnly;
       updateFavoritesFilter();
@@ -1045,6 +1098,7 @@
       populateCategories();
       updateSourceDisclaimer();
       updateFavoritesFilter();
+      updateBreadcrumb();
       applyFilters();
       elements.search.focus();
     });
