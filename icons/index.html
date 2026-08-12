@@ -173,6 +173,23 @@
       font-size: .9rem;
     }
     .results-bar p { margin: 0; }
+    .results-actions { display: flex; align-items: center; gap: .75rem; }
+    .favorites-filter {
+      min-height: 2.25rem;
+      padding: .375rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .favorites-filter[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      background: #fff8e8;
+      color: #8a5a08;
+    }
     .clear-button {
       border: 0;
       background: transparent;
@@ -440,6 +457,8 @@
       .dialog-footer { align-items: stretch; flex-direction: column; }
       .dialog-actions { grid-template-columns: 1fr 1fr; }
       .dialog-status { text-align: left; }
+      .results-bar { align-items: flex-start; flex-direction: column; }
+      .results-actions { width: 100%; justify-content: space-between; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
       .footer-bottom { flex-direction: column; }
@@ -506,7 +525,10 @@
 
       <div class="results-bar" aria-live="polite">
         <p id="resultCount">Loading icons...</p>
-        <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+        <div class="results-actions">
+          <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+          <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+        </div>
       </div>
 
       <div class="gallery" id="gallery" aria-busy="true"></div>
@@ -586,6 +608,7 @@
       icons: [],
       filtered: [],
       favorites: new Set(),
+      favoritesOnly: false,
       visible: DEFAULT_PAGE_SIZE,
       pageSize: DEFAULT_PAGE_SIZE,
       selectedIcon: null
@@ -601,6 +624,7 @@
       currentYear: document.getElementById("currentYear"),
       sourceDisclaimerText: document.getElementById("sourceDisclaimerText"),
       sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
+      favoritesFilter: document.getElementById("favoritesFilter"),
       clearFilters: document.getElementById("clearFilters"),
       loadMore: document.getElementById("loadMore"),
       dialog: document.getElementById("previewDialog"),
@@ -648,6 +672,13 @@
       button.setAttribute("aria-label", `${nextState ? "Remove" : "Add"} ${icon.name} ${nextState ? "from" : "to"} favorites`);
       button.title = nextState ? "Remove from favorites" : "Add to favorites";
       button.textContent = nextState ? "\u2605" : "\u2606";
+      updateFavoritesFilter();
+      if (state.favoritesOnly) applyFilters();
+    }
+
+    function updateFavoritesFilter() {
+      elements.favoritesFilter.textContent = `${state.favoritesOnly ? "\u2605" : "\u2606"} My favorites (${state.favorites.size.toLocaleString()})`;
+      elements.favoritesFilter.setAttribute("aria-pressed", String(state.favoritesOnly));
     }
 
     function createCard(icon) {
@@ -700,7 +731,9 @@
       if (!visibleIcons.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.innerHTML = "<h2>No icons found</h2><p>Try another keyword or clear the category filter.</p>";
+        empty.innerHTML = state.favoritesOnly
+          ? "<h2>No favorite icons found</h2><p>Add icons with the star button or clear the other filters.</p>"
+          : "<h2>No icons found</h2><p>Try another keyword or clear the category filter.</p>";
         elements.gallery.append(empty);
       } else {
         const fragment = document.createDocumentFragment();
@@ -714,7 +747,7 @@
       if (!elements.loadMore.hidden) {
         elements.loadMore.textContent = `Show more (${Math.min(state.pageSize, total - state.visible)})`;
       }
-      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value;
+      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !state.favoritesOnly;
       elements.gallery.setAttribute("aria-busy", "false");
     }
 
@@ -725,6 +758,7 @@
       state.filtered = state.icons.filter((icon) => {
         const matchesQuery = !query || normalize(`${icon.name} ${icon.source} ${icon.category}`).includes(query);
         return matchesQuery
+          && (!state.favoritesOnly || state.favorites.has(icon.path))
           && (!selectedSource || icon.source === selectedSource)
           && (!selectedCategory || icon.category === selectedCategory);
       });
@@ -849,6 +883,7 @@
       try {
         elements.currentYear.textContent = new Date().getFullYear();
         loadFavorites();
+        updateFavoritesFilter();
         const response = await fetch("icons.json");
         if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
         state.icons = await response.json();
@@ -882,6 +917,11 @@
       applyFilters();
     });
     elements.category.addEventListener("change", applyFilters);
+    elements.favoritesFilter.addEventListener("click", () => {
+      state.favoritesOnly = !state.favoritesOnly;
+      updateFavoritesFilter();
+      applyFilters();
+    });
     elements.perPage.addEventListener("change", () => {
       state.pageSize = elements.perPage.value === "all" ? Number.POSITIVE_INFINITY : Number(elements.perPage.value);
       state.visible = state.pageSize;
@@ -891,8 +931,10 @@
       elements.search.value = "";
       elements.source.value = "";
       elements.category.value = "";
+      state.favoritesOnly = false;
       populateCategories();
       updateSourceDisclaimer();
+      updateFavoritesFilter();
       applyFilters();
       elements.search.focus();
     });
