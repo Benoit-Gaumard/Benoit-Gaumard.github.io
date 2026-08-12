@@ -152,15 +152,23 @@
     .source-disclaimer {
       margin: 0 0 1rem;
       padding: .875rem 1rem;
-      border-left: 3px solid var(--cp-accent);
-      border-radius: 0 6px 6px 0;
-      background: var(--cp-panel);
-      color: var(--cp-text-muted);
+      border: 1px solid #6eb5e8;
+      border-left: 5px solid var(--cp-accent);
+      border-radius: 6px;
+      background: #dcefff;
+      color: #244f73;
       font-size: .875rem;
       line-height: 1.5;
+      box-shadow: 0 3px 12px rgba(11, 111, 184, .12);
     }
-    .source-disclaimer strong { color: var(--cp-text); }
-    .source-disclaimer a { margin-left: .25rem; }
+    .source-disclaimer strong { color: #075b98; }
+    .source-disclaimer a {
+      margin-left: .25rem;
+      color: #075b98;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
     .source-disclaimer a[hidden] { display: none; }
 
     .results-bar {
@@ -294,19 +302,37 @@
     }
     .empty-state h2, .error-state h2 { margin: 0; font-size: 1.25rem; }
     .empty-state p, .error-state p { margin: .5rem 0 0; color: var(--cp-text-muted); }
-    .load-more-wrap { display: flex; justify-content: center; padding-top: 2rem; }
-    .load-more {
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding-top: 2rem;
+    }
+    .pagination-button {
       min-height: 2.75rem;
       padding: .625rem 1.25rem;
-      border: 1px solid var(--cp-accent);
+      border: 1px solid var(--cp-border-strong);
       border-radius: 6px;
-      background: var(--cp-accent);
-      color: var(--cp-accent-fg);
+      background: var(--cp-surface);
+      color: var(--cp-text);
       cursor: pointer;
       font-weight: 700;
     }
-    .load-more:hover { background: var(--cp-accent-hover); }
-    .load-more[hidden] { display: none; }
+    .pagination-button:hover:not(:disabled) {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent-hover);
+    }
+    .pagination-button:disabled { cursor: not-allowed; opacity: .45; }
+    .pagination-status {
+      min-width: 9rem;
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      font-weight: 650;
+      text-align: center;
+    }
+    .pagination[hidden] { display: none; }
 
     dialog {
       width: min(42rem, calc(100% - 2rem));
@@ -532,9 +558,11 @@
       </div>
 
       <div class="gallery" id="gallery" aria-busy="true"></div>
-      <div class="load-more-wrap">
-        <button class="load-more" id="loadMore" type="button" hidden>Show more icons</button>
-      </div>
+      <nav class="pagination" id="pagination" aria-label="Icon pages">
+        <button class="pagination-button" id="previousPage" type="button">Previous</button>
+        <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
+        <button class="pagination-button" id="nextPage" type="button">Next</button>
+      </nav>
     </section>
   </main>
 
@@ -609,7 +637,7 @@
       filtered: [],
       favorites: new Set(),
       favoritesOnly: false,
-      visible: DEFAULT_PAGE_SIZE,
+      currentPage: 1,
       pageSize: DEFAULT_PAGE_SIZE,
       selectedIcon: null
     };
@@ -626,7 +654,10 @@
       sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
       favoritesFilter: document.getElementById("favoritesFilter"),
       clearFilters: document.getElementById("clearFilters"),
-      loadMore: document.getElementById("loadMore"),
+      pagination: document.getElementById("pagination"),
+      paginationStatus: document.getElementById("paginationStatus"),
+      previousPage: document.getElementById("previousPage"),
+      nextPage: document.getElementById("nextPage"),
       dialog: document.getElementById("previewDialog"),
       dialogTitle: document.getElementById("dialogTitle"),
       dialogImage: document.getElementById("dialogImage"),
@@ -726,7 +757,12 @@
 
     function render() {
       elements.gallery.replaceChildren();
-      const visibleIcons = state.filtered.slice(0, state.visible);
+      const total = state.filtered.length;
+      const totalPages = state.pageSize === Number.POSITIVE_INFINITY ? 1 : Math.max(1, Math.ceil(total / state.pageSize));
+      state.currentPage = Math.min(state.currentPage, totalPages);
+      const startIndex = state.pageSize === Number.POSITIVE_INFINITY ? 0 : (state.currentPage - 1) * state.pageSize;
+      const endIndex = state.pageSize === Number.POSITIVE_INFINITY ? total : startIndex + state.pageSize;
+      const visibleIcons = state.filtered.slice(startIndex, endIndex);
 
       if (!visibleIcons.length) {
         const empty = document.createElement("div");
@@ -741,12 +777,11 @@
         elements.gallery.append(fragment);
       }
 
-      const total = state.filtered.length;
       elements.resultCount.textContent = `${total.toLocaleString()} icon${total === 1 ? "" : "s"} found`;
-      elements.loadMore.hidden = state.visible >= total;
-      if (!elements.loadMore.hidden) {
-        elements.loadMore.textContent = `Show more (${Math.min(state.pageSize, total - state.visible)})`;
-      }
+      elements.pagination.hidden = total === 0 || state.pageSize === Number.POSITIVE_INFINITY;
+      elements.paginationStatus.textContent = `Page ${state.currentPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
+      elements.previousPage.disabled = state.currentPage <= 1;
+      elements.nextPage.disabled = state.currentPage >= totalPages;
       elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !state.favoritesOnly;
       elements.gallery.setAttribute("aria-busy", "false");
     }
@@ -764,7 +799,7 @@
       });
 
       state.filtered.sort((left, right) => left.name.localeCompare(right.name));
-      state.visible = state.pageSize;
+      state.currentPage = 1;
       render();
     }
 
@@ -924,7 +959,7 @@
     });
     elements.perPage.addEventListener("change", () => {
       state.pageSize = elements.perPage.value === "all" ? Number.POSITIVE_INFINITY : Number(elements.perPage.value);
-      state.visible = state.pageSize;
+      state.currentPage = 1;
       render();
     });
     elements.clearFilters.addEventListener("click", () => {
@@ -938,9 +973,15 @@
       applyFilters();
       elements.search.focus();
     });
-    elements.loadMore.addEventListener("click", () => {
-      state.visible += state.pageSize;
+    elements.previousPage.addEventListener("click", () => {
+      state.currentPage = Math.max(1, state.currentPage - 1);
       render();
+      elements.gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    elements.nextPage.addEventListener("click", () => {
+      state.currentPage += 1;
+      render();
+      elements.gallery.scrollIntoView({ behavior: "smooth", block: "start" });
     });
     elements.downloadSvg.addEventListener("click", () => setDialogStatus("SVG downloaded."));
     elements.downloadPng.addEventListener("click", () => runDialogAction(async () => {
