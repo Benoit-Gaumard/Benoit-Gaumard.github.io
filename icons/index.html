@@ -183,6 +183,9 @@
     .results-bar p { margin: 0; }
     .results-actions { display: flex; align-items: center; gap: .75rem; }
     .favorites-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
       min-height: 2.25rem;
       padding: .375rem .75rem;
       border: 1px solid var(--cp-border-strong);
@@ -243,8 +246,6 @@
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
       cursor: pointer;
-      font-size: 1.25rem;
-      line-height: 1;
       box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
     }
     .favorite-button:hover { color: var(--cp-accent); }
@@ -355,15 +356,22 @@
     }
     .dialog-header h2 { min-width: 0; margin: 0; font-size: 1.05rem; }
     .close-button {
+      display: grid;
+      place-items: center;
       width: 2.5rem;
       height: 2.5rem;
       flex: 0 0 auto;
+      padding: 0;
       border: 1px solid var(--cp-border);
       border-radius: 50%;
       background: var(--cp-surface-soft);
-      color: var(--cp-text);
+      color: var(--cp-text-muted);
       cursor: pointer;
-      font-size: 1.25rem;
+    }
+    .close-button:hover {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent-hover);
     }
     .dialog-preview {
       display: grid;
@@ -391,7 +399,7 @@
       color: var(--cp-text-muted);
       text-transform: capitalize;
     }
-    .dialog-source-category::before { content: " \2022 "; }
+    .dialog-source-category::before { content: " / "; }
     .dialog-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(8.5rem, 1fr));
@@ -606,7 +614,11 @@
   <dialog id="previewDialog" aria-labelledby="dialogTitle">
     <div class="dialog-header">
       <h2 id="dialogTitle"></h2>
-      <button class="close-button" id="closeDialog" type="button" aria-label="Close preview">&times;</button>
+      <button class="close-button" id="closeDialog" type="button" aria-label="Close preview">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+          <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
     <div class="dialog-preview"><img id="dialogImage" alt=""></div>
     <div class="dialog-footer">
@@ -701,6 +713,10 @@
       }
     }
 
+    function starIconMarkup(isFavorite) {
+      return `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="${isFavorite ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    }
+
     function toggleFavorite(icon, button) {
       const isFavorite = state.favorites.has(icon.path);
       if (isFavorite) state.favorites.delete(icon.path);
@@ -716,13 +732,13 @@
       button.setAttribute("aria-pressed", String(nextState));
       button.setAttribute("aria-label", `${nextState ? "Remove" : "Add"} ${icon.name} ${nextState ? "from" : "to"} favorites`);
       button.title = nextState ? "Remove from favorites" : "Add to favorites";
-      button.textContent = nextState ? "\u2605" : "\u2606";
+      button.innerHTML = starIconMarkup(nextState);
       updateFavoritesFilter();
       if (state.favoritesOnly) applyFilters();
     }
 
     function updateFavoritesFilter() {
-      elements.favoritesFilter.textContent = `${state.favoritesOnly ? "\u2605" : "\u2606"} My favorites (${state.favorites.size.toLocaleString()})`;
+      elements.favoritesFilter.innerHTML = `${starIconMarkup(state.favoritesOnly)} My favorites (${state.favorites.size.toLocaleString()})`;
       elements.favoritesFilter.setAttribute("aria-pressed", String(state.favoritesOnly));
     }
 
@@ -737,7 +753,7 @@
       favorite.setAttribute("aria-pressed", String(isFavorite));
       favorite.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${icon.name} ${isFavorite ? "from" : "to"} favorites`);
       favorite.title = isFavorite ? "Remove from favorites" : "Add to favorites";
-      favorite.textContent = isFavorite ? "\u2605" : "\u2606";
+      favorite.innerHTML = starIconMarkup(isFavorite);
       favorite.addEventListener("click", () => toggleFavorite(icon, favorite));
 
       const preview = document.createElement("button");
