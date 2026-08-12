@@ -4,67 +4,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Browse and download a curated gallery of Azure SVG icons.">
+  <meta name="color-scheme" content="light">
   <title>Azure SVG Icon Gallery | Benoit Gaumard</title>
-  <script>
-    (() => {
-      const param = new URLSearchParams(window.location.search).get("scoutTheme");
-      const theme =
-        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      document.documentElement.setAttribute("data-theme", theme);
-    })();
-  </script>
   <style>
     :root {
       color-scheme: light;
-      --cp-bg: #f7f4ef;
-      --cp-bg-elevated: #fcfbf8;
+      --cp-bg: #f5faff;
+      --cp-bg-elevated: #edf6ff;
       --cp-surface: #ffffff;
-      --cp-surface-soft: #f5f5f5;
-      --cp-border: #dedede;
-      --cp-border-strong: #919191;
-      --cp-text: #242424;
-      --cp-text-muted: #5c5c5c;
-      --cp-text-soft: #6f6f6f;
-      --cp-accent: #b11f4b;
-      --cp-accent-hover: #9a1a41;
-      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-text-soft: #6d879d;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
       --cp-accent-fg: #ffffff;
-      --cp-success: #16a34a;
-      --cp-danger: #dc2626;
-      --cp-warning: #f59e0b;
-      --cp-link: #0078d4;
-      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
-      --cp-overlay: rgba(255, 255, 255, 0.8);
-      --cp-panel: rgba(255, 255, 255, 0.86);
-      --cp-panel-strong: rgba(255, 255, 255, 0.96);
-      --cp-sheen: rgba(255, 255, 255, 0.55);
-      --cp-highlight: rgba(177, 31, 75, 0.12);
-    }
-    html[data-theme="dark"] {
-      color-scheme: dark;
-      --cp-bg: #3d3b3a;
-      --cp-bg-elevated: #343231;
-      --cp-surface: #292929;
-      --cp-surface-soft: #2e2e2e;
-      --cp-border: #474747;
-      --cp-border-strong: #5f5f5f;
-      --cp-text: #dedede;
-      --cp-text-muted: #919191;
-      --cp-text-soft: #b0b0b0;
-      --cp-accent: #fd8ea1;
-      --cp-accent-hover: #fb7b91;
-      --cp-accent-soft: rgba(253, 142, 161, 0.14);
-      --cp-accent-fg: #1a1a1a;
-      --cp-success: #4ade80;
-      --cp-danger: #f87171;
-      --cp-warning: #fbbf24;
-      --cp-link: #4da6ff;
-      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
-      --cp-overlay: rgba(41, 41, 41, 0.88);
-      --cp-panel: rgba(41, 41, 41, 0.72);
-      --cp-panel-strong: rgba(41, 41, 41, 0.96);
-      --cp-sheen: rgba(255, 255, 255, 0.04);
-      --cp-highlight: rgba(253, 142, 161, 0.12);
+      --cp-success: #16845b;
+      --cp-danger: #c93636;
+      --cp-warning: #c88719;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-overlay: rgba(238, 247, 255, 0.84);
+      --cp-panel: rgba(248, 252, 255, 0.9);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+      --cp-sheen: rgba(255, 255, 255, 0.7);
+      --cp-highlight: rgba(11, 111, 184, 0.12);
     }
 
     * { box-sizing: border-box; }
@@ -74,8 +41,8 @@
       margin: 0;
       background-color: var(--cp-bg);
       background-image:
-        linear-gradient(var(--cp-border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--cp-border) 1px, transparent 1px);
+        linear-gradient(rgba(137, 175, 208, .16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(137, 175, 208, .16) 1px, transparent 1px);
       background-size: 3rem 3rem;
       color: var(--cp-text);
       font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -96,7 +63,7 @@
       background: var(--cp-panel-strong);
       backdrop-filter: blur(12px);
     }
-    .header-inner, main, footer {
+    .header-inner, main, .footer-inner {
       width: min(90rem, calc(100% - 2rem));
       margin-inline: auto;
     }
@@ -221,6 +188,7 @@
       gap: .75rem;
     }
     .icon-card {
+      position: relative;
       min-width: 0;
       display: grid;
       grid-template-rows: 8rem auto;
@@ -234,6 +202,30 @@
     .icon-card:hover {
       border-color: var(--cp-accent);
       transform: translateY(-2px);
+    }
+    .favorite-button {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      z-index: 2;
+      display: grid;
+      width: 2rem;
+      height: 2rem;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: 1.25rem;
+      line-height: 1;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+    }
+    .favorite-button:hover { color: var(--cp-accent); }
+    .favorite-button[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      color: var(--cp-warning);
     }
     .preview-button {
       display: grid;
@@ -385,13 +377,48 @@
     }
     .dialog-status.error { color: var(--cp-danger); }
 
-    footer {
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
-      padding-block: 1.5rem 2rem;
+      padding-top: 1rem;
       border-top: 1px solid var(--cp-border);
-      color: var(--cp-text-muted);
       font-size: .8rem;
     }
 
@@ -399,18 +426,23 @@
       .toolbar { position: static; grid-template-columns: 1fr 1fr; }
       .toolbar .search-field { grid-column: 1 / -1; }
       .gallery { grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
     }
     @media (max-width: 32rem) {
-      .header-inner, main, footer { width: min(100% - 1rem, 90rem); }
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       .header-links a:first-child { display: none; }
       main { padding-top: 1.75rem; }
       .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
       .toolbar .search-field { grid-column: auto; }
       .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
       .icon-card { grid-template-rows: 7rem auto; }
-      .dialog-footer, footer { align-items: stretch; flex-direction: column; }
+      .dialog-footer { align-items: stretch; flex-direction: column; }
       .dialog-actions { grid-template-columns: 1fr 1fr; }
       .dialog-status { text-align: left; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -484,9 +516,31 @@
     </section>
   </main>
 
-  <footer>
-    <span>Original SVG files, ready to download.</span>
-    <span id="libraryCount"></span>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Icons</a>
+          <p>A curated library of original Azure SVG icons for architecture diagrams, presentations, and technical documentation.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Icon sources</strong>
+          <a href="https://learn.microsoft.com/en-us/azure/architecture/icons/" target="_blank" rel="noopener noreferrer">Microsoft</a>
+          <a href="https://github.com/benc-uk/icon-collection/tree/master/azure-icons" target="_blank" rel="noopener noreferrer">Ben Coleman</a>
+          <a href="https://github.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/tree/master/Azure/SVG" target="_blank" rel="noopener noreferrer">Sandro</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <span id="libraryCount"></span>
+      </div>
+    </div>
   </footer>
 
   <dialog id="previewDialog" aria-labelledby="dialogTitle">
@@ -509,6 +563,7 @@
 
   <script>
     const DEFAULT_PAGE_SIZE = 50;
+    const FAVORITES_STORAGE_KEY = "azure-icon-gallery-favorites";
     const SOURCE_DISCLAIMERS = {
       "": {
         text: "All icons are sourced from multiple repositories and are the property of their respective owners. Please refer to their terms of use.",
@@ -527,7 +582,14 @@
         url: "https://github.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/tree/master/Azure/SVG"
       }
     };
-    const state = { icons: [], filtered: [], visible: DEFAULT_PAGE_SIZE, pageSize: DEFAULT_PAGE_SIZE, selectedIcon: null };
+    const state = {
+      icons: [],
+      filtered: [],
+      favorites: new Set(),
+      visible: DEFAULT_PAGE_SIZE,
+      pageSize: DEFAULT_PAGE_SIZE,
+      selectedIcon: null
+    };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -536,6 +598,7 @@
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
+      currentYear: document.getElementById("currentYear"),
       sourceDisclaimerText: document.getElementById("sourceDisclaimerText"),
       sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
       clearFilters: document.getElementById("clearFilters"),
@@ -560,9 +623,46 @@
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
+    function loadFavorites() {
+      try {
+        const storedFavorites = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+        state.favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites : []);
+      } catch {
+        state.favorites = new Set();
+      }
+    }
+
+    function toggleFavorite(icon, button) {
+      const isFavorite = state.favorites.has(icon.path);
+      if (isFavorite) state.favorites.delete(icon.path);
+      else state.favorites.add(icon.path);
+
+      try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...state.favorites]));
+      } catch (error) {
+        console.warn("Unable to save favorites", error);
+      }
+
+      const nextState = !isFavorite;
+      button.setAttribute("aria-pressed", String(nextState));
+      button.setAttribute("aria-label", `${nextState ? "Remove" : "Add"} ${icon.name} ${nextState ? "from" : "to"} favorites`);
+      button.title = nextState ? "Remove from favorites" : "Add to favorites";
+      button.textContent = nextState ? "\u2605" : "\u2606";
+    }
+
     function createCard(icon) {
       const card = document.createElement("article");
       card.className = "icon-card";
+
+      const favorite = document.createElement("button");
+      const isFavorite = state.favorites.has(icon.path);
+      favorite.className = "favorite-button";
+      favorite.type = "button";
+      favorite.setAttribute("aria-pressed", String(isFavorite));
+      favorite.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${icon.name} ${isFavorite ? "from" : "to"} favorites`);
+      favorite.title = isFavorite ? "Remove from favorites" : "Add to favorites";
+      favorite.textContent = isFavorite ? "\u2605" : "\u2606";
+      favorite.addEventListener("click", () => toggleFavorite(icon, favorite));
 
       const preview = document.createElement("button");
       preview.className = "preview-button";
@@ -589,7 +689,7 @@
       category.textContent = icon.category;
       copy.append(title, category);
 
-      card.append(preview, copy);
+      card.append(favorite, preview, copy);
       return card;
     }
 
@@ -747,6 +847,8 @@
 
     async function initialize() {
       try {
+        elements.currentYear.textContent = new Date().getFullYear();
+        loadFavorites();
         const response = await fetch("icons.json");
         if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
         state.icons = await response.json();
