@@ -136,6 +136,12 @@
       color: var(--cp-text-muted);
       font-size: 1.05rem;
     }
+    .refresh-meta {
+      margin: .75rem 0 0;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+    }
+    .refresh-meta strong { color: var(--cp-text); }
 
     .breadcrumb {
       display: flex;
@@ -622,6 +628,7 @@
         <h1 id="page-title">Azure icon gallery</h1>
       </div>
       <p class="intro-text">Find the right Azure service icon, preview it at full size, and download the original SVG for your diagrams and documentation.</p>
+      <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">Loading...</strong></p>
     </section>
 
     <section aria-label="Icon browser">
@@ -780,6 +787,7 @@
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
       currentYear: document.getElementById("currentYear"),
+      refreshedAt: document.getElementById("refreshedAt"),
       sourceDisclaimerText: document.getElementById("sourceDisclaimerText"),
       sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
       breadcrumbSource: document.getElementById("breadcrumbSource"),
@@ -1066,6 +1074,11 @@
       try {
         elements.currentYear.textContent = new Date().getFullYear();
         loadFavorites();
+        fetch("meta.json").then((response) => response.ok ? response.json() : null).then((meta) => {
+          elements.refreshedAt.textContent = meta
+            ? new Date(meta.generatedAt).toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+            : "Unavailable";
+        }).catch(() => { elements.refreshedAt.textContent = "Unavailable"; });
         updateFavoritesFilter();
         const response = await fetch("icons.json");
         if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);

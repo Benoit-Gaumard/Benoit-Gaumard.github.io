@@ -46,4 +46,6 @@ const icons = (await Promise.all(svgFiles.map(async (file) => {
   .sort((left, right) => left.name.localeCompare(right.name));
 
 await writeFile(outputPath, `${JSON.stringify(icons)}\n`, "utf8");
+const metaPath = join(dirname(outputPath), "meta.json");
+await writeFile(metaPath, `${JSON.stringify({ generatedAt: new Date().toISOString() })}\n`, "utf8");
 console.log(`Generated ${icons.length} icons (${svgFiles.length - icons.length} skipped) in ${outputPath}`);
