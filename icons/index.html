@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Browse and download a curated gallery of Azure SVG icons.">
   <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Azure SVG Icon Gallery | Benoit Gaumard</title>
   <style>
     :root {
@@ -90,13 +91,16 @@
       max-width: 52rem;
       margin-bottom: 2rem;
     }
-    .eyebrow {
-      margin: 0 0 .5rem;
-      color: var(--cp-accent);
-      font-size: .75rem;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .page-logo {
+      width: clamp(2.5rem, 6vw, 3.5rem);
+      height: clamp(2.5rem, 6vw, 3.5rem);
+      flex: 0 0 auto;
+      border-radius: 10px;
     }
     h1 {
       margin: 0;
@@ -526,8 +530,10 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">SVG library</p>
-      <h1 id="page-title">Azure icon gallery</h1>
+      <div class="page-title-row">
+        <img class="page-logo" src="/favicon.svg" alt="" width="56" height="56">
+        <h1 id="page-title">Azure icon gallery</h1>
+      </div>
       <p class="intro-text">Find the right Azure service icon, preview it at full size, and download the original SVG for your diagrams and documentation.</p>
     </section>
 
