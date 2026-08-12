@@ -375,12 +375,23 @@
     .dialog-preview img { width: min(16rem, 70vw); height: min(16rem, 70vw); object-fit: contain; }
     .dialog-footer {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+      gap: .875rem;
       padding: 1rem;
     }
-    .dialog-meta { min-width: 0; color: var(--cp-text-muted); font-size: .8rem; text-transform: capitalize; }
+    .dialog-source {
+      margin: 0;
+      color: var(--cp-text);
+      font-size: .9rem;
+      text-align: center;
+    }
+    .dialog-source-name { font-weight: 700; }
+    .dialog-source-category {
+      color: var(--cp-text-muted);
+      text-transform: capitalize;
+    }
+    .dialog-source-category::before { content: " \2022 "; }
     .dialog-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(8.5rem, 1fr));
@@ -416,7 +427,7 @@
       margin: -.5rem 1rem 1rem;
       color: var(--cp-text-muted);
       font-size: .8rem;
-      text-align: right;
+      text-align: center;
     }
     .dialog-status.error { color: var(--cp-danger); }
 
@@ -480,9 +491,8 @@
       .toolbar .search-field { grid-column: auto; }
       .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
       .icon-card { grid-template-rows: 7rem auto; }
-      .dialog-footer { align-items: stretch; flex-direction: column; }
-      .dialog-actions { grid-template-columns: 1fr 1fr; }
-      .dialog-status { text-align: left; }
+      .dialog-actions { grid-template-columns: 1fr 1fr; width: 100%; }
+      .dialog-status { text-align: center; }
       .results-bar { align-items: flex-start; flex-direction: column; }
       .results-actions { width: 100%; justify-content: space-between; }
       .footer-main { grid-template-columns: 1fr; }
@@ -600,7 +610,10 @@
     </div>
     <div class="dialog-preview"><img id="dialogImage" alt=""></div>
     <div class="dialog-footer">
-      <span class="dialog-meta" id="dialogCategory"></span>
+      <p class="dialog-source">
+        <span class="dialog-source-name" id="dialogSourceName"></span>
+        <span class="dialog-source-category" id="dialogCategoryName"></span>
+      </p>
       <div class="dialog-actions">
         <a class="dialog-action primary" id="downloadSvg" download>Download SVG</a>
         <button class="dialog-action" id="downloadPng" type="button">Download PNG</button>
@@ -661,7 +674,8 @@
       dialog: document.getElementById("previewDialog"),
       dialogTitle: document.getElementById("dialogTitle"),
       dialogImage: document.getElementById("dialogImage"),
-      dialogCategory: document.getElementById("dialogCategory"),
+      dialogSourceName: document.getElementById("dialogSourceName"),
+      dialogCategoryName: document.getElementById("dialogCategoryName"),
       downloadSvg: document.getElementById("downloadSvg"),
       downloadPng: document.getElementById("downloadPng"),
       copySvg: document.getElementById("copySvg"),
@@ -835,7 +849,8 @@
       elements.dialogTitle.textContent = icon.name;
       elements.dialogImage.src = url;
       elements.dialogImage.alt = `${icon.name} preview`;
-      elements.dialogCategory.textContent = `${icon.source} / ${icon.category}`;
+      elements.dialogSourceName.textContent = icon.source;
+      elements.dialogCategoryName.textContent = icon.category;
       elements.downloadSvg.href = url;
       elements.downloadSvg.download = icon.path.split("/").at(-1);
       setDialogStatus("");
