@@ -1,0 +1,37 @@
+name: Refresh M365 Release Updates
+
+on:
+  schedule:
+    # 07:00 and 19:00 UTC (twice daily)
+    - cron: '0 7 * * *'
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: m365-updates-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest M365 Updates RSS
+        run: node m365-release-updates/fetch-updates.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- m365-release-updates/updates.json; then
+            echo "No changes to M365 updates data."
+          else
+            git add m365-release-updates/updates.json
+            git commit -m "chore: refresh M365 Release Updates data"
+            git push
+          fi

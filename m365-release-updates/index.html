@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Latest Azure service updates from the official Azure Updates RSS feed, refreshed twice daily.">
+  <meta name="description" content="Latest Microsoft 365 roadmap updates from the official Microsoft 365 RSS feed, refreshed twice daily.">
   <meta name="color-scheme" content="light">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>Azure Release Updates | Benoit Gaumard</title>
+  <title>M365 Release Updates | Benoit Gaumard</title>
   <style>
     :root {
       color-scheme: light;
@@ -354,9 +354,9 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><span class="brand-mark">B.</span>G / Azure Updates</a>
+      <a class="brand" href="/"><span class="brand-mark">B.</span>G / M365 Updates</a>
       <nav class="header-links" aria-label="Primary navigation">
-        <a href="/m365-release-updates/">M365 Updates</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
         <a href="/icons/">Icons</a>
         <a href="/emoji-sheet/">Emoji Sheet</a>
         <a href="/blog/">Blog</a>
@@ -369,13 +369,13 @@
     <section class="intro" aria-labelledby="page-title">
       <div class="page-title-row">
         <img class="page-logo" src="/favicon.svg" alt="" width="56" height="56">
-        <h1 id="page-title">Azure Release Updates</h1>
+        <h1 id="page-title">M365 Release Updates</h1>
       </div>
-      <p class="intro-text">Latest Azure service updates, sourced directly from the official Azure Updates RSS feed. Refreshed automatically every morning and evening.</p>
+      <p class="intro-text">Latest Microsoft 365 roadmap updates, sourced directly from the official Microsoft 365 RSS feed. Refreshed automatically every morning and evening.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
-        <a href="https://azure.microsoft.com/en-us/updates/" target="_blank" rel="noopener noreferrer">View on Azure Updates</a>
-        <a href="https://www.microsoft.com/releasecommunications/api/v2/azure/rss" target="_blank" rel="noopener noreferrer">RSS feed</a>
+        <a href="https://www.microsoft.com/microsoft-365/roadmap" target="_blank" rel="noopener noreferrer">View on M365 Roadmap</a>
+        <a href="https://www.microsoft.com/releasecommunications/api/v2/m365/rss" target="_blank" rel="noopener noreferrer">RSS feed</a>
       </p>
     </section>
 
@@ -419,7 +419,7 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>Data sourced from the official Azure Updates RSS feed.</span>
+      <span>Data sourced from the official Microsoft 365 RSS feed.</span>
       <span id="libraryCount"></span>
     </div>
   </footer>
@@ -588,7 +588,7 @@
 
     function showError() {
       elements.updateList.setAttribute("aria-busy", "false");
-      elements.resultCount.textContent = "Unable to load Azure updates";
+      elements.resultCount.textContent = "Unable to load M365 updates";
       const error = document.createElement("div");
       error.className = "error-state";
       error.innerHTML = "<h2>The updates feed could not be loaded</h2><p>Please refresh the page or try again later.</p>";
