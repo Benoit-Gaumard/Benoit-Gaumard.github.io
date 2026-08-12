@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Complete collection of emojis with their shortcodes. Click to copy.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Emoji Sheet | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-warning: #c88719;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(72rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      color: var(--cp-text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand-mark { color: var(--cp-accent); }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    .page-title-row { display: flex; align-items: center; gap: 1rem; }
+    .page-logo {
+      width: clamp(2.5rem, 6vw, 3.5rem);
+      height: clamp(2.5rem, 6vw, 3.5rem);
+      flex: 0 0 auto;
+      border-radius: 10px;
+    }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .toolbar {
+      position: sticky;
+      top: 4.75rem;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: minmax(14rem, 1fr) minmax(11rem, .4fr);
+      gap: .75rem;
+      margin-bottom: .75rem;
+      padding: .75rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+    }
+    .toolbar::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      backdrop-filter: blur(12px);
+    }
+    .field { position: relative; }
+    .field label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    input, select {
+      width: 100%;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .75rem;
+    }
+    input::placeholder { color: var(--cp-text-muted); }
+
+    .hint { margin: 0 0 1rem; color: var(--cp-text-muted); font-size: .85rem; }
+
+    .results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: var(--cp-text-muted);
+      font-size: .9rem;
+    }
+    .results-bar p { margin: 0; }
+    .clear-button {
+      border: 0;
+      background: transparent;
+      color: var(--cp-link);
+      cursor: pointer;
+      padding: .25rem;
+    }
+    .clear-button[hidden] { display: none; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+      gap: .75rem;
+    }
+    .emoji-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      padding: 1rem .5rem .75rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      transition: border-color .18s ease, transform .18s ease;
+    }
+    .emoji-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
+    .emoji-glyph {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 2.5rem;
+      line-height: 1;
+      padding: .25rem;
+    }
+    .emoji-codes { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem; }
+    .emoji-code {
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      padding: .15rem .5rem;
+      font-size: .68rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: nowrap;
+    }
+    .emoji-code:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+
+    .empty-state, .error-state {
+      grid-column: 1 / -1;
+      padding: 4rem 1rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      text-align: center;
+    }
+    .empty-state h2, .error-state h2 { margin: 0; font-size: 1.25rem; }
+    .empty-state p, .error-state p { margin: .5rem 0 0; color: var(--cp-text-muted); }
+    .load-more-wrap { display: flex; justify-content: center; padding-top: 2rem; }
+    .load-more {
+      min-height: 2.75rem;
+      padding: .625rem 1.25rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .load-more:hover { background: var(--cp-accent-hover); }
+    .load-more[hidden] { display: none; }
+
+    .copy-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      z-index: 40;
+      transform: translate(-50%, .75rem);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .625rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      background: var(--cp-text);
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 650;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .copy-toast.visible { opacity: 1; transform: translate(-50%, 0); }
+    .copy-toast-emoji { font-size: 1.1rem; }
+
+    footer.site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; font-size: .8rem; }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .toolbar { position: static; grid-template-columns: 1fr 1fr; }
+      .toolbar .search-field { grid-column: 1 / -1; }
+      .gallery { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 72rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
+      .toolbar .search-field { grid-column: auto; }
+      .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+      .results-bar { align-items: flex-start; flex-direction: column; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .emoji-card { transition: none; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><span class="brand-mark">B.</span>G / Emoji</a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/icons/">Icons</a>
+        <a href="/blog/">Blog</a>
+        <a href="/">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div class="page-title-row">
+        <img class="page-logo" src="/favicon.svg" alt="" width="56" height="56">
+        <h1 id="page-title">Emoji Sheet</h1>
+      </div>
+      <p class="intro-text">Complete collection of emojis with their shortcodes. Click to copy!</p>
+    </section>
+
+    <section aria-label="Emoji browser">
+      <div class="toolbar">
+        <div class="field search-field">
+          <label for="search">Search emojis</label>
+          <input id="search" type="search" placeholder="Search by name, shortcode, or keyword..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category"><option value="">All categories</option></select>
+        </div>
+      </div>
+
+      <p class="hint">Click an emoji to copy it, or click a shortcode chip to copy <code>:shortcode:</code>.</p>
+
+      <div class="results-bar" aria-live="polite">
+        <p id="resultCount">Loading emojis...</p>
+        <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+      </div>
+
+      <div class="gallery" id="gallery" aria-busy="true"></div>
+      <div class="load-more-wrap">
+        <button class="load-more" id="loadMore" type="button" hidden>Show more emojis</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>All emoji glyphs render using your device's font.</span>
+      <span id="libraryCount"></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="copy-toast" id="copyToast" role="status" aria-live="polite">
+    <span class="copy-toast-emoji" id="copyToastEmoji"></span>
+    <span id="copyToastText"></span>
+  </div>
+
+  <script>
+    const DEFAULT_PAGE_SIZE = 150;
+    const state = { emojis: [], filtered: [], visible: DEFAULT_PAGE_SIZE };
+    const elements = {
+      search: document.getElementById("search"),
+      category: document.getElementById("category"),
+      gallery: document.getElementById("gallery"),
+      resultCount: document.getElementById("resultCount"),
+      libraryCount: document.getElementById("libraryCount"),
+      clearFilters: document.getElementById("clearFilters"),
+      loadMore: document.getElementById("loadMore"),
+      backToTop: document.getElementById("backToTop"),
+      copyToast: document.getElementById("copyToast"),
+      copyToastEmoji: document.getElementById("copyToastEmoji"),
+      copyToastText: document.getElementById("copyToastText"),
+    };
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    let toastTimer;
+    async function copyToClipboard(text, emoji, label) {
+      try {
+        await navigator.clipboard.writeText(text);
+        elements.copyToastEmoji.textContent = emoji;
+        elements.copyToastText.textContent = `Copied ${label}`;
+        elements.copyToast.classList.remove("error");
+      } catch (error) {
+        console.error(error);
+        elements.copyToastEmoji.textContent = "";
+        elements.copyToastText.textContent = "Copy failed. Try again.";
+        elements.copyToast.classList.add("error");
+      }
+      elements.copyToast.classList.add("visible");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => elements.copyToast.classList.remove("visible"), 1600);
+    }
+
+    function createCard(item) {
+      const card = document.createElement("article");
+      card.className = "emoji-card";
+
+      const glyph = document.createElement("button");
+      glyph.className = "emoji-glyph";
+      glyph.type = "button";
+      glyph.textContent = item.emoji;
+      glyph.setAttribute("aria-label", `Copy ${item.description}`);
+      glyph.title = `Copy ${item.emoji}`;
+      glyph.addEventListener("click", () => copyToClipboard(item.emoji, item.emoji, item.emoji));
+
+      const codes = document.createElement("div");
+      codes.className = "emoji-codes";
+      item.names.forEach((name) => {
+        const chip = document.createElement("button");
+        chip.className = "emoji-code";
+        chip.type = "button";
+        const shortcode = `:${name}:`;
+        chip.textContent = shortcode;
+        chip.title = `Copy ${shortcode}`;
+        chip.addEventListener("click", () => copyToClipboard(shortcode, item.emoji, shortcode));
+        codes.append(chip);
+      });
+
+      card.append(glyph, codes);
+      return card;
+    }
+
+    function render() {
+      elements.gallery.replaceChildren();
+      const visibleItems = state.filtered.slice(0, state.visible);
+
+      if (!visibleItems.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML = "<h2>No emojis found</h2><p>Try another keyword or clear the category filter.</p>";
+        elements.gallery.append(empty);
+      } else {
+        const fragment = document.createDocumentFragment();
+        visibleItems.forEach((item) => fragment.append(createCard(item)));
+        elements.gallery.append(fragment);
+      }
+
+      const total = state.filtered.length;
+      elements.resultCount.textContent = `${total.toLocaleString()} emoji${total === 1 ? "" : "s"} found`;
+      elements.loadMore.hidden = state.visible >= total;
+      if (!elements.loadMore.hidden) {
+        elements.loadMore.textContent = `Show more (${Math.min(DEFAULT_PAGE_SIZE, total - state.visible)})`;
+      }
+      elements.clearFilters.hidden = !elements.search.value && !elements.category.value;
+      elements.gallery.setAttribute("aria-busy", "false");
+    }
+
+    function applyFilters() {
+      const query = normalize(elements.search.value.trim());
+      const selectedCategory = elements.category.value;
+      state.filtered = state.emojis.filter((item) => {
+        const matchesQuery = !query || normalize(item.search).includes(query);
+        return matchesQuery && (!selectedCategory || item.category === selectedCategory);
+      });
+      state.visible = DEFAULT_PAGE_SIZE;
+      render();
+    }
+
+    function populateCategories() {
+      const counts = new Map();
+      state.emojis.forEach((item) => counts.set(item.category, (counts.get(item.category) || 0) + 1));
+      elements.category.replaceChildren(new Option(`All categories (${state.emojis.length.toLocaleString()})`, ""));
+      [...counts.keys()].sort().forEach((category) => {
+        elements.category.append(new Option(`${category} (${counts.get(category).toLocaleString()})`, category));
+      });
+    }
+
+    function showError() {
+      elements.gallery.setAttribute("aria-busy", "false");
+      elements.resultCount.textContent = "Unable to load the emoji sheet";
+      const error = document.createElement("div");
+      error.className = "error-state";
+      error.innerHTML = "<h2>The emoji sheet could not be loaded</h2><p>Please refresh the page or try again later.</p>";
+      elements.gallery.replaceChildren(error);
+    }
+
+    async function initialize() {
+      try {
+        const response = await fetch("emojis.json");
+        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+        state.emojis = await response.json();
+        state.filtered = [...state.emojis];
+        populateCategories();
+        elements.libraryCount.textContent = `${state.emojis.length.toLocaleString()} emojis across ${elements.category.options.length - 1} categories`;
+        applyFilters();
+      } catch (error) {
+        console.error(error);
+        showError();
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilters, 100);
+    });
+    elements.category.addEventListener("change", applyFilters);
+    elements.clearFilters.addEventListener("click", () => {
+      elements.search.value = "";
+      elements.category.value = "";
+      applyFilters();
+      elements.search.focus();
+    });
+    elements.loadMore.addEventListener("click", () => {
+      state.visible += DEFAULT_PAGE_SIZE;
+      render();
+    });
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    initialize();
+  </script>
+</body>
+</html>

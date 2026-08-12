@@ -72,6 +72,9 @@ jobs:
           cp ../icons/index.html public/icons/index.html
           cp -R ../icons/export public/icons/export
           node ../icons/generate-manifest.mjs public/icons/icons.json
+          mkdir -p public/emoji-sheet
+          cp ../emoji-sheet/index.html public/emoji-sheet/index.html
+          cp ../emoji-sheet/emojis.json public/emoji-sheet/emojis.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
