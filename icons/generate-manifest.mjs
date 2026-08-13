@@ -38,7 +38,7 @@ const icons = (await Promise.all(svgFiles.map(async (file) => {
     return {
       name: displayName(pathSegments.at(-1)),
       source: pathSegments[0],
-      category: pathSegments[1],
+      category: pathSegments.length > 2 ? pathSegments[1] : "General",
       path,
     };
   })))
