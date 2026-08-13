@@ -98,25 +98,22 @@
       gap: 1rem;
     }
     .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
       color: var(--cp-text);
       font-size: 1rem;
       font-weight: 700;
       text-decoration: none;
     }
     .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
     .header-links { display: flex; align-items: center; gap: 1rem; }
     .header-links a { color: var(--cp-text-muted); text-decoration: none; }
     .header-links a:hover { color: var(--cp-text); }
 
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.5rem; }
-    .page-title-row { display: flex; align-items: center; gap: 1rem; }
-    .page-logo {
-      width: clamp(2.5rem, 6vw, 3.5rem);
-      height: clamp(2.5rem, 6vw, 3.5rem);
-      flex: 0 0 auto;
-      border-radius: 10px;
-    }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta {
@@ -397,7 +394,7 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><span class="brand-mark">B.</span>G / M365 Updates</a>
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="28" height="28"><span class="brand-mark">B.</span>G / M365 Updates</a>
       <nav class="header-links" aria-label="Primary navigation">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
@@ -410,10 +407,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
-      <div class="page-title-row">
-        <img class="page-logo" src="/favicon.svg" alt="" width="56" height="56">
-        <h1 id="page-title">M365 Release Updates</h1>
-      </div>
+      <h1 id="page-title">M365 Release Updates</h1>
       <p class="intro-text">Latest Microsoft 365 roadmap updates, sourced directly from the official Microsoft 365 RSS feed. Refreshed automatically every morning and evening.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>

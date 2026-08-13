@@ -98,12 +98,16 @@
       gap: 1rem;
     }
     .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
       color: var(--cp-text);
       font-size: 1rem;
       font-weight: 700;
       text-decoration: none;
     }
     .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
     .header-links { display: flex; align-items: center; gap: 1rem; }
     .header-links a { color: var(--cp-text-muted); text-decoration: none; }
     .header-links a:hover { color: var(--cp-text); }
@@ -112,17 +116,6 @@
     .intro {
       max-width: 52rem;
       margin-bottom: 2rem;
-    }
-    .page-title-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .page-logo {
-      width: clamp(2.5rem, 6vw, 3.5rem);
-      height: clamp(2.5rem, 6vw, 3.5rem);
-      flex: 0 0 auto;
-      border-radius: 10px;
     }
     h1 {
       margin: 0;
@@ -613,7 +606,7 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><span class="brand-mark">B.</span>G / Icons</a>
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="28" height="28"><span class="brand-mark">B.</span>G / Icons</a>
       <nav class="header-links" aria-label="Primary navigation">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
@@ -626,10 +619,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
-      <div class="page-title-row">
-        <img class="page-logo" src="/favicon.svg" alt="" width="56" height="56">
-        <h1 id="page-title">Azure icon gallery</h1>
-      </div>
+      <h1 id="page-title">Azure icon gallery</h1>
       <p class="intro-text">Find the right Azure service icon, preview it at full size, and download the original SVG for your diagrams and documentation.</p>
       <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">Loading...</strong></p>
     </section>
