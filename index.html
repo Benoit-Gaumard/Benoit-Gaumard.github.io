@@ -134,9 +134,14 @@
     }
     .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
     .brand-mark { color: var(--cp-accent); }
+    .page-breadcrumb { display: flex; align-items: center; gap: .375rem; font-size: .85rem; color: var(--cp-text-muted); }
+    .page-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
+    .page-breadcrumb a:hover { color: var(--cp-text); }
+    .page-breadcrumb .crumb-current { color: var(--cp-text); font-weight: 600; }
     .header-links { display: flex; align-items: center; gap: 1rem; }
     .header-links a { color: var(--cp-text-muted); text-decoration: none; }
     .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
     .lang-switch { display: flex; gap: .375rem; align-items: center; }
     .lang-switch a { display: inline-flex; padding: 3px; border-radius: 6px; border: 1px solid var(--cp-border); line-height: 0; opacity: 0.55; transition: opacity 0.2s, border-color 0.2s, transform 0.15s; }
     .lang-switch a svg { width: 22px; height: 15px; border-radius: 3px; display: block; }
@@ -376,8 +381,12 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="28" height="28"><span class="brand-mark">B.</span>G / Home</a>
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="28" height="28"></a>
+      <nav class="page-breadcrumb" aria-label="Breadcrumb">
+        <span class="crumb-current">Home</span>
+      </nav>
       <nav class="header-links" aria-label="Primary navigation">
+        <a href="/" aria-current="page">Home</a>
         <a href="/blog/">Blog</a>
         <a href="/icons/">Icons</a>
         <a href="/emoji-sheet/">Emoji</a>

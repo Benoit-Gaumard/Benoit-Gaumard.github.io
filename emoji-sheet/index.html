@@ -101,9 +101,14 @@
     }
     .brand-mark { color: var(--cp-accent); }
     .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .page-breadcrumb { display: flex; align-items: center; gap: .375rem; font-size: .85rem; color: var(--cp-text-muted); }
+    .page-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
+    .page-breadcrumb a:hover { color: var(--cp-text); }
+    .page-breadcrumb .crumb-current { color: var(--cp-text); font-weight: 600; }
     .header-links { display: flex; align-items: center; gap: 1rem; }
     .header-links a { color: var(--cp-text-muted); text-decoration: none; }
     .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
 
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
@@ -338,6 +343,8 @@
     .back-to-top:hover { background: var(--cp-accent-hover); }
 
     @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
       .toolbar { position: static; grid-template-columns: 1fr 1fr; }
       .toolbar .search-field { grid-column: 1 / -1; }
       .gallery { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
@@ -367,11 +374,17 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="28" height="28"><span class="brand-mark">B.</span>G / Emoji</a>
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="28" height="28"></a>
+      <nav class="page-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="crumb-sep" aria-hidden="true">/</span>
+        <span class="crumb-current">Emoji</span>
+      </nav>
       <nav class="header-links" aria-label="Primary navigation">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
         <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/" aria-current="page">Emoji</a>
         <a href="/azure-release-updates/">Azure Updates</a>
         <a href="/m365-release-updates/">M365 Updates</a>
       </nav>
