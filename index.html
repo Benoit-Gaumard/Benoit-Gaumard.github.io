@@ -284,7 +284,45 @@
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
     }
-    .footer-inner { padding-block: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; font-size: .8rem; flex-wrap: wrap; }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
 
     .back-to-top {
       position: fixed;
@@ -320,11 +358,16 @@
       .hero-main { flex-basis: 100%; }
       .hero-photo { order: -1; }
       .hero-photo img { width: 130px; height: 130px; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       .header-links a:first-child { display: none; }
       .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) { body::before { animation: none; } .cursor { animation: none; } .reveal { opacity: 1 !important; transform: none !important; } .track i { transition: none; } }
   </style>
@@ -593,8 +636,28 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>Azure Infra &amp; DevOps Consultant.</span>
-      <span>&copy; <span id="y"></span> Benoit Gaumard</span>
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/blog/">Blog</a>
+          <a href="#top">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Explore more</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="y"></span> Benoit Gaumard</span>
+        <span>Open to new opportunities</span>
+      </div>
     </div>
   </footer>
 

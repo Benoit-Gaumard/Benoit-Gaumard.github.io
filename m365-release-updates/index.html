@@ -304,7 +304,45 @@
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
     }
-    .footer-inner { padding-block: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; font-size: .8rem; flex-wrap: wrap; }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
 
     .back-to-top {
       position: fixed;
@@ -333,6 +371,8 @@
     @media (max-width: 48rem) {
       .toolbar { position: static; grid-template-columns: 1fr 1fr; }
       .toolbar .search-field { grid-column: 1 / -1; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
@@ -342,6 +382,9 @@
       .toolbar .search-field { grid-column: auto; }
       .results-bar { align-items: flex-start; flex-direction: column; }
       .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -419,8 +462,27 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>Data sourced from the official Microsoft 365 RSS feed.</span>
-      <span id="libraryCount"></span>
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / M365 Updates</a>
+          <p>Latest Microsoft 365 roadmap updates, refreshed automatically every morning and evening from the official RSS feed.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Data source</strong>
+          <a href="https://www.microsoft.com/microsoft-365/roadmap" target="_blank" rel="noopener noreferrer">M365 Roadmap</a>
+          <a href="https://www.microsoft.com/releasecommunications/api/v2/m365/rss" target="_blank" rel="noopener noreferrer">RSS feed</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <span id="libraryCount"></span>
+      </div>
     </div>
   </footer>
 
@@ -441,6 +503,7 @@
       updateList: document.getElementById("updateList"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
+      currentYear: document.getElementById("currentYear"),
       refreshedAt: document.getElementById("refreshedAt"),
       clearFilters: document.getElementById("clearFilters"),
       loadMore: document.getElementById("loadMore"),
@@ -597,6 +660,7 @@
 
     async function initialize() {
       try {
+        elements.currentYear.textContent = new Date().getFullYear();
         const response = await fetch("updates.json");
         if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
         const payload = await response.json();

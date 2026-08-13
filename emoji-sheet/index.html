@@ -276,7 +276,45 @@
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
     }
-    .footer-inner { padding-block: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; font-size: .8rem; }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
 
     .back-to-top {
       position: fixed;
@@ -306,6 +344,8 @@
       .toolbar { position: static; grid-template-columns: 1fr 1fr; }
       .toolbar .search-field { grid-column: 1 / -1; }
       .gallery { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
@@ -316,6 +356,9 @@
       .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
       .results-bar { align-items: flex-start; flex-direction: column; }
       .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -376,8 +419,26 @@
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>All emoji glyphs render using your device's font.</span>
-      <span id="libraryCount"></span>
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Emoji</a>
+          <p>A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Emoji source</strong>
+          <a href="https://github.com/github/gemoji" target="_blank" rel="noopener noreferrer">GitHub gemoji</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <span id="libraryCount"></span>
+      </div>
     </div>
   </footer>
 
@@ -401,6 +462,7 @@
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
+      currentYear: document.getElementById("currentYear"),
       refreshedAt: document.getElementById("refreshedAt"),
       clearFilters: document.getElementById("clearFilters"),
       loadMore: document.getElementById("loadMore"),
@@ -517,6 +579,7 @@
 
     async function initialize() {
       try {
+        elements.currentYear.textContent = new Date().getFullYear();
         fetch("meta.json").then((response) => response.ok ? response.json() : null).then((meta) => {
           elements.refreshedAt.textContent = meta
             ? new Date(meta.generatedAt).toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
