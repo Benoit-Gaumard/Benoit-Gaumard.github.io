@@ -8,7 +8,7 @@ on:
   # Data-refresh workflows commit with the default GITHUB_TOKEN, which does NOT
   # trigger the push event above, so redeploy explicitly once they finish.
   workflow_run:
-    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates"]
+    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh RSS Watcher Updates"]
     types: [completed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -84,6 +84,9 @@ jobs:
           cp ../world-clock/index.html public/world-clock/index.html
           mkdir -p public/random-wheel
           cp ../random-wheel/index.html public/random-wheel/index.html
+          mkdir -p public/rss-watcher
+          cp ../rss-watcher/index.html public/rss-watcher/index.html
+          cp ../rss-watcher/updates.json public/rss-watcher/updates.json
           mkdir -p public/icons
           cp ../icons/index.html public/icons/index.html
           cp -R ../icons/export public/icons/export

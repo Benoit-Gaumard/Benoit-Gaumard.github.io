@@ -1,0 +1,39 @@
+name: Refresh RSS Watcher Updates
+
+on:
+  schedule:
+    # 06:00 and 09:00 and 12:00 and 15:00 UTC (4 times daily)
+    - cron: '0 6 * * *'
+    - cron: '0 9 * * *'
+    - cron: '0 12 * * *'
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rss-updates-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest RSS feeds
+        run: node rss-watcher/fetch-updates.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- rss-watcher/updates.json; then
+            echo "No changes to RSS Watcher data."
+          else
+            git add rss-watcher/updates.json
+            git commit -m "chore: refresh RSS Watcher data"
+            git push
+          fi
