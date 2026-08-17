@@ -29,6 +29,8 @@
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
+      --cp-highlight-bg: #fef9c3;
+      --cp-highlight-border: #eab308;
     }
 
     * { box-sizing: border-box; }
@@ -244,7 +246,7 @@
       background: var(--cp-surface);
       box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
     }
-    .list-article.is-highlighted { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .list-article.is-highlighted { border-color: var(--cp-highlight-border); background: var(--cp-highlight-bg); }
     .list-icon { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; border-radius: 4px; object-fit: contain; background: var(--cp-surface-soft); }
     .list-source {
       flex: 0 0 auto;
@@ -311,7 +313,13 @@
     .keyword-chip button:hover { background: rgba(11, 111, 184, .18); }
     .keyword-chips-empty { color: var(--cp-text-muted); font-size: .8rem; }
     mark.keyword-mark { background: #fef08a; color: #713f12; border-radius: 2px; padding: 0 .1rem; }
-    .site-article.is-highlighted { box-shadow: inset 3px 0 0 0 var(--cp-accent); padding-left: .5rem; }
+    .site-article.is-highlighted {
+      background: var(--cp-highlight-bg);
+      border-radius: 6px;
+      margin-inline: -.5rem;
+      padding-inline: .5rem;
+      box-shadow: inset 3px 0 0 0 var(--cp-highlight-border);
+    }
 
     .site-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
     .site-card {
