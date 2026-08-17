@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from real downtime, and combine multiple dependent service SLAs into a composite uptime target.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>SLA Calculator | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .mode-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
+    .mode-tab {
+      padding: .5rem 1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+    .mode-tab:hover { color: var(--cp-text); }
+    .mode-tab[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+
+    .calculator-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .preset-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+    .preset-chip {
+      padding: .35rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-accent);
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .preset-chip:hover { background: var(--cp-accent-soft); }
+
+    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; }
+    .unit-field.value-field { flex: 1 1 12rem; }
+    .unit-field.select-field { flex: 1 1 12rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .9rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      width: 100%;
+    }
+    .unit-field select {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .75rem;
+      width: 100%;
+    }
+
+    .results-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cp-border);
+    }
+    .results-heading { margin: 0 0 1rem; color: var(--cp-text-muted); font-size: .95rem; }
+    .results-heading strong { color: var(--cp-text); font-size: 1.1rem; }
+    .results-list { display: flex; flex-direction: column; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .result-row.is-source { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .result-unit { color: var(--cp-text-muted); font-size: .9rem; }
+    .result-row.is-source .result-unit { color: var(--cp-text); font-weight: 700; }
+    .result-value { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1rem; }
+
+    .service-list { display: flex; flex-direction: column; gap: .75rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+    .service-row {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .service-name {
+      flex: 1 1 12rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .75rem;
+    }
+    .service-sla {
+      flex: 0 0 6rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .75rem;
+      font-weight: 700;
+      text-align: right;
+    }
+    .service-suffix { color: var(--cp-text-muted); font-weight: 700; }
+    .remove-service-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-danger);
+      cursor: pointer;
+    }
+    .remove-service-button:hover { background: var(--cp-danger-bg); }
+    .add-service-button {
+      padding: .6rem 1.1rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-accent);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .add-service-button:hover { background: var(--cp-accent-soft); }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .calculator-card { padding: 1.25rem; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .service-row { flex-wrap: wrap; }
+      .service-name { flex-basis: 100%; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">SLA Calculator</h1>
+      <p class="intro-text">Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from real downtime, and combine multiple dependent service SLAs into a composite uptime target.</p>
+    </section>
+
+    <section aria-label="SLA calculator">
+      <div class="mode-tabs" id="modeTabs" aria-label="Choose a calculator mode">
+        <button class="mode-tab" type="button" data-mode="fromSla" aria-pressed="true">SLA &rarr; Downtime</button>
+        <button class="mode-tab" type="button" data-mode="fromDowntime" aria-pressed="false">Downtime &rarr; SLA</button>
+        <button class="mode-tab" type="button" data-mode="composite" aria-pressed="false">Composite SLA</button>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calc-panel" id="panel-fromSla">
+          <div class="preset-row" id="slaPresets"></div>
+          <div class="field-row">
+            <div class="unit-field value-field">
+              <label for="slaInput">SLA target (%)</label>
+              <input id="slaInput" type="number" step="0.001" min="0" max="100" value="99.9">
+            </div>
+          </div>
+          <div class="results-section">
+            <p class="results-heading" id="slaHeading"></p>
+            <ul class="results-list" id="slaResultsList"></ul>
+          </div>
+        </div>
+
+        <div class="calc-panel" id="panel-fromDowntime" hidden>
+          <div class="field-row">
+            <div class="unit-field value-field">
+              <label for="downtimeValue">Downtime</label>
+              <input id="downtimeValue" type="number" step="any" min="0" value="43.2">
+            </div>
+            <div class="unit-field select-field">
+              <label for="downtimeUnit">Unit</label>
+              <select id="downtimeUnit">
+                <option value="1">Seconds</option>
+                <option value="60" selected>Minutes</option>
+                <option value="3600">Hours</option>
+                <option value="86400">Days</option>
+              </select>
+            </div>
+            <div class="unit-field select-field">
+              <label for="downtimePeriod">Per</label>
+              <select id="downtimePeriod">
+                <option value="86400">Day</option>
+                <option value="604800">Week</option>
+                <option value="2629800" selected>Month</option>
+                <option value="7889400">Quarter</option>
+                <option value="31557600">Year</option>
+              </select>
+            </div>
+          </div>
+          <div class="results-section">
+            <p class="results-heading" id="downtimeHeading"></p>
+            <ul class="results-list" id="downtimeResultsList"></ul>
+          </div>
+        </div>
+
+        <div class="calc-panel" id="panel-composite" hidden>
+          <ul class="service-list" id="serviceList"></ul>
+          <button class="add-service-button" id="addService" type="button">+ Add service</button>
+          <div class="results-section">
+            <p class="results-heading" id="compositeHeading"></p>
+            <ul class="results-list" id="compositeResultsList"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / SLA Calculator</a>
+          <p>Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from real downtime, and combine dependent service SLAs.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const PERIODS = [
+      { key: "day", label: "Daily", seconds: 86400 },
+      { key: "week", label: "Weekly", seconds: 604800 },
+      { key: "month", label: "Monthly", seconds: 2629800 },
+      { key: "quarter", label: "Quarterly", seconds: 7889400 },
+      { key: "year", label: "Yearly", seconds: 31557600 },
+    ];
+    const SLA_PRESETS = [90, 95, 99, 99.5, 99.9, 99.95, 99.99, 99.999];
+
+    const state = {
+      services: [
+        { name: "Load balancer", sla: 99.99 },
+        { name: "Database", sla: 99.95 },
+      ],
+    };
+
+    const elements = {
+      modeTabs: document.getElementById("modeTabs"),
+      slaInput: document.getElementById("slaInput"),
+      slaPresets: document.getElementById("slaPresets"),
+      slaHeading: document.getElementById("slaHeading"),
+      slaResultsList: document.getElementById("slaResultsList"),
+      downtimeValue: document.getElementById("downtimeValue"),
+      downtimeUnit: document.getElementById("downtimeUnit"),
+      downtimePeriod: document.getElementById("downtimePeriod"),
+      downtimeHeading: document.getElementById("downtimeHeading"),
+      downtimeResultsList: document.getElementById("downtimeResultsList"),
+      serviceList: document.getElementById("serviceList"),
+      addService: document.getElementById("addService"),
+      compositeHeading: document.getElementById("compositeHeading"),
+      compositeResultsList: document.getElementById("compositeResultsList"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    function formatDuration(totalSeconds) {
+      if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return "0s";
+      let remaining = totalSeconds;
+      const parts = [];
+      const defs = [["d", 86400], ["h", 3600], ["m", 60]];
+      defs.forEach(([suffix, size]) => {
+        const value = Math.floor(remaining / size);
+        if (value > 0) {
+          parts.push(`${value}${suffix}`);
+          remaining -= value * size;
+        }
+      });
+      if (remaining > 0.005 || parts.length === 0) {
+        const decimals = parts.length === 0 ? 2 : (remaining < 10 ? 1 : 0);
+        parts.push(`${remaining.toFixed(decimals)}s`);
+      }
+      return parts.join(" ");
+    }
+
+    function formatSlaPercent(value) {
+      if (!Number.isFinite(value)) return "\u2014";
+      return value.toFixed(5).replace(/0+$/, "").replace(/\.$/, "");
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    function renderDowntimeTable(listEl, slaPercent, highlightSeconds) {
+      listEl.replaceChildren();
+      const downtimeFraction = Math.max(0, 1 - slaPercent / 100);
+      PERIODS.forEach((period) => {
+        const li = document.createElement("li");
+        li.className = `result-row${period.seconds === highlightSeconds ? " is-source" : ""}`;
+        li.innerHTML = `<span class="result-unit">${period.label}</span><span class="result-value">${formatDuration(downtimeFraction * period.seconds)}</span>`;
+        listEl.append(li);
+      });
+    }
+
+    function renderSlaPresets() {
+      elements.slaPresets.replaceChildren();
+      SLA_PRESETS.forEach((value) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "preset-chip";
+        button.textContent = `${value}%`;
+        button.addEventListener("click", () => {
+          elements.slaInput.value = value;
+          renderFromSla();
+        });
+        elements.slaPresets.append(button);
+      });
+    }
+
+    function renderFromSla() {
+      const sla = parseFloat(elements.slaInput.value);
+      if (!Number.isFinite(sla) || sla < 0 || sla > 100) {
+        elements.slaHeading.textContent = "Enter a valid SLA percentage between 0 and 100.";
+        elements.slaResultsList.replaceChildren();
+        return;
+      }
+      elements.slaHeading.innerHTML = `<strong>${sla}% uptime</strong> allows the following downtime:`;
+      renderDowntimeTable(elements.slaResultsList, sla);
+    }
+
+    function renderFromDowntime() {
+      const value = parseFloat(elements.downtimeValue.value);
+      const unitSeconds = parseFloat(elements.downtimeUnit.value);
+      const periodSeconds = parseFloat(elements.downtimePeriod.value);
+      if (!Number.isFinite(value) || value < 0) {
+        elements.downtimeHeading.textContent = "Enter a valid downtime value.";
+        elements.downtimeResultsList.replaceChildren();
+        return;
+      }
+      const downtimeSeconds = value * unitSeconds;
+      const downtimeFraction = Math.min(1, downtimeSeconds / periodSeconds);
+      const sla = (1 - downtimeFraction) * 100;
+      const periodLabel = elements.downtimePeriod.selectedOptions[0].textContent.toLowerCase();
+      elements.downtimeHeading.innerHTML = `<strong>${formatDuration(downtimeSeconds)}</strong> of downtime per ${periodLabel} equals an SLA of <strong>${formatSlaPercent(sla)}%</strong>.`;
+      renderDowntimeTable(elements.downtimeResultsList, sla, periodSeconds);
+    }
+
+    function renderServiceList() {
+      elements.serviceList.replaceChildren();
+      state.services.forEach((service, index) => {
+        const li = document.createElement("li");
+        li.className = "service-row";
+        li.innerHTML = `
+          <input type="text" class="service-name" placeholder="Service name" value="${escapeHtml(service.name)}">
+          <input type="number" class="service-sla" step="0.001" min="0" max="100" value="${service.sla}">
+          <span class="service-suffix">%</span>
+          <button type="button" class="remove-service-button" aria-label="Remove service">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/></svg>
+          </button>
+        `;
+        li.querySelector(".service-name").addEventListener("input", (event) => {
+          service.name = event.target.value;
+          renderComposite();
+        });
+        li.querySelector(".service-sla").addEventListener("input", (event) => {
+          service.sla = parseFloat(event.target.value);
+          renderComposite();
+        });
+        li.querySelector(".remove-service-button").addEventListener("click", () => {
+          state.services.splice(index, 1);
+          renderServiceList();
+          renderComposite();
+        });
+        elements.serviceList.append(li);
+      });
+    }
+
+    function renderComposite() {
+      const validServices = state.services.filter((s) => Number.isFinite(s.sla) && s.sla >= 0 && s.sla <= 100);
+      if (!validServices.length) {
+        elements.compositeHeading.textContent = "Add at least one service with a valid SLA percentage.";
+        elements.compositeResultsList.replaceChildren();
+        return;
+      }
+      const combined = validServices.reduce((acc, s) => acc * (s.sla / 100), 1) * 100;
+      const count = validServices.length;
+      elements.compositeHeading.innerHTML = `Combined SLA across ${count} dependent service${count > 1 ? "s" : ""}: <strong>${formatSlaPercent(combined)}%</strong>`;
+      renderDowntimeTable(elements.compositeResultsList, combined);
+    }
+
+    elements.slaInput.addEventListener("input", renderFromSla);
+    elements.downtimeValue.addEventListener("input", renderFromDowntime);
+    elements.downtimeUnit.addEventListener("change", renderFromDowntime);
+    elements.downtimePeriod.addEventListener("change", renderFromDowntime);
+    elements.addService.addEventListener("click", () => {
+      state.services.push({ name: `Service ${state.services.length + 1}`, sla: 99.9 });
+      renderServiceList();
+      renderComposite();
+    });
+
+    [...elements.modeTabs.children].forEach((tab) => {
+      tab.addEventListener("click", () => {
+        [...elements.modeTabs.children].forEach((t) => t.setAttribute("aria-pressed", String(t === tab)));
+        document.querySelectorAll(".calc-panel").forEach((panel) => { panel.hidden = true; });
+        document.getElementById(`panel-${tab.dataset.mode}`).hidden = false;
+      });
+    });
+
+    renderSlaPresets();
+    renderFromSla();
+    renderFromDowntime();
+    renderServiceList();
+    renderComposite();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
