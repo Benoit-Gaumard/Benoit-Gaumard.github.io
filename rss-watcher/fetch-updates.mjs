@@ -89,6 +89,21 @@ function parseItems(xml) {
   });
 }
 
+function extractFeedIcon(xml, feedUrl) {
+  // Only look at channel/feed-level metadata, not per-item images.
+  const channelXml = xml.replace(/<item\b[^>]*>[\s\S]*?<\/item>/gi, "").replace(/<entry\b[^>]*>[\s\S]*?<\/entry>/gi, "");
+  const imageBlock = channelXml.match(/<image\b[^>]*>([\s\S]*?)<\/image>/i);
+  const imageUrl = imageBlock ? extractTag(imageBlock[1], "url") : "";
+  const icon = imageUrl || extractTag(channelXml, "icon") || extractTag(channelXml, "logo");
+  if (icon) return icon;
+  try {
+    const { hostname } = new URL(feedUrl);
+    return `https://www.google.com/s2/favicons?sz=64&domain=${hostname}`;
+  } catch {
+    return "";
+  }
+}
+
 function parseCsvLine(line) {
   const cells = [];
   let current = "";
@@ -146,11 +161,12 @@ async function fetchFeed(feed) {
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const xml = await response.text();
+    const icon = extractFeedIcon(xml, feed.url);
     const items = parseItems(xml)
       .filter((item) => item.title && item.link && item.pubDate)
       .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
       .slice(0, MAX_ITEMS_PER_FEED)
-      .map((item) => ({ ...item, source: feed.name, categories: feed.categories }));
+      .map((item) => ({ ...item, source: feed.name, categories: feed.categories, icon }));
     return { ok: true, name: feed.name, count: items.length, items };
   } catch (error) {
     return { ok: false, name: feed.name, error: error.message };

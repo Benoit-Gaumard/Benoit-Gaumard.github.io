@@ -218,7 +218,9 @@
       transition: border-color .18s ease, transform .18s ease;
     }
     .site-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
-    .site-card-head h2 { margin: 0 0 .25rem; font-size: 1.05rem; }
+    .site-card-title-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; }
+    .site-icon { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; border-radius: 4px; object-fit: contain; background: var(--cp-surface-soft); }
+    .site-card-head h2 { margin: 0; font-size: 1.05rem; }
     .site-meta { margin: 0; color: var(--cp-text-muted); font-size: .8rem; }
     .site-tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .5rem; }
     .site-articles { display: flex; flex-direction: column; gap: .25rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
@@ -681,12 +683,28 @@
 
       const head = document.createElement("div");
       head.className = "site-card-head";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "site-card-title-row";
+      if (group.icon) {
+        const icon = document.createElement("img");
+        icon.className = "site-icon";
+        icon.src = group.icon;
+        icon.alt = "";
+        icon.loading = "lazy";
+        icon.width = 20;
+        icon.height = 20;
+        icon.addEventListener("error", () => icon.remove(), { once: true });
+        titleRow.append(icon);
+      }
       const title = document.createElement("h2");
       title.textContent = group.source;
+      titleRow.append(title);
+
       const meta = document.createElement("p");
       meta.className = "site-meta";
       meta.textContent = `${group.totalCount.toLocaleString()} article${group.totalCount === 1 ? "" : "s"} \u00b7 Latest ${relativeTime(group.articles[0].pubDate).toLowerCase()}`;
-      head.append(title, meta);
+      head.append(titleRow, meta);
 
       if (group.categories.length) {
         const tags = document.createElement("div");
@@ -711,7 +729,7 @@
     function buildGroups(items) {
       const map = new Map();
       items.forEach((item) => {
-        if (!map.has(item.source)) map.set(item.source, { source: item.source, categories: item.categories, articles: [] });
+        if (!map.has(item.source)) map.set(item.source, { source: item.source, categories: item.categories, icon: item.icon, articles: [] });
         map.get(item.source).articles.push(item);
       });
       return [...map.values()]
