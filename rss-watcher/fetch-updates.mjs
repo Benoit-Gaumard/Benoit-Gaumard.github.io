@@ -5,6 +5,10 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const csvPath = join(HERE, "rss-feeds.csv");
 const outputPath = join(HERE, "updates.json");
+const feedEnPath = join(HERE, "feed.en.xml");
+const feedFrPath = join(HERE, "feed.fr.xml");
+const SITE_URL = "https://benoit-gaumard.io/rss-watcher/";
+const MAX_FEED_ITEMS = 300;
 
 const CONCURRENCY = 20;
 const FEED_TIMEOUT_MS = 15000;
@@ -153,6 +157,40 @@ async function mapLimit(items, limit, worker) {
   return results;
 }
 
+function escapeXml(text) {
+  return text.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[char]));
+}
+
+function buildRssFeed(items, lang) {
+  const title = lang === "fr" ? "RSS Watcher \u2013 Actu tech en fran\u00e7ais" : "RSS Watcher \u2013 Tech news in English";
+  const description = lang === "fr"
+    ? "Actualit\u00e9s tech du moment, agr\u00e9g\u00e9es depuis de nombreux flux RSS francophones."
+    : "Tech news of the moment, aggregated from many English-language RSS feeds.";
+  const feedUrl = `${SITE_URL}feed.${lang}.xml`;
+  const entries = items.map((item) => `    <item>
+      <title>${escapeXml(item.title)}</title>
+      <link>${escapeXml(item.link)}</link>
+      <guid isPermaLink="false">${escapeXml(item.id)}</guid>
+      <pubDate>${new Date(item.pubDate).toUTCString()}</pubDate>
+      <description>${escapeXml(item.description)}</description>
+      <source url="${escapeXml(SITE_URL)}">${escapeXml(item.source)}</source>
+    </item>`).join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(title)}</title>
+    <link>${escapeXml(SITE_URL)}</link>
+    <atom:link href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml"/>
+    <description>${escapeXml(description)}</description>
+    <language>${lang === "fr" ? "fr-fr" : "en-us"}</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+${entries}
+  </channel>
+</rss>
+`;
+}
+
 async function fetchFeed(feed) {
   try {
     const response = await fetch(feed.url, {
@@ -203,7 +241,14 @@ const payload = {
 };
 
 await writeFile(outputPath, `${JSON.stringify(payload)}\n`, "utf8");
+
+const enItems = items.filter((item) => item.country === "EN").slice(0, MAX_FEED_ITEMS);
+const frItems = items.filter((item) => item.country === "FR").slice(0, MAX_FEED_ITEMS);
+await writeFile(feedEnPath, buildRssFeed(enItems, "en"), "utf8");
+await writeFile(feedFrPath, buildRssFeed(frItems, "fr"), "utf8");
+
 console.log(`Fetched ${items.length} items from ${succeeded.length}/${feeds.length} feeds (${failed.length} failed).`);
+console.log(`Wrote feed.en.xml (${enItems.length} items) and feed.fr.xml (${frItems.length} items).`);
 if (failed.length) {
   console.log("Failed feeds:", failed.map((f) => `${f.name} (${f.error})`).join("; "));
 }
