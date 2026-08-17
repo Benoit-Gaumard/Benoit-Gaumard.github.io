@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Current time and date in Paris, plus a glance at colleague timezones around the world.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>World Clock | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--cp-text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .sec-label {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin: 2.5rem 0 1rem;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-weight: 650;
+    }
+
+    .clock-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      padding: 2rem 2.25rem;
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      box-shadow: var(--cp-shadow);
+    }
+    .clock-hero-main { min-width: 16rem; }
+    .clock-hero-city {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: 1.1rem;
+      font-weight: 650;
+      color: var(--cp-text-muted);
+    }
+    .clock-hero-city .flag { font-size: 1.5rem; line-height: 1; }
+    .clock-hero-time {
+      margin: .5rem 0 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: clamp(2.75rem, 8vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--cp-accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .clock-hero-date {
+      margin: .25rem 0 0;
+      font-size: 1.1rem;
+      color: var(--cp-text-muted);
+    }
+    .clock-hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .stat-pill {
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+      padding: .85rem 1.25rem;
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      min-width: 8.5rem;
+    }
+    .stat-pill span.label {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--cp-text-muted);
+    }
+    .stat-pill span.value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timezone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 1.1rem;
+    }
+    .timezone-card {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      padding: 1.25rem 1.4rem;
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+    .timezone-card:hover { transform: translateY(-3px); border-color: var(--cp-accent); }
+    .timezone-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+    .timezone-card-city {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 650;
+    }
+    .timezone-card-city .flag { font-size: 1.35rem; line-height: 1; }
+    .timezone-card-offset {
+      font-size: .78rem;
+      font-weight: 650;
+      color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .timezone-card-time {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .timezone-card-date {
+      color: var(--cp-text-muted);
+      font-size: .88rem;
+    }
+    .timezone-card-country {
+      color: var(--cp-text-muted);
+      font-size: .8rem;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .clock-hero { flex-direction: column; align-items: flex-start; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .timezone-card { transition: none; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">World Clock</h1>
+      <p class="intro-text">Current time and date in Paris, plus a quick glance at the timezones of colleagues around the world.</p>
+    </section>
+
+    <section aria-label="Paris time">
+      <div class="clock-hero">
+        <div class="clock-hero-main">
+          <p class="clock-hero-city"><span class="flag" aria-hidden="true">🇫🇷</span> Paris, France</p>
+          <p class="clock-hero-time" id="parisTime">--:--:--</p>
+          <p class="clock-hero-date" id="parisDate">Loading...</p>
+        </div>
+        <div class="clock-hero-stats">
+          <div class="stat-pill">
+            <span class="label">Day of the Year</span>
+            <span class="value" id="dayOfYear">-</span>
+          </div>
+          <div class="stat-pill">
+            <span class="label">Week of the Year</span>
+            <span class="value" id="weekOfYear">-</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Other timezones">
+      <p class="sec-label">Other Timezones</p>
+      <div class="timezone-grid" id="timezoneGrid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / World Clock</a>
+          <p>Current time in Paris and a quick reference for colleague timezones around the world.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const PARIS_TZ = "Europe/Paris";
+    const OTHER_ZONES = [
+      { city: "London", country: "United Kingdom", flag: "🇬🇧", tz: "Europe/London" },
+      { city: "New York", country: "United States", flag: "🇺🇸", tz: "America/New_York" },
+      { city: "Seattle", country: "United States", flag: "🇺🇸", tz: "America/Los_Angeles" },
+      { city: "Houston", country: "United States", flag: "🇺🇸", tz: "America/Chicago" },
+      { city: "Hyderabad", country: "India", flag: "🇮🇳", tz: "Asia/Kolkata" },
+      { city: "Bengaluru", country: "India", flag: "🇮🇳", tz: "Asia/Kolkata" },
+      { city: "Johannesburg", country: "South Africa", flag: "🇿🇦", tz: "Africa/Johannesburg" },
+    ];
+
+    const grid = document.getElementById("timezoneGrid");
+    OTHER_ZONES.forEach((zone, index) => {
+      const card = document.createElement("article");
+      card.className = "timezone-card";
+      card.innerHTML = `
+        <div class="timezone-card-head">
+          <span class="timezone-card-city"><span class="flag" aria-hidden="true">${zone.flag}</span> ${zone.city}</span>
+          <span class="timezone-card-offset" id="offset-${index}"></span>
+        </div>
+        <p class="timezone-card-time" id="time-${index}">--:--</p>
+        <p class="timezone-card-date" id="date-${index}"></p>
+        <p class="timezone-card-country">${zone.country}</p>
+      `;
+      grid.appendChild(card);
+    });
+
+    function getTzOffsetMinutes(timeZone, date) {
+      const dtf = new Intl.DateTimeFormat("en-US", {
+        timeZone, hourCycle: "h23",
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+      });
+      const parts = dtf.formatToParts(date).reduce((acc, part) => {
+        acc[part.type] = part.value;
+        return acc;
+      }, {});
+      const asUTC = Date.UTC(
+        Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+        Number(parts.hour), Number(parts.minute), Number(parts.second)
+      );
+      return (asUTC - date.getTime()) / 60000;
+    }
+
+    function formatOffsetDiff(minutesDiff) {
+      if (minutesDiff === 0) return "Same time";
+      const sign = minutesDiff > 0 ? "+" : "-";
+      const abs = Math.abs(minutesDiff);
+      const hours = Math.floor(abs / 60);
+      const minutes = abs % 60;
+      return `${sign}${hours}h${minutes ? String(minutes).padStart(2, "0") : ""}`;
+    }
+
+    function getDateParts(timeZone, date) {
+      const dtf = new Intl.DateTimeFormat("en-CA", {
+        timeZone, year: "numeric", month: "2-digit", day: "2-digit",
+      });
+      const parts = dtf.formatToParts(date).reduce((acc, part) => {
+        acc[part.type] = part.value;
+        return acc;
+      }, {});
+      return { year: Number(parts.year), month: Number(parts.month), day: Number(parts.day) };
+    }
+
+    function getDayOfYear(parts) {
+      const start = Date.UTC(parts.year, 0, 1);
+      const current = Date.UTC(parts.year, parts.month - 1, parts.day);
+      return Math.floor((current - start) / 86400000) + 1;
+    }
+
+    function getIsoWeek(parts) {
+      const d = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+      const dayNum = (d.getUTCDay() + 6) % 7;
+      d.setUTCDate(d.getUTCDate() - dayNum + 3);
+      const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+      const firstDayNum = (firstThursday.getUTCDay() + 6) % 7;
+      firstThursday.setUTCDate(firstThursday.getUTCDate() - firstDayNum + 3);
+      return 1 + Math.round((d - firstThursday) / (7 * 24 * 3600 * 1000));
+    }
+
+    const timeFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
+      timeZone, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
+    });
+    const shortTimeFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
+      timeZone, hour: "2-digit", minute: "2-digit", hour12: false,
+    });
+    const dateFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
+      timeZone, weekday: "long", day: "numeric", month: "long", year: "numeric",
+    });
+    const shortDateFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
+      timeZone, weekday: "short", day: "numeric", month: "short",
+    });
+
+    const parisTimeFormatter = timeFormatter(PARIS_TZ);
+    const parisDateFormatter = dateFormatter(PARIS_TZ);
+    const zoneTimeFormatters = OTHER_ZONES.map((zone) => shortTimeFormatter(zone.tz));
+    const zoneDateFormatters = OTHER_ZONES.map((zone) => shortDateFormatter(zone.tz));
+
+    function tick() {
+      const now = new Date();
+      document.getElementById("parisTime").textContent = parisTimeFormatter.format(now);
+      document.getElementById("parisDate").textContent = parisDateFormatter.format(now);
+
+      const parisParts = getDateParts(PARIS_TZ, now);
+      document.getElementById("dayOfYear").textContent = getDayOfYear(parisParts);
+      document.getElementById("weekOfYear").textContent = getIsoWeek(parisParts);
+
+      const parisOffset = getTzOffsetMinutes(PARIS_TZ, now);
+      OTHER_ZONES.forEach((zone, index) => {
+        document.getElementById(`time-${index}`).textContent = zoneTimeFormatters[index].format(now);
+        document.getElementById(`date-${index}`).textContent = zoneDateFormatters[index].format(now);
+        const diff = getTzOffsetMinutes(zone.tz, now) - parisOffset;
+        document.getElementById(`offset-${index}`).textContent = formatOffsetDiff(diff);
+      });
+    }
+
+    tick();
+    setInterval(tick, 1000);
+
+    const backToTop = document.getElementById("backToTop");
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
