@@ -5,9 +5,11 @@ on:
   push:
     branches:
       - main # Set a branch to deploy
-  # schedule:
-  #   # Every day at 10:00 UTC
-  #   - cron: '0 10 * * *'
+  # Data-refresh workflows commit with the default GITHUB_TOKEN, which does NOT
+  # trigger the push event above, so redeploy explicitly once they finish.
+  workflow_run:
+    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates"]
+    types: [completed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -32,6 +34,7 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     env:
       HUGO_VERSION: 0.139.2 #0.134.2
     steps:
@@ -48,6 +51,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           submodules: recursive
           fetch-depth: 0
       - name: Setup Pages
