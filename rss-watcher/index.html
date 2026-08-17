@@ -317,19 +317,6 @@
     }
     .empty-state h2, .error-state h2 { margin: 0; font-size: 1.25rem; }
     .empty-state p, .error-state p { margin: .5rem 0 0; color: var(--cp-text-muted); }
-    .load-more-wrap { display: flex; justify-content: center; padding-top: 2rem; }
-    .load-more {
-      min-height: 2.75rem;
-      padding: .625rem 1.25rem;
-      border: 1px solid var(--cp-accent);
-      border-radius: 6px;
-      background: var(--cp-accent);
-      color: var(--cp-accent-fg);
-      cursor: pointer;
-      font-weight: 700;
-    }
-    .load-more:hover { background: var(--cp-accent-hover); }
-    .load-more[hidden] { display: none; }
 
     footer.site-footer {
       border-top: 1px solid var(--cp-border);
@@ -493,9 +480,6 @@
       </div>
 
       <div class="site-grid" id="siteGrid" aria-busy="true"></div>
-      <div class="load-more-wrap">
-        <button class="load-more" id="loadMore" type="button" hidden>Show more sites</button>
-      </div>
     </section>
   </main>
 
@@ -534,7 +518,6 @@
   </button>
 
   <script>
-    const DEFAULT_PAGE_SIZE = 24;
     const MAX_ARTICLES_PER_SITE = 10;
     const FAVORITES_KEY = "rssWatcherFavorites";
 
@@ -549,7 +532,7 @@
       localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
     }
 
-    const state = { updates: [], filteredItems: [], groups: [], visibleSites: DEFAULT_PAGE_SIZE, favorites: loadFavorites(), favoritesOnly: false };
+    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -563,7 +546,6 @@
       feedMeta: document.getElementById("feedMeta"),
       favoritesToggle: document.getElementById("favoritesToggle"),
       clearFilters: document.getElementById("clearFilters"),
-      loadMore: document.getElementById("loadMore"),
       backToTop: document.getElementById("backToTop"),
     };
 
@@ -739,9 +721,8 @@
 
     function render() {
       elements.siteGrid.replaceChildren();
-      const visibleGroups = state.groups.slice(0, state.visibleSites);
 
-      if (!visibleGroups.length) {
+      if (!state.groups.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
         empty.innerHTML = state.favoritesOnly
@@ -750,17 +731,13 @@
         elements.siteGrid.append(empty);
       } else {
         const fragment = document.createDocumentFragment();
-        visibleGroups.forEach((group) => fragment.append(createSiteCard(group)));
+        state.groups.forEach((group) => fragment.append(createSiteCard(group)));
         elements.siteGrid.append(fragment);
       }
 
       const totalArticles = state.filteredItems.length;
       const totalSites = state.groups.length;
       elements.resultCount.textContent = `${totalArticles.toLocaleString()} article${totalArticles === 1 ? "" : "s"} across ${totalSites.toLocaleString()} site${totalSites === 1 ? "" : "s"}`;
-      elements.loadMore.hidden = state.visibleSites >= totalSites;
-      if (!elements.loadMore.hidden) {
-        elements.loadMore.textContent = `Show more sites (${Math.min(DEFAULT_PAGE_SIZE, totalSites - state.visibleSites)})`;
-      }
       elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.lastUpdate.value;
       elements.siteGrid.setAttribute("aria-busy", "false");
     }
@@ -785,7 +762,6 @@
           && (!state.favoritesOnly || state.favorites.has(item.id));
       });
       state.groups = buildGroups(state.filteredItems);
-      state.visibleSites = DEFAULT_PAGE_SIZE;
       render();
     }
 
@@ -857,10 +833,6 @@
       elements.lastUpdate.value = "";
       applyFilters();
       elements.search.focus();
-    });
-    elements.loadMore.addEventListener("click", () => {
-      state.visibleSites += DEFAULT_PAGE_SIZE;
-      render();
     });
 
     let scrollTicking = false;
