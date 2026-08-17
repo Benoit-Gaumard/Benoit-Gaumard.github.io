@@ -578,6 +578,10 @@
           <select id="category"><option value="">All categories</option></select>
         </div>
         <div class="field">
+          <label for="subcategory">Subcategory</label>
+          <select id="subcategory"><option value="">All subcategories</option></select>
+        </div>
+        <div class="field">
           <label for="lastUpdate">Last update</label>
           <select id="lastUpdate">
             <option value="">All time</option>
@@ -702,6 +706,7 @@
       search: document.getElementById("search"),
       source: document.getElementById("source"),
       category: document.getElementById("category"),
+      subcategory: document.getElementById("subcategory"),
       lastUpdate: document.getElementById("lastUpdate"),
       siteGrid: document.getElementById("siteGrid"),
       resultCount: document.getElementById("resultCount"),
@@ -1037,7 +1042,7 @@
       const totalArticles = state.filteredItems.length;
       const totalSites = state.groups.length;
       elements.resultCount.textContent = `${totalArticles.toLocaleString()} article${totalArticles === 1 ? "" : "s"} across ${totalSites.toLocaleString()} site${totalSites === 1 ? "" : "s"}`;
-      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.lastUpdate.value && !state.language;
+      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.subcategory.value && !elements.lastUpdate.value && !state.language;
       elements.siteGrid.setAttribute("aria-busy", "false");
     }
 
@@ -1045,6 +1050,7 @@
       const query = normalize(elements.search.value.trim());
       const selectedSource = elements.source.value;
       const selectedCategory = elements.category.value;
+      const selectedSubcategory = elements.subcategory.value;
       const maxAgeDays = elements.lastUpdate.value ? Number(elements.lastUpdate.value) : null;
       const cutoff = maxAgeDays === null ? null : new Date();
       if (cutoff) {
@@ -1057,6 +1063,7 @@
         return matchesQuery
           && (!selectedSource || item.source === selectedSource)
           && (!selectedCategory || item.categories.includes(selectedCategory))
+          && (!selectedSubcategory || item.subcategory === selectedSubcategory)
           && (!cutoff || new Date(item.pubDate) >= cutoff)
           && (!state.favoritesOnly || state.favorites.has(item.id))
           && (!state.language || item.country === state.language);
@@ -1068,9 +1075,11 @@
     function populateFilters() {
       const sourceCounts = new Map();
       const categoryCounts = new Map();
+      const subcategoryCounts = new Map();
       state.updates.forEach((item) => {
         sourceCounts.set(item.source, (sourceCounts.get(item.source) || 0) + 1);
         item.categories.forEach((tag) => categoryCounts.set(tag, (categoryCounts.get(tag) || 0) + 1));
+        if (item.subcategory) subcategoryCounts.set(item.subcategory, (subcategoryCounts.get(item.subcategory) || 0) + 1);
       });
 
       elements.source.replaceChildren(new Option(`All sources (${state.updates.length.toLocaleString()})`, ""));
@@ -1081,6 +1090,11 @@
       elements.category.replaceChildren(new Option(`All categories (${state.updates.length.toLocaleString()})`, ""));
       [...categoryCounts.keys()].sort((a, b) => a.localeCompare(b)).forEach((tag) => {
         elements.category.append(new Option(`${tag} (${categoryCounts.get(tag).toLocaleString()})`, tag));
+      });
+
+      elements.subcategory.replaceChildren(new Option(`All subcategories (${state.updates.length.toLocaleString()})`, ""));
+      [...subcategoryCounts.keys()].sort((a, b) => a.localeCompare(b)).forEach((tag) => {
+        elements.subcategory.append(new Option(`${tag} (${subcategoryCounts.get(tag).toLocaleString()})`, tag));
       });
     }
 
@@ -1123,6 +1137,7 @@
     });
     elements.source.addEventListener("change", applyFilters);
     elements.category.addEventListener("change", applyFilters);
+    elements.subcategory.addEventListener("change", applyFilters);
     elements.lastUpdate.addEventListener("change", applyFilters);
     elements.favoritesToggle.addEventListener("click", () => {
       state.favoritesOnly = !state.favoritesOnly;
@@ -1153,6 +1168,7 @@
       elements.search.value = "";
       elements.source.value = "";
       elements.category.value = "";
+      elements.subcategory.value = "";
       elements.lastUpdate.value = "";
       state.language = "";
       elements.languageOptions.forEach((option) => option.setAttribute("aria-pressed", String(option.dataset.lang === "")));
