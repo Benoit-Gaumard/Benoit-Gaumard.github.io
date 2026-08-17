@@ -187,11 +187,12 @@
     }
     .clear-button[hidden] { display: none; }
 
-    .site-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 1rem; align-items: start; }
+    .site-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
     .site-card {
       display: flex;
       flex-direction: column;
       gap: .75rem;
+      min-width: 0;
       padding: 1rem 1.25rem;
       border: 1px solid var(--cp-border);
       border-radius: 8px;
@@ -203,12 +204,50 @@
     .site-card-head h2 { margin: 0 0 .25rem; font-size: 1.05rem; }
     .site-meta { margin: 0; color: var(--cp-text-muted); font-size: .8rem; }
     .site-tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .5rem; }
-    .site-articles { display: flex; flex-direction: column; gap: .5rem; margin: 0; padding: 0; list-style: none; }
-    .site-article { padding-bottom: .5rem; border-bottom: 1px solid var(--cp-border); }
-    .site-article:last-child { padding-bottom: 0; border-bottom: 0; }
-    .site-article a { display: block; margin-bottom: .25rem; color: var(--cp-text); text-decoration: none; font-size: .9rem; line-height: 1.4; }
-    .site-article a:hover { color: var(--cp-accent); text-decoration: underline; }
-    .site-article-meta { display: flex; align-items: center; gap: .5rem; }
+    .site-articles { display: flex; flex-direction: column; gap: .25rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
+    .site-article {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .375rem 0;
+      border-bottom: 1px solid var(--cp-border);
+      min-width: 0;
+    }
+    .site-article:last-child { border-bottom: 0; }
+    .site-article-day {
+      flex: 0 0 auto;
+      min-width: 2rem;
+      text-align: center;
+    }
+    .site-article-title {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--cp-text);
+      text-decoration: none;
+      font-size: .9rem;
+    }
+    .site-article-title:hover { color: var(--cp-accent); text-decoration: underline; }
+    .site-article-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .icon-button {
+      display: grid;
+      place-items: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      transition: color .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .icon-button:hover { color: var(--cp-accent); border-color: var(--cp-accent); }
+    .icon-button svg { width: 1rem; height: 1rem; }
+    .icon-button.is-active { color: var(--cp-accent); border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .icon-button.copied { color: var(--cp-success); border-color: var(--cp-success); background: var(--cp-success-bg); }
     .update-date { color: var(--cp-text-muted); font-size: .8rem; }
     .update-relative {
       display: inline-flex;
@@ -347,6 +386,7 @@
       .header-links { flex-wrap: wrap; row-gap: .5rem; }
       .toolbar { position: static; grid-template-columns: 1fr 1fr; }
       .toolbar .search-field { grid-column: 1 / -1; }
+      .site-grid { grid-template-columns: minmax(0, 1fr); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
     }
@@ -471,7 +511,20 @@
   <script>
     const DEFAULT_PAGE_SIZE = 24;
     const MAX_ARTICLES_PER_SITE = 10;
-    const state = { updates: [], filteredItems: [], groups: [], visibleSites: DEFAULT_PAGE_SIZE };
+    const FAVORITES_KEY = "rssWatcherFavorites";
+
+    function loadFavorites() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []);
+      } catch {
+        return new Set();
+      }
+    }
+    function saveFavorites(favorites) {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
+    }
+
+    const state = { updates: [], filteredItems: [], groups: [], visibleSites: DEFAULT_PAGE_SIZE, favorites: loadFavorites() };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -517,28 +570,81 @@
       return `${years} year${years === 1 ? "" : "s"} ago`;
     }
 
+    function dayCount(iso) {
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const target = new Date(iso);
+      const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+      return Math.max(0, Math.round((startOfToday - startOfTarget) / 86400000));
+    }
+
+    function createFavoriteButton(item) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "icon-button";
+      const isFavorite = state.favorites.has(item.id);
+      button.classList.toggle("is-active", isFavorite);
+      button.setAttribute("aria-pressed", String(isFavorite));
+      button.setAttribute("aria-label", isFavorite ? "Remove from favorites" : "Add to favorites");
+      button.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+      button.addEventListener("click", () => {
+        const active = state.favorites.has(item.id);
+        if (active) state.favorites.delete(item.id); else state.favorites.add(item.id);
+        saveFavorites(state.favorites);
+        button.classList.toggle("is-active", !active);
+        button.setAttribute("aria-pressed", String(!active));
+        button.setAttribute("aria-label", !active ? "Remove from favorites" : "Add to favorites");
+      });
+      return button;
+    }
+
+    function createShareButton(item) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "icon-button";
+      button.setAttribute("aria-label", "Share");
+      button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>';
+      button.addEventListener("click", async () => {
+        if (navigator.share) {
+          try { await navigator.share({ title: item.title, url: item.link }); } catch { /* user cancelled */ }
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(item.link);
+          button.classList.add("copied");
+          button.setAttribute("aria-label", "Link copied");
+          setTimeout(() => {
+            button.classList.remove("copied");
+            button.setAttribute("aria-label", "Share");
+          }, 1500);
+        } catch { /* clipboard unavailable */ }
+      });
+      return button;
+    }
+
     function createArticle(item) {
       const li = document.createElement("li");
       li.className = "site-article";
 
+      const days = dayCount(item.pubDate);
+      const day = document.createElement("span");
+      day.className = `update-relative site-article-day ${days === 0 ? "fresh" : ""}`.trim();
+      day.textContent = `${days} d`;
+      day.title = formatDate(item.pubDate);
+
       const link = document.createElement("a");
+      link.className = "site-article-title";
       link.href = item.link;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
+      link.title = item.title;
       link.textContent = item.title;
 
-      const meta = document.createElement("div");
-      meta.className = "site-article-meta";
-      const date = document.createElement("span");
-      date.className = "update-date";
-      date.textContent = formatDate(item.pubDate);
-      const relative = document.createElement("span");
-      const relativeText = relativeTime(item.pubDate);
-      relative.className = `update-relative ${relativeText === "Today" || relativeText === "Yesterday" ? "fresh" : ""}`.trim();
-      relative.textContent = relativeText;
-      meta.append(date, relative);
+      const actions = document.createElement("div");
+      actions.className = "site-article-actions";
+      actions.append(createFavoriteButton(item), createShareButton(item));
 
-      li.append(link, meta);
+      li.append(day, link, actions);
       return li;
     }
 
