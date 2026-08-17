@@ -178,7 +178,32 @@
       font-size: .9rem;
     }
     .results-bar p { margin: 0; }
-    .results-bar-actions { display: flex; align-items: center; gap: .75rem; }
+    .results-bar-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+    .language-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: .125rem;
+      padding: .2rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface);
+    }
+    .language-option {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      padding: .3rem .65rem;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+    .language-option .flag { width: 1.1rem; height: .75rem; flex: 0 0 auto; border-radius: 2px; box-shadow: 0 0 0 1px var(--cp-border); }
+    .language-option:hover { color: var(--cp-text); }
+    .language-option[aria-pressed="true"] { background: var(--cp-accent); color: var(--cp-accent-fg); }
     .clear-button {
       border: 0;
       background: transparent;
@@ -509,6 +534,17 @@
       <div class="results-bar" aria-live="polite">
         <p id="resultCount">Loading updates...</p>
         <div class="results-bar-actions">
+          <div class="language-filter" role="group" aria-label="Filter by language">
+            <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true">All</button>
+            <button class="language-option" id="languageEn" type="button" data-lang="EN" aria-pressed="false">
+              <svg class="flag" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247d"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L26,17.3 M60,0 L34,17.3 M0,40 L26,22.7 M60,40 L34,22.7" stroke="#cf142b" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="14"/><path d="M30,0 V40 M0,20 H60" stroke="#cf142b" stroke-width="8"/></svg>
+              EN
+            </button>
+            <button class="language-option" id="languageFr" type="button" data-lang="FR" aria-pressed="false">
+              <svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
+              FR
+            </button>
+          </div>
           <button class="favorites-toggle" id="favoritesToggle" type="button" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             <span id="favoritesToggleLabel">Favorites</span>
@@ -582,7 +618,7 @@
       localStorage.setItem(KEYWORDS_KEY, JSON.stringify(keywords));
     }
 
-    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords() };
+    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords(), language: "" };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -596,6 +632,7 @@
       feedMeta: document.getElementById("feedMeta"),
       favoritesToggle: document.getElementById("favoritesToggle"),
       favoritesToggleLabel: document.getElementById("favoritesToggleLabel"),
+      languageOptions: [...document.querySelectorAll(".language-option")],
       keywordInput: document.getElementById("keywordInput"),
       keywordChips: document.getElementById("keywordChips"),
       clearFilters: document.getElementById("clearFilters"),
@@ -861,7 +898,7 @@
       const totalArticles = state.filteredItems.length;
       const totalSites = state.groups.length;
       elements.resultCount.textContent = `${totalArticles.toLocaleString()} article${totalArticles === 1 ? "" : "s"} across ${totalSites.toLocaleString()} site${totalSites === 1 ? "" : "s"}`;
-      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.lastUpdate.value;
+      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.lastUpdate.value && !state.language;
       elements.siteGrid.setAttribute("aria-busy", "false");
     }
 
@@ -882,7 +919,8 @@
           && (!selectedSource || item.source === selectedSource)
           && (!selectedCategory || item.categories.includes(selectedCategory))
           && (!cutoff || new Date(item.pubDate) >= cutoff)
-          && (!state.favoritesOnly || state.favorites.has(item.id));
+          && (!state.favoritesOnly || state.favorites.has(item.id))
+          && (!state.language || item.country === state.language);
       });
       state.groups = buildGroups(state.filteredItems);
       render();
@@ -951,6 +989,13 @@
       elements.favoritesToggle.setAttribute("aria-pressed", String(state.favoritesOnly));
       applyFilters();
     });
+    elements.languageOptions.forEach((button) => {
+      button.addEventListener("click", () => {
+        state.language = button.dataset.lang;
+        elements.languageOptions.forEach((option) => option.setAttribute("aria-pressed", String(option === button)));
+        applyFilters();
+      });
+    });
     elements.keywordInput.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" || !elements.keywordInput.value.trim()) return;
       addKeywords(elements.keywordInput.value);
@@ -961,6 +1006,8 @@
       elements.source.value = "";
       elements.category.value = "";
       elements.lastUpdate.value = "";
+      state.language = "";
+      elements.languageOptions.forEach((option) => option.setAttribute("aria-pressed", String(option.dataset.lang === "")));
       applyFilters();
       elements.search.focus();
     });

@@ -166,7 +166,7 @@ async function fetchFeed(feed) {
       .filter((item) => item.title && item.link && item.pubDate)
       .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
       .slice(0, MAX_ITEMS_PER_FEED)
-      .map((item) => ({ ...item, source: feed.name, categories: feed.categories, icon }));
+      .map((item) => ({ ...item, source: feed.name, categories: feed.categories, icon, country: feed.country }));
     return { ok: true, name: feed.name, count: items.length, items };
   } catch (error) {
     return { ok: false, name: feed.name, error: error.message };
@@ -180,6 +180,7 @@ const feeds = parseCsv(csvText)
     name: row.name,
     url: row.url,
     categories: (row.category || "").split(",").map((c) => c.trim()).filter(Boolean),
+    country: row.country?.toUpperCase() === "FR" ? "FR" : "EN",
   }));
 
 const results = await mapLimit(feeds, CONCURRENCY, fetchFeed);
