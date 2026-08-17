@@ -756,6 +756,20 @@
       return Math.max(0, Math.round((startOfToday - startOfTarget) / 86400000));
     }
 
+    function hourCount(iso) {
+      return Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 3600000));
+    }
+
+    function createDayBadge(pubDate) {
+      const days = dayCount(pubDate);
+      const isToday = days === 0;
+      const badge = document.createElement("span");
+      badge.className = `update-relative site-article-day ${isToday ? "fresh" : ""}`.trim();
+      badge.textContent = isToday ? `${hourCount(pubDate)} h` : `${days} d`;
+      badge.title = formatDate(pubDate);
+      return badge;
+    }
+
     function updateFavoritesToggleLabel() {
       elements.favoritesToggleLabel.textContent = `Favorites (${state.favorites.size})`;
     }
@@ -880,11 +894,7 @@
       const li = document.createElement("li");
       li.className = "site-article";
 
-      const days = dayCount(item.pubDate);
-      const day = document.createElement("span");
-      day.className = `update-relative site-article-day ${days === 0 ? "fresh" : ""}`.trim();
-      day.textContent = `${days} d`;
-      day.title = formatDate(item.pubDate);
+      const day = createDayBadge(item.pubDate);
 
       const link = document.createElement("a");
       link.className = "site-article-title";
@@ -923,11 +933,7 @@
       source.textContent = item.source;
       source.title = item.source;
 
-      const days = dayCount(item.pubDate);
-      const day = document.createElement("span");
-      day.className = `update-relative site-article-day ${days === 0 ? "fresh" : ""}`.trim();
-      day.textContent = `${days} d`;
-      day.title = formatDate(item.pubDate);
+      const day = createDayBadge(item.pubDate);
 
       const link = document.createElement("a");
       link.className = "site-article-title";
