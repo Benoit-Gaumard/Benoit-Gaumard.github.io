@@ -128,12 +128,13 @@
       backdrop-filter: blur(12px);
     }
     .converter-row {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
       align-items: end;
       gap: 1rem;
     }
     .unit-field { display: flex; flex-direction: column; gap: .5rem; }
+    .unit-field.value-field { flex: 1 1 12rem; }
+    .unit-field.select-field { flex: 1 1 14rem; }
     .unit-field label {
       font-size: .75rem;
       font-weight: 700;
@@ -153,7 +154,7 @@
       width: 100%;
     }
     .unit-field select {
-      min-height: 2.75rem;
+      min-height: 3.25rem;
       border: 1px solid var(--cp-border-strong);
       border-radius: 8px;
       background: var(--cp-surface);
@@ -161,21 +162,29 @@
       padding: .5rem .75rem;
       width: 100%;
     }
-    .swap-button {
-      display: grid;
-      place-items: center;
-      width: 3rem;
-      height: 3rem;
-      margin-bottom: .25rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 50%;
-      background: var(--cp-surface);
-      color: var(--cp-accent);
-      cursor: pointer;
-      transition: transform .18s ease, background .18s ease;
+
+    .results-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cp-border);
     }
-    .swap-button:hover { background: var(--cp-accent-soft); }
-    .swap-button.is-spinning { transform: rotate(180deg); }
+    .results-heading { margin: 0 0 1rem; color: var(--cp-text-muted); font-size: .95rem; }
+    .results-heading strong { color: var(--cp-text); font-size: 1.1rem; }
+    .results-list { display: flex; flex-direction: column; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .result-row.is-source { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .result-unit { color: var(--cp-text-muted); font-size: .9rem; }
+    .result-row.is-source .result-unit { color: var(--cp-text); font-weight: 700; }
+    .result-value { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1rem; }
 
     .conversion-note {
       margin-top: 1.25rem;
@@ -233,9 +242,7 @@
       .header-links a:first-child { display: none; }
       main { padding-top: 1.75rem; }
       .converter-card { padding: 1.25rem; }
-      .converter-row { grid-template-columns: 1fr; }
-      .swap-button { justify-self: center; transform: rotate(90deg); margin: 0; }
-      .swap-button.is-spinning { transform: rotate(270deg); }
+      .converter-row { flex-direction: column; align-items: stretch; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -244,7 +251,6 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       body::before { animation: none; }
-      .swap-button { transition: none; }
     }
   </style>
 </head>
@@ -275,21 +281,19 @@
 
       <div class="converter-card">
         <div class="converter-row">
-          <div class="unit-field">
-            <label for="valueFrom">From</label>
+          <div class="unit-field value-field">
+            <label for="valueFrom">Value</label>
             <input id="valueFrom" type="number" inputmode="decimal" value="1">
+          </div>
+          <div class="unit-field select-field">
+            <label for="unitFrom">Unit</label>
             <select id="unitFrom"></select>
           </div>
-          <button class="swap-button" id="swapUnits" type="button" aria-label="Swap units">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg>
-          </button>
-          <div class="unit-field">
-            <label for="valueTo">To</label>
-            <input id="valueTo" type="number" inputmode="decimal">
-            <select id="unitTo"></select>
-          </div>
         </div>
-        <p class="conversion-note" id="conversionNote"></p>
+        <div class="results-section">
+          <p class="results-heading" id="resultsHeading"></p>
+          <ul class="results-list" id="resultsList"></ul>
+        </div>
       </div>
     </section>
   </main>
@@ -449,11 +453,9 @@
     const elements = {
       categoryTabs: document.getElementById("categoryTabs"),
       valueFrom: document.getElementById("valueFrom"),
-      valueTo: document.getElementById("valueTo"),
       unitFrom: document.getElementById("unitFrom"),
-      unitTo: document.getElementById("unitTo"),
-      swapUnits: document.getElementById("swapUnits"),
-      conversionNote: document.getElementById("conversionNote"),
+      resultsHeading: document.getElementById("resultsHeading"),
+      resultsList: document.getElementById("resultsList"),
       currentYear: document.getElementById("currentYear"),
       backToTop: document.getElementById("backToTop"),
     };
@@ -477,18 +479,16 @@
       return base / category.units[toUnit].factor;
     }
 
-    function formatNumber(value) {
-      if (!Number.isFinite(value)) return "";
-      const rounded = Math.round(value * 1e6) / 1e6;
-      return rounded.toLocaleString(undefined, { maximumFractionDigits: 6 });
-    }
-
-    function updateNote() {
-      const fromUnit = elements.unitFrom.value;
-      const toUnit = elements.unitTo.value;
-      const result = convert(1, fromUnit, toUnit);
-      const category = CATEGORIES[state.category];
-      elements.conversionNote.innerHTML = `<strong>1 ${category.units[fromUnit].label}</strong> = <strong>${formatNumber(result)} ${category.units[toUnit].label}</strong>`;
+    function formatResult(value) {
+      if (!Number.isFinite(value)) return "\u2014";
+      if (value === 0) return "0";
+      const abs = Math.abs(value);
+      let decimals;
+      if (abs >= 100) decimals = 2;
+      else if (abs >= 1) decimals = 4;
+      else if (abs >= 0.001) decimals = 6;
+      else decimals = 8;
+      return value.toLocaleString(undefined, { maximumFractionDigits: decimals });
     }
 
     function populateUnitSelect(select, category, selected) {
@@ -518,37 +518,31 @@
     function setupCategory() {
       const category = CATEGORIES[state.category];
       populateUnitSelect(elements.unitFrom, category, category.default[0]);
-      populateUnitSelect(elements.unitTo, category, category.default[1]);
       elements.valueFrom.value = 1;
-      recalculateTo();
+      renderResults();
     }
 
-    function recalculateTo() {
+    function renderResults() {
+      const category = CATEGORIES[state.category];
       const value = parseFloat(elements.valueFrom.value);
-      const result = convert(value, elements.unitFrom.value, elements.unitTo.value);
-      elements.valueTo.value = Number.isFinite(result) ? formatNumber(result) : "";
-      updateNote();
-    }
-
-    function recalculateFrom() {
-      const value = parseFloat(elements.valueTo.value);
-      const result = convert(value, elements.unitTo.value, elements.unitFrom.value);
-      elements.valueFrom.value = Number.isFinite(result) ? formatNumber(result) : "";
-      updateNote();
-    }
-
-    elements.valueFrom.addEventListener("input", recalculateTo);
-    elements.valueTo.addEventListener("input", recalculateFrom);
-    elements.unitFrom.addEventListener("change", recalculateTo);
-    elements.unitTo.addEventListener("change", recalculateTo);
-    elements.swapUnits.addEventListener("click", () => {
       const fromUnit = elements.unitFrom.value;
-      elements.unitFrom.value = elements.unitTo.value;
-      elements.unitTo.value = fromUnit;
-      elements.swapUnits.classList.add("is-spinning");
-      setTimeout(() => elements.swapUnits.classList.remove("is-spinning"), 200);
-      recalculateTo();
-    });
+
+      elements.resultsHeading.innerHTML = Number.isFinite(value)
+        ? `<strong>${formatResult(value)} ${category.units[fromUnit].label}</strong> converts to:`
+        : "Enter a value to convert.";
+
+      elements.resultsList.replaceChildren();
+      Object.entries(category.units).forEach(([key, unit]) => {
+        const li = document.createElement("li");
+        li.className = `result-row${key === fromUnit ? " is-source" : ""}`;
+        const result = Number.isFinite(value) ? convert(value, fromUnit, key) : NaN;
+        li.innerHTML = `<span class="result-unit">${unit.label}</span><span class="result-value">${formatResult(result)}</span>`;
+        elements.resultsList.append(li);
+      });
+    }
+
+    elements.valueFrom.addEventListener("input", renderResults);
+    elements.unitFrom.addEventListener("change", renderResults);
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
