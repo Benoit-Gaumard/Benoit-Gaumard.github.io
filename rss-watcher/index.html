@@ -340,7 +340,6 @@
     .site-card-title-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; }
     .site-icon { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; border-radius: 4px; object-fit: contain; background: var(--cp-surface-soft); }
     .site-card-head h2 { margin: 0; font-size: 1.05rem; }
-    .site-meta { margin: 0; color: var(--cp-text-muted); font-size: .8rem; }
     .site-tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .5rem; }
     .site-articles { display: flex; flex-direction: column; gap: .25rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
     .site-article {
@@ -732,27 +731,6 @@
       return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
     }
 
-    function relativeTime(iso) {
-      const now = new Date();
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const target = new Date(iso);
-      const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
-      const diffDays = Math.round((startOfToday - startOfTarget) / 86400000);
-      if (diffDays <= 0) return "Today";
-      if (diffDays === 1) return "Yesterday";
-      if (diffDays < 7) return `${diffDays} days ago`;
-      if (diffDays < 30) {
-        const weeks = Math.round(diffDays / 7);
-        return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
-      }
-      if (diffDays < 365) {
-        const months = Math.round(diffDays / 30);
-        return `${months} month${months === 1 ? "" : "s"} ago`;
-      }
-      const years = Math.round(diffDays / 365);
-      return `${years} year${years === 1 ? "" : "s"} ago`;
-    }
-
     function dayCount(iso) {
       const now = new Date();
       const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -980,10 +958,7 @@
       title.textContent = group.source;
       titleRow.append(title);
 
-      const meta = document.createElement("p");
-      meta.className = "site-meta";
-      meta.textContent = `${group.totalCount.toLocaleString()} article${group.totalCount === 1 ? "" : "s"} \u00b7 Latest ${relativeTime(group.articles[0].pubDate).toLowerCase()}`;
-      head.append(titleRow, meta);
+      head.append(titleRow);
 
       if (group.categories.length) {
         const tags = document.createElement("div");
