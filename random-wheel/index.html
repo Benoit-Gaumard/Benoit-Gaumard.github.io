@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Spin a wheel to generate a random letter (A-Z) or number (0-100). Already picked values are excluded until you reset.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Random Wheel | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--cp-text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .mode-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
+      margin-bottom: 2rem;
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+    }
+    .mode-toggle button {
+      padding: .55rem 1.1rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease;
+    }
+    .mode-toggle button[aria-pressed="true"] {
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      box-shadow: var(--cp-shadow);
+    }
+
+    .wheel-layout {
+      display: grid;
+      grid-template-columns: minmax(18rem, 22rem) 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .wheel-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .wheel-frame {
+      position: relative;
+      width: 19rem;
+      height: 19rem;
+    }
+    .wheel-pointer {
+      position: absolute;
+      top: -.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: .9rem solid transparent;
+      border-right: .9rem solid transparent;
+      border-top: 1.4rem solid var(--cp-text);
+      z-index: 2;
+      filter: drop-shadow(0 2px 3px rgba(23, 50, 77, 0.35));
+    }
+    #wheelCanvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: var(--cp-shadow), 0 0 0 6px var(--cp-surface), 0 0 0 8px var(--cp-border);
+      transition: transform 4.2s cubic-bezier(0.15, 0.65, 0.15, 1);
+    }
+    .wheel-hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 3rem;
+      height: 3rem;
+      transform: translate(-50%, -50%);
+      background: var(--cp-surface);
+      border: 3px solid var(--cp-accent);
+      border-radius: 50%;
+      box-shadow: var(--cp-shadow);
+      z-index: 1;
+    }
+    .spin-button {
+      padding: .85rem 2.25rem;
+      border: 0;
+      border-radius: 8px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .spin-button:hover:not(:disabled) { background: var(--cp-accent-hover); transform: translateY(-2px); }
+    .spin-button:disabled { opacity: .5; cursor: not-allowed; }
+    .pool-status { color: var(--cp-text-muted); font-size: .9rem; }
+    .pool-status strong { color: var(--cp-text); }
+
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .result-card {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.75rem;
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      box-shadow: var(--cp-shadow);
+    }
+    .result-value {
+      display: grid;
+      place-items: center;
+      width: 5.5rem;
+      height: 5.5rem;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-size: 2.25rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .result-text { color: var(--cp-text-muted); }
+    .result-text strong { display: block; color: var(--cp-text); font-size: 1.1rem; margin-bottom: .2rem; }
+
+    .history-section h2 {
+      margin: 0 0 .75rem;
+      font-size: 1rem;
+      color: var(--cp-text-muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .history-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      min-height: 2.25rem;
+    }
+    .history-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.25rem;
+      padding: .4rem .65rem;
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+    .history-empty { color: var(--cp-text-muted); font-size: .88rem; }
+
+    .reset-button {
+      align-self: flex-start;
+      padding: .6rem 1.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-weight: 650;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .reset-button:hover { border-color: var(--cp-danger); background: #fbe9e9; color: var(--cp-danger); }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 60rem) {
+      .wheel-layout { grid-template-columns: 1fr; }
+      .wheel-panel { margin-inline: auto; }
+    }
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      .wheel-frame { width: 15.5rem; height: 15.5rem; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      #wheelCanvas { transition-duration: .3s; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Random Wheel</h1>
+      <p class="intro-text">Spin the wheel to generate a random letter (A&ndash;Z) or number (0&ndash;100). Already picked values are excluded until you reset.</p>
+    </section>
+
+    <div class="mode-toggle" role="group" aria-label="Wheel mode">
+      <button type="button" id="modeLetters" aria-pressed="true">Letters (A&ndash;Z)</button>
+      <button type="button" id="modeNumbers" aria-pressed="false">Numbers (0&ndash;100)</button>
+    </div>
+
+    <div class="wheel-layout">
+      <div class="wheel-panel">
+        <div class="wheel-frame">
+          <div class="wheel-pointer" aria-hidden="true"></div>
+          <canvas id="wheelCanvas" width="600" height="600"></canvas>
+          <div class="wheel-hub" aria-hidden="true"></div>
+        </div>
+        <button class="spin-button" id="spinButton" type="button">Spin the wheel</button>
+        <p class="pool-status" id="poolStatus"></p>
+      </div>
+
+      <div class="result-panel">
+        <div class="result-card">
+          <div class="result-value" id="resultValue">?</div>
+          <div class="result-text">
+            <strong id="resultHeadline">Spin to get started</strong>
+            <span id="resultSub">Your next value will appear here.</span>
+          </div>
+        </div>
+
+        <div class="history-section">
+          <h2>History</h2>
+          <div class="history-chips" id="historyChips">
+            <span class="history-empty" id="historyEmpty">No values picked yet.</span>
+          </div>
+        </div>
+
+        <button class="reset-button" id="resetButton" type="button">Reset this wheel</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Random Wheel</a>
+          <p>A spinning wheel to generate random letters or numbers, excluding values you've already picked.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const COLORS = ["#0b6fb8", "#6a4fd6", "#16845b", "#c88719", "#c93636", "#0fb0d4", "#075b98", "#8a5a2b"];
+
+    function buildPool(mode) {
+      if (mode === "letters") {
+        return Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
+      }
+      return Array.from({ length: 101 }, (_, i) => String(i));
+    }
+
+    const state = {
+      mode: "letters",
+      pools: { letters: buildPool("letters"), numbers: buildPool("numbers") },
+      picked: { letters: [], numbers: [] },
+      rotation: 0,
+      spinning: false,
+    };
+
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const spinButton = document.getElementById("spinButton");
+    const resetButton = document.getElementById("resetButton");
+    const poolStatus = document.getElementById("poolStatus");
+    const resultValue = document.getElementById("resultValue");
+    const resultHeadline = document.getElementById("resultHeadline");
+    const resultSub = document.getElementById("resultSub");
+    const historyChips = document.getElementById("historyChips");
+    const historyEmpty = document.getElementById("historyEmpty");
+    const modeButtons = { letters: document.getElementById("modeLetters"), numbers: document.getElementById("modeNumbers") };
+
+    function currentPool() { return state.pools[state.mode]; }
+    function currentPicked() { return state.picked[state.mode]; }
+
+    function drawWheel() {
+      const pool = currentPool();
+      const size = canvas.width;
+      const radius = size / 2;
+      ctx.clearRect(0, 0, size, size);
+
+      if (pool.length === 0) {
+        ctx.fillStyle = "#eef7ff";
+        ctx.beginPath();
+        ctx.arc(radius, radius, radius - 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#536f88";
+        ctx.font = "600 28px 'Segoe UI', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("All done!", radius, radius);
+        return;
+      }
+
+      const anglePer = (Math.PI * 2) / pool.length;
+      const showLabels = anglePer > (8 * Math.PI / 180);
+
+      pool.forEach((value, index) => {
+        const start = index * anglePer - Math.PI / 2;
+        const end = start + anglePer;
+        ctx.beginPath();
+        ctx.moveTo(radius, radius);
+        ctx.arc(radius, radius, radius - 4, start, end);
+        ctx.closePath();
+        ctx.fillStyle = COLORS[index % COLORS.length];
+        ctx.fill();
+
+        if (showLabels) {
+          ctx.save();
+          ctx.translate(radius, radius);
+          ctx.rotate(start + anglePer / 2);
+          ctx.textAlign = "right";
+          ctx.textBaseline = "middle";
+          ctx.fillStyle = "#ffffff";
+          ctx.font = `600 ${pool.length > 40 ? 14 : 20}px 'Segoe UI', sans-serif`;
+          ctx.fillText(value, radius - 18, 0);
+          ctx.restore();
+        }
+      });
+    }
+
+    function updatePoolStatus() {
+      const pool = currentPool();
+      const total = state.mode === "letters" ? 26 : 101;
+      poolStatus.innerHTML = pool.length > 0
+        ? `<strong>${pool.length}</strong> of ${total} values remaining`
+        : `All ${total} values have been picked`;
+      spinButton.disabled = pool.length === 0 || state.spinning;
+    }
+
+    function updateHistory() {
+      const picked = currentPicked();
+      historyChips.innerHTML = "";
+      if (picked.length === 0) {
+        historyChips.appendChild(historyEmpty);
+        return;
+      }
+      picked.forEach((value) => {
+        const chip = document.createElement("span");
+        chip.className = "history-chip";
+        chip.textContent = value;
+        historyChips.appendChild(chip);
+      });
+    }
+
+    function setMode(mode) {
+      if (state.mode === mode || state.spinning) return;
+      state.mode = mode;
+      modeButtons.letters.setAttribute("aria-pressed", String(mode === "letters"));
+      modeButtons.numbers.setAttribute("aria-pressed", String(mode === "numbers"));
+      canvas.style.transition = "none";
+      state.rotation = 0;
+      canvas.style.transform = "rotate(0deg)";
+      requestAnimationFrame(() => { canvas.style.transition = ""; });
+      resultValue.textContent = "?";
+      resultHeadline.textContent = "Spin to get started";
+      resultSub.textContent = "Your next value will appear here.";
+      drawWheel();
+      updatePoolStatus();
+      updateHistory();
+    }
+
+    function spin() {
+      const pool = currentPool();
+      if (state.spinning || pool.length === 0) return;
+      state.spinning = true;
+      spinButton.disabled = true;
+
+      const winnerIndex = Math.floor(Math.random() * pool.length);
+      const winnerValue = pool[winnerIndex];
+      const anglePerDeg = 360 / pool.length;
+      const winnerCenterDeg = winnerIndex * anglePerDeg + anglePerDeg / 2;
+
+      const currentMod = ((state.rotation % 360) + 360) % 360;
+      const targetAlignment = (360 - winnerCenterDeg) % 360;
+      let delta = targetAlignment - currentMod;
+      if (delta < 0) delta += 360;
+      const extraSpins = 6 + Math.floor(Math.random() * 3);
+      state.rotation += delta + extraSpins * 360;
+
+      canvas.style.transform = `rotate(${state.rotation}deg)`;
+
+      const onDone = () => {
+        canvas.removeEventListener("transitionend", onDone);
+        const pool2 = currentPool();
+        const idx = pool2.indexOf(winnerValue);
+        if (idx !== -1) pool2.splice(idx, 1);
+        currentPicked().push(winnerValue);
+
+        resultValue.textContent = winnerValue;
+        resultHeadline.textContent = state.mode === "letters" ? "Letter picked!" : "Number picked!";
+        resultSub.textContent = pool2.length > 0
+          ? "Spin again for another value."
+          : "That was the last one. Reset to spin again.";
+
+        drawWheel();
+        state.spinning = false;
+        updatePoolStatus();
+        updateHistory();
+      };
+      canvas.addEventListener("transitionend", onDone);
+    }
+
+    function resetPool() {
+      if (state.spinning) return;
+      state.pools[state.mode] = buildPool(state.mode);
+      state.picked[state.mode] = [];
+      resultValue.textContent = "?";
+      resultHeadline.textContent = "Spin to get started";
+      resultSub.textContent = "Your next value will appear here.";
+      drawWheel();
+      updatePoolStatus();
+      updateHistory();
+    }
+
+    modeButtons.letters.addEventListener("click", () => setMode("letters"));
+    modeButtons.numbers.addEventListener("click", () => setMode("numbers"));
+    spinButton.addEventListener("click", spin);
+    resetButton.addEventListener("click", resetPool);
+
+    drawWheel();
+    updatePoolStatus();
+    updateHistory();
+
+    const backToTop = document.getElementById("backToTop");
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
