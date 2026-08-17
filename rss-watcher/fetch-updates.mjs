@@ -7,6 +7,8 @@ const csvPath = join(HERE, "rss-feeds.csv");
 const outputPath = join(HERE, "updates.json");
 const feedEnPath = join(HERE, "feed.en.xml");
 const feedFrPath = join(HERE, "feed.fr.xml");
+const feedsStatusPath = join(HERE, "feeds-status.json");
+const feedsMetaPath = join(HERE, "feeds-meta.json");
 const SITE_URL = "https://benoit-gaumard.io/rss-watcher/";
 const MAX_FEED_ITEMS = 300;
 
@@ -247,6 +249,35 @@ const enItems = items.filter((item) => item.country === "EN").slice(0, MAX_FEED_
 const frItems = items.filter((item) => item.country === "FR").slice(0, MAX_FEED_ITEMS);
 await writeFile(feedEnPath, buildRssFeed(enItems, "en"), "utf8");
 await writeFile(feedFrPath, buildRssFeed(frItems, "fr"), "utf8");
+
+let feedsMeta = {};
+try {
+  feedsMeta = JSON.parse(await readFile(feedsMetaPath, "utf8"));
+} catch {
+  feedsMeta = {};
+}
+const now = new Date().toISOString();
+feeds.forEach((feed) => {
+  if (!feedsMeta[feed.name]) feedsMeta[feed.name] = now;
+});
+await writeFile(feedsMetaPath, `${JSON.stringify(feedsMeta)}\n`, "utf8");
+
+const feedsStatus = results.map((r) => {
+  const feed = feeds.find((f) => f.name === r.name);
+  return {
+    name: r.name,
+    category: feed.categories.join(", "),
+    subcategory: feed.subcategory,
+    country: feed.country,
+    url: feed.url,
+    ok: r.ok,
+    error: r.ok ? null : r.error,
+    lastPublication: r.ok && r.items.length ? r.items[0].pubDate : null,
+    addedAt: feedsMeta[r.name] || now,
+  };
+});
+
+await writeFile(feedsStatusPath, `${JSON.stringify({ generatedAt: now, feeds: feedsStatus })}\n`, "utf8");
 
 console.log(`Fetched ${items.length} items from ${succeeded.length}/${feeds.length} feeds (${failed.length} failed).`);
 console.log(`Wrote feed.en.xml (${enItems.length} items) and feed.fr.xml (${frItems.length} items).`);

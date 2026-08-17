@@ -30,10 +30,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml; then
+          if git diff --quiet -- rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml rss-watcher/feeds-status.json rss-watcher/feeds-meta.json; then
             echo "No changes to RSS Watcher data."
           else
-            git add rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml
+            git add rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml rss-watcher/feeds-status.json rss-watcher/feeds-meta.json
             git commit -m "chore: refresh RSS Watcher data"
             git push
           fi
