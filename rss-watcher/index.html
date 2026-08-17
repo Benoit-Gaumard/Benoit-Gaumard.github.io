@@ -131,9 +131,10 @@
       position: sticky;
       top: 4.75rem;
       z-index: 10;
-      display: grid;
-      grid-template-columns: minmax(14rem, 1fr) repeat(3, minmax(9rem, .35fr));
-      gap: .75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .65rem;
       margin-bottom: 1rem;
       padding: .75rem;
       border: 1px solid var(--cp-border);
@@ -149,7 +150,10 @@
       box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
       backdrop-filter: blur(12px);
     }
-    .field { position: relative; }
+    .field { position: relative; flex: 1 1 8rem; min-width: 8rem; }
+    .search-field { flex: 2 1 12rem; }
+    .keyword-field { flex: 2 1 12rem; }
+    .language-filter, .favorites-toggle { flex: 0 0 auto; }
     .field label {
       position: absolute;
       width: 1px;
@@ -285,9 +289,7 @@
     .favorites-toggle:hover { border-color: var(--cp-accent); color: var(--cp-text); }
     .favorites-toggle[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
 
-    .keyword-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
-    .keyword-field { flex: 1 1 18rem; }
-    .keyword-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .keyword-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
     .keyword-chip {
       display: inline-flex;
       align-items: center;
@@ -507,8 +509,8 @@
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
       .header-links { flex-wrap: wrap; row-gap: .5rem; }
-      .toolbar { position: static; grid-template-columns: 1fr 1fr; }
-      .toolbar .search-field { grid-column: 1 / -1; }
+      .toolbar { position: static; }
+      .toolbar .search-field { flex-basis: 100%; }
       .site-grid { grid-template-columns: minmax(0, 1fr); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
@@ -517,8 +519,8 @@
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       .header-links a:first-child { display: none; }
       main { padding-top: 1.75rem; }
-      .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
-      .toolbar .search-field { grid-column: auto; }
+      .toolbar { top: 4.5rem; }
+      .toolbar .field, .toolbar .keyword-field { flex-basis: 100%; }
       .results-bar { align-items: flex-start; flex-direction: column; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
@@ -585,15 +587,28 @@
             <option value="30">Last 30 days</option>
           </select>
         </div>
-      </div>
-
-      <div class="keyword-bar">
         <div class="field keyword-field">
           <label for="keywordInput">Highlight keywords</label>
-          <input id="keywordInput" type="text" placeholder="Add a keyword and press Enter (e.g. microsoft, musk, github)" autocomplete="off" spellcheck="false">
+          <input id="keywordInput" type="text" placeholder="Add a keyword and press Enter..." autocomplete="off" spellcheck="false">
         </div>
-        <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
+        <div class="language-filter" role="group" aria-label="Filter by language">
+          <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true">All</button>
+          <button class="language-option" id="languageEn" type="button" data-lang="EN" aria-pressed="false">
+            <svg class="flag" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247d"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L26,17.3 M60,0 L34,17.3 M0,40 L26,22.7 M60,40 L34,22.7" stroke="#cf142b" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="14"/><path d="M30,0 V40 M0,20 H60" stroke="#cf142b" stroke-width="8"/></svg>
+            EN
+          </button>
+          <button class="language-option" id="languageFr" type="button" data-lang="FR" aria-pressed="false">
+            <svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
+            FR
+          </button>
+        </div>
+        <button class="favorites-toggle" id="favoritesToggle" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span id="favoritesToggleLabel">Favorites</span>
+        </button>
       </div>
+
+      <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
 
       <div class="results-bar" aria-live="polite">
         <p id="resultCount">Loading updates...</p>
@@ -608,21 +623,6 @@
               List
             </button>
           </div>
-          <div class="language-filter" role="group" aria-label="Filter by language">
-            <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true">All</button>
-            <button class="language-option" id="languageEn" type="button" data-lang="EN" aria-pressed="false">
-              <svg class="flag" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247d"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L26,17.3 M60,0 L34,17.3 M0,40 L26,22.7 M60,40 L34,22.7" stroke="#cf142b" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="14"/><path d="M30,0 V40 M0,20 H60" stroke="#cf142b" stroke-width="8"/></svg>
-              EN
-            </button>
-            <button class="language-option" id="languageFr" type="button" data-lang="FR" aria-pressed="false">
-              <svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
-              FR
-            </button>
-          </div>
-          <button class="favorites-toggle" id="favoritesToggle" type="button" aria-pressed="false">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            <span id="favoritesToggleLabel">Favorites</span>
-          </button>
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         </div>
       </div>
