@@ -204,6 +204,36 @@
     .favorites-toggle:hover { border-color: var(--cp-accent); color: var(--cp-text); }
     .favorites-toggle[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
 
+    .keyword-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .keyword-field { flex: 1 1 18rem; }
+    .keyword-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .keyword-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      padding: .3rem .4rem .3rem .75rem;
+      border-radius: 999px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent-hover);
+      font-size: .8rem;
+      font-weight: 600;
+    }
+    .keyword-chip button {
+      display: grid;
+      place-items: center;
+      width: 1.1rem;
+      height: 1.1rem;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+    .keyword-chip button:hover { background: rgba(11, 111, 184, .18); }
+    .keyword-chips-empty { color: var(--cp-text-muted); font-size: .8rem; }
+    mark.keyword-mark { background: #fef08a; color: #713f12; border-radius: 2px; padding: 0 .1rem; }
+    .site-article.is-highlighted { box-shadow: inset 3px 0 0 0 var(--cp-accent); padding-left: .5rem; }
+
     .site-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
     .site-card {
       display: flex;
@@ -468,6 +498,14 @@
         </div>
       </div>
 
+      <div class="keyword-bar">
+        <div class="field keyword-field">
+          <label for="keywordInput">Highlight keywords</label>
+          <input id="keywordInput" type="text" placeholder="Add a keyword and press Enter (e.g. microsoft, musk, github)" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
+      </div>
+
       <div class="results-bar" aria-live="polite">
         <p id="resultCount">Loading updates...</p>
         <div class="results-bar-actions">
@@ -520,6 +558,7 @@
   <script>
     const MAX_ARTICLES_PER_SITE = 10;
     const FAVORITES_KEY = "rssWatcherFavorites";
+    const KEYWORDS_KEY = "rssWatcherKeywords";
 
     function loadFavorites() {
       try {
@@ -532,7 +571,18 @@
       localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
     }
 
-    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false };
+    function loadKeywords() {
+      try {
+        return JSON.parse(localStorage.getItem(KEYWORDS_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+    function saveKeywords(keywords) {
+      localStorage.setItem(KEYWORDS_KEY, JSON.stringify(keywords));
+    }
+
+    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords() };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -546,6 +596,8 @@
       feedMeta: document.getElementById("feedMeta"),
       favoritesToggle: document.getElementById("favoritesToggle"),
       favoritesToggleLabel: document.getElementById("favoritesToggleLabel"),
+      keywordInput: document.getElementById("keywordInput"),
+      keywordChips: document.getElementById("keywordChips"),
       clearFilters: document.getElementById("clearFilters"),
       backToTop: document.getElementById("backToTop"),
     };
@@ -589,6 +641,55 @@
 
     function updateFavoritesToggleLabel() {
       elements.favoritesToggleLabel.textContent = `Favorites (${state.favorites.size})`;
+    }
+
+    function escapeRegex(value) {
+      return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function buildKeywordRegex() {
+      const escaped = state.keywords.map(escapeRegex).filter(Boolean);
+      return escaped.length ? new RegExp(`(${escaped.join("|")})`, "gi") : null;
+    }
+
+    function renderKeywordChips() {
+      elements.keywordChips.replaceChildren();
+      if (!state.keywords.length) {
+        const empty = document.createElement("span");
+        empty.className = "keyword-chips-empty";
+        empty.textContent = "No keywords yet — add one to highlight matching titles.";
+        elements.keywordChips.append(empty);
+        return;
+      }
+      state.keywords.forEach((keyword) => {
+        const chip = document.createElement("span");
+        chip.className = "keyword-chip";
+        const label = document.createElement("span");
+        label.textContent = keyword;
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.setAttribute("aria-label", `Remove keyword ${keyword}`);
+        remove.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+        remove.addEventListener("click", () => {
+          state.keywords = state.keywords.filter((k) => k !== keyword);
+          saveKeywords(state.keywords);
+          renderKeywordChips();
+          render();
+        });
+        chip.append(label, remove);
+        elements.keywordChips.append(chip);
+      });
+    }
+
+    function addKeywords(raw) {
+      const additions = raw.split(",").map((k) => k.trim()).filter(Boolean);
+      additions.forEach((keyword) => {
+        const exists = state.keywords.some((k) => k.toLowerCase() === keyword.toLowerCase());
+        if (!exists) state.keywords.push(keyword);
+      });
+      saveKeywords(state.keywords);
+      renderKeywordChips();
+      render();
     }
 
     function createFavoriteButton(item) {
@@ -639,7 +740,7 @@
       return button;
     }
 
-    function createArticle(item) {
+    function createArticle(item, keywordRegex) {
       const li = document.createElement("li");
       li.className = "site-article";
 
@@ -655,7 +756,22 @@
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.title = item.title;
-      link.textContent = item.title;
+      const matches = keywordRegex ? [...item.title.matchAll(keywordRegex)] : [];
+      if (matches.length) {
+        li.classList.add("is-highlighted");
+        let lastIndex = 0;
+        matches.forEach((match) => {
+          if (match.index > lastIndex) link.append(document.createTextNode(item.title.slice(lastIndex, match.index)));
+          const mark = document.createElement("mark");
+          mark.className = "keyword-mark";
+          mark.textContent = match[0];
+          link.append(mark);
+          lastIndex = match.index + match[0].length;
+        });
+        if (lastIndex < item.title.length) link.append(document.createTextNode(item.title.slice(lastIndex)));
+      } else {
+        link.textContent = item.title;
+      }
 
       const actions = document.createElement("div");
       actions.className = "site-article-actions";
@@ -665,7 +781,7 @@
       return li;
     }
 
-    function createSiteCard(group) {
+    function createSiteCard(group, keywordRegex) {
       const card = document.createElement("article");
       card.className = "site-card";
 
@@ -708,7 +824,7 @@
 
       const list = document.createElement("ul");
       list.className = "site-articles";
-      group.articles.forEach((item) => list.append(createArticle(item)));
+      group.articles.forEach((item) => list.append(createArticle(item, keywordRegex)));
 
       card.append(head, list);
       return card;
@@ -727,6 +843,7 @@
 
     function render() {
       elements.siteGrid.replaceChildren();
+      const keywordRegex = buildKeywordRegex();
 
       if (!state.groups.length) {
         const empty = document.createElement("div");
@@ -737,7 +854,7 @@
         elements.siteGrid.append(empty);
       } else {
         const fragment = document.createDocumentFragment();
-        state.groups.forEach((group) => fragment.append(createSiteCard(group)));
+        state.groups.forEach((group) => fragment.append(createSiteCard(group, keywordRegex)));
         elements.siteGrid.append(fragment);
       }
 
@@ -803,6 +920,7 @@
       try {
         elements.currentYear.textContent = new Date().getFullYear();
         updateFavoritesToggleLabel();
+        renderKeywordChips();
         const response = await fetch("updates.json");
         if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
         const payload = await response.json();
@@ -832,6 +950,11 @@
       state.favoritesOnly = !state.favoritesOnly;
       elements.favoritesToggle.setAttribute("aria-pressed", String(state.favoritesOnly));
       applyFilters();
+    });
+    elements.keywordInput.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" || !elements.keywordInput.value.trim()) return;
+      addKeywords(elements.keywordInput.value);
+      elements.keywordInput.value = "";
     });
     elements.clearFilters.addEventListener("click", () => {
       elements.search.value = "";
