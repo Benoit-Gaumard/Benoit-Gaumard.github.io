@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Convert between common units of length, weight, temperature, volume, speed, area, data, and time.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Units Converter | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .category-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
+    .category-tab {
+      padding: .5rem 1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+    .category-tab:hover { color: var(--cp-text); }
+    .category-tab[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+
+    .converter-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+    }
+    .converter-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 1rem;
+    }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .9rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      width: 100%;
+    }
+    .unit-field select {
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .75rem;
+      width: 100%;
+    }
+    .swap-button {
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      margin-bottom: .25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 50%;
+      background: var(--cp-surface);
+      color: var(--cp-accent);
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease;
+    }
+    .swap-button:hover { background: var(--cp-accent-soft); }
+    .swap-button.is-spinning { transform: rotate(180deg); }
+
+    .conversion-note {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: .9rem;
+      text-align: center;
+    }
+    .conversion-note strong { color: var(--cp-text); }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .converter-card { padding: 1.25rem; }
+      .converter-row { grid-template-columns: 1fr; }
+      .swap-button { justify-self: center; transform: rotate(90deg); margin: 0; }
+      .swap-button.is-spinning { transform: rotate(270deg); }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+      .swap-button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Units Converter</h1>
+      <p class="intro-text">Convert between common units of length, weight, temperature, volume, speed, area, data, and time.</p>
+    </section>
+
+    <section aria-label="Unit converter">
+      <div class="category-tabs" id="categoryTabs" role="group" aria-label="Choose a unit category"></div>
+
+      <div class="converter-card">
+        <div class="converter-row">
+          <div class="unit-field">
+            <label for="valueFrom">From</label>
+            <input id="valueFrom" type="number" inputmode="decimal" value="1">
+            <select id="unitFrom"></select>
+          </div>
+          <button class="swap-button" id="swapUnits" type="button" aria-label="Swap units">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg>
+          </button>
+          <div class="unit-field">
+            <label for="valueTo">To</label>
+            <input id="valueTo" type="number" inputmode="decimal">
+            <select id="unitTo"></select>
+          </div>
+        </div>
+        <p class="conversion-note" id="conversionNote"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Units Converter</a>
+          <p>Convert between common units of length, weight, temperature, volume, speed, area, data, and time.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    const CATEGORIES = {
+      length: {
+        label: "Length",
+        units: {
+          m: { label: "Meters (m)", factor: 1 },
+          km: { label: "Kilometers (km)", factor: 1000 },
+          cm: { label: "Centimeters (cm)", factor: 0.01 },
+          mm: { label: "Millimeters (mm)", factor: 0.001 },
+          mi: { label: "Miles (mi)", factor: 1609.344 },
+          yd: { label: "Yards (yd)", factor: 0.9144 },
+          ft: { label: "Feet (ft)", factor: 0.3048 },
+          in: { label: "Inches (in)", factor: 0.0254 },
+          nmi: { label: "Nautical miles (nmi)", factor: 1852 },
+        },
+        default: ["m", "ft"],
+      },
+      weight: {
+        label: "Weight",
+        units: {
+          kg: { label: "Kilograms (kg)", factor: 1 },
+          g: { label: "Grams (g)", factor: 0.001 },
+          mg: { label: "Milligrams (mg)", factor: 0.000001 },
+          t: { label: "Metric tons (t)", factor: 1000 },
+          lb: { label: "Pounds (lb)", factor: 0.45359237 },
+          oz: { label: "Ounces (oz)", factor: 0.028349523125 },
+          st: { label: "Stone (st)", factor: 6.35029318 },
+        },
+        default: ["kg", "lb"],
+      },
+      temperature: {
+        label: "Temperature",
+        special: "temperature",
+        units: {
+          C: { label: "Celsius (\u00b0C)" },
+          F: { label: "Fahrenheit (\u00b0F)" },
+          K: { label: "Kelvin (K)" },
+        },
+        default: ["C", "F"],
+      },
+      volume: {
+        label: "Volume",
+        units: {
+          L: { label: "Liters (L)", factor: 1 },
+          mL: { label: "Milliliters (mL)", factor: 0.001 },
+          m3: { label: "Cubic meters (m\u00b3)", factor: 1000 },
+          galUS: { label: "Gallons (US gal)", factor: 3.785411784 },
+          qtUS: { label: "Quarts (US qt)", factor: 0.946352946 },
+          ptUS: { label: "Pints (US pt)", factor: 0.473176473 },
+          flozUS: { label: "Fluid ounces (US fl oz)", factor: 0.0295735295625 },
+          cupUS: { label: "Cups (US cup)", factor: 0.2365882365 },
+        },
+        default: ["L", "galUS"],
+      },
+      speed: {
+        label: "Speed",
+        units: {
+          ms: { label: "Meters/second (m/s)", factor: 1 },
+          kmh: { label: "Kilometers/hour (km/h)", factor: 0.2777777778 },
+          mph: { label: "Miles/hour (mph)", factor: 0.44704 },
+          knot: { label: "Knots (kn)", factor: 0.5144444444 },
+          fts: { label: "Feet/second (ft/s)", factor: 0.3048 },
+        },
+        default: ["kmh", "mph"],
+      },
+      area: {
+        label: "Area",
+        units: {
+          m2: { label: "Square meters (m\u00b2)", factor: 1 },
+          km2: { label: "Square kilometers (km\u00b2)", factor: 1000000 },
+          ha: { label: "Hectares (ha)", factor: 10000 },
+          acre: { label: "Acres", factor: 4046.8564224 },
+          ft2: { label: "Square feet (ft\u00b2)", factor: 0.09290304 },
+          mi2: { label: "Square miles (mi\u00b2)", factor: 2589988.110336 },
+        },
+        default: ["m2", "ft2"],
+      },
+      data: {
+        label: "Data",
+        units: {
+          B: { label: "Bytes (B)", factor: 1 },
+          KB: { label: "Kilobytes (KB)", factor: 1024 },
+          MB: { label: "Megabytes (MB)", factor: 1024 ** 2 },
+          GB: { label: "Gigabytes (GB)", factor: 1024 ** 3 },
+          TB: { label: "Terabytes (TB)", factor: 1024 ** 4 },
+          PB: { label: "Petabytes (PB)", factor: 1024 ** 5 },
+        },
+        default: ["MB", "GB"],
+      },
+      time: {
+        label: "Time",
+        units: {
+          s: { label: "Seconds (s)", factor: 1 },
+          min: { label: "Minutes (min)", factor: 60 },
+          h: { label: "Hours (h)", factor: 3600 },
+          day: { label: "Days", factor: 86400 },
+          week: { label: "Weeks", factor: 604800 },
+          month: { label: "Months (avg)", factor: 2629800 },
+          year: { label: "Years", factor: 31557600 },
+        },
+        default: ["h", "min"],
+      },
+    };
+
+    const state = { category: "length" };
+    const elements = {
+      categoryTabs: document.getElementById("categoryTabs"),
+      valueFrom: document.getElementById("valueFrom"),
+      valueTo: document.getElementById("valueTo"),
+      unitFrom: document.getElementById("unitFrom"),
+      unitTo: document.getElementById("unitTo"),
+      swapUnits: document.getElementById("swapUnits"),
+      conversionNote: document.getElementById("conversionNote"),
+      currentYear: document.getElementById("currentYear"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    function toCelsius(value, unit) {
+      if (unit === "C") return value;
+      if (unit === "F") return (value - 32) * (5 / 9);
+      return value - 273.15;
+    }
+    function fromCelsius(celsius, unit) {
+      if (unit === "C") return celsius;
+      if (unit === "F") return celsius * (9 / 5) + 32;
+      return celsius + 273.15;
+    }
+
+    function convert(value, fromUnit, toUnit) {
+      const category = CATEGORIES[state.category];
+      if (Number.isNaN(value)) return NaN;
+      if (category.special === "temperature") return fromCelsius(toCelsius(value, fromUnit), toUnit);
+      const base = value * category.units[fromUnit].factor;
+      return base / category.units[toUnit].factor;
+    }
+
+    function formatNumber(value) {
+      if (!Number.isFinite(value)) return "";
+      const rounded = Math.round(value * 1e6) / 1e6;
+      return rounded.toLocaleString(undefined, { maximumFractionDigits: 6 });
+    }
+
+    function updateNote() {
+      const fromUnit = elements.unitFrom.value;
+      const toUnit = elements.unitTo.value;
+      const result = convert(1, fromUnit, toUnit);
+      const category = CATEGORIES[state.category];
+      elements.conversionNote.innerHTML = `<strong>1 ${category.units[fromUnit].label}</strong> = <strong>${formatNumber(result)} ${category.units[toUnit].label}</strong>`;
+    }
+
+    function populateUnitSelect(select, category, selected) {
+      select.replaceChildren();
+      Object.entries(category.units).forEach(([key, unit]) => {
+        select.append(new Option(unit.label, key, key === selected, key === selected));
+      });
+    }
+
+    function renderCategoryTabs() {
+      elements.categoryTabs.replaceChildren();
+      Object.entries(CATEGORIES).forEach(([key, category]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "category-tab";
+        button.textContent = category.label;
+        button.setAttribute("aria-pressed", String(key === state.category));
+        button.addEventListener("click", () => {
+          state.category = key;
+          [...elements.categoryTabs.children].forEach((tab) => tab.setAttribute("aria-pressed", String(tab === button)));
+          setupCategory();
+        });
+        elements.categoryTabs.append(button);
+      });
+    }
+
+    function setupCategory() {
+      const category = CATEGORIES[state.category];
+      populateUnitSelect(elements.unitFrom, category, category.default[0]);
+      populateUnitSelect(elements.unitTo, category, category.default[1]);
+      elements.valueFrom.value = 1;
+      recalculateTo();
+    }
+
+    function recalculateTo() {
+      const value = parseFloat(elements.valueFrom.value);
+      const result = convert(value, elements.unitFrom.value, elements.unitTo.value);
+      elements.valueTo.value = Number.isFinite(result) ? formatNumber(result) : "";
+      updateNote();
+    }
+
+    function recalculateFrom() {
+      const value = parseFloat(elements.valueTo.value);
+      const result = convert(value, elements.unitTo.value, elements.unitFrom.value);
+      elements.valueFrom.value = Number.isFinite(result) ? formatNumber(result) : "";
+      updateNote();
+    }
+
+    elements.valueFrom.addEventListener("input", recalculateTo);
+    elements.valueTo.addEventListener("input", recalculateFrom);
+    elements.unitFrom.addEventListener("change", recalculateTo);
+    elements.unitTo.addEventListener("change", recalculateTo);
+    elements.swapUnits.addEventListener("click", () => {
+      const fromUnit = elements.unitFrom.value;
+      elements.unitFrom.value = elements.unitTo.value;
+      elements.unitTo.value = fromUnit;
+      elements.swapUnits.classList.add("is-spinning");
+      setTimeout(() => elements.swapUnits.classList.remove("is-spinning"), 200);
+      recalculateTo();
+    });
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    elements.currentYear.textContent = new Date().getFullYear();
+    renderCategoryTabs();
+    setupCategory();
+  </script>
+</body>
+</html>
