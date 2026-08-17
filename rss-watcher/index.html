@@ -473,7 +473,7 @@
         <div class="results-bar-actions">
           <button class="favorites-toggle" id="favoritesToggle" type="button" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            Favorites only
+            <span id="favoritesToggleLabel">Favorites</span>
           </button>
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         </div>
@@ -545,6 +545,7 @@
       refreshedAt: document.getElementById("refreshedAt"),
       feedMeta: document.getElementById("feedMeta"),
       favoritesToggle: document.getElementById("favoritesToggle"),
+      favoritesToggleLabel: document.getElementById("favoritesToggleLabel"),
       clearFilters: document.getElementById("clearFilters"),
       backToTop: document.getElementById("backToTop"),
     };
@@ -586,6 +587,10 @@
       return Math.max(0, Math.round((startOfToday - startOfTarget) / 86400000));
     }
 
+    function updateFavoritesToggleLabel() {
+      elements.favoritesToggleLabel.textContent = `Favorites (${state.favorites.size})`;
+    }
+
     function createFavoriteButton(item) {
       const button = document.createElement("button");
       button.type = "button";
@@ -604,6 +609,7 @@
         if (active) state.favorites.delete(item.id); else state.favorites.add(item.id);
         saveFavorites(state.favorites);
         setState(!active);
+        updateFavoritesToggleLabel();
         if (state.favoritesOnly) applyFilters();
       });
       return button;
@@ -796,6 +802,7 @@
     async function initialize() {
       try {
         elements.currentYear.textContent = new Date().getFullYear();
+        updateFavoritesToggleLabel();
         const response = await fetch("updates.json");
         if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
         const payload = await response.json();
