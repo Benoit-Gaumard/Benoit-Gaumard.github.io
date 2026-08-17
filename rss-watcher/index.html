@@ -178,6 +178,7 @@
       font-size: .9rem;
     }
     .results-bar p { margin: 0; }
+    .results-bar-actions { display: flex; align-items: center; gap: .75rem; }
     .clear-button {
       border: 0;
       background: transparent;
@@ -186,6 +187,22 @@
       padding: .25rem;
     }
     .clear-button[hidden] { display: none; }
+    .favorites-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      padding: .4rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+    .favorites-toggle svg { width: .9rem; height: .9rem; }
+    .favorites-toggle:hover { border-color: var(--cp-accent); color: var(--cp-text); }
+    .favorites-toggle[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
 
     .site-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
     .site-card {
@@ -464,7 +481,13 @@
 
       <div class="results-bar" aria-live="polite">
         <p id="resultCount">Loading updates...</p>
-        <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+        <div class="results-bar-actions">
+          <button class="favorites-toggle" id="favoritesToggle" type="button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            Favorites only
+          </button>
+          <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+        </div>
       </div>
 
       <div class="site-grid" id="siteGrid" aria-busy="true"></div>
@@ -524,7 +547,7 @@
       localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
     }
 
-    const state = { updates: [], filteredItems: [], groups: [], visibleSites: DEFAULT_PAGE_SIZE, favorites: loadFavorites() };
+    const state = { updates: [], filteredItems: [], groups: [], visibleSites: DEFAULT_PAGE_SIZE, favorites: loadFavorites(), favoritesOnly: false };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -536,6 +559,7 @@
       currentYear: document.getElementById("currentYear"),
       refreshedAt: document.getElementById("refreshedAt"),
       feedMeta: document.getElementById("feedMeta"),
+      favoritesToggle: document.getElementById("favoritesToggle"),
       clearFilters: document.getElementById("clearFilters"),
       loadMore: document.getElementById("loadMore"),
       backToTop: document.getElementById("backToTop"),
@@ -582,18 +606,21 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "icon-button";
-      const isFavorite = state.favorites.has(item.id);
-      button.classList.toggle("is-active", isFavorite);
-      button.setAttribute("aria-pressed", String(isFavorite));
-      button.setAttribute("aria-label", isFavorite ? "Remove from favorites" : "Add to favorites");
-      button.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+      const star = '<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+      const setState = (isFavorite) => {
+        button.classList.toggle("is-active", isFavorite);
+        button.setAttribute("aria-pressed", String(isFavorite));
+        button.setAttribute("aria-label", isFavorite ? "Remove from favorites" : "Add to favorites");
+        button.querySelector("svg").setAttribute("fill", isFavorite ? "currentColor" : "none");
+      };
+      button.innerHTML = star;
+      setState(state.favorites.has(item.id));
       button.addEventListener("click", () => {
         const active = state.favorites.has(item.id);
         if (active) state.favorites.delete(item.id); else state.favorites.add(item.id);
         saveFavorites(state.favorites);
-        button.classList.toggle("is-active", !active);
-        button.setAttribute("aria-pressed", String(!active));
-        button.setAttribute("aria-label", !active ? "Remove from favorites" : "Add to favorites");
+        setState(!active);
+        if (state.favoritesOnly) applyFilters();
       });
       return button;
     }
@@ -699,7 +726,9 @@
       if (!visibleGroups.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.innerHTML = "<h2>No updates found</h2><p>Try another keyword or clear the filters.</p>";
+        empty.innerHTML = state.favoritesOnly
+          ? "<h2>No favorites yet</h2><p>Click the star icon on any article to save it here.</p>"
+          : "<h2>No updates found</h2><p>Try another keyword or clear the filters.</p>";
         elements.siteGrid.append(empty);
       } else {
         const fragment = document.createDocumentFragment();
@@ -734,7 +763,8 @@
         return matchesQuery
           && (!selectedSource || item.source === selectedSource)
           && (!selectedCategory || item.categories.includes(selectedCategory))
-          && (!cutoff || new Date(item.pubDate) >= cutoff);
+          && (!cutoff || new Date(item.pubDate) >= cutoff)
+          && (!state.favoritesOnly || state.favorites.has(item.id));
       });
       state.groups = buildGroups(state.filteredItems);
       state.visibleSites = DEFAULT_PAGE_SIZE;
@@ -797,6 +827,11 @@
     elements.source.addEventListener("change", applyFilters);
     elements.category.addEventListener("change", applyFilters);
     elements.lastUpdate.addEventListener("change", applyFilters);
+    elements.favoritesToggle.addEventListener("click", () => {
+      state.favoritesOnly = !state.favoritesOnly;
+      elements.favoritesToggle.setAttribute("aria-pressed", String(state.favoritesOnly));
+      applyFilters();
+    });
     elements.clearFilters.addEventListener("click", () => {
       elements.search.value = "";
       elements.source.value = "";
