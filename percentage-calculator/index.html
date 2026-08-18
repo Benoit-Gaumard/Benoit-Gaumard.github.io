@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculate percentages: what is X% of Y, what percent X is of Y, percentage change between two values, and add or subtract a percentage from a value.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Percentage Calculator | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .mode-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
+    .mode-tab {
+      padding: .5rem 1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+    .mode-tab:hover { color: var(--cp-text); }
+    .mode-tab[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+
+    .calculator-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; flex: 1 1 12rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .9rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      width: 100%;
+    }
+
+    .segment-toggle {
+      display: flex;
+      flex: 1 1 12rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .segment-button {
+      flex: 1 1 50%;
+      min-height: 3.25rem;
+      border: none;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .segment-button + .segment-button { border-left: 1px solid var(--cp-border-strong); }
+    .segment-button[aria-pressed="true"] { background: var(--cp-accent); color: var(--cp-accent-fg); }
+
+    .result-display {
+      margin-top: 1.5rem;
+      padding: 1.75rem 1.5rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-accent-soft);
+      text-align: center;
+    }
+    .result-display.is-error { background: var(--cp-danger-bg); border-color: var(--cp-danger); }
+    .result-number {
+      display: block;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 800;
+      color: var(--cp-accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .result-display.is-error .result-number { color: var(--cp-danger); }
+    .result-label { display: block; margin-top: .5rem; color: var(--cp-text-muted); font-size: .95rem; }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .calculator-card { padding: 1.25rem; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Percentage Calculator</h1>
+      <p class="intro-text">Calculate what X% of Y is, what percent X is of Y, the percentage change between two values, and add or subtract a percentage from a value.</p>
+    </section>
+
+    <section aria-label="Percentage calculator">
+      <div class="mode-tabs" id="modeTabs" aria-label="Choose a calculator mode">
+        <button class="mode-tab" type="button" data-mode="of" aria-pressed="true">X% of Y</button>
+        <button class="mode-tab" type="button" data-mode="isWhatPercent" aria-pressed="false">X is what % of Y</button>
+        <button class="mode-tab" type="button" data-mode="change" aria-pressed="false">% change</button>
+        <button class="mode-tab" type="button" data-mode="addSubtract" aria-pressed="false">Add / subtract %</button>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calc-panel" id="panel-of">
+          <div class="field-row">
+            <div class="unit-field">
+              <label for="ofPercent">Percentage (%)</label>
+              <input id="ofPercent" type="number" step="any" value="20">
+            </div>
+            <div class="unit-field">
+              <label for="ofValue">Of value</label>
+              <input id="ofValue" type="number" step="any" value="50">
+            </div>
+          </div>
+          <div class="result-display" id="ofResult">
+            <span class="result-number"></span>
+            <span class="result-label"></span>
+          </div>
+        </div>
+
+        <div class="calc-panel" id="panel-isWhatPercent" hidden>
+          <div class="field-row">
+            <div class="unit-field">
+              <label for="iwpX">X</label>
+              <input id="iwpX" type="number" step="any" value="10">
+            </div>
+            <div class="unit-field">
+              <label for="iwpY">Y</label>
+              <input id="iwpY" type="number" step="any" value="50">
+            </div>
+          </div>
+          <div class="result-display" id="iwpResult">
+            <span class="result-number"></span>
+            <span class="result-label"></span>
+          </div>
+        </div>
+
+        <div class="calc-panel" id="panel-change" hidden>
+          <div class="field-row">
+            <div class="unit-field">
+              <label for="changeFrom">From value</label>
+              <input id="changeFrom" type="number" step="any" value="50">
+            </div>
+            <div class="unit-field">
+              <label for="changeTo">To value</label>
+              <input id="changeTo" type="number" step="any" value="75">
+            </div>
+          </div>
+          <div class="result-display" id="changeResult">
+            <span class="result-number"></span>
+            <span class="result-label"></span>
+          </div>
+        </div>
+
+        <div class="calc-panel" id="panel-addSubtract" hidden>
+          <div class="field-row">
+            <div class="unit-field">
+              <label for="asValue">Value</label>
+              <input id="asValue" type="number" step="any" value="50">
+            </div>
+            <div class="unit-field">
+              <label for="asPercent">Percentage (%)</label>
+              <input id="asPercent" type="number" step="any" value="20">
+            </div>
+            <div class="segment-toggle" role="group" aria-label="Add or subtract">
+              <button class="segment-button" type="button" data-operation="add" aria-pressed="true">Add</button>
+              <button class="segment-button" type="button" data-operation="subtract" aria-pressed="false">Subtract</button>
+            </div>
+          </div>
+          <div class="result-display" id="asResult">
+            <span class="result-number"></span>
+            <span class="result-label"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Percentage Calculator</a>
+          <p>Calculate what X% of Y is, what percent X is of Y, percentage change, and add or subtract a percentage.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const elements = {
+      modeTabs: document.getElementById("modeTabs"),
+      ofPercent: document.getElementById("ofPercent"),
+      ofValue: document.getElementById("ofValue"),
+      ofResult: document.getElementById("ofResult"),
+      iwpX: document.getElementById("iwpX"),
+      iwpY: document.getElementById("iwpY"),
+      iwpResult: document.getElementById("iwpResult"),
+      changeFrom: document.getElementById("changeFrom"),
+      changeTo: document.getElementById("changeTo"),
+      changeResult: document.getElementById("changeResult"),
+      asValue: document.getElementById("asValue"),
+      asPercent: document.getElementById("asPercent"),
+      asResult: document.getElementById("asResult"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    let addSubtractOperation = "add";
+
+    function formatNumber(value) {
+      if (!Number.isFinite(value)) return "\u2014";
+      const rounded = Math.round(value * 10000) / 10000;
+      return rounded.toLocaleString(undefined, { maximumFractionDigits: 4 });
+    }
+
+    function setResult(container, number, label, isError) {
+      container.classList.toggle("is-error", Boolean(isError));
+      container.querySelector(".result-number").textContent = number;
+      container.querySelector(".result-label").textContent = label;
+    }
+
+    function renderOf() {
+      const percent = parseFloat(elements.ofPercent.value);
+      const value = parseFloat(elements.ofValue.value);
+      if (!Number.isFinite(percent) || !Number.isFinite(value)) {
+        setResult(elements.ofResult, "\u2014", "Enter valid numbers.", true);
+        return;
+      }
+      const result = (percent / 100) * value;
+      setResult(elements.ofResult, formatNumber(result), `${formatNumber(percent)}% of ${formatNumber(value)}`);
+    }
+
+    function renderIsWhatPercent() {
+      const x = parseFloat(elements.iwpX.value);
+      const y = parseFloat(elements.iwpY.value);
+      if (!Number.isFinite(x) || !Number.isFinite(y) || y === 0) {
+        setResult(elements.iwpResult, "\u2014", y === 0 ? "Y cannot be zero." : "Enter valid numbers.", true);
+        return;
+      }
+      const result = (x / y) * 100;
+      setResult(elements.iwpResult, `${formatNumber(result)}%`, `${formatNumber(x)} is ${formatNumber(result)}% of ${formatNumber(y)}`);
+    }
+
+    function renderChange() {
+      const from = parseFloat(elements.changeFrom.value);
+      const to = parseFloat(elements.changeTo.value);
+      if (!Number.isFinite(from) || !Number.isFinite(to) || from === 0) {
+        setResult(elements.changeResult, "\u2014", from === 0 ? "From value cannot be zero." : "Enter valid numbers.", true);
+        return;
+      }
+      const result = ((to - from) / Math.abs(from)) * 100;
+      const direction = result > 0 ? "increase" : result < 0 ? "decrease" : "no change";
+      const sign = result > 0 ? "+" : "";
+      setResult(elements.changeResult, `${sign}${formatNumber(result)}%`, `${direction} from ${formatNumber(from)} to ${formatNumber(to)}`);
+    }
+
+    function renderAddSubtract() {
+      const value = parseFloat(elements.asValue.value);
+      const percent = parseFloat(elements.asPercent.value);
+      if (!Number.isFinite(value) || !Number.isFinite(percent)) {
+        setResult(elements.asResult, "\u2014", "Enter valid numbers.", true);
+        return;
+      }
+      const result = addSubtractOperation === "add" ? value * (1 + percent / 100) : value * (1 - percent / 100);
+      const verb = addSubtractOperation === "add" ? "plus" : "minus";
+      setResult(elements.asResult, formatNumber(result), `${formatNumber(value)} ${verb} ${formatNumber(percent)}% = ${formatNumber(result)}`);
+    }
+
+    elements.ofPercent.addEventListener("input", renderOf);
+    elements.ofValue.addEventListener("input", renderOf);
+    elements.iwpX.addEventListener("input", renderIsWhatPercent);
+    elements.iwpY.addEventListener("input", renderIsWhatPercent);
+    elements.changeFrom.addEventListener("input", renderChange);
+    elements.changeTo.addEventListener("input", renderChange);
+    elements.asValue.addEventListener("input", renderAddSubtract);
+    elements.asPercent.addEventListener("input", renderAddSubtract);
+
+    document.querySelectorAll(".segment-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        addSubtractOperation = button.dataset.operation;
+        document.querySelectorAll(".segment-button").forEach((btn) => {
+          btn.setAttribute("aria-pressed", String(btn === button));
+        });
+        renderAddSubtract();
+      });
+    });
+
+    [...elements.modeTabs.children].forEach((tab) => {
+      tab.addEventListener("click", () => {
+        [...elements.modeTabs.children].forEach((t) => t.setAttribute("aria-pressed", String(t === tab)));
+        document.querySelectorAll(".calc-panel").forEach((panel) => { panel.hidden = true; });
+        document.getElementById(`panel-${tab.dataset.mode}`).hidden = false;
+      });
+    });
+
+    renderOf();
+    renderIsWhatPercent();
+    renderChange();
+    renderAddSubtract();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
