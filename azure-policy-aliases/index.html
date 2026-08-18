@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Azure Policy Aliases | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.75rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+    .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+    .refresh-meta strong { color: var(--cp-text); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
+    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .filter-bar input, .filter-bar select {
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
+    .filter-bar input { flex: 2 1 16rem; max-width: 30rem; min-width: 0; }
+    .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
+    .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
+    .clear-button[hidden] { display: none; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--cp-surface-soft);
+      text-align: left;
+      padding: .7rem .9rem;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      color: var(--cp-text-muted);
+      border-bottom: 1px solid var(--cp-border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover { color: var(--cp-text); }
+    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
+    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
+    tbody td { padding: .55rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; overflow-wrap: anywhere; }
+    .alias-cell { display: flex; align-items: center; gap: .5rem; }
+    .copy-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
+    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); }
+    #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar input { max-width: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Azure Policy Aliases</h1>
+      <p class="intro-text">Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions, generated daily from <code>Get-AzPolicyAlias</code>.</p>
+      <p class="refresh-meta">
+        <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+        <span>Source: <a href="https://policyalias.mats.codes" target="_blank" rel="noopener">policyalias.mats.codes</a></span>
+      </p>
+    </section>
+
+    <section class="stats-grid" id="statsGrid" aria-label="Policy alias statistics"></section>
+
+    <section aria-label="Policy aliases">
+      <div class="filter-bar">
+        <input id="search" type="search" placeholder="Search resource type, default path, or alias..." autocomplete="off" spellcheck="false">
+        <select id="resourceTypeFilter"><option value="">All resource types</option></select>
+        <button class="clear-button" id="clearFilters" type="button" hidden>Clear</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-key="resourceType">Resource type <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="defaultPath">Default path <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="alias">Alias <span class="sort-arrow">&#9650;</span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <p id="resultCount"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Azure Policy Aliases</a>
+          <p>Search all supported Azure Policy aliases, refreshed daily.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    const RENDER_LIMIT = 500;
+    const state = { rows: [], filtered: [], sortKey: "resourceType", sortDir: "asc", query: "" };
+    const elements = {
+      statsGrid: document.getElementById("statsGrid"),
+      refreshedAt: document.getElementById("refreshedAt"),
+      currentYear: document.getElementById("currentYear"),
+      search: document.getElementById("search"),
+      resourceTypeFilter: document.getElementById("resourceTypeFilter"),
+      clearFilters: document.getElementById("clearFilters"),
+      tableBody: document.getElementById("tableBody"),
+      resultCount: document.getElementById("resultCount"),
+      backToTop: document.getElementById("backToTop"),
+      headers: [...document.querySelectorAll("thead th[data-key]")],
+    };
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function renderStats(payload) {
+      const stats = [
+        { label: "Resource types", value: payload.totalResourceTypes },
+        { label: "Providers", value: payload.totalProviders },
+        { label: "Aliases", value: payload.totalAliases },
+      ];
+      elements.statsGrid.replaceChildren();
+      stats.forEach((stat) => {
+        const el = document.createElement("div");
+        el.className = "stat-card";
+        el.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
+        elements.statsGrid.append(el);
+      });
+    }
+
+    function populateResourceTypeFilter(resources) {
+      resources.forEach((resource) => elements.resourceTypeFilter.append(new Option(resource.resourceType, resource.resourceType)));
+    }
+
+    function flattenRows(resources) {
+      const rows = [];
+      resources.forEach((resource) => {
+        resource.aliases.forEach(([defaultPath, alias]) => {
+          rows.push({ resourceType: resource.resourceType, defaultPath, alias });
+        });
+      });
+      return rows;
+    }
+
+    function copyIconMarkup(copied) {
+      return copied
+        ? '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M3 8.5 6.5 12 13 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9.5V3.5a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    }
+
+    async function copyToClipboard(text, button) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      button.classList.add("is-copied");
+      button.innerHTML = copyIconMarkup(true);
+      button.setAttribute("aria-label", "Copied");
+      setTimeout(() => {
+        button.classList.remove("is-copied");
+        button.innerHTML = copyIconMarkup(false);
+        button.setAttribute("aria-label", "Copy alias");
+      }, 1500);
+    }
+
+    function renderTable() {
+      const rows = [...state.filtered].sort((a, b) => {
+        const av = normalize(a[state.sortKey]);
+        const bv = normalize(b[state.sortKey]);
+        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
+        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
+        return 0;
+      });
+
+      const shown = rows.slice(0, RENDER_LIMIT);
+      elements.tableBody.replaceChildren();
+      const fragment = document.createDocumentFragment();
+      shown.forEach((row) => {
+        const tr = document.createElement("tr");
+        const typeTd = document.createElement("td");
+        typeTd.innerHTML = `<code>${row.resourceType}</code>`;
+        const pathTd = document.createElement("td");
+        pathTd.innerHTML = `<code>${row.defaultPath}</code>`;
+        const aliasTd = document.createElement("td");
+        const cell = document.createElement("div");
+        cell.className = "alias-cell";
+        cell.innerHTML = `<code>${row.alias}</code>`;
+        const copyButton = document.createElement("button");
+        copyButton.type = "button";
+        copyButton.className = "copy-button";
+        copyButton.setAttribute("aria-label", "Copy alias");
+        copyButton.innerHTML = copyIconMarkup(false);
+        copyButton.addEventListener("click", () => copyToClipboard(row.alias, copyButton));
+        cell.append(copyButton);
+        aliasTd.append(cell);
+        tr.append(typeTd, pathTd, aliasTd);
+        fragment.append(tr);
+      });
+      elements.tableBody.append(fragment);
+
+      elements.resultCount.textContent = rows.length > RENDER_LIMIT
+        ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching aliases. Refine your search to see more specific results.`
+        : `${rows.length.toLocaleString()} alias${rows.length === 1 ? "" : "es"} shown.`;
+
+      elements.headers.forEach((th) => {
+        th.removeAttribute("aria-sort");
+        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+      });
+    }
+
+    function applyFilter() {
+      const query = normalize(state.query.trim());
+      const resourceType = elements.resourceTypeFilter.value;
+      state.filtered = state.rows.filter((row) => {
+        if (resourceType && row.resourceType !== resourceType) return false;
+        if (query && !normalize(`${row.resourceType} ${row.defaultPath} ${row.alias}`).includes(query)) return false;
+        return true;
+      });
+      elements.clearFilters.hidden = !query && !resourceType;
+      renderTable();
+    }
+
+    async function init() {
+      elements.currentYear.textContent = new Date().getFullYear();
+      try {
+        const response = await fetch("./policy-aliases.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+        const payload = await response.json();
+        state.rows = flattenRows(payload.resources);
+        state.filtered = state.rows;
+        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString(undefined, {
+          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+        renderStats(payload);
+        populateResourceTypeFilter(payload.resources);
+        renderTable();
+      } catch (error) {
+        console.error(error);
+        elements.resultCount.textContent = "Unable to load policy alias data.";
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      state.query = elements.search.value;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilter, 150);
+    });
+    elements.resourceTypeFilter.addEventListener("change", applyFilter);
+    elements.clearFilters.addEventListener("click", () => {
+      elements.search.value = "";
+      elements.resourceTypeFilter.value = "";
+      state.query = "";
+      applyFilter();
+      elements.search.focus();
+    });
+
+    elements.headers.forEach((th) => {
+      th.addEventListener("click", () => {
+        const key = th.dataset.key;
+        if (state.sortKey === key) {
+          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+        } else {
+          state.sortKey = key;
+          state.sortDir = "asc";
+        }
+        renderTable();
+      });
+    });
+
+    init();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
