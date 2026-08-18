@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A curated collection of useful links and resources.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>My Favorite Links | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-warning: #c88719;
+      --cp-warning-bg: #fff8e8;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.75rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
+    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .filter-bar input, .filter-bar select {
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
+    .filter-bar input { flex: 2 1 16rem; max-width: 26rem; }
+    .filter-bar select { flex: 1 1 11rem; }
+    .filter-toggle { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: .9rem; font-weight: 600; cursor: pointer; }
+    .filter-toggle input { width: 1.15rem; height: 1.15rem; accent-color: var(--cp-accent); cursor: pointer; }
+    .results-count { margin: 0 0 1.25rem; color: var(--cp-text-muted); font-size: .9rem; }
+
+    .link-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.25rem; }
+    .link-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      padding: 1.5rem;
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--cp-text);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .link-card:hover, .link-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--cp-accent);
+      box-shadow: var(--cp-shadow);
+    }
+    .link-card.is-highlighted { border-color: var(--cp-warning); background: var(--cp-warning-bg); }
+    .link-card-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+    .link-avatar {
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-accent);
+      font-weight: 800;
+      font-size: 1.1rem;
+      overflow: hidden;
+    }
+    .link-avatar img { width: 1.75rem; height: 1.75rem; object-fit: contain; }
+    .highlight-star { flex: 0 0 auto; color: var(--cp-warning); }
+    .link-card h2 { margin: 0; font-size: 1.1rem; overflow-wrap: anywhere; }
+    .link-rating { display: flex; gap: .1rem; color: var(--cp-warning); }
+    .link-rating svg { width: 1rem; height: 1rem; }
+    .link-rating .is-empty { color: var(--cp-border-strong); }
+    .link-tag {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: .2rem .6rem;
+      border-radius: 999px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-size: .75rem;
+      font-weight: 700;
+    }
+    .link-description {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: .87rem;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .link-url { margin: 0; color: var(--cp-text-muted); font-size: .85rem; overflow-wrap: anywhere; }
+    .link-arrow {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      color: var(--cp-accent);
+      font-size: .85rem;
+      font-weight: 600;
+    }
+    .link-arrow svg { transition: transform .2s ease; }
+    .link-card:hover .link-arrow svg, .link-card:focus-visible .link-arrow svg { transform: translate(2px, -2px); }
+
+    .empty-state {
+      padding: 2.5rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 12px;
+      text-align: center;
+      color: var(--cp-text-muted);
+    }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar input { max-width: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">My Favorite Links</h1>
+      <p class="intro-text">A curated collection of useful links and resources.</p>
+    </section>
+
+    <section class="stats-grid" id="statsGrid" aria-label="Link statistics"></section>
+
+    <section aria-label="Favorite links">
+      <div class="filter-bar">
+        <input id="searchInput" type="search" placeholder="Search links..." autocomplete="off" spellcheck="false">
+        <select id="categoryFilter"><option value="">All categories</option></select>
+        <select id="sortSelect">
+          <option value="featured">Featured first</option>
+          <option value="rating">Rating (high to low)</option>
+          <option value="title">Title (A-Z)</option>
+          <option value="category">Category</option>
+        </select>
+        <label class="filter-toggle"><input type="checkbox" id="highlightedOnly"> Featured only</label>
+      </div>
+      <p class="results-count" id="resultsCount"></p>
+      <div class="link-cards" id="linkCards"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / My Favorite Links</a>
+          <p>A curated collection of useful links and resources.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const elements = {
+      searchInput: document.getElementById("searchInput"),
+      categoryFilter: document.getElementById("categoryFilter"),
+      sortSelect: document.getElementById("sortSelect"),
+      highlightedOnly: document.getElementById("highlightedOnly"),
+      resultsCount: document.getElementById("resultsCount"),
+      statsGrid: document.getElementById("statsGrid"),
+      linkCards: document.getElementById("linkCards"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    let links = [];
+
+    function parseCsvLine(line) {
+      const cells = [];
+      let current = "";
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (inQuotes) {
+          if (char === '"') {
+            if (line[i + 1] === '"') { current += '"'; i++; } else inQuotes = false;
+          } else {
+            current += char;
+          }
+        } else if (char === '"') {
+          inQuotes = true;
+        } else if (char === ",") {
+          cells.push(current);
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      cells.push(current);
+      return cells;
+    }
+
+    function parseCsv(text) {
+      // Split into records, not lines: quoted fields may contain literal newlines.
+      const records = [];
+      let current = "";
+      let inQuotes = false;
+      const normalized = text.replace(/\r\n/g, "\n");
+      for (let i = 0; i < normalized.length; i++) {
+        const char = normalized[i];
+        if (char === '"') inQuotes = !inQuotes;
+        if (char === "\n" && !inQuotes) {
+          records.push(current);
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      if (current.trim()) records.push(current);
+
+      const headers = parseCsvLine(records[0]);
+      return records.slice(1).filter((record) => record.trim()).map((record) => {
+        const cells = parseCsvLine(record);
+        const row = {};
+        headers.forEach((header, index) => { row[header] = (cells[index] ?? "").trim(); });
+        return row;
+      });
+    }
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function hostnameFor(url) {
+      try {
+        return new URL(url).hostname.replace(/^www\./, "");
+      } catch {
+        return url;
+      }
+    }
+
+    function faviconUrlFor(url) {
+      const hostname = hostnameFor(url);
+      return `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(hostname)}`;
+    }
+
+    function initials(title) {
+      return title.split(/\s+/).map((part) => part[0]).filter(Boolean).join("").slice(0, 2).toUpperCase();
+    }
+
+    function starIcon(filled) {
+      return `<svg viewBox="0 0 24 24" fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false" class="${filled ? "" : "is-empty"}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+    }
+
+    function renderStats() {
+      const categories = new Set(links.map((link) => link.category).filter(Boolean));
+      const highlighted = links.filter((link) => link.isHighlighted).length;
+      const stats = [
+        { label: "Links", value: links.length },
+        { label: "Categories", value: categories.size },
+        { label: "Featured", value: highlighted },
+      ];
+      elements.statsGrid.replaceChildren();
+      stats.forEach((stat) => {
+        const el = document.createElement("div");
+        el.className = "stat-card";
+        el.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
+        elements.statsGrid.append(el);
+      });
+    }
+
+    function populateFilters() {
+      const categories = [...new Set(links.map((link) => link.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+      categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
+    }
+
+    function sortLinks(list) {
+      const sortMode = elements.sortSelect.value;
+      const sorted = [...list];
+      if (sortMode === "rating") {
+        sorted.sort((a, b) => b.rating - a.rating || a.title.localeCompare(b.title));
+      } else if (sortMode === "title") {
+        sorted.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (sortMode === "category") {
+        sorted.sort((a, b) => a.category.localeCompare(b.category) || a.title.localeCompare(b.title));
+      } else {
+        sorted.sort((a, b) => (b.isHighlighted - a.isHighlighted) || b.rating - a.rating || a.title.localeCompare(b.title));
+      }
+      return sorted;
+    }
+
+    function createCard(link) {
+      const card = document.createElement("a");
+      card.className = `link-card${link.isHighlighted ? " is-highlighted" : ""}`;
+      card.href = link.url;
+      card.target = "_blank";
+      card.rel = "noopener";
+
+      const header = document.createElement("div");
+      header.className = "link-card-header";
+      const avatar = document.createElement("span");
+      avatar.className = "link-avatar";
+      const favicon = document.createElement("img");
+      favicon.src = faviconUrlFor(link.url);
+      favicon.alt = "";
+      favicon.loading = "lazy";
+      favicon.addEventListener("error", () => {
+        favicon.remove();
+        avatar.textContent = initials(link.title);
+      }, { once: true });
+      avatar.append(favicon);
+      header.append(avatar);
+      if (link.isHighlighted) {
+        const star = document.createElement("span");
+        star.className = "highlight-star";
+        star.title = "Featured link";
+        star.innerHTML = starIcon(true);
+        header.append(star);
+      }
+
+      const heading = document.createElement("h2");
+      heading.textContent = link.title;
+
+      const rating = document.createElement("div");
+      rating.className = "link-rating";
+      rating.setAttribute("aria-label", `Rated ${link.rating} out of 5`);
+      for (let i = 0; i < 5; i++) rating.innerHTML += starIcon(i < link.rating);
+
+      card.append(header, heading, rating);
+
+      if (link.category) {
+        const tag = document.createElement("span");
+        tag.className = "link-tag";
+        tag.textContent = link.category;
+        card.append(tag);
+      }
+
+      if (link.description) {
+        const description = document.createElement("p");
+        description.className = "link-description";
+        description.textContent = link.description;
+        card.append(description);
+      }
+
+      const url = document.createElement("p");
+      url.className = "link-url";
+      url.textContent = hostnameFor(link.url);
+
+      const arrow = document.createElement("span");
+      arrow.className = "link-arrow";
+      arrow.innerHTML = 'Visit link <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+
+      card.append(url, arrow);
+      return card;
+    }
+
+    function renderCards() {
+      const query = normalize(elements.searchInput.value.trim());
+      const category = elements.categoryFilter.value;
+      const highlightedOnly = elements.highlightedOnly.checked;
+
+      const filtered = links.filter((link) => {
+        if (category && link.category !== category) return false;
+        if (highlightedOnly && !link.isHighlighted) return false;
+        if (query && !normalize(`${link.title} ${link.description} ${link.category}`).includes(query)) return false;
+        return true;
+      });
+
+      const sorted = sortLinks(filtered);
+
+      elements.resultsCount.textContent = sorted.length === 1
+        ? "1 link found."
+        : `${sorted.length.toLocaleString()} links found.`;
+      elements.linkCards.replaceChildren();
+
+      if (!sorted.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "No links match your filters.";
+        elements.linkCards.append(empty);
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      sorted.forEach((link) => fragment.append(createCard(link)));
+      elements.linkCards.append(fragment);
+    }
+
+    async function init() {
+      const response = await fetch("./favorite-links.csv", { cache: "no-store" });
+      const csvText = await response.text();
+      links = parseCsv(csvText)
+        .filter((row) => row.title && row.url)
+        .map((row) => ({
+          ...row,
+          rating: Number.parseInt(row.rating, 10) || 0,
+          isHighlighted: row.isHighlighted?.trim().toLowerCase() === "true",
+        }));
+      renderStats();
+      populateFilters();
+      renderCards();
+    }
+
+    elements.searchInput.addEventListener("input", renderCards);
+    elements.categoryFilter.addEventListener("change", renderCards);
+    elements.sortSelect.addEventListener("change", renderCards);
+    elements.highlightedOnly.addEventListener("change", renderCards);
+
+    init();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
