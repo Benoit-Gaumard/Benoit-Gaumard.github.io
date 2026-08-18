@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data across this site.">
+  <meta name="description" content="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, RSS Watcher, and GitHub IP Ranges data across this site.">
   <meta name="color-scheme" content="light">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Workflows | Benoit Gaumard</title>
@@ -270,7 +270,7 @@
   <main>
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Workflows</h1>
-      <p class="intro-text">Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data across this site.</p>
+      <p class="intro-text">Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, RSS Watcher, and GitHub IP Ranges data across this site.</p>
     </section>
 
     <section aria-label="Workflow status">
@@ -323,6 +323,7 @@
       { name: "Refresh Azure Release Updates", file: "azure-updates.yaml" },
       { name: "Refresh M365 Release Updates", file: "m365-updates.yaml" },
       { name: "Refresh RSS Watcher Updates", file: "rss-updates.yaml" },
+      { name: "Refresh GitHub IP Ranges", file: "github-ip-ranges-updates.yaml" },
     ];
 
     function statusInfo(run) {

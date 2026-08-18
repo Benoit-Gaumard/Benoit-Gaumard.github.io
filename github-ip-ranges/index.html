@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="IP address ranges used by GitHub services (web, API, git, Actions, Pages, Copilot, and more), fetched directly from the GitHub Meta API.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>GitHub IP Ranges | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .stat-value { display: block; font-size: 1.65rem; font-weight: 800; color: var(--cp-text); }
+    .stat-label { display: block; margin-top: .25rem; color: var(--cp-text-muted); font-size: .82rem; }
+
+    .calculator-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+      margin-bottom: 1.5rem;
+    }
+    .card-heading { margin: 0 0 1.25rem; font-size: 1.15rem; }
+
+    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; flex: 1 1 16rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .9rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      width: 100%;
+    }
+    .primary-button {
+      flex: 0 0 auto;
+      min-height: 3.25rem;
+      padding: 0 1.5rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 8px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .primary-button:hover { background: var(--cp-accent-hover); border-color: var(--cp-accent-hover); }
+
+    .lookup-result { margin-top: 1.25rem; }
+    .lookup-heading { margin: 0 0 .75rem; color: var(--cp-text-muted); font-size: .95rem; }
+    .lookup-heading strong { color: var(--cp-text); font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .match-list { display: flex; flex-direction: column; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+    .match-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-success);
+      border-radius: 8px;
+      background: var(--cp-success-bg);
+    }
+    .match-row .match-category { font-weight: 700; color: var(--cp-success); }
+    .match-row .match-cidr { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cp-text-muted); font-size: .88rem; }
+    .no-match-row {
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+    }
+
+    .category-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+    .category-tab {
+      padding: .5rem 1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+    .category-tab:hover { color: var(--cp-text); }
+    .category-tab[aria-pressed="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+
+    .cidr-search {
+      min-height: 3rem;
+      width: 100%;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .9rem;
+      margin-bottom: 1rem;
+    }
+    .cidr-note { margin: 0 0 .75rem; color: var(--cp-text-muted); font-size: .85rem; }
+    .cidr-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      gap: .5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      max-height: 26rem;
+      overflow-y: auto;
+    }
+    .cidr-item {
+      padding: .5rem .75rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .85rem;
+      overflow-wrap: anywhere;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .calculator-card { padding: 1.25rem; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">GitHub IP Ranges</h1>
+      <p class="intro-text">IP address ranges used by GitHub services (web, API, git, Actions, Pages, Copilot, and more), fetched directly from the <a href="https://api.github.com/meta" target="_blank" rel="noopener">GitHub Meta API</a>.</p>
+    </section>
+
+    <section aria-label="Summary">
+      <div class="stat-cards" id="statCards"></div>
+    </section>
+
+    <section aria-label="IP lookup">
+      <div class="calculator-card">
+        <h2 class="card-heading">Check an IP address</h2>
+        <div class="field-row">
+          <div class="unit-field">
+            <label for="lookupInput">IP address (IPv4 or IPv6)</label>
+            <input id="lookupInput" type="text" placeholder="e.g. 140.82.112.3" autocomplete="off" spellcheck="false">
+          </div>
+          <button class="primary-button" id="lookupButton" type="button">Check</button>
+        </div>
+        <div class="lookup-result">
+          <p class="lookup-heading" id="lookupHeading"></p>
+          <ul class="match-list" id="matchList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Browse ranges by category">
+      <div class="calculator-card">
+        <h2 class="card-heading">Browse ranges by category</h2>
+        <div class="category-tabs" id="categoryTabs"></div>
+        <input class="cidr-search" id="cidrSearch" type="text" placeholder="Filter this category's CIDR ranges...">
+        <p class="cidr-note" id="cidrNote"></p>
+        <ul class="cidr-list" id="cidrList"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / GitHub IP Ranges</a>
+          <p>IP address ranges used by GitHub services, refreshed automatically from the GitHub Meta API.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const RENDER_LIMIT = 400;
+
+    const elements = {
+      statCards: document.getElementById("statCards"),
+      lookupInput: document.getElementById("lookupInput"),
+      lookupButton: document.getElementById("lookupButton"),
+      lookupHeading: document.getElementById("lookupHeading"),
+      matchList: document.getElementById("matchList"),
+      categoryTabs: document.getElementById("categoryTabs"),
+      cidrSearch: document.getElementById("cidrSearch"),
+      cidrNote: document.getElementById("cidrNote"),
+      cidrList: document.getElementById("cidrList"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    const state = { data: null, activeCategoryKey: null };
+
+    function parseIpv4(str) {
+      const match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(String(str).trim());
+      if (!match) return null;
+      const octets = match.slice(1, 5).map(Number);
+      if (octets.some((o) => o < 0 || o > 255)) return null;
+      return octets;
+    }
+    function ipv4ToInt(octets) {
+      return ((octets[0] << 24) | (octets[1] << 16) | (octets[2] << 8) | octets[3]) >>> 0;
+    }
+    function ipv6ToBigInt(str) {
+      const value = str.trim();
+      let head = value;
+      let tail = null;
+      if (value.includes("::")) {
+        const parts = value.split("::");
+        if (parts.length !== 2) return null;
+        [head, tail] = parts;
+      }
+      const headParts = head ? head.split(":").filter(Boolean) : [];
+      const tailParts = tail ? tail.split(":").filter(Boolean) : [];
+      let groups;
+      if (value.includes("::")) {
+        const missing = 8 - headParts.length - tailParts.length;
+        if (missing < 0) return null;
+        groups = [...headParts, ...Array(missing).fill("0"), ...tailParts];
+      } else {
+        groups = headParts;
+      }
+      if (groups.length !== 8) return null;
+      let result = 0n;
+      for (const group of groups) {
+        if (!/^[0-9a-fA-F]{1,4}$/.test(group)) return null;
+        result = (result << 16n) | BigInt(parseInt(group, 16));
+      }
+      return result;
+    }
+    function ipInCidr(ip, cidr) {
+      const separatorIndex = cidr.lastIndexOf("/");
+      const rangeIp = cidr.slice(0, separatorIndex);
+      const prefix = parseInt(cidr.slice(separatorIndex + 1), 10);
+      const isRangeV6 = rangeIp.includes(":");
+      const isIpV6 = ip.includes(":");
+      if (isRangeV6 !== isIpV6) return false;
+      if (isRangeV6) {
+        const ipBig = ipv6ToBigInt(ip);
+        const rangeBig = ipv6ToBigInt(rangeIp);
+        if (ipBig === null || rangeBig === null) return false;
+        const fullMask = (1n << 128n) - 1n;
+        const maskBig = prefix === 0 ? 0n : (fullMask << BigInt(128 - prefix)) & fullMask;
+        return (ipBig & maskBig) === (rangeBig & maskBig);
+      }
+      const ipOctets = parseIpv4(ip);
+      const rangeOctets = parseIpv4(rangeIp);
+      if (!ipOctets || !rangeOctets) return false;
+      const ipInt = ipv4ToInt(ipOctets);
+      const rangeInt = ipv4ToInt(rangeOctets);
+      const maskInt = prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0;
+      return ((ipInt & maskInt) >>> 0) === ((rangeInt & maskInt) >>> 0);
+    }
+
+    function formatDateTime(iso) {
+      return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+    }
+
+    function renderStats() {
+      const { data } = state;
+      const totalV4 = data.categories.reduce((sum, c) => sum + c.ipv4Count, 0);
+      const totalV6 = data.categories.reduce((sum, c) => sum + c.ipv6Count, 0);
+      const stats = [
+        { value: data.categories.length, label: "Categories" },
+        { value: data.totalCidrs.toLocaleString(), label: "Total ranges" },
+        { value: totalV4.toLocaleString(), label: "IPv4 ranges" },
+        { value: totalV6.toLocaleString(), label: "IPv6 ranges" },
+        { value: data.verifiablePasswordAuthentication ? "Yes" : "No", label: "Password auth verifiable" },
+        { value: formatDateTime(data.generatedAt), label: "Last refreshed" },
+      ];
+      elements.statCards.replaceChildren();
+      stats.forEach((stat) => {
+        const card = document.createElement("div");
+        card.className = "stat-card";
+        const value = document.createElement("span");
+        value.className = "stat-value";
+        value.textContent = stat.value;
+        const label = document.createElement("span");
+        label.className = "stat-label";
+        label.textContent = stat.label;
+        card.append(value, label);
+        elements.statCards.append(card);
+      });
+    }
+
+    function renderCategoryTabs() {
+      elements.categoryTabs.replaceChildren();
+      state.data.categories.forEach((category) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "category-tab";
+        button.textContent = `${category.label} (${category.count})`;
+        button.setAttribute("aria-pressed", String(category.key === state.activeCategoryKey));
+        button.addEventListener("click", () => {
+          state.activeCategoryKey = category.key;
+          elements.cidrSearch.value = "";
+          renderCategoryTabs();
+          renderCidrList();
+        });
+        elements.categoryTabs.append(button);
+      });
+    }
+
+    function renderCidrList() {
+      const category = state.data.categories.find((c) => c.key === state.activeCategoryKey);
+      elements.cidrList.replaceChildren();
+      if (!category) return;
+      const query = elements.cidrSearch.value.trim().toLowerCase();
+      const filtered = query ? category.cidrs.filter((c) => c.toLowerCase().includes(query)) : category.cidrs;
+      const shown = filtered.slice(0, RENDER_LIMIT);
+      shown.forEach((cidr) => {
+        const li = document.createElement("li");
+        li.className = "cidr-item";
+        li.textContent = cidr;
+        elements.cidrList.append(li);
+      });
+      elements.cidrNote.textContent = filtered.length > RENDER_LIMIT
+        ? `Showing ${shown.length} of ${filtered.length.toLocaleString()} matching ranges. Refine your search to see more specific results.`
+        : `Showing ${filtered.length.toLocaleString()} of ${category.count.toLocaleString()} ranges.`;
+    }
+
+    function performLookup() {
+      const ip = elements.lookupInput.value.trim();
+      elements.matchList.replaceChildren();
+      if (!ip) {
+        elements.lookupHeading.textContent = "Enter an IP address to check.";
+        return;
+      }
+      const isV4 = Boolean(parseIpv4(ip));
+      const isV6 = !isV4 && ipv6ToBigInt(ip) !== null;
+      if (!isV4 && !isV6) {
+        elements.lookupHeading.textContent = `"${ip}" doesn't look like a valid IPv4 or IPv6 address.`;
+        return;
+      }
+
+      const matches = [];
+      state.data.categories.forEach((category) => {
+        for (const cidr of category.cidrs) {
+          if (ipInCidr(ip, cidr)) {
+            matches.push({ category: category.label, cidr });
+            break;
+          }
+        }
+      });
+
+      elements.lookupHeading.innerHTML = "";
+      const strong = document.createElement("strong");
+      strong.textContent = ip;
+      elements.lookupHeading.append(
+        strong,
+        document.createTextNode(matches.length ? ` matches ${matches.length} GitHub service categor${matches.length > 1 ? "ies" : "y"}:` : " does not match any known GitHub IP range."),
+      );
+
+      matches.forEach((match) => {
+        const li = document.createElement("li");
+        li.className = "match-row";
+        const category = document.createElement("span");
+        category.className = "match-category";
+        category.textContent = match.category;
+        const cidr = document.createElement("span");
+        cidr.className = "match-cidr";
+        cidr.textContent = match.cidr;
+        li.append(category, cidr);
+        elements.matchList.append(li);
+      });
+      if (!matches.length) {
+        const li = document.createElement("li");
+        li.className = "no-match-row";
+        li.textContent = "No match found. This IP is not published in GitHub's current Meta API IP ranges.";
+        elements.matchList.append(li);
+      }
+    }
+
+    async function init() {
+      const response = await fetch("./ip-ranges.json", { cache: "no-store" });
+      state.data = await response.json();
+      state.activeCategoryKey = state.data.categories[0]?.key ?? null;
+      renderStats();
+      renderCategoryTabs();
+      renderCidrList();
+    }
+
+    elements.lookupButton.addEventListener("click", performLookup);
+    elements.lookupInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") performLookup();
+    });
+    elements.cidrSearch.addEventListener("input", renderCidrList);
+
+    init();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
