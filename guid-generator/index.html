@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generate one or many random GUIDs / UUIDs (v4), with options for uppercase, hyphens, braces, and quotes.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>GUID Generator | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .calculator-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; }
+    .unit-field.value-field { flex: 0 0 8rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .9rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      width: 100%;
+    }
+
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 1.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface-soft);
+    }
+    .option-toggle {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--cp-text);
+      font-size: .92rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .option-toggle input { width: 1.15rem; height: 1.15rem; accent-color: var(--cp-accent); cursor: pointer; }
+
+    .button-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1.5rem; }
+    .primary-button, .secondary-button {
+      padding: .65rem 1.25rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: .95rem;
+    }
+    .primary-button { border: 1px solid var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .primary-button:hover { background: var(--cp-accent-hover); border-color: var(--cp-accent-hover); }
+    .secondary-button { border: 1px solid var(--cp-border-strong); background: var(--cp-surface); color: var(--cp-accent); }
+    .secondary-button:hover { background: var(--cp-accent-soft); }
+    .secondary-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); background: var(--cp-success-bg); }
+
+    .results-list { display: flex; flex-direction: column; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+    .guid-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .guid-value {
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .95rem;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+    .copy-button {
+      flex: 0 0 auto;
+      padding: .4rem .85rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-accent);
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .copy-button:hover { background: var(--cp-accent-soft); }
+    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); background: var(--cp-success-bg); }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .calculator-card { padding: 1.25rem; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .guid-row { flex-wrap: wrap; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">GUID Generator</h1>
+      <p class="intro-text">Generate one or many random GUIDs / UUIDs (v4), with options for uppercase, hyphens, braces, and quotes.</p>
+    </section>
+
+    <section aria-label="GUID generator">
+      <div class="calculator-card">
+        <div class="field-row">
+          <div class="unit-field value-field">
+            <label for="quantity">Quantity</label>
+            <input id="quantity" type="number" min="1" max="500" value="1">
+          </div>
+        </div>
+        <div class="options-row" id="optionsRow">
+          <label class="option-toggle"><input type="checkbox" id="optUppercase"> Uppercase</label>
+          <label class="option-toggle"><input type="checkbox" id="optHyphens" checked> Hyphens</label>
+          <label class="option-toggle"><input type="checkbox" id="optBraces"> Braces {}</label>
+          <label class="option-toggle"><input type="checkbox" id="optQuotes"> Quotes ""</label>
+          <label class="option-toggle"><input type="checkbox" id="optComma"> Comma-separated</label>
+        </div>
+        <div class="button-row">
+          <button class="primary-button" id="generateButton" type="button">Generate</button>
+          <button class="secondary-button" id="copyAllButton" type="button">Copy all</button>
+        </div>
+        <ul class="results-list" id="guidList"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / GUID Generator</a>
+          <p>Generate one or many random GUIDs / UUIDs (v4), with options for uppercase, hyphens, braces, and quotes.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const elements = {
+      quantity: document.getElementById("quantity"),
+      optUppercase: document.getElementById("optUppercase"),
+      optHyphens: document.getElementById("optHyphens"),
+      optBraces: document.getElementById("optBraces"),
+      optQuotes: document.getElementById("optQuotes"),
+      optComma: document.getElementById("optComma"),
+      generateButton: document.getElementById("generateButton"),
+      copyAllButton: document.getElementById("copyAllButton"),
+      guidList: document.getElementById("guidList"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    let currentGuids = [];
+
+    function createGuid() {
+      if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+      // Fallback UUID v4 generator for browsers without crypto.randomUUID.
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    }
+
+    function currentOptions() {
+      return {
+        uppercase: elements.optUppercase.checked,
+        hyphens: elements.optHyphens.checked,
+        braces: elements.optBraces.checked,
+        quotes: elements.optQuotes.checked,
+        comma: elements.optComma.checked,
+      };
+    }
+
+    function formatGuid(guid, options) {
+      let value = options.hyphens ? guid : guid.replace(/-/g, "");
+      if (options.uppercase) value = value.toUpperCase();
+      if (options.braces) value = `{${value}}`;
+      if (options.quotes) value = `"${value}"`;
+      return value;
+    }
+
+    function renderList() {
+      const options = currentOptions();
+      elements.guidList.replaceChildren();
+      currentGuids.forEach((guid) => {
+        const formatted = formatGuid(guid, options) + (options.comma ? "," : "");
+        const li = document.createElement("li");
+        li.className = "guid-row";
+        li.innerHTML = `<span class="guid-value"></span><button type="button" class="copy-button">Copy</button>`;
+        li.querySelector(".guid-value").textContent = formatted;
+        li.querySelector(".copy-button").addEventListener("click", (event) => {
+          copyText(formatted, event.currentTarget);
+        });
+        elements.guidList.append(li);
+      });
+    }
+
+    function generate() {
+      const quantity = Math.min(500, Math.max(1, parseInt(elements.quantity.value, 10) || 1));
+      elements.quantity.value = quantity;
+      currentGuids = Array.from({ length: quantity }, createGuid);
+      renderList();
+    }
+
+    async function copyText(text, buttonEl) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      if (buttonEl) {
+        const originalText = buttonEl.textContent;
+        buttonEl.textContent = "Copied!";
+        buttonEl.classList.add("is-copied");
+        setTimeout(() => {
+          buttonEl.textContent = originalText;
+          buttonEl.classList.remove("is-copied");
+        }, 1500);
+      }
+    }
+
+    elements.generateButton.addEventListener("click", generate);
+    elements.copyAllButton.addEventListener("click", () => {
+      const options = currentOptions();
+      const text = currentGuids.map((guid) => formatGuid(guid, options)).join(options.comma ? ",\n" : "\n");
+      copyText(text, elements.copyAllButton);
+    });
+    [elements.optUppercase, elements.optHyphens, elements.optBraces, elements.optQuotes, elements.optComma].forEach((checkbox) => {
+      checkbox.addEventListener("change", renderList);
+    });
+
+    generate();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
