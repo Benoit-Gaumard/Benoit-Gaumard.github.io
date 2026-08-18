@@ -119,6 +119,10 @@ jobs:
           mkdir -p public/azure-taggable-resources
           cp ../azure-taggable-resources/index.html public/azure-taggable-resources/index.html
           cp ../azure-taggable-resources/tag-support.json public/azure-taggable-resources/tag-support.json
+          mkdir -p public/it-images
+          cp ../it-images/index.html public/it-images/index.html
+          cp -R ../it-images/export public/it-images/export
+          node ../it-images/generate-manifest.mjs public/it-images/images.json
           mkdir -p public/rss-watcher
           cp ../rss-watcher/index.html public/rss-watcher/index.html
           cp ../rss-watcher/updates.json public/rss-watcher/updates.json

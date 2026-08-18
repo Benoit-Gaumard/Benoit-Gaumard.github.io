@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A collection of funny IT memes, developer humor, and tech-related images.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>IT Images &amp; Memes | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-overlay: rgba(238, 247, 255, 0.84);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.75rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
+    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1.25rem; }
+    .filter-bar input {
+      flex: 1 1 20rem;
+      max-width: 28rem;
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
+    .clear-button {
+      border: 0;
+      background: transparent;
+      color: var(--cp-link);
+      cursor: pointer;
+      padding: .25rem;
+      font-weight: 600;
+    }
+    .clear-button[hidden] { display: none; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+      gap: 1rem;
+    }
+    .image-card {
+      display: grid;
+      grid-template-rows: 10rem auto;
+      min-width: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      transition: border-color .18s ease, transform .18s ease;
+    }
+    .image-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
+    .preview-button {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-surface-soft);
+      cursor: zoom-in;
+    }
+    .preview-button img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-copy { min-width: 0; padding: .65rem .85rem; }
+    .image-title {
+      margin: 0;
+      overflow: hidden;
+      color: var(--cp-text);
+      font-size: .875rem;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 3rem 1.5rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      text-align: center;
+      color: var(--cp-text-muted);
+    }
+    .empty-state h2 { margin: 0 0 .5rem; color: var(--cp-text); font-size: 1.1rem; }
+
+    dialog {
+      width: min(48rem, calc(100% - 2rem));
+      max-height: calc(100vh - 2rem);
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      box-shadow: var(--cp-shadow);
+    }
+    dialog::backdrop { background: var(--cp-overlay); backdrop-filter: blur(6px); }
+    .dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .dialog-header h2 { min-width: 0; margin: 0; font-size: 1.05rem; }
+    .close-button {
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex: 0 0 auto;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .close-button:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent-hover); }
+    .dialog-preview {
+      position: relative;
+      display: grid;
+      min-height: 20rem;
+      place-items: center;
+      padding: 1rem;
+      background: var(--cp-surface-soft);
+    }
+    .dialog-preview img { max-width: 100%; max-height: min(32rem, 70vh); object-fit: contain; border-radius: 4px; }
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      transform: translateY(-50%);
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-panel-strong);
+      color: var(--cp-text);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+    }
+    .nav-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
+    .nav-button.prev { left: .75rem; }
+    .nav-button.next { right: .75rem; }
+    .dialog-footer { display: flex; flex-direction: column; align-items: center; gap: .875rem; padding: 1rem; }
+    .dialog-actions { display: grid; grid-template-columns: repeat(2, minmax(9rem, 1fr)); gap: .5rem; }
+    .dialog-action {
+      display: inline-flex;
+      min-height: 2.5rem;
+      align-items: center;
+      justify-content: center;
+      padding: .625rem 1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .dialog-action:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent-hover); }
+    .dialog-action.primary { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .dialog-action.primary:hover { background: var(--cp-accent-hover); }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .filter-bar input { max-width: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+      .nav-button { width: 2.25rem; height: 2.25rem; }
+      .dialog-actions { grid-template-columns: 1fr 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">IT Images &amp; Memes</h1>
+      <p class="intro-text">A collection of funny IT memes, developer humor, and tech-related images.</p>
+    </section>
+
+    <section class="stats-grid" id="statsGrid" aria-label="Gallery statistics"></section>
+
+    <section aria-label="Image gallery">
+      <div class="filter-bar">
+        <input id="search" type="search" placeholder="Search images..." autocomplete="off" spellcheck="false">
+        <button class="clear-button" id="clearFilters" type="button" hidden>Clear search</button>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / IT Images &amp; Memes</a>
+          <p>A collection of funny IT memes, developer humor, and tech-related images.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="previewDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-header">
+      <h2 id="dialogTitle"></h2>
+      <button class="close-button" id="closeDialog" type="button" aria-label="Close preview">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M2 2l12 12M14 2 2 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="dialog-preview">
+      <button class="nav-button prev" id="prevImage" type="button" aria-label="Previous image">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <img id="dialogImage" alt="">
+      <button class="nav-button next" id="nextImage" type="button" aria-label="Next image">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="dialog-footer">
+      <div class="dialog-actions">
+        <a class="dialog-action primary" id="downloadImage" download>Download</a>
+        <a class="dialog-action" id="openOriginal" target="_blank" rel="noopener">Open original</a>
+      </div>
+    </div>
+  </dialog>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    const state = { images: [], filtered: [], query: "", currentIndex: -1 };
+    const elements = {
+      statsGrid: document.getElementById("statsGrid"),
+      currentYear: document.getElementById("currentYear"),
+      search: document.getElementById("search"),
+      clearFilters: document.getElementById("clearFilters"),
+      gallery: document.getElementById("gallery"),
+      dialog: document.getElementById("previewDialog"),
+      dialogTitle: document.getElementById("dialogTitle"),
+      dialogImage: document.getElementById("dialogImage"),
+      closeDialog: document.getElementById("closeDialog"),
+      prevImage: document.getElementById("prevImage"),
+      nextImage: document.getElementById("nextImage"),
+      downloadImage: document.getElementById("downloadImage"),
+      openOriginal: document.getElementById("openOriginal"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    function assetUrl(file) {
+      return `export/${encodeURIComponent(file)}`;
+    }
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function renderStats() {
+      elements.statsGrid.replaceChildren();
+      const el = document.createElement("div");
+      el.className = "stat-card";
+      el.innerHTML = `<div class="stat-value">${state.images.length.toLocaleString()}</div><div class="stat-label">Images</div>`;
+      elements.statsGrid.append(el);
+    }
+
+    function createCard(image, index) {
+      const card = document.createElement("article");
+      card.className = "image-card";
+
+      const preview = document.createElement("button");
+      preview.className = "preview-button";
+      preview.type = "button";
+      preview.setAttribute("aria-label", `Preview ${image.title}`);
+      preview.addEventListener("click", () => openPreview(index));
+
+      const img = document.createElement("img");
+      img.src = assetUrl(image.file);
+      img.alt = image.title;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.addEventListener("error", () => card.remove(), { once: true });
+      preview.append(img);
+
+      const copy = document.createElement("div");
+      copy.className = "card-copy";
+      const title = document.createElement("h2");
+      title.className = "image-title";
+      title.textContent = image.title;
+      title.title = image.title;
+      copy.append(title);
+
+      card.append(preview, copy);
+      return card;
+    }
+
+    function render() {
+      elements.gallery.replaceChildren();
+      elements.clearFilters.hidden = state.query.length === 0;
+
+      if (!state.filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML = "<h2>No images found</h2><p>Try a different search term.</p>";
+        elements.gallery.append(empty);
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      state.filtered.forEach((image) => fragment.append(createCard(image, state.images.indexOf(image))));
+      elements.gallery.append(fragment);
+    }
+
+    function applyFilter() {
+      const query = normalize(state.query.trim());
+      state.filtered = query
+        ? state.images.filter((image) => normalize(image.title).includes(query))
+        : state.images;
+      render();
+    }
+
+    function openPreview(index) {
+      state.currentIndex = index;
+      const image = state.images[index];
+      elements.dialogTitle.textContent = image.title;
+      elements.dialogImage.src = assetUrl(image.file);
+      elements.dialogImage.alt = image.title;
+      elements.downloadImage.href = assetUrl(image.file);
+      elements.downloadImage.download = image.file;
+      elements.openOriginal.href = assetUrl(image.file);
+      elements.dialog.showModal();
+    }
+
+    function showRelative(offset) {
+      if (state.currentIndex < 0 || !state.images.length) return;
+      const nextIndex = (state.currentIndex + offset + state.images.length) % state.images.length;
+      openPreview(nextIndex);
+    }
+
+    async function init() {
+      elements.currentYear.textContent = new Date().getFullYear();
+      try {
+        const response = await fetch("./images.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+        const payload = await response.json();
+        state.images = payload.images;
+        state.filtered = payload.images;
+        renderStats();
+        render();
+      } catch (error) {
+        console.error(error);
+        elements.gallery.innerHTML = "<div class=\"empty-state\"><h2>Unable to load images</h2></div>";
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      state.query = elements.search.value;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilter, 100);
+    });
+    elements.clearFilters.addEventListener("click", () => {
+      elements.search.value = "";
+      state.query = "";
+      applyFilter();
+      elements.search.focus();
+    });
+
+    elements.closeDialog.addEventListener("click", () => elements.dialog.close());
+    elements.dialog.addEventListener("click", (event) => {
+      if (event.target === elements.dialog) elements.dialog.close();
+    });
+    elements.prevImage.addEventListener("click", () => showRelative(-1));
+    elements.nextImage.addEventListener("click", () => showRelative(1));
+    elements.dialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") showRelative(-1);
+      else if (event.key === "ArrowRight") showRelative(1);
+      else if (event.key === "Escape") elements.dialog.close();
+    });
+
+    init();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
