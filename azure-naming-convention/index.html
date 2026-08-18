@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generate Azure resource names following the Cloud Adoption Framework naming convention, and browse recommended resource type abbreviations.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Azure Naming Convention | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .calculator-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+      margin-bottom: 1.5rem;
+    }
+    .card-heading { margin: 0 0 1.25rem; font-size: 1.15rem; }
+
+    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; flex: 1 1 11rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input, .unit-field select {
+      min-height: 3.1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+      width: 100%;
+    }
+
+    .result-display {
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-accent-soft);
+      margin-bottom: .9rem;
+    }
+    .result-display.is-error { background: var(--cp-danger-bg); border-color: var(--cp-danger); }
+    .result-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .result-label { color: var(--cp-text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+    .result-name {
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--cp-accent);
+      overflow-wrap: anywhere;
+    }
+    .result-display.is-error .result-name { color: var(--cp-danger); }
+    .copy-button {
+      flex: 0 0 auto;
+      padding: .45rem .9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-accent);
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .copy-button:hover { background: var(--cp-surface-soft); }
+    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); background: var(--cp-success-bg); }
+    .result-note { margin: 0; color: var(--cp-text-muted); font-size: .8rem; }
+
+    .table-toolbar { margin-bottom: 1rem; }
+    .table-toolbar input {
+      width: 100%;
+      max-width: 24rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .75rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--cp-surface-soft);
+      text-align: left;
+      padding: .7rem .9rem;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      color: var(--cp-text-muted);
+      border-bottom: 1px solid var(--cp-border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover { color: var(--cp-text); }
+    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
+    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
+    tbody td { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: var(--cp-accent); }
+    tbody .provider-cell { color: var(--cp-text-muted); font-size: .8rem; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
+    #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .calculator-card { padding: 1.25rem; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .result-row { flex-direction: column; align-items: flex-start; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Azure Naming Convention</h1>
+      <p class="intro-text">Generate Azure resource names following the <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank" rel="noopener">Cloud Adoption Framework naming convention</a>, and browse recommended resource type abbreviations.</p>
+    </section>
+
+    <section aria-label="Name generator">
+      <div class="calculator-card">
+        <h2 class="card-heading">Generate a resource name</h2>
+        <div class="field-row">
+          <div class="unit-field" style="flex: 2 1 16rem;">
+            <label for="resourceSelect">Resource type</label>
+            <select id="resourceSelect"></select>
+          </div>
+          <div class="unit-field">
+            <label for="workloadInput">Workload / app</label>
+            <input id="workloadInput" type="text" value="myapp" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="unit-field">
+            <label for="envSelect">Environment</label>
+            <select id="envSelect">
+              <option value="dev">dev</option>
+              <option value="test">test</option>
+              <option value="qa">qa</option>
+              <option value="stage">stage</option>
+              <option value="prod" selected>prod</option>
+              <option value="shared">shared</option>
+            </select>
+          </div>
+          <div class="unit-field">
+            <label for="regionSelect">Region</label>
+            <select id="regionSelect">
+              <option value="eastus">eastus</option>
+              <option value="eastus2">eastus2</option>
+              <option value="centralus">centralus</option>
+              <option value="westus2" selected>westus2</option>
+              <option value="westus3">westus3</option>
+              <option value="northeurope">northeurope</option>
+              <option value="westeurope">westeurope</option>
+              <option value="francecentral">francecentral</option>
+              <option value="uksouth">uksouth</option>
+              <option value="swedencentral">swedencentral</option>
+              <option value="southeastasia">southeastasia</option>
+              <option value="japaneast">japaneast</option>
+              <option value="australiaeast">australiaeast</option>
+            </select>
+          </div>
+          <div class="unit-field" style="flex: 0 1 6rem;">
+            <label for="instanceInput">Instance</label>
+            <input id="instanceInput" type="text" value="001" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+
+        <div class="result-display" id="fullResult">
+          <div class="result-row">
+            <div>
+              <div class="result-label">Standard name (hyphenated)</div>
+              <div class="result-name" id="fullName"></div>
+            </div>
+            <button class="copy-button" id="copyFullButton" type="button">Copy</button>
+          </div>
+        </div>
+        <div class="result-display" id="compactResult">
+          <div class="result-row">
+            <div>
+              <div class="result-label">Compact name (no hyphens, for globally-unique resources)</div>
+              <div class="result-name" id="compactName"></div>
+            </div>
+            <button class="copy-button" id="copyCompactButton" type="button">Copy</button>
+          </div>
+        </div>
+        <p class="result-note">Pattern: <code>&lt;resource-type&gt;-&lt;workload&gt;-&lt;environment&gt;-&lt;region&gt;-&lt;instance&gt;</code>. Use the compact name for resources that don't allow hyphens or require a globally unique, lowercase, alphanumeric-only name (e.g. storage accounts, container registries, key vaults) &mdash; storage accounts are additionally limited to 24 characters.</p>
+      </div>
+    </section>
+
+    <section aria-label="Abbreviations reference">
+      <div class="calculator-card">
+        <h2 class="card-heading">Resource type abbreviations</h2>
+        <div class="table-toolbar">
+          <input id="search" type="search" placeholder="Filter by resource, category, or abbreviation..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-key="resource">Resource <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="abbreviation">Abbreviation <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="provider">Provider namespace <span class="sort-arrow">&#9650;</span></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <p id="resultCount"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Azure Naming Convention</a>
+          <p>Generate Azure resource names following the Cloud Adoption Framework naming convention.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const state = { resources: [], filtered: [], sortKey: "resource", sortDir: "asc", query: "" };
+    const elements = {
+      resourceSelect: document.getElementById("resourceSelect"),
+      workloadInput: document.getElementById("workloadInput"),
+      envSelect: document.getElementById("envSelect"),
+      regionSelect: document.getElementById("regionSelect"),
+      instanceInput: document.getElementById("instanceInput"),
+      fullResult: document.getElementById("fullResult"),
+      fullName: document.getElementById("fullName"),
+      compactResult: document.getElementById("compactResult"),
+      compactName: document.getElementById("compactName"),
+      copyFullButton: document.getElementById("copyFullButton"),
+      copyCompactButton: document.getElementById("copyCompactButton"),
+      search: document.getElementById("search"),
+      tableBody: document.getElementById("tableBody"),
+      resultCount: document.getElementById("resultCount"),
+      backToTop: document.getElementById("backToTop"),
+      headers: [...document.querySelectorAll("thead th[data-key]")],
+    };
+
+    function slugify(value) {
+      return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    }
+    function compactify(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    async function copyText(text, buttonEl) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      const originalText = buttonEl.textContent;
+      buttonEl.textContent = "Copied!";
+      buttonEl.classList.add("is-copied");
+      setTimeout(() => {
+        buttonEl.textContent = originalText;
+        buttonEl.classList.remove("is-copied");
+      }, 1500);
+    }
+
+    function renderGenerator() {
+      const resource = state.resources.find((r) => r.abbreviation === elements.resourceSelect.value);
+      const workloadSlug = slugify(elements.workloadInput.value) || "app";
+      const env = elements.envSelect.value;
+      const region = elements.regionSelect.value;
+      const instance = slugify(elements.instanceInput.value) || "001";
+      const abbreviation = resource?.abbreviation || "res";
+
+      const fullName = [abbreviation, workloadSlug, env, region, instance].filter(Boolean).join("-");
+      const compact = compactify(fullName).slice(0, 24);
+
+      elements.fullName.textContent = fullName;
+      elements.compactName.textContent = compact;
+      elements.fullResult.classList.toggle("is-error", fullName.length > 63);
+      elements.compactResult.classList.toggle("is-error", compact.length === 0);
+    }
+
+    function renderResourceSelect() {
+      const categories = [...new Set(state.resources.map((r) => r.category))];
+      elements.resourceSelect.replaceChildren();
+      categories.forEach((category) => {
+        const group = document.createElement("optgroup");
+        group.label = category;
+        state.resources.filter((r) => r.category === category).forEach((resource) => {
+          group.append(new Option(`${resource.resource} (${resource.abbreviation})`, resource.abbreviation));
+        });
+        elements.resourceSelect.append(group);
+      });
+      const vm = state.resources.find((r) => r.abbreviation === "vm");
+      if (vm) elements.resourceSelect.value = "vm";
+    }
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function renderTable() {
+      const rows = [...state.filtered].sort((a, b) => {
+        let av = normalize(a[state.sortKey]);
+        let bv = normalize(b[state.sortKey]);
+        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
+        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
+        return 0;
+      });
+
+      elements.tableBody.replaceChildren();
+      const fragment = document.createDocumentFragment();
+      rows.forEach((resource) => {
+        const tr = document.createElement("tr");
+        const resourceTd = document.createElement("td");
+        resourceTd.textContent = resource.resource;
+        const categoryTd = document.createElement("td");
+        categoryTd.textContent = resource.category;
+        const abbrTd = document.createElement("td");
+        abbrTd.innerHTML = `<code>${resource.abbreviation}</code>`;
+        const providerTd = document.createElement("td");
+        providerTd.className = "provider-cell";
+        providerTd.textContent = resource.provider;
+        tr.append(resourceTd, categoryTd, abbrTd, providerTd);
+        fragment.append(tr);
+      });
+      elements.tableBody.append(fragment);
+      elements.resultCount.textContent = `${rows.length.toLocaleString()} resource type${rows.length === 1 ? "" : "s"} shown`;
+
+      elements.headers.forEach((th) => {
+        th.removeAttribute("aria-sort");
+        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+      });
+    }
+
+    function applyFilter() {
+      const query = normalize(state.query.trim());
+      state.filtered = state.resources.filter((resource) => {
+        if (!query) return true;
+        return normalize(`${resource.resource} ${resource.category} ${resource.abbreviation}`).includes(query);
+      });
+      renderTable();
+    }
+
+    async function init() {
+      const response = await fetch("./abbreviations.json", { cache: "no-store" });
+      const payload = await response.json();
+      state.resources = payload.resources;
+      state.filtered = payload.resources;
+      renderResourceSelect();
+      renderGenerator();
+      renderTable();
+    }
+
+    [elements.resourceSelect, elements.workloadInput, elements.envSelect, elements.regionSelect, elements.instanceInput].forEach((el) => {
+      el.addEventListener("input", renderGenerator);
+      el.addEventListener("change", renderGenerator);
+    });
+    elements.copyFullButton.addEventListener("click", () => copyText(elements.fullName.textContent, elements.copyFullButton));
+    elements.copyCompactButton.addEventListener("click", () => copyText(elements.compactName.textContent, elements.copyCompactButton));
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      state.query = elements.search.value;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilter, 100);
+    });
+
+    elements.headers.forEach((th) => {
+      th.addEventListener("click", () => {
+        const key = th.dataset.key;
+        if (state.sortKey === key) {
+          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+        } else {
+          state.sortKey = key;
+          state.sortDir = "asc";
+        }
+        renderTable();
+      });
+    });
+
+    init();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
