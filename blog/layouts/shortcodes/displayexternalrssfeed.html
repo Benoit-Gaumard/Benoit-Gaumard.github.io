@@ -1,15 +1,24 @@
 {{ if .Get "url" }}
   {{ $url := .Get "url" }}
   {{ $limit := .Get "limit" }}
-  {{ with resources.GetRemote $url | transform.Unmarshal }}
-    <ul>
-      {{ with .channel.item }}
-        {{ range first $limit . }}
-        <li>
-          <p style="padding: 1px;">{{ dateFormat "Mon, 02 Jan 2006" .pubDate }}: <a href="{{ .link }}">{{ .title }}</a></p>
-        </li>
-        {{ end }}
+  {{ $resource := resources.GetRemote $url }}
+  {{ with $resource }}
+    {{ with .Err }}
+      {{ warnf "displayexternalrssfeed: unable to fetch %q: %s" $url . }}
+    {{ else }}
+      {{ with . | transform.Unmarshal }}
+        <ul>
+          {{ with .channel.item }}
+            {{ range first $limit . }}
+            <li>
+              <p style="padding: 1px;">{{ dateFormat "Mon, 02 Jan 2006" .pubDate }}: <a href="{{ .link }}">{{ .title }}</a></p>
+            </li>
+            {{ end }}
+          {{ end }}
+        </ul>
       {{ end }}
-    </ul>
+    {{ end }}
+  {{ else }}
+    {{ warnf "displayexternalrssfeed: no resource returned for %q" $url }}
   {{ end }}
 {{ end }}
