@@ -8,7 +8,7 @@ on:
   # Data-refresh workflows commit with the default GITHUB_TOKEN, which does NOT
   # trigger the push event above, so redeploy explicitly once they finish.
   workflow_run:
-    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh RSS Watcher Updates", "Refresh GitHub IP Ranges"]
+    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh RSS Watcher Updates", "Refresh GitHub IP Ranges", "Refresh Azure IP Ranges"]
     types: [completed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -99,6 +99,9 @@ jobs:
           mkdir -p public/github-ip-ranges
           cp ../github-ip-ranges/index.html public/github-ip-ranges/index.html
           cp ../github-ip-ranges/ip-ranges.json public/github-ip-ranges/ip-ranges.json
+          mkdir -p public/azure-ip-ranges
+          cp ../azure-ip-ranges/index.html public/azure-ip-ranges/index.html
+          cp ../azure-ip-ranges/ip-ranges.json public/azure-ip-ranges/ip-ranges.json
           mkdir -p public/rss-watcher
           cp ../rss-watcher/index.html public/rss-watcher/index.html
           cp ../rss-watcher/updates.json public/rss-watcher/updates.json
