@@ -8,7 +8,7 @@ on:
   # Data-refresh workflows commit with the default GITHUB_TOKEN, which does NOT
   # trigger the push event above, so redeploy explicitly once they finish.
   workflow_run:
-    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh RSS Watcher Updates", "Refresh GitHub IP Ranges", "Refresh Azure IP Ranges", "Refresh Microsoft Tech Community RSS Feeds"]
+    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh RSS Watcher Updates", "Refresh GitHub IP Ranges", "Refresh Azure IP Ranges", "Refresh Microsoft Tech Community RSS Feeds", "Refresh Azure Taggable Resources"]
     types: [completed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -116,6 +116,9 @@ jobs:
           mkdir -p public/azure-naming-convention
           cp ../azure-naming-convention/index.html public/azure-naming-convention/index.html
           cp ../azure-naming-convention/abbreviations.json public/azure-naming-convention/abbreviations.json
+          mkdir -p public/azure-taggable-resources
+          cp ../azure-taggable-resources/index.html public/azure-taggable-resources/index.html
+          cp ../azure-taggable-resources/tag-support.json public/azure-taggable-resources/tag-support.json
           mkdir -p public/rss-watcher
           cp ../rss-watcher/index.html public/rss-watcher/index.html
           cp ../rss-watcher/updates.json public/rss-watcher/updates.json
