@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculate IPv4 subnet details from an IP address and CIDR prefix or subnet mask, and split a network into equal-sized subnets.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Subnet Calculator | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    .calculator-card {
+      padding: 2rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      backdrop-filter: blur(12px);
+    }
+    .calculator-card + .calculator-card { margin-top: 1.5rem; }
+    .card-heading { margin: 0 0 1.25rem; font-size: 1.15rem; }
+
+    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; }
+    .unit-field.ip-field { flex: 2 1 16rem; }
+    .unit-field.prefix-field { flex: 1 1 8rem; }
+    .unit-field.mask-field { flex: 1 1 12rem; }
+    .unit-field.select-field { flex: 1 1 14rem; }
+    .unit-field label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--cp-text-muted);
+    }
+    .unit-field input, .unit-field select {
+      min-height: 3.25rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .9rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      width: 100%;
+    }
+    .field-error { margin: -0.75rem 0 1.25rem; color: var(--cp-danger); font-size: .9rem; min-height: 1.3rem; }
+
+    .results-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cp-border);
+    }
+    .results-heading { margin: 0 0 1rem; color: var(--cp-text-muted); font-size: .95rem; }
+    .results-heading strong { color: var(--cp-text); font-size: 1.1rem; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .results-list { display: flex; flex-direction: column; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .65rem .9rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .result-unit { color: var(--cp-text-muted); font-size: .9rem; }
+    .result-value { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1rem; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .subnet-table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+    .subnet-table th, .subnet-table td {
+      padding: .55rem .7rem;
+      border-bottom: 1px solid var(--cp-border);
+      text-align: left;
+      font-size: .88rem;
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: nowrap;
+    }
+    .subnet-table th { color: var(--cp-text-muted); font-family: inherit; text-transform: uppercase; font-size: .72rem; letter-spacing: .03em; }
+    .subnet-table-wrap { overflow-x: auto; }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      main { padding-top: 1.75rem; }
+      .calculator-card { padding: 1.25rem; }
+      .field-row { flex-direction: column; align-items: stretch; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Subnet Calculator</h1>
+      <p class="intro-text">Calculate IPv4 subnet details from an IP address and CIDR prefix or subnet mask, and split a network into equal-sized subnets.</p>
+    </section>
+
+    <section aria-label="Subnet calculator">
+      <div class="calculator-card">
+        <h2 class="card-heading">Network details</h2>
+        <div class="field-row">
+          <div class="unit-field ip-field">
+            <label for="ipInput">IP address</label>
+            <input id="ipInput" type="text" value="192.168.1.10" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="unit-field prefix-field">
+            <label for="prefixInput">CIDR prefix</label>
+            <input id="prefixInput" type="number" min="0" max="32" value="24">
+          </div>
+          <div class="unit-field mask-field">
+            <label for="maskInput">Subnet mask</label>
+            <input id="maskInput" type="text" value="255.255.255.0" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+        <p class="field-error" id="fieldError"></p>
+        <div class="results-section">
+          <p class="results-heading" id="resultsHeading"></p>
+          <ul class="results-list" id="resultsList"></ul>
+        </div>
+      </div>
+
+      <div class="calculator-card">
+        <h2 class="card-heading">Split into equal subnets</h2>
+        <div class="field-row">
+          <div class="unit-field select-field">
+            <label for="splitCount">Number of subnets</label>
+            <select id="splitCount">
+              <option value="2">2</option>
+              <option value="4" selected>4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32">32</option>
+              <option value="64">64</option>
+              <option value="128">128</option>
+              <option value="256">256</option>
+            </select>
+          </div>
+        </div>
+        <p class="field-error" id="splitError"></p>
+        <div class="subnet-table-wrap">
+          <table class="subnet-table" id="splitTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Network</th>
+                <th>First host</th>
+                <th>Last host</th>
+                <th>Broadcast</th>
+              </tr>
+            </thead>
+            <tbody id="splitTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Subnet Calculator</a>
+          <p>Calculate IPv4 subnet details from an IP address and CIDR prefix or subnet mask, and split a network into equal-sized subnets.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const elements = {
+      ipInput: document.getElementById("ipInput"),
+      prefixInput: document.getElementById("prefixInput"),
+      maskInput: document.getElementById("maskInput"),
+      fieldError: document.getElementById("fieldError"),
+      resultsHeading: document.getElementById("resultsHeading"),
+      resultsList: document.getElementById("resultsList"),
+      splitCount: document.getElementById("splitCount"),
+      splitError: document.getElementById("splitError"),
+      splitTableBody: document.getElementById("splitTableBody"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    function parseIp(str) {
+      const match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(String(str).trim());
+      if (!match) return null;
+      const octets = match.slice(1, 5).map(Number);
+      if (octets.some((o) => o < 0 || o > 255)) return null;
+      return octets;
+    }
+
+    function ipToInt(octets) {
+      return ((octets[0] << 24) | (octets[1] << 16) | (octets[2] << 8) | octets[3]) >>> 0;
+    }
+
+    function intToIp(value) {
+      return [(value >>> 24) & 255, (value >>> 16) & 255, (value >>> 8) & 255, value & 255].join(".");
+    }
+
+    function prefixToMaskInt(prefix) {
+      return prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0;
+    }
+
+    function maskIntToPrefix(maskInt) {
+      let prefix = 0;
+      let seenZero = false;
+      for (let i = 31; i >= 0; i--) {
+        const bit = (maskInt >>> i) & 1;
+        if (bit === 1) {
+          if (seenZero) return null;
+          prefix++;
+        } else {
+          seenZero = true;
+        }
+      }
+      return prefix;
+    }
+
+    function ipClass(firstOctet) {
+      if (firstOctet < 128) return "A";
+      if (firstOctet < 192) return "B";
+      if (firstOctet < 224) return "C";
+      if (firstOctet < 240) return "D (multicast)";
+      return "E (reserved)";
+    }
+
+    const SPECIAL_RANGES = [
+      { base: [0, 0, 0, 0], prefix: 8, label: "Unspecified" },
+      { base: [127, 0, 0, 0], prefix: 8, label: "Loopback" },
+      { base: [10, 0, 0, 0], prefix: 8, label: "Private" },
+      { base: [100, 64, 0, 0], prefix: 10, label: "Private (carrier-grade NAT)" },
+      { base: [172, 16, 0, 0], prefix: 12, label: "Private" },
+      { base: [192, 168, 0, 0], prefix: 16, label: "Private" },
+      { base: [169, 254, 0, 0], prefix: 16, label: "Link-local" },
+      { base: [224, 0, 0, 0], prefix: 4, label: "Multicast" },
+      { base: [240, 0, 0, 0], prefix: 4, label: "Reserved" },
+    ];
+
+    function ipType(ipInt) {
+      if (ipInt === 0xFFFFFFFF) return "Broadcast";
+      for (const range of SPECIAL_RANGES) {
+        const baseInt = ipToInt(range.base);
+        const maskInt = prefixToMaskInt(range.prefix);
+        if (((ipInt & maskInt) >>> 0) === ((baseInt & maskInt) >>> 0)) return range.label;
+      }
+      return "Public";
+    }
+
+    function computeNetwork(ipInt, prefix) {
+      const maskInt = prefixToMaskInt(prefix);
+      const networkInt = (ipInt & maskInt) >>> 0;
+      const broadcastInt = (networkInt | (~maskInt >>> 0)) >>> 0;
+      const totalAddresses = 2 ** (32 - prefix);
+      let usableHosts, firstHostInt, lastHostInt;
+      if (prefix === 32) {
+        usableHosts = 1;
+        firstHostInt = networkInt;
+        lastHostInt = networkInt;
+      } else if (prefix === 31) {
+        usableHosts = 2;
+        firstHostInt = networkInt;
+        lastHostInt = broadcastInt;
+      } else {
+        usableHosts = totalAddresses - 2;
+        firstHostInt = networkInt + 1;
+        lastHostInt = broadcastInt - 1;
+      }
+      return { maskInt, networkInt, broadcastInt, totalAddresses, usableHosts, firstHostInt, lastHostInt };
+    }
+
+    function addResultRow(label, value) {
+      const li = document.createElement("li");
+      li.className = "result-row";
+      const unit = document.createElement("span");
+      unit.className = "result-unit";
+      unit.textContent = label;
+      const val = document.createElement("span");
+      val.className = "result-value";
+      val.textContent = value;
+      li.append(unit, val);
+      elements.resultsList.append(li);
+    }
+
+    function renderResults() {
+      elements.fieldError.textContent = "";
+      elements.resultsList.replaceChildren();
+      elements.resultsHeading.textContent = "";
+
+      const octets = parseIp(elements.ipInput.value);
+      const prefix = parseInt(elements.prefixInput.value, 10);
+
+      if (!octets) {
+        elements.fieldError.textContent = "Enter a valid IPv4 address (e.g. 192.168.1.10).";
+        return null;
+      }
+      if (!Number.isInteger(prefix) || prefix < 0 || prefix > 32) {
+        elements.fieldError.textContent = "CIDR prefix must be an integer between 0 and 32.";
+        return null;
+      }
+
+      const ipInt = ipToInt(octets);
+      const network = computeNetwork(ipInt, prefix);
+
+      elements.resultsHeading.innerHTML = "";
+      const strong = document.createElement("strong");
+      strong.textContent = `${elements.ipInput.value.trim()}/${prefix}`;
+      elements.resultsHeading.append(strong, document.createTextNode(" breakdown:"));
+
+      addResultRow("Network address", intToIp(network.networkInt));
+      addResultRow("Broadcast address", intToIp(network.broadcastInt));
+      addResultRow("Subnet mask", intToIp(network.maskInt));
+      addResultRow("Wildcard mask", intToIp((~network.maskInt) >>> 0));
+      addResultRow("CIDR notation", `/${prefix}`);
+      addResultRow("Total addresses", network.totalAddresses.toLocaleString());
+      addResultRow("Usable hosts", network.usableHosts.toLocaleString());
+      addResultRow("First usable host", intToIp(network.firstHostInt));
+      addResultRow("Last usable host", intToIp(network.lastHostInt));
+      addResultRow("IP class", ipClass(octets[0]));
+      addResultRow("IP type", ipType(ipInt));
+
+      return { ipInt, prefix, network };
+    }
+
+    function renderSplit(context) {
+      elements.splitError.textContent = "";
+      elements.splitTableBody.replaceChildren();
+      if (!context) return;
+
+      const count = parseInt(elements.splitCount.value, 10);
+      const extraBits = Math.log2(count);
+      const newPrefix = context.prefix + extraBits;
+
+      if (newPrefix > 32) {
+        elements.splitError.textContent = `Cannot split a /${context.prefix} network into ${count} subnets: not enough address space.`;
+        return;
+      }
+
+      const subnetSize = 2 ** (32 - newPrefix);
+      for (let i = 0; i < count; i++) {
+        const subnetNetworkInt = (context.network.networkInt + i * subnetSize) >>> 0;
+        const subnet = computeNetwork(subnetNetworkInt, newPrefix);
+        const row = document.createElement("tr");
+        [
+          String(i + 1),
+          `${intToIp(subnetNetworkInt)}/${newPrefix}`,
+          intToIp(subnet.firstHostInt),
+          intToIp(subnet.lastHostInt),
+          intToIp(subnet.broadcastInt),
+        ].forEach((text) => {
+          const cell = document.createElement("td");
+          cell.textContent = text;
+          row.append(cell);
+        });
+        elements.splitTableBody.append(row);
+      }
+    }
+
+    function recalculate() {
+      const context = renderResults();
+      renderSplit(context);
+    }
+
+    elements.ipInput.addEventListener("input", recalculate);
+    elements.prefixInput.addEventListener("input", () => {
+      const prefix = parseInt(elements.prefixInput.value, 10);
+      if (Number.isInteger(prefix) && prefix >= 0 && prefix <= 32) {
+        elements.maskInput.value = intToIp(prefixToMaskInt(prefix));
+      }
+      recalculate();
+    });
+    elements.maskInput.addEventListener("input", () => {
+      const maskOctets = parseIp(elements.maskInput.value);
+      if (maskOctets) {
+        const prefix = maskIntToPrefix(ipToInt(maskOctets));
+        if (prefix !== null) elements.prefixInput.value = prefix;
+      }
+      recalculate();
+    });
+    elements.splitCount.addEventListener("change", recalculate);
+
+    recalculate();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
