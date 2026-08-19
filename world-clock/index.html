@@ -106,6 +106,11 @@
     .header-links a { color: var(--cp-text-muted); text-decoration: none; }
     .header-links a:hover { color: var(--cp-text); }
     .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
 
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
@@ -379,15 +384,18 @@
     .back-to-top:hover { background: var(--cp-accent-hover); }
 
     @media (max-width: 48rem) {
-      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
-      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-panel); }
       .clock-hero { flex-direction: column; align-items: flex-start; }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
-      .header-links a:first-child { display: none; }
       .timezone-grid.list-view .timezone-card-date { display: none; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
@@ -405,7 +413,11 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
-      <nav class="header-links" aria-label="Primary navigation">
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
         <a href="/articles/">Articles</a>
@@ -666,6 +678,25 @@
     backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("menuToggle");
+      var nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
+      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
+      });
+      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", function (e) {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
+    })();
   </script>
 </body>
 </html>
