@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The end-to-end workflow for contributing to a GitHub project: fork, branch, commit, push, pull request, code review, and merge.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/github-contribution-workflow/">
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
+  <title>GitHub Contribution Workflow | Benoit Gaumard</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-warning: #c88719;
+      --cp-warning-bg: #fff8e8;
+      --cp-info: #0c7d8f;
+      --cp-info-bg: #e6f6f8;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner { width: min(90rem, calc(100% - 2rem)); margin-inline: auto; }
+    .header-inner { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    main { padding-block: 2.5rem 4rem; }
+    .empty-state { padding: 2.5rem; border: 1px dashed var(--cp-border-strong); border-radius: 12px; text-align: center; color: var(--cp-text-muted); }
+    .back-to-top {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 30;
+      display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0;
+      border: 1px solid var(--cp-border); border-radius: 50%;
+      background: var(--cp-accent); color: var(--cp-accent-fg); cursor: pointer;
+      box-shadow: var(--cp-shadow); opacity: 0; transform: translateY(.75rem); pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+
+    .article-header { max-width: 46rem; margin: 0 auto 2rem; }
+    .article-breadcrumb { margin: 0 0 1.25rem; font-size: .85rem; }
+    .article-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
+    .article-breadcrumb a:hover { color: var(--cp-link); }
+    .article-categories { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .article-category-tag {
+      display: inline-flex; padding: .2rem .6rem; border-radius: 999px;
+      background: var(--cp-accent-soft); color: var(--cp-accent); font-size: .75rem; font-weight: 700; text-decoration: none;
+    }
+    .article-title { margin: 0; font-size: clamp(1.9rem, 4.4vw, 2.85rem); line-height: 1.12; }
+    .article-description { margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.08rem; line-height: 1.6; }
+    .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: 1.25rem; color: var(--cp-text-muted); font-size: .88rem; }
+    .article-meta .dot { opacity: .5; }
+    .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: .75rem; border: 1px solid var(--cp-border); }
+    .article-feature-image { max-width: 46rem; margin: 0 auto 2.5rem; }
+    .article-feature-image img { width: 100%; border-radius: 14px; border: 1px solid var(--cp-border); box-shadow: var(--cp-shadow); display: block; }
+    .article-body {
+      max-width: 46rem; margin: 0 auto; font-size: 1.05rem; line-height: 1.75;
+      background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
+      padding: clamp(1.5rem, 4vw, 3rem); box-shadow: 0 1px 2px var(--cp-border);
+    }
+    .article-body h2, .article-body h3, .article-body h4 { scroll-margin-top: 5.5rem; }
+    .article-body h2 { margin: 2.2rem 0 1rem; font-size: 1.55rem; }
+    .article-body h3 { margin: 1.8rem 0 .85rem; font-size: 1.28rem; }
+    .article-body h4 { margin: 1.5rem 0 .7rem; font-size: 1.08rem; }
+    .article-body p { margin: 0 0 1.1rem; overflow-wrap: anywhere; }
+    .article-body ul, .article-body ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+    .article-body li { margin-bottom: .4rem; }
+    .article-body hr { border: 0; border-top: 1px solid var(--cp-border); margin: 2rem 0; }
+    .article-body blockquote { margin: 0 0 1.1rem; padding: .25rem 1.1rem; border-left: 3px solid var(--cp-accent); color: var(--cp-text-muted); }
+    .article-body a { overflow-wrap: anywhere; }
+    .article-body a .external-icon { vertical-align: middle; }
+    .article-body code { background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 4px; padding: .1rem .35rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; overflow-wrap: anywhere; }
+    .article-figure { margin: 0 0 1.5rem; }
+    .article-figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--cp-border); display: block; }
+    .article-figure figcaption { margin-top: .5rem; color: var(--cp-text-muted); font-size: .85rem; text-align: center; }
+    .table-wrap { overflow-x: auto; margin: 0 0 1.1rem; }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+    .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
+    .article-body th { background: var(--cp-surface-soft); }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: .78rem; }
+    .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: .75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button:hover { background: rgba(255,255,255,.1); }
+    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
+    .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88rem; line-height: 1.6; }
+    .callout { display: flex; gap: .75rem; margin: 0 0 1.3rem; padding: 1rem 1.15rem; border-radius: 10px; border: 1px solid var(--cp-border); }
+    .callout-icon { flex: 0 0 auto; margin-top: .15rem; }
+    .callout-label { display: block; margin-bottom: .3rem; font-weight: 700; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; }
+    .callout-body p:last-child { margin-bottom: 0; }
+    .callout-note { background: var(--cp-accent-soft); color: var(--cp-text); }
+    .callout-note .callout-icon, .callout-note .callout-label { color: var(--cp-accent); }
+    .callout-info { background: var(--cp-info-bg); color: var(--cp-text); }
+    .callout-info .callout-icon, .callout-info .callout-label { color: var(--cp-info); }
+    .callout-warning { background: var(--cp-warning-bg); color: var(--cp-text); }
+    .callout-warning .callout-icon, .callout-warning .callout-label { color: var(--cp-warning); }
+    .article-toc { margin: 0 0 1.6rem; padding: 1rem 1.25rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); }
+    .article-toc strong { display: block; margin-bottom: .5rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    .article-toc ul { margin: 0; padding: 0; list-style: none; }
+    .article-toc li { margin: 0; }
+    .article-toc a { display: block; padding: .25rem 0; color: var(--cp-text); text-decoration: none; font-size: .92rem; }
+    .article-toc a:hover { color: var(--cp-link); }
+    .toc-level-3 a { padding-left: 1rem; font-size: .87rem; color: var(--cp-text-muted); }
+    .toc-level-4 a { padding-left: 2rem; font-size: .85rem; color: var(--cp-text-muted); }
+    .article-footer-nav { max-width: 46rem; margin: 2rem auto 0; display: flex; justify-content: space-between; gap: 1rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: .92rem; }
+    .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    @media (max-width: 40rem) {
+      .article-meta { font-size: .82rem; }
+    }
+  </style>
+</head>
+<body class="">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/articles/" aria-current="page">Articles</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="article-header">
+      <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=GitHub">GitHub</a></div>
+      <h1 class="article-title">GitHub Contribution Workflow</h1>
+      <p class="article-description">The end-to-end workflow for contributing to a GitHub project: fork, branch, commit, push, pull request, code review, and merge.</p>
+      <div class="article-meta">
+        <span>Benoit G</span>
+        <span class="dot">&middot;</span>
+        <span>February 26, 2025</span>
+        <span class="dot">&middot;</span>
+        <span>4 min read</span>
+      </div>
+      <div class="article-tags"><span class="article-tag">#GitHub</span><span class="article-tag">#Productivity</span></div>
+    </div>
+
+    <div class="article-feature-image"><img src="/articles/images/github-color.svg" alt="GitHub Contribution Workflow"></div>
+
+    <article class="article-body">
+      <p>If you want to create your own or contribute to an existing GitHub project, you are on the right page.</p>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#contribution-scenarios">Contribution scenarios</a></li><li class="toc-level-2"><a href="#main-principles">Main principles</a></li><li class="toc-level-2"><a href="#steps-for-contribution">Steps for contribution</a></li><li class="toc-level-3"><a href="#0-prerequisites">0. Prerequisites</a></li><li class="toc-level-3"><a href="#1-pull-the-latest-changes-from-upstream-into-your-local-repository">1. Pull the latest changes from upstream into your local repository</a></li><li class="toc-level-3"><a href="#2-create-a-new-branch">2. Create a new branch</a></li><li class="toc-level-3"><a href="#3-make-changes-in-your-local-repository">3. Make changes in your local repository</a></li><li class="toc-level-3"><a href="#4-commit-your-changes">4. Commit your changes</a></li><li class="toc-level-3"><a href="#5-push-changes-to-your-branch">5. Push changes to your branch</a></li><li class="toc-level-3"><a href="#6-create-a-pull-request">6. Create a pull request</a></li><li class="toc-level-3"><a href="#7-code-review">7. Code review</a></li><li class="toc-level-3"><a href="#8-merge-to-the-main-branch">8. Merge to the main branch</a></li><li class="toc-level-2"><a href="#golden-rules">Golden rules</a></li></ul></nav>
+<h2 id="contribution-scenarios">Contribution scenarios</h2>
+<p>You can contribute to a GitHub project in several ways: reporting bugs, submitting fixes, proposing new features, or becoming a maintainer.</p>
+<h2 id="main-principles">Main principles</h2>
+<ul><li>The main branch is protected, preventing direct commits.</li><li>Developers work in their own branches derived from the main branch.</li><li>Developers submit pull requests for their changes.</li><li>Once a pull request is approved, the code is merged.</li><li>A release is then created.</li><li>The new code is deployed via a deployment pipeline.</li></ul>
+<p>Here is the main contribution workflow:</p>
+<figure class="article-figure"><img src="/articles/images/github-workflow.drawio.png" alt="GitHub contribution workflow diagram" loading="lazy"></figure>
+<h2 id="steps-for-contribution">Steps for contribution</h2>
+<h3 id="0-prerequisites">0. Prerequisites</h3>
+<ul><li>Ensure Git is installed on your machine: <a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">Git downloads <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li>Have a code editor (IDE) ready, such as <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">Visual Studio Code <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li></ul>
+<h3 id="1-pull-the-latest-changes-from-upstream-into-your-local-repository">1. Pull the latest changes from upstream into your local repository</h3>
+<p>To start working on your contribution, you first need to retrieve the project in your local repository:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git clone https://github.com/Benoit-Gaumard/ProjectName</code></pre></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Replace "ProjectName" with the actual project you want to contribute to.</p></div></div>
+<p>Before you start making any changes to your local files, it's a good practice to first synchronize your local repository with the project repository:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># If the default branch is "main"
+git pull upstream main</code></pre></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>If the project repository uses a different default branch name than "main", substitute it accordingly.</p></div></div>
+<h3 id="2-create-a-new-branch">2. Create a new branch</h3>
+<p>Rather than making changes directly on the "main" branch, it's a good practice to create your own branch. This creates an environment for your work that is isolated from the main branch.</p>
+<p>Use this command to create a new branch and immediately switch to it. The branch name should briefly describe what you are working on, and should not contain any spaces:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git checkout -b my_new_feature</code></pre></div>
+<p>For example, I used <code>git checkout -b doc-fixes</code> because I was making some small fixes to the documentation.</p>
+<p>To show your local branches, use:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git branch</code></pre></div>
+<p>You should see your new branch as well as "main", with an asterisk next to the branch that's currently checked out.</p>
+<h3 id="3-make-changes-in-your-local-repository">3. Make changes in your local repository</h3>
+<p>Open a text editor or IDE such as Visual Studio Code to implement the changes you have planned. Since you checked out a branch in the previous step, any modifications you make will be confined to that branch.</p>
+<h3 id="4-commit-your-changes">4. Commit your changes</h3>
+<p>After you make a set of changes, stage them:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git add .</code></pre></div>
+<p>The description of your commit must be clear, explicit, and understandable to anyone, for example:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git commit -m "fix: typos in set_config docstring"</code></pre></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>This commit message might be included in a changelog. Commit messages should follow <a href="https://www.conventionalcommits.org/" target="_blank" rel="noopener noreferrer">Conventional Commits <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>, e.g. <code>feat:</code>, <code>release:</code>, <code>hotfix:</code>, <code>fix:</code>.</p></div></div>
+<p>If you are making multiple sets of changes, it's a good practice to make a commit after each set.</p>
+<h3 id="5-push-changes-to-your-branch">5. Push changes to your branch</h3>
+<p>When you are done making all of your changes, upload them to your branch:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git push origin my_new_feature</code></pre></div>
+<p>This command pushes your changes to the <code>my_new_feature</code> branch of your fork on GitHub.</p>
+<h3 id="6-create-a-pull-request">6. Create a pull request</h3>
+<p>A pull request is created when a developer asks for changes committed to a specific branch to be considered for inclusion in another branch of the repository.</p>
+<p>Go to your GitHub project's web page, open the <strong>Pull requests</strong> menu, and click <strong>New pull request</strong>, then <strong>Create pull request</strong>.</p>
+<p>If there are no conflicts between your fork and the main branch, your pull request will be created and contributors will be notified. They will then review your changes and choose to merge your code or not.</p>
+<p>Add colleagues working on the repository as reviewers and yourself as an assignee — reviewers will be notified by email automatically. As a best practice, let your colleagues know about your pull request through a direct message, as GitHub emails are frequently ignored.</p>
+<h3 id="7-code-review">7. Code review</h3>
+<p>Before merging, the code should be reviewed by peers — code review involves one or more team members checking another teammate's work.</p>
+<figure class="article-figure"><img src="/articles/images/code-review.png" alt="Code review process" loading="lazy"></figure>
+<h3 id="8-merge-to-the-main-branch">8. Merge to the main branch</h3>
+<p>Congratulations! Your code has been successfully reviewed and merged into the main branch. It is now available for others to build upon.</p>
+<h2 id="golden-rules">Golden rules</h2>
+<ul><li>Commit each day.</li><li>Never commit directly to the main branch — always protect it.</li><li>Adopt a naming convention for your branches (e.g., <code>feat/</code> for a new feature, <code>fix/</code> for a bug fix).</li><li>Adopt a naming convention for your commits.</li><li>Enhance security in your code with the principle of least privilege.</li><li>Prefer recreating resources over patching them in place when using IaC.</li></ul>
+    </article>
+
+    <div class="article-footer-nav">
+      <a href="/articles/">&larr; Back to all articles</a>
+      <a href="/articles/rss.xml">RSS feed</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Articles</a>
+          <p>Articles and how-to guides written by Benoit Gaumard about Azure, Terraform, GitHub, and cloud engineering.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="#top">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    document.querySelectorAll('[data-code-copy]').forEach((button) => {
+      button.addEventListener("click", () => {
+        const code = button.closest(".code-block").querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const original = button.textContent;
+          button.textContent = "Copied!";
+          button.classList.add("is-copied");
+          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
+        });
+      });
+    });
+    let scrollTicking = false;
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  </script>
+</body>
+</html>

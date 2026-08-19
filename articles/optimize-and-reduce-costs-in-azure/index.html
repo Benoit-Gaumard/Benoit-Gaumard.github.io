@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/optimize-and-reduce-costs-in-azure/">
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
+  <title>Optimize and Reduce Costs in Azure | Benoit Gaumard</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-warning: #c88719;
+      --cp-warning-bg: #fff8e8;
+      --cp-info: #0c7d8f;
+      --cp-info-bg: #e6f6f8;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner { width: min(90rem, calc(100% - 2rem)); margin-inline: auto; }
+    .header-inner { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    main { padding-block: 2.5rem 4rem; }
+    .empty-state { padding: 2.5rem; border: 1px dashed var(--cp-border-strong); border-radius: 12px; text-align: center; color: var(--cp-text-muted); }
+    .back-to-top {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 30;
+      display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0;
+      border: 1px solid var(--cp-border); border-radius: 50%;
+      background: var(--cp-accent); color: var(--cp-accent-fg); cursor: pointer;
+      box-shadow: var(--cp-shadow); opacity: 0; transform: translateY(.75rem); pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: wrap; row-gap: .5rem; min-height: auto; padding-block: .75rem; }
+      .header-links { flex-wrap: wrap; row-gap: .5rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .header-links a:first-child { display: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+
+    .article-header { max-width: 46rem; margin: 0 auto 2rem; }
+    .article-breadcrumb { margin: 0 0 1.25rem; font-size: .85rem; }
+    .article-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
+    .article-breadcrumb a:hover { color: var(--cp-link); }
+    .article-categories { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .article-category-tag {
+      display: inline-flex; padding: .2rem .6rem; border-radius: 999px;
+      background: var(--cp-accent-soft); color: var(--cp-accent); font-size: .75rem; font-weight: 700; text-decoration: none;
+    }
+    .article-title { margin: 0; font-size: clamp(1.9rem, 4.4vw, 2.85rem); line-height: 1.12; }
+    .article-description { margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.08rem; line-height: 1.6; }
+    .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: 1.25rem; color: var(--cp-text-muted); font-size: .88rem; }
+    .article-meta .dot { opacity: .5; }
+    .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: .75rem; border: 1px solid var(--cp-border); }
+    .article-feature-image { max-width: 46rem; margin: 0 auto 2.5rem; }
+    .article-feature-image img { width: 100%; border-radius: 14px; border: 1px solid var(--cp-border); box-shadow: var(--cp-shadow); display: block; }
+    .article-body {
+      max-width: 46rem; margin: 0 auto; font-size: 1.05rem; line-height: 1.75;
+      background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
+      padding: clamp(1.5rem, 4vw, 3rem); box-shadow: 0 1px 2px var(--cp-border);
+    }
+    .article-body h2, .article-body h3, .article-body h4 { scroll-margin-top: 5.5rem; }
+    .article-body h2 { margin: 2.2rem 0 1rem; font-size: 1.55rem; }
+    .article-body h3 { margin: 1.8rem 0 .85rem; font-size: 1.28rem; }
+    .article-body h4 { margin: 1.5rem 0 .7rem; font-size: 1.08rem; }
+    .article-body p { margin: 0 0 1.1rem; overflow-wrap: anywhere; }
+    .article-body ul, .article-body ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+    .article-body li { margin-bottom: .4rem; }
+    .article-body hr { border: 0; border-top: 1px solid var(--cp-border); margin: 2rem 0; }
+    .article-body blockquote { margin: 0 0 1.1rem; padding: .25rem 1.1rem; border-left: 3px solid var(--cp-accent); color: var(--cp-text-muted); }
+    .article-body a { overflow-wrap: anywhere; }
+    .article-body a .external-icon { vertical-align: middle; }
+    .article-body code { background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 4px; padding: .1rem .35rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; overflow-wrap: anywhere; }
+    .article-figure { margin: 0 0 1.5rem; }
+    .article-figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--cp-border); display: block; }
+    .article-figure figcaption { margin-top: .5rem; color: var(--cp-text-muted); font-size: .85rem; text-align: center; }
+    .table-wrap { overflow-x: auto; margin: 0 0 1.1rem; }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+    .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
+    .article-body th { background: var(--cp-surface-soft); }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: .78rem; }
+    .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: .75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button:hover { background: rgba(255,255,255,.1); }
+    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
+    .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88rem; line-height: 1.6; }
+    .callout { display: flex; gap: .75rem; margin: 0 0 1.3rem; padding: 1rem 1.15rem; border-radius: 10px; border: 1px solid var(--cp-border); }
+    .callout-icon { flex: 0 0 auto; margin-top: .15rem; }
+    .callout-label { display: block; margin-bottom: .3rem; font-weight: 700; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; }
+    .callout-body p:last-child { margin-bottom: 0; }
+    .callout-note { background: var(--cp-accent-soft); color: var(--cp-text); }
+    .callout-note .callout-icon, .callout-note .callout-label { color: var(--cp-accent); }
+    .callout-info { background: var(--cp-info-bg); color: var(--cp-text); }
+    .callout-info .callout-icon, .callout-info .callout-label { color: var(--cp-info); }
+    .callout-warning { background: var(--cp-warning-bg); color: var(--cp-text); }
+    .callout-warning .callout-icon, .callout-warning .callout-label { color: var(--cp-warning); }
+    .article-toc { margin: 0 0 1.6rem; padding: 1rem 1.25rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); }
+    .article-toc strong { display: block; margin-bottom: .5rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    .article-toc ul { margin: 0; padding: 0; list-style: none; }
+    .article-toc li { margin: 0; }
+    .article-toc a { display: block; padding: .25rem 0; color: var(--cp-text); text-decoration: none; font-size: .92rem; }
+    .article-toc a:hover { color: var(--cp-link); }
+    .toc-level-3 a { padding-left: 1rem; font-size: .87rem; color: var(--cp-text-muted); }
+    .toc-level-4 a { padding-left: 2rem; font-size: .85rem; color: var(--cp-text-muted); }
+    .article-footer-nav { max-width: 46rem; margin: 2rem auto 0; display: flex; justify-content: space-between; gap: 1rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: .92rem; }
+    .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    @media (max-width: 40rem) {
+      .article-meta { font-size: .82rem; }
+    }
+  </style>
+</head>
+<body class="">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <nav class="header-links" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/articles/" aria-current="page">Articles</a>
+        <a href="/tools/">Tools</a>
+        <a href="/icons/">Icons</a>
+        <a href="/emoji-sheet/">Emoji</a>
+        <a href="/azure-release-updates/">Azure Updates</a>
+        <a href="/m365-release-updates/">M365 Updates</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="article-header">
+      <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Azure">Azure</a></div>
+      <h1 class="article-title">Optimize and Reduce Costs in Azure</h1>
+      <p class="article-description">Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.</p>
+      <div class="article-meta">
+        <span>Benoit G</span>
+        <span class="dot">&middot;</span>
+        <span>September 11, 2024</span>
+        <span class="dot">&middot;</span>
+        <span>7 min read</span>
+      </div>
+      <div class="article-tags"><span class="article-tag">#Cost Optimization</span></div>
+    </div>
+
+    <div class="article-feature-image"><img src="/articles/images/cost-management.svg" alt="Optimize and Reduce Costs in Azure"></div>
+
+    <article class="article-body">
+      <p>Throughout my various assignments, I have often heard: "It doesn't matter, I'm not the one paying." If you have ever taken an Azure subscription with a pay-as-you-go offer, you know that it is essential to control usage costs. Whether for personal use, an SME, or a large group, Azure cost optimization should be part of your cloud strategy.</p>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#use-the-right-sizes-of-virtual-machines-according-to-needs">Use the right sizes of virtual machines according to needs</a></li><li class="toc-level-2"><a href="#block-the-deployment-of-certain-machine-sizes">Block the deployment of certain machine sizes</a></li><li class="toc-level-2"><a href="#start-stop-machines-automatically">Start/stop machines automatically</a></li><li class="toc-level-2"><a href="#use-azure-advisor">Use Azure Advisor</a></li><li class="toc-level-2"><a href="#use-reserved-instances-ri">Use reserved instances (RI)</a></li><li class="toc-level-2"><a href="#use-savings-plans">Use savings plans</a></li><li class="toc-level-2"><a href="#use-hybrid-benefit">Use Hybrid Benefit</a></li><li class="toc-level-2"><a href="#implement-policies-and-tags">Implement policies and tags</a></li><li class="toc-level-2"><a href="#choose-the-right-type-of-disk">Choose the right type of disk</a></li><li class="toc-level-2"><a href="#choose-the-right-storage-tier-for-blobs">Choose the right storage tier for blobs</a></li><li class="toc-level-2"><a href="#purge-unused-data-and-resources-orphaned-resources">Purge unused data and resources (orphaned resources)</a></li><li class="toc-level-2"><a href="#support-and-train-users">Support and train users</a></li><li class="toc-level-2"><a href="#use-azure-cost-management">Use Azure Cost Management</a></li><li class="toc-level-2"><a href="#select-the-right-azure-region-to-deploy-your-resources">Select the right Azure region to deploy your resources</a></li><li class="toc-level-2"><a href="#sign-an-enterprise-agreement">Sign an enterprise agreement</a></li><li class="toc-level-2"><a href="#other-cost-optimization-topics">Other cost optimization topics</a></li></ul></nav>
+<p>Cloud adoption and cost reduction are not necessarily associated. The power of the cloud allows you to deploy resources quickly and benefit from the provider's datacenter capabilities to deploy large configurations rapidly.</p>
+<p>With one click, it is very easy to inflate the bill. The interest of a cloud provider is obviously to encourage and facilitate the use of its services, but it is also advisable to guide its users to make the most of the deployed elements. A satisfied customer is a returning customer.</p>
+<p>Below are some tips to help you lower the bill.</p>
+<h2 id="use-the-right-sizes-of-virtual-machines-according-to-needs">Use the right sizes of virtual machines according to needs</h2>
+<p>There are several sizes and options available for Azure virtual machines that you can deploy to run your applications and workloads. These machines are classified by families, so it is advisable to choose the configuration best suited to your needs.</p>
+<ul><li>General purpose</li><li>Compute optimized</li><li>Memory optimized</li><li>Storage optimized</li><li>GPU optimized</li><li>High-performance compute</li></ul>
+<p>Even though the size of the machine can be increased or decreased at any time during its lifecycle, choose the right size from the start. There is no need to provision an F-size machine to host a showcase website for an SME.</p>
+<ul><li><a href="https://azureprice.net" target="_blank" rel="noopener noreferrer">Azure VM comparison (azureprice.net) <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://azure.microsoft.com/en-us/pricing/virtual-machines/" target="_blank" rel="noopener noreferrer">Microsoft Azure VM selector <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li></ul>
+<h2 id="block-the-deployment-of-certain-machine-sizes">Block the deployment of certain machine sizes</h2>
+<p>There is a built-in Azure policy called <em>Allowed virtual machine SKUs</em> that allows you to authorize the deployment of certain machine sizes only and thus block the deployment of unauthorized machines. This way, it is easier to control VM deployment costs.</p>
+<p>In this example, only <code>Basic_A1</code>, <code>Basic_A2</code>, and <code>Basic_A3</code> size machines are allowed to be deployed. If you try to deploy an unauthorized machine size, the Azure API will send an error message.</p>
+<h2 id="start-stop-machines-automatically">Start/stop machines automatically</h2>
+<p>With the cloud, things have changed; resources are billed on a usage basis. It is therefore necessary to schedule the stop/start of your VMs when they are not in use to save money. By analogy, at home, when you leave a room, you turn off the light — the principle is the same.</p>
+<p>There are several solutions to do this automatically:</p>
+<ul><li>Use the native Azure auto-shutdown function on each VM.</li><li>Use the <a href="https://learn.microsoft.com/en-us/azure/automation/automation-solution-vm-management" target="_blank" rel="noopener noreferrer">Azure Start/Stop VM <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> solution with Azure Automation.</li><li>Use a custom PowerShell script executed by Azure Automation, such as <a href="https://automys.com/library/asset/scheduled-virtual-machine-shutdown-startup-microsoft-azure" target="_blank" rel="noopener noreferrer">Scheduled Virtual Machine Shutdown Startup <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</li></ul>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Never stop a virtual machine from the OS by doing Start → Stop, because the VM will still be allocated on the hypervisor in Azure, and you will be billed for the machine even if it is turned off. The best practice is to do a Stop from the Azure portal. Only the <strong>Stopped (deallocated)</strong> status ensures that the VM is properly turned off and no longer billed.</p></div></div>
+<h2 id="use-azure-advisor">Use Azure Advisor</h2>
+<p>As its name suggests, Azure Advisor is an "advisor" that describes best practices to follow to optimize your Azure deployments. It analyzes your configuration and resource usage, then recommends solutions that can help you improve profitability, performance, high availability, and security.</p>
+<p>Recommendations are divided into five categories:</p>
+<ul><li><strong>High availability</strong> — helps ensure and improve the continuity of your critical applications.</li><li><strong>Security</strong> — helps detect threats and vulnerabilities that could lead to security breaches.</li><li><strong>Performance</strong> — to improve the speed of your applications.</li><li><strong>Cost</strong> — to optimize and reduce your overall Azure spending.</li><li><strong>Operational excellence</strong> — for process and workflow efficiency, resource management, and deployment.</li></ul>
+<h2 id="use-reserved-instances-ri">Use reserved instances (RI)</h2>
+<p>Azure reservations allow you to save money by committing to a one- or three-year plan for virtual machines, Azure Blob Storage, Azure Data Lake Storage Gen2, SQL Database compute capacity, Azure Cosmos DB throughput, or other Azure resources. Reservations can significantly reduce resource costs, up to 72% off pay-as-you-go prices, and have no impact on the runtime state of your resources. More information: <a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/reservations/save-compute-costs-reservations" target="_blank" rel="noopener noreferrer">Save compute costs with reservations <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</p>
+<h2 id="use-savings-plans">Use savings plans</h2>
+<p>An Azure feature that complements reservations with a flexible, spend-based commitment across compute services.</p>
+<h2 id="use-hybrid-benefit">Use Hybrid Benefit</h2>
+<p>The Azure Hybrid Benefit program offers a pricing advantage to customers who already have Microsoft licenses under a Software Assurance (SA) agreement, allowing those licenses to be reused in Azure. Eligible customers can save up to 40% on Azure virtual machines (IaaS) and 55% on Azure SQL Database (PaaS) and SQL Server on Azure VMs (IaaS), or even more when combined with reserved instances. More information: <a href="https://azure.microsoft.com/en-us/pricing/hybrid-benefit/" target="_blank" rel="noopener noreferrer">Azure Hybrid Benefit <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</p>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>It is possible to enforce the use of Hybrid Benefit via an Azure policy, available in the <a href="https://github.com/Azure/azure-policy/tree/master/samples/Compute/enforce-hybrid-use-benefit" target="_blank" rel="noopener noreferrer">enforce-hybrid-use-benefit <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> sample.</p></div></div>
+<h2 id="implement-policies-and-tags">Implement policies and tags</h2>
+<p>Implementing tags and policies is fundamental before opening the Azure service to users. Tags let you know who a resource is assigned to and let you contact the right person directly if needed (maintenance, billing, patching, etc.). Policies let you audit or constrain users to control the deployment of expensive resources.</p>
+<h2 id="choose-the-right-type-of-disk">Choose the right type of disk</h2>
+<p>When creating a virtual machine in Azure, several types of disks are offered: Ultra disk, Premium SSD, Standard SSD, and Standard HDD. Each type is intended for specific scenarios — if your application doesn't require high performance or is only for testing purposes, prefer an HDD disk as it is the cheapest.</p>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>When creating a VM, the Premium SSD type is selected by default. Don't forget to change it to save money.</p></div></div>
+<h2 id="choose-the-right-storage-tier-for-blobs">Choose the right storage tier for blobs</h2>
+<p>Azure Storage offers different access tiers that allow you to store your blob objects in the most cost-effective way:</p>
+<ul><li><strong>Hot</strong> — optimized for storing frequently accessed data.</li><li><strong>Cool</strong> — optimized for storing infrequently accessed data, stored for at least 30 days.</li><li><strong>Archive</strong> — optimized for storing infrequently accessed data, stored for at least 180 days, under flexible latency conditions (a few hours).</li></ul>
+<h2 id="purge-unused-data-and-resources-orphaned-resources">Purge unused data and resources (orphaned resources)</h2>
+<p>When you delete Azure resources, such as a virtual machine, some associated components are not automatically deleted (public IP, disk, VNet, subnet, etc.). Some resources become "orphaned" and potentially billed. Files in a storage account are billed based on the stored volume (GB), so it is necessary to regularly clean up obsolete logs, ISO images, and other stale data.</p>
+<ul><li><a href="https://github.com/dolevshor/azure-orphan-resources" target="_blank" rel="noopener noreferrer">Azure Orphan Resources <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li></ul>
+<h2 id="support-and-train-users">Support and train users</h2>
+<p>To avoid deviations, especially in cost management, supporting and training users is essential. Microsoft offers free courses on <a href="https://learn.microsoft.com/en-us/training/" target="_blank" rel="noopener noreferrer">Microsoft Learn <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>, including the free <a href="https://learn.microsoft.com/en-us/training/paths/azure-fundamentals/" target="_blank" rel="noopener noreferrer">Azure Fundamentals (AZ-900) <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> learning path. Certification also validates skills and provides recognition in the job market.</p>
+<h2 id="use-azure-cost-management">Use Azure Cost Management</h2>
+<p>Take advantage of the tools included in your Azure subscription to track resource usage and manage costs with a single, unified view. More information: <a href="https://azure.microsoft.com/en-us/products/cost-management/" target="_blank" rel="noopener noreferrer">Azure Cost Management <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</p>
+<h2 id="select-the-right-azure-region-to-deploy-your-resources">Select the right Azure region to deploy your resources</h2>
+<p>Microsoft Azure offers dozens of regions worldwide. Not all Azure services are available in all regions, and not all Azure services cost the same in every region — prices can depend on operating costs and other regional factors. Deploying the same Windows virtual machine in France will not cost the same as in Australia, for example.</p>
+<h2 id="sign-an-enterprise-agreement">Sign an enterprise agreement</h2>
+<p>For large organizations, signing an Enterprise Agreement (EA) with Microsoft consolidates all your Azure subscriptions into a single contract. Generating volume allows you to negotiate discounts and rebates.</p>
+<h2 id="other-cost-optimization-topics">Other cost optimization topics</h2>
+<ul><li>Organize resources with management groups (e.g., Test, Prod, Dev)</li><li>Commit to long-term consumption (3 to 5 years) to lower the price</li><li>Use Dev/Test subscriptions</li><li>Use Azure Spot VMs and burstable VMs</li><li>Choose the right compute service for your workload: <a href="https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree" target="_blank" rel="noopener noreferrer">Choose an Azure compute service <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li>Use containers, autoscaling, and the pricing calculator</li><li>Conduct architecture reviews: <a href="https://learn.microsoft.com/en-us/assessments/" target="_blank" rel="noopener noreferrer">Azure Well-Architected Review <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li>Develop FinOps practices within your company</li><li><a href="https://github.com/helderpinto/AzureOptimizationEngine" target="_blank" rel="noopener noreferrer">Azure Optimization Engine <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> — an extensible, fully customizable Azure Advisor alternative</li><li>Enforce a naming convention and RBAC least privilege</li></ul>
+    </article>
+
+    <div class="article-footer-nav">
+      <a href="/articles/">&larr; Back to all articles</a>
+      <a href="/articles/rss.xml">RSS feed</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Articles</a>
+          <p>Articles and how-to guides written by Benoit Gaumard about Azure, Terraform, GitHub, and cloud engineering.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="#top">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    document.querySelectorAll('[data-code-copy]').forEach((button) => {
+      button.addEventListener("click", () => {
+        const code = button.closest(".code-block").querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const original = button.textContent;
+          button.textContent = "Copied!";
+          button.classList.add("is-copied");
+          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
+        });
+      });
+    });
+    let scrollTicking = false;
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  </script>
+</body>
+</html>
