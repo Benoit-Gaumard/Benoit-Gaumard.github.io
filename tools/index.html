@@ -181,21 +181,31 @@
       box-shadow: var(--cp-shadow);
     }
     .tool-card.is-dragging {
-      opacity: .45;
-      box-shadow: none;
-      transform: none;
+      position: fixed;
+      z-index: 50;
+      margin: 0;
+      pointer-events: none;
+      cursor: grabbing;
+      transform: scale(1.03) rotate(1deg);
+      box-shadow: 0 24px 48px rgba(23, 50, 77, .28);
+      transition: none;
+    }
+    .tool-card-placeholder {
+      border: 2px dashed var(--cp-border-strong);
+      border-radius: 12px;
+      background: var(--cp-surface-soft);
     }
     .drag-handle {
       position: absolute;
-      top: .6rem;
-      right: .6rem;
+      top: .5rem;
+      right: .5rem;
       display: grid;
       place-items: center;
-      width: 1.6rem;
-      height: 1.6rem;
-      border-radius: 6px;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 7px;
       color: var(--cp-text-muted);
-      opacity: 0;
+      opacity: .4;
       cursor: grab;
       touch-action: none;
       transition: opacity .15s ease, background .15s ease, color .15s ease;
@@ -697,48 +707,73 @@
     }
 
     function enableReordering() {
-      let draggedCard = null;
+      let dragCtx = null;
+
+      function onPointerMove(event) {
+        if (!dragCtx || event.pointerId !== dragCtx.pointerId) return;
+        event.preventDefault();
+        dragCtx.card.style.left = `${event.clientX - dragCtx.offsetX}px`;
+        dragCtx.card.style.top = `${event.clientY - dragCtx.offsetY}px`;
+
+        const overCard = document.elementFromPoint(event.clientX, event.clientY)?.closest(".tool-card, .tool-card-placeholder");
+        if (!overCard || overCard === dragCtx.placeholder || overCard.parentNode !== toolCards) return;
+        const rect = overCard.getBoundingClientRect();
+        const isListView = toolCards.classList.contains("list-view");
+        const before = isListView
+          ? (event.clientY - rect.top) < rect.height / 2
+          : (event.clientX - rect.left) < rect.width / 2;
+        toolCards.insertBefore(dragCtx.placeholder, before ? overCard : overCard.nextSibling);
+      }
+
+      function onPointerEnd(event) {
+        if (!dragCtx || event.pointerId !== dragCtx.pointerId) return;
+        const { card, placeholder } = dragCtx;
+        toolCards.insertBefore(card, placeholder);
+        placeholder.remove();
+        card.classList.remove("is-dragging");
+        card.style.position = "";
+        card.style.left = "";
+        card.style.top = "";
+        card.style.width = "";
+        card.style.height = "";
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerEnd);
+        window.removeEventListener("pointercancel", onPointerEnd);
+        dragCtx = null;
+        saveOrder();
+      }
 
       toolCards.querySelectorAll(".tool-card").forEach((card) => {
         const handle = addDragHandle(card);
 
         handle.addEventListener("pointerdown", (event) => {
           event.preventDefault();
-          draggedCard = card;
+          const rect = card.getBoundingClientRect();
+
+          const placeholder = document.createElement("div");
+          placeholder.className = "tool-card-placeholder";
+          placeholder.style.width = `${rect.width}px`;
+          placeholder.style.height = `${rect.height}px`;
+          card.parentNode.insertBefore(placeholder, card.nextSibling);
+
           card.classList.add("is-dragging");
-          try {
-            handle.setPointerCapture(event.pointerId);
-          } catch {
-            // ignore unsupported pointer capture
-          }
+          card.style.left = `${rect.left}px`;
+          card.style.top = `${rect.top}px`;
+          card.style.width = `${rect.width}px`;
+          card.style.height = `${rect.height}px`;
+
+          dragCtx = {
+            card,
+            placeholder,
+            pointerId: event.pointerId,
+            offsetX: event.clientX - rect.left,
+            offsetY: event.clientY - rect.top,
+          };
+
+          window.addEventListener("pointermove", onPointerMove);
+          window.addEventListener("pointerup", onPointerEnd);
+          window.addEventListener("pointercancel", onPointerEnd);
         });
-
-        handle.addEventListener("pointermove", (event) => {
-          if (!draggedCard) return;
-          const overCard = document.elementFromPoint(event.clientX, event.clientY)?.closest(".tool-card");
-          if (!overCard || overCard === draggedCard || overCard.parentNode !== toolCards) return;
-          const rect = overCard.getBoundingClientRect();
-          const isListView = toolCards.classList.contains("list-view");
-          const before = isListView
-            ? (event.clientY - rect.top) < rect.height / 2
-            : (event.clientX - rect.left) < rect.width / 2;
-          toolCards.insertBefore(draggedCard, before ? overCard : overCard.nextSibling);
-        });
-
-        function endDrag(event) {
-          if (!draggedCard) return;
-          try {
-            handle.releasePointerCapture(event.pointerId);
-          } catch {
-            // ignore unsupported pointer capture
-          }
-          draggedCard.classList.remove("is-dragging");
-          draggedCard = null;
-          saveOrder();
-        }
-
-        handle.addEventListener("pointerup", endDrag);
-        handle.addEventListener("pointercancel", endDrag);
       });
     }
 
