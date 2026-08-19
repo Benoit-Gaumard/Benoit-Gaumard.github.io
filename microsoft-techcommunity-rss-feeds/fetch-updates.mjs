@@ -41,11 +41,35 @@ function extractDate(xml) {
   return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 }
 
+function extractTitle(xml) {
+  const title = extractTag(xml, "title");
+  return title.replace(/\s+/g, " ").trim();
+}
+
+function extractLink(xml) {
+  // RSS: <link>https://example.com/post</link> (plain text content).
+  const rssLink = extractTag(xml, "link");
+  if (rssLink) return rssLink;
+  // Atom: <link rel="alternate" href="https://example.com/post" /> (self-closing, no text content).
+  const atomLinks = [...xml.matchAll(/<link\b([^>]*)\/?>/gi)];
+  for (const [, attrs] of atomLinks) {
+    const relMatch = attrs.match(/\brel=["']([^"']*)["']/i);
+    if (relMatch && relMatch[1] !== "alternate") continue;
+    const hrefMatch = attrs.match(/\bhref=["']([^"']*)["']/i);
+    if (hrefMatch) return decodeEntities(hrefMatch[1]);
+  }
+  return "";
+}
+
 function parseItems(xml) {
   const itemBlocks = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)];
   const entryBlocks = [...xml.matchAll(/<entry\b[^>]*>([\s\S]*?)<\/entry>/gi)];
   const blocks = itemBlocks.length ? itemBlocks : entryBlocks;
-  return blocks.map((match) => ({ pubDate: extractDate(match[1]) }));
+  return blocks.map((match) => ({
+    pubDate: extractDate(match[1]),
+    title: extractTitle(match[1]),
+    link: extractLink(match[1]),
+  }));
 }
 
 function parseCsvLine(line) {
@@ -108,9 +132,28 @@ async function fetchFeed(feed) {
     const items = parseItems(xml)
       .filter((item) => item.pubDate)
       .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    return { name: feed.name, category: feed.category, url: feed.url, ok: true, error: null, lastPublication: items[0]?.pubDate ?? null };
+    const latest = items[0];
+    return {
+      name: feed.name,
+      category: feed.category,
+      url: feed.url,
+      ok: true,
+      error: null,
+      lastPublication: latest?.pubDate ?? null,
+      latestTitle: latest?.title || null,
+      latestLink: latest?.link || null,
+    };
   } catch (error) {
-    return { name: feed.name, category: feed.category, url: feed.url, ok: false, error: error.message, lastPublication: null };
+    return {
+      name: feed.name,
+      category: feed.category,
+      url: feed.url,
+      ok: false,
+      error: error.message,
+      lastPublication: null,
+      latestTitle: null,
+      latestLink: null,
+    };
   }
 }
 

@@ -159,6 +159,21 @@
     tbody tr:last-child td { border-bottom: 0; }
     tbody tr.is-dead { background: var(--cp-danger-bg); }
     .feed-name { font-weight: 600; }
+    .feed-latest {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: .2rem;
+      width: 26rem;
+      max-width: 26rem;
+      font-size: .8rem;
+      font-weight: 400;
+      color: var(--cp-text-muted);
+      text-decoration: none;
+    }
+    .feed-latest:hover { color: var(--cp-link); text-decoration: underline; }
+    .feed-latest strong { color: var(--cp-text-muted); font-weight: 600; }
     .feed-link { display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap; }
     .activity-badge {
       display: inline-flex;
@@ -408,8 +423,23 @@
         if (dead) tr.classList.add("is-dead");
 
         const nameTd = document.createElement("td");
-        nameTd.className = "feed-name";
-        nameTd.textContent = feed.name;
+        const nameEl = document.createElement("div");
+        nameEl.className = "feed-name";
+        nameEl.textContent = feed.name;
+        nameTd.append(nameEl);
+        if (feed.latestTitle) {
+          const latestEl = document.createElement(feed.latestLink ? "a" : "div");
+          latestEl.className = "feed-latest";
+          if (feed.latestLink) {
+            latestEl.href = feed.latestLink;
+            latestEl.target = "_blank";
+            latestEl.rel = "noopener noreferrer";
+          }
+          latestEl.title = feed.latestTitle;
+          latestEl.append(Object.assign(document.createElement("strong"), { textContent: "Latest: " }));
+          latestEl.append(document.createTextNode(feed.latestTitle));
+          nameTd.append(latestEl);
+        }
 
         const categoryTd = document.createElement("td");
         categoryTd.textContent = feed.category || "\u2014";
