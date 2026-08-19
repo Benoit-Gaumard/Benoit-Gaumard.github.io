@@ -124,6 +124,43 @@
       font-weight: 650;
     }
 
+    .timezones-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      margin: 2.5rem 0 1rem;
+    }
+    .timezones-toolbar .sec-label { margin: 0; }
+    .view-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .view-toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .view-toggle-button:hover { color: var(--cp-text); }
+    .view-toggle-button.is-active {
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+    }
+    .view-toggle-button svg { flex: 0 0 auto; }
+
     .clock-hero {
       display: flex;
       flex-wrap: wrap;
@@ -245,6 +282,33 @@
       font-size: .8rem;
     }
 
+    .timezone-grid.list-view { grid-template-columns: 1fr; gap: .6rem; }
+    .timezone-grid.list-view .timezone-card {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 1rem;
+      padding: .65rem 1.25rem;
+      min-width: 0;
+    }
+    .timezone-grid.list-view .timezone-card:hover { transform: none; }
+    .timezone-grid.list-view .timezone-card-head { flex: 1 1 auto; min-width: 0; }
+    .timezone-grid.list-view .timezone-card-city {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .timezone-grid.list-view .timezone-card-offset { flex: 0 0 auto; }
+    .timezone-grid.list-view .timezone-card-time {
+      flex: 0 0 auto;
+      font-size: 1.15rem;
+      white-space: nowrap;
+    }
+    .timezone-grid.list-view .timezone-card-date { flex: 0 0 auto; white-space: nowrap; }
+    .timezone-grid.list-view .timezone-card-country { display: none; }
+
     .site-footer {
       border-top: 1px solid var(--cp-border);
       background: var(--cp-panel-strong);
@@ -324,6 +388,7 @@
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       .header-links a:first-child { display: none; }
+      .timezone-grid.list-view .timezone-card-date { display: none; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -381,7 +446,19 @@
     </section>
 
     <section aria-label="Other timezones">
-      <p class="sec-label">Other Timezones</p>
+      <div class="timezones-toolbar">
+        <p class="sec-label">Other Timezones</p>
+        <div class="view-toggle" role="group" aria-label="Choose view">
+          <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+            Cards
+          </button>
+          <button type="button" class="view-toggle-button" data-view="list" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            List
+          </button>
+        </div>
+      </div>
       <div class="timezone-grid" id="timezoneGrid"></div>
     </section>
   </main>
@@ -421,6 +498,41 @@
 
   <script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const VIEW_STORAGE_KEY = "world-clock-view-mode";
+    const timezoneGridEl = document.getElementById("timezoneGrid");
+    const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
+
+    function applyView(view) {
+      timezoneGridEl.classList.toggle("list-view", view === "list");
+      viewButtons.forEach((button) => {
+        const isActive = button.dataset.view === view;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+    }
+
+    function loadView() {
+      try {
+        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
+      } catch {
+        return "cards";
+      }
+    }
+
+    applyView(loadView());
+
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const view = button.dataset.view;
+        applyView(view);
+        try {
+          localStorage.setItem(VIEW_STORAGE_KEY, view);
+        } catch {
+          // ignore storage errors (private browsing, quota, etc.)
+        }
+      });
+    });
 
     const PARIS_TZ = "Europe/Paris";
     const FLAGS = {
