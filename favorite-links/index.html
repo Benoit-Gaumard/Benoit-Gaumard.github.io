@@ -128,7 +128,36 @@
     .filter-bar select { flex: 1 1 11rem; }
     .filter-toggle { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: .9rem; font-weight: 600; cursor: pointer; }
     .filter-toggle input { width: 1.15rem; height: 1.15rem; accent-color: var(--cp-accent); cursor: pointer; }
-    .results-count { margin: 0 0 1.25rem; color: var(--cp-text-muted); font-size: .9rem; }
+
+    .links-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .results-count { margin: 0; color: var(--cp-text-muted); font-size: .9rem; }
+    .view-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .view-toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .view-toggle-button:hover { color: var(--cp-text); }
+    .view-toggle-button.is-active {
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+    }
+    .view-toggle-button svg { flex: 0 0 auto; }
 
     .link-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.25rem; }
     .link-card {
@@ -203,6 +232,33 @@
     .link-arrow svg { transition: transform .2s ease; }
     .link-card:hover .link-arrow svg, .link-card:focus-visible .link-arrow svg { transform: translate(2px, -2px); }
 
+    .link-cards.list-view { grid-template-columns: 1fr; gap: .6rem; }
+    .link-cards.list-view .link-card {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 1rem;
+      padding: .65rem 1.25rem;
+      min-width: 0;
+    }
+    .link-cards.list-view .link-card:hover, .link-cards.list-view .link-card:focus-visible { transform: none; }
+    .link-cards.list-view .link-card-header { order: 1; flex: 0 0 auto; }
+    .link-cards.list-view .link-avatar { width: 2.25rem; height: 2.25rem; }
+    .link-cards.list-view .link-card h2 {
+      order: 2;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .link-cards.list-view .link-tag { order: 3; flex: 0 0 auto; }
+    .link-cards.list-view .link-rating { order: 4; flex: 0 0 auto; }
+    .link-cards.list-view .link-description, .link-cards.list-view .link-url { display: none; }
+    .link-cards.list-view .link-arrow { order: 5; flex: 0 0 auto; margin-top: 0; }
+
     .empty-state {
       padding: 2.5rem;
       border: 1px dashed var(--cp-border-strong);
@@ -258,6 +314,9 @@
       main { padding-top: 1.75rem; }
       .filter-bar { flex-direction: column; align-items: stretch; }
       .filter-bar input { max-width: none; }
+      .link-cards.list-view .link-tag, .link-cards.list-view .link-rating { display: none; }
+      .link-cards.list-view .link-arrow { font-size: 0; }
+      .link-cards.list-view .link-arrow svg { width: 16px; height: 16px; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -305,7 +364,19 @@
         </select>
         <label class="filter-toggle"><input type="checkbox" id="highlightedOnly"> Featured only</label>
       </div>
-      <p class="results-count" id="resultsCount"></p>
+      <div class="links-toolbar">
+        <p class="results-count" id="resultsCount"></p>
+        <div class="view-toggle" role="group" aria-label="Choose view">
+          <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+            Cards
+          </button>
+          <button type="button" class="view-toggle-button" data-view="list" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            List
+          </button>
+        </div>
+      </div>
       <div class="link-cards" id="linkCards"></div>
     </section>
   </main>
@@ -356,6 +427,40 @@
       linkCards: document.getElementById("linkCards"),
       backToTop: document.getElementById("backToTop"),
     };
+
+    const VIEW_STORAGE_KEY = "favorite-links-view-mode";
+    const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
+
+    function applyView(view) {
+      elements.linkCards.classList.toggle("list-view", view === "list");
+      viewButtons.forEach((button) => {
+        const isActive = button.dataset.view === view;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+    }
+
+    function loadView() {
+      try {
+        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
+      } catch {
+        return "cards";
+      }
+    }
+
+    applyView(loadView());
+
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const view = button.dataset.view;
+        applyView(view);
+        try {
+          localStorage.setItem(VIEW_STORAGE_KEY, view);
+        } catch {
+          // ignore storage errors (private browsing, quota, etc.)
+        }
+      });
+    });
 
     let links = [];
 
