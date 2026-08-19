@@ -118,7 +118,36 @@
     }
     .filter-bar input { flex: 2 1 14rem; }
     .filter-bar select { flex: 1 1 10rem; }
-    .results-count { margin: 0 0 1.25rem; color: var(--cp-text-muted); font-size: .9rem; }
+
+    .friends-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .results-count { margin: 0; color: var(--cp-text-muted); font-size: .9rem; }
+    .view-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .view-toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .view-toggle-button:hover { color: var(--cp-text); }
+    .view-toggle-button.is-active {
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+    }
+    .view-toggle-button svg { flex: 0 0 auto; }
 
     .friend-cards {
       display: grid;
@@ -191,6 +220,33 @@
     .friend-arrow svg { transition: transform .2s ease; }
     .friend-card:hover .friend-arrow svg, .friend-card:focus-visible .friend-arrow svg { transform: translate(2px, -2px); }
 
+    .friend-cards.list-view { grid-template-columns: 1fr; gap: .6rem; }
+    .friend-cards.list-view .friend-card {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 1rem;
+      padding: .65rem 1.25rem;
+      min-width: 0;
+    }
+    .friend-cards.list-view .friend-card:hover, .friend-cards.list-view .friend-card:focus-visible { transform: none; }
+    .friend-cards.list-view .friend-card-header { order: 1; flex: 0 0 auto; }
+    .friend-cards.list-view .friend-avatar { width: 2.25rem; height: 2.25rem; }
+    .friend-cards.list-view .friend-country { display: none; }
+    .friend-cards.list-view .friend-card h2 {
+      order: 2;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .friend-cards.list-view .friend-tags { order: 3; flex: 0 0 auto; flex-wrap: nowrap; }
+    .friend-cards.list-view .friend-description, .friend-cards.list-view .friend-url { display: none; }
+    .friend-cards.list-view .friend-arrow { order: 4; flex: 0 0 auto; margin-top: 0; }
+
     .empty-state {
       padding: 2.5rem;
       border: 1px dashed var(--cp-border-strong);
@@ -261,6 +317,9 @@
       .header-links a:first-child { display: none; }
       main { padding-top: 1.75rem; }
       .filter-bar { flex-direction: column; align-items: stretch; }
+      .friend-cards.list-view .friend-tags { display: none; }
+      .friend-cards.list-view .friend-arrow { font-size: 0; }
+      .friend-cards.list-view .friend-arrow svg { width: 16px; height: 16px; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -301,7 +360,19 @@
         <select id="categoryFilter"><option value="">All categories</option></select>
         <select id="countryFilter"><option value="">All countries</option></select>
       </div>
-      <p class="results-count" id="resultsCount"></p>
+      <div class="friends-toolbar">
+        <p class="results-count" id="resultsCount"></p>
+        <div class="view-toggle" role="group" aria-label="Choose view">
+          <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+            Cards
+          </button>
+          <button type="button" class="view-toggle-button" data-view="list" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            List
+          </button>
+        </div>
+      </div>
       <div class="friend-cards" id="friendCards"></div>
     </section>
   </main>
@@ -350,6 +421,40 @@
       friendCards: document.getElementById("friendCards"),
       backToTop: document.getElementById("backToTop"),
     };
+
+    const VIEW_STORAGE_KEY = "friends-websites-view-mode";
+    const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
+
+    function applyView(view) {
+      elements.friendCards.classList.toggle("list-view", view === "list");
+      viewButtons.forEach((button) => {
+        const isActive = button.dataset.view === view;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+    }
+
+    function loadView() {
+      try {
+        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
+      } catch {
+        return "cards";
+      }
+    }
+
+    applyView(loadView());
+
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const view = button.dataset.view;
+        applyView(view);
+        try {
+          localStorage.setItem(VIEW_STORAGE_KEY, view);
+        } catch {
+          // ignore storage errors (private browsing, quota, etc.)
+        }
+      });
+    });
 
     let friends = [];
 
