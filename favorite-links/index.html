@@ -357,6 +357,7 @@
         <input id="searchInput" type="search" placeholder="Search links..." autocomplete="off" spellcheck="false">
         <select id="categoryFilter"><option value="">All categories</option></select>
         <select id="sortSelect">
+          <option value="latest" selected>Latest</option>
           <option value="featured">Featured first</option>
           <option value="rating">Rating (high to low)</option>
           <option value="title">Title (A-Z)</option>
@@ -566,7 +567,9 @@
     function sortLinks(list) {
       const sortMode = elements.sortSelect.value;
       const sorted = [...list];
-      if (sortMode === "rating") {
+      if (sortMode === "latest") {
+        sorted.sort((a, b) => b.originalIndex - a.originalIndex);
+      } else if (sortMode === "rating") {
         sorted.sort((a, b) => b.rating - a.rating || a.title.localeCompare(b.title));
       } else if (sortMode === "title") {
         sorted.sort((a, b) => a.title.localeCompare(b.title));
@@ -680,10 +683,11 @@
       const csvText = await response.text();
       links = parseCsv(csvText)
         .filter((row) => row.title && row.url)
-        .map((row) => ({
+        .map((row, index) => ({
           ...row,
           rating: Number.parseInt(row.rating, 10) || 0,
           isHighlighted: row.isHighlighted?.trim().toLowerCase() === "true",
+          originalIndex: index,
         }));
       renderStats();
       populateFilters();
