@@ -136,6 +136,26 @@
 
     .links-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
     .results-count { margin: 0; color: var(--cp-text-muted); font-size: .9rem; }
+    .results-actions { display: flex; align-items: center; gap: .75rem; }
+    .favorites-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      min-height: 2.25rem;
+      padding: .375rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .favorites-filter[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      background: var(--cp-warning-bg);
+      color: #8a5a08;
+    }
     .view-toggle {
       display: inline-flex;
       gap: .25rem;
@@ -184,6 +204,28 @@
       box-shadow: var(--cp-shadow);
     }
     .link-card.is-highlighted { border-color: var(--cp-warning); background: var(--cp-warning-bg); }
+    .favorite-button {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      z-index: 2;
+      display: grid;
+      width: 2rem;
+      height: 2rem;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+    }
+    .favorite-button:hover { color: var(--cp-accent); }
+    .favorite-button[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      color: var(--cp-warning);
+    }
     .link-card-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
     .link-avatar {
       display: grid;
@@ -263,6 +305,7 @@
     .link-cards.list-view .link-rating { order: 4; flex: 0 0 auto; }
     .link-cards.list-view .link-description, .link-cards.list-view .link-url { display: none; }
     .link-cards.list-view .link-arrow { order: 5; flex: 0 0 auto; margin-top: 0; }
+    .link-cards.list-view .favorite-button { position: static; order: 6; margin-left: .25rem; box-shadow: none; }
 
     .empty-state {
       padding: 2.5rem;
@@ -380,15 +423,18 @@
       </div>
       <div class="links-toolbar">
         <p class="results-count" id="resultsCount"></p>
-        <div class="view-toggle" role="group" aria-label="Choose view">
-          <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-            Cards
-          </button>
-          <button type="button" class="view-toggle-button" data-view="list" aria-pressed="false">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-            List
-          </button>
+        <div class="results-actions">
+          <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+          <div class="view-toggle" role="group" aria-label="Choose view">
+            <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+              Cards
+            </button>
+            <button type="button" class="view-toggle-button" data-view="list" aria-pressed="false">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+              List
+            </button>
+          </div>
         </div>
       </div>
       <div class="link-cards" id="linkCards"></div>
@@ -436,6 +482,7 @@
       categoryFilter: document.getElementById("categoryFilter"),
       sortSelect: document.getElementById("sortSelect"),
       highlightedOnly: document.getElementById("highlightedOnly"),
+      favoritesFilter: document.getElementById("favoritesFilter"),
       resultsCount: document.getElementById("resultsCount"),
       statsGrid: document.getElementById("statsGrid"),
       linkCards: document.getElementById("linkCards"),
@@ -477,6 +524,44 @@
     });
 
     let links = [];
+
+    const FAVORITES_STORAGE_KEY = "favorite-links-my-favorites";
+    let favorites = new Set();
+    let favoritesOnly = false;
+
+    function loadFavorites() {
+      try {
+        const storedFavorites = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+        favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites : []);
+      } catch {
+        favorites = new Set();
+      }
+    }
+
+    function toggleFavorite(link, button) {
+      const isFavorite = favorites.has(link.url);
+      if (isFavorite) favorites.delete(link.url);
+      else favorites.add(link.url);
+
+      try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...favorites]));
+      } catch (error) {
+        console.warn("Unable to save favorites", error);
+      }
+
+      const nextState = !isFavorite;
+      button.setAttribute("aria-pressed", String(nextState));
+      button.setAttribute("aria-label", `${nextState ? "Remove" : "Add"} ${link.title} ${nextState ? "from" : "to"} favorites`);
+      button.title = nextState ? "Remove from favorites" : "Add to favorites";
+      button.innerHTML = starIcon(nextState);
+      updateFavoritesFilter();
+      if (favoritesOnly) renderCards();
+    }
+
+    function updateFavoritesFilter() {
+      elements.favoritesFilter.innerHTML = `${starIcon(favoritesOnly)} My favorites (${favorites.size.toLocaleString()})`;
+      elements.favoritesFilter.setAttribute("aria-pressed", String(favoritesOnly));
+    }
 
     function parseCsvLine(line) {
       const cells = [];
@@ -626,12 +711,26 @@
       const heading = document.createElement("h2");
       heading.textContent = link.title;
 
+      const favorite = document.createElement("button");
+      const isFavorite = favorites.has(link.url);
+      favorite.type = "button";
+      favorite.className = "favorite-button";
+      favorite.setAttribute("aria-pressed", String(isFavorite));
+      favorite.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${link.title} ${isFavorite ? "from" : "to"} favorites`);
+      favorite.title = isFavorite ? "Remove from favorites" : "Add to favorites";
+      favorite.innerHTML = starIcon(isFavorite);
+      favorite.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(link, favorite);
+      });
+
       const rating = document.createElement("div");
       rating.className = "link-rating";
       rating.setAttribute("aria-label", `Rated ${link.rating} out of 5`);
       for (let i = 0; i < 5; i++) rating.innerHTML += starIcon(i < link.rating);
 
-      card.append(header, heading, rating);
+      card.append(header, heading, rating, favorite);
 
       if (link.category) {
         const tag = document.createElement("span");
@@ -667,6 +766,7 @@
       const filtered = links.filter((link) => {
         if (category && link.category !== category) return false;
         if (highlightedOnly && !link.isHighlighted) return false;
+        if (favoritesOnly && !favorites.has(link.url)) return false;
         if (query && !normalize(`${link.title} ${link.description} ${link.category}`).includes(query)) return false;
         return true;
       });
@@ -681,7 +781,7 @@
       if (!sorted.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.textContent = "No links match your filters.";
+        empty.textContent = favoritesOnly ? "No favorite links yet. Add some with the star button." : "No links match your filters.";
         elements.linkCards.append(empty);
         return;
       }
@@ -692,6 +792,8 @@
     }
 
     async function init() {
+      loadFavorites();
+      updateFavoritesFilter();
       const response = await fetch("./favorite-links.csv", { cache: "no-store" });
       const csvText = await response.text();
       links = parseCsv(csvText)
@@ -711,6 +813,11 @@
     elements.categoryFilter.addEventListener("change", renderCards);
     elements.sortSelect.addEventListener("change", renderCards);
     elements.highlightedOnly.addEventListener("change", renderCards);
+    elements.favoritesFilter.addEventListener("click", () => {
+      favoritesOnly = !favoritesOnly;
+      updateFavoritesFilter();
+      renderCards();
+    });
 
     init();
 
