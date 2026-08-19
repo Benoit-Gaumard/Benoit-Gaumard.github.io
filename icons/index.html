@@ -939,17 +939,32 @@
       const query = normalize(elements.search.value.trim());
       const selectedSource = elements.source.value;
       const selectedCategory = elements.category.value;
-      state.filtered = state.icons.filter((icon) => {
-        const matchesQuery = !query || normalize(`${icon.name} ${icon.source} ${icon.category}`).includes(query);
-        return matchesQuery
+
+      state.filtered = state.icons
+        .map((icon) => ({ icon, score: matchScore(icon, query) }))
+        .filter(({ icon, score }) => score !== null
           && (!state.favoritesOnly || state.favorites.has(icon.path))
           && (!selectedSource || icon.source === selectedSource)
-          && (!selectedCategory || icon.category === selectedCategory);
-      });
+          && (!selectedCategory || icon.category === selectedCategory))
+        .sort((left, right) => (left.score - right.score) || left.icon.name.localeCompare(right.icon.name))
+        .map(({ icon }) => icon);
 
-      state.filtered.sort((left, right) => left.name.localeCompare(right.name));
       state.currentPage = 1;
       render();
+    }
+
+    // Ranks a matching icon so results whose NAME matches the query always outrank icons that
+    // only match via category/source (e.g. searching "azure" would otherwise be swamped by the
+    // thousands of icons simply categorized under "azure-icons", "azure-patterns", etc.).
+    function matchScore(icon, query) {
+      if (!query) return 0;
+      const name = normalize(icon.name);
+      if (name === query) return 0;
+      if (name.startsWith(query)) return 1;
+      if (name.includes(query)) return 2;
+      if (normalize(icon.category).includes(query)) return 3;
+      if (normalize(icon.source).includes(query)) return 4;
+      return null;
     }
 
     function populateCategories() {
