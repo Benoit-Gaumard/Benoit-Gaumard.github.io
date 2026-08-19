@@ -146,6 +146,17 @@
       gap: .75rem;
       margin-bottom: 1.25rem;
     }
+    .tools-search { margin-bottom: 1.25rem; }
+    .tools-search input {
+      width: 100%;
+      max-width: 26rem;
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
     .reset-order-button {
       border: 0;
       background: transparent;
@@ -300,6 +311,16 @@
       transform: translate(2px, -2px);
     }
 
+    .tool-card.is-hidden { display: none; }
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 2.5rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 12px;
+      text-align: center;
+      color: var(--cp-text-muted);
+    }
+
     .site-footer {
       border-top: 1px solid var(--cp-border);
       background: var(--cp-panel-strong);
@@ -414,6 +435,9 @@
     </section>
 
     <section aria-label="Tool list">
+      <div class="tools-search">
+        <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false">
+      </div>
       <div class="tools-toolbar">
         <div class="view-toggle" role="group" aria-label="Choose view">
           <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
@@ -647,6 +671,37 @@
         }
       });
     });
+
+    const searchInput = document.getElementById("toolSearch");
+    let emptyState = null;
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function filterCards() {
+      const query = normalize(searchInput.value.trim());
+      const cards = [...toolCards.querySelectorAll(".tool-card")];
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const haystack = normalize(`${card.querySelector("h2")?.textContent ?? ""} ${card.querySelector("p")?.textContent ?? ""}`);
+        const matches = !query || haystack.includes(query);
+        card.classList.toggle("is-hidden", !matches);
+        if (matches) visibleCount++;
+      });
+
+      if (!visibleCount && !emptyState) {
+        emptyState = document.createElement("div");
+        emptyState.className = "empty-state";
+        emptyState.textContent = "No tools match your search.";
+        toolCards.append(emptyState);
+      } else if (visibleCount && emptyState) {
+        emptyState.remove();
+        emptyState = null;
+      }
+    }
+
+    searchInput.addEventListener("input", filterCards);
 
     const ORDER_STORAGE_KEY = "tools-card-order";
     const resetOrderButton = document.getElementById("resetOrderButton");
