@@ -556,7 +556,7 @@ ${content}
 }
 
 const ARTICLE_CSS = `
-    .article-header { max-width: 46rem; margin: 0 auto 2rem; }
+    .article-header { margin: 0 0 2rem; }
     .article-breadcrumb { margin: 0 0 1.25rem; font-size: .85rem; }
     .article-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
     .article-breadcrumb a:hover { color: var(--cp-link); }
@@ -571,10 +571,10 @@ const ARTICLE_CSS = `
     .article-meta .dot { opacity: .5; }
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: .75rem; border: 1px solid var(--cp-border); }
-    .article-feature-image { max-width: 46rem; margin: 0 auto 2.5rem; }
+    .article-feature-image { margin: 0 0 2.5rem; }
     .article-feature-image img { width: 100%; border-radius: 14px; border: 1px solid var(--cp-border); box-shadow: var(--cp-shadow); display: block; }
     .article-body {
-      max-width: 46rem; margin: 0 auto; font-size: 1.05rem; line-height: 1.75;
+      margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
       padding: clamp(1.5rem, 4vw, 3rem); box-shadow: 0 1px 2px var(--cp-border);
     }
@@ -623,7 +623,7 @@ const ARTICLE_CSS = `
     .article-toc a:hover { color: var(--cp-link); }
     .toc-level-3 a { padding-left: 1rem; font-size: .87rem; color: var(--cp-text-muted); }
     .toc-level-4 a { padding-left: 2rem; font-size: .85rem; color: var(--cp-text-muted); }
-    .article-footer-nav { max-width: 46rem; margin: 2rem auto 0; display: flex; justify-content: space-between; gap: 1rem; }
+    .article-footer-nav { margin: 2rem 0 0; display: flex; justify-content: space-between; gap: 1rem; }
     .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: .92rem; }
     .article-footer-nav a:hover { color: var(--cp-accent-hover); }
     @media (max-width: 40rem) {
