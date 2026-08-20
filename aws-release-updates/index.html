@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Latest AWS service updates from the official AWS What's New RSS feed, refreshed automatically.">
+  <meta name="color-scheme" content="light">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>AWS Release Updates | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-warning: #c88719;
+      --cp-warning-bg: #fdf3e1;
+      --cp-violet: #6a4fd6;
+      --cp-violet-bg: #efeaff;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-bg-elevated: #101c2c;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-text-soft: #b7c9d8;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-danger: #f3696a;
+      --cp-danger-bg: #3c1919;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-violet: #a58cf5;
+      --cp-violet-bg: #251d47;
+      --cp-cyan: #4bd7f4;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-overlay: rgba(10, 17, 28, 0.84);
+      --cp-panel: rgba(20, 32, 50, 0.9);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+      --cp-sheen: rgba(255, 255, 255, 0.06);
+      --cp-highlight: rgba(79, 168, 234, 0.2);
+      --cp-highlight-bg: #3c3410;
+      --cp-highlight-border: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--cp-text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; border: 1px solid var(--cp-border); border-radius: 6px; overflow: hidden; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; color: var(--cp-text-muted); flex: 0 0 auto; border-right: 1px solid var(--cp-border); }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.5rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+    .refresh-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem 1rem;
+      margin: .75rem 0 0;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+    }
+    .refresh-meta strong { color: var(--cp-text); }
+
+    .toolbar {
+      position: sticky;
+      top: 4.75rem;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: minmax(14rem, 1fr) repeat(3, minmax(9rem, .35fr));
+      gap: .75rem;
+      margin-bottom: 1rem;
+      padding: .75rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+    }
+    .toolbar::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      backdrop-filter: blur(12px);
+    }
+    .field { position: relative; }
+    .field label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    input, select {
+      width: 100%;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .625rem .75rem;
+    }
+    input::placeholder { color: var(--cp-text-muted); }
+
+    .results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: var(--cp-text-muted);
+      font-size: .9rem;
+    }
+    .results-bar p { margin: 0; }
+    .results-actions { display: flex; align-items: center; gap: .75rem; }
+    .favorites-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      min-height: 2.25rem;
+      padding: .375rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .favorites-filter[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      background: #fff8e8;
+      color: #8a5a08;
+    }
+    .clear-button {
+      border: 0;
+      background: transparent;
+      color: var(--cp-link);
+      cursor: pointer;
+      padding: .25rem;
+    }
+    .clear-button[hidden] { display: none; }
+
+    .update-list { display: flex; flex-direction: column; gap: .75rem; }
+    .update-card {
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      transition: border-color .18s ease, transform .18s ease;
+    }
+    .update-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
+    .update-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .5rem;
+    }
+    .favorite-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      margin-left: auto;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .favorite-button:hover { color: var(--cp-accent); }
+    .favorite-button[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      color: var(--cp-warning);
+    }
+    .update-date { color: var(--cp-text-muted); font-size: .8rem; }
+    .update-relative {
+      display: inline-flex;
+      align-items: center;
+      padding: .1rem .55rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 700;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+    }
+    .update-relative.fresh {
+      padding: .2rem .7rem;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .76rem;
+      letter-spacing: .01em;
+      box-shadow: 0 0 0 3px var(--cp-accent-soft);
+      animation: fresh-pulse 2s ease-in-out infinite;
+    }
+    .update-relative.fresh::before {
+      content: "";
+      width: .4rem;
+      height: .4rem;
+      margin-right: .4rem;
+      border-radius: 50%;
+      background: var(--cp-accent-fg);
+    }
+    @keyframes fresh-pulse {
+      0%, 100% { box-shadow: 0 0 0 3px var(--cp-accent-soft); }
+      50% { box-shadow: 0 0 0 6px rgba(11, 111, 184, .2); }
+    }
+    .update-title {
+      margin: 0 0 .375rem;
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+    .update-title a { color: var(--cp-text); text-decoration: none; }
+    .update-title a:hover { color: var(--cp-accent); text-decoration: underline; }
+    .update-description { margin: 0 0 .625rem; color: var(--cp-text-muted); font-size: .9rem; line-height: 1.5; }
+    .update-tags { display: flex; flex-wrap: wrap; gap: .375rem; }
+    .update-tag {
+      padding: .1rem .5rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: .72rem;
+    }
+    .update-tag.is-product { border-color: var(--cp-accent); color: var(--cp-accent-hover); background: var(--cp-accent-soft); }
+
+    .empty-state, .error-state {
+      padding: 4rem 1rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      text-align: center;
+    }
+    .empty-state h2, .error-state h2 { margin: 0; font-size: 1.25rem; }
+    .empty-state p, .error-state p { margin: .5rem 0 0; color: var(--cp-text-muted); }
+    .load-more-wrap { display: flex; justify-content: center; padding-top: 2rem; }
+    .load-more {
+      min-height: 2.75rem;
+      padding: .625rem 1.25rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .load-more:hover { background: var(--cp-accent-hover); }
+    .load-more[hidden] { display: none; }
+
+    footer.site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: .875rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: .75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a {
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: .8rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-panel); }
+      .toolbar { position: static; grid-template-columns: 1fr 1fr; }
+      .toolbar .search-field { grid-column: 1 / -1; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      main { padding-top: 1.75rem; }
+      .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
+      .toolbar .search-field { grid-column: auto; }
+      .results-bar { align-items: flex-start; flex-direction: column; }
+      .results-actions { width: 100%; justify-content: space-between; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .update-card { transition: none; }
+      body::before { animation: none; }
+      .update-relative.fresh { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/blog/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>Blog</a>
+        <a href="/articles/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">AWS Release Updates</h1>
+      <p class="intro-text">Latest AWS service updates, sourced directly from the official AWS What's New RSS feed. Refreshed automatically several times a day.</p>
+      <p class="refresh-meta">
+        <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+        <a href="https://aws.amazon.com/about-aws/whats-new/recent/" target="_blank" rel="noopener noreferrer">View on AWS What's New</a>
+        <a href="https://aws.amazon.com/about-aws/whats-new/recent/feed/" target="_blank" rel="noopener noreferrer">RSS feed</a>
+      </p>
+    </section>
+
+    <section aria-label="Update browser">
+      <div class="toolbar">
+        <div class="field search-field">
+          <label for="search">Search updates</label>
+          <input id="search" type="search" placeholder="Search by title, description, or product..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category"><option value="">All categories</option></select>
+        </div>
+        <div class="field">
+          <label for="product">Product</label>
+          <select id="product"><option value="">All products</option></select>
+        </div>
+        <div class="field">
+          <label for="lastUpdate">Last update</label>
+          <select id="lastUpdate">
+            <option value="">All time</option>
+            <option value="0">Today</option>
+            <option value="7">Last 7 days</option>
+            <option value="14">Last 14 days</option>
+            <option value="30">Last 30 days</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="results-bar" aria-live="polite">
+        <p id="resultCount">Loading updates...</p>
+        <div class="results-actions">
+          <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+          <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="update-list" id="updateList" aria-busy="true"></div>
+      <div class="load-more-wrap">
+        <button class="load-more" id="loadMore" type="button" hidden>Show more updates</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / AWS Updates</a>
+          <p>Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Data source</strong>
+          <a href="https://aws.amazon.com/about-aws/whats-new/recent/" target="_blank" rel="noopener noreferrer">AWS What's New</a>
+          <a href="https://aws.amazon.com/about-aws/whats-new/recent/feed/" target="_blank" rel="noopener noreferrer">RSS feed</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <span id="libraryCount"></span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    const DEFAULT_PAGE_SIZE = 40;
+    const FAVORITES_STORAGE_KEY = "aws-release-updates-favorites";
+    const state = { updates: [], filtered: [], visible: DEFAULT_PAGE_SIZE, favorites: new Set(), favoritesOnly: false };
+    const elements = {
+      search: document.getElementById("search"),
+      category: document.getElementById("category"),
+      product: document.getElementById("product"),
+      lastUpdate: document.getElementById("lastUpdate"),
+      updateList: document.getElementById("updateList"),
+      resultCount: document.getElementById("resultCount"),
+      libraryCount: document.getElementById("libraryCount"),
+      currentYear: document.getElementById("currentYear"),
+      refreshedAt: document.getElementById("refreshedAt"),
+      favoritesFilter: document.getElementById("favoritesFilter"),
+      clearFilters: document.getElementById("clearFilters"),
+      loadMore: document.getElementById("loadMore"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    function normalize(value) {
+      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function loadFavorites() {
+      try {
+        const storedFavorites = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+        state.favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites : []);
+      } catch {
+        state.favorites = new Set();
+      }
+    }
+
+    function starIconMarkup(isFavorite) {
+      return `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="${isFavorite ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    }
+
+    function toggleFavorite(item, button) {
+      const isFavorite = state.favorites.has(item.link);
+      if (isFavorite) state.favorites.delete(item.link);
+      else state.favorites.add(item.link);
+
+      try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...state.favorites]));
+      } catch (error) {
+        console.warn("Unable to save favorites", error);
+      }
+
+      const nextState = !isFavorite;
+      button.setAttribute("aria-pressed", String(nextState));
+      button.setAttribute("aria-label", `${nextState ? "Remove" : "Add"} ${item.title} ${nextState ? "from" : "to"} favorites`);
+      button.title = nextState ? "Remove from favorites" : "Add to favorites";
+      button.innerHTML = starIconMarkup(nextState);
+      updateFavoritesFilter();
+      if (state.favoritesOnly) applyFilters();
+    }
+
+    function updateFavoritesFilter() {
+      elements.favoritesFilter.innerHTML = `${starIconMarkup(state.favoritesOnly)} My favorites (${state.favorites.size.toLocaleString()})`;
+      elements.favoritesFilter.setAttribute("aria-pressed", String(state.favoritesOnly));
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function relativeTime(iso) {
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const target = new Date(iso);
+      const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+      const diffDays = Math.round((startOfToday - startOfTarget) / 86400000);
+      if (diffDays <= 0) return "Today";
+      if (diffDays === 1) return "Yesterday";
+      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffDays < 30) {
+        const weeks = Math.round(diffDays / 7);
+        return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
+      }
+      if (diffDays < 365) {
+        const months = Math.round(diffDays / 30);
+        return `${months} month${months === 1 ? "" : "s"} ago`;
+      }
+      const years = Math.round(diffDays / 365);
+      return `${years} year${years === 1 ? "" : "s"} ago`;
+    }
+
+    function createCard(item) {
+      const card = document.createElement("article");
+      card.className = "update-card";
+
+      const head = document.createElement("div");
+      head.className = "update-head";
+      const date = document.createElement("span");
+      date.className = "update-date";
+      date.textContent = formatDate(item.pubDate);
+      const relative = document.createElement("span");
+      const relativeText = relativeTime(item.pubDate);
+      relative.className = `update-relative ${relativeText === "Today" || relativeText === "Yesterday" ? "fresh" : ""}`.trim();
+      relative.textContent = relativeText;
+      const favorite = document.createElement("button");
+      const isFavorite = state.favorites.has(item.link);
+      favorite.type = "button";
+      favorite.className = "favorite-button";
+      favorite.setAttribute("aria-pressed", String(isFavorite));
+      favorite.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${item.title} ${isFavorite ? "from" : "to"} favorites`);
+      favorite.title = isFavorite ? "Remove from favorites" : "Add to favorites";
+      favorite.innerHTML = starIconMarkup(isFavorite);
+      favorite.addEventListener("click", () => toggleFavorite(item, favorite));
+      head.append(date, relative, favorite);
+
+      const title = document.createElement("h2");
+      title.className = "update-title";
+      const link = document.createElement("a");
+      link.href = item.link;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = item.title;
+      title.append(link);
+
+      const description = document.createElement("p");
+      description.className = "update-description";
+      description.textContent = item.description;
+
+      const tags = document.createElement("div");
+      tags.className = "update-tags";
+      item.products.forEach((tag) => {
+        const chip = document.createElement("span");
+        chip.className = "update-tag is-product";
+        chip.textContent = tag;
+        tags.append(chip);
+      });
+      item.topics.forEach((tag) => {
+        const chip = document.createElement("span");
+        chip.className = "update-tag";
+        chip.textContent = tag;
+        tags.append(chip);
+      });
+
+      card.append(head, title, description, tags);
+      return card;
+    }
+
+    function render() {
+      elements.updateList.replaceChildren();
+      const visibleItems = state.filtered.slice(0, state.visible);
+
+      if (!visibleItems.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML = state.favoritesOnly
+          ? "<h2>No favorite updates found</h2><p>Add updates with the star button or clear the other filters.</p>"
+          : "<h2>No updates found</h2><p>Try another keyword or clear the filters.</p>";
+        elements.updateList.append(empty);
+      } else {
+        const fragment = document.createDocumentFragment();
+        visibleItems.forEach((item) => fragment.append(createCard(item)));
+        elements.updateList.append(fragment);
+      }
+
+      const total = state.filtered.length;
+      elements.resultCount.textContent = `${total.toLocaleString()} update${total === 1 ? "" : "s"} found`;
+      elements.loadMore.hidden = state.visible >= total;
+      if (!elements.loadMore.hidden) {
+        elements.loadMore.textContent = `Show more (${Math.min(DEFAULT_PAGE_SIZE, total - state.visible)})`;
+      }
+      elements.clearFilters.hidden = !elements.search.value && !elements.category.value && !elements.product.value && !elements.lastUpdate.value && !state.favoritesOnly;
+      elements.updateList.setAttribute("aria-busy", "false");
+    }
+
+    function applyFilters() {
+      const query = normalize(elements.search.value.trim());
+      const selectedCategory = elements.category.value;
+      const selectedProduct = elements.product.value;
+      const maxAgeDays = elements.lastUpdate.value ? Number(elements.lastUpdate.value) : null;
+      const cutoff = maxAgeDays === null ? null : new Date();
+      if (cutoff) {
+        cutoff.setHours(0, 0, 0, 0);
+        cutoff.setDate(cutoff.getDate() - maxAgeDays);
+      }
+      state.filtered = state.updates.filter((item) => {
+        const haystack = normalize(`${item.title} ${item.description} ${item.products.join(" ")} ${item.topics.join(" ")}`);
+        const matchesQuery = !query || haystack.includes(query);
+        return matchesQuery
+          && (!state.favoritesOnly || state.favorites.has(item.link))
+          && (!selectedCategory || item.topics.includes(selectedCategory))
+          && (!selectedProduct || item.products.includes(selectedProduct))
+          && (!cutoff || new Date(item.pubDate) >= cutoff);
+      });
+      state.visible = DEFAULT_PAGE_SIZE;
+      render();
+    }
+
+    function populateFilters() {
+      const categoryCounts = new Map();
+      const productCounts = new Map();
+      state.updates.forEach((item) => {
+        item.topics.forEach((tag) => categoryCounts.set(tag, (categoryCounts.get(tag) || 0) + 1));
+        item.products.forEach((tag) => productCounts.set(tag, (productCounts.get(tag) || 0) + 1));
+      });
+
+      elements.category.replaceChildren(new Option(`All categories (${state.updates.length.toLocaleString()})`, ""));
+      [...categoryCounts.keys()].sort().forEach((tag) => {
+        elements.category.append(new Option(`${tag} (${categoryCounts.get(tag).toLocaleString()})`, tag));
+      });
+
+      elements.product.replaceChildren(new Option(`All products (${state.updates.length.toLocaleString()})`, ""));
+      [...productCounts.keys()].sort().forEach((tag) => {
+        elements.product.append(new Option(`${tag} (${productCounts.get(tag).toLocaleString()})`, tag));
+      });
+    }
+
+    function showError() {
+      elements.updateList.setAttribute("aria-busy", "false");
+      elements.resultCount.textContent = "Unable to load AWS updates";
+      const error = document.createElement("div");
+      error.className = "error-state";
+      error.innerHTML = "<h2>The updates feed could not be loaded</h2><p>Please refresh the page or try again later.</p>";
+      elements.updateList.replaceChildren(error);
+    }
+
+    async function initialize() {
+      try {
+        elements.currentYear.textContent = new Date().getFullYear();
+        loadFavorites();
+        updateFavoritesFilter();
+        const response = await fetch("updates.json");
+        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+        const payload = await response.json();
+        state.updates = payload.items;
+        state.filtered = [...state.updates];
+        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString(undefined, {
+          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+        populateFilters();
+        elements.libraryCount.textContent = `${state.updates.length.toLocaleString()} updates tracked`;
+        applyFilters();
+      } catch (error) {
+        console.error(error);
+        showError();
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilters, 100);
+    });
+    elements.category.addEventListener("change", applyFilters);
+    elements.product.addEventListener("change", applyFilters);
+    elements.lastUpdate.addEventListener("change", applyFilters);
+    elements.favoritesFilter.addEventListener("click", () => {
+      state.favoritesOnly = !state.favoritesOnly;
+      updateFavoritesFilter();
+      applyFilters();
+    });
+    elements.clearFilters.addEventListener("click", () => {
+      elements.search.value = "";
+      elements.category.value = "";
+      elements.product.value = "";
+      elements.lastUpdate.value = "";
+      state.favoritesOnly = false;
+      updateFavoritesFilter();
+      applyFilters();
+      elements.search.focus();
+    });
+    elements.loadMore.addEventListener("click", () => {
+      state.visible += DEFAULT_PAGE_SIZE;
+      render();
+    });
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    initialize();
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("menuToggle");
+      var nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
+      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
+      });
+      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", function (e) {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
+    })();
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", function () {
+        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        var next = isDark ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("site-theme", next); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>
