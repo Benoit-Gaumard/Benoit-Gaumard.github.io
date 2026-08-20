@@ -155,10 +155,10 @@
     .menu-toggle .menu-icon-close { display: none; }
     .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
     .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
-    .header-actions { display: flex; align-items: center; border: 1px solid var(--cp-border); border-radius: 6px; overflow: hidden; flex: 0 0 auto; }
-    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; color: var(--cp-text-muted); flex: 0 0 auto; border-right: 1px solid var(--cp-border); }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
     .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
-    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
     .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
     .theme-toggle .theme-icon-sun { display: none; }
     :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
@@ -520,11 +520,11 @@
       <p class="hint">Click an emoji to copy it, or click a shortcode chip to copy <code>:shortcode:</code>.</p>
 
       <div class="results-bar" aria-live="polite">
-        <p id="resultCount">Loading emojis...</p>
         <div class="results-actions">
           <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         </div>
+        <p id="resultCount">Loading emojis...</p>
       </div>
 
       <div class="gallery" id="gallery" aria-busy="true"></div>
