@@ -186,7 +186,7 @@
     }
     .refresh-button:hover { background: var(--cp-accent-soft); }
     .last-checked { color: var(--cp-text-muted); font-size: .85rem; }
-    .toolbar-right { display: flex; align-items: center; gap: .9rem; }
+    .toolbar-left { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; }
     .view-toggle {
       display: inline-flex;
       gap: .25rem;
@@ -350,7 +350,6 @@
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
       .workflow-toolbar { flex-direction: column; align-items: stretch; gap: .5rem; }
-      .toolbar-right { justify-content: space-between; }
       .workflow-cards.list-view .workflow-link { display: none; }
       .workflow-meta { grid-template-columns: 1fr; }
       .back-to-top { right: 1rem; bottom: 1rem; }
@@ -398,9 +397,8 @@
 
     <section aria-label="Workflow status">
       <div class="workflow-toolbar">
-        <button class="refresh-button" id="refreshButton" type="button">Refresh</button>
-        <div class="toolbar-right">
-          <span class="last-checked" id="lastChecked"></span>
+        <div class="toolbar-left">
+          <button class="refresh-button" id="refreshButton" type="button">Refresh</button>
           <div class="view-toggle" role="group" aria-label="Choose view">
             <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
@@ -412,6 +410,7 @@
             </button>
           </div>
         </div>
+        <span class="last-checked" id="lastChecked"></span>
       </div>
       <div class="workflow-cards" id="workflowCards"></div>
     </section>
