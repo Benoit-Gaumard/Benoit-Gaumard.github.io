@@ -249,28 +249,28 @@
     .view-toggle {
       display: inline-flex;
       align-items: center;
-      gap: .125rem;
-      padding: .2rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 999px;
+      gap: .25rem;
+      padding: .25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
       background: var(--cp-surface);
     }
     .view-option {
       display: inline-flex;
       align-items: center;
-      gap: .375rem;
-      padding: .3rem .65rem;
+      gap: .4rem;
+      padding: .45rem .9rem;
       border: 0;
-      border-radius: 999px;
+      border-radius: 7px;
       background: transparent;
       color: var(--cp-text-muted);
       cursor: pointer;
-      font-size: .8rem;
+      font-size: .85rem;
       font-weight: 600;
     }
-    .view-option svg { width: .9rem; height: .9rem; }
+    .view-option svg { flex: 0 0 auto; }
     .view-option:hover { color: var(--cp-text); }
-    .view-option[aria-pressed="true"] { background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .view-option[aria-pressed="true"] { background: var(--cp-accent-soft); color: var(--cp-accent); }
 
     .language-filter {
       display: inline-flex;
@@ -702,11 +702,11 @@
         <div class="results-bar-actions">
           <div class="view-toggle" role="group" aria-label="Choose view">
             <button class="view-option" id="viewCards" type="button" data-view="cards" aria-pressed="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
               Cards
             </button>
             <button class="view-option" id="viewList" type="button" data-view="list" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
               List
             </button>
           </div>
