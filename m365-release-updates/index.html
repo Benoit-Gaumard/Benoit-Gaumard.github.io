@@ -241,6 +241,26 @@
       font-size: .9rem;
     }
     .results-bar p { margin: 0; }
+    .results-actions { display: flex; align-items: center; gap: .75rem; }
+    .favorites-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      min-height: 2.25rem;
+      padding: .375rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .favorites-filter[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      background: #fff8e8;
+      color: #8a5a08;
+    }
     .clear-button {
       border: 0;
       background: transparent;
@@ -266,6 +286,26 @@
       align-items: center;
       gap: .5rem;
       margin-bottom: .5rem;
+    }
+    .favorite-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      margin-left: auto;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .favorite-button:hover { color: var(--cp-accent); }
+    .favorite-button[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      color: var(--cp-warning);
     }
     .status-badge {
       display: inline-flex;
@@ -442,6 +482,7 @@
       .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
       .toolbar .search-field { grid-column: auto; }
       .results-bar { align-items: flex-start; flex-direction: column; }
+      .results-actions { width: 100%; justify-content: space-between; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -519,8 +560,11 @@
       </div>
 
       <div class="results-bar" aria-live="polite">
+        <div class="results-actions">
+          <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+          <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+        </div>
         <p id="resultCount">Loading updates...</p>
-        <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
       </div>
 
       <div class="update-list" id="updateList" aria-busy="true"></div>
@@ -564,7 +608,8 @@
 
   <script>
     const DEFAULT_PAGE_SIZE = 40;
-    const state = { updates: [], filtered: [], visible: DEFAULT_PAGE_SIZE };
+    const FAVORITES_STORAGE_KEY = "m365-release-updates-favorites";
+    const state = { updates: [], filtered: [], visible: DEFAULT_PAGE_SIZE, favorites: new Set(), favoritesOnly: false };
     const elements = {
       search: document.getElementById("search"),
       status: document.getElementById("status"),
@@ -575,6 +620,7 @@
       libraryCount: document.getElementById("libraryCount"),
       currentYear: document.getElementById("currentYear"),
       refreshedAt: document.getElementById("refreshedAt"),
+      favoritesFilter: document.getElementById("favoritesFilter"),
       clearFilters: document.getElementById("clearFilters"),
       loadMore: document.getElementById("loadMore"),
       backToTop: document.getElementById("backToTop"),
@@ -582,6 +628,44 @@
 
     function normalize(value) {
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function loadFavorites() {
+      try {
+        const storedFavorites = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+        state.favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites : []);
+      } catch {
+        state.favorites = new Set();
+      }
+    }
+
+    function starIconMarkup(isFavorite) {
+      return `<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="${isFavorite ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    }
+
+    function toggleFavorite(item, button) {
+      const isFavorite = state.favorites.has(item.link);
+      if (isFavorite) state.favorites.delete(item.link);
+      else state.favorites.add(item.link);
+
+      try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...state.favorites]));
+      } catch (error) {
+        console.warn("Unable to save favorites", error);
+      }
+
+      const nextState = !isFavorite;
+      button.setAttribute("aria-pressed", String(nextState));
+      button.setAttribute("aria-label", `${nextState ? "Remove" : "Add"} ${item.title} ${nextState ? "from" : "to"} favorites`);
+      button.title = nextState ? "Remove from favorites" : "Add to favorites";
+      button.innerHTML = starIconMarkup(nextState);
+      updateFavoritesFilter();
+      if (state.favoritesOnly) applyFilters();
+    }
+
+    function updateFavoritesFilter() {
+      elements.favoritesFilter.innerHTML = `${starIconMarkup(state.favoritesOnly)} My favorites (${state.favorites.size.toLocaleString()})`;
+      elements.favoritesFilter.setAttribute("aria-pressed", String(state.favoritesOnly));
     }
 
     function formatDate(iso) {
@@ -625,7 +709,16 @@
       const relativeText = relativeTime(item.pubDate);
       relative.className = `update-relative ${relativeText === "Today" || relativeText === "Yesterday" ? "fresh" : ""}`.trim();
       relative.textContent = relativeText;
-      head.append(badge, date, relative);
+      const favorite = document.createElement("button");
+      const isFavorite = state.favorites.has(item.link);
+      favorite.type = "button";
+      favorite.className = "favorite-button";
+      favorite.setAttribute("aria-pressed", String(isFavorite));
+      favorite.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${item.title} ${isFavorite ? "from" : "to"} favorites`);
+      favorite.title = isFavorite ? "Remove from favorites" : "Add to favorites";
+      favorite.innerHTML = starIconMarkup(isFavorite);
+      favorite.addEventListener("click", () => toggleFavorite(item, favorite));
+      head.append(badge, date, relative, favorite);
 
       const title = document.createElement("h2");
       title.className = "update-title";
@@ -660,7 +753,9 @@
       if (!visibleItems.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.innerHTML = "<h2>No updates found</h2><p>Try another keyword or clear the filters.</p>";
+        empty.innerHTML = state.favoritesOnly
+          ? "<h2>No favorite updates found</h2><p>Add updates with the star button or clear the other filters.</p>"
+          : "<h2>No updates found</h2><p>Try another keyword or clear the filters.</p>";
         elements.updateList.append(empty);
       } else {
         const fragment = document.createDocumentFragment();
@@ -674,7 +769,7 @@
       if (!elements.loadMore.hidden) {
         elements.loadMore.textContent = `Show more (${Math.min(DEFAULT_PAGE_SIZE, total - state.visible)})`;
       }
-      elements.clearFilters.hidden = !elements.search.value && !elements.status.value && !elements.product.value && !elements.lastUpdate.value;
+      elements.clearFilters.hidden = !elements.search.value && !elements.status.value && !elements.product.value && !elements.lastUpdate.value && !state.favoritesOnly;
       elements.updateList.setAttribute("aria-busy", "false");
     }
 
@@ -692,6 +787,7 @@
         const haystack = normalize(`${item.title} ${item.description} ${item.tags.join(" ")}`);
         const matchesQuery = !query || haystack.includes(query);
         return matchesQuery
+          && (!state.favoritesOnly || state.favorites.has(item.link))
           && (!selectedStatus || item.statusLabel === selectedStatus)
           && (!selectedProduct || item.tags.includes(selectedProduct))
           && (!cutoff || new Date(item.pubDate) >= cutoff);
@@ -731,6 +827,8 @@
     async function initialize() {
       try {
         elements.currentYear.textContent = new Date().getFullYear();
+        loadFavorites();
+        updateFavoritesFilter();
         const response = await fetch("updates.json");
         if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
         const payload = await response.json();
@@ -756,11 +854,18 @@
     elements.status.addEventListener("change", applyFilters);
     elements.product.addEventListener("change", applyFilters);
     elements.lastUpdate.addEventListener("change", applyFilters);
+    elements.favoritesFilter.addEventListener("click", () => {
+      state.favoritesOnly = !state.favoritesOnly;
+      updateFavoritesFilter();
+      applyFilters();
+    });
     elements.clearFilters.addEventListener("click", () => {
       elements.search.value = "";
       elements.status.value = "";
       elements.product.value = "";
       elements.lastUpdate.value = "";
+      state.favoritesOnly = false;
+      updateFavoritesFilter();
       applyFilters();
       elements.search.focus();
     });
