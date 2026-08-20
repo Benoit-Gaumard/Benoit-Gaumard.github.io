@@ -673,6 +673,7 @@
           <select id="lastUpdate">
             <option value="">All time</option>
             <option value="0" selected>Today</option>
+            <option value="1">Yesterday</option>
             <option value="7">Last 7 days</option>
             <option value="14">Last 14 days</option>
             <option value="30">Last 30 days</option>
@@ -1116,20 +1117,32 @@
       const selectedSource = elements.source.value;
       const selectedCategory = elements.category.value;
       const selectedSubcategory = elements.subcategory.value;
-      const maxAgeDays = elements.lastUpdate.value ? Number(elements.lastUpdate.value) : null;
+      const isYesterday = elements.lastUpdate.value === "1";
+      const maxAgeDays = elements.lastUpdate.value && !isYesterday ? Number(elements.lastUpdate.value) : null;
       const cutoff = maxAgeDays === null ? null : new Date();
       if (cutoff) {
         cutoff.setHours(0, 0, 0, 0);
         cutoff.setDate(cutoff.getDate() - maxAgeDays);
       }
+      // "Yesterday" is a single-day window, not a cumulative cutoff like the other options.
+      let yesterdayStart = null;
+      let yesterdayEnd = null;
+      if (isYesterday) {
+        yesterdayEnd = new Date();
+        yesterdayEnd.setHours(0, 0, 0, 0);
+        yesterdayStart = new Date(yesterdayEnd);
+        yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+      }
       state.filteredItems = state.updates.filter((item) => {
         const haystack = normalize(`${item.title} ${item.description} ${item.source} ${item.categories.join(" ")}`);
         const matchesQuery = !query || haystack.includes(query);
+        const pubDate = new Date(item.pubDate);
         return matchesQuery
           && (!selectedSource || item.source === selectedSource)
           && (!selectedCategory || item.categories.includes(selectedCategory))
           && (!selectedSubcategory || item.subcategory === selectedSubcategory)
-          && (!cutoff || new Date(item.pubDate) >= cutoff)
+          && (!cutoff || pubDate >= cutoff)
+          && (!isYesterday || (pubDate >= yesterdayStart && pubDate < yesterdayEnd))
           && (!state.favoritesOnly || state.favorites.has(item.id))
           && (!state.language || item.country === state.language);
       });
