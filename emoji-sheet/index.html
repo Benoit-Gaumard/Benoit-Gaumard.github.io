@@ -232,7 +232,7 @@
       top: 4.75rem;
       z-index: 10;
       display: grid;
-      grid-template-columns: minmax(14rem, 1fr) minmax(11rem, .4fr);
+      grid-template-columns: minmax(14rem, 1fr) minmax(11rem, .4fr) minmax(9rem, .3fr);
       gap: .75rem;
       margin-bottom: .75rem;
       padding: .75rem;
@@ -389,19 +389,37 @@
     }
     .empty-state h2, .error-state h2 { margin: 0; font-size: 1.25rem; }
     .empty-state p, .error-state p { margin: .5rem 0 0; color: var(--cp-text-muted); }
-    .load-more-wrap { display: flex; justify-content: center; padding-top: 2rem; }
-    .load-more {
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding-top: 2rem;
+    }
+    .pagination-button {
       min-height: 2.75rem;
       padding: .625rem 1.25rem;
-      border: 1px solid var(--cp-accent);
+      border: 1px solid var(--cp-border-strong);
       border-radius: 6px;
-      background: var(--cp-accent);
-      color: var(--cp-accent-fg);
+      background: var(--cp-surface);
+      color: var(--cp-text);
       cursor: pointer;
       font-weight: 700;
     }
-    .load-more:hover { background: var(--cp-accent-hover); }
-    .load-more[hidden] { display: none; }
+    .pagination-button:hover:not(:disabled) {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent-hover);
+    }
+    .pagination-button:disabled { cursor: not-allowed; opacity: .45; }
+    .pagination-status {
+      min-width: 9rem;
+      color: var(--cp-text-muted);
+      font-size: .875rem;
+      font-weight: 650;
+      text-align: center;
+    }
+    .pagination[hidden] { display: none; }
 
     .copy-toast {
       position: fixed;
@@ -579,6 +597,15 @@
           <label for="category">Category</label>
           <select id="category"><option value="">All categories</option></select>
         </div>
+        <div class="field">
+          <label for="perPage">Per page</label>
+          <select id="perPage">
+            <option value="50">Per page: 50</option>
+            <option value="100">Per page: 100</option>
+            <option value="200">Per page: 200</option>
+            <option value="all">Per page: All</option>
+          </select>
+        </div>
       </div>
 
       <p class="hint">Click an emoji to copy it, or click a shortcode chip to copy <code>:shortcode:</code>.</p>
@@ -592,9 +619,11 @@
       </div>
 
       <div class="gallery" id="gallery" aria-busy="true"></div>
-      <div class="load-more-wrap">
-        <button class="load-more" id="loadMore" type="button" hidden>Show more emojis</button>
-      </div>
+      <nav class="pagination" id="pagination" aria-label="Emoji pages">
+        <button class="pagination-button" id="previousPage" type="button">Previous</button>
+        <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
+        <button class="pagination-button" id="nextPage" type="button">Next</button>
+      </nav>
     </section>
   </main>
 
@@ -635,12 +664,13 @@
   </div>
 
   <script>
-    const DEFAULT_PAGE_SIZE = 150;
+    const DEFAULT_PAGE_SIZE = 50;
     const FAVORITES_STORAGE_KEY = "emoji-sheet-favorites";
-    const state = { emojis: [], filtered: [], visible: DEFAULT_PAGE_SIZE, favorites: new Set(), favoritesOnly: false };
+    const state = { emojis: [], filtered: [], currentPage: 1, pageSize: DEFAULT_PAGE_SIZE, favorites: new Set(), favoritesOnly: false };
     const elements = {
       search: document.getElementById("search"),
       category: document.getElementById("category"),
+      perPage: document.getElementById("perPage"),
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
@@ -648,7 +678,10 @@
       refreshedAt: document.getElementById("refreshedAt"),
       favoritesFilter: document.getElementById("favoritesFilter"),
       clearFilters: document.getElementById("clearFilters"),
-      loadMore: document.getElementById("loadMore"),
+      pagination: document.getElementById("pagination"),
+      paginationStatus: document.getElementById("paginationStatus"),
+      previousPage: document.getElementById("previousPage"),
+      nextPage: document.getElementById("nextPage"),
       backToTop: document.getElementById("backToTop"),
       copyToast: document.getElementById("copyToast"),
       copyToastEmoji: document.getElementById("copyToastEmoji"),
@@ -756,7 +789,12 @@
 
     function render() {
       elements.gallery.replaceChildren();
-      const visibleItems = state.filtered.slice(0, state.visible);
+      const total = state.filtered.length;
+      const totalPages = state.pageSize === Number.POSITIVE_INFINITY ? 1 : Math.max(1, Math.ceil(total / state.pageSize));
+      state.currentPage = Math.min(state.currentPage, totalPages);
+      const startIndex = state.pageSize === Number.POSITIVE_INFINITY ? 0 : (state.currentPage - 1) * state.pageSize;
+      const endIndex = state.pageSize === Number.POSITIVE_INFINITY ? total : startIndex + state.pageSize;
+      const visibleItems = state.filtered.slice(startIndex, endIndex);
 
       if (!visibleItems.length) {
         const empty = document.createElement("div");
@@ -771,12 +809,11 @@
         elements.gallery.append(fragment);
       }
 
-      const total = state.filtered.length;
       elements.resultCount.textContent = `${total.toLocaleString()} emoji${total === 1 ? "" : "s"} found`;
-      elements.loadMore.hidden = state.visible >= total;
-      if (!elements.loadMore.hidden) {
-        elements.loadMore.textContent = `Show more (${Math.min(DEFAULT_PAGE_SIZE, total - state.visible)})`;
-      }
+      elements.pagination.hidden = total === 0 || state.pageSize === Number.POSITIVE_INFINITY;
+      elements.paginationStatus.textContent = `Page ${state.currentPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
+      elements.previousPage.disabled = state.currentPage <= 1;
+      elements.nextPage.disabled = state.currentPage >= totalPages;
       elements.clearFilters.hidden = !elements.search.value && !elements.category.value && !state.favoritesOnly;
       elements.gallery.setAttribute("aria-busy", "false");
     }
@@ -790,7 +827,7 @@
           && (!state.favoritesOnly || state.favorites.has(item.emoji))
           && (!selectedCategory || item.category === selectedCategory);
       });
-      state.visible = DEFAULT_PAGE_SIZE;
+      state.currentPage = 1;
       render();
     }
 
@@ -854,9 +891,20 @@
       applyFilters();
       elements.search.focus();
     });
-    elements.loadMore.addEventListener("click", () => {
-      state.visible += DEFAULT_PAGE_SIZE;
+    elements.perPage.addEventListener("change", () => {
+      state.pageSize = elements.perPage.value === "all" ? Number.POSITIVE_INFINITY : Number(elements.perPage.value);
+      state.currentPage = 1;
       render();
+    });
+    elements.previousPage.addEventListener("click", () => {
+      state.currentPage = Math.max(1, state.currentPage - 1);
+      render();
+      elements.gallery.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    elements.nextPage.addEventListener("click", () => {
+      state.currentPage += 1;
+      render();
+      elements.gallery.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     let scrollTicking = false;
