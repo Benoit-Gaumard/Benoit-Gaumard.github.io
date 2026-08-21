@@ -1196,7 +1196,7 @@
         if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
         const payload = await response.json();
         state.updates = payload.items;
-        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString(undefined, {
+        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
           year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
         });
         elements.feedMeta.textContent = `${payload.succeededCount.toLocaleString()} feeds tracked`;

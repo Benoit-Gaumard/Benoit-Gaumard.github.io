@@ -1165,7 +1165,7 @@
         loadFavorites();
         fetch("meta.json").then((response) => response.ok ? response.json() : null).then((meta) => {
           elements.refreshedAt.textContent = meta
-            ? new Date(meta.generatedAt).toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+            ? new Date(meta.generatedAt).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
             : "Unavailable";
         }).catch(() => { elements.refreshedAt.textContent = "Unavailable"; });
         updateFavoritesFilter();

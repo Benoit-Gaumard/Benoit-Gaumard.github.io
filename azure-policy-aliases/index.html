@@ -535,7 +535,7 @@
         const payload = await response.json();
         state.rows = flattenRows(payload.resources);
         state.filtered = state.rows;
-        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString(undefined, {
+        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
           year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
         });
         renderStats(payload);
