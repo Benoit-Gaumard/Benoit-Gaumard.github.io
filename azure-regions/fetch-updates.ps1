@@ -94,6 +94,8 @@ foreach ($location in $locations) {
     name              = $location.DisplayName
     id                = $location.Location
     physicalLocation  = $location.PhysicalLocation
+    latitude          = if ($location.Latitude) { [double]$location.Latitude } else { $null }
+    longitude         = if ($location.Longitude) { [double]$location.Longitude } else { $null }
     geography         = $geography
     continent         = $continent
     availabilityZones = [bool]$zoneEnabledLocations[$location.Location]

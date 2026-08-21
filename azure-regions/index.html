@@ -16,6 +16,7 @@
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Azure Regions | Benoit Gaumard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
     :root {
       color-scheme: light;
@@ -237,6 +238,28 @@
     }
     .view-toggle-button svg { flex: 0 0 auto; }
 
+    .region-map {
+      height: 34rem;
+      max-height: 70vh;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--cp-surface-soft);
+    }
+    .region-map .leaflet-popup-content-wrapper, .region-map .leaflet-popup-tip {
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      box-shadow: var(--cp-shadow);
+    }
+    .map-popup h3 { margin: 0 0 .35rem; font-size: .95rem; color: var(--cp-text); }
+    .map-popup dl { margin: 0; font-size: .8rem; color: var(--cp-text-muted); }
+    .map-popup dl div { display: flex; gap: .35rem; }
+    .map-popup dt { flex: 0 0 auto; font-weight: 600; color: var(--cp-text); }
+    .map-popup .map-popup-tag { display: inline-block; margin-top: .4rem; padding: .15rem .5rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+    .map-popup .map-popup-tag.is-az { background: var(--cp-success-bg); color: var(--cp-success); }
+    .map-popup .map-popup-tag.is-no-az { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .map-popup .map-popup-tag.is-restricted { margin-left: .35rem; background: var(--cp-danger-bg); color: var(--cp-danger); }
+
     .region-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
@@ -438,10 +461,15 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
             List
           </button>
+          <button type="button" class="view-toggle-button" data-view="map" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3-6-3"/><path d="M9 4v13M15 7v13"/></svg>
+            Map
+          </button>
         </div>
         <p class="results-count" id="resultsCount"></p>
       </div>
       <div class="region-cards" id="regionCards"></div>
+      <div class="region-map" id="regionMap" hidden></div>
     </section>
   </main>
 
@@ -478,6 +506,7 @@
     </svg>
   </button>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
@@ -488,24 +517,88 @@
       azOnlyFilter: document.getElementById("azOnlyFilter"),
       resultsCount: document.getElementById("resultsCount"),
       regionCards: document.getElementById("regionCards"),
+      regionMap: document.getElementById("regionMap"),
       backToTop: document.getElementById("backToTop"),
     };
 
     const VIEW_STORAGE_KEY = "azure-regions-view-mode";
     const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
+    const mapState = { map: null, markers: [], tileLayer: null };
+
+    const MAP_TILES = {
+      light: { url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
+      dark: { url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
+    };
+
+    function currentTheme() {
+      return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    }
+
+    function initMap() {
+      if (mapState.map) return;
+      mapState.map = L.map(elements.regionMap, { worldCopyJump: true }).setView([20, 10], 2);
+      mapState.tileLayer = L.tileLayer(MAP_TILES[currentTheme()].url, {
+        attribution: MAP_TILES[currentTheme()].attribution,
+        maxZoom: 18,
+      }).addTo(mapState.map);
+    }
+
+    function updateMapTheme() {
+      if (!mapState.map) return;
+      mapState.tileLayer.setUrl(MAP_TILES[currentTheme()].url);
+    }
+
+    function renderMap(regions) {
+      if (!mapState.map) return;
+      mapState.markers.forEach((marker) => marker.remove());
+      mapState.markers = regions
+        .filter((region) => typeof region.latitude === "number" && typeof region.longitude === "number")
+        .map((region) => {
+          const marker = L.circleMarker([region.latitude, region.longitude], {
+            radius: 7,
+            weight: 2,
+            color: region.restricted ? "#c93636" : (region.availabilityZones ? "#16845b" : "#0b6fb8"),
+            fillColor: region.restricted ? "#c93636" : (region.availabilityZones ? "#16845b" : "#0b6fb8"),
+            fillOpacity: 0.55,
+          }).addTo(mapState.map);
+          marker.bindPopup(`
+            <div class="map-popup">
+              <h3>${region.name}</h3>
+              <dl>
+                <div><dt>Location</dt><span>${region.physicalLocation}</span></div>
+                <div><dt>Geography</dt><span>${region.geography}</span></div>
+                <div><dt>Paired</dt><span>${region.pairedRegion || "\u2014"}</span></div>
+              </dl>
+              <span class="map-popup-tag ${region.availabilityZones ? "is-az" : "is-no-az"}">${region.availabilityZones ? "Availability zones" : "No availability zones"}</span>
+              ${region.restricted ? '<span class="map-popup-tag is-restricted">Restricted</span>' : ""}
+            </div>
+          `);
+          return marker;
+        });
+    }
 
     function applyView(view) {
       elements.regionCards.classList.toggle("list-view", view === "list");
+      elements.regionCards.hidden = view === "map";
+      elements.regionMap.hidden = view !== "map";
       viewButtons.forEach((button) => {
         const isActive = button.dataset.view === view;
         button.classList.toggle("is-active", isActive);
         button.setAttribute("aria-pressed", String(isActive));
       });
+      if (view === "map") {
+        initMap();
+        requestAnimationFrame(() => {
+          mapState.map.invalidateSize();
+          if (state.data) renderMap(getFilteredRegions());
+        });
+      }
     }
 
     function loadView() {
       try {
-        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
+        const stored = localStorage.getItem(VIEW_STORAGE_KEY);
+        return stored === "list" || stored === "map" ? stored : "cards";
       } catch {
         return "cards";
       }
@@ -558,12 +651,12 @@
       continents.forEach((continent) => elements.continentFilter.append(new Option(continent, continent)));
     }
 
-    function renderCards() {
+    function getFilteredRegions() {
       const query = elements.searchInput.value.trim().toLowerCase();
       const continent = elements.continentFilter.value;
       const azOnly = elements.azOnlyFilter.checked;
 
-      const filtered = state.data.regions.filter((region) => {
+      return state.data.regions.filter((region) => {
         if (continent && region.continent !== continent) return false;
         if (azOnly && !region.availabilityZones) return false;
         if (query) {
@@ -572,9 +665,13 @@
         }
         return true;
       });
+    }
 
+    function renderCards() {
+      const filtered = getFilteredRegions();
       elements.resultsCount.textContent = `${filtered.length} region${filtered.length === 1 ? "" : "s"} found.`;
       elements.regionCards.replaceChildren();
+      renderMap(filtered);
 
       if (!filtered.length) {
         const empty = document.createElement("div");
@@ -686,6 +783,7 @@
         if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
         else document.documentElement.removeAttribute("data-theme");
         try { localStorage.setItem("site-theme", next); } catch (e) {}
+        if (typeof updateMapTheme === "function") updateMapTheme();
       });
     })();
   </script>
