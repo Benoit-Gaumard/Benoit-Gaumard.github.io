@@ -1,0 +1,45 @@
+name: Refresh Azure Regions
+
+on:
+  schedule:
+    # 06:00 and 09:00 and 12:00 and 15:00 UTC (4 times daily)
+    - cron: '0 6 * * *'
+    - cron: '0 9 * * *'
+    - cron: '0 12 * * *'
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: azure-regions-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest Azure regions
+        shell: pwsh
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: ./azure-regions/fetch-updates.ps1
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- azure-regions/regions.json; then
+            echo "No changes to Azure regions data."
+          else
+            git add azure-regions/regions.json
+            git commit -m "chore: refresh Azure regions data"
+            git push
+          fi
