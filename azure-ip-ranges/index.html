@@ -163,6 +163,16 @@
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+    .refresh-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem 1rem;
+      margin: .75rem 0 0;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+    }
+    .refresh-meta strong { color: var(--cp-text); }
 
     .stat-cards {
       display: grid;
@@ -432,6 +442,7 @@
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Azure IP Ranges</h1>
       <p class="intro-text">IP address ranges used by Azure services (service tags), fetched from the official <a href="https://www.microsoft.com/en-us/download/details.aspx?id=56519" target="_blank" rel="noopener">Azure IP Ranges and Service Tags &ndash; Public Cloud</a> download.</p>
+      <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">Loading...</strong></p>
     </section>
 
     <section aria-label="Summary">
@@ -515,6 +526,7 @@
 
     const elements = {
       statCards: document.getElementById("statCards"),
+      refreshedAt: document.getElementById("refreshedAt"),
       lookupInput: document.getElementById("lookupInput"),
       lookupButton: document.getElementById("lookupButton"),
       lookupHeading: document.getElementById("lookupHeading"),
@@ -597,7 +609,7 @@
     }
 
     function formatDateTime(iso) {
-      return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+      return new Date(iso).toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
     }
 
     function renderStats() {
@@ -609,7 +621,6 @@
         { value: data.ipv6Count.toLocaleString(), label: "IPv6 prefixes" },
         { value: `#${data.version}`, label: "Service tags version" },
         { value: data.sourceFileName.replace("ServiceTags_Public_", "").replace(".json", ""), label: "Source file date" },
-        { value: formatDateTime(data.generatedAt), label: "Last refreshed" },
       ];
       elements.statCards.replaceChildren();
       stats.forEach((stat) => {
@@ -743,6 +754,7 @@
     async function init() {
       const response = await fetch("./ip-ranges.json", { cache: "no-store" });
       state.data = await response.json();
+      elements.refreshedAt.textContent = formatDateTime(state.data.generatedAt);
       renderStats();
       renderTagResults();
       renderTagDetail();

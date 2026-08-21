@@ -613,7 +613,9 @@
         container.append(card);
         loadWorkflow(workflow, card);
       });
-      document.getElementById("lastChecked").textContent = new Date().toLocaleTimeString();
+      document.getElementById("lastChecked").textContent = new Date().toLocaleString(undefined, {
+        year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+      });
     }
 
     document.getElementById("refreshButton").addEventListener("click", renderCards);
