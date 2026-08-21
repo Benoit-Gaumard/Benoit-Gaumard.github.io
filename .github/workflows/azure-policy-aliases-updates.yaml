@@ -7,7 +7,14 @@ on:
     - cron: '0 9 * * *'
     - cron: '0 12 * * *'
     - cron: '0 15 * * *'
+    # Weekly dated snapshot (Monday 18:00 UTC, outside the daily refresh times above) to track new aliases over time
+    - cron: '0 18 * * 1'
   workflow_dispatch:
+    inputs:
+      snapshot:
+        description: 'Also save a dated snapshot (normally only done on the weekly schedule)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -32,14 +39,24 @@ jobs:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         run: ./azure-policy-aliases/fetch-updates.ps1
 
+      - name: Save weekly dated snapshot
+        if: github.event.schedule == '0 18 * * 1' || (github.event_name == 'workflow_dispatch' && inputs.snapshot)
+        run: |
+          mkdir -p azure-policy-aliases/history
+          snapshot_date=$(date -u +%Y-%m-%d)
+          cp azure-policy-aliases/policy-aliases.json "azure-policy-aliases/history/policy-aliases-${snapshot_date}.json"
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- azure-policy-aliases/policy-aliases.json; then
+          git add azure-policy-aliases/policy-aliases.json
+          if [ -d azure-policy-aliases/history ]; then
+            git add azure-policy-aliases/history
+          fi
+          if git diff --cached --quiet; then
             echo "No changes to Azure Policy aliases data."
           else
-            git add azure-policy-aliases/policy-aliases.json
             git commit -m "chore: refresh Azure Policy aliases data"
             git push
           fi
