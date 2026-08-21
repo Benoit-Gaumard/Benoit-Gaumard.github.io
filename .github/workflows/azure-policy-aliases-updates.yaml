@@ -19,12 +19,18 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Fetch latest Azure Policy aliases
-        run: node azure-policy-aliases/fetch-updates.mjs
+        shell: pwsh
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: ./azure-policy-aliases/fetch-updates.ps1
 
       - name: Commit and push if changed
         run: |
