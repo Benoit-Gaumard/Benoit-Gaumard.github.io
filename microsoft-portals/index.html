@@ -160,17 +160,6 @@
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
-    .stat-card {
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
-    }
-    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
-    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
-
     .filter-bar { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1.5rem; }
     .filter-bar input, .filter-bar select {
       min-height: 2.9rem;
@@ -402,8 +391,6 @@
       <p class="intro-text">A comprehensive directory of all Microsoft portals in one place.</p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Portal statistics"></section>
-
     <section aria-label="Microsoft portals">
       <div class="filter-bar">
         <input id="searchInput" type="search" placeholder="Search portals..." autocomplete="off" spellcheck="false">
@@ -466,7 +453,6 @@
       searchInput: document.getElementById("searchInput"),
       categoryFilter: document.getElementById("categoryFilter"),
       resultsCount: document.getElementById("resultsCount"),
-      statsGrid: document.getElementById("statsGrid"),
       portalCards: document.getElementById("portalCards"),
       backToTop: document.getElementById("backToTop"),
     };
@@ -579,21 +565,6 @@
       return name.split(/\s+/).map((part) => part[0]).filter(Boolean).join("").slice(0, 2).toUpperCase();
     }
 
-    function renderStats() {
-      const categories = new Set(portals.map((portal) => portal.categorie).filter(Boolean));
-      const stats = [
-        { label: "Portals", value: portals.length },
-        { label: "Categories", value: categories.size },
-      ];
-      elements.statsGrid.replaceChildren();
-      stats.forEach((stat) => {
-        const el = document.createElement("div");
-        el.className = "stat-card";
-        el.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
-        elements.statsGrid.append(el);
-      });
-    }
-
     function populateFilters() {
       const categories = [...new Set(portals.map((portal) => portal.categorie).filter(Boolean))].sort((a, b) => a.localeCompare(b));
       categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
@@ -679,7 +650,6 @@
         .filter((row) => row.name && row.url)
         .map((row) => ({ name: row.name, categorie: row.categorie, url: row.url }))
         .sort((a, b) => a.name.localeCompare(b.name));
-      renderStats();
       populateFilters();
       renderCards();
     }
