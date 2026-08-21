@@ -283,34 +283,35 @@
     }
     .view-toggle-button svg { flex: 0 0 auto; }
 
-    .link-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.25rem; }
+    .link-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .85rem; }
     .link-card {
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: .65rem;
-      padding: 1.5rem;
+      gap: .4rem;
+      padding: .7rem .9rem;
       background: var(--cp-surface);
       border: 1px solid var(--cp-border);
-      border-radius: 12px;
+      border-radius: 10px;
       text-decoration: none;
       color: var(--cp-text);
+      min-width: 0;
       transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
     .link-card:hover, .link-card:focus-visible {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
       border-color: var(--cp-accent);
       box-shadow: var(--cp-shadow);
     }
     .link-card.is-highlighted { border-color: var(--cp-warning); background: var(--cp-warning-bg); }
     .favorite-button {
       position: absolute;
-      top: .75rem;
-      right: .75rem;
+      top: .5rem;
+      right: .5rem;
       z-index: 2;
       display: grid;
-      width: 2rem;
-      height: 2rem;
+      width: 1.75rem;
+      height: 1.75rem;
       place-items: center;
       padding: 0;
       border: 1px solid var(--cp-border);
@@ -325,86 +326,58 @@
       border-color: var(--cp-warning);
       color: var(--cp-warning);
     }
-    .link-card-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+    .link-card-row1 { display: flex; align-items: center; gap: .55rem; min-width: 0; padding-right: 1.75rem; }
     .link-avatar {
       display: grid;
       place-items: center;
-      width: 2.75rem;
-      height: 2.75rem;
+      width: 2rem;
+      height: 2rem;
       flex: 0 0 auto;
-      border-radius: 10px;
+      border-radius: 8px;
       background: var(--cp-surface-soft);
       color: var(--cp-accent);
       font-weight: 800;
-      font-size: 1.1rem;
-      overflow: hidden;
-    }
-    .link-avatar img { width: 1.75rem; height: 1.75rem; object-fit: contain; }
-    .highlight-star { flex: 0 0 auto; color: var(--cp-warning); }
-    .link-card h2 { margin: 0; font-size: 1.1rem; overflow-wrap: anywhere; }
-    .link-rating { display: flex; gap: .1rem; color: var(--cp-warning); }
-    .link-rating svg { width: 1rem; height: 1rem; }
-    .link-rating .is-empty { color: var(--cp-border-strong); }
-    .link-tag {
-      display: inline-flex;
-      align-self: flex-start;
-      padding: .2rem .6rem;
-      border-radius: 999px;
-      background: var(--cp-accent-soft);
-      color: var(--cp-accent);
-      font-size: .75rem;
-      font-weight: 700;
-    }
-    .link-description {
-      margin: 0;
-      color: var(--cp-text-muted);
-      font-size: .87rem;
-      line-height: 1.45;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .link-url { margin: 0; color: var(--cp-text-muted); font-size: .85rem; overflow-wrap: anywhere; }
-    .link-arrow {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      gap: .35rem;
-      color: var(--cp-accent);
       font-size: .85rem;
-      font-weight: 600;
+      overflow: hidden;
     }
-    .link-arrow svg { transition: transform .2s ease; }
-    .link-card:hover .link-arrow svg, .link-card:focus-visible .link-arrow svg { transform: translate(2px, -2px); }
-
-    .link-cards.list-view { grid-template-columns: 1fr; gap: .6rem; }
-    .link-cards.list-view .link-card {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: center;
-      gap: 1rem;
-      padding: .65rem 1.25rem;
-      min-width: 0;
-    }
-    .link-cards.list-view .link-card:hover, .link-cards.list-view .link-card:focus-visible { transform: none; }
-    .link-cards.list-view .link-card-header { order: 1; flex: 0 0 auto; }
-    .link-cards.list-view .link-avatar { width: 2.25rem; height: 2.25rem; }
-    .link-cards.list-view .link-card h2 {
-      order: 2;
+    .link-avatar img { width: 1.3rem; height: 1.3rem; object-fit: contain; }
+    .highlight-flame { flex: 0 0 auto; font-size: 1rem; line-height: 1; }
+    .link-card h2 {
+      margin: 0;
       flex: 1 1 auto;
       min-width: 0;
-      font-size: 1rem;
+      font-size: .95rem;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .link-cards.list-view .link-tag { order: 3; flex: 0 0 auto; }
-    .link-cards.list-view .link-rating { order: 4; flex: 0 0 auto; }
-    .link-cards.list-view .link-description, .link-cards.list-view .link-url { display: none; }
-    .link-cards.list-view .link-arrow { order: 5; flex: 0 0 auto; margin-top: 0; }
-    .link-cards.list-view .favorite-button { position: static; order: 6; margin-left: .25rem; box-shadow: none; }
+    .link-card-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; min-width: 0; }
+    .link-rating { display: flex; gap: .1rem; color: var(--cp-warning); }
+    .link-rating svg { width: .85rem; height: .85rem; }
+    .link-rating .is-empty { color: var(--cp-border-strong); }
+    .link-tag {
+      display: inline-flex;
+      padding: .15rem .55rem;
+      border-radius: 999px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-size: .72rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .link-date { color: var(--cp-text-muted); font-size: .72rem; white-space: nowrap; }
+
+    .link-cards.list-view { grid-template-columns: 1fr; gap: .4rem; }
+    .link-cards.list-view .link-card {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 1rem;
+      padding: .45rem .9rem;
+    }
+    .link-cards.list-view .link-card:hover, .link-cards.list-view .link-card:focus-visible { transform: none; }
+    .link-cards.list-view .link-card-row1 { flex: 1 1 auto; padding-right: 0; }
+    .link-cards.list-view .link-card-row2 { flex: 0 0 auto; }
 
     .empty-state {
       padding: 2.5rem;
@@ -464,9 +437,7 @@
       main { padding-top: 1.75rem; }
       .filter-bar { flex-direction: column; align-items: stretch; }
       .filter-bar input { max-width: none; }
-      .link-cards.list-view .link-tag, .link-cards.list-view .link-rating { display: none; }
-      .link-cards.list-view .link-arrow { font-size: 0; }
-      .link-cards.list-view .link-arrow svg { width: 16px; height: 16px; }
+      .link-cards.list-view .link-card-row2 { display: none; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -749,6 +720,13 @@
       return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false" class="${filled ? "" : "is-empty"}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
     }
 
+    function formatDateAdded(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    }
+
     function populateFilters() {
       const categories = [...new Set(links.map((link) => link.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
       categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
@@ -778,31 +756,6 @@
       card.target = "_blank";
       card.rel = "noopener";
 
-      const header = document.createElement("div");
-      header.className = "link-card-header";
-      const avatar = document.createElement("span");
-      avatar.className = "link-avatar";
-      const favicon = document.createElement("img");
-      favicon.src = faviconUrlFor(link.url);
-      favicon.alt = "";
-      favicon.loading = "lazy";
-      favicon.addEventListener("error", () => {
-        favicon.remove();
-        avatar.textContent = initials(link.title);
-      }, { once: true });
-      avatar.append(favicon);
-      header.append(avatar);
-      if (link.isHighlighted) {
-        const star = document.createElement("span");
-        star.className = "highlight-star";
-        star.title = "Featured link";
-        star.innerHTML = starIcon(true);
-        header.append(star);
-      }
-
-      const heading = document.createElement("h2");
-      heading.textContent = link.title;
-
       const favorite = document.createElement("button");
       const isFavorite = favorites.has(link.url);
       favorite.type = "button";
@@ -817,36 +770,56 @@
         toggleFavorite(link, favorite);
       });
 
-      const rating = document.createElement("div");
-      rating.className = "link-rating";
-      rating.setAttribute("aria-label", `Rated ${link.rating} out of 5`);
-      for (let i = 0; i < 5; i++) rating.innerHTML += starIcon(i < link.rating);
+      const row1 = document.createElement("div");
+      row1.className = "link-card-row1";
+      const avatar = document.createElement("span");
+      avatar.className = "link-avatar";
+      const favicon = document.createElement("img");
+      favicon.src = faviconUrlFor(link.url);
+      favicon.alt = "";
+      favicon.loading = "lazy";
+      favicon.addEventListener("error", () => {
+        favicon.remove();
+        avatar.textContent = initials(link.title);
+      }, { once: true });
+      avatar.append(favicon);
+      row1.append(avatar);
 
-      card.append(header, heading, rating, favorite);
+      const heading = document.createElement("h2");
+      heading.textContent = link.title;
+      heading.title = link.title;
+      row1.append(heading);
 
+      if (link.isHighlighted) {
+        const flame = document.createElement("span");
+        flame.className = "highlight-flame";
+        flame.title = "Featured link";
+        flame.textContent = "\u{1F525}";
+        row1.append(flame);
+      }
+
+      const row2 = document.createElement("div");
+      row2.className = "link-card-row2";
       if (link.category) {
         const tag = document.createElement("span");
         tag.className = "link-tag";
         tag.textContent = link.category;
-        card.append(tag);
+        row2.append(tag);
       }
-
-      if (link.description) {
-        const description = document.createElement("p");
-        description.className = "link-description";
-        description.textContent = link.description;
-        card.append(description);
+      const dateLabel = formatDateAdded(link.dateAdded);
+      if (dateLabel) {
+        const date = document.createElement("span");
+        date.className = "link-date";
+        date.textContent = dateLabel;
+        row2.append(date);
       }
+      const rating = document.createElement("div");
+      rating.className = "link-rating";
+      rating.setAttribute("aria-label", `Rated ${link.rating} out of 5`);
+      for (let i = 0; i < 5; i++) rating.innerHTML += starIcon(i < link.rating);
+      row2.append(rating);
 
-      const url = document.createElement("p");
-      url.className = "link-url";
-      url.textContent = hostnameFor(link.url);
-
-      const arrow = document.createElement("span");
-      arrow.className = "link-arrow";
-      arrow.innerHTML = 'Visit link <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
-
-      card.append(url, arrow);
+      card.append(favorite, row1, row2);
       return card;
     }
 
