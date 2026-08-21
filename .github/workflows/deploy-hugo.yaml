@@ -8,7 +8,7 @@ on:
   # Data-refresh workflows commit with the default GITHUB_TOKEN, which does NOT
   # trigger the push event above, so redeploy explicitly once they finish.
   workflow_run:
-    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh AWS Release Updates", "Refresh RSS Watcher Updates", "Refresh GitHub IP Ranges", "Refresh Azure IP Ranges", "Refresh Microsoft Tech Community RSS Feeds", "Refresh Azure Taggable Resources", "Refresh Azure Policy Aliases"]
+    workflows: ["Refresh Azure Release Updates", "Refresh M365 Release Updates", "Refresh AWS Release Updates", "Refresh RSS Watcher Updates", "Refresh GitHub IP Ranges", "Refresh Azure IP Ranges", "Refresh Microsoft Tech Community RSS Feeds", "Refresh Azure Taggable Resources", "Refresh Azure Policy Aliases", "Refresh Azure Regions", "Refresh Azure Policies"]
     types: [completed]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -158,6 +158,10 @@ jobs:
           mkdir -p public/aws-release-updates
           cp ../aws-release-updates/index.html public/aws-release-updates/index.html
           cp ../aws-release-updates/updates.json public/aws-release-updates/updates.json
+          mkdir -p public/azure-policies
+          cp ../azure-policies/index.html public/azure-policies/index.html
+          cp ../azure-policies/policydefinitions.json public/azure-policies/policydefinitions.json
+          cp ../azure-policies/policysetdefinitions.json public/azure-policies/policysetdefinitions.json
           mkdir -p public/articles
           cp ../articles/index.html public/articles/index.html
           cp ../articles/articles.json public/articles/articles.json

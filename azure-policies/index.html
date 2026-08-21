@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse all built-in Azure Policy definitions and initiatives (policy sets), refreshed directly from Azure.">
+  <meta name="color-scheme" content="light">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Azure Policies | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16845b;
+      --cp-success-bg: #e4f6ee;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fbe9e9;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-bg-elevated: #101c2c;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-text-soft: #b7c9d8;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-danger: #f3696a;
+      --cp-danger-bg: #3c1919;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-violet: #a58cf5;
+      --cp-violet-bg: #251d47;
+      --cp-cyan: #4bd7f4;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-overlay: rgba(10, 17, 28, 0.84);
+      --cp-panel: rgba(20, 32, 50, 0.9);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+      --cp-sheen: rgba(255, 255, 255, 0.06);
+      --cp-highlight: rgba(79, 168, 234, 0.2);
+      --cp-highlight-bg: #3c3410;
+      --cp-highlight-border: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.75rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+    .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+    .refresh-meta strong { color: var(--cp-text); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
+    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+
+    .view-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      margin-bottom: 1.25rem;
+    }
+    .view-toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .view-toggle-button:hover { color: var(--cp-text); }
+    .view-toggle-button.is-active { background: var(--cp-accent-soft); color: var(--cp-accent); }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .filter-bar input, .filter-bar select {
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
+    .filter-bar input { flex: 2 1 16rem; max-width: 30rem; min-width: 0; }
+    .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
+    .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
+    .clear-button[hidden] { display: none; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--cp-surface-soft);
+      text-align: left;
+      padding: .7rem .9rem;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      color: var(--cp-text-muted);
+      border-bottom: 1px solid var(--cp-border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover { color: var(--cp-text); }
+    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
+    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
+    tbody td { padding: .55rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; overflow-wrap: anywhere; }
+    .policy-name { font-weight: 600; }
+    .policy-desc { display: block; margin-top: .2rem; color: var(--cp-text-muted); font-size: .78rem; font-weight: 400; overflow-wrap: anywhere; }
+    .category-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-size: .78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .id-cell { display: flex; align-items: center; gap: .5rem; }
+    .copy-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
+    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); }
+    .result-count { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
+    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-panel); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      main { padding-top: 1.75rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar input { max-width: none; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/blog/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>Blog</a>
+        <a href="/articles/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Azure Policies</h1>
+      <p class="intro-text">Browse all built-in Azure Policy definitions and initiatives (policy sets), refreshed directly from Azure via <code>Get-AzPolicyDefinition</code> and <code>Get-AzPolicySetDefinition</code>.</p>
+      <p class="refresh-meta">
+        <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+        <span>Source: <a href="https://learn.microsoft.com/en-us/powershell/module/az.resources/get-azpolicydefinition" target="_blank" rel="noopener">Get-AzPolicyDefinition</a></span>
+      </p>
+    </section>
+
+    <section class="stats-grid" id="statsGrid" aria-label="Policy statistics"></section>
+
+    <section aria-label="Policies and initiatives">
+      <div class="view-toggle" role="tablist">
+        <button class="view-toggle-button is-active" id="tabPolicies" type="button" role="tab" aria-selected="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          Policies
+        </button>
+        <button class="view-toggle-button" id="tabInitiatives" type="button" role="tab" aria-selected="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Initiatives
+        </button>
+      </div>
+
+      <div id="policiesPanel" role="tabpanel">
+        <div class="filter-bar">
+          <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false">
+          <select id="policiesCategoryFilter"><option value="">All categories</option></select>
+          <button class="clear-button" id="policiesClear" type="button" hidden>Clear</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-key="displayName">Policy <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="mode">Mode <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="policyType">Type <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="name">ID <span class="sort-arrow">&#9650;</span></th>
+              </tr>
+            </thead>
+            <tbody id="policiesTableBody"></tbody>
+          </table>
+        </div>
+        <p class="result-count" id="policiesResultCount"></p>
+      </div>
+
+      <div id="initiativesPanel" role="tabpanel" hidden>
+        <div class="filter-bar">
+          <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false">
+          <select id="initiativesCategoryFilter"><option value="">All categories</option></select>
+          <button class="clear-button" id="initiativesClear" type="button" hidden>Clear</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-key="displayName">Initiative <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="policyCount">Policies <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="policyType">Type <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="name">ID <span class="sort-arrow">&#9650;</span></th>
+              </tr>
+            </thead>
+            <tbody id="initiativesTableBody"></tbody>
+          </table>
+        </div>
+        <p class="result-count" id="initiativesResultCount"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Azure Policies</a>
+          <p>Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="#page-title">Back to top</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/azure-policy-aliases/">Policy Aliases</a>
+          <a href="/azure-regions/">Azure Regions</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    const RENDER_LIMIT = 500;
+
+    function normalize(value) {
+      return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function copyIconMarkup(copied) {
+      return copied
+        ? '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M3 8.5 6.5 12 13 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9.5V3.5a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    }
+
+    async function copyToClipboard(text, button) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      button.classList.add("is-copied");
+      button.innerHTML = copyIconMarkup(true);
+      button.setAttribute("aria-label", "Copied");
+      setTimeout(() => {
+        button.classList.remove("is-copied");
+        button.innerHTML = copyIconMarkup(false);
+        button.setAttribute("aria-label", "Copy ID");
+      }, 1500);
+    }
+
+    // Both tabs (policies/initiatives) share the same search+category+sortable-table behavior,
+    // just bound to different DOM ids, data files, and row shapes.
+    function createBrowser(config) {
+      const state = { rows: [], filtered: [], sortKey: "displayName", sortDir: "asc", query: "", category: "" };
+      const elements = {
+        search: document.getElementById(config.searchId),
+        categoryFilter: document.getElementById(config.categoryFilterId),
+        clearFilters: document.getElementById(config.clearId),
+        tableBody: document.getElementById(config.tableBodyId),
+        resultCount: document.getElementById(config.resultCountId),
+        headers: [...document.querySelectorAll(`#${config.panelId} thead th[data-key]`)],
+      };
+
+      function populateCategoryFilter(categories) {
+        categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
+      }
+
+      function renderRow(row) {
+        const tr = document.createElement("tr");
+
+        const nameTd = document.createElement("td");
+        nameTd.innerHTML = `<span class="policy-name">${row.displayName ?? ""}</span>${row.description ? `<span class="policy-desc">${row.description}</span>` : ""}`;
+
+        const categoryTd = document.createElement("td");
+        categoryTd.innerHTML = row.category ? `<span class="category-badge">${row.category}</span>` : "&mdash;";
+
+        const middleTd = document.createElement("td");
+        middleTd.textContent = config.middleValue(row);
+
+        const typeTd = document.createElement("td");
+        typeTd.textContent = row.policyType ?? "";
+
+        const idTd = document.createElement("td");
+        const cell = document.createElement("div");
+        cell.className = "id-cell";
+        cell.innerHTML = `<code>${row.name}</code>`;
+        const copyButton = document.createElement("button");
+        copyButton.type = "button";
+        copyButton.className = "copy-button";
+        copyButton.setAttribute("aria-label", "Copy ID");
+        copyButton.innerHTML = copyIconMarkup(false);
+        copyButton.addEventListener("click", () => copyToClipboard(row.name, copyButton));
+        cell.append(copyButton);
+        idTd.append(cell);
+
+        tr.append(nameTd, categoryTd, middleTd, typeTd, idTd);
+        return tr;
+      }
+
+      function renderTable() {
+        const rows = [...state.filtered].sort((a, b) => {
+          const av = state.sortKey === "policyCount" ? (a[state.sortKey] ?? 0) : normalize(a[state.sortKey]);
+          const bv = state.sortKey === "policyCount" ? (b[state.sortKey] ?? 0) : normalize(b[state.sortKey]);
+          if (av < bv) return state.sortDir === "asc" ? -1 : 1;
+          if (av > bv) return state.sortDir === "asc" ? 1 : -1;
+          return 0;
+        });
+
+        const shown = rows.slice(0, RENDER_LIMIT);
+        elements.tableBody.replaceChildren();
+        const fragment = document.createDocumentFragment();
+        shown.forEach((row) => fragment.append(renderRow(row)));
+        elements.tableBody.append(fragment);
+
+        elements.resultCount.textContent = rows.length > RENDER_LIMIT
+          ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching ${config.countLabel}. Refine your search to see more specific results.`
+          : `${rows.length.toLocaleString()} ${rows.length === 1 ? config.countLabelSingular : config.countLabel} shown.`;
+
+        elements.headers.forEach((th) => {
+          th.removeAttribute("aria-sort");
+          if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+        });
+      }
+
+      function applyFilter() {
+        const query = normalize(state.query.trim());
+        const category = elements.categoryFilter.value;
+        state.filtered = state.rows.filter((row) => {
+          if (category && row.category !== category) return false;
+          if (query && !normalize(`${row.displayName} ${row.description} ${row.category}`).includes(query)) return false;
+          return true;
+        });
+        elements.clearFilters.hidden = !query && !category;
+        renderTable();
+      }
+
+      let searchTimer;
+      elements.search.addEventListener("input", () => {
+        state.query = elements.search.value;
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(applyFilter, 150);
+      });
+      elements.categoryFilter.addEventListener("change", applyFilter);
+      elements.clearFilters.addEventListener("click", () => {
+        elements.search.value = "";
+        elements.categoryFilter.value = "";
+        state.query = "";
+        applyFilter();
+        elements.search.focus();
+      });
+      elements.headers.forEach((th) => {
+        th.addEventListener("click", () => {
+          const key = th.dataset.key;
+          if (state.sortKey === key) {
+            state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+          } else {
+            state.sortKey = key;
+            state.sortDir = "asc";
+          }
+          renderTable();
+        });
+      });
+
+      return {
+        async load() {
+          const response = await fetch(config.file, { cache: "no-store" });
+          if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+          const payload = await response.json();
+          state.rows = payload[config.listKey];
+          state.filtered = state.rows;
+          const categories = [...new Set(state.rows.map((row) => row.category).filter(Boolean))].sort();
+          populateCategoryFilter(categories);
+          renderTable();
+          return payload;
+        },
+      };
+    }
+
+    const policiesBrowser = createBrowser({
+      panelId: "policiesPanel",
+      searchId: "policiesSearch",
+      categoryFilterId: "policiesCategoryFilter",
+      clearId: "policiesClear",
+      tableBodyId: "policiesTableBody",
+      resultCountId: "policiesResultCount",
+      file: "./policydefinitions.json",
+      listKey: "policies",
+      countLabel: "policies",
+      countLabelSingular: "policy",
+      middleValue: (row) => row.mode ?? "",
+    });
+
+    const initiativesBrowser = createBrowser({
+      panelId: "initiativesPanel",
+      searchId: "initiativesSearch",
+      categoryFilterId: "initiativesCategoryFilter",
+      clearId: "initiativesClear",
+      tableBodyId: "initiativesTableBody",
+      resultCountId: "initiativesResultCount",
+      file: "./policysetdefinitions.json",
+      listKey: "initiatives",
+      countLabel: "initiatives",
+      countLabelSingular: "initiative",
+      middleValue: (row) => row.policyCount ?? 0,
+    });
+
+    const elements = {
+      statsGrid: document.getElementById("statsGrid"),
+      refreshedAt: document.getElementById("refreshedAt"),
+      currentYear: document.getElementById("currentYear"),
+      tabPolicies: document.getElementById("tabPolicies"),
+      tabInitiatives: document.getElementById("tabInitiatives"),
+      policiesPanel: document.getElementById("policiesPanel"),
+      initiativesPanel: document.getElementById("initiativesPanel"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    function renderStats(policiesPayload, initiativesPayload) {
+      const stats = [
+        { label: "Policies", value: policiesPayload.totalPolicies },
+        { label: "Initiatives", value: initiativesPayload.totalInitiatives },
+        { label: "Policy categories", value: policiesPayload.totalCategories },
+      ];
+      elements.statsGrid.replaceChildren();
+      stats.forEach((stat) => {
+        const el = document.createElement("div");
+        el.className = "stat-card";
+        el.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
+        elements.statsGrid.append(el);
+      });
+    }
+
+    function selectTab(tab) {
+      const isPolicies = tab === "policies";
+      elements.tabPolicies.classList.toggle("is-active", isPolicies);
+      elements.tabPolicies.setAttribute("aria-selected", String(isPolicies));
+      elements.tabInitiatives.classList.toggle("is-active", !isPolicies);
+      elements.tabInitiatives.setAttribute("aria-selected", String(!isPolicies));
+      elements.policiesPanel.hidden = !isPolicies;
+      elements.initiativesPanel.hidden = isPolicies;
+    }
+    elements.tabPolicies.addEventListener("click", () => selectTab("policies"));
+    elements.tabInitiatives.addEventListener("click", () => selectTab("initiatives"));
+
+    async function init() {
+      elements.currentYear.textContent = new Date().getFullYear();
+      try {
+        const [policiesPayload, initiativesPayload] = await Promise.all([
+          policiesBrowser.load(),
+          initiativesBrowser.load(),
+        ]);
+        renderStats(policiesPayload, initiativesPayload);
+        const generatedAt = new Date(Math.max(
+          new Date(policiesPayload.generatedAt).getTime(),
+          new Date(initiativesPayload.generatedAt).getTime()
+        ));
+        elements.refreshedAt.textContent = generatedAt.toLocaleString("en-US", {
+          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+      } catch (error) {
+        console.error(error);
+        document.getElementById("policiesResultCount").textContent = "Unable to load policy data.";
+      }
+    }
+    init();
+
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    elements.backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("menuToggle");
+      var nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
+      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
+      });
+      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", function (e) {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
+    })();
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", function () {
+        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        var next = isDark ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("site-theme", next); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>
