@@ -270,6 +270,11 @@
       font-size: .85rem;
     }
     .refresh-meta strong { color: var(--cp-text); }
+    /* .refresh-meta is a wrapping flex row: an empty feed count is 0 wide, so
+       filling it pushes a link onto a third line. Reserve both boxes and the
+       row wraps identically before and after the data lands. */
+    #feedMeta { min-width: 8rem; min-height: 1.15em; }
+    #refreshedAt { display: inline-block; min-width: 21ch; }
     .refresh-meta a { display: inline-flex; align-items: center; gap: .3rem; }
 
     .toolbar {

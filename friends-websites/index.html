@@ -254,6 +254,8 @@
       font-size: .92rem;
       font-weight: 600;
     }
+    .refresh-meta { margin: .6rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+    .refresh-meta strong { color: var(--cp-text); font-weight: 600; }
 
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
@@ -530,6 +532,7 @@
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">My Friends' Websites</h1>
       <p class="intro-text">Discover amazing websites from my network of friends and colleagues.</p>
+      <p class="refresh-meta">Data updated: <strong id="refreshedAt">&hellip;</strong></p>
     </section>
 
     <section aria-label="Friends' websites directory">
@@ -755,12 +758,31 @@
         elements.friendCards.append(card);
       });
     }
+    // build-freshness.mjs stamps the real git date; the host's Last-Modified
+    // would report the deploy and overclaim freshness on curated lists
+    async function showRefreshedAt() {
+      var el = document.getElementById("refreshedAt");
+      if (!el) return;
+      try {
+        var res = await fetch("/freshness.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(res.status);
+        var iso = (await res.json())["friends-websites/friends-websites.csv"];
+        var date = iso ? new Date(iso) : null;
+        if (!date || isNaN(date)) throw new Error("no stamp");
+        el.textContent = date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+        el.parentElement.title = date.toLocaleString();
+      } catch (err) {
+        el.parentElement.hidden = true;
+      }
+    }
+
 
     async function init() {
       const [csvResponse, metaResponse] = await Promise.all([
         fetch("./friends-websites.csv", { cache: "no-store" }),
         fetch("./websites-meta.json", { cache: "no-store" }).catch(() => null),
       ]);
+      showRefreshedAt();
       const csvText = await csvResponse.text();
       const metaByUrl = new Map();
       if (metaResponse?.ok) {
