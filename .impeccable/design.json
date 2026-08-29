@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-29T14:45:00.000Z",
+  "title": "Design System: benoit-gaumard.io",
+  "extensions": {
+    "colorMeta": {
+      "azure-signal": {
+        "role": "primary",
+        "displayName": "Azure Signal",
+        "canonical": "#0b6fb8",
+        "tonalRamp": ["#031a2c", "#052f4f", "#064673", "#075b98", "#0b6fb8", "#3f92cd", "#79b6de", "#b6d8ef"]
+      },
+      "probe-cyan": {
+        "role": "secondary",
+        "displayName": "Probe Cyan",
+        "canonical": "#0d93b0",
+        "tonalRamp": ["#03242b", "#053f4b", "#075f72", "#0a7c94", "#0d93b0", "#3fb0c8", "#7bcbdb", "#bae5ee"]
+      },
+      "index-violet": {
+        "role": "tertiary",
+        "displayName": "Index Violet",
+        "canonical": "#6a4fd6",
+        "tonalRamp": ["#150f2c", "#251b4d", "#38287a", "#5039ab", "#6a4fd6", "#8d78e2", "#b3a5ed", "#d9d2f6"]
+      },
+      "pass-green": {
+        "role": "status",
+        "displayName": "Pass Green",
+        "canonical": "#157f57",
+        "tonalRamp": ["#041a11", "#082e1f", "#0d4a33", "#116548", "#157f57", "#3fa47a", "#79c5a5", "#bce2d2"]
+      },
+      "fail-red": {
+        "role": "status",
+        "displayName": "Fail Red",
+        "canonical": "#c93636",
+        "tonalRamp": ["#2b0b0b", "#4b1414", "#761f1f", "#a12b2b", "#c93636", "#d96565", "#e79797", "#f3cbcb"]
+      },
+      "warn-ochre": {
+        "role": "status",
+        "displayName": "Warn Ochre",
+        "canonical": "#96610a",
+        "tonalRamp": ["#1f1402", "#3a2505", "#5c3b07", "#7a4f08", "#96610a", "#b8843a", "#d3ab77", "#ecd6bb"]
+      },
+      "ink-navy": {
+        "role": "neutral",
+        "displayName": "Ink Navy",
+        "canonical": "#17324d",
+        "tonalRamp": ["#080f18", "#0d1c2b", "#122740", "#17324d", "#3a5a7c", "#6d8aa8", "#a3b8cd", "#d5e0eb"]
+      },
+      "ink-slate": {
+        "role": "neutral",
+        "displayName": "Ink Slate",
+        "canonical": "#536f88",
+        "tonalRamp": ["#111820", "#1e2a36", "#33475a", "#425a70", "#536f88", "#7c92a6", "#a8b8c6", "#d4dde5"]
+      },
+      "page-frost": {
+        "role": "neutral",
+        "displayName": "Page Frost",
+        "canonical": "#f5faff",
+        "tonalRamp": ["#0c1420", "#16233a", "#2b4560", "#5b7f9f", "#89afd0", "#c0d9ec", "#eef7ff", "#f5faff"]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#d8e8f5",
+        "tonalRamp": ["#16252f", "#25404f", "#3a6377", "#5d8ba3", "#89afd0", "#b4cee4", "#d8e8f5", "#eef6fc"]
+      },
+      "night-void": {
+        "role": "neutral",
+        "displayName": "Night Void",
+        "canonical": "#0c1420",
+        "tonalRamp": ["#050810", "#0c1420", "#16233a", "#1c2c42", "#253b52", "#3f6280", "#6d8aa8", "#9db3c7"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The author's name on the homepage hero. Used once across the whole site." },
+      "headline": { "displayName": "Headline", "purpose": "Page h1 and the contact call to action." },
+      "title": { "displayName": "Title", "purpose": "Card titles: roles, certifications, tools, articles." },
+      "body": { "displayName": "Body", "purpose": "All prose. Capped at 62ch in the hero." },
+      "label": { "displayName": "Label", "purpose": "Section labels. Uppercase with .04em tracking on tool pages; PS>-prefixed on the homepage." },
+      "mono": { "displayName": "Machine Voice", "purpose": "Terminal chrome, shell prompts, exam codes, IP ranges. Anything a machine produced or must consume." }
+    },
+    "shadows": [
+      { "name": "hairline-lift", "value": "0 0 2px var(--cp-border), 0 1px 2px var(--cp-border)", "purpose": "The default .glass card. Reads as a crisper border, not as height." },
+      { "name": "floating-panel", "value": "0 18px 48px rgba(36, 92, 136, 0.14)", "purpose": "Only for elements that overlay content: mobile nav, back-to-top. Dark theme uses rgba(0,0,0,0.45)." },
+      { "name": "backplate-ring", "value": "0 0 0 1px var(--cp-border)", "purpose": "White backplates behind third-party logos, which need a light field in both themes." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "0.15s", "purpose": "Chip and pill hover lifts." },
+      { "name": "state-standard", "value": "0.2s", "purpose": "Default for card lift, button hover, border colour changes." },
+      { "name": "reveal", "value": "0.7s ease", "purpose": "Homepage scroll-reveal of sections. Forced visible under prefers-reduced-motion and inside <noscript>." },
+      { "name": "aurora-drift", "value": "30s ease-in-out infinite alternate", "purpose": "Background atmosphere only. Fully stopped under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "lg", "value": "48rem" },
+      { "name": "md", "value": "40rem" },
+      { "name": "sm", "value": "32rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single highest-intent action on a page. One per view.",
+      "html": "<button class=\"ds-btn-primary\">LinkedIn</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 9px; padding: .625rem 1.25rem; border: 0; border-radius: 6px; background: #0b6fb8; color: #fff; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; font-size: .88rem; font-weight: 700; cursor: pointer; transition: transform .2s, background .2s; } .ds-btn-primary:hover { background: #075b98; transform: translateY(-2px); } .ds-btn-primary:focus-visible { outline: 3px solid #0b6fb8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action. Borders and fills with the accent on hover rather than carrying it at rest.",
+      "html": "<button class=\"ds-btn-ghost\">GitHub</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 9px; padding: .625rem 1.25rem; border: 1px solid #89afd0; border-radius: 6px; background: #fff; color: #17324d; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; font-size: .88rem; font-weight: 700; cursor: pointer; transition: transform .2s, border-color .2s, background .2s; } .ds-btn-ghost:hover { border-color: #0b6fb8; background: rgba(11,111,184,.09); transform: translateY(-2px); } .ds-btn-ghost:focus-visible { outline: 3px solid #0b6fb8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Glass Card",
+      "kind": "card",
+      "refersTo": "card-glass",
+      "description": "The most-used container on the site. Flat at rest, lifts and borders in accent on hover.",
+      "html": "<article class=\"ds-card\"><h3>Azure Security Engineer</h3><p>AZ-500 · associate</p></article>",
+      "css": ".ds-card { padding: 22px 26px; border: 1px solid #d8e8f5; border-radius: 8px; background: #fff; box-shadow: 0 0 2px #d8e8f5, 0 1px 2px #d8e8f5; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; transition: transform .2s, border-color .2s; } .ds-card:hover { transform: translateY(-4px); border-color: #0b6fb8; } .ds-card h3 { margin: 0 0 4px; font-size: 1.05rem; font-weight: 650; color: #17324d; line-height: 1.3; } .ds-card p { margin: 0; font-size: .78rem; color: #536f88; }"
+    },
+    {
+      "name": "Filter Input",
+      "kind": "input",
+      "refersTo": "input-filter",
+      "description": "The search field that opens nearly every tool page's filter bar.",
+      "html": "<input class=\"ds-input\" type=\"search\" placeholder=\"Search regions…\">",
+      "css": ".ds-input { min-height: 2.9rem; padding: 0 .85rem; border: 1px solid #89afd0; border-radius: 8px; background: #fff; color: #17324d; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; font-size: 15px; } .ds-input::placeholder { color: #536f88; } .ds-input:focus-visible { outline: 3px solid #0b6fb8; outline-offset: 2px; }"
+    },
+    {
+      "name": "View Toggle",
+      "kind": "nav",
+      "refersTo": "toggle-active",
+      "description": "The Cards/List (and sometimes Map) switch shared by nine tool pages. Active segment carries the accent wash.",
+      "html": "<div class=\"ds-toggle\"><button class=\"ds-toggle-btn is-active\">Cards</button><button class=\"ds-toggle-btn\">List</button></div>",
+      "css": ".ds-toggle { display: inline-flex; gap: .25rem; padding: .25rem; border: 1px solid #d8e8f5; border-radius: 10px; background: #fff; } .ds-toggle-btn { padding: .45rem .9rem; border: 0; border-radius: 7px; background: transparent; color: #536f88; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; font-size: .85rem; cursor: pointer; transition: background .2s, color .2s; } .ds-toggle-btn:hover { color: #17324d; background: #eef7ff; } .ds-toggle-btn.is-active { background: rgba(11,111,184,.09); color: #0b6fb8; font-weight: 600; } .ds-toggle-btn:focus-visible { outline: 3px solid #0b6fb8; outline-offset: 2px; }"
+    },
+    {
+      "name": "Client Pill",
+      "kind": "chip",
+      "refersTo": "chip-pill",
+      "description": "A named organisation with its favicon. Fully rounded, lifts on hover.",
+      "html": "<span class=\"ds-pill\"><span class=\"ds-pill-mark\"></span>Thales</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 5px; border: 1px solid #d8e8f5; border-radius: 999px; background: #eef7ff; color: #17324d; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; font-size: .76rem; transition: transform .15s, border-color .15s; } .ds-pill:hover { transform: translateY(-2px); border-color: #0b6fb8; } .ds-pill-mark { width: 20px; height: 20px; border-radius: 5px; background: #fff; box-shadow: 0 0 0 1px #d8e8f5; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "chip-tag",
+      "description": "Machine state on a data row: availability, taggability, feed health. The only place colour is allowed to shout.",
+      "html": "<span class=\"ds-badge is-pass\">Yes</span> <span class=\"ds-badge is-fail\">No</span>",
+      "css": ".ds-badge { display: inline-flex; padding: 2px 9px; border-radius: 999px; font-family: \"Segoe UI\", Aptos, Calibri, -apple-system, sans-serif; font-size: .72rem; font-weight: 700; } .ds-badge.is-pass { background: #eefaf5; color: #157f57; } .ds-badge.is-fail { background: #fdf2f2; color: #c93636; }"
+    },
+    {
+      "name": "Terminal Chrome",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The signature homepage frame. A window title bar that sets the PowerShell metaphor without entering any tool page.",
+      "html": "<div class=\"ds-term\"><div class=\"ds-term-bar\"><span class=\"ds-dot r\"></span><span class=\"ds-dot y\"></span><span class=\"ds-dot g\"></span><span class=\"ds-term-title\">Windows PowerShell</span></div><div class=\"ds-term-body\"><p class=\"ds-cmd\">whoami</p></div></div>",
+      "css": ".ds-term { overflow: hidden; border: 1px solid #d8e8f5; border-radius: 8px; background: #fff; box-shadow: 0 0 2px #d8e8f5, 0 1px 2px #d8e8f5; } .ds-term-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #eef7ff; border-bottom: 1px solid #d8e8f5; } .ds-dot { width: 12px; height: 12px; border-radius: 50%; } .ds-dot.r { background: #ff5f56; } .ds-dot.y { background: #ffbd2e; } .ds-dot.g { background: #27c93f; } .ds-term-title { margin-left: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8rem; color: #536f88; } .ds-term-body { padding: 26px 28px; } .ds-cmd { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #17324d; } .ds-cmd::before { content: \"PS> \"; color: #157f57; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Practitioner's Console",
+    "overview": "This is the workbench of a working Azure engineer that happens to also be his portfolio. The person using it is mid-task: an incident is open, a policy alias needs resolving, a region's zone support has to be confirmed now. Every visual decision answers to that scene. The palette is cool and low-drama so that a green PASS or a red FAIL is the only thing that shouts. Density is deliberately high — a console that makes you scroll to find one value has failed. Type is the OS UI stack, not a personality font, because this should feel like a tool you already know how to operate rather than a designed artifact you have to learn.\n\nThe frame around that instrument is a light PowerShell metaphor: a terminal chrome bar on the homepage hero, PS> prefixes on section labels, .\\Start-Collaboration.ps1 as a contact heading. It is a costume, worn lightly and only where the site talks about its author. It never enters a tool page, where the data is the point.\n\nThe system's real signature is the shared shell: an identical sticky header, aurora backdrop, dismissible banner, footer, theme toggle, and back-to-top across 63 pages built by hand with no build step and no dependencies. Twenty-six unrelated utilities read as one product because that shell never varies. That consistency is not decoration — it is the load-bearing structure of the whole design.",
+    "keyCharacteristics": [
+      "Cool blue-frost neutrals; colour reserved almost entirely for status",
+      "Dense, scannable, built for a visitor who arrived from search and needs one answer",
+      "Full light/dark parity, both themes measured at WCAG AA",
+      "Flat surfaces with hairline borders; elevation is rare and functional",
+      "OS-native type stack, monospace only where the terminal metaphor speaks",
+      "Zero dependencies, zero build, one shell across every page"
+    ],
+    "rules": [
+      { "name": "The Status-Only Rule", "body": "Green, red and ochre exist to report machine state, never to decorate. If a colour on this site is not answering a question the visitor asked about their data, it should be a neutral.", "section": "colors" },
+      { "name": "The Two-Palette Rule", "body": "Light and dark are two independently tuned palettes that share token names, not token values. --cp-warning is #96610a in light and #e4a940 in dark because each was set against its own background. Never resynchronise them.", "section": "colors" },
+      { "name": "The Composite-Before-You-Judge Rule", "body": "--cp-accent-soft is an alpha tint and the banner background is a gradient. Both read as transparent from getComputedStyle().backgroundColor. Any contrast check that does not composite the full background stack will report spectacular false failures on this site.", "section": "colors" },
+      { "name": "The No-Webfont Rule", "body": "The system font stack is a hard constraint, not a placeholder. A webfont would add a network dependency, a FOUT, and a licence to a site whose entire premise is that it has none.", "section": "typography" },
+      { "name": "The Machine-Voice Rule", "body": "Monospace marks text that came from a machine or addresses one. Prose never uses it, and a value the user must copy always does.", "section": "typography" },
+      { "name": "The Reserve-The-List Rule", "body": "Every list on this site is rendered from JSON after load. A container that starts at zero height throws the footer up the page and then shoves it back down, which is the single largest source of layout shift here. Any async-filled container gets a min-height (70vh is the house value) so the first paint already occupies the space the data will need.", "section": "layout" },
+      { "name": "The Lift-On-Intent Rule", "body": "Cards do not sit raised; they rise translateY(-4px) and switch their border to the accent on hover. Elevation is feedback, never decoration.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do build a new page by copying the most recently built similar page. The shell is the design system; re-typing it from memory is how drift starts.",
+      "Do ship every colour in both themes, tuned independently against its own background, and verify both at WCAG AA.",
+      "Do reserve height (min-height: 70vh) on any container filled from JSON after load.",
+      "Do offset anything sticky from --header-h, never from a hard-coded pixel value.",
+      "Do wrap grid floors in min(<floor>, 100%) so they can collapse on a 360px viewport.",
+      "Do keep colour for machine status. A neutral is the correct answer for almost everything else.",
+      "Do give focus a visible 3px accent outline on :focus-visible."
+    ],
+    "donts": [
+      "Don't break light/dark parity. Every new token needs both values, measured — a dark theme that is a washed-out grey inversion of the light one is a regression, not a shortcut.",
+      "Don't introduce a build step, a framework, a webfont, or an npm dependency. Each page is one self-contained HTML file with inline <style> and <script>, and that portability is the point. (Leaflet on /azure-regions/ is the single deliberate exception.)",
+      "Don't let one page's shell diverge from the other 62. A change to the header, footer, banner or theme toggle is a sitewide codemod plus a pageShell() edit plus a rebuild — or it is not done.",
+      "Don't animate layout properties. width, height, padding and margin transitions cause reflow; use transform and opacity.",
+      "Don't add a second accent. The site has one interactive colour, and cyan and violet exist only inside a single decorative gradient.",
+      "Don't trust a contrast reading without compositing alpha tints and gradient backgrounds first."
+    ]
+  }
+}

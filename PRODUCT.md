@@ -20,6 +20,12 @@ A personal site and Azure tooling hub at `benoit-gaumard.io`. It exists to (a) g
 
 It currently ships 26 tool and reference pages, 32 how-to articles, a Hugo blog, and a bilingual homepage. Success looks like a practitioner finding the answer on the page they landed on, without needing the rest of the site.
 
+**The owner uses this site himself, daily, as a working tool.** That is a first-class purpose, not a side effect — it is why the tool pages are dense and utilitarian rather than presentational.
+
+### Settled: the homepage is not a tools showcase
+
+A 2026-08-29 design critique flagged that "the homepage of a tools hub previews zero tools" as its highest-value opportunity. **The owner considered and rejected it.** The homepage is the portfolio; `/tools/` is the hub and is correct as it stands. Do not re-raise this, and do not add tool previews, live widgets or featured-tool cards to the homepage without an explicit new request.
+
 ## Positioning
 
 **The Azure data is authoritative and refreshes itself.** `azure-regions`, `azure-policies` and `azure-policy-aliases` query Azure directly through `Get-Az*` cmdlets under a service principal, rather than scraping Microsoft Learn or a third-party doc site. Twelve GitHub Actions workflows refresh the datasets up to four times a day, and the three Azure-authoritative pipelines also write weekly dated snapshots so catalogs can be diffed over time.
