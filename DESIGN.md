@@ -32,6 +32,16 @@ colors:
   night-ink-muted: "#9db3c7"
   night-azure-signal: "#4fa8ea"
   night-panel-veil: "rgba(16, 26, 41, 0.97)"
+  # Deliberately literal, not tokenised — documented so they read as system, not drift.
+  aurora-cyan: "rgba(15, 176, 212, 0.22)"
+  aurora-violet: "rgba(123, 97, 255, 0.16)"
+  aurora-blue: "rgba(47, 127, 245, 0.16)"
+  chrome-dot-red: "#ff5f56"
+  chrome-dot-amber: "#ffbd2e"
+  chrome-dot-green: "#27c93f"
+  print-ink: "#000"
+  print-rule: "#bbb"
+  logo-backplate: "#fff"
 typography:
   display:
     fontFamily: '"Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif'
@@ -64,11 +74,22 @@ typography:
     fontSize: "0.8rem"
     fontWeight: 400
     lineHeight: 1.7
+  code:
+    fontFamily: '"Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, monospace'
+    fontSize: "1rem"
+    fontWeight: 700
+    lineHeight: 1.7
 rounded:
-  xs: "3px"
+  hairline: "3px"
+  xs: "4px"
+  chip: "5px"
   sm: "6px"
+  control: "7px"
   md: "8px"
   lg: "10px"
+  panel: "12px"
+  xl: "14px"
+  xxl: "16px"
   pill: "999px"
   circle: "50%"
 spacing:

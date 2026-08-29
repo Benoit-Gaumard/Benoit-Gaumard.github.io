@@ -83,82 +83,109 @@ When a change needs to touch all ~63 pages:
 - Repo files are CRLF. When writing files programmatically (Node scripts, `create_file`), the working tree normalizes to CRLF on commit regardless (confirmed via byte-count check) — safe to always convert `\n` → `\r\n` before `writeFileSync` in codemods to avoid a print of "LF will be replaced by CRLF" warnings/big diffs.
 - No `gh` CLI/token available in this environment — can't dispatch workflows or query the Actions API with authentication. Verify deploys by polling the live production URL instead.
 
-## 7. Known outstanding items
+## 7. Backlog — prioritised, measured 2026-08-29
 
-### From the 2026-08-21 audit of all 26 `/tools/` pages (still open)
+Every count below was verified in a browser or by scanning all 63 shell pages. Nothing here is inferred. Each item has an ID so it can be picked off individually.
 
-The core design system (colors/fonts/header/footer/dark-mode/banner) is 100% consistent, but two real inconsistencies remain unaddressed:
+Priority means **user harm**, not effort: P1 is something broken or missing for a real visitor today, P2 is real but tolerable, P3 is hygiene and taste.
 
-1. **Two different class names for the same "stats summary" widget**: `.stats-grid` (azure-policy-aliases, azure-taggable-resources, azure-policies, microsoft-techcommunity-rss-feeds, it-images) vs `.stat-cards` (azure-regions, github-ip-ranges, azure-ip-ranges, workflows, world-clock). Purely a naming/DRY issue, not visually broken.
-2. **Four different strategies for handling long lists**, inconsistent across pages:
-   - Full Previous/Next pagination + "Per page" dropdown: `icons`, `emoji-sheet` only.
-   - "Show more" load-more button: `azure-release-updates`, `m365-release-updates`, `aws-release-updates`.
-   - Silent truncation at 400-500 rows with a "refine your search" message, no button: `azure-policy-aliases`, `azure-taggable-resources`, `azure-policies`, `github-ip-ranges`, `azure-ip-ranges`.
-   - No limit at all (renders everything): `friends-websites`, `microsoft-portals`, `favorite-links` (522 cards), `azure-regions`, `workflows`, `world-clock`, `rss-watcher`, `microsoft-techcommunity-rss-feeds`.
-   - The user has NOT yet asked to generalize the pagination pattern to the rest of these pages — only `favorite-links` got a targeted fix (3-column grid cap + no title truncation) and `emoji-sheet` got the icons-style pagination. If asked to continue this cleanup, prioritize `friends-websites`/`microsoft-portals` (similar card-grid pages with no limit at all).
-3. Calculator/generator pages (`guid-generator`, `subnet-calculator`, `percentage-calculator`, `sla-calculator`, `units-converter`, `random-wheel`, `azure-naming-convention`) are intentionally simpler (no filter bar / pagination) — this is correct, not a bug.
+---
 
-### From the 2026-08-29 Impeccable critique + audit (homepage only)
+### P1 — real harm to a visitor today
 
-The critique targeted `index.html` only. Everything it found there was fixed on `index.html` **and** `index_fr.html`. A follow-up pass then audited the remaining 61 pages in a real browser (see below), so items 4-6 are now **closed**; 7 and 8 remain open.
+**P1-1 · No skip link on any of the 63 pages.**
+WCAG 2.4.1 Bypass Blocks is **Level A** — this is the site's only remaining Level A failure. Every visit begins with roughly nine header tab stops before content. `<main id="top">` already exists on every page, so this is a visually-hidden anchor that becomes visible on focus.
+*Effort: small (one codemod + `pageShell()`). Risk: very low. Verify: Tab once from page load and confirm the first stop is the skip link and that it moves focus into `<main>`.*
 
-4. ~~Heading hierarchy and landmark names.~~ **Closed.** All 63 pages now measure 0 heading-level skips, 0 `<p class="sec-label">` used as a title, and 0 unnamed `<section>`.
-5. ~~No `<noscript>`.~~ **Non-issue**: only the two homepages use `.reveal`, and both have it. `@media print` still exists only on the homepages — printing a tool page is not a real use case.
-6. ~~Horizontal overflow.~~ **Closed.** 0 pages overflow at 1440 or 375.
-7. ~~Touch targets.~~ **Closed 2026-08-29 (polish pass).** Every interactive target now measures at least 24x24 CSS px (WCAG 2.2 SC 2.5.8, Level AA). The fix was almost entirely in the shared shell — footer links, header links, `.brand` and the language flags were 18-22px because their boxes were pure text. `display: inline-flex; align-items: center; min-height: 1.5rem` on those four rules cleared most of the site at once; `.transcript`, `.breadcrumb-link`, `.rss-link`, `.article-category-tag`, `.article-footer-nav a`, `.workflow-link` and `.emoji-code` were mopped up individually. Inline links inside running text (the banner sentence) are exempt under SC 2.5.8 and were left alone.
-8. **Design-direction items the owner has not decided on** (not defects): 10 undifferentiated skill cards; a 22-logo client wall with no outcomes attached. (The "homepage should showcase tools" item was **considered and rejected** — see `PRODUCT.md`.)
+**P1-2 · Seven data pages fail silently.**
+`azure-ip-ranges`, `azure-naming-convention`, `azure-regions`, `favorite-links`, `friends-websites`, `github-ip-ranges`, `workflows` all `catch` a failed JSON fetch and then render **nothing** — no message, no retry, no explanation. A visitor on a flaky connection sees an empty page and concludes the tool is broken. The other 13 data pages do show a message, so the pattern to copy already exists in-repo.
+*Effort: small per page. Risk: low. Verify: block the page's own JSON in devtools and confirm a human-readable message appears.*
 
-### Cumulative layout shift — measure it, don't count image attributes
+**P1-3 · Nothing shared from this site has an image — 0 of 63 pages have `og:image`.**
+`PRODUCT.md` records LinkedIn as the owner's channel; every link posted there currently renders bare. Only 2 of 63 pages have `og:title`/`og:description` at all (the two homepages, fixed earlier). No Twitter card anywhere.
+*Effort: medium (needs one real share image, plus a sitewide meta block; the article template can generate per-article values). Risk: low. Note: an image asset must be provided or produced — `PRODUCT.md` says none exists today.*
 
-The 2026-08-29 sitewide pass started from "712 images lack `width`/`height`" and that number turned out to be **almost entirely a false alarm**: the CSS already reserves a fixed box for nearly every one of them. `/favorite-links/` renders 522 dimensionless images and measured **CLS 0**.
+**P1-4 · No `sitemap.xml` and no `robots.txt`.**
+The whole product premise is that visitors arrive deep from search. There is no sitemap for 63 pages plus 75 blog pages, and no robots directive. `deploy-hugo.yaml` has no sitemap step either, so adding one means touching the workflow.
+*Effort: medium. Risk: low. Verify: fetch both files in production and validate the sitemap.*
 
-The real CLS came from JS-rendered lists starting at zero height and shoving the footer down on first render. Measured before -> after:
+**P1-5 · Render cost on the two heaviest pages.**
+`/favorite-links/` builds **11,249 DOM nodes / 1.3 MB of HTML** in a single pass; `/azure-policies/` builds **10,588 nodes / 1.7 MB**. Both are far past where mobile paint suffers, and `favorite-links` is one of the most-used tools.
+*Effort: large (virtualise or chunk the render). Risk: medium — this is real render-logic surgery. Verify: DOM node count and time-to-interactive on a throttled mobile profile.*
 
-| Page | Before | After | Fix |
-|---|---|---|---|
-| `/articles/` (desktop) | 0.70 | **0.05** | `#featuredSection[data-loading] { min-height: 100vh }`, released by `renderFeatured()` |
-| `/favorite-links/` | 0.31 | **0** | `.link-cards { min-height: 70vh }` |
-| `/icons/` | 0.29 | **0** | `.gallery { min-height: 70vh }` |
-| `/workflows/` | 0.15 | **0.01** | badge `width`/`height` attrs + `.workflow-badge { min-width: 9.25rem }` (badges loaded at `width:auto` and re-wrapped every card) |
+---
 
-**If you measure CLS yourself, do not reuse a Playwright page across iterations.** `addInitScript` accumulates, so every extra iteration adds another observer incrementing the same counter and each successive page reports an inflated multiple. Use a fresh `browser.newContext()` per measurement.
+### P2 — real, but tolerable
 
-### Still open on CLS (mobile only, both reproducible)
+**P2-1 · `canonical` missing on 29 of 63 pages.** Present on the 32 articles and 2 homepages only. Duplicate-content risk for a search-first site. *Small, low risk.*
 
-- `/articles/` at 375px: **0.35**, one shift sourced at `div.articles-layout` / `div.articles-main`. The featured-section reservation fixed desktop but not this; the source is something above the layout, not the featured grid (a 160vh mobile reservation was tried and changed nothing, so it was reverted).
-- `/azure-taggable-resources/` at 375px: **0.25**, one shift sourced at a `section`. `.table-wrap { min-height: 60vh }` was added and did not move it.
-- `/azure-regions/` at 1440px: **0.66**, never investigated — almost certainly the Leaflet map container.
+**P2-2 · Six data pages never show when they were refreshed.** `azure-naming-convention`, `azure-regions`, `favorite-links`, `friends-websites`, `microsoft-portals`, `it-images`. `azure-regions` is one of the three Azure-authoritative pipelines — the flagship of the "self-refreshing data" positioning — and it shows no timestamp at all. The `refresh-meta` convention already exists on 14 pages. *Small, low risk.*
 
-### Contrast: composite alpha before you believe a failure
+**P2-3 · Four long-list mechanisms.** Pagination on 2 pages, show-more on 3, cap-with-message on 5, unlimited elsewhere. **Nuance:** every capped list *does* announce its cap ("Showing 500 of 76,497 matching aliases"), so this is consistency, not misleading state. Pick one default — "showing N of M" plus Load More — and keep pagination on `/icons/` where the per-page dropdown is muscle memory. *Large, medium risk (18 pages of render logic).*
 
-A naive contrast probe reported 27 distinct failures sitewide. All but a handful were artefacts of the probe, not real:
+**P2-4 · None of the six calculators give validation feedback.** `subnet-calculator`, `percentage-calculator`, `sla-calculator`, `units-converter`, `guid-generator`, `azure-naming-convention` accept malformed input silently — no `aria-invalid`, no message, no invalid styling. The user gets a wrong or empty answer with no clue why. *Medium, low risk.*
 
-- `.news-banner-text` "white on `#f5faff` = 1.05:1" — the banner's background is a `linear-gradient`, i.e. a `background-image`, so `backgroundColor` reads transparent and a naive walker falls through to the page background. Real ratio on the gradient is 5.0-6.5:1.
-- Every `--cp-accent-soft` badge "1:1" — that token is `rgba(11,111,184,0.09)`; it must be composited over its parent before measuring. Real ratio ~4.7:1.
+**P2-5 · Colour drift: 53 `design-system-color` findings across 41 pages** *after* the deliberate literals were documented. Genuine one-offs (`#244f73`, `#6eb5e8`, `#dcefff`, `#fff8e8`, `#8a5a08`, `#9ee8c8`…) that should become tokens or map onto existing ones. *Medium, low risk.*
 
-Genuine failures were fixed by **lightening the two surface tokens** rather than darkening three foregrounds (which would have dragged `--cp-text-muted`, used everywhere): `--cp-danger-bg #fbe9e9 -> #fdf2f2` and `--cp-success-bg #e4f6ee -> #eefaf5`.
+**P2-6 · The type scale is genuinely ad hoc: 555 `design-system-font-size` findings across all 63 pages, from 24 distinct sizes.** Decide a real ramp and map onto it. **Do not simply bless all 24 in DESIGN.md** — that documents disorder rather than a system. *Large, medium risk (visual regression surface).*
 
-**Two marginal failures remain, deliberately not fixed:** `.link-tag` (4.41:1) on `/favorite-links/` and `.article-category-tag` (4.45:1) on article pages, both `--cp-accent` on `--cp-accent-soft`. Clearing them by lowering the token's alpha to 0.05 would visibly weaken the active-state tint that `.view-toggle-button.is-active` relies on across 8 pages — a functional affordance traded for a 0.09 ratio gain. Fix it with a darker colour on those two tag classes specifically if you pick it up.
+**P2-7 · `.stats-grid` vs `.stat-cards`** — one widget, two class names, 7 pages versus 3. Invisible to users today; drifts further with every new page. *Small, low risk.*
 
-### Detector state (`npx impeccable detect`, config-aware)
+**P2-8 · Extend click-to-copy.** Done on `/subnet-calculator/`. The same affordance belongs on `azure-regions` programmatic names, the IP-range CIDRs, and `azure-policy-aliases` — every page whose purpose is producing a value to paste. *Medium, low risk.*
 
-`.impeccable/config.json` holds three confirmed-intentional exceptions: `marquee` project-wide (the sitewide banner), plus `dark-glow` and `gradient-text` scoped to `index.html`/`index_fr.html` only. **41 findings remain unsuppressed and undecided:**
+**P2-9 · `/rss-watcher/` mobile CLS 0.165** (desktop is 0.001, down from 0.365). Remaining shift sources report as `section.` and `a.` — something *above* the container already reserved. *Small, low risk.*
 
-- `side-tab` x33 — `border-left: 3px solid var(--cp-accent)` on article callouts.
-- `em-dash-overuse` x6 — article prose.
-- `broken-image` x2 — `<img id="dialogImage" alt="">` in `icons/` and `it-images/`. These are **false positives**: they are lightbox placeholders inside a closed `<dialog>` whose `src` is set by JS on open. (An earlier version of this file claimed the JS never sets a meaningful `alt` — that was wrong. Both pages do set it: `${icon.name} preview` and `image.title`.)
+**P2-10 · Third-party favicons: ~560 requests to Google per full browse.** Mitigated — `no-referrer`, lazy, intrinsic sizes, and a verified fallback to initials — but not removed. Caching them into the repo via a refresh workflow would close it and matches the site's own "every page stands alone" principle. *Large, medium risk (new pipeline + ~560 committed files).*
 
-Note: running the detector with `--no-config` reports ~32 extra `dark-glow` hits on the shared `--cp-shadow` elevation token. Those do **not** fire in a normal config-aware run; don't chase them.
+---
 
-### Custom-property hygiene (checked 2026-08-29, currently clean)
+### P3 — hygiene, taste, and open questions
 
-The token graph is closed: **28 `--cp-*` properties declared, 28 used, zero orphans in either direction.** Getting there found real bugs that a per-page reading had missed:
+**P3-1 · Record the confirmed detector false positives** so the hook stops reporting them: `side-tab` ×33 (article blockquotes and callouts, not navigation) and `broken-image` ×2 (lightbox placeholders in a *closed* `<dialog>` whose `src` is set on open). Both were verified by direct inspection. *Trivial.*
 
-- **`var(--cp-panel)` was referenced on 29 pages and never declared anywhere.** It had only been fixed on the two homepages and in `pageShell()`. On tool pages it silently killed the mobile nav hover background; on `/icons/` it killed the **empty-state panel background** entirely. Both now use `--cp-surface-soft`.
-- `--cp-bg-elevated`, `--cp-text-soft`, `--cp-highlight` and `--cp-sheen` were declared across 29-31 pages and used exactly zero times. Removed.
+**P3-2 · No `404.html`.** GitHub Pages will serve its default. A branded 404 that routes back to `/tools/` would fit a search-first site. *Small.*
 
-If you add a token, verify both directions. A one-line script that collects every `--cp-x:` declaration and every `var(--cp-x)` reference across the 63 pages, then diffs the two sets, catches this class of bug instantly — reading one page will not.
+**P3-3 · No app-icon set**: no `favicon.ico`, no `apple-touch-icon`, no web manifest, no `theme-color`. Only `favicon.svg` exists. Affects the home-screen and tab experience. *Small.*
 
+**P3-4 · No structured data (JSON-LD) on any page.** `Person` on the homepage and `SoftwareApplication`/`TechArticle` on tools and articles would help a search-first site. *Medium.*
+
+**P3-5 · Print stylesheet on 2 of 63 pages.** Low value for tool pages; the articles are a plausible print target. *Small.*
+
+**P3-6 · `em-dash-overuse` on 6 article pages.** Cosmetic copy issue. *Trivial.*
+
+**P3-7 · Small UI items**, batchable: the `All > All` breadcrumb on `/icons/`; the patronising "Click a card to open it" hub subtitle; the Refresh action sitting inside the Cards/List view toggle on `/workflows/`; `.drag-handle` and some SVG transitions escaping `prefers-reduced-motion`; hub tool icons loading from external CDNs with no fallback; Enter in the hub search not opening the single remaining result. *Small each.*
+
+**P3-8 · Tools hub information scent** *(design direction — owner's call)*. 26 undifferentiated cards, no grouping, no record counts, no refresh timestamps — so the stated differentiator is invisible on the most important surface. Adding category headings plus a "last refreshed" and record-count chip per card would fix it without changing what the hub is. *Medium.*
+
+**P3-9 · French parity is undecided** *(product decision)*. `index_fr.html` is the only French page; 62 others are English-only, and `hreflang` alternates exist on 2 pages. `PRODUCT.md` records this as explicitly undecided. Either commit to FR for tool pages or drop the switch to a homepage-only affordance. *Large if pursued.*
+
+**P3-10 · The Hugo blog has never been audited — 75 pages.** It uses the `hugo-clarity` theme and **none of the 75 pages use the shared shell**, so it is a separate design system with its own header, footer, theme handling and accessibility profile. Every audit this session deliberately excluded it. It is more than half the site's page count. *Unknown scope until scanned.*
+
+---
+
+### Closed this session — do not re-raise
+
+WCAG AA contrast in both themes · 24×24 touch targets sitewide · heading hierarchy and landmark names · horizontal overflow at every width · reflow at 320px · closed token graph (28 declared / 28 used) · desktop CLS on articles, favorite-links, icons, workflows, azure-regions, azure-policies, emoji-sheet · 27 unnamed filter controls · 18 silent result counters · the `/workflows/` 403 storefront · filter and calculator state in the URL across 26 pages · back-to-hub breadcrumbs on 25 tool pages · click-to-copy on the subnet calculator · the news-banner dismiss no-op · the dead GitHub CTA · the retired `tools.`/`blog.` subdomain links.
+
+**The homepage deliberately does not showcase tools** — considered and rejected by the owner, recorded in `PRODUCT.md`.
+
+## 7b. Measurement gotchas — read before you trust a number
+
+These three cost real time this session. Each one produced confident, wrong conclusions.
+
+**Do not reuse a Playwright page across CLS measurements.** `addInitScript` accumulates, so every extra iteration registers another observer incrementing the same counter and each successive page reports an inflated multiple. This produced a reading of 14.47 before it was caught. Use a fresh `browser.newContext()` per measurement.
+
+**Composite alpha and gradient backgrounds before believing a contrast failure.** `--cp-accent-soft` is `rgba(11,111,184,0.09)` and the news banner's background is a `linear-gradient`. Both read as `transparent` from `getComputedStyle().backgroundColor`, so a naive walker falls through to the page background and reports spectacular false failures — 1.05:1 on white-on-blue text that actually measures 5–6.5:1. A naive probe reported 27 distinct "failures" sitewide; almost all were artefacts.
+
+**Counting attributes is not measuring.** A pass began from "712 images lack `width`/`height`" and it was almost entirely a false alarm: the CSS already reserves the box nearly everywhere, and `/favorite-links/` renders 522 dimensionless images at **CLS 0**. The real shift came from JS-rendered lists starting at zero height and shoving the footer down. Measure the outcome, not the proxy.
+
+**Verify agent findings before repeating them.** Across two sub-agent assessments this session, four confident claims were disproved by direct checking: the favicon fallback *does* work (zero broken images with Google fully blocked), the `/favorite-links/` empty state *does* render its message, the hub drag handles *do* carry `aria-label`, and every capped list *does* announce its cap.
+
+**Custom properties: check both directions.** `var(--cp-panel)` was referenced on 29 pages and declared nowhere — it silently killed a mobile nav hover and the `/icons/` empty-state background. Four other tokens were declared on 29–31 pages and used zero times. Reading one page will never catch this; collect every `--cp-x:` declaration and every `var(--cp-x)` reference across all 63 pages and diff the two sets. The graph is currently closed at 28/28.
+
+**Run the detector config-aware.** `--no-config` strips project context and reports ~32 known-false `dark-glow` hits on the shared `--cp-shadow` elevation token. `.impeccable/config.json` holds three confirmed-intentional exceptions: `marquee` project-wide, plus `dark-glow` and `gradient-text` scoped to the two homepages.
+
+**Calculator and generator pages are intentionally simpler** — no filter bar, no pagination, no stats row. That is correct, not an omission.
 ## 8. Recent session history (most recent first, as of 2026-08-29)
 
 - **2026-08-29, `/impeccable polish` across all 63 pages.**

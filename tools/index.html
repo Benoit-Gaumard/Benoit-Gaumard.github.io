@@ -4,6 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A collection of small tools and reference pages built by Benoit Gaumard.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Tools | Benoit Gaumard" />
+  <meta property="og:description" content="A collection of small tools and reference pages built by Benoit Gaumard." />
+  <meta property="og:url" content="https://benoit-gaumard.io/tools/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://benoit-gaumard.io/tools/" />
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
     (function () {
@@ -112,6 +125,24 @@
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
 
         .news-banner {
       display: flex;
@@ -526,6 +557,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
       <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
@@ -559,7 +591,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Tools</h1>
       <p class="intro-text">A growing collection of small tools and reference pages. Click a card to open it.</p>
@@ -567,7 +599,7 @@
 
     <section aria-label="Tool list">
       <div class="tools-search">
-        <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false">
+        <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-label="Search tools">
       </div>
       <div class="tools-toolbar">
         <div class="view-toggle" role="group" aria-label="Choose view">
@@ -1042,6 +1074,64 @@
       closeBtn.addEventListener("click", function () {
         banner.setAttribute("hidden", "");
         try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+  <script data-url-state>
+    (function () {
+      var scope = document.querySelector("main");
+      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
+      var controls = [].slice
+        .call(scope.querySelectorAll("input[id], select[id]"))
+        .filter(function (el) {
+          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
+          return !el.closest("[data-no-url-state]");
+        });
+      if (!controls.length) return;
+
+      var params = new URLSearchParams(location.search);
+      var hydrating = false;
+
+      function readValue(el) {
+        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+      }
+
+      if (params.toString()) {
+        hydrating = true;
+        var applied = [];
+        controls.forEach(function (el) {
+          var v = params.get(el.id);
+          if (v === null) return;
+          if (el.type === "checkbox") el.checked = v === "1";
+          else el.value = v;
+          applied.push(el);
+        });
+        // let each page's own listeners recompute from the restored values
+        applied.forEach(function (el) {
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        hydrating = false;
+      }
+
+      var pending = null;
+      function sync() {
+        if (hydrating) return;
+        clearTimeout(pending);
+        pending = setTimeout(function () {
+          var p = new URLSearchParams();
+          controls.forEach(function (el) {
+            var v = readValue(el);
+            if (v !== "" && v != null) p.set(el.id, v);
+          });
+          var qs = p.toString();
+          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
+        }, 250);
+      }
+
+      controls.forEach(function (el) {
+        el.addEventListener("input", sync);
+        el.addEventListener("change", sync);
       });
     })();
   </script>
