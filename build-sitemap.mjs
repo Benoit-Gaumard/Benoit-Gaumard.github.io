@@ -9,6 +9,9 @@ import { join, relative, sep } from "node:path";
 const ROOT = process.cwd();
 const SITE = "https://benoit-gaumard.io";
 const SKIP = new Set(["blog", "public", "node_modules", "themes", ".git", ".github", ".impeccable", ".playwright-mcp"]);
+// 404.html carries meta robots noindex; listing it in the sitemap is a
+// contradiction search engines report as an error
+const NOINDEX = new Set(["404.html"]);
 
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir)) {
@@ -16,7 +19,7 @@ function walk(dir, out = []) {
     const p = join(dir, entry);
     const st = statSync(p);
     if (st.isDirectory()) walk(p, out);
-    else if (entry.endsWith(".html")) out.push(p);
+    else if (entry.endsWith(".html") && !NOINDEX.has(entry)) out.push(p);
   }
   return out;
 }
