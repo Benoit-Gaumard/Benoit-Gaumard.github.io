@@ -284,7 +284,7 @@
     }
     .view-toggle-button svg { flex: 0 0 auto; }
 
-    .link-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr)); gap: .85rem; }
+    .link-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(23rem, 100%), 1fr)); gap: .85rem; min-height: 70vh; }
     .link-card {
       position: relative;
       display: flex;
@@ -777,6 +777,10 @@
       favicon.src = faviconUrlFor(link.url);
       favicon.alt = "";
       favicon.loading = "lazy";
+      favicon.decoding = "async";
+      favicon.width = 21;
+      favicon.height = 21;
+      favicon.referrerPolicy = "no-referrer";
       favicon.addEventListener("error", () => {
         favicon.remove();
         avatar.textContent = initials(link.title);

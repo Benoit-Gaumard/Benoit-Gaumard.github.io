@@ -100,13 +100,45 @@ The core design system (colors/fonts/header/footer/dark-mode/banner) is 100% con
 
 ### From the 2026-08-29 Impeccable critique + audit (homepage only)
 
-The critique targeted `index.html` only. Everything it found there was fixed on `index.html` **and** `index_fr.html`, but the **other 61 pages were never audited to the same depth**. Expect the same classes of problem there:
+The critique targeted `index.html` only. Everything it found there was fixed on `index.html` **and** `index_fr.html`. A follow-up pass then audited the remaining 61 pages in a real browser (see below), so items 4-6 are now **closed**; 7 and 8 remain open.
 
-4. **Heading hierarchy and landmark names.** The homepage had `h1` -> fifteen `h3` with a single trailing `h2`, and six unnamed `<section>` regions. Fixed there. `articles/index.html` and `world-clock/index.html` also use `<p class="sec-label">` as a section title and were **not** checked.
-5. **No `<noscript>` and no `@media print` anywhere except the two homepages.** Only `index.html`/`index_fr.html` use `.reveal` (content hidden until IntersectionObserver fires), so the noscript gap is homepage-specific, but no page on the site is printable.
-6. **Touch targets.** Header nav links render 26px tall, the theme/social buttons 32px, the banner close 28px, the footer language flags 29x22 (under the WCAG 2.2 SC 2.5.8 24px floor). Sitewide, untouched.
-7. **Third-party image dependency.** The homepage still makes 28 requests to `google.com/s2/favicons` for the client-logo wall. If that host is blocked by an ad blocker or a corporate proxy, the entire credibility section silently disappears. Other pages use the same favicon trick.
+4. ~~Heading hierarchy and landmark names.~~ **Closed.** All 63 pages now measure 0 heading-level skips, 0 `<p class="sec-label">` used as a title, and 0 unnamed `<section>`.
+5. ~~No `<noscript>`.~~ **Non-issue**: only the two homepages use `.reveal`, and both have it. `@media print` still exists only on the homepages — printing a tool page is not a real use case.
+6. ~~Horizontal overflow.~~ **Closed.** 0 pages overflow at 1440 or 375.
+7. **Touch targets.** Header nav links render 26px tall, the theme/social buttons 32px, the banner close 28px, the footer language flags 29x22 (under the WCAG 2.2 SC 2.5.8 24px floor). Sitewide, untouched.
 8. **Design-direction items the owner has not decided on** (not defects): the homepage of a tools hub previews zero tools; 10 undifferentiated skill cards; a 22-logo client wall with no outcomes attached.
+
+### Cumulative layout shift — measure it, don't count image attributes
+
+The 2026-08-29 sitewide pass started from "712 images lack `width`/`height`" and that number turned out to be **almost entirely a false alarm**: the CSS already reserves a fixed box for nearly every one of them. `/favorite-links/` renders 522 dimensionless images and measured **CLS 0**.
+
+The real CLS came from JS-rendered lists starting at zero height and shoving the footer down on first render. Measured before -> after:
+
+| Page | Before | After | Fix |
+|---|---|---|---|
+| `/articles/` (desktop) | 0.70 | **0.05** | `#featuredSection[data-loading] { min-height: 100vh }`, released by `renderFeatured()` |
+| `/favorite-links/` | 0.31 | **0** | `.link-cards { min-height: 70vh }` |
+| `/icons/` | 0.29 | **0** | `.gallery { min-height: 70vh }` |
+| `/workflows/` | 0.15 | **0.01** | badge `width`/`height` attrs + `.workflow-badge { min-width: 9.25rem }` (badges loaded at `width:auto` and re-wrapped every card) |
+
+**If you measure CLS yourself, do not reuse a Playwright page across iterations.** `addInitScript` accumulates, so every extra iteration adds another observer incrementing the same counter and each successive page reports an inflated multiple. Use a fresh `browser.newContext()` per measurement.
+
+### Still open on CLS (mobile only, both reproducible)
+
+- `/articles/` at 375px: **0.35**, one shift sourced at `div.articles-layout` / `div.articles-main`. The featured-section reservation fixed desktop but not this; the source is something above the layout, not the featured grid (a 160vh mobile reservation was tried and changed nothing, so it was reverted).
+- `/azure-taggable-resources/` at 375px: **0.25**, one shift sourced at a `section`. `.table-wrap { min-height: 60vh }` was added and did not move it.
+- `/azure-regions/` at 1440px: **0.66**, never investigated — almost certainly the Leaflet map container.
+
+### Contrast: composite alpha before you believe a failure
+
+A naive contrast probe reported 27 distinct failures sitewide. All but a handful were artefacts of the probe, not real:
+
+- `.news-banner-text` "white on `#f5faff` = 1.05:1" — the banner's background is a `linear-gradient`, i.e. a `background-image`, so `backgroundColor` reads transparent and a naive walker falls through to the page background. Real ratio on the gradient is 5.0-6.5:1.
+- Every `--cp-accent-soft` badge "1:1" — that token is `rgba(11,111,184,0.09)`; it must be composited over its parent before measuring. Real ratio ~4.7:1.
+
+Genuine failures were fixed by **lightening the two surface tokens** rather than darkening three foregrounds (which would have dragged `--cp-text-muted`, used everywhere): `--cp-danger-bg #fbe9e9 -> #fdf2f2` and `--cp-success-bg #e4f6ee -> #eefaf5`.
+
+**Two marginal failures remain, deliberately not fixed:** `.link-tag` (4.41:1) on `/favorite-links/` and `.article-category-tag` (4.45:1) on article pages, both `--cp-accent` on `--cp-accent-soft`. Clearing them by lowering the token's alpha to 0.05 would visibly weaken the active-state tint that `.view-toggle-button.is-active` relies on across 8 pages — a functional affordance traded for a 0.09 ratio gain. Fix it with a darker colour on those two tag classes specifically if you pick it up.
 
 ### Detector state (`npx impeccable detect`, config-aware)
 
@@ -119,6 +151,18 @@ The critique targeted `index.html` only. Everything it found there was fixed on 
 Note: running the detector with `--no-config` reports ~32 extra `dark-glow` hits on the shared `--cp-shadow` elevation token. Those do **not** fire in a normal config-aware run; don't chase them.
 
 ## 8. Recent session history (most recent first, as of 2026-08-29)
+
+- **2026-08-29, sitewide audit of the remaining 61 pages.** Browser-measured every page at 1440 and 375.
+  - Article template (`pageShell()`): `var(--cp-panel)` was still undefined and the "Back to top" link pointed at a `#top` that did not exist — both were fixed on the homepages earlier but never in the template, so all 32 generated pages carried them. `<main>` is now `<main id="top">`.
+  - `articles/index.html`: section titles were `<p class="sec-label">` while all 39 article card titles were `<h2>`, giving a screen reader `h1` + 39 flat `h2`s. Card titles are now `<h3>` (CSS selectors moved with them) and the section titles are `<h2>`. Same `<p>`-as-title fix on `world-clock/index.html`.
+  - `azure-taggable-resources`: the mobile rule `.filter-bar input { width: 100% }` also matched the "Taggable only" **checkbox** (equal specificity, declared later than `.filter-toggle input`), blowing it up to 344px and overflowing the page. Now scoped with `:not([type="checkbox"])`.
+  - `favorite-links`: `minmax(23rem, 1fr)` = 368px could not shrink below a 360px viewport. Now `minmax(min(23rem, 100%), 1fr)`.
+  - Favicon images on `favorite-links` / `microsoft-portals` / `friends-websites` got intrinsic sizes and `referrerPolicy = "no-referrer"` (every one of those ~530 requests was leaking the visited page URL to Google). No fallback was added: all three already remove the image and show initials on error.
+  - CLS work and contrast work as described in section 7.
+- **2026-08-29, Impeccable `critique` + `audit` + `init` (PR #6).** Design health scored 19/36, audit health 11/20.
+  - Sitewide (63 pages): fixed the banner Dismiss no-op (see §5); darkened three colour tokens for light-mode WCAG AA (see §2); fixed the contact GitHub CTA, which pointed at `https://github.com/` root.
+  - Homepage pair only: added the sticky `.section-nav` (see §2) because six section `id`s existed with nothing linking to them; converted the four `.sec-label` titles to `<h2>` and named every `<section>`; repointed the Tools cards off the retired `tools.`/`blog.benoit-gaumard.io` subdomains to `/blog/`, `/tools/`, `/icons/`, `/favorite-links/`; added `<noscript>` and `@media print` fallbacks; plus a batch of small defects (undefined `var(--cp-panel)`, `.hero p` overriding `.loc-badge`'s green, a stat animating `7x`->`7+` against its own label, duplicated PHP entry, dev-vocabulary `og:description`, missing `og:url`/`canonical`/`hreflang`, `width`/`height` on 41 images, and deletion of a dead Languages CSS block).
+  - **`PRODUCT.md` was created** — see §9.
 
 - **2026-08-29, Impeccable `critique` + `audit` + `init` (PR #6).** Design health scored 19/36, audit health 11/20.
   - Sitewide (63 pages): fixed the banner Dismiss no-op (see §5); darkened three colour tokens for light-mode WCAG AA (see §2); fixed the contact GitHub CTA, which pointed at `https://github.com/` root.
