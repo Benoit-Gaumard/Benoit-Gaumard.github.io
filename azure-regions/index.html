@@ -4,6 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Explore Azure datacenter locations and regional information worldwide: physical location, geography, paired region, and availability zone support.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Azure Regions | Benoit Gaumard" />
+  <meta property="og:description" content="Explore Azure datacenter locations and regional information worldwide: physical location, geography, paired region, and availability zone support." />
+  <meta property="og:url" content="https://benoit-gaumard.io/azure-regions/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://benoit-gaumard.io/azure-regions/" />
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
     (function () {
@@ -117,6 +130,24 @@
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
 
         .news-banner {
       display: flex;
@@ -218,6 +249,17 @@
     .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
     .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
     .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
+    .data-error {
+      margin: 1rem 0;
+      padding: .85rem 1rem;
+      border: 1px solid var(--cp-danger);
+      border-radius: 8px;
+      background: var(--cp-danger-bg);
+      color: var(--cp-danger);
+      font-size: .92rem;
+      font-weight: 600;
+    }
+
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
     .stat-cards { min-height: 7rem;
@@ -465,6 +507,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
       <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
@@ -498,7 +541,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Regions</h1>
@@ -803,7 +846,19 @@
     elements.continentFilter.addEventListener("change", renderCards);
     elements.azOnlyFilter.addEventListener("change", renderCards);
 
-    init();
+    init().catch(function (error) {
+      console.error(error);
+      if (document.querySelector(".data-error")) return;
+      var host = document.querySelector("main");
+      if (!host) return;
+      var msg = document.createElement("p");
+      msg.className = "data-error";
+      msg.setAttribute("role", "alert");
+      msg.textContent = "Could not load the data for this page. This is usually a temporary network problem \u2014 reload to try again.";
+      var intro = host.querySelector(".intro");
+      if (intro) intro.insertAdjacentElement("afterend", msg);
+      else host.prepend(msg);
+    });
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
