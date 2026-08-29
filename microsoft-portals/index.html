@@ -650,6 +650,10 @@
       favicon.src = faviconUrlFor(portal.url);
       favicon.alt = "";
       favicon.loading = "lazy";
+      favicon.decoding = "async";
+      favicon.width = 28;
+      favicon.height = 28;
+      favicon.referrerPolicy = "no-referrer";
       favicon.addEventListener("error", () => {
         favicon.remove();
         avatar.textContent = initials(portal.name);

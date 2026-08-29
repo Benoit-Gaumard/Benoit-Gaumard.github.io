@@ -294,7 +294,7 @@ ${extraHead}
       --cp-accent-soft: rgba(11, 111, 184, 0.09);
       --cp-accent-fg: #ffffff;
       --cp-success: #157f57;
-      --cp-success-bg: #e4f6ee;
+      --cp-success-bg: #eefaf5;
       --cp-warning: #96610a;
       --cp-warning-bg: #fff8e8;
       --cp-info: #0c7d8f;
@@ -472,7 +472,7 @@ ${extraHead}
       .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
       .header-links.nav-open { display: flex; }
       .header-links a { padding: .65rem .75rem; border-radius: 6px; }
-      .header-links a:hover { background: var(--cp-panel); }
+      .header-links a:hover { background: var(--cp-surface-soft); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
     }
@@ -524,7 +524,7 @@ ${ARTICLE_CSS}
     </div>
   </header>
 
-  <main>
+  <main id="top">
 ${content}
   </main>
 

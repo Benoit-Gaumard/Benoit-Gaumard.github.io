@@ -31,6 +31,10 @@ Every hand-authored page shares byte-identical (or near-identical) boilerplate:
 
 **Cards/List view toggle** (used on azure-regions, friends-websites, microsoft-portals, rss-watcher, workflows, world-clock, tools, favorite-links): `.view-toggle { border-radius: 10px; border: 1px solid var(--cp-border); padding: .25rem; gap: .25rem; }` + `.view-toggle-button { border-radius: 7px; padding: .45rem .9rem; font-size: .85rem; }`, active state `background: var(--cp-accent-soft); color: var(--cp-accent);`. Do NOT reinvent a round-pill variant — copy this exact CSS.
 
+**Accessible colour tokens (do not lighten these back)**: `--cp-warning: #96610a`, `--cp-success: #157f57` and `--cp-cyan: #0d93b0` were darkened on 2026-08-29 to clear WCAG AA in **light** mode (`.skill h3`/`.exp-card .hash` were at 3.03:1, `.grad-text` at 2.44:1, `.tl-note` at 4.46:1). The dark-theme values are separate and were already compliant — don't "resync" the two palettes. Any new token used for text must be checked against `--cp-bg` **and** `--cp-surface` in light mode.
+
+**Section navigation (homepage only)**: `index.html` / `index_fr.html` carry a sticky `.section-nav` under the header. Its offset comes from a `--header-h` custom property that a `ResizeObserver` keeps in sync with the real header height, so never hard-code a `top` value for it. Sections use `main [id] { scroll-margin-top: calc(var(--header-h) + 4rem); }` so anchor jumps clear both sticky bars. No other page has this component.
+
 ## 3. Standard pipeline for adding a new `/<slug>/` tool page
 
 1. Research the data source.
@@ -59,6 +63,7 @@ using the **"scan-benoit-gaumard.io"** Entra app. The 3 secrets (`AZURE_CLIENT_I
 
 - **Dark/light theme toggle** — `data-theme` attribute + FOUC-prevention script (see §2).
 - **News/welcome banner** — `.news-banner` marquee at top of every page, dismiss button, versioned localStorage key `news-banner-dismissed`. **To push a new announcement**: change the message text in the banner HTML on all pages AND bump the version string (currently `"2026-08-21"`) in both the FOUC-check script and the close-button handler, on all 63 pages (31 direct + 32 generated articles) — this is a full sitewide codemod, see the pattern below.
+  - **Gotcha, fixed 2026-08-29**: the close handler sets `hidden` on the banner, but `.news-banner { display: flex }` is an author rule and beats the UA `[hidden] { display: none }`, so for a long time clicking Dismiss did nothing on the current page (it only took effect on the next load, via `data-news-banner`). All 63 pages now carry `.news-banner[hidden] { display: none; }` right after the `:root[data-news-banner="hidden"]` rule. **Keep that rule** if you ever rewrite the banner CSS.
 - **Azure Regions interactive map** — Leaflet.js via CDN, Cards/List/Map 3-way toggle.
 - **Emoji Sheet & Icons "Per page" pagination** — Previous/Next + a `<select id="perPage">` (50/100/200/All) dropdown, replacing older "Show more" or unlimited-render patterns.
 
@@ -78,9 +83,11 @@ When a change needs to touch all ~63 pages:
 - Repo files are CRLF. When writing files programmatically (Node scripts, `create_file`), the working tree normalizes to CRLF on commit regardless (confirmed via byte-count check) — safe to always convert `\n` → `\r\n` before `writeFileSync` in codemods to avoid a print of "LF will be replaced by CRLF" warnings/big diffs.
 - No `gh` CLI/token available in this environment — can't dispatch workflows or query the Actions API with authentication. Verify deploys by polling the live production URL instead.
 
-## 7. Known outstanding items (not yet fixed — see audit from 2026-08-21)
+## 7. Known outstanding items
 
-An audit of all 26 `/tools/` pages found the core design system (colors/fonts/header/footer/dark-mode/banner) is 100% consistent, but two real inconsistencies remain unaddressed:
+### From the 2026-08-21 audit of all 26 `/tools/` pages (still open)
+
+The core design system (colors/fonts/header/footer/dark-mode/banner) is 100% consistent, but two real inconsistencies remain unaddressed:
 
 1. **Two different class names for the same "stats summary" widget**: `.stats-grid` (azure-policy-aliases, azure-taggable-resources, azure-policies, microsoft-techcommunity-rss-feeds, it-images) vs `.stat-cards` (azure-regions, github-ip-ranges, azure-ip-ranges, workflows, world-clock). Purely a naming/DRY issue, not visually broken.
 2. **Four different strategies for handling long lists**, inconsistent across pages:
@@ -91,7 +98,76 @@ An audit of all 26 `/tools/` pages found the core design system (colors/fonts/he
    - The user has NOT yet asked to generalize the pagination pattern to the rest of these pages — only `favorite-links` got a targeted fix (3-column grid cap + no title truncation) and `emoji-sheet` got the icons-style pagination. If asked to continue this cleanup, prioritize `friends-websites`/`microsoft-portals` (similar card-grid pages with no limit at all).
 3. Calculator/generator pages (`guid-generator`, `subnet-calculator`, `percentage-calculator`, `sla-calculator`, `units-converter`, `random-wheel`, `azure-naming-convention`) are intentionally simpler (no filter bar / pagination) — this is correct, not a bug.
 
-## 8. Recent session history (most recent first, as of 2026-08-21)
+### From the 2026-08-29 Impeccable critique + audit (homepage only)
+
+The critique targeted `index.html` only. Everything it found there was fixed on `index.html` **and** `index_fr.html`. A follow-up pass then audited the remaining 61 pages in a real browser (see below), so items 4-6 are now **closed**; 7 and 8 remain open.
+
+4. ~~Heading hierarchy and landmark names.~~ **Closed.** All 63 pages now measure 0 heading-level skips, 0 `<p class="sec-label">` used as a title, and 0 unnamed `<section>`.
+5. ~~No `<noscript>`.~~ **Non-issue**: only the two homepages use `.reveal`, and both have it. `@media print` still exists only on the homepages — printing a tool page is not a real use case.
+6. ~~Horizontal overflow.~~ **Closed.** 0 pages overflow at 1440 or 375.
+7. **Touch targets.** Header nav links render 26px tall, the theme/social buttons 32px, the banner close 28px, the footer language flags 29x22 (under the WCAG 2.2 SC 2.5.8 24px floor). Sitewide, untouched.
+8. **Design-direction items the owner has not decided on** (not defects): the homepage of a tools hub previews zero tools; 10 undifferentiated skill cards; a 22-logo client wall with no outcomes attached.
+
+### Cumulative layout shift — measure it, don't count image attributes
+
+The 2026-08-29 sitewide pass started from "712 images lack `width`/`height`" and that number turned out to be **almost entirely a false alarm**: the CSS already reserves a fixed box for nearly every one of them. `/favorite-links/` renders 522 dimensionless images and measured **CLS 0**.
+
+The real CLS came from JS-rendered lists starting at zero height and shoving the footer down on first render. Measured before -> after:
+
+| Page | Before | After | Fix |
+|---|---|---|---|
+| `/articles/` (desktop) | 0.70 | **0.05** | `#featuredSection[data-loading] { min-height: 100vh }`, released by `renderFeatured()` |
+| `/favorite-links/` | 0.31 | **0** | `.link-cards { min-height: 70vh }` |
+| `/icons/` | 0.29 | **0** | `.gallery { min-height: 70vh }` |
+| `/workflows/` | 0.15 | **0.01** | badge `width`/`height` attrs + `.workflow-badge { min-width: 9.25rem }` (badges loaded at `width:auto` and re-wrapped every card) |
+
+**If you measure CLS yourself, do not reuse a Playwright page across iterations.** `addInitScript` accumulates, so every extra iteration adds another observer incrementing the same counter and each successive page reports an inflated multiple. Use a fresh `browser.newContext()` per measurement.
+
+### Still open on CLS (mobile only, both reproducible)
+
+- `/articles/` at 375px: **0.35**, one shift sourced at `div.articles-layout` / `div.articles-main`. The featured-section reservation fixed desktop but not this; the source is something above the layout, not the featured grid (a 160vh mobile reservation was tried and changed nothing, so it was reverted).
+- `/azure-taggable-resources/` at 375px: **0.25**, one shift sourced at a `section`. `.table-wrap { min-height: 60vh }` was added and did not move it.
+- `/azure-regions/` at 1440px: **0.66**, never investigated — almost certainly the Leaflet map container.
+
+### Contrast: composite alpha before you believe a failure
+
+A naive contrast probe reported 27 distinct failures sitewide. All but a handful were artefacts of the probe, not real:
+
+- `.news-banner-text` "white on `#f5faff` = 1.05:1" — the banner's background is a `linear-gradient`, i.e. a `background-image`, so `backgroundColor` reads transparent and a naive walker falls through to the page background. Real ratio on the gradient is 5.0-6.5:1.
+- Every `--cp-accent-soft` badge "1:1" — that token is `rgba(11,111,184,0.09)`; it must be composited over its parent before measuring. Real ratio ~4.7:1.
+
+Genuine failures were fixed by **lightening the two surface tokens** rather than darkening three foregrounds (which would have dragged `--cp-text-muted`, used everywhere): `--cp-danger-bg #fbe9e9 -> #fdf2f2` and `--cp-success-bg #e4f6ee -> #eefaf5`.
+
+**Two marginal failures remain, deliberately not fixed:** `.link-tag` (4.41:1) on `/favorite-links/` and `.article-category-tag` (4.45:1) on article pages, both `--cp-accent` on `--cp-accent-soft`. Clearing them by lowering the token's alpha to 0.05 would visibly weaken the active-state tint that `.view-toggle-button.is-active` relies on across 8 pages — a functional affordance traded for a 0.09 ratio gain. Fix it with a darker colour on those two tag classes specifically if you pick it up.
+
+### Detector state (`npx impeccable detect`, config-aware)
+
+`.impeccable/config.json` holds three confirmed-intentional exceptions: `marquee` project-wide (the sitewide banner), plus `dark-glow` and `gradient-text` scoped to `index.html`/`index_fr.html` only. **41 findings remain unsuppressed and undecided:**
+
+- `side-tab` x33 — `border-left: 3px solid var(--cp-accent)` on article callouts.
+- `em-dash-overuse` x6 — article prose.
+- `broken-image` x2 — `<img id="dialogImage" alt="">` in `icons/` and `it-images/`. These are **false positives**: they are lightbox placeholders inside a closed `<dialog>` whose `src` is set by JS on open. (Real nit worth fixing though: the JS sets `.src` but never a meaningful `.alt`.)
+
+Note: running the detector with `--no-config` reports ~32 extra `dark-glow` hits on the shared `--cp-shadow` elevation token. Those do **not** fire in a normal config-aware run; don't chase them.
+
+## 8. Recent session history (most recent first, as of 2026-08-29)
+
+- **2026-08-29, sitewide audit of the remaining 61 pages.** Browser-measured every page at 1440 and 375.
+  - Article template (`pageShell()`): `var(--cp-panel)` was still undefined and the "Back to top" link pointed at a `#top` that did not exist — both were fixed on the homepages earlier but never in the template, so all 32 generated pages carried them. `<main>` is now `<main id="top">`.
+  - `articles/index.html`: section titles were `<p class="sec-label">` while all 39 article card titles were `<h2>`, giving a screen reader `h1` + 39 flat `h2`s. Card titles are now `<h3>` (CSS selectors moved with them) and the section titles are `<h2>`. Same `<p>`-as-title fix on `world-clock/index.html`.
+  - `azure-taggable-resources`: the mobile rule `.filter-bar input { width: 100% }` also matched the "Taggable only" **checkbox** (equal specificity, declared later than `.filter-toggle input`), blowing it up to 344px and overflowing the page. Now scoped with `:not([type="checkbox"])`.
+  - `favorite-links`: `minmax(23rem, 1fr)` = 368px could not shrink below a 360px viewport. Now `minmax(min(23rem, 100%), 1fr)`.
+  - Favicon images on `favorite-links` / `microsoft-portals` / `friends-websites` got intrinsic sizes and `referrerPolicy = "no-referrer"` (every one of those ~530 requests was leaking the visited page URL to Google). No fallback was added: all three already remove the image and show initials on error.
+  - CLS work and contrast work as described in section 7.
+- **2026-08-29, Impeccable `critique` + `audit` + `init` (PR #6).** Design health scored 19/36, audit health 11/20.
+  - Sitewide (63 pages): fixed the banner Dismiss no-op (see §5); darkened three colour tokens for light-mode WCAG AA (see §2); fixed the contact GitHub CTA, which pointed at `https://github.com/` root.
+  - Homepage pair only: added the sticky `.section-nav` (see §2) because six section `id`s existed with nothing linking to them; converted the four `.sec-label` titles to `<h2>` and named every `<section>`; repointed the Tools cards off the retired `tools.`/`blog.benoit-gaumard.io` subdomains to `/blog/`, `/tools/`, `/icons/`, `/favorite-links/`; added `<noscript>` and `@media print` fallbacks; plus a batch of small defects (undefined `var(--cp-panel)`, `.hero p` overriding `.loc-badge`'s green, a stat animating `7x`->`7+` against its own label, duplicated PHP entry, dev-vocabulary `og:description`, missing `og:url`/`canonical`/`hreflang`, `width`/`height` on 41 images, and deletion of a dead Languages CSS block).
+  - **`PRODUCT.md` was created** — see §9.
+
+- **2026-08-29, Impeccable `critique` + `audit` + `init` (PR #6).** Design health scored 19/36, audit health 11/20.
+  - Sitewide (63 pages): fixed the banner Dismiss no-op (see §5); darkened three colour tokens for light-mode WCAG AA (see §2); fixed the contact GitHub CTA, which pointed at `https://github.com/` root.
+  - Homepage pair only: added the sticky `.section-nav` (see §2) because six section `id`s existed with nothing linking to them; converted the four `.sec-label` titles to `<h2>` and named every `<section>`; repointed the Tools cards off the retired `tools.`/`blog.benoit-gaumard.io` subdomains to `/blog/`, `/tools/`, `/icons/`, `/favorite-links/`; added `<noscript>` and `@media print` fallbacks; plus a batch of small defects (undefined `var(--cp-panel)`, `.hero p` overriding `.loc-badge`'s green, a stat animating `7x`->`7+` against its own label, duplicated PHP entry, dev-vocabulary `og:description`, missing `og:url`/`canonical`/`hreflang`, `width`/`height` on 41 images, and deletion of a dead Languages CSS block).
+  - **`PRODUCT.md` was created** — see §9.
 
 - `favorite-links`: removed title/URL truncation (was `text-overflow: ellipsis`), capped grid to 3 columns (`minmax(23rem, 1fr)` instead of `15rem`).
 - `favorite-links`: redesigned cards to a compact 2-line layout (favicon+clickable title / category+date+rating), added `dateAdded` CSV column (empty for existing 522 rows — user chose not to backfill), replaced the "featured link" star badge with a 🔥 flame emoji.
@@ -107,5 +183,8 @@ An audit of all 26 `/tools/` pages found the core design system (colors/fonts/he
 
 ## 9. Where to look for more context
 
+- **`PRODUCT.md` at the repo root** (added 2026-08-29) is now the authority on product truth: who the users are, what the positioning is, what constraints future work must preserve, and — importantly — what evidence does **not** exist and must not be invented (no testimonials, no case studies, no outcome metrics; the "80+ projects" figure is self-reported). Read it before any design or copy work. Two facts in it are easy to get wrong from the code alone: the tools reference is the core of the product (the profile is the frame around it), and `tools.benoit-gaumard.io` / `blog.benoit-gaumard.io` are **retired** — everything must target `/tools/` and `/blog/` on the canonical domain.
+- There is no `DESIGN.md` yet. This handoff's §2 is the closest thing to one; `/impeccable document` would generate a proper one from the incumbent code.
 - `/memories/repo/benoit-gaumard-site.md` in this AI assistant's memory store has a much more detailed, chronological log of every fix made in past sessions (root causes, exact CSS/JS anchors used, gotchas) — if you're a different AI tool without access to that memory file, this handoff doc is your best summary, but the git commit history (`git log --oneline -50`) plus reading the actual current file contents is the ground truth.
+- `.impeccable/critique/` holds the dated critique snapshots (heuristic scores, priority issues, persona findings) that `/impeccable polish` can pick up directly.
 - No formal issue tracker / TODO list exists beyond what's in §7 above and whatever the user says next.

@@ -36,9 +36,9 @@
       --cp-accent-soft: rgba(11, 111, 184, 0.09);
       --cp-accent-fg: #ffffff;
       --cp-success: #157f57;
-      --cp-success-bg: #e4f6ee;
+      --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
-      --cp-danger-bg: #fbe9e9;
+      --cp-danger-bg: #fdf2f2;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -248,6 +248,7 @@
 
     .table-wrap {
       overflow-x: auto;
+      min-height: 60vh;
       border: 1px solid var(--cp-border);
       border-radius: 8px;
       background: var(--cp-surface);
@@ -338,7 +339,7 @@
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
       .filter-bar { flex-direction: column; align-items: stretch; }
-      .filter-bar input, .filter-bar select { max-width: none; width: 100%; }
+      .filter-bar input:not([type="checkbox"]), .filter-bar select { max-width: none; width: 100%; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
