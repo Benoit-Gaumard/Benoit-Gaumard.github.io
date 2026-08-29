@@ -215,9 +215,12 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
-    .stat-cards {
+    .stat-cards { min-height: 7rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
       gap: 1rem;
@@ -312,7 +315,7 @@
     .map-popup .map-popup-tag.is-no-az { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
     .map-popup .map-popup-tag.is-restricted { margin-left: .35rem; background: var(--cp-danger-bg); color: var(--cp-danger); }
 
-    .region-cards {
+    .region-cards { min-height: 70vh;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
       gap: 1.25rem;
@@ -497,6 +500,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Regions</h1>
       <p class="intro-text">Explore Azure datacenter locations and regional information worldwide.</p>
     </section>
@@ -507,8 +511,8 @@
 
     <section aria-label="Azure regions directory">
       <div class="filter-bar">
-        <input type="text" id="searchInput" placeholder="Search by region, location, or country...">
-        <select id="continentFilter"><option value="">All continents</option></select>
+        <input type="text" id="searchInput" placeholder="Search by region, location, or country..." aria-label="Search by region, location, or country">
+        <select id="continentFilter" aria-label="Filter by continent"><option value="">All continents</option></select>
         <label class="filter-toggle"><input type="checkbox" id="azOnlyFilter"> Availability zones only</label>
       </div>
       <div class="regions-toolbar">
@@ -526,7 +530,7 @@
             Map
           </button>
         </div>
-        <p class="results-count" id="resultsCount"></p>
+        <p class="results-count" id="resultsCount" aria-live="polite"></p>
       </div>
       <div class="region-cards" id="regionCards"></div>
       <div class="region-map" id="regionMap" hidden></div>

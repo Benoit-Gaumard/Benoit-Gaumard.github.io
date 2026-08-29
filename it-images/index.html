@@ -212,6 +212,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
@@ -474,6 +477,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">IT Images &amp; Memes</h1>
       <p class="intro-text">A collection of funny IT memes, developer humor, and tech-related images.</p>
     </section>
@@ -482,7 +486,7 @@
 
     <section aria-label="Image gallery">
       <div class="filter-bar">
-        <input id="search" type="search" placeholder="Search images..." autocomplete="off" spellcheck="false">
+        <input id="search" type="search" placeholder="Search images..." autocomplete="off" spellcheck="false" aria-label="Search images">
         <button class="clear-button" id="clearFilters" type="button" hidden>Clear search</button>
       </div>
       <div class="gallery" id="gallery"></div>

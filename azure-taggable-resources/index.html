@@ -211,6 +211,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
     .refresh-meta strong { color: var(--cp-text); }
@@ -382,6 +385,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Taggable Resources</h1>
       <p class="intro-text">Check which Azure resource types support tags and whether those tags appear in the cost report, sourced from the official <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-support" target="_blank" rel="noopener">tag support reference</a>.</p>
       <p class="refresh-meta">
@@ -393,8 +397,8 @@
 
     <section aria-label="Taggable resources">
       <div class="filter-bar">
-        <input id="search" type="search" placeholder="Filter by provider or resource type..." autocomplete="off" spellcheck="false">
-        <select id="providerFilter"><option value="">All providers</option></select>
+        <input id="search" type="search" placeholder="Filter by provider or resource type..." autocomplete="off" spellcheck="false" aria-label="Filter by provider or resource type">
+        <select id="providerFilter" aria-label="Filter by provider"><option value="">All providers</option></select>
         <label class="filter-toggle"><input type="checkbox" id="taggableOnlyFilter"> Taggable only</label>
       </div>
       <div class="table-wrap">
@@ -410,7 +414,7 @@
           <tbody id="tableBody"></tbody>
         </table>
       </div>
-      <p id="resultCount"></p>
+      <p id="resultCount" aria-live="polite"></p>
     </section>
   </main>
 

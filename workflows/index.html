@@ -214,6 +214,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta {
       display: flex;
@@ -461,6 +464,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Workflows</h1>
       <p class="intro-text">Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, RSS Watcher, GitHub IP Ranges, and Azure IP Ranges data across this site.</p>
       <p class="refresh-meta">
@@ -618,13 +622,21 @@
       const badgeUrl = `https://github.com/${REPO}/actions/workflows/${workflow.file}/badge.svg?cb=${Date.now()}`;
       const workflowUrl = `https://github.com/${REPO}/actions/workflows/${workflow.file}`;
       if (error || !run) {
+        // The runs endpoint is public but GitHub allows only 60 unauthenticated
+        // requests per hour per IP, and this page asks for one per workflow on
+        // every visit — so a 403 here is a quota, not a broken pipeline. The
+        // badge is served from github.com without that limit and always shows
+        // the true current status, so lead with it instead of crying failure.
+        const rateLimited = error && /\b(403|429)\b/.test(error.message || "");
         cardEl.innerHTML = `
           <div class="workflow-card-header">
             <h2>${workflow.name}</h2>
-            <span class="status-pill is-unknown">Unavailable</span>
+            <span class="status-pill is-unknown">Status via badge</span>
           </div>
           <img class="workflow-badge" src="${badgeUrl}" alt="${workflow.name} status badge" width="148" height="20" loading="lazy" decoding="async">
-          <p class="workflow-error">Could not load the latest run${error ? ` (${error.message})` : ""}.</p>
+          <p class="workflow-note">${rateLimited
+            ? "Run detail needs the GitHub API, which allows 60 unauthenticated requests an hour. The badge above is live and unmetered."
+            : "Run detail is temporarily unavailable. The badge above is live."}</p>
           <a class="workflow-link" href="${workflowUrl}" target="_blank" rel="noopener">View on GitHub &rarr;</a>
         `;
         return;

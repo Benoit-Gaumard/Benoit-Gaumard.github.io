@@ -214,6 +214,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
     .calculator-card {
@@ -436,6 +439,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Naming Convention</h1>
       <p class="intro-text">Generate Azure resource names following the <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank" rel="noopener">Cloud Adoption Framework naming convention</a>, and browse recommended resource type abbreviations.</p>
     </section>
@@ -513,7 +517,7 @@
       <div class="calculator-card">
         <h2 class="card-heading">Resource type abbreviations</h2>
         <div class="table-toolbar">
-          <input id="search" type="search" placeholder="Filter by resource, category, or abbreviation..." autocomplete="off" spellcheck="false">
+          <input id="search" type="search" placeholder="Filter by resource, category, or abbreviation..." autocomplete="off" spellcheck="false" aria-label="Filter by resource, category, or abbreviation">
         </div>
         <div class="table-wrap">
           <table>
@@ -528,7 +532,7 @@
             <tbody id="tableBody"></tbody>
           </table>
         </div>
-        <p id="resultCount"></p>
+        <p id="resultCount" aria-live="polite"></p>
       </div>
     </section>
   </main>

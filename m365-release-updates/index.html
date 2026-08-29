@@ -226,6 +226,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.5rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta {
       display: flex;
@@ -584,6 +587,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">M365 Release Updates</h1>
       <p class="intro-text">Latest Microsoft 365 roadmap updates, sourced directly from the official Microsoft 365 RSS feed. Refreshed automatically every morning and evening.</p>
       <p class="refresh-meta">
@@ -624,7 +628,7 @@
           <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         </div>
-        <p id="resultCount">Loading updates...</p>
+        <p id="resultCount" aria-live="polite">Loading updates...</p>
       </div>
 
       <div class="update-list" id="updateList" aria-busy="true"></div>

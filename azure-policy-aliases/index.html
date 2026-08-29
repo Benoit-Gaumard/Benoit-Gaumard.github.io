@@ -214,6 +214,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
     .refresh-meta strong { color: var(--cp-text); }
@@ -387,6 +390,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Policy Aliases</h1>
       <p class="intro-text">Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions, generated daily from <code>Get-AzPolicyAlias</code>.</p>
       <p class="refresh-meta">
@@ -399,8 +403,8 @@
 
     <section aria-label="Policy aliases">
       <div class="filter-bar">
-        <input id="search" type="search" placeholder="Search resource type, default path, or alias..." autocomplete="off" spellcheck="false">
-        <select id="resourceTypeFilter"><option value="">All resource types</option></select>
+        <input id="search" type="search" placeholder="Search resource type, default path, or alias..." autocomplete="off" spellcheck="false" aria-label="Search resource type, default path, or alias">
+        <select id="resourceTypeFilter" aria-label="Filter by resource type"><option value="">All resource types</option></select>
         <button class="clear-button" id="clearFilters" type="button" hidden>Clear</button>
       </div>
       <div class="table-wrap">
@@ -415,7 +419,7 @@
           <tbody id="tableBody"></tbody>
         </table>
       </div>
-      <p id="resultCount"></p>
+      <p id="resultCount" aria-live="polite"></p>
     </section>
   </main>
 

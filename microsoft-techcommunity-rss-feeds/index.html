@@ -211,6 +211,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
     .refresh-meta strong { color: var(--cp-text); }
@@ -394,6 +397,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Microsoft Techcommunity RSS Feeds</h1>
       <p class="intro-text">Consolidate latest activities from Microsoft Tech Community blogs.</p>
       <p class="refresh-meta">
@@ -405,7 +409,7 @@
 
     <section aria-label="All feeds">
       <div class="table-toolbar">
-        <input id="search" type="search" placeholder="Filter by feed name or category..." autocomplete="off" spellcheck="false">
+        <input id="search" type="search" placeholder="Filter by feed name or category..." autocomplete="off" spellcheck="false" aria-label="Filter by feed name or category">
       </div>
       <div class="table-wrap">
         <table>
@@ -421,7 +425,7 @@
           <tbody id="feedsTableBody"></tbody>
         </table>
       </div>
-      <p id="resultCount"></p>
+      <p id="resultCount" aria-live="polite"></p>
     </section>
   </main>
 

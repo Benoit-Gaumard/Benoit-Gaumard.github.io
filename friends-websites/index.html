@@ -210,6 +210,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
     .filter-bar {
@@ -481,15 +484,16 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">My Friends' Websites</h1>
       <p class="intro-text">Discover amazing websites from my network of friends and colleagues.</p>
     </section>
 
     <section aria-label="Friends' websites directory">
       <div class="filter-bar">
-        <input type="text" id="searchInput" placeholder="Search by name...">
-        <select id="categoryFilter"><option value="">All categories</option></select>
-        <select id="countryFilter"><option value="">All countries</option></select>
+        <input type="text" id="searchInput" placeholder="Search by name..." aria-label="Search by name">
+        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
+        <select id="countryFilter" aria-label="Filter by country"><option value="">All countries</option></select>
       </div>
       <div class="friends-toolbar">
         <div class="view-toggle" role="group" aria-label="Choose view">
@@ -502,7 +506,7 @@
             List
           </button>
         </div>
-        <p class="results-count" id="resultsCount"></p>
+        <p class="results-count" id="resultsCount" aria-live="polite"></p>
       </div>
       <div class="friend-cards" id="friendCards"></div>
     </section>

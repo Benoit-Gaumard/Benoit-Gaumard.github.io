@@ -219,6 +219,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
     .refresh-meta strong { color: var(--cp-text); }
@@ -309,7 +312,7 @@
     }
     .clear-button[hidden] { display: none; }
 
-    .gallery {
+    .gallery { min-height: 70vh;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
       gap: .75rem;
@@ -518,7 +521,7 @@
       .header-links a:hover { background: var(--cp-surface-soft); }
       .toolbar { position: static; grid-template-columns: 1fr 1fr; }
       .toolbar .search-field { grid-column: 1 / -1; }
-      .gallery { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
+      .gallery { min-height: 70vh; grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
     }
@@ -527,7 +530,7 @@
       main { padding-top: 1.75rem; }
       .toolbar { grid-template-columns: 1fr; top: 4.5rem; }
       .toolbar .search-field { grid-column: auto; }
-      .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+      .gallery { min-height: 70vh; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
       .results-bar { align-items: flex-start; flex-direction: column; }
       .results-actions { width: 100%; justify-content: space-between; }
       .back-to-top { right: 1rem; bottom: 1rem; }
@@ -578,6 +581,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Emoji Sheet</h1>
       <p class="intro-text">Complete collection of emojis with their shortcodes. Click to copy!</p>
       <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">Loading...</strong></p>
@@ -611,7 +615,7 @@
           <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         </div>
-        <p id="resultCount">Loading emojis...</p>
+        <p id="resultCount" aria-live="polite">Loading emojis...</p>
       </div>
 
       <div class="gallery" id="gallery" aria-busy="true"></div>

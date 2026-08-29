@@ -214,6 +214,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta {
       display: flex;
@@ -500,6 +503,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure IP Ranges</h1>
       <p class="intro-text">IP address ranges used by Azure services (service tags), fetched from the official <a href="https://www.microsoft.com/en-us/download/details.aspx?id=56519" target="_blank" rel="noopener">Azure IP Ranges and Service Tags &ndash; Public Cloud</a> download.</p>
       <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">Loading...</strong></p>
@@ -529,7 +533,7 @@
     <section aria-label="Browse service tags">
       <div class="calculator-card">
         <h2 class="card-heading">Browse service tags</h2>
-        <input class="tag-search" id="tagSearch" type="text" placeholder="Search service tags (e.g. Storage, AzureCloud.westeurope, Sql)...">
+        <input class="tag-search" id="tagSearch" type="text" placeholder="Search service tags (e.g. Storage, AzureCloud.westeurope, Sql)..." aria-label="Search service tags (e.g. Storage, AzureCloud.westeurope, Sql)">
         <p class="tag-note" id="tagNote"></p>
         <div class="tag-results" id="tagResults"></div>
         <dl class="tag-detail" id="tagDetail">
@@ -538,7 +542,7 @@
           <div><dt>System service</dt><dd id="detailService"></dd></div>
           <div><dt>Prefixes</dt><dd id="detailCount"></dd></div>
         </dl>
-        <input class="cidr-search" id="cidrSearch" type="text" placeholder="Filter this tag's address prefixes...">
+        <input class="cidr-search" id="cidrSearch" type="text" placeholder="Filter this tag's address prefixes..." aria-label="Filter this tag's address prefixes">
         <p class="cidr-note" id="cidrNote"></p>
         <ul class="cidr-list" id="cidrList"></ul>
       </div>

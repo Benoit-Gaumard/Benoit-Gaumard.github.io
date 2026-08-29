@@ -214,11 +214,15 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
     .refresh-meta strong { color: var(--cp-text); }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    [role="tabpanel"] { min-height: 70vh; }
+    .stats-grid { min-height: 7rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
     .stat-card {
       padding: 1.1rem 1.25rem;
       border: 1px solid var(--cp-border);
@@ -424,6 +428,7 @@
 
   <main>
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Policies</h1>
       <p class="intro-text">Browse all built-in Azure Policy definitions and initiatives (policy sets), refreshed directly from Azure via <code>Get-AzPolicyDefinition</code> and <code>Get-AzPolicySetDefinition</code>.</p>
       <p class="refresh-meta">
@@ -448,8 +453,8 @@
 
       <div id="policiesPanel" role="tabpanel">
         <div class="filter-bar">
-          <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false">
-          <select id="policiesCategoryFilter"><option value="">All categories</option></select>
+          <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search policy name, description, or category">
+          <select id="policiesCategoryFilter" aria-label="Filter policies by category"><option value="">All categories</option></select>
           <button class="clear-button" id="policiesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
@@ -466,13 +471,13 @@
             <tbody id="policiesTableBody"></tbody>
           </table>
         </div>
-        <p class="result-count" id="policiesResultCount"></p>
+        <p class="result-count" id="policiesResultCount" aria-live="polite"></p>
       </div>
 
       <div id="initiativesPanel" role="tabpanel" hidden>
         <div class="filter-bar">
-          <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false">
-          <select id="initiativesCategoryFilter"><option value="">All categories</option></select>
+          <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search initiative name, description, or category">
+          <select id="initiativesCategoryFilter" aria-label="Filter initiatives by category"><option value="">All categories</option></select>
           <button class="clear-button" id="initiativesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
@@ -489,7 +494,7 @@
             <tbody id="initiativesTableBody"></tbody>
           </table>
         </div>
-        <p class="result-count" id="initiativesResultCount"></p>
+        <p class="result-count" id="initiativesResultCount" aria-live="polite"></p>
       </div>
     </section>
   </main>
