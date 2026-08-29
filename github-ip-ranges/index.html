@@ -506,6 +506,38 @@
         #categoryTabs:empty { min-height: 295px; }
       }
     }
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    .copyable {
+      position: relative;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      width: 100%;
+    }
+    .copyable:hover { border-color: var(--cp-accent); }
+    .copyable::after {
+      content: "Copy";
+      float: right;
+      margin-left: .75rem;
+      color: var(--cp-text-muted);
+      font-size: .78rem;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .copyable:hover::after, .copyable:focus-visible::after { opacity: 1; }
+    .copyable.is-copied::after { content: "Copied"; opacity: 1; color: var(--cp-accent); }
+    @media (prefers-reduced-motion: reduce) { .copyable::after { transition: none; } }
+
 </style>
 </head>
 <body>
@@ -579,6 +611,8 @@
         <input class="cidr-search" id="cidrSearch" type="text" placeholder="Filter this category's CIDR ranges..." aria-label="Filter this category's CIDR ranges">
         <p class="cidr-note" id="cidrNote"></p>
         <ul class="cidr-list" id="cidrList"></ul>
+        <span id="copyStatus" role="status" aria-live="polite" class="visually-hidden"></span>
+
       </div>
     </section>
   </main>
@@ -747,6 +781,32 @@
       });
     }
 
+    // the row is the button: one element per value rather than a value plus an
+    // icon button, which matters on lists that run to hundreds of rows
+    async function copyValue(text, el) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        try { document.execCommand("copy"); } catch { return; }
+        textarea.remove();
+      }
+      el.classList.add("is-copied");
+      const status = document.getElementById("copyStatus");
+      if (status) status.textContent = text + " copied";
+      window.clearTimeout(el._copyTimer);
+      el._copyTimer = window.setTimeout(() => {
+        el.classList.remove("is-copied");
+        if (status) status.textContent = "";
+      }, 1400);
+    }
+
+
     function renderCidrLoadMore(total, shownCount) {
       const list = document.getElementById("cidrList") || document.querySelector(".cidr-list");
       if (!list) return;
@@ -776,8 +836,13 @@
       const shown = filtered.slice(0, cidrVisible);
       shown.forEach((cidr) => {
         const li = document.createElement("li");
-        li.className = "cidr-item";
-        li.textContent = cidr;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "cidr-item copyable";
+        button.textContent = cidr;
+        button.setAttribute("aria-label", "Copy " + cidr);
+        button.addEventListener("click", () => copyValue(cidr, button));
+        li.append(button);
         elements.cidrList.append(li);
       });
       renderCidrLoadMore(filtered.length, shown.length);

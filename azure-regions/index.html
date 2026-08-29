@@ -507,6 +507,38 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    .copyable {
+      position: relative;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      width: 100%;
+    }
+    .copyable:hover { border-color: var(--cp-accent); }
+    .copyable::after {
+      content: "Copy";
+      float: right;
+      margin-left: .75rem;
+      color: var(--cp-text-muted);
+      font-size: .78rem;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .copyable:hover::after, .copyable:focus-visible::after { opacity: 1; }
+    .copyable.is-copied::after { content: "Copied"; opacity: 1; color: var(--cp-accent); }
+    @media (prefers-reduced-motion: reduce) { .copyable::after { transition: none; } }
+
   </style>
 </head>
 <body>
@@ -579,7 +611,8 @@
         </div>
         <p class="results-count" id="resultsCount" aria-live="polite"></p>
       </div>
-      <div class="region-cards" id="regionCards"></div>
+      <span id="copyStatus" role="status" aria-live="polite" class="visually-hidden"></span>
+        <div class="region-cards" id="regionCards"></div>
       <div class="region-map" id="regionMap" hidden></div>
     </section>
   </main>
@@ -826,8 +859,17 @@
           const labelSpan = document.createElement("span");
           labelSpan.className = "meta-label";
           labelSpan.textContent = label;
-          const valueSpan = document.createElement("span");
-          valueSpan.className = "meta-value";
+          let valueSpan;
+          if (label === "Programmatic name") {
+            valueSpan = document.createElement("button");
+            valueSpan.type = "button";
+            valueSpan.className = "meta-value copyable";
+            valueSpan.setAttribute("aria-label", "Copy programmatic name " + value);
+            valueSpan.addEventListener("click", () => copyValue(value, valueSpan));
+          } else {
+            valueSpan = document.createElement("span");
+            valueSpan.className = "meta-value";
+          }
           valueSpan.textContent = value;
           li.append(labelSpan, valueSpan);
           meta.append(li);
@@ -855,6 +897,32 @@
       }
     }
 
+
+
+    // the row is the button: one element per value rather than a value plus an
+    // icon button, which matters on lists that run to hundreds of rows
+    async function copyValue(text, el) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        try { document.execCommand("copy"); } catch { return; }
+        textarea.remove();
+      }
+      el.classList.add("is-copied");
+      const status = document.getElementById("copyStatus");
+      if (status) status.textContent = text + " copied";
+      window.clearTimeout(el._copyTimer);
+      el._copyTimer = window.setTimeout(() => {
+        el.classList.remove("is-copied");
+        if (status) status.textContent = "";
+      }, 1400);
+    }
 
 
     async function init() {
