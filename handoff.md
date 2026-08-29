@@ -85,37 +85,89 @@ When a change needs to touch all ~63 pages:
 
 ## 7. Backlog — prioritised, measured 2026-08-29
 
-Everything below was verified in a browser or by scanning all 63 pages, not inferred. Counts are real.
+Every count below was verified in a browser or by scanning all 63 shell pages. Nothing here is inferred. Each item has an ID so it can be picked off individually.
 
-### P1 — worth doing next
+Priority means **user harm**, not effort: P1 is something broken or missing for a real visitor today, P2 is real but tolerable, P3 is hygiene and taste.
 
-1. **No skip link on any of the 63 pages.** WCAG 2.4.1 Bypass Blocks is **Level A**, and this is the site's only remaining Level A failure. Every visit begins with roughly nine header tab stops before the content. `<main id="top">` already exists everywhere, so the fix is a visually-hidden link that becomes visible on focus — one sitewide codemod plus a `pageShell()` edit.
-2. **Render cost on the two heaviest pages.** `/favorite-links/` builds **11,249 DOM nodes / 1.3 MB of HTML** in a single pass; `/azure-policies/` builds **10,588 nodes / 1.7 MB**. Both are far past the point where mobile paint suffers, and `/favorite-links/` is one of the most-used tools. Virtualise or chunk the render.
-3. **Four long-list mechanisms.** Pagination on 2 pages, show-more on 3, cap-with-message on 5, unlimited elsewhere. Note the nuance: **every capped list does state its cap** ("Showing 500 of 76,497 matching aliases"), so this is a consistency problem, not misleading state. Pick one default — "showing N of M" plus Load More — and keep pagination on `/icons/`, where the per-page dropdown is already muscle memory.
+---
 
-### P2 — worth doing, not urgent
+### P1 — real harm to a visitor today
 
-4. **Colour drift**: 53 `design-system-color` findings across 41 pages *after* the deliberate literals were documented. These are genuine one-offs (`#244f73`, `#6eb5e8`, `#dcefff`, `#fff8e8`, `#8a5a08`, `#9ee8c8`…) that should become tokens or map onto existing ones.
-5. **The type scale is genuinely ad hoc**: 555 `design-system-font-size` findings across all 63 pages, from 24 distinct sizes. Decide a real ramp and map onto it. **Do not simply bless all 24 in DESIGN.md** — that documents disorder rather than a system.
-6. **`.stats-grid` vs `.stat-cards`**: one widget, two class names, 7 pages versus 3. Invisible today, drifts further with every new page.
-7. **Extend click-to-copy.** Done on `/subnet-calculator/`. The same affordance belongs on `azure-regions` programmatic names, the IP-range CIDRs, and `azure-policy-aliases` — every page whose purpose is producing a value to paste elsewhere.
-8. **`/rss-watcher/` mobile CLS 0.165** (down from 0.365; desktop is 0.001). The remaining shift sources report as `section.` and `a.`, i.e. something *above* the container already reserved.
-9. **Third-party favicons**: ~560 requests to Google per full browse. Mitigated — `no-referrer`, lazy, intrinsic sizes, and a verified fallback to initials — but not removed. Caching them into the repo via a refresh workflow would close it and would match this site's own "every page stands alone" principle.
+**P1-1 · No skip link on any of the 63 pages.**
+WCAG 2.4.1 Bypass Blocks is **Level A** — this is the site's only remaining Level A failure. Every visit begins with roughly nine header tab stops before content. `<main id="top">` already exists on every page, so this is a visually-hidden anchor that becomes visible on focus.
+*Effort: small (one codemod + `pageShell()`). Risk: very low. Verify: Tab once from page load and confirm the first stop is the skip link and that it moves focus into `<main>`.*
 
-### P3 — cleanup
+**P1-2 · Seven data pages fail silently.**
+`azure-ip-ranges`, `azure-naming-convention`, `azure-regions`, `favorite-links`, `friends-websites`, `github-ip-ranges`, `workflows` all `catch` a failed JSON fetch and then render **nothing** — no message, no retry, no explanation. A visitor on a flaky connection sees an empty page and concludes the tool is broken. The other 13 data pages do show a message, so the pattern to copy already exists in-repo.
+*Effort: small per page. Risk: low. Verify: block the page's own JSON in devtools and confirm a human-readable message appears.*
 
-10. **Record the confirmed false positives** so the hook stops reporting them: `side-tab` ×33 (article blockquotes and callouts, not navigation) and `broken-image` ×2 (lightbox placeholders in a *closed* `<dialog>` whose `src` is set on open). Both were verified.
-11. **Print stylesheet** exists on 2 of 63 pages. Low value for tool pages; the articles are a plausible print target.
-12. **`em-dash-overuse`** on 6 article pages. Cosmetic.
-13. **Small UI items**: the `All > All` breadcrumb on `/icons/`; the patronising "Click a card to open it" hub subtitle; the Refresh action sitting inside the Cards/List view toggle on `/workflows/`; `.drag-handle` and some SVG transitions escaping `prefers-reduced-motion`; hub tool icons loading from external CDNs with no fallback.
-14. **Tools hub information scent** *(design direction — owner's call)*: 26 undifferentiated cards with no grouping, no record counts and no refresh timestamps, so the site's stated differentiator — authoritative, self-refreshing data — is invisible on its most important surface.
+**P1-3 · Nothing shared from this site has an image — 0 of 63 pages have `og:image`.**
+`PRODUCT.md` records LinkedIn as the owner's channel; every link posted there currently renders bare. Only 2 of 63 pages have `og:title`/`og:description` at all (the two homepages, fixed earlier). No Twitter card anywhere.
+*Effort: medium (needs one real share image, plus a sitewide meta block; the article template can generate per-article values). Risk: low. Note: an image asset must be provided or produced — `PRODUCT.md` says none exists today.*
 
-### Closed this session (do not re-raise)
+**P1-4 · No `sitemap.xml` and no `robots.txt`.**
+The whole product premise is that visitors arrive deep from search. There is no sitemap for 63 pages plus 75 blog pages, and no robots directive. `deploy-hugo.yaml` has no sitemap step either, so adding one means touching the workflow.
+*Effort: medium. Risk: low. Verify: fetch both files in production and validate the sitemap.*
 
-WCAG AA contrast in both themes · 24×24 touch targets sitewide · heading hierarchy and landmark names · horizontal overflow at every width · reflow at 320px · the closed token graph (28/28) · desktop CLS on articles, favorite-links, icons, workflows, azure-regions, azure-policies and emoji-sheet · 27 unnamed filter controls · 18 silent result counters · the `/workflows/` 403 storefront · filter state in the URL across 26 pages · back-to-hub breadcrumbs on 25 tool pages.
+**P1-5 · Render cost on the two heaviest pages.**
+`/favorite-links/` builds **11,249 DOM nodes / 1.3 MB of HTML** in a single pass; `/azure-policies/` builds **10,588 nodes / 1.7 MB**. Both are far past where mobile paint suffers, and `favorite-links` is one of the most-used tools.
+*Effort: large (virtualise or chunk the render). Risk: medium — this is real render-logic surgery. Verify: DOM node count and time-to-interactive on a throttled mobile profile.*
+
+---
+
+### P2 — real, but tolerable
+
+**P2-1 · `canonical` missing on 29 of 63 pages.** Present on the 32 articles and 2 homepages only. Duplicate-content risk for a search-first site. *Small, low risk.*
+
+**P2-2 · Six data pages never show when they were refreshed.** `azure-naming-convention`, `azure-regions`, `favorite-links`, `friends-websites`, `microsoft-portals`, `it-images`. `azure-regions` is one of the three Azure-authoritative pipelines — the flagship of the "self-refreshing data" positioning — and it shows no timestamp at all. The `refresh-meta` convention already exists on 14 pages. *Small, low risk.*
+
+**P2-3 · Four long-list mechanisms.** Pagination on 2 pages, show-more on 3, cap-with-message on 5, unlimited elsewhere. **Nuance:** every capped list *does* announce its cap ("Showing 500 of 76,497 matching aliases"), so this is consistency, not misleading state. Pick one default — "showing N of M" plus Load More — and keep pagination on `/icons/` where the per-page dropdown is muscle memory. *Large, medium risk (18 pages of render logic).*
+
+**P2-4 · None of the six calculators give validation feedback.** `subnet-calculator`, `percentage-calculator`, `sla-calculator`, `units-converter`, `guid-generator`, `azure-naming-convention` accept malformed input silently — no `aria-invalid`, no message, no invalid styling. The user gets a wrong or empty answer with no clue why. *Medium, low risk.*
+
+**P2-5 · Colour drift: 53 `design-system-color` findings across 41 pages** *after* the deliberate literals were documented. Genuine one-offs (`#244f73`, `#6eb5e8`, `#dcefff`, `#fff8e8`, `#8a5a08`, `#9ee8c8`…) that should become tokens or map onto existing ones. *Medium, low risk.*
+
+**P2-6 · The type scale is genuinely ad hoc: 555 `design-system-font-size` findings across all 63 pages, from 24 distinct sizes.** Decide a real ramp and map onto it. **Do not simply bless all 24 in DESIGN.md** — that documents disorder rather than a system. *Large, medium risk (visual regression surface).*
+
+**P2-7 · `.stats-grid` vs `.stat-cards`** — one widget, two class names, 7 pages versus 3. Invisible to users today; drifts further with every new page. *Small, low risk.*
+
+**P2-8 · Extend click-to-copy.** Done on `/subnet-calculator/`. The same affordance belongs on `azure-regions` programmatic names, the IP-range CIDRs, and `azure-policy-aliases` — every page whose purpose is producing a value to paste. *Medium, low risk.*
+
+**P2-9 · `/rss-watcher/` mobile CLS 0.165** (desktop is 0.001, down from 0.365). Remaining shift sources report as `section.` and `a.` — something *above* the container already reserved. *Small, low risk.*
+
+**P2-10 · Third-party favicons: ~560 requests to Google per full browse.** Mitigated — `no-referrer`, lazy, intrinsic sizes, and a verified fallback to initials — but not removed. Caching them into the repo via a refresh workflow would close it and matches the site's own "every page stands alone" principle. *Large, medium risk (new pipeline + ~560 committed files).*
+
+---
+
+### P3 — hygiene, taste, and open questions
+
+**P3-1 · Record the confirmed detector false positives** so the hook stops reporting them: `side-tab` ×33 (article blockquotes and callouts, not navigation) and `broken-image` ×2 (lightbox placeholders in a *closed* `<dialog>` whose `src` is set on open). Both were verified by direct inspection. *Trivial.*
+
+**P3-2 · No `404.html`.** GitHub Pages will serve its default. A branded 404 that routes back to `/tools/` would fit a search-first site. *Small.*
+
+**P3-3 · No app-icon set**: no `favicon.ico`, no `apple-touch-icon`, no web manifest, no `theme-color`. Only `favicon.svg` exists. Affects the home-screen and tab experience. *Small.*
+
+**P3-4 · No structured data (JSON-LD) on any page.** `Person` on the homepage and `SoftwareApplication`/`TechArticle` on tools and articles would help a search-first site. *Medium.*
+
+**P3-5 · Print stylesheet on 2 of 63 pages.** Low value for tool pages; the articles are a plausible print target. *Small.*
+
+**P3-6 · `em-dash-overuse` on 6 article pages.** Cosmetic copy issue. *Trivial.*
+
+**P3-7 · Small UI items**, batchable: the `All > All` breadcrumb on `/icons/`; the patronising "Click a card to open it" hub subtitle; the Refresh action sitting inside the Cards/List view toggle on `/workflows/`; `.drag-handle` and some SVG transitions escaping `prefers-reduced-motion`; hub tool icons loading from external CDNs with no fallback; Enter in the hub search not opening the single remaining result. *Small each.*
+
+**P3-8 · Tools hub information scent** *(design direction — owner's call)*. 26 undifferentiated cards, no grouping, no record counts, no refresh timestamps — so the stated differentiator is invisible on the most important surface. Adding category headings plus a "last refreshed" and record-count chip per card would fix it without changing what the hub is. *Medium.*
+
+**P3-9 · French parity is undecided** *(product decision)*. `index_fr.html` is the only French page; 62 others are English-only, and `hreflang` alternates exist on 2 pages. `PRODUCT.md` records this as explicitly undecided. Either commit to FR for tool pages or drop the switch to a homepage-only affordance. *Large if pursued.*
+
+**P3-10 · The Hugo blog has never been audited — 75 pages.** It uses the `hugo-clarity` theme and **none of the 75 pages use the shared shell**, so it is a separate design system with its own header, footer, theme handling and accessibility profile. Every audit this session deliberately excluded it. It is more than half the site's page count. *Unknown scope until scanned.*
+
+---
+
+### Closed this session — do not re-raise
+
+WCAG AA contrast in both themes · 24×24 touch targets sitewide · heading hierarchy and landmark names · horizontal overflow at every width · reflow at 320px · closed token graph (28 declared / 28 used) · desktop CLS on articles, favorite-links, icons, workflows, azure-regions, azure-policies, emoji-sheet · 27 unnamed filter controls · 18 silent result counters · the `/workflows/` 403 storefront · filter and calculator state in the URL across 26 pages · back-to-hub breadcrumbs on 25 tool pages · click-to-copy on the subnet calculator · the news-banner dismiss no-op · the dead GitHub CTA · the retired `tools.`/`blog.` subdomain links.
 
 **The homepage deliberately does not showcase tools** — considered and rejected by the owner, recorded in `PRODUCT.md`.
-
 
 ## 7b. Measurement gotchas — read before you trust a number
 
