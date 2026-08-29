@@ -293,9 +293,9 @@ ${extraHead}
       --cp-accent-hover: #075b98;
       --cp-accent-soft: rgba(11, 111, 184, 0.09);
       --cp-accent-fg: #ffffff;
-      --cp-success: #16845b;
+      --cp-success: #157f57;
       --cp-success-bg: #e4f6ee;
-      --cp-warning: #c88719;
+      --cp-warning: #96610a;
       --cp-warning-bg: #fff8e8;
       --cp-info: #0c7d8f;
       --cp-info-bg: #e6f6f8;
@@ -374,6 +374,7 @@ ${extraHead}
       position: relative;
     }
     :root[data-news-banner="hidden"] .news-banner { display: none; }
+    .news-banner[hidden] { display: none; }
     .news-banner-track {
       flex: 1 1 auto;
       overflow: hidden;
