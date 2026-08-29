@@ -705,5 +705,63 @@
       });
     })();
   </script>
+  <script data-url-state>
+    (function () {
+      var scope = document.querySelector("main");
+      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
+      var controls = [].slice
+        .call(scope.querySelectorAll("input[id], select[id]"))
+        .filter(function (el) {
+          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
+          return !el.closest("[data-no-url-state]");
+        });
+      if (!controls.length) return;
+
+      var params = new URLSearchParams(location.search);
+      var hydrating = false;
+
+      function readValue(el) {
+        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+      }
+
+      if (params.toString()) {
+        hydrating = true;
+        var applied = [];
+        controls.forEach(function (el) {
+          var v = params.get(el.id);
+          if (v === null) return;
+          if (el.type === "checkbox") el.checked = v === "1";
+          else el.value = v;
+          applied.push(el);
+        });
+        // let each page's own listeners recompute from the restored values
+        applied.forEach(function (el) {
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        hydrating = false;
+      }
+
+      var pending = null;
+      function sync() {
+        if (hydrating) return;
+        clearTimeout(pending);
+        pending = setTimeout(function () {
+          var p = new URLSearchParams();
+          controls.forEach(function (el) {
+            var v = readValue(el);
+            if (v !== "" && v != null) p.set(el.id, v);
+          });
+          var qs = p.toString();
+          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
+        }, 250);
+      }
+
+      controls.forEach(function (el) {
+        el.addEventListener("input", sync);
+        el.addEventListener("change", sync);
+      });
+    })();
+  </script>
 </body>
 </html>
