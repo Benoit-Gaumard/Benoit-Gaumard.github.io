@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-21T09:34:01.845Z",
+  "generatedAt": "2026-08-29T12:29:06.422Z",
   "source": "Get-AzPolicyDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
-  "totalPolicies": 2844,
+  "totalPolicies": 2853,
   "totalCategories": 98,
   "policies": [
     {
@@ -239,6 +239,15 @@
       "policyDefinitionId": null
     },
     {
+      "name": "5b0bd968-5cb5-4513-8987-27786c6f0df8",
+      "displayName": "[Deprecated]: App Service app slots should have Client Certificates (Incoming client certificates) enabled",
+      "description": "The policy is deprecated. Please use /providers/Microsoft.Authorization/policyDefinitions/4583ece0-19ca-441a-b37d-0c2ad8e0e693 instead. Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
+      "category": "App Service",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
       "name": "33228571-70a4-4fa1-8ca1-26d0aba8d6ef",
       "displayName": "[Deprecated]: App Service apps should enable outbound non-RFC 1918 traffic to Azure Virtual Network",
       "description": "By default, if one uses regional Azure Virtual Network (VNET) integration, the app only routes RFC1918 traffic into that respective virtual network. Using the API to set 'vnetRouteAllEnabled' to true enables all outbound traffic into the Azure Virtual Network. This setting allows features like network security groups and user defined routes to be used for all outbound traffic from the App Service app.",
@@ -251,6 +260,15 @@
       "name": "5bb220d9-2698-4ee4-8404-b9c30c9df609",
       "displayName": "[Deprecated]: App Service apps should have 'Client Certificates (Incoming client certificates)' enabled",
       "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy has been replaced by a new policy with the same name because Http 2.0 doesn't support client certificates.",
+      "category": "App Service",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
+      "name": "19dd1db6-f442-49cf-a838-b0786b4401ef",
+      "displayName": "[Deprecated]: App Service apps should have Client Certificates (Incoming client certificates) enabled",
+      "description": "The policy is deprecated. Please use /providers/Microsoft.Authorization/policyDefinitions/5c8eef54-2020-4bd6-921c-7470989dee37 instead. Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
       "category": "App Service",
       "mode": "Indexed",
       "policyType": "BuiltIn",
@@ -2264,9 +2282,27 @@
       "policyDefinitionId": null
     },
     {
+      "name": "153ab4ca-2d58-4b5d-9134-6d8c6bdd321c",
+      "displayName": "[Deprecated]: Function app slots should have Client Certificates (Incoming client certificates) enabled",
+      "description": "The policy is deprecated. Please use /providers/Microsoft.Authorization/policyDefinitions/f123aa67-1877-4e49-9aa6-33b38fa0bfe4 instead. Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
+      "category": "App Service",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
       "name": "eaebaea7-8013-4ceb-9d14-7eb32271373c",
       "displayName": "[Deprecated]: Function apps should have 'Client Certificates (Incoming client certificates)' enabled",
       "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients with valid certificates will be able to reach the app. This policy has been replaced by a new policy with the same name because Http 2.0 doesn't support client certificates.",
+      "category": "App Service",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
+      "name": "ab6a902f-9493-453b-928d-62c30b11b5a6",
+      "displayName": "[Deprecated]: Function apps should have Client Certificates (Incoming client certificates) enabled",
+      "description": "The policy is deprecated. Please use /providers/Microsoft.Authorization/policyDefinitions/3978e137-4c94-4056-824c-c03c2616faad instead. Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
       "category": "App Service",
       "mode": "Indexed",
       "policyType": "BuiltIn",
@@ -3812,6 +3848,15 @@
       "policyDefinitionId": null
     },
     {
+      "name": "6dcfa239-b481-4de9-a03f-980f24f3b0bb",
+      "displayName": "[Preview]: Center for Internet Security (CIS) Benchmarks for Windows Server",
+      "description": "This policy provides you the ability to customize and deploy CIS Security Benchmarks for audit purposes to your Windows Server across Azure, on-premises and hybrid environments. The contents of the CIS Security Benchmarks are in parity with the benchmarks published at https://cisecurity.org. Requires that prerequisites are deployed to the policy assignment scope. For details, visit https://aka.ms/gcpol.",
+      "category": "Guest Configuration",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
       "name": "fc47609f-4d9b-4aed-806b-446816cc63a3",
       "displayName": "[Preview]: ChangeTracking extension should be installed on your Linux Arc machine",
       "description": "Install ChangeTracking Extension on Linux Arc machines to enable File Integrity Monitoring(FIM) in Azure Security Center. FIM examines operating system files, Windows registries, application software, Linux system files, and more, for changes that might indicate an attack. The extension can be installed in virtual machines and locations supported by Azure Monitoring Agent.",
@@ -4163,6 +4208,24 @@
       "policyDefinitionId": null
     },
     {
+      "name": "09911771-6d7f-4c4d-bee6-052b8839e9bb",
+      "displayName": "[Preview]: Configure vaulted backup with auto-protection for blobs on storage accounts with a given tag to a backup vault",
+      "description": "Enforce vaulted backup with auto-protection for blobs on all storage accounts that contain a given tag to a central backup vault. Auto-protection backs up all blob containers in the storage account, including containers created in the future. Doing this can help you manage vaulted backup of blobs contained across multiple storage accounts at scale. For more details, refer to https://aka.ms/AB-BlobBackupAzPolicies",
+      "category": "Backup",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
+      "name": "e876c60c-da8a-46eb-a85e-54d791446f6b",
+      "displayName": "[Preview]: Configure vaulted backup with auto-protection for blobs on storage accounts without a given tag to a backup vault",
+      "description": "Enforce vaulted backup with auto-protection for blobs on all storage accounts that do not contain a given tag to a central backup vault. Auto-protection backs up all blob containers in the storage account, including containers created in the future. Doing this can help you manage vaulted backup of blobs contained across multiple storage accounts at scale. For more details, refer to https://aka.ms/AB-BlobBackupAzPolicies",
+      "category": "Backup",
+      "mode": "Indexed",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
       "name": "d367bd60-64ca-4364-98ea-276775bddd94",
       "displayName": "[Preview]: Configure Virtual Machines to use Built-In User-Assigned Managed Identity",
       "description": "Create and assign a built-in user-assigned managed identity or assign a pre-created user-assigned managed identity at scale to virtual machines. For more detailed documentation, visit aka.ms/managedidentitypolicy.",
@@ -4460,6 +4523,15 @@
       "policyDefinitionId": null
     },
     {
+      "name": "b89ebd51-73f9-4e3e-a1ac-c1c143aaa500",
+      "displayName": "[Preview]: Kubernetes clusters should use unique ingress hostnames",
+      "description": "Ensure Ingress resources have unique hostnames across the cluster. Duplicate ingress hostnames can cause routing conflicts where traffic intended for one service is incorrectly routed to another. This policy syncs Ingress resources into OPA via Gatekeeper. Before applying, verify Gatekeeper pods memory capacity won't be exceeded. Parameters apply to specific namespaces, but it syncs all resources of that type across all namespaces. Currently in preview for Kubernetes Service (AKS).",
+      "category": "Kubernetes",
+      "mode": "Microsoft.Kubernetes.Data",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
       "name": "70aa7a1c-b0c7-4b2f-922b-8489d97cbb9f",
       "displayName": "[Preview]: Linux machines should meet requirements for the Azure security baseline for Docker hosts",
       "description": "Requires that prerequisites are deployed to the policy assignment scope. For details, visit https://aka.ms/gcpol. The machine is not configured correctly for one of the recommendations in the Azure security baseline for Docker hosts.",
@@ -4598,15 +4670,6 @@
       "name": "ec2c1bce-5ad3-4b07-bb4f-e041410cd8db",
       "displayName": "[Preview]: Nexus Compute Machines should meet Security Baseline",
       "description": "Utilizes the Azure Policy Guest Configuration agent for auditing. This policy ensures that machines adhere to the Nexus compute security baseline, encompassing various recommendations designed to fortify machines against a range of vulnerabilities and unsafe configurations (Linux only).",
-      "category": "Guest Configuration",
-      "mode": "Indexed",
-      "policyType": "BuiltIn",
-      "policyDefinitionId": null
-    },
-    {
-      "name": "6dcfa239-b481-4de9-a03f-980f24f3b0bb",
-      "displayName": "[Preview]: Official CIS Security Benchmarks for Windows Server",
-      "description": "This policy provides you the ability to customize and deploy CIS Security Benchmarks for audit purposes to your Windows Server across Azure, on-premises and hybrid environments. The contents of the CIS Security Benchmarks are in parity with the benchmarks published at https://cisecurity.org. Requires that prerequisites are deployed to the policy assignment scope. For details, visit https://aka.ms/gcpol.",
       "category": "Guest Configuration",
       "mode": "Indexed",
       "policyType": "BuiltIn",
@@ -5558,9 +5621,9 @@
       "policyDefinitionId": null
     },
     {
-      "name": "5b0bd968-5cb5-4513-8987-27786c6f0df8",
+      "name": "4583ece0-19ca-441a-b37d-0c2ad8e0e693",
       "displayName": "App Service app slots should have Client Certificates (Incoming client certificates) enabled",
-      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
+      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to app service slots.",
       "category": "App Service",
       "mode": "Indexed",
       "policyType": "BuiltIn",
@@ -5810,9 +5873,9 @@
       "policyDefinitionId": null
     },
     {
-      "name": "19dd1db6-f442-49cf-a838-b0786b4401ef",
+      "name": "5c8eef54-2020-4bd6-921c-7470989dee37",
       "displayName": "App Service apps should have Client Certificates (Incoming client certificates) enabled",
-      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
+      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app.",
       "category": "App Service",
       "mode": "Indexed",
       "policyType": "BuiltIn",
@@ -18788,6 +18851,24 @@
       "policyDefinitionId": null
     },
     {
+      "name": "3c2b2a2f-630f-44c5-bea3-b8f094412ea3",
+      "displayName": "Event Grid Domain should restrict external private endpoints",
+      "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. Restricting approved Event Grid Domain private endpoint connections to the current subscription or explicitly excluded subscriptions helps prevent unintended cross-subscription access.",
+      "category": "Mission",
+      "mode": "All",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
+      "name": "648d76a0-e52b-474b-a6a5-930a82afda30",
+      "displayName": "Event Grid Topic should restrict external private endpoints",
+      "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. Restricting approved Event Grid Topic private endpoint connections to the current subscription or explicitly excluded subscriptions helps prevent unintended cross-subscription access.",
+      "category": "Mission",
+      "mode": "All",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": null
+    },
+    {
       "name": "0602787f-9896-402a-a6e1-39ee63ee435e",
       "displayName": "Event Hub Namespaces should disable public network access",
       "description": "Azure Event Hub should have public network access disabled. Disabling public network access improves security by ensuring that the resource isn't exposed on the public internet. You can limit exposure of your resources by creating private endpoints instead. Learn more at: https://docs.microsoft.com/azure/event-hubs/private-link-service",
@@ -18968,9 +19049,9 @@
       "policyDefinitionId": null
     },
     {
-      "name": "153ab4ca-2d58-4b5d-9134-6d8c6bdd321c",
+      "name": "f123aa67-1877-4e49-9aa6-33b38fa0bfe4",
       "displayName": "Function app slots should have Client Certificates (Incoming client certificates) enabled",
-      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
+      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to function app slots.",
       "category": "App Service",
       "mode": "Indexed",
       "policyType": "BuiltIn",
@@ -19157,9 +19238,9 @@
       "policyDefinitionId": null
     },
     {
-      "name": "ab6a902f-9493-453b-928d-62c30b11b5a6",
+      "name": "3978e137-4c94-4056-824c-c03c2616faad",
       "displayName": "Function apps should have Client Certificates (Incoming client certificates) enabled",
-      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app. This policy applies to apps with Http version set to 1.1.",
+      "description": "Client certificates allow for the app to request a certificate for incoming requests. Only clients that have a valid certificate will be able to reach the app.",
       "category": "App Service",
       "mode": "Indexed",
       "policyType": "BuiltIn",
