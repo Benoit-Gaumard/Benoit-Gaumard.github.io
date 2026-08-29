@@ -301,7 +301,22 @@
     .filter-bar input { flex: 2 1 16rem; max-width: 30rem; min-width: 0; }
     .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
     .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
-    .clear-button[hidden] { display: none; }
+    .clear-button[hidden] { display: none; }    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
 
     .table-wrap {
       overflow-x: auto;
@@ -564,7 +579,7 @@
   </button>
 
   <script>
-    const RENDER_LIMIT = 500;
+    const PAGE_SIZE = 100;
 
     function normalize(value) {
       return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -602,7 +617,7 @@
     // Both tabs (policies/initiatives) share the same search+category+sortable-table behavior,
     // just bound to different DOM ids, data files, and row shapes.
     function createBrowser(config) {
-      const state = { rows: [], filtered: [], sortKey: "displayName", sortDir: "asc", query: "", category: "" };
+      const state = { rows: [], filtered: [], sortKey: "displayName", sortDir: "asc", query: "", category: "", visible: PAGE_SIZE };
       const elements = {
         search: document.getElementById(config.searchId),
         categoryFilter: document.getElementById(config.categoryFilterId),
@@ -657,20 +672,49 @@
           return 0;
         });
 
-        const shown = rows.slice(0, RENDER_LIMIT);
+        const shown = rows.slice(0, state.visible);
         elements.tableBody.replaceChildren();
         const fragment = document.createDocumentFragment();
         shown.forEach((row) => fragment.append(renderRow(row)));
         elements.tableBody.append(fragment);
 
-        elements.resultCount.textContent = rows.length > RENDER_LIMIT
-          ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching ${config.countLabel}. Refine your search to see more specific results.`
+        elements.resultCount.textContent = shown.length < rows.length
+          ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching ${config.countLabel}.`
           : `${rows.length.toLocaleString()} ${rows.length === 1 ? config.countLabelSingular : config.countLabel} shown.`;
+        renderLoadMore(rows.length, shown.length);
 
         elements.headers.forEach((th) => {
           th.removeAttribute("aria-sort");
           if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
         });
+      }
+
+      function renderLoadMore(total, shownCount) {
+        const panel = document.getElementById(config.panelId);
+        if (!panel) return;
+        let button = panel.querySelector(".load-more");
+        if (shownCount >= total) {
+          if (button) button.remove();
+          return;
+        }
+        const remaining = total - shownCount;
+        const label = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
+        if (!button) {
+          button = document.createElement("button");
+          button.type = "button";
+          button.className = "load-more";
+          button.addEventListener("click", () => {
+            state.visible += PAGE_SIZE;
+            renderTable();
+            // keep the keyboard user at the control they just pressed
+            const next = document.getElementById(config.panelId).querySelector(".load-more");
+            if (next) next.focus();
+          });
+          const wrap = panel.querySelector(".table-wrap");
+          if (wrap) wrap.insertAdjacentElement("afterend", button);
+          else panel.append(button);
+        }
+        button.textContent = label;
       }
 
       function applyFilter() {
@@ -681,6 +725,7 @@
           if (query && !normalize(`${row.displayName} ${row.description} ${row.category}`).includes(query)) return false;
           return true;
         });
+        state.visible = PAGE_SIZE;
         elements.clearFilters.hidden = !query && !category;
         renderTable();
       }

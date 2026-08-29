@@ -276,6 +276,23 @@
     .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
     .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
     .clear-button[hidden] { display: none; }
+    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
+
 
     .table-wrap {
       overflow-x: auto;
@@ -489,8 +506,8 @@
   </button>
 
   <script>
-    const RENDER_LIMIT = 500;
-    const state = { rows: [], filtered: [], sortKey: "resourceType", sortDir: "asc", query: "" };
+    const PAGE_SIZE = 100;
+    const state = { visible: 100, rows: [], filtered: [], sortKey: "resourceType", sortDir: "asc", query: "" };
     const elements = {
       statsGrid: document.getElementById("statsGrid"),
       refreshedAt: document.getElementById("refreshedAt"),
@@ -575,7 +592,7 @@
         return 0;
       });
 
-      const shown = rows.slice(0, RENDER_LIMIT);
+      const shown = rows.slice(0, state.visible);
       elements.tableBody.replaceChildren();
       const fragment = document.createDocumentFragment();
       shown.forEach((row) => {
@@ -601,17 +618,43 @@
       });
       elements.tableBody.append(fragment);
 
-      elements.resultCount.textContent = rows.length > RENDER_LIMIT
-        ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching aliases. Refine your search to see more specific results.`
+      elements.resultCount.textContent = shown.length < rows.length
+        ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching aliases.`
         : `${rows.length.toLocaleString()} alias${rows.length === 1 ? "" : "es"} shown.`;
+
+      renderLoadMore(rows.length, shown.length);
 
       elements.headers.forEach((th) => {
         th.removeAttribute("aria-sort");
         if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
       });
     }
+      function renderLoadMore(total, shownCount) {
+        const wrap = document.querySelector(".table-wrap");
+        if (!wrap) return;
+        let button = wrap.parentElement.querySelector(".load-more");
+        if (shownCount >= total) {
+          if (button) button.remove();
+          return;
+        }
+        const remaining = total - shownCount;
+        if (!button) {
+          button = document.createElement("button");
+          button.type = "button";
+          button.className = "load-more";
+          button.addEventListener("click", () => {
+            state.visible += PAGE_SIZE;
+            renderTable();
+            const next = document.querySelector(".load-more");
+            if (next) next.focus();
+          });
+          wrap.insertAdjacentElement("afterend", button);
+        }
+        button.textContent = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
+      }
 
-    function applyFilter() {
+      function applyFilter() {
+        state.visible = PAGE_SIZE;
       const query = normalize(state.query.trim());
       const resourceType = elements.resourceTypeFilter.value;
       state.filtered = state.rows.filter((row) => {

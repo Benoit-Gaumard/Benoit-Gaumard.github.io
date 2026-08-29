@@ -421,7 +421,22 @@
       list-style: none;
       max-height: 26rem;
       overflow-y: auto;
+    }    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
     }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
     .cidr-item {
       padding: .5rem .75rem;
       border: 1px solid var(--cp-border);
@@ -628,7 +643,8 @@
   <script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-    const RENDER_LIMIT = 400;
+    const PAGE_SIZE = 200;
+    let cidrVisible = PAGE_SIZE;
     const TAG_RESULT_LIMIT = 60;
 
     const elements = {
@@ -788,20 +804,40 @@
       renderCidrList();
     }
 
+    function renderCidrLoadMore(total, shownCount) {
+      const list = document.getElementById("cidrList") || document.querySelector(".cidr-list");
+      if (!list) return;
+      let button = list.parentElement.querySelector(".load-more");
+      if (shownCount >= total) { if (button) button.remove(); return; }
+      const remaining = total - shownCount;
+      if (!button) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.className = "load-more";
+        button.addEventListener("click", () => {
+          cidrVisible += PAGE_SIZE;
+          renderCidrList();
+          const next = list.parentElement.querySelector(".load-more");
+          if (next) next.focus();
+        });
+        list.insertAdjacentElement("afterend", button);
+      }
+      button.textContent = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
+    }
     function renderCidrList() {
       const tag = state.data.tags.find((t) => t.name === state.activeTagName);
       elements.cidrList.replaceChildren();
       if (!tag) return;
       const query = elements.cidrSearch.value.trim().toLowerCase();
       const filtered = query ? tag.prefixes.filter((c) => c.toLowerCase().includes(query)) : tag.prefixes;
-      const shown = filtered.slice(0, RENDER_LIMIT);
+      const shown = filtered.slice(0, cidrVisible);
       shown.forEach((cidr) => {
         const li = document.createElement("li");
         li.className = "cidr-item";
         li.textContent = cidr;
         elements.cidrList.append(li);
       });
-      elements.cidrNote.textContent = filtered.length > RENDER_LIMIT
+      elements.cidrNote.textContent = shown.length < filtered.length
         ? `Showing ${shown.length} of ${filtered.length.toLocaleString()} matching prefixes. Refine your search to see more specific results.`
         : `Showing ${filtered.length.toLocaleString()} of ${tag.prefixes.length.toLocaleString()} prefixes.`;
     }
@@ -872,7 +908,7 @@
       if (event.key === "Enter") performLookup();
     });
     elements.tagSearch.addEventListener("input", renderTagResults);
-    elements.cidrSearch.addEventListener("input", renderCidrList);
+    elements.cidrSearch.addEventListener("input", () => { cidrVisible = PAGE_SIZE; renderCidrList(); });
 
     init().catch(function (error) {
       console.error(error);
