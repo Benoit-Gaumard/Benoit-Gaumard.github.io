@@ -275,6 +275,20 @@ function pageShell({ title, description, canonical, extraHead = "", bodyClass = 
     })();
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="benoit-gaumard.io">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(description)}">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="${canonical}">
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
   <title>${escapeHtml(title)}</title>
@@ -363,6 +377,24 @@ ${extraHead}
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
     .news-banner {
       display: flex;
       align-items: center;
@@ -491,6 +523,7 @@ ${ARTICLE_CSS}
   </style>
 </head>
 <body class="${bodyClass}">
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
       <span class="news-banner-text">\u{1F44B} Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new \u2014 feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
@@ -524,7 +557,7 @@ ${ARTICLE_CSS}
     </div>
   </header>
 
-  <main id="top">
+  <main id="top" tabindex="-1">
 ${content}
   </main>
 

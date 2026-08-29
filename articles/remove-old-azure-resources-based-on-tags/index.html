@@ -20,6 +20,20 @@
     })();
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="benoit-gaumard.io">
+  <meta property="og:title" content="Remove Old Azure Resources Based on Tags | Benoit Gaumard">
+  <meta property="og:description" content="Automate the cleanup of temporary Azure resources using a Time-To-Live tag, plus a script to auto-tag untagged resources with their creator.">
+  <meta property="og:url" content="https://benoit-gaumard.io/articles/remove-old-azure-resources-based-on-tags/">
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://benoit-gaumard.io/articles/remove-old-azure-resources-based-on-tags/">
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
   <title>Remove Old Azure Resources Based on Tags | Benoit Gaumard</title>
@@ -108,6 +122,24 @@
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
     .news-banner {
       display: flex;
       align-items: center;
@@ -315,6 +347,7 @@
   </style>
 </head>
 <body class="">
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
       <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
@@ -348,7 +381,7 @@
     </div>
   </header>
 
-  <main id="top">
+  <main id="top" tabindex="-1">
     <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Azure">Azure</a></div>

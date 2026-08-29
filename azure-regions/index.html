@@ -4,6 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Explore Azure datacenter locations and regional information worldwide: physical location, geography, paired region, and availability zone support.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Azure Regions | Benoit Gaumard" />
+  <meta property="og:description" content="Explore Azure datacenter locations and regional information worldwide: physical location, geography, paired region, and availability zone support." />
+  <meta property="og:url" content="https://benoit-gaumard.io/azure-regions/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://benoit-gaumard.io/azure-regions/" />
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
     (function () {
@@ -20,6 +33,8 @@
     })();
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <title>Azure Regions | Benoit Gaumard</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
@@ -117,6 +132,24 @@
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
 
         .news-banner {
       display: flex;
@@ -215,9 +248,26 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 2rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
+    .data-error {
+      margin: 1rem 0;
+      padding: .85rem 1rem;
+      border: 1px solid var(--cp-danger);
+      border-radius: 8px;
+      background: var(--cp-danger-bg);
+      color: var(--cp-danger);
+      font-size: .92rem;
+      font-weight: 600;
+    }
+    .refresh-meta { margin: .6rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
+    .refresh-meta strong { color: var(--cp-text); font-weight: 600; }
+
+
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
-    .stat-cards {
+    .stat-cards { min-height: 7rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
       gap: 1rem;
@@ -312,7 +362,7 @@
     .map-popup .map-popup-tag.is-no-az { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
     .map-popup .map-popup-tag.is-restricted { margin-left: .35rem; background: var(--cp-danger-bg); color: var(--cp-danger); }
 
-    .region-cards {
+    .region-cards { min-height: 70vh;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
       gap: 1.25rem;
@@ -459,9 +509,42 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    .copyable {
+      position: relative;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      width: 100%;
+    }
+    .copyable:hover { border-color: var(--cp-accent); }
+    .copyable::after {
+      content: "Copy";
+      float: right;
+      margin-left: .75rem;
+      color: var(--cp-text-muted);
+      font-size: .78rem;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .copyable:hover::after, .copyable:focus-visible::after { opacity: 1; }
+    .copyable.is-copied::after { content: "Copied"; opacity: 1; color: var(--cp-accent); }
+    @media (prefers-reduced-motion: reduce) { .copyable::after { transition: none; } }
+
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
       <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
@@ -495,10 +578,12 @@
     </div>
   </header>
 
-  <main>
+  <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Regions</h1>
       <p class="intro-text">Explore Azure datacenter locations and regional information worldwide.</p>
+      <p class="refresh-meta">Data updated: <strong id="refreshedAt">&hellip;</strong></p>
     </section>
 
     <section aria-label="Summary">
@@ -507,8 +592,8 @@
 
     <section aria-label="Azure regions directory">
       <div class="filter-bar">
-        <input type="text" id="searchInput" placeholder="Search by region, location, or country...">
-        <select id="continentFilter"><option value="">All continents</option></select>
+        <input type="text" id="searchInput" placeholder="Search by region, location, or country..." aria-label="Search by region, location, or country">
+        <select id="continentFilter" aria-label="Filter by continent"><option value="">All continents</option></select>
         <label class="filter-toggle"><input type="checkbox" id="azOnlyFilter"> Availability zones only</label>
       </div>
       <div class="regions-toolbar">
@@ -526,9 +611,10 @@
             Map
           </button>
         </div>
-        <p class="results-count" id="resultsCount"></p>
+        <p class="results-count" id="resultsCount" aria-live="polite"></p>
       </div>
-      <div class="region-cards" id="regionCards"></div>
+      <span id="copyStatus" role="status" aria-live="polite" class="visually-hidden"></span>
+        <div class="region-cards" id="regionCards"></div>
       <div class="region-map" id="regionMap" hidden></div>
     </section>
   </main>
@@ -775,8 +861,17 @@
           const labelSpan = document.createElement("span");
           labelSpan.className = "meta-label";
           labelSpan.textContent = label;
-          const valueSpan = document.createElement("span");
-          valueSpan.className = "meta-value";
+          let valueSpan;
+          if (label === "Programmatic name") {
+            valueSpan = document.createElement("button");
+            valueSpan.type = "button";
+            valueSpan.className = "meta-value copyable";
+            valueSpan.setAttribute("aria-label", "Copy programmatic name " + value);
+            valueSpan.addEventListener("click", () => copyValue(value, valueSpan));
+          } else {
+            valueSpan = document.createElement("span");
+            valueSpan.className = "meta-value";
+          }
           valueSpan.textContent = value;
           li.append(labelSpan, valueSpan);
           meta.append(li);
@@ -786,9 +881,55 @@
         elements.regionCards.append(card);
       });
     }
+    // build-freshness.mjs stamps the real git date; the host's Last-Modified
+    // would report the deploy and overclaim freshness on curated lists
+    async function showRefreshedAt() {
+      var el = document.getElementById("refreshedAt");
+      if (!el) return;
+      try {
+        var res = await fetch("/freshness.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(res.status);
+        var iso = (await res.json())["azure-regions/regions.json"];
+        var date = iso ? new Date(iso) : null;
+        if (!date || isNaN(date)) throw new Error("no stamp");
+        el.textContent = date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+        el.parentElement.title = date.toLocaleString();
+      } catch (err) {
+        el.parentElement.hidden = true;
+      }
+    }
+
+
+
+    // the row is the button: one element per value rather than a value plus an
+    // icon button, which matters on lists that run to hundreds of rows
+    async function copyValue(text, el) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        try { document.execCommand("copy"); } catch { return; }
+        textarea.remove();
+      }
+      el.classList.add("is-copied");
+      const status = document.getElementById("copyStatus");
+      if (status) status.textContent = text + " copied";
+      window.clearTimeout(el._copyTimer);
+      el._copyTimer = window.setTimeout(() => {
+        el.classList.remove("is-copied");
+        if (status) status.textContent = "";
+      }, 1400);
+    }
+
 
     async function init() {
       const response = await fetch("./regions.json", { cache: "no-store" });
+      showRefreshedAt();
       state.data = await response.json();
       renderStats();
       populateFilters();
@@ -799,7 +940,19 @@
     elements.continentFilter.addEventListener("change", renderCards);
     elements.azOnlyFilter.addEventListener("change", renderCards);
 
-    init();
+    init().catch(function (error) {
+      console.error(error);
+      if (document.querySelector(".data-error")) return;
+      var host = document.querySelector("main");
+      if (!host) return;
+      var msg = document.createElement("p");
+      msg.className = "data-error";
+      msg.setAttribute("role", "alert");
+      msg.textContent = "Could not load the data for this page. This is usually a temporary network problem \u2014 reload to try again.";
+      var intro = host.querySelector(".intro");
+      if (intro) intro.insertAdjacentElement("afterend", msg);
+      else host.prepend(msg);
+    });
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
@@ -855,6 +1008,64 @@
       closeBtn.addEventListener("click", function () {
         banner.setAttribute("hidden", "");
         try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+  <script data-url-state>
+    (function () {
+      var scope = document.querySelector("main");
+      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
+      var controls = [].slice
+        .call(scope.querySelectorAll("input[id], select[id]"))
+        .filter(function (el) {
+          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
+          return !el.closest("[data-no-url-state]");
+        });
+      if (!controls.length) return;
+
+      var params = new URLSearchParams(location.search);
+      var hydrating = false;
+
+      function readValue(el) {
+        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+      }
+
+      if (params.toString()) {
+        hydrating = true;
+        var applied = [];
+        controls.forEach(function (el) {
+          var v = params.get(el.id);
+          if (v === null) return;
+          if (el.type === "checkbox") el.checked = v === "1";
+          else el.value = v;
+          applied.push(el);
+        });
+        // let each page's own listeners recompute from the restored values
+        applied.forEach(function (el) {
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        hydrating = false;
+      }
+
+      var pending = null;
+      function sync() {
+        if (hydrating) return;
+        clearTimeout(pending);
+        pending = setTimeout(function () {
+          var p = new URLSearchParams();
+          controls.forEach(function (el) {
+            var v = readValue(el);
+            if (v !== "" && v != null) p.set(el.id, v);
+          });
+          var qs = p.toString();
+          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
+        }, 250);
+      }
+
+      controls.forEach(function (el) {
+        el.addEventListener("input", sync);
+        el.addEventListener("change", sync);
       });
     })();
   </script>

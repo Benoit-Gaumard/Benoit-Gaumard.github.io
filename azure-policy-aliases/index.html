@@ -4,6 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Azure Policy Aliases | Benoit Gaumard" />
+  <meta property="og:description" content="Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions." />
+  <meta property="og:url" content="https://benoit-gaumard.io/azure-policy-aliases/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://benoit-gaumard.io/azure-policy-aliases/" />
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
     (function () {
@@ -20,6 +33,8 @@
     })();
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <title>Azure Policy Aliases | Benoit Gaumard</title>
   <style>
     :root {
@@ -116,6 +131,24 @@
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
 
         .news-banner {
       display: flex;
@@ -214,6 +247,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: .85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: .85rem; }
     .refresh-meta strong { color: var(--cp-text); }
@@ -242,6 +278,23 @@
     .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
     .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
     .clear-button[hidden] { display: none; }
+    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
+
 
     .table-wrap {
       overflow-x: auto;
@@ -352,6 +405,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
       <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
@@ -385,8 +439,9 @@
     </div>
   </header>
 
-  <main>
+  <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title">Azure Policy Aliases</h1>
       <p class="intro-text">Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions, generated daily from <code>Get-AzPolicyAlias</code>.</p>
       <p class="refresh-meta">
@@ -399,8 +454,8 @@
 
     <section aria-label="Policy aliases">
       <div class="filter-bar">
-        <input id="search" type="search" placeholder="Search resource type, default path, or alias..." autocomplete="off" spellcheck="false">
-        <select id="resourceTypeFilter"><option value="">All resource types</option></select>
+        <input id="search" type="search" placeholder="Search resource type, default path, or alias..." autocomplete="off" spellcheck="false" aria-label="Search resource type, default path, or alias">
+        <select id="resourceTypeFilter" aria-label="Filter by resource type"><option value="">All resource types</option></select>
         <button class="clear-button" id="clearFilters" type="button" hidden>Clear</button>
       </div>
       <div class="table-wrap">
@@ -415,7 +470,7 @@
           <tbody id="tableBody"></tbody>
         </table>
       </div>
-      <p id="resultCount"></p>
+      <p id="resultCount" aria-live="polite"></p>
     </section>
   </main>
 
@@ -453,8 +508,8 @@
   </button>
 
   <script>
-    const RENDER_LIMIT = 500;
-    const state = { rows: [], filtered: [], sortKey: "resourceType", sortDir: "asc", query: "" };
+    const PAGE_SIZE = 100;
+    const state = { visible: 100, rows: [], filtered: [], sortKey: "resourceType", sortDir: "asc", query: "" };
     const elements = {
       statsGrid: document.getElementById("statsGrid"),
       refreshedAt: document.getElementById("refreshedAt"),
@@ -539,7 +594,7 @@
         return 0;
       });
 
-      const shown = rows.slice(0, RENDER_LIMIT);
+      const shown = rows.slice(0, state.visible);
       elements.tableBody.replaceChildren();
       const fragment = document.createDocumentFragment();
       shown.forEach((row) => {
@@ -565,17 +620,43 @@
       });
       elements.tableBody.append(fragment);
 
-      elements.resultCount.textContent = rows.length > RENDER_LIMIT
-        ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching aliases. Refine your search to see more specific results.`
+      elements.resultCount.textContent = shown.length < rows.length
+        ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching aliases.`
         : `${rows.length.toLocaleString()} alias${rows.length === 1 ? "" : "es"} shown.`;
+
+      renderLoadMore(rows.length, shown.length);
 
       elements.headers.forEach((th) => {
         th.removeAttribute("aria-sort");
         if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
       });
     }
+      function renderLoadMore(total, shownCount) {
+        const wrap = document.querySelector(".table-wrap");
+        if (!wrap) return;
+        let button = wrap.parentElement.querySelector(".load-more");
+        if (shownCount >= total) {
+          if (button) button.remove();
+          return;
+        }
+        const remaining = total - shownCount;
+        if (!button) {
+          button = document.createElement("button");
+          button.type = "button";
+          button.className = "load-more";
+          button.addEventListener("click", () => {
+            state.visible += PAGE_SIZE;
+            renderTable();
+            const next = document.querySelector(".load-more");
+            if (next) next.focus();
+          });
+          wrap.insertAdjacentElement("afterend", button);
+        }
+        button.textContent = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
+      }
 
-    function applyFilter() {
+      function applyFilter() {
+        state.visible = PAGE_SIZE;
       const query = normalize(state.query.trim());
       const resourceType = elements.resourceTypeFilter.value;
       state.filtered = state.rows.filter((row) => {
@@ -690,6 +771,64 @@
       closeBtn.addEventListener("click", function () {
         banner.setAttribute("hidden", "");
         try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+  <script data-url-state>
+    (function () {
+      var scope = document.querySelector("main");
+      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
+      var controls = [].slice
+        .call(scope.querySelectorAll("input[id], select[id]"))
+        .filter(function (el) {
+          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
+          return !el.closest("[data-no-url-state]");
+        });
+      if (!controls.length) return;
+
+      var params = new URLSearchParams(location.search);
+      var hydrating = false;
+
+      function readValue(el) {
+        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+      }
+
+      if (params.toString()) {
+        hydrating = true;
+        var applied = [];
+        controls.forEach(function (el) {
+          var v = params.get(el.id);
+          if (v === null) return;
+          if (el.type === "checkbox") el.checked = v === "1";
+          else el.value = v;
+          applied.push(el);
+        });
+        // let each page's own listeners recompute from the restored values
+        applied.forEach(function (el) {
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        hydrating = false;
+      }
+
+      var pending = null;
+      function sync() {
+        if (hydrating) return;
+        clearTimeout(pending);
+        pending = setTimeout(function () {
+          var p = new URLSearchParams();
+          controls.forEach(function (el) {
+            var v = readValue(el);
+            if (v !== "" && v != null) p.set(el.id, v);
+          });
+          var qs = p.toString();
+          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
+        }, 250);
+      }
+
+      controls.forEach(function (el) {
+        el.addEventListener("input", sync);
+        el.addEventListener("change", sync);
       });
     })();
   </script>
