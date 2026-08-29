@@ -489,7 +489,24 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  </style>
+  
+
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statCards:empty { min-height: 93px; }
+      #categoryTabs:empty { min-height: 79px; }
+      #cidrList:empty { min-height: 416px; }
+      @media (max-width: 48rem) {
+        #statCards:empty { min-height: 220px; }
+        #categoryTabs:empty { min-height: 122px; }
+      }
+      @media (max-width: 32rem) {
+        #statCards:empty { min-height: 329px; }
+        #categoryTabs:empty { min-height: 295px; }
+      }
+    }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

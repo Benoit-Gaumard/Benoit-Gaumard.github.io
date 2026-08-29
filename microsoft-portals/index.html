@@ -446,7 +446,20 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  </style>
+  
+
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #portalCards:empty { min-height: 188px; }
+      @media (max-width: 48rem) {
+        #portalCards:empty { min-height: 395px; }
+      }
+      @media (max-width: 32rem) {
+        #portalCards:empty { min-height: 811px; }
+      }
+    }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
