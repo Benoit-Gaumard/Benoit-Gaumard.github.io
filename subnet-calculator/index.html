@@ -456,18 +456,18 @@
         <div class="field-row">
           <div class="unit-field ip-field">
             <label for="ipInput">IP address</label>
-            <input id="ipInput" type="text" value="192.168.1.10" autocomplete="off" spellcheck="false">
+            <input id="ipInput" aria-describedby="fieldError" type="text" value="192.168.1.10" autocomplete="off" spellcheck="false">
           </div>
           <div class="unit-field prefix-field">
             <label for="prefixInput">CIDR prefix</label>
-            <input id="prefixInput" type="number" min="0" max="32" value="24">
+            <input id="prefixInput" aria-describedby="fieldError" type="number" min="0" max="32" value="24">
           </div>
           <div class="unit-field mask-field">
             <label for="maskInput">Subnet mask</label>
-            <input id="maskInput" type="text" value="255.255.255.0" autocomplete="off" spellcheck="false">
+            <input id="maskInput" aria-describedby="fieldError" type="text" value="255.255.255.0" autocomplete="off" spellcheck="false">
           </div>
         </div>
-        <p class="field-error" id="fieldError"></p>
+        <p class="field-error" id="fieldError" role="alert"></p>
         <div class="results-section">
           <p class="results-heading" id="resultsHeading"></p>
           <ul class="results-list" id="resultsList"></ul>
@@ -491,7 +491,7 @@
             </select>
           </div>
         </div>
-        <p class="field-error" id="splitError"></p>
+        <p class="field-error" id="splitError" role="alert"></p>
         <div class="subnet-table-wrap">
           <table class="subnet-table" id="splitTable">
             <thead>
@@ -659,8 +659,18 @@
       elements.resultsList.append(li);
     }
 
+    // mark the field itself, not just the message, so a screen reader hears
+    // which input is at fault when it lands there
+    function markInvalid(el, bad) {
+      if (!el) return;
+      if (bad) el.setAttribute("aria-invalid", "true");
+      else el.removeAttribute("aria-invalid");
+    }
+
     function renderResults() {
       elements.fieldError.textContent = "";
+      markInvalid(elements.ipInput, false);
+      markInvalid(elements.prefixInput, false);
       elements.resultsList.replaceChildren();
       elements.resultsHeading.textContent = "";
 
@@ -669,10 +679,12 @@
 
       if (!octets) {
         elements.fieldError.textContent = "Enter a valid IPv4 address (e.g. 192.168.1.10).";
+        markInvalid(elements.ipInput, true);
         return null;
       }
       if (!Number.isInteger(prefix) || prefix < 0 || prefix > 32) {
         elements.fieldError.textContent = "CIDR prefix must be an integer between 0 and 32.";
+        markInvalid(elements.prefixInput, true);
         return null;
       }
 

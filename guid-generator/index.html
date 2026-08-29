@@ -423,6 +423,8 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
+    .quantity-note { margin: .35rem 0 0; font-size: .85rem; color: var(--cp-text-muted); }
+    .quantity-note:empty { display: none; }
   </style>
 </head>
 <body>
@@ -473,6 +475,7 @@
           <div class="unit-field value-field">
             <label for="quantity">Quantity</label>
             <input id="quantity" type="number" min="1" max="500" value="1">
+            <p class="quantity-note" id="quantityNote" role="status"></p>
           </div>
         </div>
         <div class="options-row" id="optionsRow">
@@ -529,6 +532,7 @@
 
     const elements = {
       quantity: document.getElementById("quantity"),
+      quantityNote: document.getElementById("quantityNote"),
       optUppercase: document.getElementById("optUppercase"),
       optHyphens: document.getElementById("optHyphens"),
       optBraces: document.getElementById("optBraces"),
@@ -587,7 +591,16 @@
     }
 
     function generate() {
-      const quantity = Math.min(500, Math.max(1, parseInt(elements.quantity.value, 10) || 1));
+      const asked = elements.quantity.value.trim();
+      const quantity = Math.min(500, Math.max(1, parseInt(asked, 10) || 1));
+      // the field is rewritten under the visitor either way; say why
+      if (String(quantity) !== asked) {
+        elements.quantityNote.textContent = `Quantity adjusted to ${quantity} (allowed range is 1 to 500).`;
+        elements.quantity.setAttribute("aria-invalid", "true");
+      } else {
+        elements.quantityNote.textContent = "";
+        elements.quantity.removeAttribute("aria-invalid");
+      }
       elements.quantity.value = quantity;
       currentGuids = Array.from({ length: quantity }, createGuid);
       renderList();

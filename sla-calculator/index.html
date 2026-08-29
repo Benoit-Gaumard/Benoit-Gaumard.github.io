@@ -530,11 +530,11 @@
           <div class="field-row">
             <div class="unit-field value-field">
               <label for="slaInput">SLA target (%)</label>
-              <input id="slaInput" type="number" step="0.001" min="0" max="100" value="99.9">
+              <input id="slaInput" aria-describedby="slaHeading" type="number" step="0.001" min="0" max="100" value="99.9">
             </div>
           </div>
           <div class="results-section">
-            <p class="results-heading" id="slaHeading"></p>
+            <p class="results-heading" id="slaHeading" role="status"></p>
             <ul class="results-list" id="slaResultsList"></ul>
           </div>
         </div>
@@ -566,7 +566,7 @@
             </div>
           </div>
           <div class="results-section">
-            <p class="results-heading" id="downtimeHeading"></p>
+            <p class="results-heading" id="downtimeHeading" role="status"></p>
             <ul class="results-list" id="downtimeResultsList"></ul>
           </div>
         </div>
@@ -709,8 +709,12 @@
 
     function renderFromSla() {
       const sla = parseFloat(elements.slaInput.value);
+      // clear first: a stuck aria-invalid is worse than none, because the field
+      // keeps announcing an error the visitor has already corrected
+      elements.slaInput.removeAttribute("aria-invalid");
       if (!Number.isFinite(sla) || sla < 0 || sla > 100) {
         elements.slaHeading.textContent = "Enter a valid SLA percentage between 0 and 100.";
+        elements.slaInput.setAttribute("aria-invalid", "true");
         elements.slaResultsList.replaceChildren();
         return;
       }
