@@ -117,12 +117,6 @@ The whole product premise is that visitors arrive deep from search. There is no 
 
 ### P2 — real, but tolerable
 
-**P2-1 · `canonical` missing on 29 of 63 pages.** Present on the 32 articles and 2 homepages only. Duplicate-content risk for a search-first site. *Small, low risk.*
-
-**P2-2 · Six data pages never show when they were refreshed.** `azure-naming-convention`, `azure-regions`, `favorite-links`, `friends-websites`, `microsoft-portals`, `it-images`. `azure-regions` is one of the three Azure-authoritative pipelines — the flagship of the "self-refreshing data" positioning — and it shows no timestamp at all. The `refresh-meta` convention already exists on 14 pages. *Small, low risk.*
-
-**P2-3 · Four long-list mechanisms.** Pagination on 2 pages, show-more on 3, cap-with-message on 5, unlimited elsewhere. **Nuance:** every capped list *does* announce its cap ("Showing 500 of 76,497 matching aliases"), so this is consistency, not misleading state. Pick one default — "showing N of M" plus Load More — and keep pagination on `/icons/` where the per-page dropdown is muscle memory. *Large, medium risk (18 pages of render logic).*
-
 **P2-4 · None of the six calculators give validation feedback.** `subnet-calculator`, `percentage-calculator`, `sla-calculator`, `units-converter`, `guid-generator`, `azure-naming-convention` accept malformed input silently — no `aria-invalid`, no message, no invalid styling. The user gets a wrong or empty answer with no clue why. *Medium, low risk.*
 
 **P2-5 · Colour drift: 53 `design-system-color` findings across 41 pages** *after* the deliberate literals were documented. Genuine one-offs (`#244f73`, `#6eb5e8`, `#dcefff`, `#fff8e8`, `#8a5a08`, `#9ee8c8`…) that should become tokens or map onto existing ones. *Medium, low risk.*
@@ -133,9 +127,9 @@ The whole product premise is that visitors arrive deep from search. There is no 
 
 **P2-8 · Extend click-to-copy.** Done on `/subnet-calculator/`. The same affordance belongs on `azure-regions` programmatic names, the IP-range CIDRs, and `azure-policy-aliases` — every page whose purpose is producing a value to paste. *Medium, low risk.*
 
-**P2-9 · `/rss-watcher/` mobile CLS 0.165** (desktop is 0.001, down from 0.365). Remaining shift sources report as `section.` and `a.` — something *above* the container already reserved. *Small, low risk.*
-
 **P2-10 · Third-party favicons: ~560 requests to Google per full browse.** Mitigated — `no-referrer`, lazy, intrinsic sizes, and a verified fallback to initials — but not removed. Caching them into the repo via a refresh workflow would close it and matches the site's own "every page stands alone" principle. *Large, medium risk (new pipeline + ~560 committed files).*
+
+**P2-11 · Pre-existing CLS on three long-list pages, confirmed against a baseline.** `azure-policy-aliases` 0.604 at 1280 and 0.146 at 390, `azure-taggable-resources` 0.121 at 390, `azure-policies` 0.085 at 390, `azure-ip-ranges` 0.21 at 390. These were measured on the pre-session commit as well as on HEAD and are **identical in both**, so they predate the paging work and were not introduced by it. Same root cause as the six containers fixed in `1593a4a`: a results container that starts at zero height. The fix is the same tiered `:empty` reservation — the only reason it was not applied here is that these lists have no single settled height to reserve. *Medium, low risk.*
 
 ---
 
@@ -165,11 +159,23 @@ The whole product premise is that visitors arrive deep from search. There is no 
 
 ### Closed this session — do not re-raise
 
+- **P2-1 · `canonical` on every page** — verified 62/62 `index.html` files carry `rel="canonical"`. This was finished earlier in the session but left sitting in the open list; re-measured before closing it.
+- **P2-2 · Data freshness on six pages** — `edc94d1`. `build-freshness.mjs` stamps each data file's real git commit date into `freshness.json` at deploy time and the pages read it. **Do not "simplify" this to the `Last-Modified` header**: that reports the deploy, not the edit, and five of the six files are hand-curated, so every one of them would claim to be fresh the moment an unrelated page ships. Label reads "Data updated", not "refreshed", for the same reason.
+- **P2-3 · Long-list mechanisms unified** — `57ced53`. The four strategies collapsed to one: a page plus Load More with "Showing N of M", on `azure-policies`, `azure-policy-aliases`, `azure-taggable-resources`, `github-ip-ranges`, `azure-ip-ranges` and `favorite-links`. Pagination stays on `/icons/` only. This also finished P1-5 and made 76,894 aliases reachable that the old 500-row cap had put permanently out of reach.
+- **P2-9 · `/rss-watcher/` mobile CLS 0.1516 → 0** — `edc94d1`. Two wrong guesses first (reserving the count's *height*, then the date's *width*). `.refresh-meta` is a wrapping flex row, so the empty feed count is 0 wide and 106px filled, which pushed a link onto a third line. Reserving its **width** fixed it.
+- **Six script-filled containers reserved** — `1593a4a`. `#statCards`, `#categoryTabs`, `#cidrList`, `#statsGrid`, `#gallery`, `#portalCards`, all 0.000 at 1280/768/390. Reservations are tiered on the pages' existing 48rem/32rem breakpoints and scoped to `:empty` so no blank hole survives a no-match filter.
+
 WCAG AA contrast in both themes · 24×24 touch targets sitewide · heading hierarchy and landmark names · horizontal overflow at every width · reflow at 320px · closed token graph (28 declared / 28 used) · desktop CLS on articles, favorite-links, icons, workflows, azure-regions, azure-policies, emoji-sheet · 27 unnamed filter controls · 18 silent result counters · the `/workflows/` 403 storefront · filter and calculator state in the URL across 26 pages · back-to-hub breadcrumbs on 25 tool pages · click-to-copy on the subnet calculator · the news-banner dismiss no-op · the dead GitHub CTA · the retired `tools.`/`blog.` subdomain links.
 
 **The homepage deliberately does not showcase tools** — considered and rejected by the owner, recorded in `PRODUCT.md`.
 
 ## 7b. Measurement gotchas — read before you trust a number
+
+**Serve the previous commit on a second port before blaming your own change.** After adding the freshness row, three pages showed new CLS and four more showed large numbers. Running `git worktree add --detach <tmp> <prev-commit>` and serving it on another port answered in one pass what guessing would not have: `azure-policy-aliases` 0.604 and `azure-policies` 0.085 were **identical before the change**, so the paging work was innocent, while three genuinely were mine. Without that comparison the obvious move was to revert good work chasing a cause it did not have.
+
+**A layout fix that only holds at one width is not a fix.** These grids reflow — `#portalCards` settles at 188px, 395px and 811px at the three tiers — so a single reserved height left mobile shifting exactly as before, and in one case turned a clean 0 into 0.143. Measure the settled height at every breakpoint the page actually defines.
+
+**Prefer `:empty` to an unconditional `min-height`.** Reserving a container permanently trades a layout jump for a blank hole: filter `microsoft-portals` to nothing on a phone and 811px of empty box would sit under the message. Scoped to `:empty`, the box is held only until the first render.
 
 These three cost real time this session. Each one produced confident, wrong conclusions.
 
