@@ -4,6 +4,8 @@ Purpose of this file: let another AI coding assistant pick up work on this repo 
 
 ## 1. What this repo is
 
+**Scope:** the site is the 63 standalone pages at the repo root. The Hugo blog under `blog/` is an external blog the owner is retiring — out of scope, never audited, not counted.
+
 Personal site + tools hub for Benoit Gaumard, deployed to **https://benoit-gaumard.io** via GitHub Pages.
 
 - Repo: `Benoit-Gaumard/Benoit-Gaumard.github.io` (GitHub), local clone at `c:\REPOS\VIBE\Benoit-Gaumard.github.io`.
@@ -145,12 +147,11 @@ The whole product premise is that visitors arrive deep from search. There is no 
 
 **P3-9 · French parity is undecided** *(product decision)*. `index_fr.html` is the only French page; 62 others are English-only, and `hreflang` alternates exist on 2 pages. `PRODUCT.md` records this as explicitly undecided. Either commit to FR for tool pages or drop the switch to a homepage-only affordance. *Large if pursued.*
 
-**P3-10 · The Hugo blog has never been audited — 75 pages.** It uses the `hugo-clarity` theme and **none of the 75 pages use the shared shell**, so it is a separate design system with its own header, footer, theme handling and accessibility profile. Every audit this session deliberately excluded it. It is more than half the site's page count. *Unknown scope until scanned.*
-
 ---
 
 ### Closed this session — do not re-raise
 
+- **The Hugo blog under `blog/` is out of scope permanently** — owner's decision, 2026-08-29. It is an external blog he intends to delete. **Do not audit it, do not critique it, do not count it in page totals, and do not raise it as a gap.** Earlier notes in this file treated its ~45 pages as an unaudited half of the site; that framing is withdrawn. The site is the 63 pages at the repo root. Leave `blog/` alone unless the owner asks.
 - **P3-2 · `404.html`** — built *from* `guid-generator/index.html` by script rather than hand-written, so the shell (theme boot, tokens, header, footer, banner) stays byte-identical instead of becoming the one page that drifts. Carries `meta robots noindex, follow` in place of a canonical, and `build-sitemap.mjs` now excludes it — a noindex page listed in a sitemap is a contradiction search engines report as an error.
 - **P3-3 · App icons and manifest** — `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png` rasterised from the real `favicon.svg` through Playwright, plus `site.webmanifest`. Linked on 64/64 pages *and* in `articles/build-articles.mjs`, so a rebuild keeps them. Verified: manifest parses, all icons return 200 with the right content-type, and the PNGs are exactly 192/512/180.
 - **Deploy wiring** — `404.html`, `site.webmanifest` and the three PNGs are in `deploy-hugo.yaml`. **Nothing at the repo root reaches production unless it is copied there**; this is the third time that has nearly bitten.

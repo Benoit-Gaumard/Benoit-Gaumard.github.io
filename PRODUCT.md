@@ -79,3 +79,7 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 No formal standard has been declared by the owner. In practice, **WCAG 2.1 AA is the working floor**: the 2026-08-29 audit brought light-mode text contrast up to AA (`--cp-warning`, `--cp-success`, `--cp-cyan`), and dark mode already met AA across every sampled pair. Both themes must continue to meet AA.
 
 Known open accessibility gaps recorded at that audit: heading hierarchy (`h1` → fifteen `h3`, sole `h2` last), unnamed `<section>` landmarks, no `<noscript>` fallback for `.reveal`, no print stylesheet, and interactive targets below 44 px.
+
+## Out of scope
+
+The Hugo blog under `blog/` is an external blog the owner intends to delete. It is **out of scope permanently** (decided 2026-08-29): not audited, not critiqued, not counted in page totals, and not to be raised as a gap. The product is the 63 standalone pages at the repo root.
