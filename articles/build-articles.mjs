@@ -422,11 +422,11 @@ ${extraHead}
     }
     .header-inner, main, .footer-inner { width: min(90rem, calc(100% - 2rem)); margin-inline: auto; }
     .header-inner { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .brand { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand { min-height: 1.5rem; display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
     .brand-mark { color: var(--cp-accent); }
     .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
     .header-links { display: flex; align-items: center; gap: 1rem; }
-    .header-links a { display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
     .nav-icon { flex: 0 0 auto; opacity: .7; }
     .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
     .header-links a:hover { color: var(--cp-text); }
@@ -463,7 +463,7 @@ ${extraHead}
     .footer-about p { margin: .75rem 0 0; font-size: .875rem; line-height: 1.6; }
     .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
     .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: .75rem; text-transform: uppercase; }
-    .footer-group a { color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
+    .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: .875rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: .8rem; }
     @media (max-width: 48rem) {
@@ -471,7 +471,7 @@ ${extraHead}
       .menu-toggle { display: inline-flex; }
       .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
       .header-links.nav-open { display: flex; }
-      .header-links a { padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
       .header-links a:hover { background: var(--cp-surface-soft); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
@@ -635,8 +635,8 @@ const ARTICLE_CSS = `
     .article-breadcrumb a:hover { color: var(--cp-link); }
     .article-categories { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
     .article-category-tag {
-      display: inline-flex; padding: .2rem .6rem; border-radius: 999px;
-      background: var(--cp-accent-soft); color: var(--cp-accent); font-size: .75rem; font-weight: 700; text-decoration: none;
+      display: inline-flex; align-items: center; min-height: 1.5rem; padding: .2rem .7rem; border-radius: 999px;
+      background: var(--cp-accent-soft); color: var(--cp-accent-hover); font-size: .75rem; font-weight: 700; text-decoration: none;
     }
     .article-title { margin: 0; font-size: clamp(1.9rem, 4.4vw, 2.85rem); line-height: 1.12; }
     .article-description { margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.08rem; line-height: 1.6; }
@@ -702,6 +702,7 @@ const ARTICLE_CSS = `
     .toc-level-3 a { padding-left: 1rem; font-size: .87rem; color: var(--cp-text-muted); }
     .toc-level-4 a { padding-left: 2rem; font-size: .85rem; color: var(--cp-text-muted); }
     .article-footer-nav { margin: 2rem 0 0; display: flex; justify-content: space-between; gap: 1rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
     .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: .92rem; }
     .article-footer-nav a:hover { color: var(--cp-accent-hover); }
     @media (max-width: 40rem) {

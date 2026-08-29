@@ -105,8 +105,8 @@ The critique targeted `index.html` only. Everything it found there was fixed on 
 4. ~~Heading hierarchy and landmark names.~~ **Closed.** All 63 pages now measure 0 heading-level skips, 0 `<p class="sec-label">` used as a title, and 0 unnamed `<section>`.
 5. ~~No `<noscript>`.~~ **Non-issue**: only the two homepages use `.reveal`, and both have it. `@media print` still exists only on the homepages — printing a tool page is not a real use case.
 6. ~~Horizontal overflow.~~ **Closed.** 0 pages overflow at 1440 or 375.
-7. **Touch targets.** Header nav links render 26px tall, the theme/social buttons 32px, the banner close 28px, the footer language flags 29x22 (under the WCAG 2.2 SC 2.5.8 24px floor). Sitewide, untouched.
-8. **Design-direction items the owner has not decided on** (not defects): the homepage of a tools hub previews zero tools; 10 undifferentiated skill cards; a 22-logo client wall with no outcomes attached.
+7. ~~Touch targets.~~ **Closed 2026-08-29 (polish pass).** Every interactive target now measures at least 24x24 CSS px (WCAG 2.2 SC 2.5.8, Level AA). The fix was almost entirely in the shared shell — footer links, header links, `.brand` and the language flags were 18-22px because their boxes were pure text. `display: inline-flex; align-items: center; min-height: 1.5rem` on those four rules cleared most of the site at once; `.transcript`, `.breadcrumb-link`, `.rss-link`, `.article-category-tag`, `.article-footer-nav a`, `.workflow-link` and `.emoji-code` were mopped up individually. Inline links inside running text (the banner sentence) are exempt under SC 2.5.8 and were left alone.
+8. **Design-direction items the owner has not decided on** (not defects): 10 undifferentiated skill cards; a 22-logo client wall with no outcomes attached. (The "homepage should showcase tools" item was **considered and rejected** — see `PRODUCT.md`.)
 
 ### Cumulative layout shift — measure it, don't count image attributes
 
@@ -146,12 +146,27 @@ Genuine failures were fixed by **lightening the two surface tokens** rather than
 
 - `side-tab` x33 — `border-left: 3px solid var(--cp-accent)` on article callouts.
 - `em-dash-overuse` x6 — article prose.
-- `broken-image` x2 — `<img id="dialogImage" alt="">` in `icons/` and `it-images/`. These are **false positives**: they are lightbox placeholders inside a closed `<dialog>` whose `src` is set by JS on open. (Real nit worth fixing though: the JS sets `.src` but never a meaningful `.alt`.)
+- `broken-image` x2 — `<img id="dialogImage" alt="">` in `icons/` and `it-images/`. These are **false positives**: they are lightbox placeholders inside a closed `<dialog>` whose `src` is set by JS on open. (An earlier version of this file claimed the JS never sets a meaningful `alt` — that was wrong. Both pages do set it: `${icon.name} preview` and `image.title`.)
 
 Note: running the detector with `--no-config` reports ~32 extra `dark-glow` hits on the shared `--cp-shadow` elevation token. Those do **not** fire in a normal config-aware run; don't chase them.
 
+### Custom-property hygiene (checked 2026-08-29, currently clean)
+
+The token graph is closed: **28 `--cp-*` properties declared, 28 used, zero orphans in either direction.** Getting there found real bugs that a per-page reading had missed:
+
+- **`var(--cp-panel)` was referenced on 29 pages and never declared anywhere.** It had only been fixed on the two homepages and in `pageShell()`. On tool pages it silently killed the mobile nav hover background; on `/icons/` it killed the **empty-state panel background** entirely. Both now use `--cp-surface-soft`.
+- `--cp-bg-elevated`, `--cp-text-soft`, `--cp-highlight` and `--cp-sheen` were declared across 29-31 pages and used exactly zero times. Removed.
+
+If you add a token, verify both directions. A one-line script that collects every `--cp-x:` declaration and every `var(--cp-x)` reference across the 63 pages, then diffs the two sets, catches this class of bug instantly — reading one page will not.
+
 ## 8. Recent session history (most recent first, as of 2026-08-29)
 
+- **2026-08-29, `/impeccable polish` across all 63 pages.**
+  - **Touch targets closed sitewide** — see §7 item 7.
+  - **Undefined `var(--cp-panel)` on 29 pages** — a bug the earlier passes missed because they only checked the homepages. It killed the `/icons/` empty-state background outright. See the custom-property hygiene note in §7.
+  - Four dead tokens removed; the token graph is now closed at 28/28.
+  - The last two marginal contrasts (`.link-tag` 4.41:1, `.article-category-tag` 4.45:1) cleared by switching those two classes to `--cp-accent-hover`, which is darker in light and lighter in dark — a gain in both themes without touching the shared `--cp-accent-soft` tint the active toggle state depends on.
+  - Verified across 16 representative pages at 1440 and 375, light and dark: zero small targets, zero overflow, zero heading skips, zero unnamed sections, zero unresolved tokens, zero JS errors.
 - **2026-08-29, sitewide audit of the remaining 61 pages.** Browser-measured every page at 1440 and 375.
   - Article template (`pageShell()`): `var(--cp-panel)` was still undefined and the "Back to top" link pointed at a `#top` that did not exist — both were fixed on the homepages earlier but never in the template, so all 32 generated pages carried them. `<main>` is now `<main id="top">`.
   - `articles/index.html`: section titles were `<p class="sec-label">` while all 39 article card titles were `<h2>`, giving a screen reader `h1` + 39 flat `h2`s. Card titles are now `<h3>` (CSS selectors moved with them) and the section titles are `<h2>`. Same `<p>`-as-title fix on `world-clock/index.html`.
