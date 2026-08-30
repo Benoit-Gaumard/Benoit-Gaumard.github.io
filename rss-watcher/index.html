@@ -1146,10 +1146,11 @@
 
       const iconSlot = document.createElement("span");
       iconSlot.className = "list-icon-slot";
-      if (item.icon) {
+      const itemIconSrc = item.icon ? cachedFaviconFor(hostFromUrl(item.link || "")) || cachedFaviconFor(iconDomain(item.icon)) : null;
+      if (itemIconSrc) {
         const icon = document.createElement("img");
         icon.className = "list-icon";
-        icon.src = item.icon;
+        icon.src = itemIconSrc;
         icon.alt = "";
         icon.loading = "lazy";
         icon.width = 20;
@@ -1190,10 +1191,11 @@
 
       const titleRow = document.createElement("div");
       titleRow.className = "site-card-title-row";
-      if (group.icon) {
+      const groupIconSrc = group.icon ? cachedFaviconFor(iconDomain(group.icon)) : null;
+      if (groupIconSrc) {
         const icon = document.createElement("img");
         icon.className = "site-icon";
-        icon.src = group.icon;
+        icon.src = groupIconSrc;
         icon.alt = "";
         icon.loading = "lazy";
         icon.width = 20;
@@ -1340,6 +1342,39 @@
       error.innerHTML = "<h2>The updates feed could not be loaded</h2><p>Please refresh the page or try again later.</p>";
       elements.siteGrid.replaceChildren(error);
     }
+    // Favicons are cached in /favicons/ so no visitor request ever reaches a
+    // third party. One lookup fetch replaces one request per icon.
+    var faviconMap = null;
+    async function loadFaviconMap() {
+      if (faviconMap) return faviconMap;
+      try {
+        var res = await fetch("/favicons/lookup.json", { cache: "force-cache" });
+        faviconMap = res.ok ? await res.json() : {};
+      } catch (err) {
+        faviconMap = {};
+      }
+      return faviconMap;
+    }
+    // Returns null when nothing is cached, so the caller's existing initials
+    // fallback handles it rather than reaching for the network.
+    function cachedFaviconFor(hostname) {
+      if (!faviconMap || !hostname) return null;
+      var bare = String(hostname).toLowerCase().replace(/^www\./, "");
+      var file = faviconMap[bare] || faviconMap[String(hostname).toLowerCase()];
+      return file ? "/favicons/" + file : null;
+    }
+    function hostFromUrl(value) {
+      try { return new URL(value, location.origin).hostname; } catch (err) { return null; }
+    }
+    // The stored icon is a Google URL carrying the real domain as a query
+    // parameter; pull it back out so it can be looked up locally.
+    function iconDomain(iconUrl) {
+      if (!iconUrl) return null;
+      var match = String(iconUrl).match(/[?&]domain=([^&]+)/);
+      return match ? decodeURIComponent(match[1]) : hostFromUrl(iconUrl);
+    }
+
+
 
     async function initialize() {
       try {
@@ -1347,6 +1382,7 @@
         updateFavoritesToggleLabel();
         renderKeywordChips();
         elements.viewOptions.forEach((option) => option.setAttribute("aria-pressed", String(option.dataset.view === state.viewMode)));
+        await loadFaviconMap();
         const response = await fetch("updates.json");
         if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
         const payload = await response.json();

@@ -726,7 +726,7 @@
     }
 
     function faviconUrlFor(url) {
-      return `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(hostnameFor(url))}`;
+      return cachedFaviconFor(hostnameFor(url));
     }
 
     function initials(name) {
@@ -750,7 +750,8 @@
       const avatar = document.createElement("span");
       avatar.className = "portal-avatar";
       const favicon = document.createElement("img");
-      favicon.src = faviconUrlFor(portal.url);
+      const faviconSrc = faviconUrlFor(portal.url);
+      if (faviconSrc) favicon.src = faviconSrc;
       favicon.alt = "";
       favicon.loading = "lazy";
       favicon.decoding = "async";
@@ -762,6 +763,12 @@
         avatar.textContent = initials(portal.name);
       }, { once: true });
       avatar.append(favicon);
+      if (!faviconSrc) {
+        // nothing cached for this domain, and no request will be made, so do
+        // what the error handler would have done rather than leave an empty box
+        favicon.remove();
+        avatar.textContent = initials(portal.name);
+      }
       const heading = document.createElement("h2");
       heading.textContent = portal.name;
       header.append(avatar, heading);
@@ -831,10 +838,37 @@
         el.parentElement.hidden = true;
       }
     }
+    // Favicons are cached in /favicons/ so no visitor request ever reaches a
+    // third party. One lookup fetch replaces one request per icon.
+    var faviconMap = null;
+    async function loadFaviconMap() {
+      if (faviconMap) return faviconMap;
+      try {
+        var res = await fetch("/favicons/lookup.json", { cache: "force-cache" });
+        faviconMap = res.ok ? await res.json() : {};
+      } catch (err) {
+        faviconMap = {};
+      }
+      return faviconMap;
+    }
+    // Returns null when nothing is cached, so the caller's existing initials
+    // fallback handles it rather than reaching for the network.
+    function cachedFaviconFor(hostname) {
+      if (!faviconMap || !hostname) return null;
+      var bare = String(hostname).toLowerCase().replace(/^www\./, "");
+      var file = faviconMap[bare] || faviconMap[String(hostname).toLowerCase()];
+      return file ? "/favicons/" + file : null;
+    }
+    function hostFromUrl(value) {
+      try { return new URL(value, location.origin).hostname; } catch (err) { return null; }
+    }
+
+
 
 
 
     async function init() {
+      await loadFaviconMap();
       const response = await fetch("./portals-urls.csv", { cache: "no-store" });
       showRefreshedAt();
       const csvText = await response.text();

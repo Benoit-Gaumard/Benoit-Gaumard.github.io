@@ -95,31 +95,9 @@ Priority means **user harm**, not effort: P1 is something broken or missing for 
 
 ### P1 - real harm to a visitor today
 
-**P1-1 · No skip link on any of the 63 pages.**
-WCAG 2.4.1 Bypass Blocks is **Level A** - this is the site's only remaining Level A failure. Every visit begins with roughly nine header tab stops before content. `<main id="top">` already exists on every page, so this is a visually-hidden anchor that becomes visible on focus.
-*Effort: small (one codemod + `pageShell()`). Risk: very low. Verify: Tab once from page load and confirm the first stop is the skip link and that it moves focus into `<main>`.*
-
-**P1-2 · Seven data pages fail silently.**
-`azure-ip-ranges`, `azure-naming-convention`, `azure-regions`, `favorite-links`, `friends-websites`, `github-ip-ranges`, `workflows` all `catch` a failed JSON fetch and then render **nothing** - no message, no retry, no explanation. A visitor on a flaky connection sees an empty page and concludes the tool is broken. The other 13 data pages do show a message, so the pattern to copy already exists in-repo.
-*Effort: small per page. Risk: low. Verify: block the page's own JSON in devtools and confirm a human-readable message appears.*
-
-**P1-3 · Nothing shared from this site has an image - 0 of 63 pages have `og:image`.**
-`PRODUCT.md` records LinkedIn as the owner's channel; every link posted there currently renders bare. Only 2 of 63 pages have `og:title`/`og:description` at all (the two homepages, fixed earlier). No Twitter card anywhere.
-*Effort: medium (needs one real share image, plus a sitewide meta block; the article template can generate per-article values). Risk: low. Note: an image asset must be provided or produced - `PRODUCT.md` says none exists today.*
-
-**P1-4 · No `sitemap.xml` and no `robots.txt`.**
-The whole product premise is that visitors arrive deep from search. There is no sitemap for 63 pages plus 75 blog pages, and no robots directive. `deploy-hugo.yaml` has no sitemap step either, so adding one means touching the workflow.
-*Effort: medium. Risk: low. Verify: fetch both files in production and validate the sitemap.*
-
-**P1-5 · Render cost on the two heaviest pages.**
-`/favorite-links/` builds **11,249 DOM nodes / 1.3 MB of HTML** in a single pass; `/azure-policies/` builds **10,588 nodes / 1.7 MB**. Both are far past where mobile paint suffers, and `favorite-links` is one of the most-used tools.
-*Effort: large (virtualise or chunk the render). Risk: medium - this is real render-logic surgery. Verify: DOM node count and time-to-interactive on a throttled mobile profile.*
-
 ---
 
 ### P2 - real, but tolerable
-
-**P2-10 · Third-party favicons: ~560 requests to Google per full browse.** Mitigated - `no-referrer`, lazy, intrinsic sizes, and a verified fallback to initials - but not removed. Caching them into the repo via a refresh workflow would close it and matches the site's own "every page stands alone" principle. *Large, medium risk (new pipeline + ~560 committed files).*
 
 ---
 
@@ -129,6 +107,8 @@ The whole product premise is that visitors arrive deep from search. There is no 
 
 ### Closed this session - do not re-raise
 
+- **P1-1 to P1-5 were already done** and had simply been left in the open list from an earlier session. Re-measured before closing: skip link 62/62 pages, `og:image` 62/62, `sitemap.xml` and `robots.txt` both present, paging on 29 pages, and the silent-failure message on the 6 data pages that needed it.
+- **P2-10 · Third-party favicons eliminated** - 320 of 363 domains are now cached in `/favicons/` and served from the site, so **no visitor request reaches Google at all**. `build-favicons.mjs` refreshes them; `.github/workflows/favicons-refresh.yaml` runs it weekly and only fetches what is missing. Three things worth keeping in mind: the endpoint answers with PNG for most domains but JPEG and ICO for others, so the extension is sniffed from the bytes rather than assumed; the 43 domains Google has no icon for fall back to initials, which is what the pages already did for a failed image; and `/favicons/` must stay in `deploy-hugo.yaml` or none of it reaches production. A lean `lookup.json` (13 KB, 320 entries) maps domain to filename for the four pages that build icon URLs in script - one request replacing the 42 to 522 they each used to make.
 - **P2-11 + every other CLS source** - `bdd2146`. The four backlog pages are 0.000 at 1280/768/390. The sweep that verified it found three more nobody had measured, the worst being `/rss-watcher/activity/` at 0.566 - a sub-page, which is why it never appeared in a list. **Tables cannot be reserved with a fixed height** (they settle between 5,000px and 89,000px); `.table-wrap:has(tbody:empty) { min-height: 65vh }` keeps the footer below the fold at first paint and releases on first render.
 - **P2-5 · Colour drift, and the bug under it** - `e35bd2c`. The 53 findings were mostly the light theme's *missing* tokens written out by hand. Four pages referenced `--cp-warning`/`--cp-danger`/`--cp-danger-bg` with no light declaration at all. Two real dark-mode defects surfaced: the `/icons/` disclaimer panel and rss-watcher's keyword mark both stayed light-themed on a dark page. Token graph verified closed across 64 pages x 2 themes. **Take values from DESIGN.md, not from the literals you find** - my first pass adopted the drifted `#fff8e8`/`#fbe9e9` when the system documents `#fdf3e1`/`#fdf2f2`.
 - **P2-6 · Type scale** - `cd24b40`. 30 distinct sizes -> 17 named steps, nothing moved more than 0.05rem. **Do not snap onto the 7 named roles** - that moves headings up to 30% and is a redesign, not a cleanup. Merge near-duplicates only. The detector reads `typography.scale`, not a top-level key.

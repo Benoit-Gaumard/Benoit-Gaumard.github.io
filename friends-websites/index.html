@@ -771,7 +771,8 @@
         avatar.className = "friend-avatar";
         if (friend.faviconUrl) {
           const favicon = document.createElement("img");
-          favicon.src = friend.faviconUrl;
+          const friendIconSrc = cachedFaviconFor(hostFromUrl(friend.faviconUrl));
+          if (friendIconSrc) favicon.src = friendIconSrc;
           favicon.alt = "";
           favicon.loading = "lazy";
           favicon.decoding = "async";
@@ -783,6 +784,11 @@
             avatar.textContent = initials(friend.name);
           }, { once: true });
           avatar.append(favicon);
+          if (!friendIconSrc) {
+            // nothing cached, and no request will be made
+            favicon.remove();
+            avatar.textContent = initials(friend.name);
+          }
         } else {
           avatar.textContent = initials(friend.name);
         }
@@ -839,9 +845,36 @@
         el.parentElement.hidden = true;
       }
     }
+    // Favicons are cached in /favicons/ so no visitor request ever reaches a
+    // third party. One lookup fetch replaces one request per icon.
+    var faviconMap = null;
+    async function loadFaviconMap() {
+      if (faviconMap) return faviconMap;
+      try {
+        var res = await fetch("/favicons/lookup.json", { cache: "force-cache" });
+        faviconMap = res.ok ? await res.json() : {};
+      } catch (err) {
+        faviconMap = {};
+      }
+      return faviconMap;
+    }
+    // Returns null when nothing is cached, so the caller's existing initials
+    // fallback handles it rather than reaching for the network.
+    function cachedFaviconFor(hostname) {
+      if (!faviconMap || !hostname) return null;
+      var bare = String(hostname).toLowerCase().replace(/^www\./, "");
+      var file = faviconMap[bare] || faviconMap[String(hostname).toLowerCase()];
+      return file ? "/favicons/" + file : null;
+    }
+    function hostFromUrl(value) {
+      try { return new URL(value, location.origin).hostname; } catch (err) { return null; }
+    }
+
+
 
 
     async function init() {
+      await loadFaviconMap();
       const [csvResponse, metaResponse] = await Promise.all([
         fetch("./friends-websites.csv", { cache: "no-store" }),
         fetch("./websites-meta.json", { cache: "no-store" }).catch(() => null),

@@ -1,0 +1,59 @@
+name: Refresh cached favicons
+
+# Third-party favicons are cached into /favicons/ so visitors never request them
+# from Google. This keeps that cache current as links are added or removed:
+# it only downloads domains that are new or missing, so a normal run is cheap.
+#
+# Weekly rather than daily, because link lists change slowly and every run is a
+# few hundred requests to a third party. Use --all via workflow_dispatch to
+# force a full re-download when an icon has genuinely changed.
+
+on:
+  schedule:
+    # Sunday 04:00 UTC, well clear of the data refresh workflows
+    - cron: '0 4 * * 0'
+  workflow_dispatch:
+    inputs:
+      redownload:
+        description: 'Re-download every icon, not just missing ones'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: favicons-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Refresh favicon cache
+        run: |
+          if [ "${{ inputs.redownload }}" = "true" ]; then
+            node build-favicons.mjs --all
+          else
+            node build-favicons.mjs
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add favicons
+          if git diff --cached --quiet; then
+            echo "No favicon changes."
+          else
+            git commit -m "chore: refresh cached favicons"
+            git push
+          fi
