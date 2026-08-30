@@ -611,6 +611,16 @@
       tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
       h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
 </style>
 </head>
 <body>

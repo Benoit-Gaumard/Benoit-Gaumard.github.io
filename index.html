@@ -565,7 +565,17 @@
       .site-footer { border-top: 1px solid #bbb; }
       .tool .t-url { color: #000; }
     }
-  </style>
+      @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

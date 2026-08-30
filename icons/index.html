@@ -790,6 +790,16 @@
       tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
       h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
 </style>
 </head>
 <body>
@@ -998,6 +1008,7 @@
       refreshedAt: document.getElementById("refreshedAt"),
       sourceDisclaimerText: document.getElementById("sourceDisclaimerText"),
       sourceDisclaimerLink: document.getElementById("sourceDisclaimerLink"),
+      breadcrumb: document.querySelector(".breadcrumb"),
       breadcrumbSource: document.getElementById("breadcrumbSource"),
       breadcrumbCategory: document.getElementById("breadcrumbCategory"),
       favoritesFilter: document.getElementById("favoritesFilter"),
@@ -1199,12 +1210,16 @@
     }
 
     function updateBreadcrumb() {
-      const categoryLabel = elements.category.value
-        ? elements.category.value.replace(/\b\w/g, (letter) => letter.toUpperCase())
-        : "All";
-      elements.breadcrumbSource.textContent = elements.source.value || "All";
-      elements.breadcrumbSource.disabled = !elements.category.value;
-      elements.breadcrumbCategory.textContent = categoryLabel;
+      const hasSource = Boolean(elements.source.value);
+      const hasCategory = Boolean(elements.category.value);
+      // "All > All" is two crumbs saying nothing; only show a trail once one exists
+      elements.breadcrumb.hidden = !hasSource && !hasCategory;
+      elements.breadcrumbSource.textContent = elements.source.value || "All icons";
+      elements.breadcrumbSource.disabled = !hasCategory;
+      elements.breadcrumbCategory.hidden = !hasCategory;
+      if (hasCategory) {
+        elements.breadcrumbCategory.textContent = elements.category.value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+      }
     }
 
     function openPreview(icon) {
