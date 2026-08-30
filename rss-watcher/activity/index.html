@@ -393,7 +393,27 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  </style>
+      /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statsGrid:empty { min-height: 111px; }
+      #addedCards:empty { min-height: 93px; }
+      @media (max-width: 48rem) {
+        #statsGrid:empty { min-height: 216px; }
+        #addedCards:empty { min-height: 200px; }
+      }
+      @media (max-width: 32rem) {
+        #statsGrid:empty { min-height: 320px; }
+        #addedCards:empty { min-height: 439px; }
+      }
+    }
+    /* the table can settle past 10,000px, so hold a viewport-relative box
+       instead of a fixed one and let :has() release it on first render */
+    .table-wrap:has(tbody:empty) { min-height: 65vh; }</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

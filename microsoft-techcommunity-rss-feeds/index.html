@@ -392,7 +392,10 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  </style>
+      /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

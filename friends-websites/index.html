@@ -494,7 +494,17 @@
       .friend-card { transition: none; }
       body::before { animation: none; }
     }
-  </style>
+      /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #friendCards:empty { min-height: 255px; }
+      @media (max-width: 48rem) { #friendCards:empty { min-height: 275px; } }
+      @media (max-width: 32rem) { #friendCards:empty { min-height: 551px; } }
+    }</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

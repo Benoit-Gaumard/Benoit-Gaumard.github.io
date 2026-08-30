@@ -556,7 +556,25 @@
     .copyable.is-copied::after { content: "Copied"; opacity: 1; color: var(--cp-accent); }
     @media (prefers-reduced-motion: reduce) { .copyable::after { transition: none; } }
 
-  </style>
+  
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statCards:empty { min-height: 90px; }
+      #tagResults:empty { min-height: 192px; }
+      #tagNote:empty { min-height: 18px; }
+      @media (max-width: 48rem) {
+        #statCards:empty { min-height: 196px; }
+      }
+      @media (max-width: 32rem) {
+        #statCards:empty { min-height: 302px; }
+        #tagNote:empty { min-height: 36px; }
+      }
+    }
+    /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

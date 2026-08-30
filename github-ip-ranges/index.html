@@ -540,6 +540,9 @@
     .copyable.is-copied::after { content: "Copied"; opacity: 1; color: var(--cp-accent); }
     @media (prefers-reduced-motion: reduce) { .copyable::after { transition: none; } }
 
+    /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
 </style>
 </head>
 <body>

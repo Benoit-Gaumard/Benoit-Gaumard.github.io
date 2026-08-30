@@ -438,7 +438,25 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  </style>
+  
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statsGrid:empty { min-height: 112px; }
+      @media (max-width: 32rem) {
+        #statsGrid:empty { min-height: 194px; }
+      }
+    }
+
+    /* The table is the last thing on the page and can settle anywhere between
+       5,000px and 89,000px, so a fixed reservation would be wrong at most
+       widths. Holding a viewport-relative box while the body is empty keeps the
+       footer below the fold at first paint, so its arrival moves nothing the
+       visitor can see. :has() releases it as soon as the first row renders. */
+    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>

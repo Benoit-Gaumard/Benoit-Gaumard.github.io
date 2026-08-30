@@ -481,7 +481,13 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  </style>
+  
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statsGrid:empty { min-height: 90px; }
+      @media (max-width: 32rem) { #statsGrid:empty { min-height: 194px; } }
+    }</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
