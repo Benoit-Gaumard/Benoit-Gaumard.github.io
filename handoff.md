@@ -119,37 +119,27 @@ The whole product premise is that visitors arrive deep from search. There is no 
 
 ### P2 - real, but tolerable
 
-**P2-5 · Colour drift: 53 `design-system-color` findings across 41 pages** *after* the deliberate literals were documented. Genuine one-offs (`#244f73`, `#6eb5e8`, `#dcefff`, `#fff8e8`, `#8a5a08`, `#9ee8c8`…) that should become tokens or map onto existing ones. *Medium, low risk.*
-
-**P2-6 · The type scale is genuinely ad hoc: 555 `design-system-font-size` findings across all 63 pages, from 24 distinct sizes.** Decide a real ramp and map onto it. **Do not simply bless all 24 in DESIGN.md** - that documents disorder rather than a system. *Large, medium risk (visual regression surface).*
-
-**P2-7 · `.stats-grid` vs `.stat-cards`** - one widget, two class names, 7 pages versus 3. Invisible to users today; drifts further with every new page. *Small, low risk.*
-
 **P2-10 · Third-party favicons: ~560 requests to Google per full browse.** Mitigated - `no-referrer`, lazy, intrinsic sizes, and a verified fallback to initials - but not removed. Caching them into the repo via a refresh workflow would close it and matches the site's own "every page stands alone" principle. *Large, medium risk (new pipeline + ~560 committed files).*
-
-**P2-11 · Pre-existing CLS on three long-list pages, confirmed against a baseline.** `azure-policy-aliases` 0.604 at 1280 and 0.146 at 390, `azure-taggable-resources` 0.121 at 390, `azure-policies` 0.085 at 390, `azure-ip-ranges` 0.21 at 390. These were measured on the pre-session commit as well as on HEAD and are **identical in both**, so they predate the paging work and were not introduced by it. Same root cause as the six containers fixed in `1593a4a`: a results container that starts at zero height. The fix is the same tiered `:empty` reservation - the only reason it was not applied here is that these lists have no single settled height to reserve. *Medium, low risk.*
 
 ---
 
 ### P3 - hygiene, taste, and open questions
 
-**P3-1 · Record the confirmed detector false positives** so the hook stops reporting them: `side-tab` ×33 (article blockquotes and callouts, not navigation) and `broken-image` ×2 (lightbox placeholders in a *closed* `<dialog>` whose `src` is set on open). Both were verified by direct inspection. *Trivial.*
-
-**P3-4 · No structured data (JSON-LD) on any page.** `Person` on the homepage and `SoftwareApplication`/`TechArticle` on tools and articles would help a search-first site. *Medium.*
-
-**P3-5 · Print stylesheet on 2 of 63 pages.** Low value for tool pages; the articles are a plausible print target. *Small.*
-
-**P3-6 · `em-dash-overuse` on 6 article pages.** Cosmetic copy issue. *Trivial.*
-
-**P3-7 · Small UI items**, batchable: the `All > All` breadcrumb on `/icons/`; the patronising "Click a card to open it" hub subtitle; the Refresh action sitting inside the Cards/List view toggle on `/workflows/`; `.drag-handle` and some SVG transitions escaping `prefers-reduced-motion`; hub tool icons loading from external CDNs with no fallback; Enter in the hub search not opening the single remaining result. *Small each.*
-
-**P3-8 · Tools hub information scent** *(design direction - owner's call)*. 26 undifferentiated cards, no grouping, no record counts, no refresh timestamps - so the stated differentiator is invisible on the most important surface. Adding category headings plus a "last refreshed" and record-count chip per card would fix it without changing what the hub is. *Medium.*
-
-**P3-9 · French parity is undecided** *(product decision)*. `index_fr.html` is the only French page; 62 others are English-only, and `hreflang` alternates exist on 2 pages. `PRODUCT.md` records this as explicitly undecided. Either commit to FR for tool pages or drop the switch to a homepage-only affordance. *Large if pursued.*
-
 ---
 
 ### Closed this session - do not re-raise
+
+- **P2-11 + every other CLS source** — `bdd2146`. The four backlog pages are 0.000 at 1280/768/390. The sweep that verified it found three more nobody had measured, the worst being `/rss-watcher/activity/` at 0.566 - a sub-page, which is why it never appeared in a list. **Tables cannot be reserved with a fixed height** (they settle between 5,000px and 89,000px); `.table-wrap:has(tbody:empty) { min-height: 65vh }` keeps the footer below the fold at first paint and releases on first render.
+- **P2-5 · Colour drift, and the bug under it** — `e35bd2c`. The 53 findings were mostly the light theme's *missing* tokens written out by hand. Four pages referenced `--cp-warning`/`--cp-danger`/`--cp-danger-bg` with no light declaration at all. Two real dark-mode defects surfaced: the `/icons/` disclaimer panel and rss-watcher's keyword mark both stayed light-themed on a dark page. Token graph verified closed across 64 pages x 2 themes. **Take values from DESIGN.md, not from the literals you find** - my first pass adopted the drifted `#fff8e8`/`#fbe9e9` when the system documents `#fdf3e1`/`#fdf2f2`.
+- **P2-6 · Type scale** — `cd24b40`. 30 distinct sizes -> 17 named steps, nothing moved more than 0.05rem. **Do not snap onto the 7 named roles** - that moves headings up to 30% and is a redesign, not a cleanup. Merge near-duplicates only. The detector reads `typography.scale`, not a top-level key.
+- **P2-7 · `.stat-cards` unified into `.stats-grid`** — `e35bd2c`. One widget, one name, 10 pages.
+- **P3-1 · Detector false positives** — recorded via `hook-admin.mjs`, not hand-edited config: `side-tab` x33, `broken-image` x2, and `em-dash-overuse` as an owner style decision.
+- **P3-4 · JSON-LD** — `9c16aa0`. 63 pages, typed by what the page is. Values are read back out of the existing meta tags, so structured data cannot drift from them.
+- **P3-5 · Print stylesheet** — `9c16aa0`. 63 pages; chrome hidden, black on white, table headers repeat, no breaks inside rows or code blocks, external links print their URL.
+- **P3-6 · Em-dashes** — `7bf20fd`. 360 replaced across 82 files; 0 remain. **Deliberately not touched**: the ~244 in `*/updates.json` and rss-watcher feed titles are fetched from Microsoft, AWS and external feeds - rewriting them would misquote the source and the next refresh would undo it.
+- **P3-7 · UI details** — `5776b56`. The reduced-motion blocks named selectors, so everything added since escaped them; all 64 pages now carry the catch-all. `/icons/` no longer opens on "All > All". Enter in the hub search opens the last remaining card. Two items in that entry were stale: the hub loads no third-party icons, and Refresh already sat outside the view toggle.
+- **P3-8 · Tools hub** — `624fde5`. Six groups with counts, and an "Updated" date on 18 of 26 cards read from the same git-stamped manifest the data pages use, so the hub cannot advertise a freshness the tool would contradict.
+- **P3-9 · French parity** — settled by the owner: English everywhere except the portfolio homepage, which stays EN/FR. Not a gap.
 
 - **The Hugo blog under `blog/` is out of scope permanently** - owner's decision, 2026-08-29. It is an external blog he intends to delete. **Do not audit it, do not critique it, do not count it in page totals, and do not raise it as a gap.** Earlier notes in this file treated its ~45 pages as an unaudited half of the site; that framing is withdrawn. The site is the 63 pages at the repo root. Leave `blog/` alone unless the owner asks.
 - **P3-2 · `404.html`** - built *from* `guid-generator/index.html` by script rather than hand-written, so the shell (theme boot, tokens, header, footer, banner) stays byte-identical instead of becoming the one page that drifts. Carries `meta robots noindex, follow` in place of a canonical, and `build-sitemap.mjs` now excludes it - a noindex page listed in a sitemap is a contradiction search engines report as an error.
@@ -168,6 +158,14 @@ WCAG AA contrast in both themes · 24×24 touch targets sitewide · heading hier
 **The homepage deliberately does not showcase tools** - considered and rejected by the owner, recorded in `PRODUCT.md`.
 
 ## 7b. Measurement gotchas - read before you trust a number
+
+**A generated page will silently undo you.** Both the em-dash pass and the JSON-LD pass were applied to the 32 article pages, and the very next `node articles/build-articles.mjs` stripped them straight back out. Anything sitewide must go into `articles/build-articles.mjs` *and* the pages, then be re-verified after a rebuild. Watch for escape sequences too: the template stored `\\u2014`, which a search for the literal character will never find.
+
+**A blind string replace will rewrite declarations as well as usages.** Swapping `#fff8e8` for `var(--cp-warning-bg)` also rewrote `--cp-warning-bg: #fff8e8` into `--cp-warning-bg: var(--cp-warning-bg)` on 35 files. A property that resolves to itself resolves to nothing, so the fix briefly deleted the theme it was repairing. Only usages may hold a `var()`.
+
+**Check the token graph per theme, not per page.** "Is this token declared somewhere?" is the wrong question; "does every token this page *uses* resolve in *both* themes?" is the right one. That is what caught four pages rendering no danger border in light mode.
+
+**Sweep, do not work the list.** Every batch this session found something the backlog never mentioned, because sub-pages and non-obvious surfaces never make it into a list: `/rss-watcher/activity/` at 0.566 CLS, a 404ing article image, three unmeasured CLS regressions. The list is a starting point, not the scope.
 
 **Serve the previous commit on a second port before blaming your own change.** After adding the freshness row, three pages showed new CLS and four more showed large numbers. Running `git worktree add --detach <tmp> <prev-commit>` and serving it on another port answered in one pass what guessing would not have: `azure-policy-aliases` 0.604 and `azure-policies` 0.085 were **identical before the change**, so the paging work was innocent, while three genuinely were mine. Without that comparison the obvious move was to revert good work chasing a cause it did not have.
 
