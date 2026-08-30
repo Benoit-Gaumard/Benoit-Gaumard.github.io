@@ -22,6 +22,19 @@ const FILES = [
   "friends-websites/friends-websites.csv",
   "microsoft-portals/portals-urls.csv",
   "it-images/images.json",
+  // added so /tools/ can show a per-card "updated" date
+  "icons/icons.json",
+  "azure-release-updates/updates.json",
+  "m365-release-updates/updates.json",
+  "aws-release-updates/updates.json",
+  "rss-watcher/updates.json",
+  "microsoft-techcommunity-rss-feeds/feeds-status.json",
+  "github-ip-ranges/ip-ranges.json",
+  "azure-ip-ranges/ip-ranges.json",
+  "emoji-sheet/emojis.json",
+  "azure-taggable-resources/tag-support.json",
+  "azure-policy-aliases/policy-aliases.json",
+  "azure-policies/policydefinitions.json",
 ];
 
 const manifest = {};
