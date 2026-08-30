@@ -88,7 +88,42 @@ typography:
     fontSize: "1rem"
     fontWeight: 700
     lineHeight: 1.7
+  # The named roles above describe intent; `scale` is the closed set of sizes
+  # the whole UI may use. Consolidated from 30 ad hoc sizes: near-duplicates
+  # such as .72/.75/.76 and .87/.875/.88 were one intent spelled several ways
+  # and were merged onto the nearest step. Nothing moved more than 0.05rem.
+  # Always write the leading zero.
+  scale:
+    micro: "0.7rem"
+    caption: "0.75rem"
+    mono: "0.8rem"
+    label: "0.85rem"
+    small: "0.9rem"
+    compact: "0.95rem"
+    body: "1rem"
+    lead: "1.05rem"
+    title: "1.2rem"
+    subhead: "1.25rem"
+    section: "1.35rem"
+    heading: "1.5rem"
+    headingLg: "1.65rem"
+    h2: "1.9rem"
+    h1: "2rem"
+    hero: "2.25rem"
+    display: "2.5rem"
+    # Fluid endpoints: the min/max terms of clamp() on headings that scale with
+    # the viewport, not extra static steps. No element renders at a size between
+    # them by accident.
+    fluidH2Min: "1.8rem"
+    fluidHeroMax: "2.75rem"
+    fluidTitleMax: "2.85rem"
+    fluidDisplayMax: "3.25rem"
+    fluidDisplayMaxLg: "3.5rem"
+    fluidClockMax: "4.5rem"   # world-clock face, the largest type on the site
 rounded:
+  # 2px is the tightest radius: flag swatches and inline keyword highlights,
+  # where anything rounder reads as a button rather than a mark.
+  tight: "2px"
   hairline: "3px"
   xs: "4px"
   chip: "5px"
