@@ -41,8 +41,8 @@ For the past few years, my professional focus has been on developing Infrastruct
 
 ## Multi provider
 
-- **Terraform**: a multi-cloud Infrastructure as Code (IaC) tool designed for provisioning resources across various cloud platforms — multi-cloud support (Azure, AWS, GCP, etc.), enabling hybrid cloud deployments.
-- **Bicep**: a domain-specific IaC tool for deploying Azure resources, designed as a simplified alternative to Azure Resource Manager (ARM) templates — Azure-only, deeply integrated with the Azure ecosystem.
+- **Terraform**: a multi-cloud Infrastructure as Code (IaC) tool designed for provisioning resources across various cloud platforms - multi-cloud support (Azure, AWS, GCP, etc.), enabling hybrid cloud deployments.
+- **Bicep**: a domain-specific IaC tool for deploying Azure resources, designed as a simplified alternative to Azure Resource Manager (ARM) templates - Azure-only, deeply integrated with the Azure ecosystem.
 
 ## Editors
 
@@ -52,7 +52,7 @@ For the past few years, my professional focus has been on developing Infrastruct
 ## State management
 
 - **Terraform**: requires a state file to track resource changes; supports remote state storage (e.g., Azure Blob Storage, S3).
-- **Bicep**: stateless — relies on Azure Resource Manager's existing state, eliminating the need for a separate state file.
+- **Bicep**: stateless - relies on Azure Resource Manager's existing state, eliminating the need for a separate state file.
 
 ## Learning curve
 
@@ -76,7 +76,7 @@ For the past few years, my professional focus has been on developing Infrastruct
 
 ## To conclude
 
-In conclusion, there is no "IaC war" — both tools have their strengths. For many use cases, I prefer Bicep over Terraform, particularly in scenarios where no one else will manage the IaC, or to sidestep chicken-and-egg challenges such as provisioning the storage account used for Terraform's own state.
+In conclusion, there is no "IaC war" - both tools have their strengths. For many use cases, I prefer Bicep over Terraform, particularly in scenarios where no one else will manage the IaC, or to sidestep chicken-and-egg challenges such as provisioning the storage account used for Terraform's own state.
 
 For other use cases, I'll stick with Terraform, as it keeps people aligned with a consistent, multi-cloud approach and provides robust state management, making it ideal for more complex or diverse infrastructure scenarios. The Terraform community is also currently more established and active than the Bicep community, largely due to the longer maturity of the product.
 

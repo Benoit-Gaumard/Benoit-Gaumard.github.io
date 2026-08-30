@@ -30,12 +30,12 @@
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides">
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://benoit-gaumard.io/articles/what-is-an-azure-landing-zone/">
-  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
   <title>What Is an Azure Landing Zone? | Benoit Gaumard</title>
 
   <style>
@@ -350,7 +350,7 @@
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -400,7 +400,7 @@
     <div class="article-feature-image"><img src="/articles/images/azure-landing-zone.svg" alt="What Is an Azure Landing Zone?"></div>
 
     <article class="article-body">
-      <p>An Azure landing zone is the environment where you deploy and operate your applications and workloads. It is not a single resource — it is a combination of subscriptions, networking, identity, policy, and management tooling designed to scale safely as you onboard more teams and workloads.</p>
+      <p>An Azure landing zone is the environment where you deploy and operate your applications and workloads. It is not a single resource - it is a combination of subscriptions, networking, identity, policy, and management tooling designed to scale safely as you onboard more teams and workloads.</p>
 <nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#why-landing-zones-matter">Why landing zones matter</a></li><li class="toc-level-2"><a href="#the-core-building-blocks">The core building blocks</a></li><li class="toc-level-3"><a href="#a-minimal-management-group-hierarchy">A minimal management group hierarchy</a></li><li class="toc-level-2"><a href="#deploying-a-landing-zone-with-terraform">Deploying a landing zone with Terraform</a></li><li class="toc-level-2"><a href="#landing-zone-vs-subscription-vesting">Landing zone vs. subscription vesting</a></li><li class="toc-level-2"><a href="#where-to-go-next">Where to go next</a></li></ul></nav>
 <h2 id="why-landing-zones-matter">Why landing zones matter</h2>
 <p>Most organizations don't start with a landing zone. They start with one subscription, a handful of resources, and no real governance. That works fine until a second team joins, then a third, and suddenly nobody can answer simple questions like <em>"who can create a public IP address?"</em> or <em>"which subscription does this cost belong to?"</em></p>
@@ -437,13 +437,13 @@
   subscription_management_group_association_enabled = true
   subscription_management_group_id                   = "corp"
 }</code></pre></div>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Landing zone deployments usually run with highly privileged credentials at the tenant or management-group scope. Keep this pipeline separate from your application pipelines, protect it with required reviewers, and use OIDC federated credentials instead of long-lived secrets — see <a href="/articles/connect-github-and-azure-for-deployment-using-oidc/">Connect GitHub and Azure for deployment using OIDC</a> for a full walkthrough.</p></div></div>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Landing zone deployments usually run with highly privileged credentials at the tenant or management-group scope. Keep this pipeline separate from your application pipelines, protect it with required reviewers, and use OIDC federated credentials instead of long-lived secrets - see <a href="/articles/connect-github-and-azure-for-deployment-using-oidc/">Connect GitHub and Azure for deployment using OIDC</a> for a full walkthrough.</p></div></div>
 <hr>
 <h2 id="landing-zone-vs-subscription-vesting">Landing zone vs. subscription vesting</h2>
-<p>A landing zone is not the same thing as "a subscription." A single landing zone (say, <code>Corp</code>) can contain many subscriptions, and a single subscription usually hosts many workloads. The landing zone defines the <em>guardrails</em> that every subscription underneath it inherits automatically — new subscriptions don't require manual policy configuration.</p>
+<p>A landing zone is not the same thing as "a subscription." A single landing zone (say, <code>Corp</code>) can contain many subscriptions, and a single subscription usually hosts many workloads. The landing zone defines the <em>guardrails</em> that every subscription underneath it inherits automatically - new subscriptions don't require manual policy configuration.</p>
 <h2 id="where-to-go-next">Where to go next</h2>
 <ol><li>Read the <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/" target="_blank" rel="noopener noreferrer">Azure Landing Zone conceptual architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> on Microsoft Learn.</li><li>Decide whether you need the full enterprise-scale architecture or a lighter-weight starter landing zone.</li><li>Pick an Infrastructure as Code tool (Bicep or Terraform) and automate subscription vending from day one.</li></ol>
-<p>Landing zones are a journey, not a one-time setup — expect to revisit policy assignments and network design as your platform grows.</p>
+<p>Landing zones are a journey, not a one-time setup - expect to revisit policy assignments and network design as your platform grows.</p>
     </article>
 
     <div class="article-footer-nav">

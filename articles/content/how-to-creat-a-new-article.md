@@ -44,7 +44,7 @@ featured = true
 
 ## 2. Headings and the table of contents
 
-Use `##`, `###`, and `#### ` for section headings — don't use a single `#`, since the page title already renders as the `<h1>`. Put `[[toc]]` anywhere in the body (it's used at the top of this very page) and it's replaced with a table of contents built from every `##`/`###`/`####` heading.
+Use `##`, `###`, and `#### ` for section headings - don't use a single `#`, since the page title already renders as the `<h1>`. Put `[[toc]]` anywhere in the body (it's used at the top of this very page) and it's replaced with a table of contents built from every `##`/`###`/`####` heading.
 
 ## 3. Lists
 
@@ -110,7 +110,7 @@ A local image, served from this same `/articles/images/` folder:
 
 ![How to create a new article illustration](/articles/images/how-to-create-a-new-article.svg)
 
-A remote image also works — the build script doesn't care where it's hosted:
+A remote image also works - the build script doesn't care where it's hosted:
 
 ![Azure logo](https://learn.microsoft.com/favicon.ico "Loaded from a remote URL")
 
@@ -122,4 +122,4 @@ External link, which automatically opens in a new tab: [Hugo documentation](http
 
 ---
 
-That's the whole system — copy this file, replace the frontmatter and the body, and drop it into `articles/content/` as your next post.
+That's the whole system - copy this file, replace the frontmatter and the body, and drop it into `articles/content/` as your next post.

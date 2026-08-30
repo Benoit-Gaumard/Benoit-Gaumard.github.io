@@ -8,7 +8,7 @@ categories = ["Azure"]
 featureImage = "/articles/images/rest-api.jpeg"
 +++
 
-Microsoft provides a list of all REST APIs available for Azure in the [REST API browser](https://learn.microsoft.com/en-us/rest/api/azure/). For example, the API dedicated to Compute lets you select [Virtual Machines](https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines) and gives you access to all the actions you can perform on that object — for example, to [list all VMs](https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all) in an Azure subscription.
+Microsoft provides a list of all REST APIs available for Azure in the [REST API browser](https://learn.microsoft.com/en-us/rest/api/azure/). For example, the API dedicated to Compute lets you select [Virtual Machines](https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines) and gives you access to all the actions you can perform on that object - for example, to [list all VMs](https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all) in an Azure subscription.
 
 The major advantage of this site is that it allows live testing of the selected API (by clicking **Try It**) from a web browser, without needing to install a third-party tool such as Postman.
 

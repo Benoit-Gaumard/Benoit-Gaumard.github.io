@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://benoit-gaumard.io/workflows/" />
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
@@ -465,7 +465,7 @@
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -631,7 +631,7 @@
 
     function formatDuration(startIso, endIso) {
       const ms = new Date(endIso) - new Date(startIso);
-      if (!Number.isFinite(ms) || ms < 0) return "\u2014";
+      if (!Number.isFinite(ms) || ms < 0) return "-";
       const totalSeconds = Math.round(ms / 1000);
       const minutes = Math.floor(totalSeconds / 60);
       const seconds = totalSeconds % 60;
@@ -658,7 +658,7 @@
       if (error || !run) {
         // The runs endpoint is public but GitHub allows only 60 unauthenticated
         // requests per hour per IP, and this page asks for one per workflow on
-        // every visit — so a 403 here is a quota, not a broken pipeline. The
+        // every visit - so a 403 here is a quota, not a broken pipeline. The
         // badge is served from github.com without that limit and always shows
         // the true current status, so lead with it instead of crying failure.
         const rateLimited = error && /\b(403|429)\b/.test(error.message || "");
@@ -685,7 +685,7 @@
         <img class="workflow-badge" src="${badgeUrl}" alt="${workflow.name} status badge" width="148" height="20" loading="lazy" decoding="async">
         <dl class="workflow-meta">
           <div><dt>Run</dt><dd>#${run.run_number}</dd></div>
-          <div><dt>Branch</dt><dd>${run.head_branch || "\u2014"}</dd></div>
+          <div><dt>Branch</dt><dd>${run.head_branch || "-"}</dd></div>
           <div><dt>Started</dt><dd>${relativeTime(run.run_started_at)} &middot; ${formatDateTime(run.run_started_at)}</dd></div>
           <div><dt>Duration</dt><dd>${duration}</dd></div>
         </dl>

@@ -164,7 +164,7 @@ function escapeXml(text) {
 }
 
 function buildRssFeed(items, lang) {
-  const title = lang === "fr" ? "RSS Watcher \u2013 Actu tech en fran\u00e7ais" : "RSS Watcher \u2013 Tech news in English";
+  const title = lang === "fr" ? "RSS Watcher - Actu tech en fran\u00e7ais" : "RSS Watcher - Tech news in English";
   const description = lang === "fr"
     ? "Actualit\u00e9s tech du moment, agr\u00e9g\u00e9es depuis de nombreux flux RSS francophones."
     : "Tech news of the moment, aggregated from many English-language RSS feeds.";

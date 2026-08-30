@@ -30,12 +30,12 @@
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides">
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://benoit-gaumard.io/articles/how-to-creat-a-new-article/">
-  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
   <title>How to Create a New Article | Benoit Gaumard</title>
 
   <style>
@@ -350,7 +350,7 @@
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -416,7 +416,7 @@ featured = true
 +++</code></pre></div>
 <div class="table-wrap"><table><thead><tr><th>Field</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td><code>author</code></td><td>No</td><td>Defaults to "Benoit Gaumard"</td></tr><tr><td><code>title</code></td><td>Yes</td><td>Shown as the page <code>&lt;h1&gt;</code> and in the article list</td></tr><tr><td><code>date</code></td><td>Yes</td><td><code>YYYY-MM-DD</code>, used for sorting and the RSS <code>pubDate</code></td></tr><tr><td><code>description</code></td><td>Yes</td><td>Used in the article list, meta description, and RSS</td></tr><tr><td><code>tags</code></td><td>No</td><td>Free-form list, shown as pills at the top of the article</td></tr><tr><td><code>categories</code></td><td>Yes</td><td>Powers the <strong>Categories</strong> sidebar and its counts on <code>/articles/</code></td></tr><tr><td><code>featureImage</code></td><td>No</td><td>Shown above the article and as the card thumbnail</td></tr><tr><td><code>featured</code></td><td>No</td><td><code>true</code> adds the article to the <strong>Featured Posts</strong> sidebar</td></tr><tr><td><code>draft</code></td><td>No</td><td><code>true</code> excludes the article entirely from the build</td></tr></tbody></table></div>
 <h2 id="2-headings-and-the-table-of-contents">2. Headings and the table of contents</h2>
-<p>Use <code>##</code>, <code>###</code>, and <code>#### </code> for section headings — don't use a single <code>#</code>, since the page title already renders as the <code>&lt;h1&gt;</code>. Put <code>[[toc]]</code> anywhere in the body (it's used at the top of this very page) and it's replaced with a table of contents built from every <code>##</code>/<code>###</code>/<code>####</code> heading.</p>
+<p>Use <code>##</code>, <code>###</code>, and <code>#### </code> for section headings - don't use a single <code>#</code>, since the page title already renders as the <code>&lt;h1&gt;</code>. Put <code>[[toc]]</code> anywhere in the body (it's used at the top of this very page) and it's replaced with a table of contents built from every <code>##</code>/<code>###</code>/<code>####</code> heading.</p>
 <h2 id="3-lists">3. Lists</h2>
 <p>Bullet list:</p>
 <ul><li>Local development happens with <code>node articles/build-articles.mjs</code></li><li>Every <code>.md</code> file becomes <code>articles/&lt;slug&gt;/index.html</code></li><li><code>draft = true</code> skips a file entirely</li></ul>
@@ -439,13 +439,13 @@ Get-ChildItem articles/*/index.html</code></pre></div>
 <h2 id="8-images">8. Images</h2>
 <p>A local image, served from this same <code>/articles/images/</code> folder:</p>
 <figure class="article-figure"><img src="/articles/images/how-to-create-a-new-article.svg" alt="How to create a new article illustration" loading="lazy"></figure>
-<p>A remote image also works — the build script doesn't care where it's hosted:</p>
+<p>A remote image also works - the build script doesn't care where it's hosted:</p>
 <figure class="article-figure"><img src="https://learn.microsoft.com/favicon.ico" alt="Azure logo" loading="lazy"><figcaption>Loaded from a remote URL</figcaption></figure>
 <h2 id="9-links">9. Links</h2>
 <p>Internal link to another article: <a href="/articles/what-is-an-azure-landing-zone/">What Is an Azure Landing Zone?</a></p>
 <p>External link, which automatically opens in a new tab: <a href="https://gohugo.io/documentation/" target="_blank" rel="noopener noreferrer">Hugo documentation <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></p>
 <hr>
-<p>That's the whole system — copy this file, replace the frontmatter and the body, and drop it into <code>articles/content/</code> as your next post.</p>
+<p>That's the whole system - copy this file, replace the frontmatter and the body, and drop it into <code>articles/content/</code> as your next post.</p>
     </article>
 
     <div class="article-footer-nav">

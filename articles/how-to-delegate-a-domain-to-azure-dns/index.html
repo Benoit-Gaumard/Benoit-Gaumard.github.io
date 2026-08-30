@@ -30,12 +30,12 @@
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides">
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://benoit-gaumard.io/articles/how-to-delegate-a-domain-to-azure-dns/">
-  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
   <title>How to Delegate a Domain to Azure DNS | Benoit Gaumard</title>
 
   <style>
@@ -350,7 +350,7 @@
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -401,7 +401,7 @@
 
     <article class="article-body">
       <p>Azure DNS allows you to host a DNS domain and manage the DNS zone records. To host your domain in Azure, the zone must be created in Azure and delegated to Azure's authoritative DNS servers with a domain registrar.</p>
-<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Azure DNS isn't a domain registrar — you must buy your domain name first from a registrar like GoDaddy, OVH, Cloudflare, etc.</p></div></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Azure DNS isn't a domain registrar - you must buy your domain name first from a registrar like GoDaddy, OVH, Cloudflare, etc.</p></div></div>
 <p>The official documentation is available here:</p>
 <ul><li><a href="https://learn.microsoft.com/en-us/azure/dns/dns-domain-delegation" target="_blank" rel="noopener noreferrer">What is DNS delegation <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://learn.microsoft.com/en-us/azure/dns/dns-delegate-domain-azure-dns" target="_blank" rel="noopener noreferrer">Host your domain in Azure DNS <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li></ul>
 <nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#context">Context</a></li><li class="toc-level-2"><a href="#creating-a-new-public-dns-zone-in-azure">Creating a new public DNS zone in Azure</a></li><li class="toc-level-2"><a href="#delegate-the-domain">Delegate the domain</a></li><li class="toc-level-2"><a href="#create-dns-records">Create DNS records</a></li><li class="toc-level-2"><a href="#test-the-delegation">Test the delegation</a></li></ul></nav>
@@ -415,7 +415,7 @@
 <p>To do this, I currently have to configure DNS settings in two different places: the <a href="https://portal.azure.com" target="_blank" rel="noopener noreferrer">Azure portal <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> and the <a href="https://www.ovh.com/manager" target="_blank" rel="noopener noreferrer">OVH portal <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>. The goal of this article is to show how to centralize DNS zone management in Azure by delegating the zone currently hosted by OVH.</p>
 <h2 id="creating-a-new-public-dns-zone-in-azure">Creating a new public DNS zone in Azure</h2>
 <p>Azure DNS allows you to host a DNS zone and manage DNS records for a domain directly in Azure. For DNS queries for a domain to reach Azure DNS, the domain must be delegated to Azure DNS from the parent domain.</p>
-<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Keep in mind, Azure DNS is not the domain registrar — OVH remains the registrar.</p></div></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Keep in mind, Azure DNS is not the domain registrar - OVH remains the registrar.</p></div></div>
 <p>Steps:</p>
 <ol><li>Sign in to the Azure portal and search for <strong>DNS Zone</strong> in the Marketplace.</li></ol>
 <figure class="article-figure"><img src="/articles/images/dns-delegation/azure-dns-zone.png" alt="Search for DNS Zone in the Azure Marketplace" loading="lazy"></figure>
@@ -426,7 +426,7 @@
 <div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Azure allows you to create a DNS zone with any name (e.g., microsoft.com, google.fr, toto.local), even if you are not the owner. However, to actually manage the zone and add records, you must be the domain owner.</p></div></div>
 <p>To manage the zone, Azure provides four name servers (NS) by default to ensure redundancy in case of failure.</p>
 <figure class="article-figure"><img src="/articles/images/dns-delegation/azure-ns-servers.png" alt="Azure DNS name servers" loading="lazy"></figure>
-<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Copy the NS server names and keep them handy — they will be required to configure the delegation in the OVH portal.</p></div></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Copy the NS server names and keep them handy - they will be required to configure the delegation in the OVH portal.</p></div></div>
 <h2 id="delegate-the-domain">Delegate the domain</h2>
 <p>Now that the DNS zone is created and we have the name servers, we need to update the parent domain with the Azure DNS name servers. Each registrar has its own tools for managing DNS and modifying name server records.</p>
 <p>Steps in OVH:</p>
@@ -440,7 +440,7 @@
 <figure class="article-figure"><img src="/articles/images/dns-delegation/apply-ovh-dns-config.png" alt="Apply OVH DNS configuration" loading="lazy"></figure>
 <ol><li>The DNS servers for the zone are now the Azure DNS servers.</li></ol>
 <figure class="article-figure"><img src="/articles/images/dns-delegation/custom-dns-servers.png" alt="Custom DNS servers configured" loading="lazy"></figure>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Be careful — your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.</p></div></div>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Be careful - your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.</p></div></div>
 <h2 id="create-dns-records">Create DNS records</h2>
 <div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Now that Azure DNS is responsible for managing the zone, all administrative tasks should be done in Azure. Do nothing on the OVH portal.</p></div></div>
 <p>First, you need to recreate the appropriate DNS records (A, CNAME, NS, MX, TXT, etc.) so that services return to normal and your website displays correctly.</p>
@@ -452,7 +452,7 @@
 <ol><li>Next, create a <code>www</code> record of type <strong>CNAME</strong> pointing to the root domain.</li></ol>
 <figure class="article-figure"><img src="/articles/images/dns-delegation/cname-record.png" alt="CNAME record pointing to root domain" loading="lazy"></figure>
 <h2 id="test-the-delegation">Test the delegation</h2>
-<p>Once the delegation is complete, you can verify it works using a tool such as <code>nslookup</code> or <a href="https://www.zonemaster.net/" target="_blank" rel="noopener noreferrer">zonemaster.net <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>. You may need to wait 10 minutes or more after delegation before verification — DNS propagation can take some time.</p>
+<p>Once the delegation is complete, you can verify it works using a tool such as <code>nslookup</code> or <a href="https://www.zonemaster.net/" target="_blank" rel="noopener noreferrer">zonemaster.net <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>. You may need to wait 10 minutes or more after delegation before verification - DNS propagation can take some time.</p>
 <p>There is no need to explicitly specify the Azure DNS name servers. If the delegation is configured correctly, the standard DNS resolution process will automatically detect the Azure name servers.</p>
 <p>Clear the DNS cache first:</p>
 <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">ipconfig /flushdns</code></pre></div>

@@ -51,7 +51,7 @@ FROM SYS.database_principals DP
 WHERE DP.type IN ('S', 'X', 'E')
 ```
 
-Replace `your-managed-identity-name` with the actual name of your managed identity — usually the web app name.
+Replace `your-managed-identity-name` with the actual name of your managed identity - usually the web app name.
 
 ## Connect to Azure SQL Database with PDO
 

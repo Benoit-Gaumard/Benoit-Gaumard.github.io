@@ -30,11 +30,11 @@ This returns all the resources that contain the `PROD` tag. You can separate cos
 
 ## Common tags
 
-- **Environment** — the environment, which may be sandbox, dev, or prod.
-- **CreatedBy** — the person who created the resource.
-- **CreationDate** — when the resource was created.
-- **TimeToLive** — if it is a temporary resource, how long it must live.
-- **Criticality** — the importance of the resource.
+- **Environment** - the environment, which may be sandbox, dev, or prod.
+- **CreatedBy** - the person who created the resource.
+- **CreationDate** - when the resource was created.
+- **TimeToLive** - if it is a temporary resource, how long it must live.
+- **Criticality** - the importance of the resource.
 
 The `CreationDate` tag may be useful if you want to find all the resources created on the same day.
 

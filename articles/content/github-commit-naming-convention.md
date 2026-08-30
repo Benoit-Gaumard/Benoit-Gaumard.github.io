@@ -58,7 +58,7 @@ Keep it concise:
 - Limit subject lines to 50 characters.
 - Use present tense (e.g., "fix" instead of "fixed").
 - Wrap the body at 72 characters per line if additional context is needed.
-- Keep commits small and focused — avoid committing thousands of lines at once.
+- Keep commits small and focused - avoid committing thousands of lines at once.
 - Avoid committing large changes (e.g., 10,000 lines or 100 files), as they are difficult to review.
 
 ## Writing meaningful commit messages

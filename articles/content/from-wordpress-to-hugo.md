@@ -12,7 +12,7 @@ Why I migrated from WordPress to a Hugo website. Pros and cons.
 
 ## WordPress vs. Hugo: understanding the difference
 
-Building a website today means choosing between many different tools and platforms. Two popular options — **WordPress** and **Hugo** — offer very different approaches to website creation, each with its strengths and ideal use cases. In this post, I dive into the core differences between WordPress and Hugo and explore why Hugo may be the perfect fit for your needs.
+Building a website today means choosing between many different tools and platforms. Two popular options - **WordPress** and **Hugo** - offer very different approaches to website creation, each with its strengths and ideal use cases. In this post, I dive into the core differences between WordPress and Hugo and explore why Hugo may be the perfect fit for your needs.
 
 ## What is WordPress?
 
@@ -39,15 +39,15 @@ Hugo is a **static site generator** (SSG) known for its speed and simplicity. In
 
 ## Key differences
 
-**Content management** — WordPress offers a user-friendly dashboard, easy content editing, and media management, making it ideal for non-developers and content-heavy sites. Hugo content is written in Markdown and stored as static files, which can be slightly challenging for non-technical users but provides a lightweight, code-driven approach.
+**Content management** - WordPress offers a user-friendly dashboard, easy content editing, and media management, making it ideal for non-developers and content-heavy sites. Hugo content is written in Markdown and stored as static files, which can be slightly challenging for non-technical users but provides a lightweight, code-driven approach.
 
-**Speed and performance** — Database queries, plugins, and a larger codebase can impact WordPress performance, especially for high-traffic sites. Hugo's static HTML files load quickly and efficiently, allowing it to handle traffic spikes with minimal load times.
+**Speed and performance** - Database queries, plugins, and a larger codebase can impact WordPress performance, especially for high-traffic sites. Hugo's static HTML files load quickly and efficiently, allowing it to handle traffic spikes with minimal load times.
 
-**Hosting and scalability** — WordPress typically requires a hosting environment with a server and database. Hugo's static pages can be hosted on platforms like GitHub Pages, Netlify, or any basic web server, which keeps hosting costs low and scalability easy.
+**Hosting and scalability** - WordPress typically requires a hosting environment with a server and database. Hugo's static pages can be hosted on platforms like GitHub Pages, Netlify, or any basic web server, which keeps hosting costs low and scalability easy.
 
-**Security** — The reliance on plugins and a server with a database can expose WordPress sites to security risks if not carefully managed. Hugo sites are secure by design, as there's no backend database or complex server interaction, minimizing vulnerability to attacks.
+**Security** - The reliance on plugins and a server with a database can expose WordPress sites to security risks if not carefully managed. Hugo sites are secure by design, as there's no backend database or complex server interaction, minimizing vulnerability to attacks.
 
-**Customization and flexibility** — WordPress is highly customizable with plugins and themes but may require more resources to optimize for performance. Hugo is flexible for developers, but without a plugin ecosystem — customizations are done by editing configuration files and theme templates.
+**Customization and flexibility** - WordPress is highly customizable with plugins and themes but may require more resources to optimize for performance. Hugo is flexible for developers, but without a plugin ecosystem - customizations are done by editing configuration files and theme templates.
 
 ## Advantages of using Hugo
 

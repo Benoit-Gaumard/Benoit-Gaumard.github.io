@@ -285,12 +285,12 @@ function pageShell({ title, description, canonical, extraHead = "", bodyClass = 
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides">
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="${canonical}">
-  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard — Articles" href="/articles/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
   <title>${escapeHtml(title)}</title>
 ${extraHead}
   <style>
@@ -526,7 +526,7 @@ ${ARTICLE_CSS}
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">\u{1F44B} Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new \u2014 feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">\u{1F44B} Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -827,7 +827,7 @@ ${a.categories.map((c) => `      <category>${escapeHtml(c)}</category>`).join("\
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Benoit Gaumard — Articles</title>
+    <title>Benoit Gaumard - Articles</title>
     <link>${SITE_URL}/articles/</link>
     <atom:link href="${SITE_URL}/articles/rss.xml" rel="self" type="application/rss+xml"/>
     <description>Latest articles and how-to guides by Benoit Gaumard.</description>

@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://benoit-gaumard.io/percentage-calculator/" />
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
@@ -415,7 +415,7 @@
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -593,7 +593,7 @@
     let addSubtractOperation = "add";
 
     function formatNumber(value) {
-      if (!Number.isFinite(value)) return "\u2014";
+      if (!Number.isFinite(value)) return "-";
       const rounded = Math.round(value * 10000) / 10000;
       return rounded.toLocaleString(undefined, { maximumFractionDigits: 4 });
     }
@@ -608,7 +608,7 @@
       const percent = parseFloat(elements.ofPercent.value);
       const value = parseFloat(elements.ofValue.value);
       if (!Number.isFinite(percent) || !Number.isFinite(value)) {
-        setResult(elements.ofResult, "\u2014", "Enter valid numbers.", true);
+        setResult(elements.ofResult, "-", "Enter valid numbers.", true);
         return;
       }
       const result = (percent / 100) * value;
@@ -619,7 +619,7 @@
       const x = parseFloat(elements.iwpX.value);
       const y = parseFloat(elements.iwpY.value);
       if (!Number.isFinite(x) || !Number.isFinite(y) || y === 0) {
-        setResult(elements.iwpResult, "\u2014", y === 0 ? "Y cannot be zero." : "Enter valid numbers.", true);
+        setResult(elements.iwpResult, "-", y === 0 ? "Y cannot be zero." : "Enter valid numbers.", true);
         return;
       }
       const result = (x / y) * 100;
@@ -630,7 +630,7 @@
       const from = parseFloat(elements.changeFrom.value);
       const to = parseFloat(elements.changeTo.value);
       if (!Number.isFinite(from) || !Number.isFinite(to) || from === 0) {
-        setResult(elements.changeResult, "\u2014", from === 0 ? "From value cannot be zero." : "Enter valid numbers.", true);
+        setResult(elements.changeResult, "-", from === 0 ? "From value cannot be zero." : "Enter valid numbers.", true);
         return;
       }
       const result = ((to - from) / Math.abs(from)) * 100;
@@ -643,7 +643,7 @@
       const value = parseFloat(elements.asValue.value);
       const percent = parseFloat(elements.asPercent.value);
       if (!Number.isFinite(value) || !Number.isFinite(percent)) {
-        setResult(elements.asResult, "\u2014", "Enter valid numbers.", true);
+        setResult(elements.asResult, "-", "Enter valid numbers.", true);
         return;
       }
       const result = addSubtractOperation === "add" ? value * (1 + percent / 100) : value * (1 - percent / 100);
