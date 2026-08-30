@@ -15,6 +15,28 @@
   <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://benoit-gaumard.io/rss-watcher/activity/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Feeds Activity | RSS Watcher",
+    "description": "Overview of all RSS feeds tracked by RSS Watcher and their latest publication dates.",
+    "url": "https://benoit-gaumard.io/rss-watcher/activity/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Benoit Gaumard",
+      "url": "https://benoit-gaumard.io/"
+    }
+  }
+  </script>
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
@@ -413,7 +435,25 @@
     }
     /* the table can settle past 10,000px, so hold a viewport-relative box
        instead of a fixed one and let :has() release it on first render */
-    .table-wrap:has(tbody:empty) { min-height: 65vh; }</style>
+    .table-wrap:has(tbody:empty) { min-height: 65vh; }    @media print {
+      /* Printing a tool page should yield the data, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
