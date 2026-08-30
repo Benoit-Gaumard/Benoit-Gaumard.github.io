@@ -11,7 +11,7 @@ featureImage = "/articles/images/azure-dns-zone.png"
 Azure DNS allows you to host a DNS domain and manage the DNS zone records. To host your domain in Azure, the zone must be created in Azure and delegated to Azure's authoritative DNS servers with a domain registrar.
 
 :::note
-Azure DNS isn't a domain registrar — you must buy your domain name first from a registrar like GoDaddy, OVH, Cloudflare, etc.
+Azure DNS isn't a domain registrar - you must buy your domain name first from a registrar like GoDaddy, OVH, Cloudflare, etc.
 :::
 
 The official documentation is available here:
@@ -42,7 +42,7 @@ To do this, I currently have to configure DNS settings in two different places: 
 Azure DNS allows you to host a DNS zone and manage DNS records for a domain directly in Azure. For DNS queries for a domain to reach Azure DNS, the domain must be delegated to Azure DNS from the parent domain.
 
 :::note
-Keep in mind, Azure DNS is not the domain registrar — OVH remains the registrar.
+Keep in mind, Azure DNS is not the domain registrar - OVH remains the registrar.
 :::
 
 Steps:
@@ -68,7 +68,7 @@ To manage the zone, Azure provides four name servers (NS) by default to ensure r
 ![Azure DNS name servers](/articles/images/dns-delegation/azure-ns-servers.png)
 
 :::note
-Copy the NS server names and keep them handy — they will be required to configure the delegation in the OVH portal.
+Copy the NS server names and keep them handy - they will be required to configure the delegation in the OVH portal.
 :::
 
 ## Delegate the domain
@@ -99,7 +99,7 @@ Steps in OVH:
    ![Custom DNS servers configured](/articles/images/dns-delegation/custom-dns-servers.png)
 
 :::warning
-Be careful — your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.
+Be careful - your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.
 :::
 
 ## Create DNS records
@@ -128,7 +128,7 @@ To display my website, the first record to create in Azure DNS is an **A** recor
 
 ## Test the delegation
 
-Once the delegation is complete, you can verify it works using a tool such as `nslookup` or [zonemaster.net](https://www.zonemaster.net/). You may need to wait 10 minutes or more after delegation before verification — DNS propagation can take some time.
+Once the delegation is complete, you can verify it works using a tool such as `nslookup` or [zonemaster.net](https://www.zonemaster.net/). You may need to wait 10 minutes or more after delegation before verification - DNS propagation can take some time.
 
 There is no need to explicitly specify the Azure DNS name servers. If the delegation is configured correctly, the standard DNS resolution process will automatically detect the Azure name servers.
 

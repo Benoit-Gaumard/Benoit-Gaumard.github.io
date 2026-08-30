@@ -8,7 +8,7 @@ web
 
 ## Users
 
-**Primary: Azure and cloud engineers, mid-task.** They arrive from a search result or a shared link, usually straight onto a single tool or article page, needing one specific answer — which Azure regions exist and where, what a policy alias resolves to, which IP ranges to allow, what a naming convention should look like. They are not browsing; they are unblocking themselves.
+**Primary: Azure and cloud engineers, mid-task.** They arrive from a search result or a shared link, usually straight onto a single tool or article page, needing one specific answer - which Azure regions exist and where, what a policy alias resolves to, which IP ranges to allow, what a naming convention should look like. They are not browsing; they are unblocking themselves.
 
 **Secondary: recruiters and prospective clients** evaluating Benoit Gaumard as an Azure consultant. They enter through the homepage (`index.html` / `index_fr.html`) and want to establish credibility quickly.
 
@@ -20,7 +20,7 @@ A personal site and Azure tooling hub at `benoit-gaumard.io`. It exists to (a) g
 
 It currently ships 26 tool and reference pages, 32 how-to articles, a Hugo blog, and a bilingual homepage. Success looks like a practitioner finding the answer on the page they landed on, without needing the rest of the site.
 
-**The owner uses this site himself, daily, as a working tool.** That is a first-class purpose, not a side effect — it is why the tool pages are dense and utilitarian rather than presentational.
+**The owner uses this site himself, daily, as a working tool.** That is a first-class purpose, not a side effect - it is why the tool pages are dense and utilitarian rather than presentational.
 
 ### Settled: the homepage is not a tools showcase
 
@@ -58,20 +58,20 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 
 ## Evidence on Hand
 
-- **7 Microsoft certifications** — AZ-900, AI-900, SC-900, AZ-500, AZ-700, AZ-104, AZ-305 — backed by a public Microsoft Learn transcript URL.
+- **7 Microsoft certifications** - AZ-900, AI-900, SC-900, AZ-500, AZ-700, AZ-104, AZ-305 - backed by a public Microsoft Learn transcript URL.
 - **22 named large-account clients** supported at Microsoft (Thales, CEA, Orano, ENGIE, EDF, Schneider Electric, Orange Business, Sopra Steria, Stellantis, Forvia, Naval Group, Coopérative U, Colas, BNP Paribas, Société Générale, BRED, Groupe BPCE, AXA, CNP, Vinci, Amadeus, HB Antwerp).
 - **Career timeline from 2005**: Bouygues Construction/Structis, BNP Paribas Arval, AXA, Crédit Agricole CIB, Microsoft since 2016.
 - **Live refreshed datasets** under each tool slug, plus weekly dated snapshots in `<slug>/history/`.
 - 26 working tools, 32 articles, a Hugo blog.
 
-**Absences future work must not fill by invention:** the homepage "20+ years" and "80+ projects" figures are self-reported with no public artifact behind the 80+ number. There are **no** testimonials, case studies, named project outcomes, or quantified client results anywhere in the repo — do not fabricate them. There is no `og:image` asset.
+**Absences future work must not fill by invention:** the homepage "20+ years" and "80+ projects" figures are self-reported with no public artifact behind the 80+ number. There are **no** testimonials, case studies, named project outcomes, or quantified client results anywhere in the repo - do not fabricate them. There is no `og:image` asset.
 
 ## Product Principles
 
 1. **Freshness is the product.** A tool showing stale Azure data is worse than no tool. Automated refresh from an authoritative source is the core promise; anything that weakens it weakens the whole site.
 2. **Every page stands alone.** Visitors land deep, not on the homepage. A tool page must be complete, self-explanatory and independently usable, with no assumed prior navigation.
 3. **Zero build, zero dependencies.** Portability and a decade-long maintenance horizon outrank authoring convenience. New capability should not introduce a toolchain.
-4. **Credibility is shown, not claimed.** Prefer verifiable artifacts — the transcript link, live data, a working tool — over adjectives and round numbers.
+4. **Credibility is shown, not claimed.** Prefer verifiable artifacts - the transcript link, live data, a working tool - over adjectives and round numbers.
 5. **The shared shell is a feature.** One consistent header, footer, theme and banner across 63 pages is what makes 26 unrelated utilities read as a single product. Divergence is a defect, not personalisation.
 
 ## Accessibility & Inclusion
@@ -79,3 +79,7 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 No formal standard has been declared by the owner. In practice, **WCAG 2.1 AA is the working floor**: the 2026-08-29 audit brought light-mode text contrast up to AA (`--cp-warning`, `--cp-success`, `--cp-cyan`), and dark mode already met AA across every sampled pair. Both themes must continue to meet AA.
 
 Known open accessibility gaps recorded at that audit: heading hierarchy (`h1` → fifteen `h3`, sole `h2` last), unnamed `<section>` landmarks, no `<noscript>` fallback for `.reveal`, no print stylesheet, and interactive targets below 44 px.
+
+## Out of scope
+
+The Hugo blog under `blog/` is an external blog the owner intends to delete. It is **out of scope permanently** (decided 2026-08-29): not audited, not critiqued, not counted in page totals, and not to be raised as a gap. The product is the 63 standalone pages at the repo root.

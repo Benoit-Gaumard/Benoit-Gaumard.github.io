@@ -8,7 +8,7 @@ categories = ["Azure"]
 featureImage = "/articles/images/Users.svg"
 +++
 
-If you see "Identity not found" in your RBAC assignments, it means that identity has been deleted from your Entra ID — whether it is a user, a group, or a service principal.
+If you see "Identity not found" in your RBAC assignments, it means that identity has been deleted from your Entra ID - whether it is a user, a group, or a service principal.
 
 However, Azure does not clean these up for you, and it's just ugly to look at in the portal. You must clean up any orphaned role assignments on a regular basis.
 

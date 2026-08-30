@@ -122,11 +122,11 @@ Go to your GitHub project's web page, open the **Pull requests** menu, and click
 
 If there are no conflicts between your fork and the main branch, your pull request will be created and contributors will be notified. They will then review your changes and choose to merge your code or not.
 
-Add colleagues working on the repository as reviewers and yourself as an assignee — reviewers will be notified by email automatically. As a best practice, let your colleagues know about your pull request through a direct message, as GitHub emails are frequently ignored.
+Add colleagues working on the repository as reviewers and yourself as an assignee - reviewers will be notified by email automatically. As a best practice, let your colleagues know about your pull request through a direct message, as GitHub emails are frequently ignored.
 
 ### 7. Code review
 
-Before merging, the code should be reviewed by peers — code review involves one or more team members checking another teammate's work.
+Before merging, the code should be reviewed by peers - code review involves one or more team members checking another teammate's work.
 
 ![Code review process](/articles/images/code-review.png)
 
@@ -137,7 +137,7 @@ Congratulations! Your code has been successfully reviewed and merged into the ma
 ## Golden rules
 
 - Commit each day.
-- Never commit directly to the main branch — always protect it.
+- Never commit directly to the main branch - always protect it.
 - Adopt a naming convention for your branches (e.g., `feat/` for a new feature, `fix/` for a bug fix).
 - Adopt a naming convention for your commits.
 - Enhance security in your code with the principle of least privilege.

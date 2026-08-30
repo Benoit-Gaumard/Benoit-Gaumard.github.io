@@ -2,7 +2,7 @@
 author = "Benoit G"
 title = "Don't Build Your Cloud Home on Shaky Foundations"
 date = "2024-11-06"
-description = "Why cloud governance and security foundations — landing zones, management groups, policies, RBAC, naming, tagging, and networking — must come before any real workload."
+description = "Why cloud governance and security foundations - landing zones, management groups, policies, RBAC, naming, tagging, and networking - must come before any real workload."
 tags = ["Governance"]
 categories = ["Azure"]
 featureImage = "/articles/images/shaky-foundations.jpeg"
@@ -33,7 +33,7 @@ Microsoft's [Cloud Adoption Framework](https://learn.microsoft.com/en-us/azure/c
 
 ## Landing zone
 
-A landing zone is the environment where you deploy and operate your applications — subscriptions, networking, identity, policy, and management tooling designed to scale as you onboard more teams.
+A landing zone is the environment where you deploy and operate your applications - subscriptions, networking, identity, policy, and management tooling designed to scale as you onboard more teams.
 
 ## Management groups
 

@@ -8,7 +8,7 @@ categories = ["Azure"]
 featureImage = "/articles/images/githubtest.png"
 +++
 
-Managing subscriptions can be a challenge in any cloud journey. Here's a script to save you some time — quickly switch between your Azure subscriptions by entering a listed index.
+Managing subscriptions can be a challenge in any cloud journey. Here's a script to save you some time - quickly switch between your Azure subscriptions by entering a listed index.
 
 Forked and updated from [matthiasguentert/azure-subscription-switcher](https://github.com/matthiasguentert/azure-subscription-switcher).
 

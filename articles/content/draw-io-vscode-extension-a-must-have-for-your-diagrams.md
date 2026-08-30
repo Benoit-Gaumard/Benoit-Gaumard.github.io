@@ -14,12 +14,12 @@ This unofficial extension integrates Draw.io (also known as diagrams.net) into V
 
 To create a new diagram, just create an empty `*.drawio`, `*.drawio.svg`, or `*.drawio.png` file and open it.
 
-- `.drawio.svg` files are valid `.svg` files that can be embedded in GitHub readme files — no export needed.
-- `.drawio.png` files are valid `.png` files — no export needed.
+- `.drawio.svg` files are valid `.svg` files that can be embedded in GitHub readme files - no export needed.
+- `.drawio.png` files are valid `.png` files - no export needed.
 
-You should use `.svg` whenever possible. It's very practical when you make updates without re-importing everything — just make the change and that's all.
+You should use `.svg` whenever possible. It's very practical when you make updates without re-importing everything - just make the change and that's all.
 
-Download is available here: [Draw.io Integration – Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio)
+Download is available here: [Draw.io Integration - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio)
 
 Here is the demo:
 

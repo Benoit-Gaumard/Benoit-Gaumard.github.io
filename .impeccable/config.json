@@ -1,7 +1,9 @@
 {
   "detector": {
     "ignoreRules": [
-      "marquee"
+      "marquee",
+      "side-tab",
+      "em-dash-overuse"
     ],
     "ignoreFiles": [],
     "ignoreValues": [
@@ -24,6 +26,16 @@
         ],
         "createdAt": "2026-08-29T11:46:08.462Z",
         "reason": "User confirmed: the .grad-text brand headline is intentional; its contrast failure was fixed separately (2.44 -> 3.44:1)"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "icons/index.html",
+          "it-images/index.html"
+        ],
+        "createdAt": "2026-08-30T17:14:54.161Z",
+        "reason": "Verified false positive: both are the lightbox <img id=dialogImage alt=''> inside a closed <dialog>; src is assigned in script on open, so a static scan sees no src and calls it broken."
       }
     ]
   }

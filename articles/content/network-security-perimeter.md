@@ -40,9 +40,9 @@ Here are the existing patterns to avoid public endpoints and secure access:
 
 - Centrally manages your ACLs and access controls for PaaS resources.
 - Announced in public preview at Microsoft Ignite 2024. See [What is a network security perimeter?](https://learn.microsoft.com/en-us/azure/private-link/network-security-perimeter-concepts)
-- Today, PaaS services only — more services are expected to be onboarded over time.
+- Today, PaaS services only - more services are expected to be onboarded over time.
 - API: `Microsoft.Network/networkSecurityPerimeters`.
-- IaC: Bicep / ARM / Terraform via the raw Azure API only — no dedicated Terraform provider resource or AzAPI module yet.
+- IaC: Bicep / ARM / Terraform via the raw Azure API only - no dedicated Terraform provider resource or AzAPI module yet.
 
 ## Overview
 

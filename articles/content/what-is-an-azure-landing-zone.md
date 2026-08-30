@@ -9,7 +9,7 @@ featureImage = "/articles/images/azure-landing-zone.svg"
 featured = true
 +++
 
-An Azure landing zone is the environment where you deploy and operate your applications and workloads. It is not a single resource — it is a combination of subscriptions, networking, identity, policy, and management tooling designed to scale safely as you onboard more teams and workloads.
+An Azure landing zone is the environment where you deploy and operate your applications and workloads. It is not a single resource - it is a combination of subscriptions, networking, identity, policy, and management tooling designed to scale safely as you onboard more teams and workloads.
 
 [[toc]]
 
@@ -80,14 +80,14 @@ module "landing_zone" {
 ```
 
 :::warning
-Landing zone deployments usually run with highly privileged credentials at the tenant or management-group scope. Keep this pipeline separate from your application pipelines, protect it with required reviewers, and use OIDC federated credentials instead of long-lived secrets — see [Connect GitHub and Azure for deployment using OIDC](/articles/connect-github-and-azure-for-deployment-using-oidc/) for a full walkthrough.
+Landing zone deployments usually run with highly privileged credentials at the tenant or management-group scope. Keep this pipeline separate from your application pipelines, protect it with required reviewers, and use OIDC federated credentials instead of long-lived secrets - see [Connect GitHub and Azure for deployment using OIDC](/articles/connect-github-and-azure-for-deployment-using-oidc/) for a full walkthrough.
 :::
 
 ---
 
 ## Landing zone vs. subscription vesting
 
-A landing zone is not the same thing as "a subscription." A single landing zone (say, `Corp`) can contain many subscriptions, and a single subscription usually hosts many workloads. The landing zone defines the *guardrails* that every subscription underneath it inherits automatically — new subscriptions don't require manual policy configuration.
+A landing zone is not the same thing as "a subscription." A single landing zone (say, `Corp`) can contain many subscriptions, and a single subscription usually hosts many workloads. The landing zone defines the *guardrails* that every subscription underneath it inherits automatically - new subscriptions don't require manual policy configuration.
 
 ## Where to go next
 
@@ -95,4 +95,4 @@ A landing zone is not the same thing as "a subscription." A single landing zone 
 2. Decide whether you need the full enterprise-scale architecture or a lighter-weight starter landing zone.
 3. Pick an Infrastructure as Code tool (Bicep or Terraform) and automate subscription vending from day one.
 
-Landing zones are a journey, not a one-time setup — expect to revisit policy assignments and network design as your platform grows.
+Landing zones are a journey, not a one-time setup - expect to revisit policy assignments and network design as your platform grows.

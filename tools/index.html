@@ -12,9 +12,23 @@
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="benoit-gaumard.io — Azure tools, reference data and how-to guides" />
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://benoit-gaumard.io/tools/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Tools",
+    "description": "A collection of small tools and reference pages built by Benoit Gaumard.",
+    "url": "https://benoit-gaumard.io/tools/",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "benoit-gaumard.io",
+      "url": "https://benoit-gaumard.io/"
+    }
+  }
+  </script>
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
@@ -137,7 +151,7 @@
       border-radius: 6px;
       background: var(--cp-accent);
       color: var(--cp-accent-fg);
-      font-size: .9rem;
+      font-size: 0.9rem;
       font-weight: 600;
       text-decoration: none;
       transition: transform .15s ease;
@@ -168,7 +182,7 @@
     .news-banner-text {
       display: inline-block;
       padding-left: 100%;
-      font-size: .85rem;
+      font-size: 0.85rem;
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
@@ -270,7 +284,7 @@
       border-radius: 7px;
       background: transparent;
       color: var(--cp-text-muted);
-      font-size: .85rem;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
     }
@@ -304,7 +318,7 @@
       border: 0;
       background: transparent;
       color: var(--cp-link);
-      font-size: .85rem;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
       padding: .25rem;
@@ -408,7 +422,7 @@
       display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
-      font-size: .85rem;
+      font-size: 0.85rem;
     }
     .tool-cards.list-view .tool-card .tool-arrow {
       grid-row: 1 / 3;
@@ -430,12 +444,12 @@
     }
     .tool-card h2 {
       margin: 0;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
     }
     .tool-card p {
       margin: 0;
       color: var(--cp-text-muted);
-      font-size: .92rem;
+      font-size: 0.9rem;
       line-height: 1.5;
       flex: 1;
     }
@@ -444,7 +458,7 @@
       align-items: center;
       gap: .35rem;
       color: var(--cp-accent);
-      font-size: .85rem;
+      font-size: 0.85rem;
       font-weight: 600;
     }
     .tool-card .tool-arrow svg {
@@ -479,7 +493,7 @@
     .footer-about { max-width: 30rem; }
     .footer-about p {
       margin: .75rem 0 0;
-      font-size: .875rem;
+      font-size: 0.85rem;
       line-height: 1.6;
     }
     .footer-group {
@@ -491,12 +505,12 @@
     .footer-group strong {
       margin-bottom: .125rem;
       color: var(--cp-text);
-      font-size: .75rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
     }
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem;
       color: var(--cp-text-muted);
-      font-size: .875rem;
+      font-size: 0.85rem;
       text-decoration: none;
     }
     .footer-group a:hover { color: var(--cp-link); }
@@ -506,7 +520,7 @@
       gap: 1rem;
       padding-top: 1rem;
       border-top: 1px solid var(--cp-border);
-      font-size: .8rem;
+      font-size: 0.8rem;
     }
 
     .back-to-top {
@@ -556,13 +570,59 @@
       .tool-card { transition: none; }
       body::before { animation: none; }
     }
-  </style>
+      @media print {
+      /* Printing a tool page should yield the data, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    .tool-group { margin: 0 0 2.5rem; }
+    .tool-group:last-child { margin-bottom: 0; }
+    .tool-group-head {
+      display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+      margin: 0 0 1rem; padding-bottom: .5rem;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .tool-group-head h2 { margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--cp-text); }
+    .tool-group-head p { margin: 0; flex: 1 1 12rem; color: var(--cp-text-muted); font-size: 0.9rem; }
+    .tool-group-count {
+      flex: 0 0 auto; min-width: 1.6rem; padding: .1rem .45rem;
+      border-radius: 999px; background: var(--cp-accent-soft); color: var(--cp-accent);
+      font-size: 0.8rem; font-weight: 700; text-align: center;
+    }
+    .tool-updated { display: block; margin: .35rem 0 0; color: var(--cp-text-muted); font-size: 0.75rem; }
+    .tool-updated:empty { display: none; }
+    /* a group whose cards are all filtered out should take its heading with it */
+    .tool-group[hidden] { display: none; }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new — feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -596,7 +656,7 @@
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Tools</h1>
-      <p class="intro-text">A growing collection of small tools and reference pages. Click a card to open it.</p>
+      <p class="intro-text">A growing collection of small tools and reference pages. Search to narrow them down, or press Enter to open it.</p>
     </section>
 
     <section aria-label="Tool list">
@@ -616,164 +676,235 @@
         </div>
         <button type="button" class="reset-order-button" id="resetOrderButton" hidden>Reset order</button>
       </div>
-      <div class="tool-cards" id="toolCards">
-        <a class="tool-card" href="/icons/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="28" height="28"></span>
-          <h2>Icons</h2>
-          <p>Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-release-updates/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Updates</h2>
-          <p>Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/m365-release-updates/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="28" height="28"></span>
-          <h2>M365 Updates</h2>
-          <p>Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/aws-release-updates/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="28" height="28"></span>
-          <h2>AWS Updates</h2>
-          <p>Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/rss-watcher/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="28" height="28"></span>
-          <h2>RSS Watcher</h2>
-          <p>Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/microsoft-techcommunity-rss-feeds/">
-          <span class="tool-icon" aria-hidden="true">📢</span>
-          <h2>Microsoft Techcommunity RSS Feeds</h2>
-          <p>Consolidate latest activities from Microsoft Tech Community blogs.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/github-ip-ranges/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="28" height="28"></span>
-          <h2>GitHub IP Ranges</h2>
-          <p>IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-ip-ranges/">
-          <span class="tool-icon" aria-hidden="true">☁️</span>
-          <h2>Azure IP Ranges</h2>
-          <p>IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/emoji-sheet/">
-          <span class="tool-icon" aria-hidden="true">😀</span>
-          <h2>Emoji</h2>
-          <p>A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/favorite-links/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="28" height="28"></span>
-          <h2>My Favorite Links</h2>
-          <p>A curated collection of useful links and resources.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/friends-websites/">
-          <span class="tool-icon" aria-hidden="true">🤝</span>
-          <h2>My Friends' Websites</h2>
-          <p>Discover amazing websites from my network of friends and colleagues.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/microsoft-portals/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="28" height="28"></span>
-          <h2>Microsoft Portals</h2>
-          <p>A comprehensive directory of all Microsoft portals in one place.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-regions/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Regions</h2>
-          <p>Explore Azure datacenter locations and regional information worldwide.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-naming-convention/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Naming Convention</h2>
-          <p>Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-taggable-resources/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Taggable Resources</h2>
-          <p>Check which Azure resource types support tags and whether tags appear in the cost report.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-
-        <a class="tool-card" href="/azure-policy-aliases/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Policy Aliases</h2>
-          <p>Search all supported Azure Policy aliases to use when authoring custom policy definitions.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-policies/">
-          <span class="tool-icon" aria-hidden="true">📋</span>
-          <h2>Azure Policies</h2>
-          <p>Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/units-converter/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="28" height="28"></span>
-          <h2>Units Converter</h2>
-          <p>Convert between common units of length, weight, temperature, volume, speed, area, data, and time.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/sla-calculator/">
-          <span class="tool-icon" aria-hidden="true">🛡️</span>
-          <h2>SLA Calculator</h2>
-          <p>Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/guid-generator/">
-          <span class="tool-icon" aria-hidden="true">🆔</span>
-          <h2>GUID Generator</h2>
-          <p>Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/subnet-calculator/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="28" height="28"></span>
-          <h2>Subnet Calculator</h2>
-          <p>Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/percentage-calculator/">
-          <span class="tool-icon" aria-hidden="true">💯</span>
-          <h2>Percentage Calculator</h2>
-          <p>Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/it-images/">
-          <span class="tool-icon" aria-hidden="true">😂</span>
-          <h2>IT Images &amp; Memes</h2>
-          <p>A collection of funny IT memes, developer humor, and tech-related images.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/random-wheel/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="28" height="28"></span>
-          <h2>Random Wheel</h2>
-          <p>Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/world-clock/">
-          <span class="tool-icon" aria-hidden="true">🕐</span>
-          <h2>World Clock</h2>
-          <p>Current time and date in Paris, plus a quick glance at colleague timezones around the world.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/workflows/">
-          <span class="tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="28" height="28"></span>
-          <h2>Workflows</h2>
-          <p>Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
+      <div class="tool-groups" id="toolCards">
+        <section class="tool-group" aria-labelledby="group-reference">
+          <div class="tool-group-head">
+            <h2 id="group-reference">Reference data</h2>
+            <p>Azure and GitHub facts, refreshed from the source.</p>
+            <span class="tool-group-count">7</span>
+          </div>
+          <div class="tool-cards">
+            <a class="tool-card" href="/azure-regions/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="28" height="28"></span>
+              <h2>Azure Regions</h2>
+              <p>Explore Azure datacenter locations and regional information worldwide.</p>
+            <span class="tool-updated" data-file="azure-regions/regions.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/azure-naming-convention/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="28" height="28"></span>
+              <h2>Azure Naming Convention</h2>
+              <p>Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations.</p>
+            <span class="tool-updated" data-file="azure-naming-convention/abbreviations.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/azure-taggable-resources/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="28" height="28"></span>
+              <h2>Azure Taggable Resources</h2>
+              <p>Check which Azure resource types support tags and whether tags appear in the cost report.</p>
+            <span class="tool-updated" data-file="azure-taggable-resources/tag-support.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/azure-policy-aliases/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="28" height="28"></span>
+              <h2>Azure Policy Aliases</h2>
+              <p>Search all supported Azure Policy aliases to use when authoring custom policy definitions.</p>
+            <span class="tool-updated" data-file="azure-policy-aliases/policy-aliases.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/azure-policies/">
+              <span class="tool-icon" aria-hidden="true">📋</span>
+              <h2>Azure Policies</h2>
+              <p>Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure.</p>
+            <span class="tool-updated" data-file="azure-policies/policydefinitions.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/azure-ip-ranges/">
+              <span class="tool-icon" aria-hidden="true">☁️</span>
+              <h2>Azure IP Ranges</h2>
+              <p>IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool.</p>
+            <span class="tool-updated" data-file="azure-ip-ranges/ip-ranges.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/github-ip-ranges/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="28" height="28"></span>
+              <h2>GitHub IP Ranges</h2>
+              <p>IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool.</p>
+            <span class="tool-updated" data-file="github-ip-ranges/ip-ranges.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+          </div>
+        </section>
+        <section class="tool-group" aria-labelledby="group-feeds">
+          <div class="tool-group-head">
+            <h2 id="group-feeds">Release notes and feeds</h2>
+            <p>What changed, from the official feeds.</p>
+            <span class="tool-group-count">5</span>
+          </div>
+          <div class="tool-cards">
+            <a class="tool-card" href="/azure-release-updates/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="28" height="28"></span>
+              <h2>Azure Updates</h2>
+              <p>Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed.</p>
+            <span class="tool-updated" data-file="azure-release-updates/updates.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/m365-release-updates/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="28" height="28"></span>
+              <h2>M365 Updates</h2>
+              <p>Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed.</p>
+            <span class="tool-updated" data-file="m365-release-updates/updates.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/aws-release-updates/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="28" height="28"></span>
+              <h2>AWS Updates</h2>
+              <p>Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed.</p>
+            <span class="tool-updated" data-file="aws-release-updates/updates.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/rss-watcher/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="28" height="28"></span>
+              <h2>RSS Watcher</h2>
+              <p>Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day.</p>
+            <span class="tool-updated" data-file="rss-watcher/updates.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/microsoft-techcommunity-rss-feeds/">
+              <span class="tool-icon" aria-hidden="true">📢</span>
+              <h2>Microsoft Techcommunity RSS Feeds</h2>
+              <p>Consolidate latest activities from Microsoft Tech Community blogs.</p>
+            <span class="tool-updated" data-file="microsoft-techcommunity-rss-feeds/feeds-status.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+          </div>
+        </section>
+        <section class="tool-group" aria-labelledby="group-calculators">
+          <div class="tool-group-head">
+            <h2 id="group-calculators">Calculators and generators</h2>
+            <p>Work out a number, produce a value.</p>
+            <span class="tool-group-count">6</span>
+          </div>
+          <div class="tool-cards">
+            <a class="tool-card" href="/subnet-calculator/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="28" height="28"></span>
+              <h2>Subnet Calculator</h2>
+              <p>Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/percentage-calculator/">
+              <span class="tool-icon" aria-hidden="true">💯</span>
+              <h2>Percentage Calculator</h2>
+              <p>Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/sla-calculator/">
+              <span class="tool-icon" aria-hidden="true">🛡️</span>
+              <h2>SLA Calculator</h2>
+              <p>Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/units-converter/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="28" height="28"></span>
+              <h2>Units Converter</h2>
+              <p>Convert between common units of length, weight, temperature, volume, speed, area, data, and time.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/guid-generator/">
+              <span class="tool-icon" aria-hidden="true">🆔</span>
+              <h2>GUID Generator</h2>
+              <p>Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/random-wheel/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="28" height="28"></span>
+              <h2>Random Wheel</h2>
+              <p>Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+          </div>
+        </section>
+        <section class="tool-group" aria-labelledby="group-assets">
+          <div class="tool-group-head">
+            <h2 id="group-assets">Icons and assets</h2>
+            <p>Things to drop into a diagram or a deck.</p>
+            <span class="tool-group-count">3</span>
+          </div>
+          <div class="tool-cards">
+            <a class="tool-card" href="/icons/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="28" height="28"></span>
+              <h2>Icons</h2>
+              <p>Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation.</p>
+            <span class="tool-updated" data-file="icons/icons.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/emoji-sheet/">
+              <span class="tool-icon" aria-hidden="true">😀</span>
+              <h2>Emoji</h2>
+              <p>A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation.</p>
+            <span class="tool-updated" data-file="emoji-sheet/emojis.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/it-images/">
+              <span class="tool-icon" aria-hidden="true">😂</span>
+              <h2>IT Images &amp; Memes</h2>
+              <p>A collection of funny IT memes, developer humor, and tech-related images.</p>
+            <span class="tool-updated" data-file="it-images/images.json"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+          </div>
+        </section>
+        <section class="tool-group" aria-labelledby="group-links">
+          <div class="tool-group-head">
+            <h2 id="group-links">Links and directories</h2>
+            <p>Curated shortcuts worth keeping.</p>
+            <span class="tool-group-count">3</span>
+          </div>
+          <div class="tool-cards">
+            <a class="tool-card" href="/favorite-links/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="28" height="28"></span>
+              <h2>My Favorite Links</h2>
+              <p>A curated collection of useful links and resources.</p>
+            <span class="tool-updated" data-file="favorite-links/favorite-links.csv"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/friends-websites/">
+              <span class="tool-icon" aria-hidden="true">🤝</span>
+              <h2>My Friends' Websites</h2>
+              <p>Discover amazing websites from my network of friends and colleagues.</p>
+            <span class="tool-updated" data-file="friends-websites/friends-websites.csv"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/microsoft-portals/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="28" height="28"></span>
+              <h2>Microsoft Portals</h2>
+              <p>A comprehensive directory of all Microsoft portals in one place.</p>
+            <span class="tool-updated" data-file="microsoft-portals/portals-urls.csv"></span>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+          </div>
+        </section>
+        <section class="tool-group" aria-labelledby="group-utilities">
+          <div class="tool-group-head">
+            <h2 id="group-utilities">Everyday utilities</h2>
+            <p>Small things used often.</p>
+            <span class="tool-group-count">2</span>
+          </div>
+          <div class="tool-cards">
+            <a class="tool-card" href="/world-clock/">
+              <span class="tool-icon" aria-hidden="true">🕐</span>
+              <h2>World Clock</h2>
+              <p>Current time and date in Paris, plus a quick glance at colleague timezones around the world.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+            <a class="tool-card" href="/workflows/">
+              <span class="tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="28" height="28"></span>
+              <h2>Workflows</h2>
+              <p>Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data.</p>
+              <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            </a>
+          </div>
+        </section>
       </div>
     </section>
   </main>
@@ -868,6 +999,11 @@
         if (matches) visibleCount++;
       });
 
+      document.querySelectorAll(".tool-group").forEach((group) => {
+        const any = [...group.querySelectorAll(".tool-card")].some((c) => !c.classList.contains("is-hidden"));
+        group.hidden = !any;
+      });
+
       if (!visibleCount && !emptyState) {
         emptyState = document.createElement("div");
         emptyState.className = "empty-state";
@@ -878,8 +1014,37 @@
         emptyState = null;
       }
     }
+    // dates come from the same git-stamped manifest the data pages read, so the
+    // hub cannot advertise a freshness the tool itself would contradict
+    (async function showUpdatedDates() {
+      const slots = [...document.querySelectorAll(".tool-updated")];
+      if (!slots.length) return;
+      let stamps;
+      try {
+        const res = await fetch("/freshness.json", { cache: "no-store" });
+        if (!res.ok) return;
+        stamps = await res.json();
+      } catch { return; }
+      for (const slot of slots) {
+        const iso = stamps[slot.dataset.file];
+        const date = iso ? new Date(iso) : null;
+        if (!date || isNaN(date)) continue;
+        slot.textContent = "Updated " + date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+    })();
+
 
     searchInput.addEventListener("input", filterCards);
+    // with exactly one card left, Enter should open it rather than do nothing
+    searchInput.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter") return;
+      const visible = [...toolCards.querySelectorAll(".tool-card")].filter((c) => !c.classList.contains("is-hidden"));
+      if (visible.length !== 1) return;
+      const link = visible[0].matches("a") ? visible[0] : visible[0].querySelector("a[href]");
+      if (!link) return;
+      event.preventDefault();
+      link.click();
+    });
 
     const ORDER_STORAGE_KEY = "tools-card-order";
     const resetOrderButton = document.getElementById("resetOrderButton");

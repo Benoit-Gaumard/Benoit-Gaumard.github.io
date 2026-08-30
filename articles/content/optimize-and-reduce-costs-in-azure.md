@@ -43,7 +43,7 @@ In this example, only `Basic_A1`, `Basic_A2`, and `Basic_A3` size machines are a
 
 ## Start/stop machines automatically
 
-With the cloud, things have changed; resources are billed on a usage basis. It is therefore necessary to schedule the stop/start of your VMs when they are not in use to save money. By analogy, at home, when you leave a room, you turn off the light — the principle is the same.
+With the cloud, things have changed; resources are billed on a usage basis. It is therefore necessary to schedule the stop/start of your VMs when they are not in use to save money. By analogy, at home, when you leave a room, you turn off the light - the principle is the same.
 
 There are several solutions to do this automatically:
 
@@ -61,11 +61,11 @@ As its name suggests, Azure Advisor is an "advisor" that describes best practice
 
 Recommendations are divided into five categories:
 
-- **High availability** — helps ensure and improve the continuity of your critical applications.
-- **Security** — helps detect threats and vulnerabilities that could lead to security breaches.
-- **Performance** — to improve the speed of your applications.
-- **Cost** — to optimize and reduce your overall Azure spending.
-- **Operational excellence** — for process and workflow efficiency, resource management, and deployment.
+- **High availability** - helps ensure and improve the continuity of your critical applications.
+- **Security** - helps detect threats and vulnerabilities that could lead to security breaches.
+- **Performance** - to improve the speed of your applications.
+- **Cost** - to optimize and reduce your overall Azure spending.
+- **Operational excellence** - for process and workflow efficiency, resource management, and deployment.
 
 ## Use reserved instances (RI)
 
@@ -89,7 +89,7 @@ Implementing tags and policies is fundamental before opening the Azure service t
 
 ## Choose the right type of disk
 
-When creating a virtual machine in Azure, several types of disks are offered: Ultra disk, Premium SSD, Standard SSD, and Standard HDD. Each type is intended for specific scenarios — if your application doesn't require high performance or is only for testing purposes, prefer an HDD disk as it is the cheapest.
+When creating a virtual machine in Azure, several types of disks are offered: Ultra disk, Premium SSD, Standard SSD, and Standard HDD. Each type is intended for specific scenarios - if your application doesn't require high performance or is only for testing purposes, prefer an HDD disk as it is the cheapest.
 
 :::note
 When creating a VM, the Premium SSD type is selected by default. Don't forget to change it to save money.
@@ -99,9 +99,9 @@ When creating a VM, the Premium SSD type is selected by default. Don't forget to
 
 Azure Storage offers different access tiers that allow you to store your blob objects in the most cost-effective way:
 
-- **Hot** — optimized for storing frequently accessed data.
-- **Cool** — optimized for storing infrequently accessed data, stored for at least 30 days.
-- **Archive** — optimized for storing infrequently accessed data, stored for at least 180 days, under flexible latency conditions (a few hours).
+- **Hot** - optimized for storing frequently accessed data.
+- **Cool** - optimized for storing infrequently accessed data, stored for at least 30 days.
+- **Archive** - optimized for storing infrequently accessed data, stored for at least 180 days, under flexible latency conditions (a few hours).
 
 ## Purge unused data and resources (orphaned resources)
 
@@ -119,7 +119,7 @@ Take advantage of the tools included in your Azure subscription to track resourc
 
 ## Select the right Azure region to deploy your resources
 
-Microsoft Azure offers dozens of regions worldwide. Not all Azure services are available in all regions, and not all Azure services cost the same in every region — prices can depend on operating costs and other regional factors. Deploying the same Windows virtual machine in France will not cost the same as in Australia, for example.
+Microsoft Azure offers dozens of regions worldwide. Not all Azure services are available in all regions, and not all Azure services cost the same in every region - prices can depend on operating costs and other regional factors. Deploying the same Windows virtual machine in France will not cost the same as in Australia, for example.
 
 ## Sign an enterprise agreement
 
@@ -135,5 +135,5 @@ For large organizations, signing an Enterprise Agreement (EA) with Microsoft con
 - Use containers, autoscaling, and the pricing calculator
 - Conduct architecture reviews: [Azure Well-Architected Review](https://learn.microsoft.com/en-us/assessments/)
 - Develop FinOps practices within your company
-- [Azure Optimization Engine](https://github.com/helderpinto/AzureOptimizationEngine) — an extensible, fully customizable Azure Advisor alternative
+- [Azure Optimization Engine](https://github.com/helderpinto/AzureOptimizationEngine) - an extensible, fully customizable Azure Advisor alternative
 - Enforce a naming convention and RBAC least privilege

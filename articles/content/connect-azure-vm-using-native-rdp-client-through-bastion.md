@@ -89,7 +89,7 @@ You should now be connected to the target VM through the Azure Bastion tunnel. Y
 ---
 
 :::warning
-Don't forget to close the tunnel when you're done by pressing `Ctrl+C` in the terminal where you started it — otherwise it keeps running and listening on the local port.
+Don't forget to close the tunnel when you're done by pressing `Ctrl+C` in the terminal where you started it - otherwise it keeps running and listening on the local port.
 :::
 
 Enjoy!
