@@ -55,6 +55,8 @@
       --cp-success: #157f57;
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -442,8 +444,8 @@
     .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
     .favorites-filter[aria-pressed="true"] {
       border-color: var(--cp-warning);
-      background: #fff8e8;
-      color: #8a5a08;
+      background: var(--cp-warning-bg);
+      color: var(--cp-warning);
     }
 
     .keyword-chips { min-height: 2.25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
@@ -472,7 +474,7 @@
     }
     .keyword-chip button:hover { background: rgba(11, 111, 184, .18); }
     .keyword-chips-empty { color: var(--cp-text-muted); font-size: .8rem; }
-    mark.keyword-mark { background: #fef08a; color: #713f12; border-radius: 2px; padding: 0 .1rem; }
+    mark.keyword-mark { background: var(--cp-highlight-bg); color: var(--cp-text); border-radius: 2px; padding: 0 .1rem; }
     .site-article.is-highlighted {
       background: var(--cp-highlight-bg);
       border-radius: 6px;
