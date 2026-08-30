@@ -2,6 +2,15 @@ import { writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Owner's style rule: no em-dashes or en-dashes anywhere on the site, including
+// in text fetched from upstream feeds. Applied at write time so a scheduled
+// refresh cannot quietly reintroduce them. Spacing is preserved: "a \u2014 b"
+// becomes "a - b" and "a\u2014b" becomes "a-b".
+function stripLongDashes(text) {
+  return String(text).replace(/\s*[\u2014\u2013]\s*/g, (match) => (/^\s|\s$/.test(match) ? " - " : "-"));
+}
+
+
 const FEED_URL = "https://www.microsoft.com/releasecommunications/api/v2/m365/rss";
 const outputPath = join(dirname(fileURLToPath(import.meta.url)), "updates.json");
 
@@ -84,5 +93,5 @@ const payload = {
   items,
 };
 
-await writeFile(outputPath, `${JSON.stringify(payload)}\n`, "utf8");
+await writeFile(outputPath, `${stripLongDashes(JSON.stringify(payload))}\n`, "utf8");
 console.log(`Fetched ${items.length} M365 updates into ${outputPath}`);

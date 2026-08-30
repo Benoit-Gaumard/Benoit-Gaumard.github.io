@@ -2,6 +2,15 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Owner's style rule: no em-dashes or en-dashes anywhere on the site, including
+// in text fetched from upstream feeds. Applied at write time so a scheduled
+// refresh cannot quietly reintroduce them. Spacing is preserved: "a \u2014 b"
+// becomes "a - b" and "a\u2014b" becomes "a-b".
+function stripLongDashes(text) {
+  return String(text).replace(/\s*[\u2014\u2013]\s*/g, (match) => (/^\s|\s$/.test(match) ? " - " : "-"));
+}
+
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const csvPath = join(HERE, "rss-feeds.csv");
 const outputPath = join(HERE, "updates.json");
@@ -243,12 +252,12 @@ const payload = {
   items,
 };
 
-await writeFile(outputPath, `${JSON.stringify(payload)}\n`, "utf8");
+await writeFile(outputPath, `${stripLongDashes(JSON.stringify(payload))}\n`, "utf8");
 
 const enItems = items.filter((item) => item.country === "EN").slice(0, MAX_FEED_ITEMS);
 const frItems = items.filter((item) => item.country === "FR").slice(0, MAX_FEED_ITEMS);
-await writeFile(feedEnPath, buildRssFeed(enItems, "en"), "utf8");
-await writeFile(feedFrPath, buildRssFeed(frItems, "fr"), "utf8");
+await writeFile(feedEnPath, stripLongDashes(buildRssFeed(enItems, "en")), "utf8");
+await writeFile(feedFrPath, stripLongDashes(buildRssFeed(frItems, "fr")), "utf8");
 
 let feedsMeta = {};
 try {
@@ -260,7 +269,7 @@ const now = new Date().toISOString();
 feeds.forEach((feed) => {
   if (!feedsMeta[feed.name]) feedsMeta[feed.name] = now;
 });
-await writeFile(feedsMetaPath, `${JSON.stringify(feedsMeta)}\n`, "utf8");
+await writeFile(feedsMetaPath, `${stripLongDashes(JSON.stringify(feedsMeta))}\n`, "utf8");
 
 const feedsStatus = results.map((r) => {
   const feed = feeds.find((f) => f.name === r.name);
@@ -277,7 +286,7 @@ const feedsStatus = results.map((r) => {
   };
 });
 
-await writeFile(feedsStatusPath, `${JSON.stringify({ generatedAt: now, feeds: feedsStatus })}\n`, "utf8");
+await writeFile(feedsStatusPath, `${stripLongDashes(JSON.stringify({ generatedAt: now, feeds: feedsStatus }))}\n`, "utf8");
 
 console.log(`Fetched ${items.length} items from ${succeeded.length}/${feeds.length} feeds (${failed.length} failed).`);
 console.log(`Wrote feed.en.xml (${enItems.length} items) and feed.fr.xml (${frItems.length} items).`);
