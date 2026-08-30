@@ -2,6 +2,15 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Owner's style rule: no em-dashes or en-dashes anywhere on the site, including
+// in text fetched from upstream feeds. Applied at write time so a scheduled
+// refresh cannot quietly reintroduce them. Spacing is preserved: "a \u2014 b"
+// becomes "a - b" and "a\u2014b" becomes "a-b".
+function stripLongDashes(text) {
+  return String(text).replace(/\s*[\u2014\u2013]\s*/g, (match) => (/^\s|\s$/.test(match) ? " - " : "-"));
+}
+
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const csvPath = join(HERE, "microsoft-rss-feeds.csv");
 const outputPath = join(HERE, "feeds-status.json");
@@ -167,6 +176,6 @@ const payload = {
   feeds: results,
 };
 
-await writeFile(outputPath, `${JSON.stringify(payload)}\n`, "utf8");
+await writeFile(outputPath, `${stripLongDashes(JSON.stringify(payload))}\n`, "utf8");
 const okCount = results.filter((r) => r.ok).length;
 console.log(`Fetched status for ${okCount}/${results.length} Microsoft Tech Community RSS feeds into ${outputPath}`);
