@@ -269,6 +269,9 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    #page-title { display: flex; align-items: center; gap: .3em; }
+    .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
+    .page-icon img { width: 100%; height: 100%; object-fit: contain; }
     .tool-breadcrumb { margin: 0 0 .75rem; font-size: 0.85rem; }
     .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
     .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
@@ -583,7 +586,6 @@
       </button>
       <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
         <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
-        <a href="/blog/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>Blog</a>
         <a href="/articles/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
@@ -602,7 +604,7 @@
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
-      <h1 id="page-title">My Favorite Links</h1>
+      <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="28" height="28"></span>My Favorite Links</h1>
       <p class="intro-text">A curated collection of useful links and resources.</p>
       <p class="refresh-meta">Data updated: <strong id="refreshedAt">&hellip;</strong></p>
     </section>
@@ -644,14 +646,14 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G / My Favorite Links</a>
-          <p>A curated collection of useful links and resources.</p>
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
           <strong>Explore</strong>
           <a href="/">Home</a>
-          <a href="/blog/">Blog</a>
-          <a href="#page-title">Back to top</a>
+          <a href="/articles/">Articles</a>
+          <a href="/tools/">Tools</a>
         </nav>
         <div class="footer-group">
           <strong>Tools</strong>
