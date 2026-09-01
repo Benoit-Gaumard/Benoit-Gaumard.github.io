@@ -1193,18 +1193,22 @@
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
     function formatDate(iso) {
       return new Date(`${iso}T12:00:00Z`).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
     }
 
     function thumbHtml(article) {
       if (!article.featureImage) return "";
-      return `<div class="card-thumb"><img src="${article.featureImage}" alt="" loading="lazy"></div>`;
+      return `<div class="card-thumb"><img src="${escapeHtml(article.featureImage)}" alt="" loading="lazy"></div>`;
     }
 
     function categoriesHtml(article) {
       if (!article.categories.length) return "";
-      return `<div class="card-categories">${article.categories.map((c) => `<span class="card-category-tag">${c}</span>`).join("")}</div>`;
+      return `<div class="card-categories">${article.categories.map((c) => `<span class="card-category-tag">${escapeHtml(c)}</span>`).join("")}</div>`;
     }
 
     function createFeaturedCard(article) {
@@ -1216,10 +1220,10 @@
         ${thumbHtml(article)}
         <div class="card-body">
           ${categoriesHtml(article)}
-          <h3>${article.title}</h3>
-          <p>${article.description}</p>
+          <h3>${escapeHtml(article.title)}</h3>
+          <p>${escapeHtml(article.description)}</p>
           <div class="card-meta">
-            <span>${article.author}</span>
+            <span>${escapeHtml(article.author)}</span>
             <span class="dot">&middot;</span>
             <span>${formatDate(article.date)}</span>
             <span class="dot">&middot;</span>
@@ -1235,12 +1239,12 @@
       card.href = article.url;
       const isFavorite = state.favorites.has(article.url);
       card.innerHTML = `
-        <button type="button" class="favorite-button" aria-pressed="${isFavorite}" aria-label="${isFavorite ? "Remove" : "Add"} ${article.title} ${isFavorite ? "from" : "to"} favorites" title="${isFavorite ? "Remove from favorites" : "Add to favorites"}">${starIconMarkup(isFavorite)}</button>
+        <button type="button" class="favorite-button" aria-pressed="${isFavorite}" aria-label="${isFavorite ? "Remove" : "Add"} ${escapeHtml(article.title)} ${isFavorite ? "from" : "to"} favorites" title="${isFavorite ? "Remove from favorites" : "Add to favorites"}">${starIconMarkup(isFavorite)}</button>
         ${thumbHtml(article)}
         <div class="card-body">
           ${categoriesHtml(article)}
-          <h3>${article.title}</h3>
-          <p>${article.description}</p>
+          <h3>${escapeHtml(article.title)}</h3>
+          <p>${escapeHtml(article.description)}</p>
           <div class="card-meta">
             <span>${formatDate(article.date)}</span>
             <span class="dot">&middot;</span>
@@ -1301,7 +1305,7 @@
         const button = document.createElement("button");
         button.type = "button";
         button.className = state.category === name ? "is-active" : "";
-        button.innerHTML = `<span>${name}</span><span class="category-count">${count}</span>`;
+        button.innerHTML = `<span>${escapeHtml(name)}</span><span class="category-count">${count}</span>`;
         button.addEventListener("click", () => setCategory(name));
         li.append(button);
         elements.categoryList.append(li);
@@ -1323,7 +1327,7 @@
       if (!state.category) return;
       const badge = document.createElement("span");
       badge.className = "active-filter";
-      badge.innerHTML = `Category: ${state.category} <button type="button" aria-label="Clear category filter">&times;</button>`;
+      badge.innerHTML = `Category: ${escapeHtml(state.category)} <button type="button" aria-label="Clear category filter">&times;</button>`;
       badge.querySelector("button").addEventListener("click", () => setCategory(""));
       elements.activeFilterWrap.append(badge);
     }
