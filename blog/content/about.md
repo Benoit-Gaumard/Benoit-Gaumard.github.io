@@ -6,7 +6,7 @@ aliases = ["about-us", "about-hugo", "contact"]
 author = "Benoit G"
 +++
 
-<img src="/images/Benoit.png" width="20%" height="20%">
+<img src="/blog/images/Benoit.png" width="20%" height="20%">
 
 ## Intro
 ---
@@ -47,14 +47,14 @@ If you have a project in mind, or just want to connect? You can find me on [Link
 
 | Title                           | Name                        | Badge                                                   |
 |---------------------------------|-----------------------------|---------------------------------------------------------|
-| Azure AI Fundamentals| AI-900                      | <center><img src="/images/badges/ai-900-badge.png" width="20%"></center> |
-| Azure Fundamentals| AZ-900                      | <center><img src="/images/badges/az-900-badge.png" width="20%"></center> |
-| Azure Administrator Associate| AZ-104                      | <center><img src="/images/badges/az-104-badge.png" width="20%"></center> |
-| Azure Solutions Architect Expert| AZ-300                      | <center><img src="/images/badges/az-305-badge.png" width="20%"></center>|
-| DevOps Engineer Expert| AZ-400                      | <center><img src="/images/badges/az-400-badge.png" width="20%"></center> |
-| Azure Security Engineer Associate| AZ-500                     | <center><img src="/images/badges/az-500-badge.png" width="20%"></center> |
-| Azure Network Engineer Associate| AZ-700                      | <center><img src="/images/badges/az-700-badge.png" width="20%"></center>|
-| Security, Compliance, and Identity Fundamentals| SC-900                      | <center><img src="/images/badges/sc-900-badge.png" width="20%"></center>|
+| Azure AI Fundamentals| AI-900                      | <center><img src="/blog/images/badges/ai-900-badge.png" width="20%"></center> |
+| Azure Fundamentals| AZ-900                      | <center><img src="/blog/images/badges/az-900-badge.png" width="20%"></center> |
+| Azure Administrator Associate| AZ-104                      | <center><img src="/blog/images/badges/az-104-badge.png" width="20%"></center> |
+| Azure Solutions Architect Expert| AZ-300                      | <center><img src="/blog/images/badges/az-305-badge.png" width="20%"></center>|
+| DevOps Engineer Expert| AZ-400                      | <center><img src="/blog/images/badges/az-400-badge.png" width="20%"></center> |
+| Azure Security Engineer Associate| AZ-500                     | <center><img src="/blog/images/badges/az-500-badge.png" width="20%"></center> |
+| Azure Network Engineer Associate| AZ-700                      | <center><img src="/blog/images/badges/az-700-badge.png" width="20%"></center>|
+| Security, Compliance, and Identity Fundamentals| SC-900                      | <center><img src="/blog/images/badges/sc-900-badge.png" width="20%"></center>|
 | Microsoft Cybersecurity Architect| SC-100                      | SC-100 In progress ...|
 
 I wish you an excellent visit!

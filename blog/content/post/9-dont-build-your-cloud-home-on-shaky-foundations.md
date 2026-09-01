@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/dont-build-your-cloud-home-on-shaky-foundations/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "✨ Don’t build your cloud home on shaky foundations"
 date = "2024-11-06"
@@ -10,11 +11,11 @@ tags = [
 ]
 categories = ["Azure"
 ]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/shaky-foundations.jpeg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/shaky-foundations.jpeg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -23,7 +24,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or to contribute to an existing GitHub project you are on the right page.
 <!--more-->
 
-<img src="/images/shaky-foundations.jpeg" width="50%" height="50%">
+<img src="/blog/images/shaky-foundations.jpeg" width="50%" height="50%">
 
 You probably wouldn’t furnish a house you’re building with a state of the art entertainment system without first installing doors and an alarm system. Similarly, it isn’t advisable to put valuable applications and data used to run your business in the cloud without ensuring the proper foundational security and governance controls are in place.
 
@@ -32,7 +33,7 @@ Many organizations struggle with how they want their cloud home to look, often s
 ## Cloud home
 ---
 
-<img src="/images/cloud-home.png" width="50%" height="50%">
+<img src="/blog/images/cloud-home.png" width="50%" height="50%">
 
 
 ## Critical Design Areas

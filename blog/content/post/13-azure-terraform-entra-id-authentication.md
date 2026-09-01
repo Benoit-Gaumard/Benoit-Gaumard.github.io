@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Terraform and Entra Id Authentication"
 date = "2024-09-11"
@@ -8,11 +9,11 @@ tags = ["Entra ID", "Terraform"
 ]
 categories = ["Azure"
 ]
-#featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/terraform.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/terraform.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -21,11 +22,11 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
 <!--more-->
 
-<img src="/images/terraform.svg">
+<img src="/blog/images/terraform.svg">
 
 AzureRM provider and the remote backend require authentication. The best practice is to disable storage account access key and enable Entra Id (Azure AD) authentication.
 
-<img src="/images/terraform-entra-id/image1.png" width="50%" height="50%">
+<img src="/blog/images/terraform-entra-id/image1.png" width="50%" height="50%">
 
 This storage account configuration will cause the following issue during the terraform init phase
 
@@ -69,7 +70,7 @@ provider "azurerm" {
 
 If you look at the storage account activity log. The “List Storage Account Keys” operations are from before use_azuread_auth = true was enabled, and Terraform listed the keys when accessing the state file. After started using Entra ID authentication, the keys were not listed anymore.
 
-<img src="/images/terraform-entra-id/image2.png" width="50%" height="50%">
+<img src="/blog/images/terraform-entra-id/image2.png" width="50%" height="50%">
 
 If using this access method on the Remote backend, your user or service principal needs Storage Data Blob Owner permission on the container scope.
 

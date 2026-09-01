@@ -13,6 +13,12 @@ const SKIP = new Set(["blog", "public", "node_modules", "themes", ".git", ".gith
 // contradiction search engines report as an error
 const NOINDEX = new Set(["404.html"]);
 
+// Any page that opts out of indexing via meta robots is excluded the same way,
+// so a new noindex page never has to be remembered here by hand.
+function isNoIndex(src) {
+  return /<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(src);
+}
+
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir)) {
     if (entry.startsWith(".") || SKIP.has(entry)) continue;
@@ -36,6 +42,7 @@ function priorityFor(url) {
 const pages = walk(ROOT)
   .filter((p) => {
     const src = readFileSync(p, "utf8");
+    if (isNoIndex(src)) return false;
     return src.includes("news-banner"); // the shared shell marks a real page
   })
   .map((p) => {

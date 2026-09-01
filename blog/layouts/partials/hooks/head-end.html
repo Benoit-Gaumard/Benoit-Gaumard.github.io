@@ -1,3 +1,25 @@
 {{ if or .Params.math .Site.Params.math }}
 {{ partial "math.html" . }}
 {{ end }}
+
+{{/* Reserving the slot height stops the sidebar from reflowing when the ad
+     fills, and keeps the box on the DESIGN.md azure-signal hairline. */}}
+<style>
+  .ad-slot {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px solid #0b6fb8;
+    border-radius: 8px;
+    min-height: 640px;
+  }
+  .ad-slot-label {
+    font-size: .68rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    opacity: .7;
+  }
+  .ad-slot ins { min-height: 600px; }
+</style>

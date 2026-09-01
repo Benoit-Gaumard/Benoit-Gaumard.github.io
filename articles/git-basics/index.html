@@ -6,6 +6,27 @@
   <meta name="description" content="The fundamental Git commands every beginner should know: configuration, cloning, branching, committing, and logs.">
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -263,6 +284,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -456,6 +483,16 @@
 <nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#current-config">Current config</a></li><li class="toc-level-2"><a href="#configure-user-and-email">Configure user and email</a></li><li class="toc-level-2"><a href="#clone-a-repo">Clone a repo</a></li><li class="toc-level-2"><a href="#get-the-current-branch-status">Get the current branch status</a></li><li class="toc-level-2"><a href="#stage-a-folder">Stage a folder</a></li><li class="toc-level-2"><a href="#create-a-commit-local">Create a commit (local)</a></li><li class="toc-level-2"><a href="#push-modifications-to-the-remote-branch">Push modifications to the remote branch</a></li><li class="toc-level-2"><a href="#get-the-last-version-of-the-repo-from-the-remote-branch">Get the last version of the repo from the remote branch</a></li><li class="toc-level-2"><a href="#change-branch">Change branch</a></li><li class="toc-level-2"><a href="#list-local-branches">List local branches</a></li><li class="toc-level-2"><a href="#list-remote-branches">List remote branches</a></li><li class="toc-level-2"><a href="#list-local-and-remote-branches">List local and remote branches</a></li><li class="toc-level-2"><a href="#delete-a-branch-local">Delete a branch (local)</a></li><li class="toc-level-2"><a href="#display-repo-config">Display repo config</a></li><li class="toc-level-2"><a href="#logs">Logs</a></li><li class="toc-level-2"><a href="#create-a-branch-local">Create a branch (local)</a></li><li class="toc-level-2"><a href="#delete-branch-remote">Delete branch (remote)</a></li><li class="toc-level-2"><a href="#list-modified-files">List modified files</a></li><li class="toc-level-2"><a href="#misc">Misc</a></li></ul></nav>
 <h2 id="current-config">Current config</h2>
 <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git config --list</code></pre></div>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="configure-user-and-email">Configure user and email</h2>
 <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git config --global user.name "Your Name"
 git config --global user.email "email@email.com"</code></pre></div>
@@ -527,6 +564,7 @@ git checkout -b feat-azure-functions</code></pre></div>
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

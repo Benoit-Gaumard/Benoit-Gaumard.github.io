@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -422,6 +442,9 @@
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -517,7 +540,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -581,6 +611,21 @@
       </div>
       <div class="portal-cards" id="portalCards"></div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About the Microsoft portals directory</h2>
+      <p>Microsoft's administration surface is spread across a large number of separate portals, each with its own address and its own scope. This directory gathers them in one searchable place.</p>
+      <h3>The ones you will use most</h3>
+      <ul>
+        <li><strong>Azure portal</strong> — subscriptions, resources, and infrastructure.</li>
+        <li><strong>Microsoft Entra admin centre</strong> — identity, groups, conditional access, and application registrations.</li>
+        <li><strong>Microsoft 365 admin centre</strong> — tenant, licences, users, and the message centre.</li>
+        <li><strong>Microsoft Purview</strong> — data governance, compliance, and information protection.</li>
+        <li><strong>Microsoft Defender</strong> — security operations, incidents, and endpoint management.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>Portals are consolidated and renamed regularly — several identity and security consoles have moved in recent years — and old addresses usually redirect rather than disappear. Because permissions are granted per service and not per portal, being able to open a console says nothing about what you can change inside it; that still depends on your role assignments.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -606,6 +651,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/app-service-php-access-to-azure-sql-database-with-managed-identity/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "App Service (PHP) access to Azure SQL database with managed identity"
 date = "2025-02-12"
@@ -9,11 +10,11 @@ tags = [
     "Database", "Security", "PHP"
 ]
 categories = ["Azure"]
-featureImage = "/images/SQL-Database.svg" # Sets featured image on blog post.
+featureImage = "/blog/images/SQL-Database.svg" # Sets featured image on blog post.
 featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/SQL-Database.svg" # Sets thumbnail image appearing inside card on homepage.
-shareImage = "/images/SQL-Database.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/SQL-Database.svg" # Sets thumbnail image appearing inside card on homepage.
+shareImage = "/blog/images/SQL-Database.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.

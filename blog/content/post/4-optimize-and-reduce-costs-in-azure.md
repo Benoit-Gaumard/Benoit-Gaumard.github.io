@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/optimize-and-reduce-costs-in-azure/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "✨ Optimize and Reduce Costs in Azure"
 date = "2024-09-11"
@@ -10,11 +11,11 @@ tags = [
 ]
 categories = ["Azure"
 ]
-featureImage = "/images/cost-management.svg" # Sets featured image on blog post.
+featureImage = "/blog/images/cost-management.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/cost-management.svg" # Sets thumbnail image appearing inside card on homepage.
-shareImage = "/images/cost-management.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/cost-management.svg" # Sets thumbnail image appearing inside card on homepage.
+shareImage = "/blog/images/cost-management.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -23,7 +24,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 Learn how to optimize and reduce costs in Azure with practical tips and strategies.
 <!--more-->
 
-<img src="/images/cost-management.svg">
+<img src="/blog/images/cost-management.svg">
 
 Throughout my various assignments, I have often heard: "It doesn't matter, I'm not the one paying." If you have ever taken an Azure subscription with a pay-as-you-go offer, you know that it is essential to control usage costs. Whether for personal use, an SME, or a large group, Azure cost optimization should be part of your cloud strategy.
 

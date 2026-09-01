@@ -6,6 +6,27 @@
   <meta name="description" content="An overview of Azure Network Security Perimeter: the pain points it solves for PaaS resource access control, how it compares to existing patterns, and its current limitations.">
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -263,6 +284,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -458,6 +485,16 @@
 <nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#pain-points">Pain points</a></li><li class="toc-level-2"><a href="#existing-patterns">Existing patterns</a></li><li class="toc-level-2"><a href="#network-access-control-features-in-azure">Network access control features in Azure</a></li><li class="toc-level-2"><a href="#azure-network-security-perimeter-for-paas-resources">Azure Network Security Perimeter for PaaS resources</a></li><li class="toc-level-2"><a href="#overview">Overview</a></li><li class="toc-level-2"><a href="#deployment">Deployment</a></li></ul></nav>
 <h2 id="pain-points">Pain points</h2>
 <ul><li><strong>Inconsistent access controls</strong>: PaaS services have partial and inconsistent inbound access controls.</li><li><strong>Varied user experience</strong>: access control mechanisms differ across services (portal, API, CLI, etc.).</li><li><strong>Scalability challenges</strong>: managing compliance and auditing is complex, requiring custom Azure Policies for each service.</li></ul>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="existing-patterns">Existing patterns</h2>
 <p>Here are the existing patterns to avoid public endpoints and secure access:</p>
 <ul><li><strong>VNet injection/integration</strong>: allows service instances to run inside the customer's VNet, providing better control and security. See <a href="https://learn.microsoft.com/en-us/azure/virtual-network/vnet-integration-for-azure-services" target="_blank" rel="noopener noreferrer">VNet integration for Azure services <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</li><li><strong>Private Link / Private Endpoint</strong>: used for services running outside the customer's VNet, ensuring secure and private access. See <a href="https://learn.microsoft.com/en-us/azure/private-link/private-link-service-overview" target="_blank" rel="noopener noreferrer">Private Link service overview <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</li></ul>
@@ -500,6 +537,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

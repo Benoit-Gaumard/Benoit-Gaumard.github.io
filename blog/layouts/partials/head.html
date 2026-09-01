@@ -11,46 +11,53 @@
 <title>{{ with $title }}{{ . }} {{ $separator }} {{ end }}{{ .Site.Title }}</title>
 <meta charset="utf-8">
 {{ if .Params.noindex }}
-<meta name="robots" content="noindex" />
+<meta name="robots" content="noindex, follow" />
 {{ end }}
 {{- with $params.ga_verify }}
   <meta name="google-site-verification" content="{{ . }}">
 {{- end }}
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Consent Mode v2 defaults. Declared before any Google tag so nothing is
+     personalised until the certified CMP reports the visitor's choice. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  gtag('set', 'ads_data_redaction', true);
+  gtag('set', 'url_passthrough', true);
+</script>
 {{- if (ne hugo.Environment "development") }}
   {{- partialCached "analytics" . }}
 {{- end }}
 {{- partial "opengraph" . }}
 {{- partialCached "favicon" . }}
-<link rel="canonical" href="{{ .Permalink }}">
+{{/* canonicalURL lets a post that also exists under /articles/ point at the
+     canonical copy there instead of competing with it. */}}
+<link rel="canonical" href="{{ with .Params.canonicalURL }}{{ . }}{{ else }}{{ .Permalink }}{{ end }}">
 {{ range .AlternativeOutputFormats -}}
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
 {{ end -}}
 
-
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-75X1Q2PPLE');
-</script>
-
+{{/* GA4 is emitted by the theme's analytics partial above, driven by
+     params.toml ga_analytics. A hardcoded copy here loaded gtag.js a second
+     time and double-counted every page view. */}}
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477"
      crossorigin="anonymous"></script>
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-P8KDSBWS');</script>
-  <!-- End Google Tag Manager -->
+{{/* Google Tag Manager is loaded once further down by the theme partial
+     driven by params.toml google_tag_manager_id; this hardcoded copy loaded
+     gtm.js a second time on every page. */}}
 
 
 <!-- preload assets de

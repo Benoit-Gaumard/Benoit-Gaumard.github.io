@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -386,6 +406,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -462,7 +485,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -587,6 +617,20 @@
         </div>
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About the percentage calculator</h2>
+      <p>Four everyday percentage questions, each with its own field so you do not have to remember which way the formula runs.</p>
+      <h3>The four modes</h3>
+      <ul>
+        <li><strong>What is X% of Y</strong> — the share of a total, for example 20% of a 1,450 € invoice.</li>
+        <li><strong>X is what percent of Y</strong> — a proportion, for example how much of a monthly cloud budget one subscription consumed.</li>
+        <li><strong>Percentage change</strong> — the difference between two values, positive for an increase and negative for a decrease.</li>
+        <li><strong>Add or subtract a percentage</strong> — applying VAT, a discount, or a forecast growth rate to a figure.</li>
+      </ul>
+      <h3>A common trap</h3>
+      <p>Percentage increases and decreases are not symmetrical. A value that falls by 50% needs to rise by 100% to get back where it started, because each step is measured against a different base. The same applies to cloud spend: a 30% cut followed by a 30% rise leaves you 9% below the original figure, not level with it.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -612,6 +656,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

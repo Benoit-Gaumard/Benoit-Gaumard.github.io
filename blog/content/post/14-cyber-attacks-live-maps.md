@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/cyber-attacks-live-maps/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Cyber attacks live maps"
 date = "2024-11-03"
@@ -6,11 +7,11 @@ description = "Test description"
 toc = false
 tags = ["Security"]
 categories = ["Tools"]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/cyber-attack-map.jpg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/cyber-attack-map.jpg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -19,7 +20,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 Free dashboards that provides a visualization of cyber attacks all over the world.
 <!--more-->
 
-<img src="/images/cyber-attack-map.jpg" width="50%" height="50%">
+<img src="/blog/images/cyber-attack-map.jpg" width="50%" height="50%">
 
 The main security players offer free dashboards that provide a simple and comprehensive visualization to better understand the dangers of the Internet and help companies analyze the state of various threats.
 

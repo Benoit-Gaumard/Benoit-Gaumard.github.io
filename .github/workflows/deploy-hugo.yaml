@@ -76,9 +76,12 @@ jobs:
           cp ../index.html public/index.html
           cp ../index_fr.html public/index_fr.html
           cp ../CNAME public/CNAME
+          cp ../ads.txt public/ads.txt
           cp ../sitemap.xml public/sitemap.xml
           cp ../robots.txt public/robots.txt
           cp ../og-image.png public/og-image.png
+          mkdir -p public/privacy
+          cp ../privacy/index.html public/privacy/index.html
           node ../build-freshness.mjs public/freshness.json
           cp -R ../favicons public/favicons
           cp ../404.html public/404.html

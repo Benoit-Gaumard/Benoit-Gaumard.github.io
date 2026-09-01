@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/terraform-vs-bicep-the-match/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Terraform vs Bicep, the match"
 date = "2024-12-06"
@@ -9,11 +10,11 @@ tags = [
     "Terraform", "Bicep"
 ]
 categories = ["Azure"]
-#featureImage = "/images/bicep.svg" # Sets featured image on blog post.
+#featureImage = "/blog/images/bicep.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/bicep.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/bicep.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -22,7 +23,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 Terraform Vs Bicep. What truly matters when working with Azure is deciding whether Terraform or Bicep is the right choice for your needs.
 <!--more-->
 
-<img src="/images/bicep.svg"> VS <img src="/images/terraform.svg">
+<img src="/blog/images/bicep.svg"> VS <img src="/blog/images/terraform.svg">
 
 For the past few years, my professional focus has been on developing Infrastructure-as-Code and CI/CD pipelines for various Azure customers. Through this, I've gained hands-on experience with both Terraform and Bicep.
 

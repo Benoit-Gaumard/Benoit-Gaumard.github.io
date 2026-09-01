@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/draw-io-vscode-extension-a-must-have-for-your-diagrams/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Draw.io VSCode Extension: A Must-Have for Your Diagrams"
 date = "2024-11-05"
@@ -9,11 +10,11 @@ tags = [
 ]
 categories = ["Tools"
 ]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/VSCode.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/VSCode.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -22,7 +23,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want an integrated solution and avoid multiple external tools (like Visio, PowerPoint, etc.) to create diagrams, here is a very helpful extension.
 <!--more-->
 
-<img src="/images/VSCode.svg">
+<img src="/blog/images/VSCode.svg">
 
 
 This unofficial extension integrates Draw.io (also known as diagrams.net) into VS Code.

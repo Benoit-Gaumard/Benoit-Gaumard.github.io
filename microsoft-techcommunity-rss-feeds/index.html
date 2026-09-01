@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -371,6 +391,9 @@
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -448,7 +471,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -516,6 +546,19 @@
       </div>
       <p id="resultCount" aria-live="polite"></p>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About the Microsoft Tech Community feeds</h2>
+      <p>The Microsoft Tech Community hosts dozens of separate product blogs, each with its own RSS feed. This page consolidates their recent activity so you can follow several at once instead of subscribing individually.</p>
+      <h3>What you will find there</h3>
+      <ul>
+        <li>Engineering posts from the product groups behind Azure, Microsoft 365, Windows, and security.</li>
+        <li>Deep dives and troubleshooting guidance that rarely make it into official documentation.</li>
+        <li>Early signals about features before they reach the formal release notes.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>Tech Community posts are written by individual engineers and programme managers, so they are more detailed and more opinionated than documentation — and occasionally out of date. Treat them as expert commentary and confirm anything load-bearing against Microsoft Learn. The per-feed status listing makes it obvious when a blog has gone quiet or its feed has changed address.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -541,6 +584,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

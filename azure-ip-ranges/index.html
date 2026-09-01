@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -501,6 +521,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -627,7 +650,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -711,6 +741,20 @@
 
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About Azure IP ranges and service tags</h2>
+      <p>Azure publishes the public IP ranges behind its services as a weekly JSON download, grouped into service tags such as <code>Storage</code>, <code>AzureCloud</code>, <code>Sql</code>, and their regional variants. This page reads that published data so you can search a tag or look up which service an address belongs to.</p>
+      <h3>How to use it</h3>
+      <ul>
+        <li>Search by service tag name to list every prefix it currently covers.</li>
+        <li>Search by region to narrow a tag down to a single location.</li>
+        <li>Use the results when a firewall or an on-premises appliance cannot resolve service tags natively.</li>
+      </ul>
+      <h3>Prefer service tags to hardcoded ranges</h3>
+      <p>Inside Azure, reference the tag itself in network security groups, Azure Firewall rules, and user-defined routes. Microsoft updates the membership of a tag automatically, so a rule written against <code>Storage.westeurope</code> keeps working as prefixes are added or retired. Copying literal ranges into a rule set means owning the maintenance of that list forever.</p>
+      <p>The published file changes regularly and new ranges are announced roughly a week before they go live, so a firewall built on static copies needs a scheduled refresh to avoid silent breakage.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -736,6 +780,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

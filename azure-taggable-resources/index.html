@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -374,6 +394,9 @@
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -471,7 +494,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -540,6 +570,20 @@
       </div>
       <p id="resultCount" aria-live="polite"></p>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About tag support in Azure</h2>
+      <p>Not every Azure resource type accepts tags, and among those that do, not all propagate tags into the cost report. This page lists both facts per resource type, from the official tag-support reference data.</p>
+      <h3>Why it matters for cost management</h3>
+      <p>Cost allocation by team, environment, or application relies on tags reaching the billing pipeline. A resource that accepts tags but does not surface them in cost analysis will appear as unallocated spend no matter how carefully it is labelled, which quietly undermines a showback or chargeback model.</p>
+      <h3>Practical guidance</h3>
+      <ul>
+        <li>Tags are not inherited automatically: a resource does not take the tags of its resource group unless a policy applies them.</li>
+        <li>Use Azure Policy with the <code>Modify</code> effect to apply and remediate required tags at scale.</li>
+        <li>Keep the required set small — an owner, an environment, and a cost centre are enough to be useful and realistic to maintain.</li>
+        <li>Tag names are case-insensitive for lookup but preserve the case you set, so agree on one spelling early.</li>
+      </ul>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -565,6 +609,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

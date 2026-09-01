@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/from-wordpress-to-hugo/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "From Wordpress to Hugo website"
 date = "2024-10-16"
@@ -6,11 +7,11 @@ description = "Test description"
 toc = false
 tags = ["hugo"]
 categories = ["hugo"]
-#featureImage = "/images/website-migration.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/website-migration.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/website-migration.png" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/website-migration.png" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -19,7 +20,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 Why I migrated from  Wordpress to Hugo website. Pros and cons.
 <!--more-->
 
-<img src="/images/website-migration.png" width="50%" height="50%">
+<img src="/blog/images/website-migration.png" width="50%" height="50%">
 
 
 ## WordPress vs. Hugo: Understanding the Difference and Why Hugo Might Be Right for You

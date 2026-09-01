@@ -12,10 +12,10 @@
 
     {{ partial "search/widget" . }}
 
-    <div style="border: 2px solid rgb(37, 165, 225); border-radius: 8px; padding: 15px; margin-top: 15px;">
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477"
-        crossorigin="anonymous"></script>
-      <!-- Ad-Display-Responsive -->
+    <div class="ad-slot">
+      <span class="ad-slot-label">Advertisement</span>
+      <!-- Ad-Display-Responsive. The adsbygoogle loader is already in head.html:
+           re-including it here loaded the script three times per page. -->
       <ins class="adsbygoogle"
           style="display:block"
           data-ad-client="ca-pub-6636684537203477"
@@ -67,7 +67,7 @@
 
     <h2 class="mt-4 taxonomy">🛠️ Tools</h2>
 
-    <div style="border: 2px solid rgb(37, 165, 225); border-radius: 8px; padding: 15px;">
+    <div style="border: 2px solid #0b6fb8; border-radius: 8px; padding: 15px;">
       <ul>
         <li><a href="https://tools.benoit-gaumard.io/" class="post_tag button button_translucent" target="_blank">🌐 tools.benoit-gaumard.io</a></li>
         <li><a href="https://tools.benoit-gaumard.io/azure-icons" class="post_tag button button_translucent" target="_blank">🌐 Azure Icons</a></li>
@@ -156,7 +156,7 @@
 
     <!-- <h2 class="mt-4 taxonomy">🌐 Friends blogs</h2>
 
-    <div style="border: 2px solid rgb(37, 165, 225); border-radius: 8px; padding: 15px;">
+    <div style="border: 2px solid #0b6fb8; border-radius: 8px; padding: 15px;">
       <ul>
       <li><a href="https://woivre.com/" class="post_tag button button_translucent">Wilfried Woivre</a></li>
       <li><a href="https://blog.stephane-robert.info/" class="post_tag button button_translucent">Stéphane Robert</a></li>
@@ -177,20 +177,9 @@
 
   <h2 class="mt-4 taxonomy"></h2>
 
-  <div style="border: 2px solid rgb(37, 165, 225); border-radius: 8px; padding: 15px;">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477"
-      crossorigin="anonymous"></script>
-    <!-- Ad-Display-Responsive -->
-    <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-6636684537203477"
-        data-ad-slot="4494484671"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
+  {{/* A second <ins> reusing data-ad-slot 4494484671 never filled: AdSense
+       serves one ad per slot per page, so the duplicate was dead markup
+       reserving 600px. Restore this block only with a dedicated slot ID. */}}
 
   </section>
 </aside>

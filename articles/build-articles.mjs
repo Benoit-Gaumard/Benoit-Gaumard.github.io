@@ -11,6 +11,68 @@ const contentDir = join(HERE, "content");
 const SITE_URL = "https://benoit-gaumard.io";
 const DEFAULT_AUTHOR = "Benoit Gaumard";
 const WORDS_PER_MINUTE = 200;
+const PRIVACY_UPDATED = "2026-09-01";
+
+// ---------- Measurement and advertising ----------
+
+const GA4_ID = "G-75X1Q2PPLE";
+const ADSENSE_CLIENT = "ca-pub-6636684537203477";
+// Existing responsive display unit. One unit per page: two <ins> sharing a slot
+// on the same page leaves the second one permanently unfilled.
+const AD_SLOT_ARTICLE = "4494484671";
+// Set this once a dedicated second ad unit exists in AdSense; leaving it empty
+// keeps a single unit per page rather than duplicating the slot above.
+const AD_SLOT_ARTICLE_SECONDARY = "";
+
+// Consent Mode v2. Everything starts denied so no Google tag personalises
+// anything before the certified CMP reports a choice.
+const CONSENT_AND_ANALYTICS = `  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', '${GA4_ID}');
+  </script>`;
+
+const ADSENSE_LOADER = `  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}" crossorigin="anonymous"></script>`;
+
+function adUnit(slot) {
+  if (!slot) return "";
+  return `    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="${ADSENSE_CLIENT}"
+           data-ad-slot="${slot}"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>`;
+}
+
+// Drops the unit after the second <h2> so it sits inside the reading flow
+// rather than below the fold. Short articles keep it at the end instead.
+function injectMidArticleAd(bodyHtml, slot) {
+  const unit = adUnit(slot);
+  if (!unit) return { body: bodyHtml, trailing: "" };
+  const headings = [...bodyHtml.matchAll(/<h2\b/g)];
+  if (headings.length < 3) return { body: bodyHtml, trailing: unit };
+  const at = headings[1].index;
+  return { body: bodyHtml.slice(0, at) + unit + "\n" + bodyHtml.slice(at), trailing: "" };
+}
 
 // ---------- Frontmatter (+++ TOML-lite +++) ----------
 
@@ -252,7 +314,7 @@ function formatRssDate(dateStr) {
   return new Date(`${dateStr}T12:00:00Z`).toUTCString();
 }
 
-function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote }) {
+function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -260,7 +322,8 @@ function pageShell({ title, description, canonical, extraHead = "", bodyClass = 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="${escapeHtml(description)}">
   <meta name="color-scheme" content="light">
-  <script>
+${CONSENT_AND_ANALYTICS}
+${ads ? ADSENSE_LOADER + "\n" : ""}  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -523,6 +586,12 @@ ${extraHead}
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -641,6 +710,7 @@ ${content}
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>
@@ -806,6 +876,8 @@ function renderArticlePage(article) {
     ? `<div class="article-feature-image"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}"></div>`
     : "";
 
+  const { body, trailing } = injectMidArticleAd(article.bodyHtml, AD_SLOT_ARTICLE);
+
   const content = `    <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories">${categoriesHtml}</div>
@@ -824,9 +896,9 @@ function renderArticlePage(article) {
     ${featureImageHtml}
 
     <article class="article-body">
-      ${article.bodyHtml}
+      ${body}
     </article>
-
+${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(AD_SLOT_ARTICLE_SECONDARY) + "\n" : ""}
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
       <a href="/articles/rss.xml">RSS feed</a>
@@ -836,6 +908,90 @@ function renderArticlePage(article) {
     title: `${article.title} | Benoit Gaumard`,
     description: article.description,
     canonical: `${SITE_URL}${article.url}`,
+    content,
+    ads: true,
+  });
+}
+
+// ---------- Static pages ----------
+
+// The privacy policy is required by AdSense and has to stay reachable from
+// every page, so it is generated from the same shell as the articles.
+function renderPrivacyPage() {
+  const description =
+    "How benoit-gaumard.io handles cookies, advertising, and analytics: Google AdSense, Google Analytics, consent management, and how to change your choices.";
+
+  const content = `    <div class="article-header">
+      <p class="article-breadcrumb"><a href="/">&larr; Home</a></p>
+      <h1 class="article-title">Privacy Policy</h1>
+      <p class="article-description">${description}</p>
+      <div class="article-meta">
+        <span>Benoit Gaumard</span>
+        <span class="dot">&middot;</span>
+        <span>Last updated ${formatDisplayDate(PRIVACY_UPDATED)}</span>
+      </div>
+    </div>
+
+    <article class="article-body">
+      <h2 id="who-runs-this-site">Who runs this site</h2>
+      <p>benoit-gaumard.io is a personal website published by Benoit Gaumard, an Azure infrastructure and DevOps consultant. It hosts free tools, reference data, and technical articles about Microsoft Azure, GitHub, and cloud operations. It is a personal project and is not operated by any employer.</p>
+      <p>For any question about this policy, you can reach me through <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+
+      <h2 id="what-data-is-collected">What data is collected</h2>
+      <p>There is no account system, no newsletter, and no contact form on this site. I never ask you for your name, email address, or any other identifying detail, and I do not sell or rent data to anyone.</p>
+      <p>Three categories of data exist:</p>
+      <ul>
+        <li><strong>Data that never leaves your browser.</strong> Every calculator and generator here runs entirely client-side. Values you type into the subnet calculator, the GUID generator, the SLA calculator, the units converter, or any other tool are processed in your browser and are never sent to a server. Preferences such as your light or dark theme choice, and whether you dismissed the announcement banner, are stored in your browser's local storage and stay on your device.</li>
+        <li><strong>Technical data from hosting.</strong> The site is served by GitHub Pages. Like any web host, GitHub processes connection data such as your IP address in order to deliver pages and protect the service against abuse. See the <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</li>
+        <li><strong>Measurement and advertising data.</strong> Described below. This is the only category that depends on your consent.</li>
+      </ul>
+
+      <h2 id="advertising">Advertising: Google AdSense</h2>
+      <p>Parts of this site display advertising served by Google AdSense, which helps cover hosting and domain costs. Google and its advertising partners act as third-party vendors on this site.</p>
+      <ul>
+        <li>Third-party vendors, including Google, use cookies and similar technologies to serve ads based on your prior visits to this website or to other websites.</li>
+        <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet.</li>
+        <li>You can opt out of personalised advertising in <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
+        <li>You can opt out of third-party vendor cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info</a> or <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer">Your Online Choices</a>.</li>
+        <li>Google's own handling of this data is described in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">how Google uses information from sites that use its services</a>.</li>
+      </ul>
+      <p>The complete, always-current list of advertising partners that may set cookies is shown inside the consent dialogue itself, under the vendor list.</p>
+
+      <h2 id="analytics">Analytics</h2>
+      <p>This site uses Google Analytics 4 to understand, in aggregate, which pages and tools are useful. It reports things such as how many people visited a page and which country traffic came from. IP addresses are handled by Google under the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>, and analytics storage stays disabled until you consent.</p>
+      <p>I do not use analytics to build profiles of individual visitors, and I have no way to identify you personally from these reports.</p>
+
+      <h2 id="cookies-and-consent">Cookies and your consent</h2>
+      <p>This site implements Google Consent Mode v2. Before you make a choice, advertising storage, advertising personalisation, ad user data, and analytics storage are all set to <em>denied</em>. Google tags run in a restricted mode and no advertising or analytics cookies are used for personalisation.</p>
+      <p>If you are in the European Economic Area, the United Kingdom, or Switzerland, a consent dialogue from a Google-certified consent management platform appears on your first visit. It lets you accept or refuse cookies used for personalised advertising and measurement.</p>
+      <ul>
+        <li><strong>If you accept</strong>, advertising and analytics cookies are enabled and ads may be personalised.</li>
+        <li><strong>If you refuse</strong>, you keep full access to every page and tool. Advertising, where present, is limited to non-personalised ads, which still require a basic ad request but do not build an advertising profile from your browsing.</li>
+        <li><strong>To change your mind later</strong>, clear this site's cookies in your browser settings and reload any page: the dialogue is shown again. You can also manage Google-wide advertising choices in <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
+      </ul>
+      <p>Strictly necessary storage — remembering your theme preference and the dismissal of the announcement banner — is not covered by consent because it is required to deliver the interface you asked for, and it is never shared with anyone.</p>
+
+      <h2 id="your-rights">Your rights</h2>
+      <p>Under the GDPR you can request access to, correction of, or erasure of personal data relating to you, object to processing, and lodge a complaint with a supervisory authority — in France, the <a href="https://www.cnil.fr/" target="_blank" rel="noopener noreferrer">CNIL</a>.</p>
+      <p>Because this site holds no account, no mailing list, and no server-side visitor database, I hold no personal data that would let me identify you. Requests about advertising or analytics data collected by Google should be addressed to Google, which acts as controller for that processing; see the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.</p>
+
+      <h2 id="children">Children</h2>
+      <p>This site publishes professional technical documentation for cloud engineers. It is not directed at children under 16, and no content here is created for a child audience.</p>
+
+      <h2 id="changes">Changes to this policy</h2>
+      <p>This policy is updated when the site's tooling changes — for example if an advertising or measurement provider is added or removed. The date at the top of this page always reflects the latest version.</p>
+    </article>
+
+    <div class="article-footer-nav">
+      <a href="/">&larr; Back to home</a>
+      <a href="/articles/">All articles</a>
+    </div>`;
+
+  return pageShell({
+    title: "Privacy Policy | Benoit Gaumard",
+    description,
+    canonical: `${SITE_URL}/privacy/`,
+    headerActive: "",
     content,
   });
 }
@@ -912,6 +1068,10 @@ async function main() {
     await writeFile(join(outDir, "index.html"), renderArticlePage(article), "utf8");
   }
 
+  const privacyDir = join(HERE, "..", "privacy");
+  await mkdir(privacyDir, { recursive: true });
+  await writeFile(join(privacyDir, "index.html"), renderPrivacyPage(), "utf8");
+
   const articlesJson = {
     generatedAt: new Date().toISOString(),
     articles: published.map(({ bodyHtml, draft, ...meta }) => meta),
@@ -921,6 +1081,7 @@ async function main() {
 
   console.log(`Built ${published.length} article(s):`);
   published.forEach((a) => console.log(`  - ${a.url}  (${a.title})`));
+  console.log("  - /privacy/  (Privacy Policy)");
   if (all.length !== published.length) {
     console.log(`Skipped ${all.length - published.length} draft article(s).`);
   }

@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/set-up-your-first-terraform-environment-on-windows/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Set Up your first Terraform environment on Windows"
 date = "2024-09-11"
@@ -6,11 +7,11 @@ description = "Learn how to optimize and reduce costs in Azure with practical ti
 toc = true
 tags = ["Terraform"]
 categories = ["Azure", "Tools"]
-#featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/terraform.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/terraform.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -19,7 +20,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
 <!--more-->
 
-<img src="/images/terraform.svg">
+<img src="/blog/images/terraform.svg">
 
 ## Prerequisites​
 ---

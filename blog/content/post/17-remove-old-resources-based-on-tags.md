@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/remove-old-azure-resources-based-on-tags/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Remove old Azure resources based on tags"
 date = "2024-11-13"
@@ -9,11 +10,11 @@ tags = [
 ]
 categories = ["Azure"
 ]
-#featureImage = "/images/azure-cost-optimization.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/azure-cost-optimization.png" # Sets featured image on blog post.
 #featureImageAlt = 'Azure Cost Optimization' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/Tags.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/Tags.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/azure-cost-optimization-share.png" # Designate a separate image for social media sharing.
 codeMaxLines = 50 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -22,7 +23,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
 <!--more-->
 
-<img src="/images/Tags.svg">
+<img src="/blog/images/Tags.svg">
 
 ### Introduction
 ---

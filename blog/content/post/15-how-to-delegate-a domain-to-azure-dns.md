@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/how-to-delegate-a-domain-to-azure-dns/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "How to delegate a domain to Azure DNS"
 date = "2025-12-16"
@@ -9,11 +10,11 @@ tags = [
 ]
 categories = ["Azure"
 ]
-#featureImage = "/images/azure-dns-zone.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/azure-dns-zone.png" # Sets featured image on blog post.
 #featureImageAlt = '' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/azure-dns-zone.png" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/azure-dns-zone.png" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/azure-dns-zone.png" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/azure-dns-zone.png" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -46,11 +47,11 @@ I own a domain name, **quickquotemaker.io**, which is used to display a website 
 
 The DNS zone management for this domain is handled by the registrar **OVH** when I purchased the domain name.
 
-<img src="/images/dns-delegation/domain-names.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/domain-names.png" width="50%" height="50%">
 
 From the OVH interface, I can manage my DNS zone and add any type of record as needed (A, CNAME, NS, MX, TXT, etc.).
 
-<img src="/images/dns-delegation/dns-entries.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/dns-entries.png" width="50%" height="50%">
 
 For various applications hosted in Azure, I regularly need to create new DNS entries so that my applications can be accessed using domain names such as:
 
@@ -76,11 +77,11 @@ Steps:
 
 - Sign in to the Azure portal and search for **DNS Zone** in the Marketplace.
 
-<img src="/images/dns-delegation/azure-dns-zone.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/azure-dns-zone.png" width="50%" height="50%">
 
 - Click **Create**.
 
-<img src="/images/dns-delegation/create-dns-zone.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/create-dns-zone.png" width="50%" height="50%">
 
 - Select an existing resource group or create (eg.quickquotemaker.io) a new one.
 
@@ -92,7 +93,7 @@ Steps:
 
 - Click **Create**.
 
-<img src="/images/dns-delegation/new-dns-zone.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/new-dns-zone.png" width="50%" height="50%">
 
 {{% notice note "Note " %}}
 Azure allows you to create a DNS zone with any name (e.g., microsoft.com, google.fr, toto.local), even if you are not the owner. However, to actually manage the zone and add records, you must be the domain owner.
@@ -100,7 +101,7 @@ Azure allows you to create a DNS zone with any name (e.g., microsoft.com, google
 
 To manage the zone, Azure provides four Name Servers (NS) by default to ensure redundancy in case of failure.
 
-<img src="/images/dns-delegation/azure-ns-servers.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/azure-ns-servers.png" width="50%" height="50%">
 
 
 {{% notice note "Note " %}}
@@ -120,26 +121,26 @@ Steps in OVH:
 
 - Click **Modify DNS Servers**.
 
-<img src="/images/dns-delegation/modify-dns-servers.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/modify-dns-servers.png" width="50%" height="50%">
 
 - Select **Use my own DNS**.
 
 - Add the four Azure DNS name servers (remove the trailing dot).
 
-<img src="/images/dns-delegation/add-azure-dns.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/add-azure-dns.png" width="50%" height="50%">
 
 - Delete the existing OVH NS entries.
 
-<img src="/images/dns-delegation/remove-ovh-ns.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/remove-ovh-ns.png" width="50%" height="50%">
 
 
 Click **Apply Configuration**.
 
-<img src="/images/dns-delegation/apply-ovh-dns-config.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/apply-ovh-dns-config.png" width="50%" height="50%">
 
 - DNS Servers for the zone are now the Azure DNS Servers.
 
-<img src="/images/dns-delegation/custom-dns-servers.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/custom-dns-servers.png" width="50%" height="50%">
 
 {{% notice note "Note " %}}
 Be careful, your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.
@@ -166,15 +167,15 @@ To display my website, the first record to create in Azure DNS is an **A** recor
 
 - Add the public IP address of the website.
 
-<img src="/images/dns-delegation/add-record-set.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/add-record-set.png" width="50%" height="50%">
 
 - Once the record is created, you should see the corresponding entry.
 
-<img src="/images/dns-delegation/new-record-set.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/new-record-set.png" width="50%" height="50%">
 
 - Next, create a www record of type CNAME pointing to the root domain.
 
-<img src="/images/dns-delegation/cname-record.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/cname-record.png" width="50%" height="50%">
 
 ## 5. Test the delegation
 ---
@@ -191,7 +192,7 @@ From a command prompt, run the following commands:
 ipconfig /flushdns
 ```
 
-<img src="/images/dns-delegation/flush-dns.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/flush-dns.png" width="50%" height="50%">
 
 - Then check the SOA with this command
 
@@ -199,7 +200,7 @@ ipconfig /flushdns
 nslookup -type=SOA quickquotemaker.io
 ```
 
-<img src="/images/dns-delegation/soa-command.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/soa-command.png" width="50%" height="50%">
 
 
 Verify that the response looks like the expected nslookup output.
@@ -210,7 +211,7 @@ Verify that the response looks like the expected nslookup output.
 nslookup -type=NS quickquotemaker.io
 ```
 
-<img src="/images/dns-delegation/ns-command.png" width="50%" height="50%">
+<img src="/blog/images/dns-delegation/ns-command.png" width="50%" height="50%">
 
 
 Verify that the response matches the Azure DNS name servers.

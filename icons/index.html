@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -745,6 +765,9 @@
       body::before { animation: none; }
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -806,7 +829,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -908,6 +938,20 @@
         <button class="pagination-button" id="nextPage" type="button">Next</button>
       </nav>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About the Azure icon gallery</h2>
+      <p>A browsable gallery of Azure service icons in SVG, for architecture diagrams, documentation, presentations, and design mockups.</p>
+      <h3>Why SVG</h3>
+      <ul>
+        <li>Vector artwork stays sharp at any size, from a slide thumbnail to a printed poster.</li>
+        <li>File sizes are small, which keeps documentation repositories light.</li>
+        <li>Colours can be adapted where a diagram needs a monochrome or dark-background variant.</li>
+      </ul>
+      <h3>Using them well</h3>
+      <p>Keep icon sizes consistent within a diagram and let position, not size, express hierarchy. Always pair an icon with a text label: the icon set is large, several services look alike at small sizes, and a diagram that depends on icon recognition alone is unreadable for anyone new to the platform — and inaccessible to screen reader users.</p>
+      <p>Microsoft publishes the official Azure architecture icon set with its own terms of use; check them before using the artwork in commercial or public-facing material.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -933,6 +977,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
         <span id="libraryCount"></span>
       </div>
     </div>

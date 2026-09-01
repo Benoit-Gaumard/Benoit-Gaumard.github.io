@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -468,6 +488,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -596,7 +619,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -672,6 +702,19 @@
 
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About GitHub IP ranges</h2>
+      <p>GitHub exposes the address ranges used by its services through the public Meta API. This page presents that data grouped by service: the website, the API, Git operations, GitHub Actions runners, GitHub Pages, Copilot, packages, webhooks, and importer traffic.</p>
+      <h3>Typical uses</h3>
+      <ul>
+        <li>Allowing outbound access to <code>github.com</code> and Git endpoints from a locked-down network.</li>
+        <li>Accepting inbound webhook deliveries on a self-hosted service.</li>
+        <li>Allowing hosted Actions runners to reach an internal artifact feed or a deployment target.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>These ranges change without individual notice, so treat the Meta API as the source of truth and refresh any firewall list on a schedule rather than copying it once. The <code>actions</code> range in particular is very large and shared across all of GitHub's hosted runners, so allowing it is not equivalent to allowing only your own workflows — if that distinction matters, self-hosted runners with a fixed egress address are the stronger control.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -697,6 +740,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

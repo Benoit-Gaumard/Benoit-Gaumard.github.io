@@ -41,6 +41,26 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -435,6 +455,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -512,7 +535,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -576,6 +606,19 @@
       </div>
       <div class="workflow-cards" id="workflowCards"></div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About these scheduled workflows</h2>
+      <p>Several pages on this site display data that has to stay current: Azure and AWS release notes, Microsoft 365 roadmap items, RSS headlines, and the published IP ranges for Azure and GitHub. Each is refreshed by a scheduled GitHub Actions workflow, and this page reports the state of every one of them.</p>
+      <h3>How the refresh works</h3>
+      <ul>
+        <li>A workflow runs on a cron schedule, fetches the upstream source, and writes the result as static JSON into the repository.</li>
+        <li>Committing that data triggers a rebuild, so the published pages serve pre-fetched files rather than calling third-party APIs on every visit.</li>
+        <li>Because the output is static, pages stay fast and keep working even when an upstream source is temporarily unavailable.</li>
+      </ul>
+      <h3>Why show the status</h3>
+      <p>Stale data is worse than missing data, because nothing looks wrong. Surfacing the last successful run for each workflow makes it obvious when a feed has changed address, an API has started rate-limiting, or a schedule has silently stopped firing.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -601,6 +644,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>
