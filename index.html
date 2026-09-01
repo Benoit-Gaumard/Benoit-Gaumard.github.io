@@ -22,23 +22,46 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Benoit Gaumard",
-    "url": "https://benoit-gaumard.io/",
-    "jobTitle": "Azure Expert",
-    "sameAs": [
-      "https://github.com/Benoit-Gaumard",
-      "https://linkedin.com/in/benoit-gaumard"
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://benoit-gaumard.io/#person",
+        "name": "Benoit Gaumard",
+        "url": "https://benoit-gaumard.io/",
+        "jobTitle": "Azure Expert",
+        "sameAs": [
+          "https://github.com/Benoit-Gaumard",
+          "https://linkedin.com/in/benoit-gaumard"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://benoit-gaumard.io/#website",
+        "name": "benoit-gaumard.io",
+        "url": "https://benoit-gaumard.io/",
+        "description": "Azure tools, auto-refreshed reference data and how-to guides.",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://benoit-gaumard.io/#person" }
+      }
     ]
   }
   </script>
   <link rel="alternate" hreflang="en" href="https://benoit-gaumard.io/" />
   <link rel="alternate" hreflang="fr" href="https://benoit-gaumard.io/index_fr.html" />
   <link rel="alternate" hreflang="x-default" href="https://benoit-gaumard.io/" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
   <script>
     (function () {
       try {
@@ -590,7 +613,7 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
       <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
         <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
