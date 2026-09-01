@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -394,6 +407,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -470,7 +486,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -597,6 +620,20 @@
         </div>
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About the subnet calculator</h2>
+      <p>Subnetting turns one IPv4 network into several smaller ones. This calculator takes an address plus a CIDR prefix or a dotted-decimal mask and returns the network address, broadcast address, usable host range, host count, and wildcard mask — then splits that network into equal-sized subnets when you need to carve it up.</p>
+      <h3>How to use it</h3>
+      <ul>
+        <li>Enter any address in the network, such as <code>10.20.0.37</code>; the network address is derived for you.</li>
+        <li>Give the size as a prefix (<code>/24</code>) or as a mask (<code>255.255.255.0</code>) — the two are interchangeable.</li>
+        <li>Use the split option to divide the block into equal subnets and read off each range.</li>
+      </ul>
+      <h3>Planning an Azure virtual network</h3>
+      <p>Azure reserves five addresses in every subnet: the network address, the broadcast address, and three more for the default gateway and DNS mapping. A <code>/24</code> therefore offers 251 usable addresses rather than 254. Several services also require a dedicated subnet with a minimum size — Azure Bastion, Azure Firewall, and gateway subnets are the common ones — so leave room for them before you allocate the whole range to workloads.</p>
+      <p>Prefer a contiguous, non-overlapping plan across environments. Overlapping ranges are the single most common cause of failed VNet peering and site-to-site VPN connections, and they are painful to renumber once workloads are running.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -622,6 +659,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

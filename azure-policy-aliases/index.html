@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -388,6 +401,9 @@
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -482,7 +498,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -577,6 +600,19 @@
       </div>
       <p id="resultCount" aria-live="polite"></p>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About Azure Policy aliases</h2>
+      <p>An alias exposes a specific property of a resource type to Azure Policy, so a rule can inspect it. Writing a custom policy means finding the right alias first, and this page lets you search the full published list.</p>
+      <h3>How aliases work</h3>
+      <ul>
+        <li>An alias looks like <code>Microsoft.Storage/storageAccounts/allowBlobPublicAccess</code> and maps to a property in the resource provider's API.</li>
+        <li>Aliases are versioned against API versions, and a property only becomes usable once an alias exists for it.</li>
+        <li>Array properties use <code>[*]</code> and are evaluated with <code>count</code> expressions rather than a direct comparison.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>If a property has no alias, no policy can evaluate it — that is the usual reason a rule that looks correct never matches anything. The same list is available from the CLI with <code>az provider show</code>, but searching it here is faster when you only need to confirm that an alias exists and how it is spelled.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -602,6 +638,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

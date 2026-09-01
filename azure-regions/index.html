@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -495,6 +508,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -615,7 +631,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -716,6 +739,21 @@
         <div class="region-cards" id="regionCards"></div>
       <div class="region-map" id="regionMap" hidden></div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About Azure regions</h2>
+      <p>Every Azure region, with its physical location, the geography it belongs to, its paired region, and whether it supports availability zones.</p>
+      <h3>Choosing a region</h3>
+      <ul>
+        <li><strong>Data residency</strong> — a geography is the boundary most compliance requirements are written against.</li>
+        <li><strong>Latency</strong> — the closest region to your users usually matters more than any other factor.</li>
+        <li><strong>Service availability</strong> — not every service or VM family exists in every region, and previews are typically limited to a handful.</li>
+        <li><strong>Price</strong> — the same resource can differ noticeably in cost between regions.</li>
+        <li><strong>Capacity</strong> — popular regions can refuse specific VM sizes at times, which is worth testing before committing.</li>
+      </ul>
+      <h3>Pairs and zones are not the same thing</h3>
+      <p>Availability zones protect against a datacenter failure inside one region; a regional pair supports recovery from the loss of an entire region, and governs how some platform-managed replication and sequenced updates behave. A resilient design usually needs both, and a pair is not automatically the region you would choose for disaster recovery — check latency and service parity first.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -741,6 +779,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

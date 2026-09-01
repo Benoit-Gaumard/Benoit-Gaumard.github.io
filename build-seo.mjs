@@ -30,10 +30,26 @@ const MARKER = "<!-- seo:analytics -->";
 export function analyticsSnippet(indent = "  ") {
   return [
     `${indent}${MARKER}`,
-    `${indent}<script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>`,
+    // Consent Mode v2 defaults lead the block: they have to be queued before
+    // gtag.js loads, otherwise the tag reads a personalised default first.
+    // Kept byte-identical to ANALYTICS_SNIPPET in articles/build-articles.mjs.
     `${indent}<script>`,
     `${indent}  window.dataLayer = window.dataLayer || [];`,
     `${indent}  function gtag(){dataLayer.push(arguments);}`,
+    `${indent}  gtag('consent', 'default', {`,
+    `${indent}    ad_storage: 'denied',`,
+    `${indent}    ad_user_data: 'denied',`,
+    `${indent}    ad_personalization: 'denied',`,
+    `${indent}    analytics_storage: 'denied',`,
+    `${indent}    functionality_storage: 'granted',`,
+    `${indent}    security_storage: 'granted',`,
+    `${indent}    wait_for_update: 500`,
+    `${indent}  });`,
+    `${indent}  gtag('set', 'ads_data_redaction', true);`,
+    `${indent}  gtag('set', 'url_passthrough', true);`,
+    `${indent}</script>`,
+    `${indent}<script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>`,
+    `${indent}<script>`,
     `${indent}  gtag('js', new Date());`,
     `${indent}  gtag('config', '${GA4_ID}');`,
     `${indent}</script>`,
@@ -87,13 +103,50 @@ function titleOf(html) {
 }
 
 function injectAnalytics(html) {
-  if (html.includes(MARKER)) return html;
+  const eol = html.includes("\r\n") ? "\r\n" : "\n";
+
+  // A block written before Consent Mode was added carries the marker but no
+  // consent defaults, so a plain marker check would leave it personalising by
+  // default forever. Rewrite it in place instead of skipping it.
+  if (html.includes(MARKER)) {
+    if (html.includes("gtag('consent', 'default'")) return html;
+    const block = new RegExp(
+      `([ \\t]*)${MARKER}[\\s\\S]*?gtag\\('config', '${GA4_ID}'\\);[\\s\\S]*?<\\/script>`
+    );
+    const m = html.match(block);
+    if (!m) return html;
+    return html.replace(block, analyticsSnippet(m[1]).split("\n").join(eol));
+  }
+
   const i = html.indexOf(ANCHOR);
   if (i === -1) return null;
-  const eol = html.includes("\r\n") ? "\r\n" : "\n";
   const indent = (html.slice(0, i).match(/([ \t]*)$/) || ["", "  "])[1];
   const snippet = analyticsSnippet(indent).split("\n").join(eol);
   return html.slice(0, i + ANCHOR.length) + eol + snippet + html.slice(i + ANCHOR.length);
+}
+
+// AdSense requires a privacy policy reachable from every page, and the footer
+// is the one element every hand-authored page shares.
+function addPrivacyLink(html) {
+  if (html.includes('href="/privacy/"')) return html;
+  const marker = '<span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>';
+  if (!html.includes(marker)) return html;
+  const eol = html.includes("\r\n") ? "\r\n" : "\n";
+  return html.replace(marker, `${marker}${eol}        <a href="/privacy/">Privacy &amp; cookies</a>`);
+}
+
+function addFooterLinkStyles(html) {
+  if (html.includes(".footer-bottom a {")) return html;
+  const anchor = `${html.includes("\r\n") ? "\r\n" : "\n"}    .back-to-top {`;
+  if (!html.includes(anchor)) return html;
+  const eol = html.includes("\r\n") ? "\r\n" : "\n";
+  const css = [
+    `    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }`,
+    `    .footer-bottom a:hover { color: var(--cp-link); }`,
+    ``,
+    `    .back-to-top {`,
+  ].join(eol);
+  return html.replace(anchor, eol + css);
 }
 
 function injectBreadcrumb(html, url) {
@@ -132,7 +185,7 @@ function fixBrandLink(html) {
   );
 }
 
-const results = { analytics: 0, breadcrumb: 0, brand: 0, ico: 0, skipped: [] };
+const results = { analytics: 0, breadcrumb: 0, brand: 0, ico: 0, privacy: 0, skipped: [] };
 
 for (const file of walk(ROOT)) {
   const original = readFileSync(file, "utf8");
@@ -167,6 +220,12 @@ for (const file of walk(ROOT)) {
     html = withIco;
   }
 
+  const withPrivacy = addFooterLinkStyles(addPrivacyLink(html));
+  if (withPrivacy !== html) {
+    results.privacy++;
+    html = withPrivacy;
+  }
+
   if (html !== original) writeFileSync(file, html, "utf8");
 }
 
@@ -174,6 +233,7 @@ console.log(`analytics injected : ${results.analytics} page(s)`);
 console.log(`breadcrumb added   : ${results.breadcrumb} page(s)`);
 console.log(`brand link labelled: ${results.brand} page(s)`);
 console.log(`favicon.ico linked : ${results.ico} page(s)`);
+console.log(`privacy link added : ${results.privacy} page(s)`);
 if (results.skipped.length) {
   console.log(`\nno anchor found in ${results.skipped.length} file(s):`);
   results.skipped.forEach((f) => console.log(`  - ${f}`));

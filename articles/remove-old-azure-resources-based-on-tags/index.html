@@ -6,13 +6,27 @@
   <meta name="description" content="Automate the cleanup of temporary Azure resources using a Time-To-Live tag, plus a script to auto-tag untagged resources with their creator.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
   <script>
     (function () {
       try {
@@ -298,6 +312,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -496,6 +516,16 @@
 <p>Using the PowerShell command:</p>
 <div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">(Get-AzResource -Tag @{ Environment = "PROD" }).Name</code></pre></div>
 <p>This returns all the resources that contain the <code>PROD</code> tag. You can separate costs based on a tag name, so tags in Azure may also be useful for billing information.</p>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="common-tags">Common tags</h2>
 <ul><li><strong>Environment</strong> - the environment, which may be sandbox, dev, or prod.</li><li><strong>CreatedBy</strong> - the person who created the resource.</li><li><strong>CreationDate</strong> - when the resource was created.</li><li><strong>TimeToLive</strong> - if it is a temporary resource, how long it must live.</li><li><strong>Criticality</strong> - the importance of the resource.</li></ul>
 <p>The <code>CreationDate</code> tag may be useful if you want to find all the resources created on the same day.</p>
@@ -573,6 +603,7 @@ $resources.foreach{
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

@@ -6,13 +6,27 @@
   <meta name="description" content="Step-by-step guide to publishing a local Hugo website to GitHub Pages, including the deployment pipeline and how to sync content updates.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
   <script>
     (function () {
       try {
@@ -298,6 +312,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -493,6 +513,16 @@
 <p>Before diving in, ensure you have the following:</p>
 <ul><li>Git</li><li>A GitHub account</li><li>Hugo installed on your system and running locally</li></ul>
 <div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>In this article we copy a local Hugo website to GitHub Pages. First ensure your website is working well locally.</p></div></div>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="setting-up-github-pages">Setting up GitHub Pages</h2>
 <p>GitHub Pages is a free static site hosting service that takes HTML, CSS, and JavaScript files straight from a repository on GitHub, optionally runs the files through a build process, and publishes a website.</p>
 <p>Follow these steps to get started:</p>
@@ -570,6 +600,7 @@ git add . &amp;&amp; git commit -m 'publish new content' &amp;&amp; git push</co
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

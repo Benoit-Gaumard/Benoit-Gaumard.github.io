@@ -6,13 +6,27 @@
   <meta name="description" content="A practical branch naming convention for GitHub projects: standard format, common prefixes, best practices, and special branches.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
   <script>
     (function () {
       try {
@@ -298,6 +312,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -496,6 +516,16 @@
 <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">feat/123-add-login
 fix/456-bug-navbar
 hotfix/789-fix-crash</code></pre></div>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="common-branch-prefixes">Common branch prefixes</h2>
 <div class="table-wrap"><table><thead><tr><th>Prefix</th><th>Purpose</th></tr></thead><tbody><tr><td><code>feat/</code></td><td>New feature development</td></tr><tr><td><code>fix/</code></td><td>Bug fixes</td></tr><tr><td><code>hotfix/</code></td><td>Critical production fixes</td></tr><tr><td><code>chore/</code></td><td>Maintenance tasks (e.g., updating dependencies)</td></tr><tr><td><code>refactor/</code></td><td>Code improvements without changing functionality</td></tr><tr><td><code>test/</code></td><td>Adding or updating tests</td></tr><tr><td><code>docs/</code></td><td>Documentation updates</td></tr><tr><td><code>release/</code></td><td>Preparing for a new release</td></tr><tr><td><code>ci/</code></td><td>Changes related to CI/CD pipelines</td></tr></tbody></table></div>
 <p>Example:</p>
@@ -553,6 +583,7 @@ git checkout -b hotfix/1.2.3-security-patch</code></pre></div>
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

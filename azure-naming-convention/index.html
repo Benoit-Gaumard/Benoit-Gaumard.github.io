@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -433,6 +446,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -513,7 +529,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -674,6 +697,20 @@
         <p id="resultCount" aria-live="polite"></p>
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About Azure naming conventions</h2>
+      <p>Generate resource names that follow the Microsoft Cloud Adoption Framework pattern, and browse the recommended abbreviation for each resource type.</p>
+      <h3>The usual pattern</h3>
+      <p>The framework suggests composing a name from a resource type abbreviation, a workload or application name, an environment, a region, and an instance number — for example <code>vm-payments-prod-weu-01</code>. The order matters less than applying it consistently: names that sort predictably are far easier to filter, script against, and audit.</p>
+      <h3>Constraints to respect</h3>
+      <ul>
+        <li>Length limits vary widely; storage accounts allow 24 characters, lowercase letters and digits only, with no hyphens.</li>
+        <li>Some names must be globally unique because they become part of a DNS name — storage accounts, key vaults, and web apps among them.</li>
+        <li>Most resources cannot be renamed after creation, so the cost of getting it wrong is a redeployment.</li>
+      </ul>
+      <p>Keep genuinely variable information — owner, cost centre, criticality — in tags rather than in the name. Tags can be changed, queried, and used in cost reports; names cannot.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -699,6 +736,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

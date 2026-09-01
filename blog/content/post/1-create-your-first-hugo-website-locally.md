@@ -7,11 +7,11 @@ toc = false
 featured = false
 tags = ["Hugo"]
 categories = ["Hugo"]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Description of image' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/firstpost.png" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/firstpost.png" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -20,7 +20,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 This article explains how to create your first web site on Windows using Hugo.
 <!--more-->
 
-<img src="/images/firstpost.png" width="50%" height="50%">
+<img src="/blog/images/firstpost.png" width="50%" height="50%">
 
 ## Prequisites
 - Install Chocolatey (Chocolatey is a free and open-source package manager for Windows)

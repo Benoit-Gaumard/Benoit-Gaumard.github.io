@@ -6,13 +6,27 @@
   <meta name="description" content="Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
   <script>
     (function () {
       try {
@@ -298,6 +312,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -497,6 +517,16 @@
 <ul><li>General purpose</li><li>Compute optimized</li><li>Memory optimized</li><li>Storage optimized</li><li>GPU optimized</li><li>High-performance compute</li></ul>
 <p>Even though the size of the machine can be increased or decreased at any time during its lifecycle, choose the right size from the start. There is no need to provision an F-size machine to host a showcase website for an SME.</p>
 <ul><li><a href="https://azureprice.net" target="_blank" rel="noopener noreferrer">Azure VM comparison (azureprice.net) <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://azure.microsoft.com/en-us/pricing/virtual-machines/" target="_blank" rel="noopener noreferrer">Microsoft Azure VM selector <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li></ul>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="block-the-deployment-of-certain-machine-sizes">Block the deployment of certain machine sizes</h2>
 <p>There is a built-in Azure policy called <em>Allowed virtual machine SKUs</em> that allows you to authorize the deployment of certain machine sizes only and thus block the deployment of unauthorized machines. This way, it is easier to control VM deployment costs.</p>
 <p>In this example, only <code>Basic_A1</code>, <code>Basic_A2</code>, and <code>Basic_A3</code> size machines are allowed to be deployed. If you try to deploy an unauthorized machine size, the Azure API will send an error message.</p>
@@ -568,6 +598,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

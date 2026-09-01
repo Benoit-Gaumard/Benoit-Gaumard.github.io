@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -460,6 +473,9 @@
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -551,7 +567,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -630,6 +653,19 @@
       </div>
       <div class="gallery" id="gallery"></div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About this image collection</h2>
+      <p>A light-hearted gallery of IT memes, developer humour, and technology images — the kind of slide that wakes a room up halfway through a long architecture review.</p>
+      <h3>Using them in talks and documents</h3>
+      <ul>
+        <li>One image per section is plenty; humour loses its effect through repetition.</li>
+        <li>Give the joke a moment to land before moving on — a meme nobody has time to read is wasted space.</li>
+        <li>Keep an eye on audience and context: what works in a team retrospective may not suit a customer steering committee.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>Internet memes circulate widely and their origin is often unclear, so ownership can be hard to establish. For internal presentations that is rarely an issue; before publishing anything externally or commercially, check the source and licence of the specific image you intend to use.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -655,6 +691,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

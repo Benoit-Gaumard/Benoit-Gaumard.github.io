@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/kql-query-collection/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "✨ KQL query collection"
 date = "2024-11-06"
@@ -7,11 +8,11 @@ toc = true
 featured = true
 tags = ["kql"]
 categories = ["Azure"]
-#featureImage = "/images/githubtest.png" # Sets featured image on blog post.
+#featureImage = "/blog/images/githubtest.png" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/kql-query.jpeg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bicep.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/kql-query.jpeg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bicep.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -20,7 +21,7 @@ figurePositionShow = true # Override global value for showing the figure label.
 If you want to create your own or to contribute to an existing GitHub project you are on the right page.
 <!--more-->
 
-<img src="/images/kql-query.jpeg" width="50%" height="50%">
+<img src="/blog/images/kql-query.jpeg" width="50%" height="50%">
 
 #  Query Language (KQL) Query Collection
 

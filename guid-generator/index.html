@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -410,6 +423,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -489,7 +505,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -581,6 +604,21 @@
         <ul class="results-list" id="guidList"></ul>
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About the GUID generator</h2>
+      <p>A GUID (Globally Unique Identifier), called a UUID outside the Microsoft world, is a 128-bit value written as 32 hexadecimal characters in five hyphen-separated groups. This page generates version 4 identifiers, which are derived from random data rather than from a timestamp or a MAC address. That makes them safe to generate offline, in bulk, and without coordinating with anything else.</p>
+      <h3>How to use it</h3>
+      <ul>
+        <li>Set <strong>Quantity</strong> to generate a single identifier or up to 500 at once.</li>
+        <li><strong>Uppercase</strong> matches the convention used by many Microsoft tools and .NET output.</li>
+        <li><strong>Hyphens</strong> can be turned off for the compact 32-character form used in some APIs and URLs.</li>
+        <li><strong>Braces</strong> wrap the value in <code>{}</code>, the registry and COM style on Windows.</li>
+        <li><strong>Quotes</strong> and <strong>Comma-separated</strong> produce a list you can paste straight into JSON, Bicep, Terraform, or a SQL insert.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>Generation happens entirely in your browser using <code>crypto.randomUUID()</code> when available, with a fallback for older browsers. Nothing is sent to a server, so the values are yours alone. A version 4 GUID has 122 random bits, which makes an accidental collision effectively impossible in practice — but it is random, not secret, so never use one as a password, an API key, or a bearer token.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -606,6 +644,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

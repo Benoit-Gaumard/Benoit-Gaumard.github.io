@@ -6,13 +6,27 @@
   <meta name="description" content="Everything you can use when writing a new article for /articles: frontmatter fields, headings, lists, callouts, code blocks, tables, images, and links.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
   <script>
     (function () {
       try {
@@ -298,6 +312,12 @@
     .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
     .footer-group a:hover { color: var(--cp-link); }
     .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
@@ -502,6 +522,16 @@ featureImage = "/images/azure-cost-optimization.png"
 featured = true
 +++</code></pre></div>
 <div class="table-wrap"><table><thead><tr><th>Field</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td><code>author</code></td><td>No</td><td>Defaults to "Benoit Gaumard"</td></tr><tr><td><code>title</code></td><td>Yes</td><td>Shown as the page <code>&lt;h1&gt;</code> and in the article list</td></tr><tr><td><code>date</code></td><td>Yes</td><td><code>YYYY-MM-DD</code>, used for sorting and the RSS <code>pubDate</code></td></tr><tr><td><code>description</code></td><td>Yes</td><td>Used in the article list, meta description, and RSS</td></tr><tr><td><code>tags</code></td><td>No</td><td>Free-form list, shown as pills at the top of the article</td></tr><tr><td><code>categories</code></td><td>Yes</td><td>Powers the <strong>Categories</strong> sidebar and its counts on <code>/articles/</code></td></tr><tr><td><code>featureImage</code></td><td>No</td><td>Shown above the article and as the card thumbnail</td></tr><tr><td><code>featured</code></td><td>No</td><td><code>true</code> adds the article to the <strong>Featured Posts</strong> sidebar</td></tr><tr><td><code>draft</code></td><td>No</td><td><code>true</code> excludes the article entirely from the build</td></tr></tbody></table></div>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
 <h2 id="2-headings-and-the-table-of-contents">2. Headings and the table of contents</h2>
 <p>Use <code>##</code>, <code>###</code>, and <code>#### </code> for section headings - don't use a single <code>#</code>, since the page title already renders as the <code>&lt;h1&gt;</code>. Put <code>[[toc]]</code> anywhere in the body (it's used at the top of this very page) and it's replaced with a table of contents built from every <code>##</code>/<code>###</code>/<code>####</code> heading.</p>
 <h2 id="3-lists">3. Lists</h2>
@@ -564,6 +594,7 @@ Get-ChildItem articles/*/index.html</code></pre></div>
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
     </div>
   </footer>

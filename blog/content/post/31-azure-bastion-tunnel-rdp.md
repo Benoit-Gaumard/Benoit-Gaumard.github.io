@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/connect-azure-vm-using-native-rdp-client-through-bastion/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "Connect Azure VM using the native RDP client through Bastion"
 date = "2026-03-06"
@@ -6,11 +7,11 @@ description = "Connect Azure VM using the native RDP client through Bastion"
 toc = false
 tags = ["bastion"]
 categories = ["Bastion"]
-#featureImage = "/images/bastion.svg" # Sets featured image on blog post.
+#featureImage = "/blog/images/bastion.svg" # Sets featured image on blog post.
 #featureImageAlt = 'Draw.io VSCode Extension' # Alternative text for featured image.
 #featureImageCap = 'This is the featured image.' # Caption (optional).
-thumbnail = "/images/bastion.svg" # Sets thumbnail image appearing inside card on homepage.
-#shareImage = "/images/bastion.svg" # Designate a separate image for social media sharing.
+thumbnail = "/blog/images/bastion.svg" # Sets thumbnail image appearing inside card on homepage.
+#shareImage = "/blog/images/bastion.svg" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.
 figurePositionShow = true # Override global value for showing the figure label.
@@ -44,7 +45,7 @@ Instead of logging in through the Azure Portal, Azure Bastion now allows users t
 
 Go to **Bastion** --> **Settings** --> **Configuration** --> **Native client support**.
 
-<img src="/images/bastion/native-client-support.png" width="50%" height="50%">
+<img src="/blog/images/bastion/native-client-support.png" width="50%" height="50%">
 
 ## Create the RDP tunnel
 ---
@@ -69,7 +70,7 @@ To get the VM resoure Id go to:
 
 **Virtual machines** --> **Select Your VM** --> **Overview** --> **JSON View** --> **Copy the Resource ID**.
 
-<img src="/images/bastion/resource-json.png" width="50%" height="50%">
+<img src="/blog/images/bastion/resource-json.png" width="50%" height="50%">
 
 {{% /notice %}}
 
@@ -84,7 +85,7 @@ az network bastion tunnel --name $BastionName `
     --subscription xxx-xxx-xxx-xxx
 ```
 
-<img src="/images/bastion/bastion-tunnel.png" width="50%" height="50%">
+<img src="/blog/images/bastion/bastion-tunnel.png" width="50%" height="50%">
 
 Open RDP connection to the VM:
 
@@ -92,13 +93,13 @@ Open RDP connection to the VM:
 mstsc /v:127.0.0.1:50022
 ```
 
-<img src="/images/bastion/mstsc.png" width="50%" height="50%">
+<img src="/blog/images/bastion/mstsc.png" width="50%" height="50%">
 
-<img src="/images/bastion/rdp1.png" width="50%" height="50%">
+<img src="/blog/images/bastion/rdp1.png" width="50%" height="50%">
 
-<img src="/images/bastion/rdp2.png" width="50%" height="50%">
+<img src="/blog/images/bastion/rdp2.png" width="50%" height="50%">
 
-<img src="/images/bastion/rdp3.png" width="50%" height="50%">
+<img src="/blog/images/bastion/rdp3.png" width="50%" height="50%">
 
 You should now be connected to the target VM through the Azure Bastion tunnel. You can use this connection to manage the VM as needed.
 

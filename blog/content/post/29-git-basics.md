@@ -1,4 +1,5 @@
 +++
+canonicalURL = "https://benoit-gaumard.io/articles/git-basics/" # duplicate of the /articles/ copy, which is the canonical one
 author = "Benoit G"
 title = "✨ Git basics"
 date = "2024-02-28"
@@ -8,10 +9,10 @@ draft = false
 featured = true
 tags = ["Git", "Productivity"]
 categories = ["Git"]
-featureImage = "/images/git.svg" # Sets featured image on blog post.
+featureImage = "/blog/images/git.svg" # Sets featured image on blog post.
 #featureImageAlt = "" # Alternative text for featured image.
 #featureImageCap = "" # Caption (optional).
-thumbnail = "/images/git.svg" # Sets thumbnail image appearing inside card on homepage.
+thumbnail = "/blog/images/git.svg" # Sets thumbnail image appearing inside card on homepage.
 shareImage = "" # Designate a separate image for social media sharing.
 codeMaxLines = 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers = false # Override global value for showing of line numbers within code block.

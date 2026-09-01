@@ -41,10 +41,23 @@
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
@@ -562,6 +575,9 @@
       font-size: 0.8rem;
     }
 
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
     .back-to-top {
       position: fixed;
       right: 1.5rem;
@@ -647,7 +663,14 @@
         scroll-behavior: auto !important;
       }
     }
-</style>
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -760,6 +783,19 @@
         <button class="load-more" id="loadMore" type="button" hidden>Show more updates</button>
       </div>
     </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About Microsoft 365 roadmap updates</h2>
+      <p>Entries from the official Microsoft 365 roadmap feed, refreshed twice a day, covering Teams, Exchange, SharePoint, OneDrive, Purview, Entra, and the rest of the suite.</p>
+      <h3>How roadmap items progress</h3>
+      <ul>
+        <li><strong>In development</strong> — announced, with a target month that can and does move.</li>
+        <li><strong>Rolling out</strong> — reaching tenants progressively, starting with targeted release.</li>
+        <li><strong>Launched</strong> — available, though not necessarily in every tenant on the same day.</li>
+      </ul>
+      <h3>Good to know</h3>
+      <p>Roadmap dates are intentions rather than commitments, and the ring model means two tenants can see the same feature weeks apart. For changes that affect your users directly — a new interface, a changed default, a deprecated setting — the message centre in the admin portal remains the authoritative, tenant-specific source. The roadmap is the better tool for planning a quarter ahead.</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -785,6 +821,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
         <span id="libraryCount"></span>
       </div>
     </div>
