@@ -1,0 +1,86 @@
+# benoit-gaumard.io
+
+> Benoit Gaumard, Azure Expert in Paris. Infrastructure as Code, Azure security, automation, 7 Microsoft certifications.
+
+Personal site of Benoit Gaumard, Azure Infra & DevOps Consultant in Paris.
+The reference datasets (Azure regions, IP ranges, policies, policy aliases,
+taggable resources, release updates) are refreshed automatically by scheduled
+GitHub Actions workflows, so the JSON behind each tool tracks upstream sources.
+
+## Main pages
+
+- [Home](https://benoit-gaumard.io/): Benoit Gaumard, Azure Expert in Paris. Infrastructure as Code, Azure security, automation, 7 Microsoft certifications.
+- [Accueil (French)](https://benoit-gaumard.io/index_fr.html)
+- [Articles](https://benoit-gaumard.io/articles/): index of every how-to guide
+- [Tools](https://benoit-gaumard.io/tools/): index of every tool and reference page
+
+## Articles
+
+- [Allow ICMP (Ping) on an Azure VM](https://benoit-gaumard.io/articles/allow-icmp-ping-on-an-azure-vm/): Azure VMs block ICMP (ping) by default via the Windows Firewall. Here's the firewall rule to allow it, applied through the Azure portal's run command.
+- [App Service (PHP) Access to Azure SQL Database with Managed Identity](https://benoit-gaumard.io/articles/app-service-php-access-to-azure-sql-database-with-managed-identity/): Connect a PHP app running on Azure App Service to Azure SQL Database using a system-assigned managed identity, with no stored username or password.
+- [Azure REST APIs, Versions, and Lifecycle](https://benoit-gaumard.io/articles/azure-rest-apis-versions-and-lifecycle/): How Azure REST API versions work, how to find them with PowerShell, and why the api-version parameter matters.
+- [Azure Subscription Switcher](https://benoit-gaumard.io/articles/azure-subscription-switcher/): A PowerShell script to quickly switch between Azure subscriptions by index, with an optional Out-GridView interface.
+- [Terraform and Entra ID Authentication](https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/): How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.
+- [Call Azure API with PowerShell](https://benoit-gaumard.io/articles/call-azure-api-with-powershell/): How to call an Azure REST API directly from PowerShell: get an access token, build the request headers, and invoke the endpoint.
+- [RBAC Delete Role Assignments with 'Identity Not Found'](https://benoit-gaumard.io/articles/clean-rbac-identity-not-found/): Why Azure keeps RBAC role assignments for deleted users, groups, or service principals, and a PowerShell script to clean them up.
+- [Connect to an Azure VM Using the Native RDP Client Through Bastion](https://benoit-gaumard.io/articles/connect-azure-vm-using-native-rdp-client-through-bastion/): Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.
+- [Connect GitHub and Azure for Deployment Using OIDC](https://benoit-gaumard.io/articles/connect-github-and-azure-for-deployment-using-oidc/): Stop storing long-lived Azure credentials in GitHub secrets. Set up OpenID Connect federation so GitHub Actions can authenticate to Azure with short-lived tokens.
+- [Cyber Attacks Live Maps](https://benoit-gaumard.io/articles/cyber-attacks-live-maps/): A curated list of free live dashboards that visualize cyber attacks happening around the world in real time.
+- [Display GitHub Secrets for Debug](https://benoit-gaumard.io/articles/display-github-secrets-for-debug/): A quick method to print a GitHub Actions secret for debugging purposes, spaced out so it can't be read directly from the log.
+- [Display Latest Commits with Git Graph](https://benoit-gaumard.io/articles/display-latest-commits-with-git-graph/): A stylish one-liner to showcase the latest commits from a repository directly in the terminal.
+- [Don't Build Your Cloud Home on Shaky Foundations](https://benoit-gaumard.io/articles/dont-build-your-cloud-home-on-shaky-foundations/): Why cloud governance and security foundations - landing zones, management groups, policies, RBAC, naming, tagging, and networking - must come before any real workload.
+- [Draw.io VS Code Extension: A Must-Have for Your Diagrams](https://benoit-gaumard.io/articles/draw-io-vscode-extension-a-must-have-for-your-diagrams/): Discover the benefits of integrating Draw.io with VS Code for seamless diagram creation.
+- [From WordPress to Hugo Website](https://benoit-gaumard.io/articles/from-wordpress-to-hugo/): Why I migrated this site from WordPress to Hugo, and the trade-offs between the two platforms.
+- [Git Basics](https://benoit-gaumard.io/articles/git-basics/): The fundamental Git commands every beginner should know: configuration, cloning, branching, committing, and logs.
+- [GitHub Branch Naming Convention](https://benoit-gaumard.io/articles/github-branch-naming-convention/): A practical branch naming convention for GitHub projects: standard format, common prefixes, best practices, and special branches.
+- [GitHub Commit Naming Convention](https://benoit-gaumard.io/articles/github-commit-naming-convention/): A practical commit message convention for GitHub projects, based on Conventional Commits: format, common types, and writing clear messages.
+- [GitHub Contribution Workflow](https://benoit-gaumard.io/articles/github-contribution-workflow/): The end-to-end workflow for contributing to a GitHub project: fork, branch, commit, push, pull request, code review, and merge.
+- [How to Create a New Article](https://benoit-gaumard.io/articles/how-to-creat-a-new-article/): Everything you can use when writing a new article for /articles: frontmatter fields, headings, lists, callouts, code blocks, tables, images, and links.
+- [How to Delegate a Domain to Azure DNS](https://benoit-gaumard.io/articles/how-to-delegate-a-domain-to-azure-dns/): Step-by-step guide to delegating a domain purchased from a third-party registrar (OVH) to Azure DNS, and recreating the DNS records once delegation is complete.
+- [How to Embed a GitHub Script in an Article](https://benoit-gaumard.io/articles/how-to-embed-a-github-script-in-an-article/): How I keep long PowerShell scripts in a dedicated GitHub repository and embed them directly as code blocks instead of duplicating the code across posts.
+- [How to Host Your Hugo Website on GitHub Pages](https://benoit-gaumard.io/articles/how-to-host-your-hugo-website-on-github-pages/): Step-by-step guide to publishing a local Hugo website to GitHub Pages, including the deployment pipeline and how to sync content updates.
+- [KQL Query Collection](https://benoit-gaumard.io/articles/kql-query-collection/): A growing collection of Kusto Query Language (KQL) queries for Azure Resource Graph, covering AKS, disks, networking, policies, RBAC, subscriptions, and tags.
+- [Network Security Perimeter (NSP)](https://benoit-gaumard.io/articles/network-security-perimeter/): An overview of Azure Network Security Perimeter: the pain points it solves for PaaS resource access control, how it compares to existing patterns, and its current limitations.
+- [Optimize and Reduce Costs in Azure](https://benoit-gaumard.io/articles/optimize-and-reduce-costs-in-azure/): Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.
+- [Remove Old Azure Resources Based on Tags](https://benoit-gaumard.io/articles/remove-old-azure-resources-based-on-tags/): Automate the cleanup of temporary Azure resources using a Time-To-Live tag, plus a script to auto-tag untagged resources with their creator.
+- [Restrict Web App Access with Entra ID Authentication](https://benoit-gaumard.io/articles/restrict-web-app-access-with-entra-id-authentication/): How to restrict access to an Azure Web App to specific users or security groups using Microsoft Entra ID, instead of allowing every user in the tenant.
+- [Search Azure Policy Aliases and Send Output to an Interactive Table](https://benoit-gaumard.io/articles/search-azure-policy-aliases/): A PowerShell script that lets you interactively search Azure Policy aliases by namespace using Out-GridView.
+- [Set Up Your First Terraform Environment on Windows](https://benoit-gaumard.io/articles/set-up-your-first-terraform-environment-on-windows/): Step-by-step guide to setting up your first Terraform environment on Windows: install the CLI, configure a remote state backend in Azure Storage, and run your first plan and apply.
+- [Terraform vs Bicep, the Match](https://benoit-gaumard.io/articles/terraform-vs-bicep-the-match/): A side-by-side comparison of Terraform and Bicep across language, state management, learning curve, cost, and more, based on hands-on experience with both.
+- [What Is an Azure Landing Zone?](https://benoit-gaumard.io/articles/what-is-an-azure-landing-zone/): A practical introduction to Azure landing zones: what they are, why they matter, and the building blocks every platform team should know.
+
+## Tools and reference data
+
+- [AWS Release Updates](https://benoit-gaumard.io/aws-release-updates/): Latest AWS service updates from the official AWS What's New RSS feed, refreshed automatically.
+- [Azure IP Ranges](https://benoit-gaumard.io/azure-ip-ranges/): IP address ranges used by Azure services (service tags), fetched from the Azure IP Ranges and Service Tags - Public Cloud download.
+- [Azure Naming Convention](https://benoit-gaumard.io/azure-naming-convention/): Generate Azure resource names following the Cloud Adoption Framework naming convention, and browse recommended resource type abbreviations.
+- [Azure Policies](https://benoit-gaumard.io/azure-policies/): Browse all built-in Azure Policy definitions and initiatives (policy sets), refreshed directly from Azure.
+- [Azure Policy Aliases](https://benoit-gaumard.io/azure-policy-aliases/): Search all supported Azure Policy aliases to use when authoring custom Azure Policy definitions.
+- [Azure Regions](https://benoit-gaumard.io/azure-regions/): Explore Azure datacenter locations and regional information worldwide: physical location, geography, paired region, and availability zone support.
+- [Azure Release Updates](https://benoit-gaumard.io/azure-release-updates/): Latest Azure service updates from the official Azure Updates RSS feed, refreshed twice daily.
+- [Azure Taggable Resources](https://benoit-gaumard.io/azure-taggable-resources/): Check which Azure resource types support tags and whether tags appear in the cost report, sourced from the official tag-support reference data.
+- [Emoji Sheet](https://benoit-gaumard.io/emoji-sheet/): Complete collection of emojis with their shortcodes. Click to copy.
+- [My Favorite Links](https://benoit-gaumard.io/favorite-links/): A curated collection of useful links and resources.
+- [My Friends' Websites](https://benoit-gaumard.io/friends-websites/): Discover amazing websites from my network of friends and colleagues.
+- [GitHub IP Ranges](https://benoit-gaumard.io/github-ip-ranges/): IP address ranges used by GitHub services (web, API, git, Actions, Pages, Copilot, and more), fetched directly from the GitHub Meta API.
+- [GUID Generator](https://benoit-gaumard.io/guid-generator/): Generate one or many random GUIDs / UUIDs (v4), with options for uppercase, hyphens, braces, and quotes.
+- [Azure SVG Icon Gallery](https://benoit-gaumard.io/icons/): Browse and download a curated gallery of Azure SVG icons.
+- [IT Images &amp; Memes](https://benoit-gaumard.io/it-images/): A collection of funny IT memes, developer humor, and tech-related images.
+- [M365 Release Updates](https://benoit-gaumard.io/m365-release-updates/): Latest Microsoft 365 roadmap updates from the official Microsoft 365 RSS feed, refreshed twice daily.
+- [Microsoft Portals](https://benoit-gaumard.io/microsoft-portals/): A comprehensive directory of all Microsoft portals in one place.
+- [Microsoft Techcommunity RSS Feeds](https://benoit-gaumard.io/microsoft-techcommunity-rss-feeds/): Consolidate latest activities from Microsoft Tech Community blogs.
+- [Percentage Calculator](https://benoit-gaumard.io/percentage-calculator/): Calculate percentages: what is X% of Y, what percent X is of Y, percentage change between two values, and add or subtract a percentage from a value.
+- [Privacy Policy](https://benoit-gaumard.io/privacy/): How benoit-gaumard.io handles cookies, advertising, and analytics: Google AdSense, Google Analytics, consent management, and how to change your choices.
+- [Random Wheel](https://benoit-gaumard.io/random-wheel/): Spin a wheel to generate a random letter (A-Z) or number (0-100). Already picked values are excluded until you reset.
+- [RSS Watcher](https://benoit-gaumard.io/rss-watcher/): An RSS aggregator that reads tech news of the moment from many sites at once, refreshed automatically throughout the day.
+- [SLA Calculator](https://benoit-gaumard.io/sla-calculator/): Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from real downtime, and combine multiple dependent service SLAs into a composite uptime target.
+- [Subnet Calculator](https://benoit-gaumard.io/subnet-calculator/): Calculate IPv4 subnet details from an IP address and CIDR prefix or subnet mask, and split a network into equal-sized subnets.
+- [Tools](https://benoit-gaumard.io/tools/): A collection of small tools and reference pages built by Benoit Gaumard.
+- [Units Converter](https://benoit-gaumard.io/units-converter/): Convert between common units of length, weight, temperature, volume, speed, area, data, and time.
+- [Workflows](https://benoit-gaumard.io/workflows/): Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, RSS Watcher, GitHub IP Ranges, and Azure IP Ranges data across this site.
+- [World Clock](https://benoit-gaumard.io/world-clock/): Current time and date in Paris, plus a glance at colleague timezones around the world.
+
+## Feeds
+
+- [Articles RSS](https://benoit-gaumard.io/articles/rss.xml)
+- [Sitemap](https://benoit-gaumard.io/sitemap.xml)

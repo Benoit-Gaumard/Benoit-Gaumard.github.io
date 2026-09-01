@@ -32,6 +32,7 @@
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -66,6 +67,7 @@
       } catch (e) {}
     })();
   </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
@@ -560,6 +562,32 @@
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://benoit-gaumard.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tools",
+        "item": "https://benoit-gaumard.io/tools/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Articles",
+        "item": "https://benoit-gaumard.io/articles/"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -573,7 +601,7 @@
   </div>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
       <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
         <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -625,7 +653,425 @@
             <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
             <p class="results-count" id="resultsCount" aria-live="polite"></p>
           </div>
-          <div class="article-cards" id="articleCards"></div>
+          <div class="article-cards" id="articleCards"><!-- articles:static:start -->
+        <a class="article-card" href="/articles/how-to-creat-a-new-article/">
+          <div class="card-thumb"><img src="/articles/images/how-to-create-a-new-article.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Documentation</span></div>
+            <h3>How to Create a New Article</h3>
+            <p>Everything you can use when writing a new article for /articles: frontmatter fields, headings, lists, callouts, code blocks, tables, images, and links.</p>
+            <div class="card-meta">
+              <span>August 19, 2026</span>
+              <span class="dot">&middot;</span>
+              <span>2 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/connect-github-and-azure-for-deployment-using-oidc/">
+          <div class="card-thumb"><img src="/articles/images/github-azure-oidc.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span><span class="card-category-tag">GitHub</span></div>
+            <h3>Connect GitHub and Azure for Deployment Using OIDC</h3>
+            <p>Stop storing long-lived Azure credentials in GitHub secrets. Set up OpenID Connect federation so GitHub Actions can authenticate to Azure with short-lived tokens.</p>
+            <div class="card-meta">
+              <span>August 14, 2026</span>
+              <span class="dot">&middot;</span>
+              <span>2 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/what-is-an-azure-landing-zone/">
+          <div class="card-thumb"><img src="/articles/images/azure-landing-zone.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span><span class="card-category-tag">Governance</span></div>
+            <h3>What Is an Azure Landing Zone?</h3>
+            <p>A practical introduction to Azure landing zones: what they are, why they matter, and the building blocks every platform team should know.</p>
+            <div class="card-meta">
+              <span>August 10, 2026</span>
+              <span class="dot">&middot;</span>
+              <span>3 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/connect-azure-vm-using-native-rdp-client-through-bastion/">
+          <div class="card-thumb"><img src="/articles/images/bastion/bastion.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span><span class="card-category-tag">Bastion</span></div>
+            <h3>Connect to an Azure VM Using the Native RDP Client Through Bastion</h3>
+            <p>Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.</p>
+            <div class="card-meta">
+              <span>March 6, 2026</span>
+              <span class="dot">&middot;</span>
+              <span>2 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/how-to-delegate-a-domain-to-azure-dns/">
+          <div class="card-thumb"><img src="/articles/images/azure-dns-zone.png" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>How to Delegate a Domain to Azure DNS</h3>
+            <p>Step-by-step guide to delegating a domain purchased from a third-party registrar (OVH) to Azure DNS, and recreating the DNS records once delegation is complete.</p>
+            <div class="card-meta">
+              <span>December 16, 2025</span>
+              <span class="dot">&middot;</span>
+              <span>5 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/display-latest-commits-with-git-graph/">
+          <div class="card-thumb"><img src="/articles/images/git.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Git</span></div>
+            <h3>Display Latest Commits with Git Graph</h3>
+            <p>A stylish one-liner to showcase the latest commits from a repository directly in the terminal.</p>
+            <div class="card-meta">
+              <span>February 26, 2025</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/github-contribution-workflow/">
+          <div class="card-thumb"><img src="/articles/images/github-color.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
+            <h3>GitHub Contribution Workflow</h3>
+            <p>The end-to-end workflow for contributing to a GitHub project: fork, branch, commit, push, pull request, code review, and merge.</p>
+            <div class="card-meta">
+              <span>February 26, 2025</span>
+              <span class="dot">&middot;</span>
+              <span>4 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/app-service-php-access-to-azure-sql-database-with-managed-identity/">
+          <div class="card-thumb"><img src="/articles/images/SQL-Database.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>App Service (PHP) Access to Azure SQL Database with Managed Identity</h3>
+            <p>Connect a PHP app running on Azure App Service to Azure SQL Database using a system-assigned managed identity, with no stored username or password.</p>
+            <div class="card-meta">
+              <span>February 12, 2025</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/allow-icmp-ping-on-an-azure-vm/">
+          <div class="card-thumb"><img src="/articles/images/Virtual-Machine.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Allow ICMP (Ping) on an Azure VM</h3>
+            <p>Azure VMs block ICMP (ping) by default via the Windows Firewall. Here's the firewall rule to allow it, applied through the Azure portal's run command.</p>
+            <div class="card-meta">
+              <span>January 31, 2025</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/network-security-perimeter/">
+          <div class="card-thumb"><img src="/articles/images/Network-Security-Groups.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Network Security Perimeter (NSP)</h3>
+            <p>An overview of Azure Network Security Perimeter: the pain points it solves for PaaS resource access control, how it compares to existing patterns, and its current limitations.</p>
+            <div class="card-meta">
+              <span>January 31, 2025</span>
+              <span class="dot">&middot;</span>
+              <span>2 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/restrict-web-app-access-with-entra-id-authentication/">
+          <div class="card-thumb"><img src="/articles/images/entra-id.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Restrict Web App Access with Entra ID Authentication</h3>
+            <p>How to restrict access to an Azure Web App to specific users or security groups using Microsoft Entra ID, instead of allowing every user in the tenant.</p>
+            <div class="card-meta">
+              <span>December 17, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/terraform-vs-bicep-the-match/">
+          <div class="card-thumb"><img src="/articles/images/bicep.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Terraform vs Bicep, the Match</h3>
+            <p>A side-by-side comparison of Terraform and Bicep across language, state management, learning curve, cost, and more, based on hands-on experience with both.</p>
+            <div class="card-meta">
+              <span>December 6, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>3 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/display-github-secrets-for-debug/">
+          <div class="card-thumb"><img src="/articles/images/github-actions.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
+            <h3>Display GitHub Secrets for Debug</h3>
+            <p>A quick method to print a GitHub Actions secret for debugging purposes, spaced out so it can't be read directly from the log.</p>
+            <div class="card-meta">
+              <span>December 2, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/remove-old-azure-resources-based-on-tags/">
+          <div class="card-thumb"><img src="/articles/images/Tags.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Remove Old Azure Resources Based on Tags</h3>
+            <p>Automate the cleanup of temporary Azure resources using a Time-To-Live tag, plus a script to auto-tag untagged resources with their creator.</p>
+            <div class="card-meta">
+              <span>November 13, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>2 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/search-azure-policy-aliases/">
+          <div class="card-thumb"><img src="/articles/images/Policy.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Search Azure Policy Aliases and Send Output to an Interactive Table</h3>
+            <p>A PowerShell script that lets you interactively search Azure Policy aliases by namespace using Out-GridView.</p>
+            <div class="card-meta">
+              <span>November 13, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/azure-rest-apis-versions-and-lifecycle/">
+          <div class="card-thumb"><img src="/articles/images/rest-api.jpeg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Azure REST APIs, Versions, and Lifecycle</h3>
+            <p>How Azure REST API versions work, how to find them with PowerShell, and why the api-version parameter matters.</p>
+            <div class="card-meta">
+              <span>November 6, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/call-azure-api-with-powershell/">
+          <div class="card-thumb"><img src="/articles/images/rest-api.jpeg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Call Azure API with PowerShell</h3>
+            <p>How to call an Azure REST API directly from PowerShell: get an access token, build the request headers, and invoke the endpoint.</p>
+            <div class="card-meta">
+              <span>November 6, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/clean-rbac-identity-not-found/">
+          <div class="card-thumb"><img src="/articles/images/Users.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>RBAC Delete Role Assignments with 'Identity Not Found'</h3>
+            <p>Why Azure keeps RBAC role assignments for deleted users, groups, or service principals, and a PowerShell script to clean them up.</p>
+            <div class="card-meta">
+              <span>November 6, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/dont-build-your-cloud-home-on-shaky-foundations/">
+          <div class="card-thumb"><img src="/articles/images/shaky-foundations.jpeg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Don't Build Your Cloud Home on Shaky Foundations</h3>
+            <p>Why cloud governance and security foundations - landing zones, management groups, policies, RBAC, naming, tagging, and networking - must come before any real workload.</p>
+            <div class="card-meta">
+              <span>November 6, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>2 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/kql-query-collection/">
+          <div class="card-thumb"><img src="/articles/images/kql-query.jpeg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>KQL Query Collection</h3>
+            <p>A growing collection of Kusto Query Language (KQL) queries for Azure Resource Graph, covering AKS, disks, networking, policies, RBAC, subscriptions, and tags.</p>
+            <div class="card-meta">
+              <span>November 6, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/azure-subscription-switcher/">
+          <div class="card-thumb"><img src="/articles/images/githubtest.png" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Azure Subscription Switcher</h3>
+            <p>A PowerShell script to quickly switch between Azure subscriptions by index, with an optional Out-GridView interface.</p>
+            <div class="card-meta">
+              <span>November 5, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/draw-io-vscode-extension-a-must-have-for-your-diagrams/">
+          <div class="card-thumb"><img src="/articles/images/VSCode.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Tools</span></div>
+            <h3>Draw.io VS Code Extension: A Must-Have for Your Diagrams</h3>
+            <p>Discover the benefits of integrating Draw.io with VS Code for seamless diagram creation.</p>
+            <div class="card-meta">
+              <span>November 5, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/cyber-attacks-live-maps/">
+          <div class="card-thumb"><img src="/articles/images/cyber-attack-map.jpg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Tools</span></div>
+            <h3>Cyber Attacks Live Maps</h3>
+            <p>A curated list of free live dashboards that visualize cyber attacks happening around the world in real time.</p>
+            <div class="card-meta">
+              <span>November 3, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/how-to-host-your-hugo-website-on-github-pages/">
+          <div class="card-thumb"><img src="/articles/images/hugo.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Hugo</span></div>
+            <h3>How to Host Your Hugo Website on GitHub Pages</h3>
+            <p>Step-by-step guide to publishing a local Hugo website to GitHub Pages, including the deployment pipeline and how to sync content updates.</p>
+            <div class="card-meta">
+              <span>November 3, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/from-wordpress-to-hugo/">
+          <div class="card-thumb"><img src="/articles/images/website-migration.png" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Hugo</span></div>
+            <h3>From WordPress to Hugo Website</h3>
+            <p>Why I migrated this site from WordPress to Hugo, and the trade-offs between the two platforms.</p>
+            <div class="card-meta">
+              <span>October 16, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>4 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/how-to-embed-a-github-script-in-an-article/">
+          <div class="card-thumb"><img src="/articles/images/githubtest.png" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
+            <h3>How to Embed a GitHub Script in an Article</h3>
+            <p>How I keep long PowerShell scripts in a dedicated GitHub repository and embed them directly as code blocks instead of duplicating the code across posts.</p>
+            <div class="card-meta">
+              <span>October 16, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/azure-terraform-entra-id-authentication/">
+          <div class="card-thumb"><img src="/articles/images/terraform.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Terraform and Entra ID Authentication</h3>
+            <p>How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.</p>
+            <div class="card-meta">
+              <span>September 11, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/optimize-and-reduce-costs-in-azure/">
+          <div class="card-thumb"><img src="/articles/images/cost-management.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span></div>
+            <h3>Optimize and Reduce Costs in Azure</h3>
+            <p>Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.</p>
+            <div class="card-meta">
+              <span>September 11, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>7 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/set-up-your-first-terraform-environment-on-windows/">
+          <div class="card-thumb"><img src="/articles/images/terraform.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Azure</span><span class="card-category-tag">Tools</span></div>
+            <h3>Set Up Your First Terraform Environment on Windows</h3>
+            <p>Step-by-step guide to setting up your first Terraform environment on Windows: install the CLI, configure a remote state backend in Azure Storage, and run your first plan and apply.</p>
+            <div class="card-meta">
+              <span>September 11, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/git-basics/">
+          <div class="card-thumb"><img src="/articles/images/git.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">Git</span></div>
+            <h3>Git Basics</h3>
+            <p>The fundamental Git commands every beginner should know: configuration, cloning, branching, committing, and logs.</p>
+            <div class="card-meta">
+              <span>February 28, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/github-branch-naming-convention/">
+          <div class="card-thumb"><img src="/articles/images/github-color.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
+            <h3>GitHub Branch Naming Convention</h3>
+            <p>A practical branch naming convention for GitHub projects: standard format, common prefixes, best practices, and special branches.</p>
+            <div class="card-meta">
+              <span>February 26, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <a class="article-card" href="/articles/github-commit-naming-convention/">
+          <div class="card-thumb"><img src="/articles/images/github-color.svg" alt="" loading="lazy" width="1200" height="630"></div>
+          <div class="card-body">
+            <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
+            <h3>GitHub Commit Naming Convention</h3>
+            <p>A practical commit message convention for GitHub projects, based on Conventional Commits: format, common types, and writing clear messages.</p>
+            <div class="card-meta">
+              <span>February 26, 2024</span>
+              <span class="dot">&middot;</span>
+              <span>1 min read</span>
+            </div>
+          </div>
+        </a>
+        <!-- articles:static:end -->
+      </div>
         </section>
       </div>
 

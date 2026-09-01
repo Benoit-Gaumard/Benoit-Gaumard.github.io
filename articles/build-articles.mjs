@@ -24,9 +24,13 @@ const AD_SLOT_ARTICLE = "4494484671";
 // keeps a single unit per page rather than duplicating the slot above.
 const AD_SLOT_ARTICLE_SECONDARY = "";
 
-// Consent Mode v2. Everything starts denied so no Google tag personalises
-// anything before the certified CMP reports a choice.
-const CONSENT_AND_ANALYTICS = `  <script>
+// Kept byte-identical to the fragment build-seo.mjs writes into the
+// hand-authored pages, including the marker, so that script treats a freshly
+// generated article as already done instead of injecting a second copy.
+// The Consent Mode v2 defaults lead the block: they have to be queued before
+// gtag.js loads, otherwise the tag reads a personalised default first.
+const ANALYTICS_SNIPPET = `<!-- seo:analytics -->
+  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('consent', 'default', {
@@ -72,6 +76,18 @@ function injectMidArticleAd(bodyHtml, slot) {
   if (headings.length < 3) return { body: bodyHtml, trailing: unit };
   const at = headings[1].index;
   return { body: bodyHtml.slice(0, at) + unit + "\n" + bodyHtml.slice(at), trailing: "" };
+}
+
+function breadcrumbLd(title, canonical) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Articles", item: `${SITE_URL}/articles/` },
+      { "@type": "ListItem", position: 3, name: title, item: canonical },
+    ],
+  };
 }
 
 // ---------- Frontmatter (+++ TOML-lite +++) ----------
@@ -314,15 +330,15 @@ function formatRssDate(dateStr) {
   return new Date(`${dateStr}T12:00:00Z`).toUTCString();
 }
 
-function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false }) {
+function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false, noindex = false }) {
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="${escapeHtml(description)}">
+  <meta name="description" content="${escapeHtml(description)}">${noindex ? `\n  <meta name="robots" content="noindex, follow">` : ""}
   <meta name="color-scheme" content="light">
-${CONSENT_AND_ANALYTICS}
+  ${ANALYTICS_SNIPPET}
 ${ads ? ADSENSE_LOADER + "\n" : ""}  <script>
     (function () {
       try {
@@ -337,6 +353,7 @@ ${ads ? ADSENSE_LOADER + "\n" : ""}  <script>
       } catch (e) {}
     })();
   </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
@@ -377,7 +394,15 @@ ${JSON.stringify(
     null,
     2
   )}
-  </script>
+  </script>${
+    canonical === 'https://benoit-gaumard.io/articles/'
+      ? ''
+      : `\n  <script type="application/ld+json">\n${JSON.stringify(
+          breadcrumbLd(title.replace(/\s*\|\s*Benoit Gaumard$/, ''), canonical),
+          null,
+          2
+        )}\n  </script>`
+  }
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
   <title>${escapeHtml(title)}</title>
 ${extraHead}
@@ -661,7 +686,7 @@ ${ARTICLE_CSS}
   </div>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
       <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
         <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -910,6 +935,7 @@ ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(A
     canonical: `${SITE_URL}${article.url}`,
     content,
     ads: true,
+    noindex: article.noindex,
   });
 }
 
@@ -1020,10 +1046,59 @@ async function loadArticle(filename) {
     featureImage: data.featureImage || null,
     featured: data.featured === true,
     draft: data.draft === true,
+    noindex: data.noindex === true,
     readingMinutes: Math.max(1, Math.round(wordCount / WORDS_PER_MINUTE)),
     url: `/articles/${slug}/`,
     bodyHtml,
   };
+}
+
+// The article list on /articles/ is rendered from articles.json at runtime, so
+// the HTML that Googlebot parses first contained the page chrome and not one
+// link to any of the 32 articles - every article was orphaned, discoverable
+// only through the sitemap and a successful JS render. Emitting the same list
+// as real markup fixes that and shows content before the script runs;
+// renderList() calls replaceChildren() on this container, so the runtime list
+// still takes over untouched.
+const LIST_START = "<!-- articles:static:start -->";
+const LIST_END = "<!-- articles:static:end -->";
+
+function staticCard(article) {
+  const thumb = article.featureImage
+    ? `<div class="card-thumb"><img src="${escapeHtml(article.featureImage)}" alt="" loading="lazy" width="1200" height="630"></div>`
+    : "";
+  const categories = article.categories.length
+    ? `<div class="card-categories">${article.categories.map((c) => `<span class="card-category-tag">${escapeHtml(c)}</span>`).join("")}</div>`
+    : "";
+  return `        <a class="article-card" href="${article.url}">
+${thumb ? `          ${thumb}\n` : ""}          <div class="card-body">
+${categories ? `            ${categories}\n` : ""}            <h3>${escapeHtml(article.title)}</h3>
+            <p>${escapeHtml(article.description)}</p>
+            <div class="card-meta">
+              <span>${formatDisplayDate(article.date)}</span>
+              <span class="dot">&middot;</span>
+              <span>${article.readingMinutes} min read</span>
+            </div>
+          </div>
+        </a>`;
+}
+
+function injectStaticList(html, articles) {
+  const cards = articles.map(staticCard).join("\n");
+  const block = `${LIST_START}\n${cards}\n        ${LIST_END}`;
+
+  if (html.includes(LIST_START) && html.includes(LIST_END)) {
+    const start = html.indexOf(LIST_START);
+    const end = html.indexOf(LIST_END) + LIST_END.length;
+    return html.slice(0, start) + block + html.slice(end);
+  }
+
+  const open = '<div class="article-cards" id="articleCards">';
+  const at = html.indexOf(open);
+  if (at === -1) throw new Error('articles/index.html: #articleCards container not found');
+  const close = html.indexOf("</div>", at + open.length);
+  if (close === -1) throw new Error('articles/index.html: #articleCards is not closed');
+  return html.slice(0, at + open.length) + block + "\n      " + html.slice(close);
 }
 
 function buildRss(articles) {
@@ -1079,9 +1154,16 @@ async function main() {
   await writeFile(join(HERE, "articles.json"), `${JSON.stringify(articlesJson, null, 2)}\n`, "utf8");
   await writeFile(join(HERE, "rss.xml"), buildRss(published), "utf8");
 
+  const indexPath = join(HERE, "index.html");
+  const indexHtml = await readFile(indexPath, "utf8");
+  const indexed = published.filter((a) => !a.noindex);
+  const nextIndexHtml = injectStaticList(indexHtml, indexed);
+  if (nextIndexHtml !== indexHtml) await writeFile(indexPath, nextIndexHtml, "utf8");
+
   console.log(`Built ${published.length} article(s):`);
-  published.forEach((a) => console.log(`  - ${a.url}  (${a.title})`));
+  published.forEach((a) => console.log(`  - ${a.url}  (${a.title})${a.noindex ? "  [noindex]" : ""}`));
   console.log("  - /privacy/  (Privacy Policy)");
+  console.log(`Static list in articles/index.html: ${indexed.length} crawlable link(s).`);
   if (all.length !== published.length) {
     console.log(`Skipped ${all.length - published.length} draft article(s).`);
   }
