@@ -78,6 +78,8 @@ jobs:
           cp ../CNAME public/CNAME
           cp ../sitemap.xml public/sitemap.xml
           cp ../robots.txt public/robots.txt
+          mkdir -p public/.well-known
+          cp ../.well-known/security.txt public/.well-known/security.txt
           cp ../og-image.png public/og-image.png
           node ../build-freshness.mjs public/freshness.json
           cp -R ../favicons public/favicons

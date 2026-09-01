@@ -595,6 +595,10 @@
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
     function dayCount(iso) {
       const now = new Date();
       const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -666,7 +670,7 @@
         const el = document.createElement("div");
         el.className = "added-card";
         const addedDate = new Date(feed.addedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-        el.innerHTML = `<h3 title="${feed.name}">${feed.name}</h3><p>${feed.category || "General"} \u00b7 Added ${addedDate}</p>`;
+        el.innerHTML = `<h3 title="${escapeHtml(feed.name)}">${escapeHtml(feed.name)}</h3><p>${escapeHtml(feed.category || "General")} \u00b7 Added ${addedDate}</p>`;
         elements.addedCards.append(el);
       });
     }
@@ -698,7 +702,7 @@
         categoryTd.textContent = feed.category || "-";
 
         const langTd = document.createElement("td");
-        langTd.innerHTML = `<span class="feed-lang">${FLAGS[feed.country] || ""}${feed.country}</span>`;
+        langTd.innerHTML = `<span class="feed-lang">${FLAGS[feed.country] || ""}${escapeHtml(feed.country)}</span>`;
 
         const linkTd = document.createElement("td");
         const link = document.createElement("a");
