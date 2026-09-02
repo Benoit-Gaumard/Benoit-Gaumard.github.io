@@ -64,23 +64,24 @@ const pages = walk(ROOT)
 
 const body = pages
   .map(({ url, lastmod }) => {
-    const alt =
-      url === "/" || url === "/index_fr.html"
-        ? `\n    <xhtml:link rel="alternate" hreflang="en" href="${SITE}/"/>` +
-          `\n    <xhtml:link rel="alternate" hreflang="fr" href="${SITE}/index_fr.html"/>` +
-          `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/"/>`
-        : "";
     return `  <url>
     <loc>${SITE}${url}</loc>
     <lastmod>${lastmod}</lastmod>
-    <priority>${priorityFor(url)}</priority>${alt}
+    <priority>${priorityFor(url)}</priority>
   </url>`;
   })
   .join("\n");
 
+// The hreflang pairing between / and /index_fr.html is already declared with
+// <link rel="alternate" hreflang> in the <head> of both pages, which Google
+// treats as equivalent. Repeating it here as <xhtml:link> added nothing and
+// cost the browser's XML tree viewer: Chromium disables it as soon as the
+// document contains an element in a known namespace such as XHTML, and renders
+// the sitemap as flat text instead. Keeping the document inside the sitemap
+// namespace alone keeps that viewer as a fallback for when XSLT is removed.
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${body}
 </urlset>
 `;
