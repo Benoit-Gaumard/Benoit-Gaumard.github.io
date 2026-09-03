@@ -342,12 +342,14 @@
       padding: .2rem .6rem; border-radius: 999px; background: var(--cp-accent); color: var(--cp-accent-fg);
       font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
     }
-    .featured-card .card-thumb { aspect-ratio: 1200 / 630; background: var(--cp-surface-soft); }
-    .featured-card .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .featured-card .card-thumb { aspect-ratio: 1200 / 630; background: var(--cp-surface-soft); overflow: hidden; }
+    .featured-card .card-thumb img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; }
     .featured-card .card-body { padding: 1.25rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
     .featured-card h3 { margin: 0; font-size: 1.2rem; line-height: 1.3; }
     .featured-card p { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; line-height: 1.5; flex: 1; }
 
+    .articles-toolbar { margin-bottom: 1.75rem; }
+    .articles-toolbar .results-bar { margin-bottom: 0; }
     .filter-bar { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
     .filter-bar input {
       flex: 1 1 16rem;
@@ -360,6 +362,35 @@
     }
     .results-count { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
     .results-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .results-bar-left { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+    .view-toggle {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .view-toggle button {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      min-height: 2rem;
+      padding: .3rem .7rem;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .view-toggle button svg { width: 1rem; height: 1rem; flex: none; }
+    .view-toggle button:hover { color: var(--cp-accent); }
+    .view-toggle button[aria-pressed="true"] {
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+    }
     .favorites-filter {
       display: inline-flex;
       align-items: center;
@@ -422,8 +453,8 @@
       border-color: var(--cp-warning);
       color: var(--cp-warning);
     }
-    .article-card .card-thumb { aspect-ratio: 1200 / 630; background: var(--cp-surface-soft); }
-    .article-card .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .article-card .card-thumb { aspect-ratio: 1200 / 630; background: var(--cp-surface-soft); overflow: hidden; }
+    .article-card .card-thumb img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; }
     .article-card .card-body { padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
     .card-categories { display: flex; flex-wrap: wrap; gap: .35rem; }
     .card-category-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.75rem; font-weight: 700; }
@@ -431,6 +462,28 @@
     .article-card p { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; }
     .card-meta .dot { opacity: .5; }
+
+    /* Feature art is drawn at the 1200x630 frame ratio and fills it edge to edge.
+       Icon-style art is square, so cover would crop it and scale it up ~2x; those
+       thumbs are letterboxed instead so every card shows art at a comparable size. */
+    .card-thumb.thumb-contain img {
+      object-fit: contain;
+      box-sizing: border-box;
+      padding: 7% 8%;
+    }
+
+    /* List view: same card markup, laid out as a single-column row list */
+    .article-cards.view-list { grid-template-columns: 1fr; gap: .75rem; }
+    .article-cards.view-list .article-card { flex-direction: row; align-items: stretch; }
+    .article-cards.view-list .article-card:hover, .article-cards.view-list .article-card:focus-visible { transform: translateX(3px); }
+    .article-cards.view-list .card-thumb { flex: none; width: 11rem; align-self: center; border-radius: 8px; overflow: hidden; margin: .9rem 0 .9rem .9rem; }
+    .article-cards.view-list .card-body { padding: .9rem 3rem .9rem 1.1rem; gap: .4rem; }
+    .article-cards.view-list .article-card p { -webkit-line-clamp: 2; flex: none; }
+    @media (max-width: 640px) {
+      .article-cards.view-list .article-card { flex-direction: column; }
+      .article-cards.view-list .card-thumb { width: auto; margin: 0; border-radius: 0; }
+      .article-cards.view-list .card-body { padding: 1.1rem 1.25rem 1.25rem; }
+    }
 
     .empty-state {
       grid-column: 1 / -1;
@@ -660,20 +713,35 @@
 
     <div class="articles-layout">
       <div class="articles-main">
+        <section class="articles-toolbar" aria-label="Search and filter articles">
+          <div class="filter-bar">
+            <input id="searchInput" type="search" placeholder="Search articles..." autocomplete="off" spellcheck="false" aria-label="Search articles">
+          </div>
+          <div id="activeFilterWrap"></div>
+          <div class="results-bar">
+            <div class="results-bar-left">
+              <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+              <p class="results-count" id="resultsCount" aria-live="polite"></p>
+            </div>
+            <div class="view-toggle" role="group" aria-label="Article view">
+              <button type="button" id="viewCards" aria-pressed="true" title="Card view">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 1.5h5v5h-5v-5Zm0 8h5v5h-5v-5Zm8-8h5v5h-5v-5Zm0 8h5v5h-5v-5Z"/></svg>
+                Cards
+              </button>
+              <button type="button" id="viewList" aria-pressed="false" title="List view">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 2.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Z"/></svg>
+                List
+              </button>
+            </div>
+          </div>
+        </section>
+
         <section aria-labelledby="featured-title" id="featuredSection" data-loading>
           <h2 class="sec-label" id="featured-title">Featured Posts</h2>
           <div class="featured-grid" id="featuredGrid"></div>
         </section>
 
         <section aria-label="All articles">
-          <div class="filter-bar">
-            <input id="searchInput" type="search" placeholder="Search articles..." autocomplete="off" spellcheck="false" aria-label="Search articles">
-          </div>
-          <div id="activeFilterWrap"></div>
-          <div class="results-bar">
-            <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
-            <p class="results-count" id="resultsCount" aria-live="polite"></p>
-          </div>
           <div class="article-cards" id="articleCards"><!-- articles:static:start -->
         <a class="article-card" href="/articles/azure-lighthouse-cross-tenant-management/">
           <div class="card-thumb"><img src="/articles/images/azure-lighthouse.svg" alt="" loading="lazy" width="1200" height="630"></div>
@@ -1312,14 +1380,17 @@
       favoritesFilter: document.getElementById("favoritesFilter"),
       resultsCount: document.getElementById("resultsCount"),
       articleCards: document.getElementById("articleCards"),
+      viewCards: document.getElementById("viewCards"),
+      viewList: document.getElementById("viewList"),
       categoryList: document.getElementById("categoryList"),
       recentPanel: document.getElementById("recentPanel"),
       recentList: document.getElementById("recentList"),
     };
 
-    const state = { articles: [], category: new URLSearchParams(location.search).get("category") || "", favorites: new Set(), favoritesOnly: false };
+    const state = { articles: [], category: new URLSearchParams(location.search).get("category") || "", favorites: new Set(), favoritesOnly: false, view: "cards" };
 
     const FAVORITES_STORAGE_KEY = "articles-favorites";
+    const VIEW_STORAGE_KEY = "articles-view";
     // Virtual category: it is not present in any article's categories array,
     // renderList resolves it against the featured flag instead.
     const FEATURED_CATEGORY = "Featured Posts";
@@ -1332,6 +1403,32 @@
       } catch {
         state.favorites = new Set();
       }
+    }
+
+    function loadView() {
+      try {
+        const stored = localStorage.getItem(VIEW_STORAGE_KEY);
+        if (stored === "list" || stored === "cards") state.view = stored;
+      } catch (error) {
+        state.view = "cards";
+      }
+    }
+
+    function applyView() {
+      const isList = state.view === "list";
+      elements.articleCards.classList.toggle("view-list", isList);
+      elements.viewCards.setAttribute("aria-pressed", String(!isList));
+      elements.viewList.setAttribute("aria-pressed", String(isList));
+    }
+
+    function setView(view) {
+      state.view = view;
+      try {
+        localStorage.setItem(VIEW_STORAGE_KEY, view);
+      } catch (error) {
+        /* storage unavailable, the choice just won't persist */
+      }
+      applyView();
     }
 
     function starIconMarkup(isFavorite) {
@@ -1380,6 +1477,24 @@
       return `<div class="card-thumb"><img src="${escapeHtml(article.featureImage)}" alt="" loading="lazy"></div>`;
     }
 
+    // Feature art uses the 1200x630 frame ratio, but several articles reuse square
+    // product icons. Those would be cropped and scaled up by object-fit: cover, so
+    // flag them and let the stylesheet letterbox them instead.
+    const THUMB_COVER_MIN_RATIO = 1.5;
+
+    function fitThumb(root) {
+      root.querySelectorAll(".card-thumb img").forEach((img) => {
+        const decide = () => {
+          if (!img.naturalWidth || !img.naturalHeight) return;
+          if (img.naturalWidth / img.naturalHeight < THUMB_COVER_MIN_RATIO) {
+            img.parentElement.classList.add("thumb-contain");
+          }
+        };
+        if (img.complete) decide();
+        else img.addEventListener("load", decide, { once: true });
+      });
+    }
+
     function categoriesHtml(article) {
       if (!article.categories.length) return "";
       return `<div class="card-categories">${article.categories.map((c) => `<span class="card-category-tag">${escapeHtml(c)}</span>`).join("")}</div>`;
@@ -1404,6 +1519,7 @@
             <span>${article.readingMinutes} min read</span>
           </div>
         </div>`;
+      fitThumb(card);
       return card;
     }
 
@@ -1431,6 +1547,7 @@
         event.stopPropagation();
         toggleFavorite(article, favorite);
       });
+      fitThumb(card);
       return card;
     }
 
@@ -1455,11 +1572,17 @@
       const featured = state.articles.filter((a) => a.featured).sort((a, b) => (a.date < b.date ? 1 : -1));
       elements.featuredSection.removeAttribute("data-loading");
       // The strip highlights the collection as a whole, so it steps aside as
-      // soon as a category narrows the list below it.
-      elements.featuredSection.hidden = featured.length === 0 || Boolean(state.category);
+      // soon as the toolbar above it narrows the list below.
+      const isNarrowed = Boolean(state.category) || state.favoritesOnly || elements.searchInput.value.trim() !== "";
+      elements.featuredSection.hidden = featured.length === 0 || isNarrowed;
       elements.featuredGrid.replaceChildren();
       if (elements.featuredSection.hidden) return;
       featured.forEach((a) => elements.featuredGrid.append(createFeaturedCard(a)));
+    }
+
+    function renderResults() {
+      renderFeatured();
+      renderList();
     }
 
     function renderRecent() {
@@ -1572,6 +1695,8 @@
 
     async function init() {
       loadFavorites();
+      loadView();
+      applyView();
       updateFavoritesFilter();
       const response = await fetch("./articles.json", { cache: "no-store" });
       const payload = await response.json();
@@ -1583,11 +1708,13 @@
       renderList();
     }
 
-    elements.searchInput.addEventListener("input", renderList);
+    elements.searchInput.addEventListener("input", renderResults);
+    elements.viewCards.addEventListener("click", () => setView("cards"));
+    elements.viewList.addEventListener("click", () => setView("list"));
     elements.favoritesFilter.addEventListener("click", () => {
       state.favoritesOnly = !state.favoritesOnly;
       updateFavoritesFilter();
-      renderList();
+      renderResults();
     });
     window.addEventListener("popstate", () => {
       state.category = new URLSearchParams(location.search).get("category") || "";
