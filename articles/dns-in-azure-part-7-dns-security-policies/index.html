@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers.">
+  <meta name="description" content="Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
   <script>
@@ -47,9 +47,9 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="benoit-gaumard.io">
-  <meta property="og:title" content="DNS in Azure, Part 3: Azure DNS Private Resolver | Benoit Gaumard">
-  <meta property="og:description" content="Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers.">
-  <meta property="og:url" content="https://benoit-gaumard.io/articles/dns-in-azure-part-3-private-resolver/">
+  <meta property="og:title" content="DNS in Azure, Part 7: DNS Security Policies | Benoit Gaumard">
+  <meta property="og:description" content="Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down.">
+  <meta property="og:url" content="https://benoit-gaumard.io/articles/dns-in-azure-part-7-dns-security-policies/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -57,14 +57,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
-  <link rel="canonical" href="https://benoit-gaumard.io/articles/dns-in-azure-part-3-private-resolver/">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/dns-in-azure-part-7-dns-security-policies/">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "DNS in Azure, Part 3: Azure DNS Private Resolver",
-  "description": "Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers.",
-  "url": "https://benoit-gaumard.io/articles/dns-in-azure-part-3-private-resolver/",
+  "headline": "DNS in Azure, Part 7: DNS Security Policies",
+  "description": "Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down.",
+  "url": "https://benoit-gaumard.io/articles/dns-in-azure-part-7-dns-security-policies/",
   "author": {
     "@type": "Person",
     "name": "Benoit Gaumard",
@@ -98,14 +98,14 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "DNS in Azure, Part 3: Azure DNS Private Resolver",
-      "item": "https://benoit-gaumard.io/articles/dns-in-azure-part-3-private-resolver/"
+      "name": "DNS in Azure, Part 7: DNS Security Policies",
+      "item": "https://benoit-gaumard.io/articles/dns-in-azure-part-7-dns-security-policies/"
     }
   ]
 }
   </script>
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
-  <title>DNS in Azure, Part 3: Azure DNS Private Resolver | Benoit Gaumard</title>
+  <title>DNS in Azure, Part 7: DNS Security Policies | Benoit Gaumard</title>
 
   <style>
     :root {
@@ -503,55 +503,31 @@
   <main id="top" tabindex="-1">
     <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
-      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=DNS">DNS</a></div>
-      <h1 class="article-title">DNS in Azure, Part 3: Azure DNS Private Resolver</h1>
-      <p class="article-description">Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers.</p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=DNS">DNS</a><a class="article-category-tag" href="/articles/?category=Security">Security</a></div>
+      <h1 class="article-title">DNS in Azure, Part 7: DNS Security Policies</h1>
+      <p class="article-description">Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
         <span>September 3, 2026</span>
         <span class="dot">&middot;</span>
-        <span>14 min read</span>
+        <span>8 min read</span>
       </div>
-      <div class="article-tags"><span class="article-tag">#DNS</span><span class="article-tag">#Networking</span><span class="article-tag">#Hybrid</span></div>
+      <div class="article-tags"><span class="article-tag">#DNS</span><span class="article-tag">#Networking</span><span class="article-tag">#Security</span><span class="article-tag">#Log Analytics</span></div>
     </div>
 
-    <div class="article-feature-image"><img src="/articles/images/dns-in-azure-part-3.svg" alt="DNS in Azure, Part 3: Azure DNS Private Resolver"></div>
+    <div class="article-feature-image"><img src="/articles/images/dns-in-azure-part-7.svg" alt="DNS in Azure, Part 7: DNS Security Policies"></div>
 
     <article class="article-body">
-      <p><a href="/articles/dns-in-azure-part-1-fundamentals/">Part 1</a> established that everything private in Azure eventually terminates at <code>168.63.129.16</code>. <a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a> showed how private DNS zones make that address genuinely useful. Both ended on the same two gaps:</p>
-<ul><li>A machine <strong>on-premises</strong> cannot resolve names in an Azure private DNS zone, because it has no path to the platform virtual IP.</li><li>A machine <strong>in Azure</strong> cannot resolve names hosted by an on-premises DNS server, because Azure DNS has no idea those zones exist.</li></ul>
-<p>For years the fix was to run your own DNS servers in a hub VNet - two VMs, forwarders both ways, and a patching schedule. The <strong>Azure DNS Private Resolver</strong>, generally available since October 2022, closes both gaps as a managed service. This post is about how it works and which architecture to pick.</p>
-<ul><li><strong><a href="/articles/dns-in-azure-part-1-fundamentals/">Part 1</a></strong> - fundamentals and Azure-provided name resolution</li><li><strong><a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a></strong> - private DNS zones and virtual network links</li><li><strong>Part 3 (this post)</strong> - Azure DNS Private Resolver</li><li><strong><a href="/articles/dns-in-azure-part-4-private-endpoints/">Part 4</a></strong> - Private Link and Private Endpoints</li><li><strong><a href="/articles/dns-in-azure-part-5-private-endpoint-dns/">Part 5</a></strong> - Private Endpoints and private DNS</li><li><strong><a href="/articles/dns-in-azure-part-6-private-dns-fallback/">Part 6</a></strong> - private DNS fallback to internet</li><li><strong><a href="/articles/dns-in-azure-part-7-dns-security-policies/">Part 7</a></strong> - DNS security policies</li><li><strong><a href="/articles/dns-in-azure-part-8-decision-tree/">Part 8</a></strong> - the resolution decision tree</li></ul>
-<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#anatomy-of-the-resolver">Anatomy of the resolver</a></li><li class="toc-level-2"><a href="#the-evaluation-order-that-explains-everything">The evaluation order that explains everything</a></li><li class="toc-level-2"><a href="#pattern-1-on-premises-resolving-azure-private-zones">Pattern 1: on-premises resolving Azure private zones</a></li><li class="toc-level-2"><a href="#pattern-2-azure-resolving-on-premises-names-centralized">Pattern 2: Azure resolving on-premises names, centralized</a></li><li class="toc-level-2"><a href="#pattern-3-azure-resolving-on-premises-names-distributed">Pattern 3: Azure resolving on-premises names, distributed</a></li><li class="toc-level-2"><a href="#pattern-4-isolated-vnets-with-a-wildcard-rule">Pattern 4: isolated VNets with a wildcard rule</a></li><li class="toc-level-2"><a href="#pattern-5-azure-to-azure-through-the-hub">Pattern 5: Azure-to-Azure through the hub</a></li><li class="toc-level-2"><a href="#choosing-a-pattern">Choosing a pattern</a></li><li class="toc-level-2"><a href="#limits-and-sizing">Limits and sizing</a></li><li class="toc-level-2"><a href="#query-logging-and-filtering">Query logging and filtering</a></li><li class="toc-level-2"><a href="#troubleshooting-checklist">Troubleshooting checklist</a></li><li class="toc-level-2"><a href="#where-this-leaves-us">Where this leaves us</a></li></ul></nav>
-<h2 id="anatomy-of-the-resolver">Anatomy of the resolver</h2>
-<p>The resolver itself is a container for three moving parts.</p>
-<div class="table-wrap"><table><thead><tr><th>Component</th><th>Direction</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Inbound endpoint</strong></td><td>Into Azure</td><td>A private IP in your VNet that accepts DNS queries from on-premises, other clouds, or other VNets</td></tr><tr><td><strong>Outbound endpoint</strong></td><td>Out of Azure</td><td>The egress point queries leave through when a forwarding rule sends them elsewhere</td></tr><tr><td><strong>DNS forwarding ruleset</strong></td><td>-</td><td>A named collection of conditional forwarding rules, attached to an outbound endpoint and linked to virtual networks</td></tr><tr><td><strong>Forwarding rule</strong></td><td>-</td><td>One entry in a ruleset: a domain suffix, up to six target IPs, and a port</td></tr></tbody></table></div>
-<p>A few structural rules follow from that:</p>
-<ul><li>The resolver lives in <strong>one</strong> virtual network, in the <strong>same region</strong> as that VNet. One resolver per VNet - they cannot share.</li><li>Each endpoint needs its <strong>own dedicated subnet</strong>, delegated to <code>Microsoft.Network/dnsResolvers</code>. Nothing else can live in it.</li><li>Subnets must be between <strong>/28 and /24</strong>. A /28 covers today's limits; a /27 buys you headroom.</li><li>Endpoint subnets cannot be IPv6-enabled.</li><li>An inbound endpoint IP can be <strong>static or dynamic</strong>. Pick static, always - it goes into on-premises conditional forwarders and you do not want it moving.</li></ul>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az network dns-resolver create \
-  --name dnspr-hub-weu \
-  --resource-group rg-dns-hub \
-  --location westeurope \
-  --id /subscriptions/&lt;sub&gt;/resourceGroups/rg-net/providers/Microsoft.Network/virtualNetworks/vnet-hub
-
-az network dns-resolver inbound-endpoint create \
-  --dns-resolver-name dnspr-hub-weu \
-  --name inbound-weu \
-  --resource-group rg-dns-hub \
-  --location westeurope \
-  --ip-configurations '[{"private-ip-allocation-method":"Static","private-ip-address":"10.30.10.4","id":"&lt;subnet-id-inbound&gt;"}]'
-
-az network dns-resolver outbound-endpoint create \
-  --dns-resolver-name dnspr-hub-weu \
-  --name outbound-weu \
-  --resource-group rg-dns-hub \
-  --location westeurope \
-  --id "&lt;subnet-id-outbound&gt;"</code></pre></div>
-<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>The resolver needs network connectivity to work, not magic. On-premises reaching an inbound endpoint requires ExpressRoute or a VPN. An outbound endpoint reaching an on-premises DNS server requires the same. The resolver does not create connectivity - it uses what you already have.</p></div></div>
-<p>Put together, the reference architecture looks like this - the resolver deployed in the hub, its two endpoint subnets, and the on-premises network attached over ExpressRoute or VPN:</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/_images/azure-dns-private-resolver-architecture.svg" alt="Azure DNS Private Resolver deployed in a hub-and-spoke network connected to on-premises" loading="lazy"><figcaption>DNS Private Resolver in the hub of a hub-and-spoke network, connected to an on-premises network</figcaption></figure>
-<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver" target="_blank" rel="noopener noreferrer">Azure DNS Private Resolver architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Azure Architecture Center.</em></p>
+      <p>Six parts in, one complaint has come up in every single one: you cannot see what the platform resolver is doing. <code>168.63.129.16</code> answers queries and keeps no receipts. For years the only way to get DNS logs in Azure was to put a VM in the path - which meant building, sizing, patching and monitoring a DNS server whose sole purpose was to write a log file.</p>
+<p><strong>DNS resolver policy</strong> ends that. It filters and logs DNS at the virtual network level, covers both public and private traffic, and needs no infrastructure at all. This post is about how it works and how to roll it out without blocking your own control plane.</p>
+<ul><li><strong><a href="/articles/dns-in-azure-part-1-fundamentals/">Part 1</a></strong> - fundamentals and Azure-provided name resolution</li><li><strong><a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a></strong> - private DNS zones and virtual network links</li><li><strong><a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a></strong> - Azure DNS Private Resolver</li><li><strong><a href="/articles/dns-in-azure-part-4-private-endpoints/">Part 4</a></strong> - Private Link and Private Endpoints</li><li><strong><a href="/articles/dns-in-azure-part-5-private-endpoint-dns/">Part 5</a></strong> - Private Endpoints and private DNS</li><li><strong><a href="/articles/dns-in-azure-part-6-private-dns-fallback/">Part 6</a></strong> - private DNS fallback to internet</li><li><strong>Part 7 (this post)</strong> - DNS security policies</li><li><strong><a href="/articles/dns-in-azure-part-8-decision-tree/">Part 8</a></strong> - the resolution decision tree</li></ul>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#why-dns-is-a-security-control">Why DNS is a security control</a></li><li class="toc-level-2"><a href="#anatomy-of-a-resolver-policy">Anatomy of a resolver policy</a></li><li class="toc-level-2"><a href="#traffic-rules-and-how-they-are-evaluated">Traffic rules and how they are evaluated</a></li><li class="toc-level-2"><a href="#domain-lists">Domain lists</a></li><li class="toc-level-2"><a href="#the-threat-intelligence-feed">The threat intelligence feed</a></li><li class="toc-level-2"><a href="#query-logging-the-part-you-have-been-waiting-for">Query logging: the part you have been waiting for</a></li><li class="toc-level-2"><a href="#limits">Limits</a></li><li class="toc-level-2"><a href="#a-rollout-plan-that-will-not-break-anything">A rollout plan that will not break anything</a></li><li class="toc-level-2"><a href="#where-this-leaves-the-series">Where this leaves the series</a></li></ul></nav>
+<h2 id="why-dns-is-a-security-control">Why DNS is a security control</h2>
+<p>Almost every attack begins with a name lookup. Command-and-control beacons, data exfiltration over DNS tunnels, phishing payload retrieval, cryptominers - they all need to resolve something before they can do anything else.</p>
+<p>That makes the resolver the cheapest chokepoint in the whole estate. You do not need to decrypt traffic, terminate TLS, or deploy an agent. You need to see the question and decide whether to answer it.</p>
+<p>Two things follow, and both matter:</p>
+<ul><li><strong>Detection.</strong> A host querying a known malicious domain is compromised, or on its way to being. That signal arrives before the connection does.</li><li><strong>Prevention.</strong> Refusing to answer stops the connection from ever being attempted, without a single firewall rule.</li></ul>
     <aside class="article-ad" aria-label="Advertisement">
       <span class="article-ad-label">Advertisement</span>
       <ins class="adsbygoogle"
@@ -562,148 +538,123 @@ az network dns-resolver outbound-endpoint create \
            data-ad-slot="4494484671"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
-<h2 id="the-evaluation-order-that-explains-everything">The evaluation order that explains everything</h2>
-<p>Most "why did my query go there?" incidents are answered by the order in which the platform evaluates a query. Once a query reaches <code>168.63.129.16</code> from a virtual network:</p>
-<ol><li>If the VNet is configured with <strong>custom DNS servers</strong>, the query never got here - it went to those servers instead.</li><li>Linked <strong>private DNS zones</strong> are checked first. A match is answered from the zone.</li><li>If no zone matches, <strong>DNS forwarding rulesets linked to the VNet</strong> are evaluated.</li><li>Rules match on <strong>domain suffix</strong>. When several rules match, the <strong>longest suffix wins</strong>.</li><li>On a match, the query is forwarded out of the outbound endpoint to the rule's target servers.</li><li>With no match and no ruleset, Azure DNS resolves the query as a normal recursive lookup.</li></ol>
-<p>Two consequences worth internalising:</p>
-<ul><li><strong>Private zones beat rules.</strong> If <code>corp.internal</code> is linked as a private zone <em>and</em> a rule forwards <code>corp.internal</code> on-premises, the zone wins and the rule never fires. This is the single most common misconfiguration.</li><li>A <strong>wildcard rule (<code>.</code>) does not catch everything.</strong> Microsoft reserves a set of namespaces - the ones behind platform services - that are always resolved by Azure DNS regardless of your wildcard. That is a feature; without it you would break managed identity, storage, and half the platform.</li></ul>
-<h2 id="pattern-1-on-premises-resolving-azure-private-zones">Pattern 1: on-premises resolving Azure private zones</h2>
-<p>The canonical starting point. A resolver sits in the hub VNet, and the private zones are linked to that hub.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">      ON-PREMISES                    │            AZURE (vnet-hub)
-                                     │
-  ┌──────────┐   ┌────────────────┐  │   ┌──────────────────┐
-  │ client   │──▶│ DNS server     │──┼──▶│ Inbound endpoint │
-  │          │   │ 192.168.0.10   │  │   │ 10.30.10.4       │
-  └──────────┘   └────────────────┘  │   └────────┬─────────┘
-                  conditional        │            │
-                  forwarder for      │            ▼
-                  corp.internal      │   ┌──────────────────┐
-                                     │   │  168.63.129.16   │
-              ExpressRoute / VPN     │   └────────┬─────────┘
-                                     │            ▼
-                                     │   ┌──────────────────────────┐
-                                     │   │ Private zone             │
-                                     │   │ corp.internal (linked)   │
-                                     │   │ vm1  A  10.30.1.4        │
-                                     │   └──────────────────────────┘</code></pre></div>
-<ol><li>The on-premises client asks its usual DNS server for <code>vm1.corp.internal</code>.</li><li>That server is not authoritative, but it has a conditional forwarder for <code>corp.internal</code> pointing at <code>10.30.10.4</code> - the inbound endpoint. The query crosses the ExpressRoute or VPN.</li><li>The inbound endpoint hands the query to the platform resolver behind <code>168.63.129.16</code>.</li><li>The private zone <code>corp.internal</code> is linked to the hub VNet, so the record is found and the answer travels back.</li></ol>
-<p>The only configuration on the Azure side is: resolver + inbound endpoint + zones linked to the resolver's VNet. No rules needed for this direction.</p>
-<p>Microsoft's diagram of the same flow, showing the query travelling from the on-premises server into the inbound endpoint and on to the private zone:</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/_images/azure-dns-private-resolver-on-premises-query-traffic-usecase-1.svg" alt="Name resolution traffic when an on-premises server queries an Azure private DNS record" loading="lazy"><figcaption>Query path when an on-premises server resolves a record hosted in an Azure private DNS zone</figcaption></figure>
-<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver" target="_blank" rel="noopener noreferrer">Azure DNS Private Resolver architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Azure Architecture Center.</em></p>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>This is also the pattern that makes <code>privatelink.*</code> zones reachable from on-premises - which is exactly what you need for a hybrid client to hit a Private Endpoint. Forward each <strong>public</strong> suffix you use (<code>blob.core.windows.net</code>, not <code>privatelink.blob.core.windows.net</code>) to the inbound endpoint, or you will get the public IP and a firewall drop. <a href="/articles/dns-in-azure-part-5-private-endpoint-dns/">Part 5</a> explains exactly why the public suffix is the right target.</p></div></div>
-<h2 id="pattern-2-azure-resolving-on-premises-names-centralized">Pattern 2: Azure resolving on-premises names, centralized</h2>
-<p>Now the other direction. This is the architecture you should reach for by default.</p>
-<p>Every spoke VNet has its <strong>DNS servers setting pointed at the inbound endpoint IP</strong>. The ruleset is linked to the hub VNet and attached to the outbound endpoint.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">  vnet-spoke-a                        vnet-hub                       ON-PREMISES
-  DNS servers = 10.30.10.4
-  ┌──────────┐   peering   ┌────────────────────────────┐   │   ┌────────────────┐
-  │ app01    │────────────▶│ Inbound  10.30.10.4        │   │   │ DNS server     │
-  └──────────┘             │    │                       │   │   │ 192.168.0.10   │
-                           │    ▼                       │   │   └────────────────┘
-                           │ 168.63.129.16              │   │            ▲
-                           │    │                       │   │            │
-                           │    ▼  ruleset: onprem.local │  │            │
-                           │ Outbound endpoint ──────────┼──┼────────────┘
-                           └────────────────────────────┘   │
-                                                    ExpressRoute / VPN</code></pre></div>
-<ol><li><code>app01</code> queries <code>svc.onprem.local</code>. Its VNet's DNS servers setting points at <code>10.30.10.4</code>, so the query is routed over the peering to the inbound endpoint.</li><li>The inbound endpoint passes it to the platform resolver. No linked private zone matches <code>onprem.local</code>.</li><li>The ruleset linked to the hub VNet is evaluated. The rule for <code>onprem.local</code> matches and forwards the query out of the outbound endpoint to <code>192.168.0.10</code>.</li><li>The on-premises server answers authoritatively.</li></ol>
-<p>The appeal is that <strong>one place</strong> holds all the routing logic. Add a new on-premises namespace and you edit one ruleset, not fifty virtual networks.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/_images/azure-dns-private-resolver-spoke-query-traffic-centralized.svg" alt="Query traffic when a spoke VM issues a DNS request in a centralized architecture" loading="lazy"><figcaption>Centralized architecture: spoke virtual networks send every query to the inbound endpoint in the hub</figcaption></figure>
-<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver" target="_blank" rel="noopener noreferrer">Azure DNS Private Resolver architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Azure Architecture Center.</em></p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az network dns-resolver forwarding-ruleset create \
-  --name frs-hybrid \
-  --resource-group rg-dns-hub \
-  --location westeurope \
-  --outbound-endpoints '[{"id":"&lt;outbound-endpoint-id&gt;"}]'
+<h2 id="anatomy-of-a-resolver-policy">Anatomy of a resolver policy</h2>
+<p>Four objects, and the relationships between them are what you need to hold in your head.</p>
+<div class="table-wrap"><table><thead><tr><th>Object</th><th>Type</th><th>Role</th></tr></thead><tbody><tr><td><strong>DNS resolver policy</strong></td><td><code>Microsoft.Network/dnsResolverPolicies</code></td><td>The container. Regional</td></tr><tr><td><strong>DNS domain list</strong></td><td><code>Microsoft.Network/dnsResolverDomainLists</code></td><td>A named list of domains. Regional</td></tr><tr><td><strong>DNS traffic rule</strong></td><td>Child of the policy</td><td>Priority + domain lists + action</td></tr><tr><td><strong>Virtual network link</strong></td><td>Child of the policy</td><td>Applies the policy to a VNet</td></tr></tbody></table></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">  ┌────────────────────── DNS resolver policy (westeurope) ──────────────────────┐
+  │                                                                              │
+  │  Traffic rules (evaluated by priority, 100 → 65000)                          │
+  │    100  rule-allow-corp        → [allowlist-corp]        → Allow             │
+  │    200  rule-block-threatintel → [Azure DNS threat intel]→ Block             │
+  │    300  rule-block-categories  → [blocklist-1, gambling] → Block             │
+  │  65000  rule-log-everything    → ["."]                   → Alert             │
+  │                                                                              │
+  │  Virtual network links:  vnet-spoke-a   vnet-spoke-b   vnet-hub              │
+  └──────────────────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼  diagnostic settings
+     Log Analytics workspace / Storage account / Event Hub</code></pre></div>
+<p>The structural rules that shape a design:</p>
+<ul><li>A policy applies <strong>only to virtual networks in its own region</strong>. Plan one policy per region you operate in.</li><li>The policy-to-VNet relationship is <strong>1:N</strong>. One policy can cover many VNets, but a VNet can be linked to <strong>exactly one</strong> policy. You cannot layer a central security policy under a team's own.</li><li>Domain lists must be in the <strong>same region</strong> as the policies that reference them, but one list can be referenced by many rules across many policies.</li><li>Every traffic rule needs <strong>at least one</strong> domain list; a rule can reference several.</li></ul>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az extension add --name dns-resolver
 
-az network dns-resolver forwarding-rule create \
-  --ruleset-name frs-hybrid \
-  --name rule-onprem-local \
+az dns-resolver policy create \
+  --name pol-dns-weu \
   --resource-group rg-dns-hub \
-  --domain-name "onprem.local." \
-  --forwarding-rule-state Enabled \
-  --target-dns-servers '[{"ip-address":"192.168.0.10","port":53},{"ip-address":"192.168.0.11","port":53}]'
+  --location westeurope
 
-az network dns-resolver vnet-link create \
-  --ruleset-name frs-hybrid \
+az dns-resolver policy vnet-link create \
+  --policy-name pol-dns-weu \
   --name link-spoke-a \
   --resource-group rg-dns-hub \
-  --id "&lt;vnet-spoke-a-id&gt;"</code></pre></div>
-<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Rule domain names are written as a fully qualified suffix with a trailing dot - <code>onprem.local.</code> - and matching is on suffix, so a rule for <code>onprem.local.</code> also catches <code>svc.eu.onprem.local.</code>. Add a more specific rule if you need a subdomain to go somewhere else; the longest match wins.</p></div></div>
-<h2 id="pattern-3-azure-resolving-on-premises-names-distributed">Pattern 3: Azure resolving on-premises names, distributed</h2>
-<p>Same goal, different plumbing. Spokes keep the <strong>default</strong> DNS servers setting (<code>168.63.129.16</code>), and the <strong>ruleset is linked directly to each spoke VNet</strong>.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">  vnet-spoke-a                                          ON-PREMISES
-  DNS servers = Default (168.63.129.16)
-  ruleset frs-hybrid linked directly
-  ┌──────────┐        ┌──────────────────┐        │   ┌────────────────┐
-  │ app01    │───────▶│  168.63.129.16   │        │   │ DNS server     │
-  └──────────┘        └────────┬─────────┘        │   │ 192.168.0.10   │
-                               │ rule match       │   └────────────────┘
-                               ▼                  │            ▲
-                      ┌──────────────────┐        │            │
-                      │ Outbound endpoint│────────┼────────────┘
-                      │ (in vnet-hub)    │        │
-                      └──────────────────┘   ExpressRoute / VPN</code></pre></div>
-<p>The query never traverses the inbound endpoint. It goes straight from the platform resolver to the outbound endpoint when a rule matches.</p>
-<p>Why bother? <strong>Throughput.</strong> Each endpoint is capped at 10,000 queries per second. In the centralized pattern every query in your estate crosses the inbound endpoint. For most organisations that is comfortable; for VDI fleets, large container platforms, or anything with a chatty resolver, it is not. The distributed pattern removes the inbound endpoint from the path entirely.</p>
-<p>The cost is operational: a ruleset link per spoke, so more objects to manage and more places to look when something forwards to the wrong place.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/_images/azure-dns-private-resolver-spoke-query-traffic-decentralized.svg" alt="Query traffic when a spoke VM issues a DNS request in a decentralized architecture" loading="lazy"><figcaption>Distributed architecture: rulesets are linked directly to each spoke and queries bypass the inbound endpoint</figcaption></figure>
-<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver" target="_blank" rel="noopener noreferrer">Azure DNS Private Resolver architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Azure Architecture Center.</em></p>
-<h2 id="pattern-4-isolated-vnets-with-a-wildcard-rule">Pattern 4: isolated VNets with a wildcard rule</h2>
-<p>Sometimes a workload must sit in a VNet with <strong>no peering at all</strong> - a compliance boundary, a third-party landing area - and you still want its DNS centrally controlled and logged.</p>
-<p>Link a ruleset to that isolated VNet containing a single wildcard rule for <code>.</code> pointing at your central DNS service. Every query the platform does not answer from a linked private zone gets forwarded out.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">  isolated VNet (no peering)
-  DNS servers = Default
-  ruleset with rule "." → 192.168.0.10
-  ┌──────────┐    ┌────────────────┐    ┌──────────────────┐    ┌────────────────┐
-  │ vm1      │───▶│ 168.63.129.16  │───▶│ Outbound endpoint│───▶│ central DNS    │
-  └──────────┘    └────────────────┘    └──────────────────┘    └────────────────┘
-                    "." rule matches                              recursive lookup</code></pre></div>
-<p>This works because ruleset links do not require network peering - the link is a control-plane relationship, and the query egresses through the outbound endpoint in the hub.</p>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Remember the reserved namespaces. A <code>.</code> rule will <strong>not</strong> capture Microsoft's platform domains, which continue to resolve through Azure DNS. Do not build a compliance story that assumes a wildcard rule sees 100% of queries - it does not, by design.</p></div></div>
-<h2 id="pattern-5-azure-to-azure-through-the-hub">Pattern 5: Azure-to-Azure through the hub</h2>
-<p>You can also use the resolver purely for Azure-internal resolution, and it is often the cleanest way to manage private zones at scale.</p>
-<p>Rather than linking every private DNS zone to every spoke VNet - which burns through the 1,000-link-per-zone budget and makes troubleshooting miserable - link all zones to the <strong>hub VNet only</strong>, and point each spoke's DNS servers setting at the inbound endpoint.</p>
-<div class="table-wrap"><table><thead><tr><th>Approach</th><th>Links to manage</th><th>Zone link limit pressure</th><th>Troubleshooting</th></tr></thead><tbody><tr><td>Zones linked to every spoke</td><td>zones × spokes</td><td>High</td><td>Hard - many links to inspect</td></tr><tr><td>Zones linked to the hub, spokes use the inbound endpoint</td><td>zones × 1</td><td>Minimal</td><td>Easy - one place holds the truth</td></tr></tbody></table></div>
-<p>The second row is what I recommend for anything beyond a handful of VNets. It also gives you a single choke point where query logging can be applied.</p>
-<p>Microsoft documents this as the hub-and-spoke-with-ruleset topology:</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/dns/media/private-resolver-architecture/hub-and-spoke-ruleset.png" alt="Hub and spoke topology with a DNS forwarding ruleset" loading="lazy"><figcaption>Hub-and-spoke topology with private DNS zones and a forwarding ruleset linked to the hub</figcaption></figure>
-<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/dns/private-resolver-architecture" target="_blank" rel="noopener noreferrer">Private resolver architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
-<h2 id="choosing-a-pattern">Choosing a pattern</h2>
-<div class="table-wrap"><table><thead><tr><th>If you need...</th><th>Use</th></tr></thead><tbody><tr><td>On-premises to resolve Azure private zones</td><td>Inbound endpoint + zones linked to the resolver's VNet (Pattern 1)</td></tr><tr><td>Azure to resolve on-premises zones, normal volumes</td><td>Centralized: spokes point at the inbound endpoint (Pattern 2)</td></tr><tr><td>Azure to resolve on-premises zones, very high QPS</td><td>Distributed: ruleset linked per spoke (Pattern 3)</td></tr><tr><td>Central control for a VNet with no peering</td><td>Wildcard ruleset linked to the isolated VNet (Pattern 4)</td></tr><tr><td>Simple private zone management across many spokes</td><td>Zones on the hub, spokes point at the inbound endpoint (Pattern 5)</td></tr></tbody></table></div>
-<p>If you are unsure, start centralized. It is simpler to reason about, and DNS is a service where being able to explain the path out loud matters more than shaving milliseconds.</p>
-<h2 id="limits-and-sizing">Limits and sizing</h2>
-<div class="table-wrap"><table><thead><tr><th>Resource</th><th>Limit</th></tr></thead><tbody><tr><td>Private resolvers per subscription</td><td>15</td></tr><tr><td>Inbound endpoints per resolver</td><td>5</td></tr><tr><td>Outbound endpoints per resolver</td><td>5</td></tr><tr><td>Queries per second per endpoint</td><td>10,000</td></tr><tr><td>Rules per forwarding ruleset</td><td>1,000</td></tr><tr><td>Virtual network links per ruleset</td><td>500</td></tr><tr><td>Outbound endpoints per ruleset</td><td>2</td></tr><tr><td>Rulesets per outbound endpoint</td><td>2</td></tr><tr><td>Target DNS servers per rule</td><td>6</td></tr></tbody></table></div>
-<p>Also worth knowing before you design:</p>
-<ul><li>Virtual networks with <strong>encryption enabled</strong> do not support the resolver.</li><li>The resolver is <strong>not compatible with Azure Lighthouse</strong>.</li><li><strong>ExpressRoute FastPath</strong> is not supported.</li><li>Cross-tenant ruleset linking is not supported (unlike private DNS zone links).</li><li>Deleting an outbound endpoint requires deleting its ruleset and virtual network links first.</li></ul>
-<h2 id="query-logging-and-filtering">Query logging and filtering</h2>
-<p>Historically the biggest complaint about this architecture was visibility: the platform resolver produced no query logs, so teams inserted a BIND or Windows DNS VM purely to capture them - which defeated most of the point of a managed service.</p>
-<p><strong>DNS resolver policy</strong> removes that need. It applies at the virtual network level, covers both public and private DNS traffic, and lets you:</p>
-<ul><li>Send full query and response logs to a Log Analytics workspace, storage account, or Event Hub</li><li>Allow, alert on, or block queries based on prioritised rules over domain lists</li><li>Subscribe to Microsoft's managed <strong>threat intelligence</strong> feed to block known malicious domains</li></ul>
-<p>A policy applies only to VNets in its own region, so plan one per region you operate in. If your only reason for running a DNS VM was logging, this is your exit path. <a href="/articles/dns-in-azure-part-7-dns-security-policies/">Part 7</a> covers the whole feature - traffic rules, domain lists, threat intelligence, and the KQL to make sense of the logs.</p>
-<h2 id="troubleshooting-checklist">Troubleshooting checklist</h2>
-<p>When resolution fails, work down this list in order - it matches the evaluation order and will find the cause faster than packet captures:</p>
-<ol><li><strong>What is the VM actually using as a resolver?</strong> <code>Get-DnsClientServerAddress</code> or <code>resolvectl status</code>. If it does not match the VNet setting, the DHCP lease is stale.</li><li><strong>Did the VNet DNS setting apply?</strong> Changing it requires a lease renewal or reboot.</li><li><strong>Is a private zone shadowing your rule?</strong> A linked zone always beats a forwarding rule for the same suffix.</li><li><strong>Is the ruleset linked to the right virtual network?</strong> Linking it to the hub does nothing for a spoke that points at <code>168.63.129.16</code> directly.</li><li><strong>Is the rule suffix right?</strong> Trailing dot, correct suffix, <code>Enabled</code> state - and remember longest match wins.</li><li><strong>Is there a route and a firewall opening?</strong> UDP and TCP 53 both, in both directions, across the ExpressRoute or VPN.</li><li><strong>Is the target server answering?</strong> Query it directly: <code>dig @192.168.0.10 svc.onprem.local</code>.</li><li><strong>Are you near the QPS ceiling?</strong> Endpoint metrics in Azure Monitor will tell you before your users do.</li></ol>
-<p>Useful one-liners:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># What is this VNet linked to, ruleset-wise?
-az network dns-resolver vnet-link list \
-  --ruleset-name frs-hybrid \
-  --resource-group rg-dns-hub \
-  --output table
+  --location westeurope \
+  --virtual-network id="&lt;vnet-spoke-a-id&gt;"</code></pre></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>This applies at the <strong>virtual network</strong> level and covers everything inside it, regardless of whether the VNet uses Azure-provided DNS, a private resolver inbound endpoint, or a forwarding ruleset. It is not tied to the Private Resolver from <a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a> - the two are independent features that happen to work well together.</p></div></div>
+<h2 id="traffic-rules-and-how-they-are-evaluated">Traffic rules and how they are evaluated</h2>
+<p>Each rule carries a <strong>priority</strong> between 100 and 65000. Lower is higher priority. And there are two evaluation behaviours that are not obvious until they bite you.</p>
+<p><strong>Allow wins over block.</strong> If a domain is blocked by a low-priority rule and allowed by a higher-priority one, the domain is allowed. This is an allow-list-friendly model: you put your exceptions at low priority numbers and your broad blocks below them.</p>
+<p><strong>Rules follow the DNS hierarchy.</strong> If <code>contoso.com</code> is allowed by a higher-priority rule, then <code>sub.contoso.com</code> is allowed too - even if a lower-priority rule explicitly blocks <code>sub.contoso.com</code>. Allowing a parent domain implicitly allows everything under it.</p>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>Query answered?</th><th>Logged?</th><th>Use it for</th></tr></thead><tbody><tr><td><strong>Allow</strong></td><td>Yes</td><td>Yes</td><td>Explicit exceptions, and logging traffic you care about</td></tr><tr><td><strong>Alert</strong></td><td>Yes</td><td>Yes, as an alert</td><td>Everything you are evaluating before you dare block it</td></tr><tr><td><strong>Block</strong></td><td>No</td><td>Yes</td><td>Confirmed-bad domains</td></tr></tbody></table></div>
+<p>A blocked query does not fail with SERVFAIL. It is answered with a CNAME to <code>blockpolicy.azuredns.invalid</code>, which resolves to nothing:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">dig @168.63.129.16 db.sec.contoso.com
 
-# What rules exist, and are they enabled?
-az network dns-resolver forwarding-rule list \
-  --ruleset-name frs-hybrid \
+# ;; ANSWER SECTION:
+# db.sec.contoso.com.  1006632960  IN  CNAME  blockpolicy.azuredns.invalid.</code></pre></div>
+<p>That sentinel name is genuinely useful - it is an unambiguous marker in a packet capture or an application log that DNS policy, not the network, refused the request.</p>
+<div class="callout callout-info"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Info</span><p><strong>CNAME chains are chased.</strong> A rule that matches <code>malicious.contoso.com</code> also applies to <code>adatum.com</code> if <code>malicious.contoso.com</code> appears anywhere in <code>adatum.com</code>'s CNAME chain. Attackers cannot hide behind an alias.</p></div></div>
+<h2 id="domain-lists">Domain lists</h2>
+<p>A domain list is exactly what it sounds like: a named, regional list of domain names. You can type them in, or import a CSV, which is how you get a threat feed from somewhere else into Azure.</p>
+<p>Wildcards are supported, including the root - a list containing <code>.</code> matches every domain there is.</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az dns-resolver domain-list create \
+  --name dl-blocklist-1 \
   --resource-group rg-dns-hub \
-  --query "[].{name:name,domain:domainName,state:forwardingRuleState}" \
-  --output table</code></pre></div>
-<h2 id="where-this-leaves-us">Where this leaves us</h2>
-<p>Three posts, one throughline:</p>
-<ul><li><strong>Part 1</strong> - every private query in a virtual network ends up at <code>168.63.129.16</code>, and the VNet's DNS servers setting decides who is asked first.</li><li><strong>Part 2</strong> - private DNS zones give you real namespaces and real records, but they only exist for virtual networks you explicitly link, and they always win over forwarding rules.</li><li><strong>Part 3</strong> - the resolver adds the two hybrid directions the platform could not do on its own, driven by rulesets evaluated in a documented, predictable order.</li></ul>
-<p>That covers name resolution as an infrastructure service. The second half of the series is about the thing everyone actually wants to resolve.</p>
-<p><strong><a href="/articles/dns-in-azure-part-4-private-endpoints/">Part 4</a></strong> takes apart Private Link and Private Endpoints as a networking construct, <strong><a href="/articles/dns-in-azure-part-5-private-endpoint-dns/">Part 5</a></strong> covers the <code>privatelink</code> CNAME chain and private DNS zone groups, <strong><a href="/articles/dns-in-azure-part-6-private-dns-fallback/">Part 6</a></strong> explains the NXDOMAIN behaviour and the fallback policy that fixes it, <strong><a href="/articles/dns-in-azure-part-7-dns-security-policies/">Part 7</a></strong> finally gets you query logs and filtering, and <strong><a href="/articles/dns-in-azure-part-8-decision-tree/">Part 8</a></strong> turns the whole series into an interactive decision tree.</p>
-<p>If I had to compress the story so far into one piece of advice: <strong>centralize DNS, and be able to draw the query path on a whiteboard.</strong> The architecture you can explain in thirty seconds is the one you will still be able to debug at 2 a.m.</p>
+  --location westeurope \
+  --domains "malicious.contoso.com" "exploit.adatum.com"
+
+az dns-resolver policy dns-security-rule create \
+  --policy-name pol-dns-weu \
+  --name rule-block-known-bad \
+  --resource-group rg-dns-hub \
+  --location westeurope \
+  --priority 300 \
+  --action '{action-type:Block}' \
+  --dns-resolver-domain-lists '[{id:"&lt;domain-list-id&gt;"}]' \
+  --dns-security-rule-state Enabled</code></pre></div>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>A <code>.</code> domain list with a <strong>Block</strong> action will take down your entire estate, including the Azure services your VMs depend on to boot, authenticate, and be managed. Use <code>.</code> with <strong>Alert</strong> for visibility. If you ever need a default-deny posture, build the allow-list first, run it in Alert for weeks, and only then invert it.</p></div></div>
+<h2 id="the-threat-intelligence-feed">The threat intelligence feed</h2>
+<p>The managed option: Microsoft's Security Response Center maintains a domain list of known malicious domains, continuously updated, and exposes it as a selectable list called <strong>Azure DNS threat intel</strong>.</p>
+<p>You use it like any other domain list - reference it from a traffic rule, choose Alert or Block, set a priority. There is nothing to download, curate, or expire.</p>
+<div class="table-wrap"><table><thead><tr><th>Mode</th><th>What you get</th></tr></thead><tbody><tr><td><strong>Alert</strong></td><td>Full visibility of hosts resolving known-bad domains, with zero risk of breaking anything</td></tr><tr><td><strong>Block</strong></td><td>Prevention. Resolution fails before the connection is attempted</td></tr></tbody></table></div>
+<p>Start in Alert. Run it for a couple of weeks, see what turns up, and then flip to Block once you know what is in your own traffic. In most estates the alert volume is close to zero, which makes the eventual switch easy to sign off - and the exceptions you do find are usually security tooling doing something that looks malicious on purpose.</p>
+<h2 id="query-logging-the-part-you-have-been-waiting-for">Query logging: the part you have been waiting for</h2>
+<p>Configure <strong>diagnostic settings</strong> on the resolver policy and send logs to a Log Analytics workspace, a storage account, or an Event Hub. Queries land in the <code>DNSQueryLogs</code> table.</p>
+<p>Each record gives you the query name and type, the source IP, the resolution path, the operation result, and the policy verdict:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">DNSQueryLogs
+| where TimeGenerated &gt; ago(1h)
+| project TimeGenerated, SourceIpAddress, QueryName, QueryType,
+          ResolutionPath, ResolverPolicyRuleAction, OperationName
+| take 100</code></pre></div>
+<p>A few queries that earn their keep immediately.</p>
+<p><strong>Who is being blocked, and for what:</strong></p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">DNSQueryLogs
+| where TimeGenerated &gt; ago(24h)
+| where ResolverPolicyRuleAction == "Block"
+| summarize Blocked = count(), Domains = make_set(QueryName, 20)
+    by SourceIpAddress
+| order by Blocked desc</code></pre></div>
+<p><strong>Private endpoint names that resolved publicly</strong> - the audit for the fallback behaviour from <a href="/articles/dns-in-azure-part-6-private-dns-fallback/">Part 6</a>:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">DNSQueryLogs
+| where TimeGenerated &gt; ago(7d)
+| where QueryName has ".privatelink."
+| where ResolutionPath !contains "PrivateDnsResolution"
+| summarize Count = count() by QueryName, SourceIpAddress
+| order by Count desc</code></pre></div>
+<p><strong>Possible DNS tunnelling</strong> - long labels and abnormal query volume to one parent domain:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">DNSQueryLogs
+| where TimeGenerated &gt; ago(1h)
+| extend parent = strcat_array(array_slice(split(QueryName, "."), -2, -1), ".")
+| summarize Queries = count(), MaxLabel = max(strlen(tostring(split(QueryName, ".")[0])))
+    by SourceIpAddress, parent
+| where Queries &gt; 500 and MaxLabel &gt; 40
+| order by Queries desc</code></pre></div>
+<p><strong>Failures, so you find broken things before your users do:</strong></p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">DNSQueryLogs
+| where TimeGenerated &gt; ago(6h)
+| where OperationName !startswith "RESPONSE_SUCCESS"
+| summarize Failures = count() by QueryName, OperationName
+| order by Failures desc
+| take 50</code></pre></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Budget for the volume. DNS is chatty - a few thousand VMs will generate a lot of rows, and Log Analytics is priced per GB ingested. Consider a Basic Logs table or an Event Hub with a cheaper downstream sink if you only need retention for forensics.</p></div></div>
+<h2 id="limits">Limits</h2>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Limit</th></tr></thead><tbody><tr><td>Resolver policies</td><td>1,000</td></tr><tr><td>DNS traffic rules per policy</td><td>100</td></tr><tr><td>Domain lists</td><td>2,000</td></tr><tr><td>Domains per standard domain list</td><td>100,000</td></tr><tr><td>Large domain lists</td><td>100</td></tr><tr><td>Resolver policies per virtual network</td><td>1</td></tr><tr><td>Region scope</td><td>Policy and VNets must be in the same region</td></tr></tbody></table></div>
+<p>The one that shapes designs is <strong>one policy per virtual network</strong>. If a central security team owns policies, application teams cannot add their own rules - build a request process for domain list entries rather than letting teams create competing policies they cannot link.</p>
+<h2 id="a-rollout-plan-that-will-not-break-anything">A rollout plan that will not break anything</h2>
+<p>DNS is the service where a mistake takes out everything at once. Roll it out in this order.</p>
+<ol><li><strong>Deploy a policy per region</strong> with no rules at all, and link one non-production virtual network.</li><li><strong>Turn on diagnostics</strong> to a Log Analytics workspace. Do nothing else for a week. You now have a baseline of what your estate actually resolves, which most organisations have never seen.</li><li><strong>Add a <code>.</code> domain list with an Alert action at the lowest priority</strong> (65000). Everything is now logged and nothing is blocked.</li><li><strong>Add the threat intelligence feed at Alert</strong>, at a higher priority. Review what it catches.</li><li><strong>Build the allow-list.</strong> Anything the platform genuinely needs - your own domains, your identity provider, your patching sources - goes in a list at priority 100 with an Allow action.</li><li><strong>Flip the threat intel rule to Block</strong> in non-production. Wait. Then production.</li><li><strong>Extend to production virtual networks</strong> one landing zone at a time, never all at once.</li><li><strong>Alert on the alerts.</strong> A rule that logs to a table nobody reads is not a control.</li></ol>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Before you block anything, work out how you would roll back if DNS resolution broke for a whole region and your remote access depended on it. The answer should not require a name lookup to reach.</p></div></div>
+<h2 id="where-this-leaves-the-series">Where this leaves the series</h2>
+<p>Seven posts in, the picture is complete: a resolver you cannot see is now a resolver you can query, filter, and audit. The DNS VM that existed only for logging has no reason to exist any more.</p>
+<p><strong><a href="/articles/dns-in-azure-part-8-decision-tree/">Part 8</a></strong> ties everything together into an interactive decision tree - answer a few questions about where the client is, what it is resolving, and where the answer lives, and get the exact architecture and the configuration steps that go with it.</p>
 <p>Enjoy!</p>
     </article>
 
