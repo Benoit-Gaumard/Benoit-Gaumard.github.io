@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Play four simple browser mini games: Breakout, Pong, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.">
+  <meta name="description" content="Play five simple browser mini games: Breakout, Pong, Space Invaders, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="benoit-gaumard.io" />
   <meta property="og:title" content="Mini Games | Benoit Gaumard" />
-  <meta property="og:description" content="Play four simple browser mini games: Breakout, Pong, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger." />
+  <meta property="og:description" content="Play five simple browser mini games: Breakout, Pong, Space Invaders, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger." />
   <meta property="og:url" content="https://benoit-gaumard.io/mini-games/" />
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -20,7 +20,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Mini Games",
-    "description": "Play four simple browser mini games: Breakout, Pong, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.",
+    "description": "Play five simple browser mini games: Breakout, Pong, Space Invaders, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.",
     "url": "https://benoit-gaumard.io/mini-games/",
     "applicationCategory": "GameApplication",
     "operatingSystem": "Any",
@@ -617,7 +617,7 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true">&#127918;</span>Mini Games</h1>
-      <p class="intro-text">Four small arcade games that run entirely in your browser - no install, no account, nothing sent anywhere. Play with a keyboard, a mouse, or your finger.</p>
+      <p class="intro-text">Five small arcade games that run entirely in your browser - no install, no account, nothing sent anywhere. Play with a keyboard, a mouse, or your finger.</p>
     </section>
 
     <div class="game-picker" role="group" aria-label="Choose a game">
@@ -628,6 +628,10 @@
       <button type="button" class="game-tab" data-game="pong" aria-pressed="false">
         <span class="game-tab-emoji" aria-hidden="true">&#127955;</span>
         <span class="game-tab-text"><strong>Pong</strong><small>First to 7 beats the CPU</small></span>
+      </button>
+      <button type="button" class="game-tab" data-game="invaders" aria-pressed="false">
+        <span class="game-tab-emoji" aria-hidden="true">&#128126;</span>
+        <span class="game-tab-text"><strong>Space Invaders</strong><small>Shoot down the fleet</small></span>
       </button>
       <button type="button" class="game-tab" data-game="runner" aria-pressed="false">
         <span class="game-tab-emoji" aria-hidden="true">&#127939;</span>
@@ -667,11 +671,12 @@
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About these mini games</h2>
-      <p>Four small arcade games written in plain JavaScript on a single HTML canvas: a brick breaker, a Pong clone against the computer, an endless runner, and a falling-object catcher. There is nothing to install and no account to create - pick a game, press Start, and play.</p>
-      <h3>The four games</h3>
+      <p>Five small arcade games written in plain JavaScript on a single HTML canvas: a brick breaker, a Pong clone against the computer, a Space Invaders tribute, an endless runner, and a falling-object catcher. There is nothing to install and no account to create - pick a game, press Start, and play.</p>
+      <h3>The five games</h3>
       <ul>
         <li><strong>Breakout</strong> - clear every brick with the ball. The paddle follows the mouse, your finger, or the left and right arrow keys, and the ball launches on a click, a tap, or Space. Each cleared level adds a row of bricks and speeds the ball up; you get three lives.</li>
         <li><strong>Pong</strong> - first to seven points against the computer. Your paddle is the blue one on the left and follows the mouse, your finger, or the up and down arrow keys. The rebound angle depends on where the ball hits the paddle, so aim with the edges.</li>
+        <li><strong>Space Invaders</strong> - a tribute to the 1978 original: an alien fleet steps sideways and drops a row every time it reaches a wall, speeding up as you thin it out. Move with the mouse, your finger, or the left and right arrow keys, and fire with a click, a tap, or Space. Three bunkers absorb the bombs until the aliens themselves grind them away, and each cleared wave starts lower and faster.</li>
         <li><strong>Runner</strong> - an endless run where you play a small yellow chick and the only control is the jump: click, tap, Space, or the up arrow, with a second press for a double jump. Speed rises with distance, and the coins floating above the track are worth extra metres.</li>
         <li><strong>Catcher</strong> - move the basket to catch the blue drops and let the red ones fall. Every five catches in a row raise the multiplier; catching three red drops ends the run.</li>
       </ul>
@@ -772,7 +777,7 @@
     const state = { key: "breakout", running: false, paused: false, over: false, score: 0, extra: 0 };
     const keys = new Set();
     const tapped = new Set();
-    const pointer = { x: GAME_W / 2, y: GAME_H / 2, active: false };
+    const pointer = { x: GAME_W / 2, y: GAME_H / 2, active: false, down: false };
 
     function clamp(v, min, max) { return v < min ? min : (v > max ? max : v); }
     function rand(min, max) { return min + Math.random() * (max - min); }
@@ -826,7 +831,32 @@
     const CHICK_WING = "#e3ac26";
     const CHICK_BEAK = "#f0891f";
     const CHICK_LEG = "#dd7318";
-    const CHICK_EYE = "#2b2118";    function badge(text) {
+    const CHICK_EYE = "#2b2118";
+
+    // Classic invader silhouettes, two animation frames each, as pixel maps.
+    const INVADER_SPRITES = {
+      squid: [
+        ["00011000", "00111100", "01111110", "11011011", "11111111", "00100100", "01011010", "10100101"],
+        ["00011000", "00111100", "01111110", "11011011", "11111111", "01011010", "10000001", "01000010"]
+      ],
+      crab: [
+        ["00100000100", "00010001000", "00111111100", "01101110110", "11111111111", "10111111101", "10100000101", "00011011000"],
+        ["00100000100", "10010001001", "10111111101", "11101110111", "11111111111", "01111111110", "00100000100", "01000000010"]
+      ]
+    };
+
+    function drawSprite(rows, x, y, px, color) {
+      ctx.fillStyle = color;
+      for (let r = 0; r < rows.length; r++) {
+        const row = rows[r];
+        for (let c = 0; c < row.length; c++) {
+          // The half-pixel overdraw hides the seams left by fractional scaling.
+          if (row[c] === "1") ctx.fillRect(x + c * px, y + r * px, px + 0.5, px + 0.5);
+        }
+      }
+    }
+
+    function badge(text) {
       ctx.fillStyle = palette.muted;
       ctx.font = "600 16px 'Segoe UI', Aptos, Calibri, sans-serif";
       ctx.textAlign = "left";
@@ -883,7 +913,8 @@
         if (keys.has("ArrowRight") || keys.has("KeyD")) dir += 1;
         if (dir) p.x += dir * 580 * dt;
         p.x = clamp(p.x, 8, GAME_W - p.w - 8);
-        if (keys.has("Space")) this.launch();
+        // tapped catches a Space press that starts and ends between two frames.
+        if (keys.has("Space") || tapped.has("Space")) this.launch();
 
         const b = this.ball;
         if (this.stuck) { b.x = p.x + p.w / 2; b.y = p.y - b.r - 4; return; }
@@ -1078,6 +1109,207 @@
         fillRR(28, this.playerY, this.pw, this.ph, 7, palette.accent);
         fillRR(GAME_W - 28 - this.pw, this.cpuY, this.pw, this.ph, 7, palette.danger);
         circle(this.ball.x, this.ball.y, this.ball.r, palette.text);
+      }
+    };
+
+    const invaders = {
+      key: "invaders",
+      title: "Space Invaders",
+      intro: "Clear the fleet before it lands. Three lives, three bunkers, and every wave starts lower and faster.",
+      extraLabel: "Lives",
+      bestLabel: "Best",
+      hint: "Move with the mouse, your finger, or the left and right arrow keys. Fire with a click, a tap, or Space - hold to keep firing.",
+      init() {
+        this.wave = 1;
+        this.lives = 3;
+        this.ship = { x: GAME_W / 2 - 22, y: GAME_H - 52, w: 44, h: 24 };
+        this.bullets = [];
+        this.bombs = [];
+        this.cooldown = 0;
+        this.hitFlash = 0;
+        state.score = 0;
+        state.extra = this.lives;
+        this.buildWave();
+        this.buildBunkers();
+      },
+      buildWave() {
+        const cols = 9, rows = 5, gapX = 52, gapY = 34, px = 2.4;
+        const left = (GAME_W - (cols - 1) * gapX) / 2;
+        const top = 66 + Math.min(this.wave - 1, 5) * 14;
+        this.aliens = [];
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const kind = r === 0 ? "squid" : "crab";
+            const w = (kind === "squid" ? 8 : 11) * px;
+            this.aliens.push({
+              x: left + c * gapX - w / 2,
+              y: top + r * gapY,
+              w: w,
+              h: 8 * px,
+              px: px,
+              kind: kind,
+              points: r === 0 ? 30 : (r < 3 ? 20 : 10),
+              alive: true
+            });
+          }
+        }
+        this.dir = 1;
+        this.frame = 0;
+        this.moveTimer = 0;
+        this.bombTimer = rand(0.9, 1.8);
+      },
+      buildBunkers() {
+        const shape = ["01111110", "11111111", "11111111", "11100111", "11000011"];
+        const bw = 8, count = 3;
+        const spacing = GAME_W / (count + 1);
+        this.blocks = [];
+        for (let n = 0; n < count; n++) {
+          const ox = spacing * (n + 1) - (shape[0].length * bw) / 2;
+          const oy = GAME_H - 148;
+          for (let r = 0; r < shape.length; r++) {
+            for (let c = 0; c < shape[r].length; c++) {
+              if (shape[r][c] === "1") this.blocks.push({ x: ox + c * bw, y: oy + r * bw, w: bw, h: bw });
+            }
+          }
+        }
+      },
+      hitBunker(x, y) {
+        for (let i = 0; i < this.blocks.length; i++) {
+          const b = this.blocks[i];
+          if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) { this.blocks.splice(i, 1); return true; }
+        }
+        return false;
+      },
+      press() {
+        // A tap fires from where the finger is, not from where the ship was on
+        // the previous frame, so snap the ship first.
+        if (pointer.active) this.ship.x = clamp(pointer.x - this.ship.w / 2, 8, GAME_W - this.ship.w - 8);
+        this.fire();
+      },
+      fire() {
+        if (this.cooldown > 0) return;
+        const s = this.ship;
+        this.bullets.push({ x: s.x + s.w / 2 - 1.5, y: s.y - 12, w: 3, h: 12 });
+        this.cooldown = 0.3;
+      },
+      update(dt) {
+        const s = this.ship;
+        if (pointer.active) s.x = pointer.x - s.w / 2;
+        let dir = 0;
+        if (keys.has("ArrowLeft") || keys.has("KeyA")) dir -= 1;
+        if (keys.has("ArrowRight") || keys.has("KeyD")) dir += 1;
+        if (dir) s.x += dir * 480 * dt;
+        s.x = clamp(s.x, 8, GAME_W - s.w - 8);
+
+        this.hitFlash = Math.max(0, this.hitFlash - dt);
+        this.cooldown -= dt;
+        // Holding the pointer down fires, which is what makes a drag on a
+        // touchscreen both move and shoot without a second control.
+        if (keys.has("Space") || tapped.has("Space") || pointer.down) this.fire();
+
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+          const b = this.bullets[i];
+          b.y -= 580 * dt;
+          if (b.y + b.h < 0) { this.bullets.splice(i, 1); continue; }
+          if (this.hitBunker(b.x + b.w / 2, b.y)) { this.bullets.splice(i, 1); continue; }
+          let hit = false;
+          for (const a of this.aliens) {
+            if (!a.alive) continue;
+            if (b.x < a.x + a.w && b.x + b.w > a.x && b.y < a.y + a.h && b.y + b.h > a.y) {
+              a.alive = false;
+              state.score += a.points * this.wave;
+              hit = true;
+              break;
+            }
+          }
+          if (hit) this.bullets.splice(i, 1);
+        }
+
+        let aliveCount = 0;
+        for (const a of this.aliens) if (a.alive) aliveCount++;
+        if (aliveCount === 0) {
+          this.wave += 1;
+          state.score += 150;
+          this.bullets = [];
+          this.bombs = [];
+          this.buildWave();
+          this.buildBunkers();
+          return;
+        }
+
+        this.moveTimer -= dt;
+        if (this.moveTimer <= 0) {
+          // The fleet speeds up as it thins out, the way the original does.
+          const ratio = aliveCount / this.aliens.length;
+          this.moveTimer = Math.max(0.07, (0.5 * ratio + 0.07) / (1 + (this.wave - 1) * 0.1));
+          this.frame = this.frame === 0 ? 1 : 0;
+          let minX = Infinity, maxX = -Infinity;
+          for (const a of this.aliens) {
+            if (!a.alive) continue;
+            minX = Math.min(minX, a.x);
+            maxX = Math.max(maxX, a.x + a.w);
+          }
+          const stepX = 12 * this.dir;
+          if (minX + stepX < 14 || maxX + stepX > GAME_W - 14) {
+            this.dir *= -1;
+            for (const a of this.aliens) a.y += 18;
+          } else {
+            for (const a of this.aliens) a.x += stepX;
+          }
+          for (let i = this.blocks.length - 1; i >= 0; i--) {
+            const bl = this.blocks[i];
+            for (const a of this.aliens) {
+              if (!a.alive) continue;
+              if (bl.x < a.x + a.w && bl.x + bl.w > a.x && bl.y < a.y + a.h && bl.y + bl.h > a.y) { this.blocks.splice(i, 1); break; }
+            }
+          }
+          for (const a of this.aliens) {
+            if (a.alive && a.y + a.h >= s.y) {
+              finish("Invaded", "The fleet landed on wave " + this.wave + ". Final score " + state.score + ".");
+              return;
+            }
+          }
+        }
+
+        this.bombTimer -= dt;
+        if (this.bombTimer <= 0) {
+          const shooters = this.aliens.filter((a) => a.alive);
+          const a = shooters[Math.floor(Math.random() * shooters.length)];
+          this.bombs.push({ x: a.x + a.w / 2 - 2, y: a.y + a.h, w: 4, h: 11 });
+          this.bombTimer = Math.max(0.32, rand(1.4, 2.4) - (this.wave - 1) * 0.14);
+        }
+        for (let i = this.bombs.length - 1; i >= 0; i--) {
+          const b = this.bombs[i];
+          b.y += (210 + this.wave * 18) * dt;
+          if (b.y > GAME_H) { this.bombs.splice(i, 1); continue; }
+          if (this.hitBunker(b.x + b.w / 2, b.y + b.h)) { this.bombs.splice(i, 1); continue; }
+          if (b.x < s.x + s.w && b.x + b.w > s.x && b.y + b.h > s.y && b.y < s.y + s.h) {
+            this.bombs.splice(i, 1);
+            this.lives -= 1;
+            this.hitFlash = 0.6;
+            state.extra = this.lives;
+            if (this.lives <= 0) { finish("Game over", "You scored " + state.score + " points on wave " + this.wave + "."); return; }
+          }
+        }
+      },
+      draw() {
+        backdrop();
+        for (const a of this.aliens) {
+          if (!a.alive) continue;
+          drawSprite(INVADER_SPRITES[a.kind][this.frame], a.x, a.y, a.px, a.kind === "squid" ? palette.violet : palette.accent);
+        }
+        ctx.fillStyle = palette.success;
+        for (const bl of this.blocks) ctx.fillRect(bl.x, bl.y, bl.w + 0.5, bl.h + 0.5);
+        ctx.fillStyle = palette.text;
+        for (const b of this.bullets) ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.fillStyle = palette.danger;
+        for (const b of this.bombs) ctx.fillRect(b.x, b.y, b.w, b.h);
+        const s = this.ship;
+        ctx.fillStyle = this.hitFlash > 0 ? palette.danger : palette.accent;
+        ctx.fillRect(s.x, s.y + s.h - 9, s.w, 9);
+        ctx.fillRect(s.x + s.w * 0.3, s.y + 7, s.w * 0.4, s.h - 15);
+        ctx.fillRect(s.x + s.w / 2 - 2, s.y, 4, 9);
+        badge("Wave " + this.wave);
       }
     };
 
@@ -1320,7 +1552,7 @@
       }
     };
 
-    const GAMES = { breakout: breakout, pong: pong, runner: runner, catcher: catcher };
+    const GAMES = { breakout: breakout, pong: pong, invaders: invaders, runner: runner, catcher: catcher };
     let game = breakout;
 
     function syncHud() {
@@ -1366,7 +1598,7 @@
       pauseButton.disabled = false;
       overlay.hidden = true;
       syncHud();
-      try { canvas.focus({ preventScroll: true }); } catch (e) { canvas.focus(); }
+      focusCanvas();
     }
 
     function togglePause(force) {
@@ -1422,6 +1654,7 @@
       pointer.x = pt.x;
       pointer.y = pt.y;
       pointer.active = true;
+      pointer.down = true;
       e.preventDefault();
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
       if (!state.running || state.over) { startGame(); return; }
@@ -1434,9 +1667,9 @@
       pointer.y = pt.y;
       pointer.active = true;
     });
-    canvas.addEventListener("pointerup", () => { pointer.active = false; });
-    canvas.addEventListener("pointercancel", () => { pointer.active = false; });
-    canvas.addEventListener("pointerleave", () => { pointer.active = false; });
+    canvas.addEventListener("pointerup", () => { pointer.active = false; pointer.down = false; });
+    canvas.addEventListener("pointercancel", () => { pointer.active = false; pointer.down = false; });
+    canvas.addEventListener("pointerleave", () => { pointer.active = false; pointer.down = false; });
 
     const GAME_KEYS = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space", "KeyA", "KeyD", "KeyW", "KeyS"]);
     let inView = true;
@@ -1457,6 +1690,12 @@
     window.addEventListener("keyup", (e) => { keys.delete(e.code); });
     window.addEventListener("blur", () => { keys.clear(); });
 
+    // Focus follows the play surface: without this, the tab button keeps focus
+    // and the next Space press activates it again instead of reaching the game.
+    function focusCanvas() {
+      try { canvas.focus({ preventScroll: true }); } catch (e) { canvas.focus(); }
+    }
+
     startButton.addEventListener("click", startGame);
     pauseButton.addEventListener("click", () => togglePause());
     // The overlay covers the canvas, so the whole panel - not just the button -
@@ -1465,7 +1704,7 @@
       if (state.paused) togglePause(false);
       else startGame();
     });
-    tabs.forEach((t) => t.addEventListener("click", () => selectGame(t.dataset.game)));
+    tabs.forEach((t) => t.addEventListener("click", () => { selectGame(t.dataset.game); focusCanvas(); }));
 
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) togglePause(true);
