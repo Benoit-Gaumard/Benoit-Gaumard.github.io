@@ -101,6 +101,7 @@
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
+      --cp-overlay: rgba(238, 247, 255, 0.84);
     }
     :root[data-theme="dark"] {
       color-scheme: dark;
@@ -607,6 +608,88 @@
     .share-btn svg { flex: none; }
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+
+    /* Submit a link */
+    .submit-link-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      min-height: 2.25rem;
+      padding: .375rem .85rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    .submit-link-button:hover { background: var(--cp-accent-hover); border-color: var(--cp-accent-hover); }
+    .submit-link-button svg { flex: 0 0 auto; }
+    .submit-toolbar-group { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+
+    .submit-dialog {
+      width: min(34rem, calc(100% - 2rem));
+      max-height: calc(100vh - 2rem);
+      padding: 0;
+      overflow-y: auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      box-shadow: var(--cp-shadow);
+    }
+    .submit-dialog::backdrop { background: var(--cp-overlay); backdrop-filter: blur(6px); }
+    .submit-dialog-form { display: block; padding: 1.5rem; }
+    .submit-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .submit-dialog h2 { margin: 0; font-size: 1.05rem; }
+    .submit-dialog-intro { margin: .5rem 0 1.25rem; color: var(--cp-text-muted); font-size: 0.9rem; line-height: 1.55; }
+    .submit-dialog-close {
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex: 0 0 auto;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .submit-dialog-close:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent-hover); }
+    .submit-field { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
+    .submit-field label { font-size: 0.85rem; font-weight: 650; }
+    .submit-field input, .submit-field textarea, .submit-field select {
+      min-height: 2.6rem;
+      padding: .5rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-family: inherit;
+    }
+    .submit-field textarea { min-height: 5rem; resize: vertical; }
+    .submit-field-hint { margin: 0; color: var(--cp-text-muted); font-size: 0.78rem; }
+    .submit-dialog-error { margin: 0 0 1rem; padding: .6rem .75rem; border-radius: 8px; background: var(--cp-danger-bg); color: var(--cp-danger); font-size: 0.85rem; }
+    .submit-dialog-error[hidden] { display: none; }
+    .submit-dialog-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .6rem; margin-top: 1.25rem; }
+    .submit-dialog-note { flex: 1 1 14rem; margin: 0; color: var(--cp-text-muted); font-size: 0.78rem; line-height: 1.5; }
+    .submit-dialog-cancel {
+      min-height: 2.4rem;
+      padding: .45rem .9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .submit-dialog-cancel:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    @media (max-width: 32rem) {
+      .submit-dialog-form { padding: 1.15rem; }
+      .submit-dialog-actions { justify-content: stretch; }
+      .submit-dialog-actions button { flex: 1 1 auto; justify-content: center; }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -703,6 +786,10 @@
               List
             </button>
           </div>
+          <button class="submit-link-button" id="submitLinkOpen" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Submit a link
+          </button>
         </div>
         <p class="results-count" id="resultsCount" aria-live="polite"></p>
       </div>
@@ -719,9 +806,44 @@
         <li>Material that has stayed useful over time, not just at the moment it was published.</li>
       </ul>
       <h3>Good to know</h3>
-      <p>Links are checked periodically, but the web moves and documentation gets reorganised: if something has moved, the vendor's own search is usually the quickest route to the new location. Suggestions are welcome through <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+      <p>Links are checked periodically, but the web moves and documentation gets reorganised: if something has moved, the vendor's own search is usually the quickest route to the new location. Spotted something worth adding? Use the <strong>Submit a link</strong> button above, or reach out on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
     </section>
   </main>
+
+  <dialog class="submit-dialog" id="submitLinkDialog" aria-labelledby="submitLinkHeading">
+    <form class="submit-dialog-form" id="submitLinkForm">
+      <div class="submit-dialog-head">
+        <h2 id="submitLinkHeading">Submit a link</h2>
+        <button class="submit-dialog-close" type="button" data-submit-close aria-label="Close">&#10005;</button>
+      </div>
+      <p class="submit-dialog-intro">Know a resource that belongs here? Fill this in and a pre-filled GitHub issue opens in a new tab. A pull request is prepared automatically, and every entry is reviewed by hand before it goes live.</p>
+      <p class="submit-dialog-error" id="submitLinkError" role="alert" hidden></p>
+      <div class="submit-field">
+        <label for="submitLinkTitleInput">Title</label>
+        <input id="submitLinkTitleInput" type="text" maxlength="120" required autocomplete="off" placeholder="AzAdvertizer">
+      </div>
+      <div class="submit-field">
+        <label for="submitLinkUrlInput">URL</label>
+        <input id="submitLinkUrlInput" type="url" maxlength="400" required autocomplete="off" placeholder="https://www.azadvertizer.net">
+        <p class="submit-field-hint">HTTPS only. Shortened URLs are rejected.</p>
+      </div>
+      <div class="submit-field">
+        <label for="submitLinkCategoryInput">Category</label>
+        <input id="submitLinkCategoryInput" type="text" maxlength="40" required autocomplete="off" list="submitLinkCategories" placeholder="Governance">
+        <datalist id="submitLinkCategories"></datalist>
+        <p class="submit-field-hint">Reuse an existing category when one fits, or propose a new one.</p>
+      </div>
+      <div class="submit-field">
+        <label for="submitLinkDescriptionInput">Why is it useful? <span class="submit-field-hint">(optional)</span></label>
+        <textarea id="submitLinkDescriptionInput" maxlength="300" placeholder="Searchable catalogue of Azure built-in policies, initiatives and aliases."></textarea>
+      </div>
+      <div class="submit-dialog-actions">
+        <p class="submit-dialog-note">A free GitHub account is needed to post the suggestion.</p>
+        <button class="submit-dialog-cancel" type="button" data-submit-close>Cancel</button>
+        <button class="submit-link-button" type="submit">Continue on GitHub</button>
+      </div>
+    </form>
+  </dialog>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -957,6 +1079,14 @@
     function populateFilters() {
       const categories = [...new Set(links.map((link) => link.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
       categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
+      const datalist = document.getElementById("submitLinkCategories");
+      if (datalist) {
+        categories.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category;
+          datalist.append(option);
+        });
+      }
     }
 
     function sortLinks(list) {
@@ -1214,6 +1344,129 @@
       if (intro) intro.insertAdjacentElement("afterend", msg);
       else host.prepend(msg);
     });
+
+    // Submit-a-link dialog: collects the proposal on-page, then hands it to a
+    // pre-filled GitHub issue form so the static site needs no backend.
+    (function setupSubmitDialog() {
+      const ISSUE_URL = "https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/issues/new";
+      const SHORTENERS = new Set([
+        "bit.ly", "tinyurl.com", "t.co", "goo.gl", "ow.ly", "rb.gy", "cutt.ly",
+        "is.gd", "buff.ly", "shorturl.at", "rebrand.ly", "lnkd.in", "s.id", "tiny.cc",
+      ]);
+      const dialog = document.getElementById("submitLinkDialog");
+      const openButton = document.getElementById("submitLinkOpen");
+      const form = document.getElementById("submitLinkForm");
+      const errorBox = document.getElementById("submitLinkError");
+      if (!dialog || !openButton || !form || !errorBox) return;
+
+      const fields = {
+        title: document.getElementById("submitLinkTitleInput"),
+        url: document.getElementById("submitLinkUrlInput"),
+        category: document.getElementById("submitLinkCategoryInput"),
+        description: document.getElementById("submitLinkDescriptionInput"),
+      };
+
+      function normalizeUrl(value) {
+        try {
+          const parsed = new URL(value);
+          const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+          return host + parsed.pathname.replace(/\/+$/, "").toLowerCase() + parsed.search;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function showError(message) {
+        errorBox.textContent = message;
+        errorBox.hidden = false;
+      }
+
+      function clearError() {
+        errorBox.textContent = "";
+        errorBox.hidden = true;
+      }
+
+      function openDialog() {
+        clearError();
+        if (typeof dialog.showModal === "function") dialog.showModal();
+        else dialog.setAttribute("open", "");
+        fields.title.focus();
+      }
+
+      function closeDialog() {
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.removeAttribute("open");
+      }
+
+      openButton.addEventListener("click", openDialog);
+      dialog.querySelectorAll("[data-submit-close]").forEach((button) => {
+        button.addEventListener("click", closeDialog);
+      });
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) closeDialog();
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        clearError();
+
+        const title = fields.title.value.trim().replace(/\s+/g, " ");
+        const rawUrl = fields.url.value.trim().replace(/\s+/g, "");
+        const category = fields.category.value.trim().replace(/\s+/g, " ");
+        const description = fields.description.value.trim().replace(/\s+/g, " ");
+
+        if (!title || !rawUrl || !category) {
+          showError("Title, URL and category are required.");
+          return;
+        }
+
+        let parsed;
+        try {
+          parsed = new URL(rawUrl);
+        } catch (error) {
+          showError("That URL could not be read. Include the full address, starting with https://.");
+          return;
+        }
+        if (parsed.protocol !== "https:") {
+          showError("Only https:// addresses are accepted.");
+          return;
+        }
+        if (!parsed.hostname.includes(".")) {
+          showError("That URL does not point to a public site.");
+          return;
+        }
+        if (SHORTENERS.has(parsed.hostname.toLowerCase().replace(/^www\./, ""))) {
+          showError("Shortened URLs are not accepted - please submit the final destination.");
+          return;
+        }
+        if (/https?:\/\//i.test(description)) {
+          showError("Keep extra links out of the description.");
+          return;
+        }
+
+        const key = normalizeUrl(rawUrl);
+        const existing = links.find((link) => normalizeUrl(link.url) === key);
+        if (existing) {
+          showError(`This link is already in the collection as "${existing.title}".`);
+          return;
+        }
+
+        const params = new URLSearchParams({
+          template: "submit-link.yml",
+          title: `Link: ${title}`,
+          "link-title": title,
+          "link-url": rawUrl,
+          "link-category": category,
+        });
+        if (description) params.set("link-description", description);
+
+        // Encode spaces as %20: GitHub's prefill parser is stricter than form encoding.
+        const query = params.toString().replace(/\+/g, "%20");
+        window.open(`${ISSUE_URL}?${query}`, "_blank", "noopener");
+        closeDialog();
+        form.reset();
+      });
+    })();
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {

@@ -1,0 +1,38 @@
+name: Submit an IT image
+description: Propose an image for the IT images and memes gallery
+title: "Image: "
+labels: ["it-images"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing an image for the [IT images gallery](https://benoit-gaumard.io/it-images/).
+
+        The gallery is published on a public website that carries advertising, so
+        anything unclear on rights or tone will be declined. Accepted formats are
+        JPEG, PNG, GIF and WebP, up to 2 MB.
+  - type: input
+    id: image-title
+    attributes:
+      label: Image title
+      description: Short caption. It also becomes the file name, so keep it simple.
+      placeholder: Kubernetes Ship Wheel
+    validations:
+      required: true
+  - type: textarea
+    id: image-file
+    attributes:
+      label: Image file
+      description: Drag the image into this box so GitHub attaches it to the issue. Pasted links to images hosted elsewhere are not accepted.
+      placeholder: Drop the image here.
+    validations:
+      required: true
+  - type: checkboxes
+    id: image-checks
+    attributes:
+      label: Rights and content
+      options:
+        - label: I created this image, or it is public domain or under a licence that allows publication on a commercial website.
+          required: true
+        - label: It contains nothing offensive, adult, political, or personally identifying.
+          required: true
