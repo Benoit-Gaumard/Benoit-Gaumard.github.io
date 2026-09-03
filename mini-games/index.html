@@ -1,0 +1,1582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Play four simple browser mini games: Breakout, Pong, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Mini Games | Benoit Gaumard" />
+  <meta property="og:description" content="Play four simple browser mini games: Breakout, Pong, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger." />
+  <meta property="og:url" content="https://benoit-gaumard.io/mini-games/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://benoit-gaumard.io/mini-games/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mini Games",
+    "description": "Play four simple browser mini games: Breakout, Pong, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.",
+    "url": "https://benoit-gaumard.io/mini-games/",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Benoit Gaumard",
+      "url": "https://benoit-gaumard.io/"
+    }
+  }
+  </script>
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+      try {
+        if (localStorage.getItem("news-banner-dismissed") === "2026-08-21") {
+          document.documentElement.setAttribute("data-news-banner", "hidden");
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Mini Games | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #157f57;
+      --cp-success-bg: #eefaf5;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fdf2f2;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-danger: #f3696a;
+      --cp-danger-bg: #3c1919;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-violet: #a58cf5;
+      --cp-violet-bg: #251d47;
+      --cp-cyan: #4bd7f4;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-overlay: rgba(10, 17, 28, 0.84);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+      --cp-highlight-bg: #3c3410;
+      --cp-highlight-border: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
+
+        .news-banner {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .5rem 1rem;
+      background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    :root[data-news-banner="hidden"] .news-banner { display: none; }
+    .news-banner[hidden] { display: none; }
+    .news-banner-track {
+      flex: 1 1 auto;
+      overflow: hidden;
+      white-space: nowrap;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+    }
+    .news-banner-text {
+      display: inline-block;
+      padding-left: 100%;
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: news-banner-scroll 28s linear infinite;
+    }
+    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
+    @keyframes news-banner-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .news-banner-close {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .16);
+      color: #fff;
+      cursor: pointer;
+    }
+    .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
+    @media (prefers-reduced-motion: reduce) {
+      .news-banner-text { animation: none; padding-left: 0; }
+      .news-banner-track { white-space: normal; -webkit-mask-image: none; mask-image: none; }
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { min-height: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--cp-text);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
+    #page-title { display: flex; align-items: center; gap: .3em; }
+    .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
+    .page-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: 0.85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+
+    /* Light-theme values for the extra palette tokens the canvas reads. The
+       dark block above already declares them; values come from DESIGN.md. */
+    :root { --cp-warning: #96610a; --cp-violet: #6a4fd6; --cp-cyan: #0d93b0; }
+
+    .game-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-bottom: 1.5rem;
+    }
+    .game-tab {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .65rem .95rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .game-tab:hover { border-color: var(--cp-border-strong); color: var(--cp-text); transform: translateY(-1px); }
+    .game-tab[aria-pressed="true"] { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
+    .game-tab-emoji { flex: 0 0 auto; font-size: 1.35rem; line-height: 1; }
+    .game-tab-text { display: flex; flex-direction: column; gap: .1rem; }
+    .game-tab-text strong { font-size: 0.95rem; color: inherit; }
+    .game-tab-text small { font-size: 0.75rem; color: var(--cp-text-muted); }
+    .game-tab[aria-pressed="true"] .game-tab-text small { color: inherit; opacity: .85; }
+
+    .game-stage { display: grid; gap: 1rem; max-width: 62rem; }
+    .game-hud {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .75rem 1.5rem;
+      padding: .85rem 1.1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-surface);
+    }
+    .hud-item { display: flex; flex-direction: column; gap: .1rem; min-width: 4.25rem; }
+    .hud-label { font-size: 0.7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .hud-item strong { font-size: 1.25rem; color: var(--cp-text); font-variant-numeric: tabular-nums; }
+    .hud-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-left: auto; }
+    .hud-button {
+      padding: .5rem 1.1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .hud-button:hover:not(:disabled) { border-color: var(--cp-border-strong); transform: translateY(-1px); }
+    .hud-button:disabled { opacity: .5; cursor: not-allowed; }
+    .hud-button.primary { border-color: transparent; background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .hud-button.primary:hover:not(:disabled) { background: var(--cp-accent-hover); }
+
+    .canvas-wrap {
+      position: relative;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--cp-surface-soft);
+      box-shadow: var(--cp-shadow);
+    }
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 8 / 5;
+      touch-action: none;
+      cursor: pointer;
+    }
+    #gameCanvas:focus-visible { outline: 2px solid var(--cp-accent); outline-offset: -3px; }
+    .game-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      text-align: center;
+      background: rgba(238, 247, 255, 0.88);
+      backdrop-filter: blur(2px);
+      cursor: pointer;
+    }
+    :root[data-theme="dark"] .game-overlay { background: rgba(10, 17, 28, 0.84); }
+    /* Author rule beats the UA [hidden] rule, so restate it - same trap as the news banner. */
+    .game-overlay[hidden] { display: none; }
+    .overlay-card { display: grid; gap: .75rem; justify-items: center; max-width: 26rem; }
+    .overlay-card h2 { margin: 0; font-size: 1.65rem; color: var(--cp-text); }
+    .overlay-card p { margin: 0; color: var(--cp-text-muted); font-size: 0.95rem; line-height: 1.6; }
+    .overlay-noscript { color: var(--cp-danger); font-weight: 600; }
+    .game-hint { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
+
+    .site-footer {
+      border-top: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+    }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+      gap: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    .footer-about { max-width: 30rem; }
+    .footer-about p {
+      margin: .75rem 0 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .footer-group {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .footer-group strong {
+      margin-bottom: .125rem;
+      color: var(--cp-text);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+    .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem;
+      color: var(--cp-text-muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cp-border);
+      font-size: 0.8rem;
+    }
+
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 60rem) {
+      .hud-actions { margin-left: 0; }
+    }
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-surface-soft); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .game-tab { flex: 1 1 100%; }
+      .game-hud { gap: .6rem 1rem; }
+      .hud-item { min-width: 3.75rem; }
+      .hud-actions { width: 100%; }
+      .hud-button { flex: 1 1 auto; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+      @media print {
+      /* Printing a tool page should yield the data, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  
+    /* Share links */
+    .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
+    .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .footer-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://benoit-gaumard.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tools",
+        "item": "https://benoit-gaumard.io/tools/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Mini Games",
+        "item": "https://benoit-gaumard.io/mini-games/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to content</a>
+  <div class="news-banner" id="newsBanner">
+    <div class="news-banner-track">
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+    </div>
+    <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/articles/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" tabindex="-1">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
+      <h1 id="page-title"><span class="page-icon" aria-hidden="true">&#127918;</span>Mini Games</h1>
+      <p class="intro-text">Four small arcade games that run entirely in your browser - no install, no account, nothing sent anywhere. Play with a keyboard, a mouse, or your finger.</p>
+    </section>
+
+    <div class="game-picker" role="group" aria-label="Choose a game">
+      <button type="button" class="game-tab" data-game="breakout" aria-pressed="true">
+        <span class="game-tab-emoji" aria-hidden="true">&#129521;</span>
+        <span class="game-tab-text"><strong>Breakout</strong><small>Clear every brick</small></span>
+      </button>
+      <button type="button" class="game-tab" data-game="pong" aria-pressed="false">
+        <span class="game-tab-emoji" aria-hidden="true">&#127955;</span>
+        <span class="game-tab-text"><strong>Pong</strong><small>First to 7 beats the CPU</small></span>
+      </button>
+      <button type="button" class="game-tab" data-game="runner" aria-pressed="false">
+        <span class="game-tab-emoji" aria-hidden="true">&#127939;</span>
+        <span class="game-tab-text"><strong>Runner</strong><small>Help the chick run</small></span>
+      </button>
+      <button type="button" class="game-tab" data-game="catcher" aria-pressed="false">
+        <span class="game-tab-emoji" aria-hidden="true">&#129768;</span>
+        <span class="game-tab-text"><strong>Catcher</strong><small>Catch the good drops</small></span>
+      </button>
+    </div>
+
+    <div class="game-stage">
+      <div class="game-hud">
+        <div class="hud-item"><span class="hud-label">Score</span><strong id="hudScore">0</strong></div>
+        <div class="hud-item"><span class="hud-label" id="hudBestLabel">Best</span><strong id="hudBest">0</strong></div>
+        <div class="hud-item"><span class="hud-label" id="hudExtraLabel">Lives</span><strong id="hudExtra">3</strong></div>
+        <div class="hud-actions">
+          <button type="button" class="hud-button primary" id="startButton">Start</button>
+          <button type="button" class="hud-button" id="pauseButton" disabled>Pause</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="800" height="500" tabindex="0" role="application" aria-label="Mini game play area"></canvas>
+        <div class="game-overlay" id="gameOverlay">
+          <div class="overlay-card">
+            <h2 id="overlayTitle">Breakout</h2>
+            <p id="overlayText">Clear every brick without dropping the ball.</p>
+            <button type="button" class="hud-button primary" id="overlayButton">Start game</button>
+            <noscript><p class="overlay-noscript">These games need JavaScript to run.</p></noscript>
+          </div>
+        </div>
+      </div>
+
+      <p class="game-hint" id="gameHint">Move the paddle with the mouse, your finger, or the left and right arrow keys. Launch the ball with a click, a tap, or Space.</p>
+    </div>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About these mini games</h2>
+      <p>Four small arcade games written in plain JavaScript on a single HTML canvas: a brick breaker, a Pong clone against the computer, an endless runner, and a falling-object catcher. There is nothing to install and no account to create - pick a game, press Start, and play.</p>
+      <h3>The four games</h3>
+      <ul>
+        <li><strong>Breakout</strong> - clear every brick with the ball. The paddle follows the mouse, your finger, or the left and right arrow keys, and the ball launches on a click, a tap, or Space. Each cleared level adds a row of bricks and speeds the ball up; you get three lives.</li>
+        <li><strong>Pong</strong> - first to seven points against the computer. Your paddle is the blue one on the left and follows the mouse, your finger, or the up and down arrow keys. The rebound angle depends on where the ball hits the paddle, so aim with the edges.</li>
+        <li><strong>Runner</strong> - an endless run where you play a small yellow chick and the only control is the jump: click, tap, Space, or the up arrow, with a second press for a double jump. Speed rises with distance, and the coins floating above the track are worth extra metres.</li>
+        <li><strong>Catcher</strong> - move the basket to catch the blue drops and let the red ones fall. Every five catches in a row raise the multiplier; catching three red drops ends the run.</li>
+      </ul>
+      <h3>Controls</h3>
+      <p>Every game accepts the three input methods at the same time, so a laptop, a mouse, and a phone all work without switching a setting. Press <strong>P</strong> or the Pause button to pause, and the game pauses on its own when you scroll it out of view or move to another tab.</p>
+      <h3>Good to know</h3>
+      <p>Everything runs in your browser: there is no server, no score submission, and no tracking of how you play. The only thing kept between visits is your best score for each game, stored locally in your own browser and removed when you clear the site data.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="/tools/">Tools</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-share">
+        <span class="footer-share-label">Share this site</span>
+        <div class="footer-share-links">
+          <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="share-btn" data-share="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+            Twitter
+          </a>
+          <a class="share-btn" data-share="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+            Reddit
+          </a>
+          <a class="share-btn" data-share="mail" href="mailto:?body=https%3A%2F%2Fbenoit-gaumard.io%2F">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Mail
+          </a>
+          <button class="share-btn" type="button" data-share="favorite">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Add to favorites
+          </button>
+        </div>
+        <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    const GAME_W = 800;
+    const GAME_H = 500;
+
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const overlay = document.getElementById("gameOverlay");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayText = document.getElementById("overlayText");
+    const overlayButton = document.getElementById("overlayButton");
+    const hudScore = document.getElementById("hudScore");
+    const hudBest = document.getElementById("hudBest");
+    const hudBestLabel = document.getElementById("hudBestLabel");
+    const hudExtra = document.getElementById("hudExtra");
+    const hudExtraLabel = document.getElementById("hudExtraLabel");
+    const hintEl = document.getElementById("gameHint");
+    const startButton = document.getElementById("startButton");
+    const pauseButton = document.getElementById("pauseButton");
+    const tabs = [...document.querySelectorAll(".game-tab")];
+
+    const BEST_KEY = "mini-games-best-v1";
+    let best = {};
+    try { best = JSON.parse(localStorage.getItem(BEST_KEY)) || {}; } catch (e) { best = {}; }
+    function saveBest() { try { localStorage.setItem(BEST_KEY, JSON.stringify(best)); } catch (e) {} }
+
+    const state = { key: "breakout", running: false, paused: false, over: false, score: 0, extra: 0 };
+    const keys = new Set();
+    const tapped = new Set();
+    const pointer = { x: GAME_W / 2, y: GAME_H / 2, active: false };
+
+    function clamp(v, min, max) { return v < min ? min : (v > max ? max : v); }
+    function rand(min, max) { return min + Math.random() * (max - min); }
+
+    // The canvas cannot inherit CSS variables, so the palette is read back out of
+    // the theme and refreshed whenever the theme toggle flips data-theme.
+    let palette = {};
+    function cssVar(name, fallback) {
+      const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return value || fallback;
+    }
+    function readPalette() {
+      palette = {
+        bg: cssVar("--cp-surface-soft", "#eef7ff"),
+        surface: cssVar("--cp-surface", "#ffffff"),
+        border: cssVar("--cp-border", "#d8e8f5"),
+        text: cssVar("--cp-text", "#17324d"),
+        muted: cssVar("--cp-text-muted", "#536f88"),
+        accent: cssVar("--cp-accent", "#0b6fb8"),
+        danger: cssVar("--cp-danger", "#c93636"),
+        success: cssVar("--cp-success", "#157f57"),
+        warning: cssVar("--cp-warning", "#96610a"),
+        violet: cssVar("--cp-violet", "#6a4fd6"),
+        cyan: cssVar("--cp-cyan", "#0d93b0")
+      };
+    }
+    readPalette();
+    new MutationObserver(readPalette).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    function rr(x, y, w, h, r) {
+      const rad = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + rad, y);
+      ctx.lineTo(x + w - rad, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + rad);
+      ctx.lineTo(x + w, y + h - rad);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - rad, y + h);
+      ctx.lineTo(x + rad, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - rad);
+      ctx.lineTo(x, y + rad);
+      ctx.quadraticCurveTo(x, y, x + rad, y);
+      ctx.closePath();
+    }
+    function fillRR(x, y, w, h, r, color) { ctx.fillStyle = color; rr(x, y, w, h, r); ctx.fill(); }
+    function circle(x, y, r, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); }
+    function backdrop() { ctx.fillStyle = palette.bg; ctx.fillRect(0, 0, GAME_W, GAME_H); }
+
+    // The runner character is a chick, and a chick is yellow in both themes.
+    // These are literal illustration colours, not theme tokens.
+    const CHICK_BODY = "#f7c948";
+    const CHICK_WING = "#e3ac26";
+    const CHICK_BEAK = "#f0891f";
+    const CHICK_LEG = "#dd7318";
+    const CHICK_EYE = "#2b2118";    function badge(text) {
+      ctx.fillStyle = palette.muted;
+      ctx.font = "600 16px 'Segoe UI', Aptos, Calibri, sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText(text, 16, 16);
+    }
+
+    const breakout = {
+      key: "breakout",
+      title: "Breakout",
+      intro: "Clear every brick without dropping the ball. Three lives, and each level is a little faster.",
+      extraLabel: "Lives",
+      bestLabel: "Best",
+      hint: "Move the paddle with the mouse, your finger, or the left and right arrow keys. Launch the ball with a click, a tap, or Space.",
+      init() {
+        this.level = 1;
+        this.lives = 3;
+        this.paddle = { w: 124, h: 14, x: GAME_W / 2 - 62, y: GAME_H - 42 };
+        state.score = 0;
+        state.extra = this.lives;
+        this.buildBricks();
+        this.resetBall();
+      },
+      buildBricks() {
+        const cols = 10;
+        const rows = Math.min(3 + this.level, 7);
+        const padX = 44, top = 64, gap = 8, bh = 22;
+        const bw = (GAME_W - padX * 2 - gap * (cols - 1)) / cols;
+        this.bricks = [];
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            this.bricks.push({ x: padX + c * (bw + gap), y: top + r * (bh + gap), w: bw, h: bh, row: r, alive: true });
+          }
+        }
+      },
+      resetBall() {
+        this.speed = 330 + (this.level - 1) * 26;
+        this.ball = { x: this.paddle.x + this.paddle.w / 2, y: this.paddle.y - 12, r: 8, vx: 0, vy: 0 };
+        this.stuck = true;
+      },
+      launch() {
+        if (!this.stuck) return;
+        const a = -Math.PI / 2 + rand(-0.35, 0.35);
+        this.ball.vx = Math.cos(a) * this.speed;
+        this.ball.vy = Math.sin(a) * this.speed;
+        this.stuck = false;
+      },
+      press() { this.launch(); },
+      update(dt) {
+        const p = this.paddle;
+        if (pointer.active) p.x = pointer.x - p.w / 2;
+        let dir = 0;
+        if (keys.has("ArrowLeft") || keys.has("KeyA")) dir -= 1;
+        if (keys.has("ArrowRight") || keys.has("KeyD")) dir += 1;
+        if (dir) p.x += dir * 580 * dt;
+        p.x = clamp(p.x, 8, GAME_W - p.w - 8);
+        if (keys.has("Space")) this.launch();
+
+        const b = this.ball;
+        if (this.stuck) { b.x = p.x + p.w / 2; b.y = p.y - b.r - 4; return; }
+
+        // Sub-stepping keeps a fast ball from tunnelling through a brick row.
+        const steps = Math.max(1, Math.ceil(Math.hypot(b.vx, b.vy) * dt / 6));
+        const sdt = dt / steps;
+        for (let s = 0; s < steps; s++) {
+          b.x += b.vx * sdt;
+          b.y += b.vy * sdt;
+          if (b.x < b.r) { b.x = b.r; b.vx = Math.abs(b.vx); }
+          if (b.x > GAME_W - b.r) { b.x = GAME_W - b.r; b.vx = -Math.abs(b.vx); }
+          if (b.y < b.r) { b.y = b.r; b.vy = Math.abs(b.vy); }
+
+          if (b.vy > 0 && b.y + b.r >= p.y && b.y - b.r <= p.y + p.h && b.x >= p.x - b.r && b.x <= p.x + p.w + b.r) {
+            const rel = clamp((b.x - (p.x + p.w / 2)) / (p.w / 2), -1, 1);
+            const angle = rel * (Math.PI / 3);
+            const sp = Math.min(Math.hypot(b.vx, b.vy) * 1.015, 720);
+            b.vx = Math.sin(angle) * sp;
+            b.vy = -Math.cos(angle) * sp;
+            b.y = p.y - b.r - 0.5;
+          }
+
+          for (let i = 0; i < this.bricks.length; i++) {
+            const br = this.bricks[i];
+            if (!br.alive) continue;
+            const nx = clamp(b.x, br.x, br.x + br.w);
+            const ny = clamp(b.y, br.y, br.y + br.h);
+            const dx0 = b.x - nx, dy0 = b.y - ny;
+            if (dx0 * dx0 + dy0 * dy0 > b.r * b.r) continue;
+            const dx = b.x - (br.x + br.w / 2);
+            const dy = b.y - (br.y + br.h / 2);
+            const overlapX = br.w / 2 + b.r - Math.abs(dx);
+            const overlapY = br.h / 2 + b.r - Math.abs(dy);
+            const sx = dx < 0 ? -1 : 1;
+            const sy = dy < 0 ? -1 : 1;
+            if (overlapX < overlapY) { b.vx = sx * Math.abs(b.vx); b.x += sx * overlapX; }
+            else { b.vy = sy * Math.abs(b.vy); b.y += sy * overlapY; }
+            br.alive = false;
+            state.score += 10 * this.level;
+            break;
+          }
+
+          if (b.y - b.r > GAME_H) {
+            this.lives -= 1;
+            state.extra = this.lives;
+            if (this.lives <= 0) { finish("Game over", "You scored " + state.score + " points and reached level " + this.level + "."); return; }
+            this.resetBall();
+            return;
+          }
+        }
+
+        let remaining = false;
+        for (let i = 0; i < this.bricks.length; i++) { if (this.bricks[i].alive) { remaining = true; break; } }
+        if (!remaining) {
+          this.level += 1;
+          state.score += 100;
+          this.buildBricks();
+          this.resetBall();
+        }
+      },
+      draw() {
+        backdrop();
+        const colors = [palette.danger, palette.warning, palette.violet, palette.accent, palette.cyan, palette.success, palette.accent];
+        for (const br of this.bricks) {
+          if (!br.alive) continue;
+          fillRR(br.x, br.y, br.w, br.h, 5, colors[br.row % colors.length]);
+        }
+        fillRR(this.paddle.x, this.paddle.y, this.paddle.w, this.paddle.h, 7, palette.accent);
+        circle(this.ball.x, this.ball.y, this.ball.r, palette.text);
+        badge("Level " + this.level);
+        if (this.stuck) {
+          ctx.fillStyle = palette.muted;
+          ctx.font = "600 18px 'Segoe UI', Aptos, Calibri, sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("Click, tap, or press Space to launch the ball", GAME_W / 2, GAME_H - 120);
+        }
+      }
+    };
+
+    const pong = {
+      key: "pong",
+      title: "Pong",
+      intro: "First to 7 points wins. Your paddle is the blue one on the left.",
+      extraLabel: "CPU",
+      bestLabel: "Wins",
+      bestFromScore: false,
+      hint: "Move your paddle with the mouse, your finger, or the up and down arrow keys. The rebound angle depends on where the ball hits.",
+      init() {
+        this.pw = 14;
+        this.ph = 92;
+        this.playerY = GAME_H / 2 - this.ph / 2;
+        this.cpuY = this.playerY;
+        this.playerScore = 0;
+        this.cpuScore = 0;
+        state.score = 0;
+        state.extra = 0;
+        this.serve(Math.random() < 0.5 ? -1 : 1);
+      },
+      serve(dir) {
+        this.ball = { x: GAME_W / 2, y: GAME_H / 2, r: 9, vx: 0, vy: 0 };
+        this.speed = 380;
+        this.serveDir = dir;
+        this.serveTimer = 0.9;
+      },
+      update(dt) {
+        if (pointer.active) this.playerY = pointer.y - this.ph / 2;
+        let dir = 0;
+        if (keys.has("ArrowUp") || keys.has("KeyW")) dir -= 1;
+        if (keys.has("ArrowDown") || keys.has("KeyS")) dir += 1;
+        if (dir) this.playerY += dir * 580 * dt;
+        this.playerY = clamp(this.playerY, 8, GAME_H - this.ph - 8);
+
+        const b = this.ball;
+        if (this.serveTimer > 0) {
+          this.serveTimer -= dt;
+          if (this.serveTimer <= 0) {
+            const a = rand(-0.3, 0.3);
+            b.vx = Math.cos(a) * this.speed * this.serveDir;
+            b.vy = Math.sin(a) * this.speed;
+          }
+        }
+
+        // The CPU only tracks the ball once it is coming back, and its top speed
+        // is capped - that is what keeps it beatable.
+        const cpuSpeed = 320 + Math.min(this.playerScore, 6) * 20;
+        let target = GAME_H / 2 - this.ph / 2;
+        if (b.vx > 0) target = b.y - this.ph / 2;
+        const move = clamp(target - this.cpuY, -cpuSpeed * dt, cpuSpeed * dt);
+        this.cpuY = clamp(this.cpuY + move, 8, GAME_H - this.ph - 8);
+
+        if (this.serveTimer > 0) return;
+
+        const px = 28;
+        const cx = GAME_W - 28 - this.pw;
+        const steps = Math.max(1, Math.ceil(Math.hypot(b.vx, b.vy) * dt / 7));
+        const sdt = dt / steps;
+        for (let s = 0; s < steps; s++) {
+          b.x += b.vx * sdt;
+          b.y += b.vy * sdt;
+          if (b.y < b.r) { b.y = b.r; b.vy = Math.abs(b.vy); }
+          if (b.y > GAME_H - b.r) { b.y = GAME_H - b.r; b.vy = -Math.abs(b.vy); }
+          if (b.vx < 0 && b.x - b.r <= px + this.pw && b.x + b.r >= px && b.y >= this.playerY && b.y <= this.playerY + this.ph) {
+            this.bounce(px + this.pw + b.r, this.playerY, 1);
+          }
+          if (b.vx > 0 && b.x + b.r >= cx && b.x - b.r <= cx + this.pw && b.y >= this.cpuY && b.y <= this.cpuY + this.ph) {
+            this.bounce(cx - b.r, this.cpuY, -1);
+          }
+          if (b.x < -30) { this.cpuScore += 1; state.extra = this.cpuScore; this.afterPoint(); return; }
+          if (b.x > GAME_W + 30) { this.playerScore += 1; state.score = this.playerScore; this.afterPoint(); return; }
+        }
+      },
+      bounce(newX, paddleY, dirSign) {
+        const b = this.ball;
+        b.x = newX;
+        const rel = clamp((b.y - (paddleY + this.ph / 2)) / (this.ph / 2), -1, 1);
+        const angle = rel * (Math.PI / 4);
+        const sp = Math.min(Math.hypot(b.vx, b.vy) * 1.05, 780);
+        b.vx = Math.cos(angle) * sp * dirSign;
+        b.vy = Math.sin(angle) * sp;
+      },
+      afterPoint() {
+        if (this.playerScore >= 7) {
+          best.pong = (best.pong || 0) + 1;
+          saveBest();
+          finish("You win!", "Final score " + this.playerScore + " - " + this.cpuScore + ".");
+          return;
+        }
+        if (this.cpuScore >= 7) {
+          finish("The CPU wins", "Final score " + this.playerScore + " - " + this.cpuScore + ". Try aiming with the edges of your paddle.");
+          return;
+        }
+        this.serve(this.playerScore > this.cpuScore ? -1 : 1);
+      },
+      draw() {
+        backdrop();
+        ctx.strokeStyle = palette.border;
+        ctx.lineWidth = 4;
+        ctx.setLineDash([12, 14]);
+        ctx.beginPath();
+        ctx.moveTo(GAME_W / 2, 12);
+        ctx.lineTo(GAME_W / 2, GAME_H - 12);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = palette.muted;
+        ctx.font = "700 44px 'Segoe UI', Aptos, Calibri, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(String(this.playerScore), GAME_W / 2 - 64, 26);
+        ctx.fillText(String(this.cpuScore), GAME_W / 2 + 64, 26);
+        fillRR(28, this.playerY, this.pw, this.ph, 7, palette.accent);
+        fillRR(GAME_W - 28 - this.pw, this.cpuY, this.pw, this.ph, 7, palette.danger);
+        circle(this.ball.x, this.ball.y, this.ball.r, palette.text);
+      }
+    };
+
+    const runner = {
+      key: "runner",
+      title: "Runner",
+      intro: "Help the chick jump over the obstacles and grab the coins. It only gets faster.",
+      extraLabel: "Speed",
+      bestLabel: "Best",
+      hint: "Jump with a click, a tap, Space, or the up arrow. A second press in the air gives you a double jump.",
+      init() {
+        this.groundY = GAME_H - 78;
+        this.player = { x: 120, y: this.groundY - 44, w: 36, h: 44, vy: 0, jumps: 0 };
+        this.obstacles = [];
+        this.coins = [];
+        this.clouds = [{ x: 140, y: 84, s: 1 }, { x: 430, y: 132, s: 0.8 }, { x: 700, y: 66, s: 1.2 }];
+        this.speed = 330;
+        this.dist = 0;
+        this.spawnIn = 1.1;
+        this.coinIn = 1.8;
+        state.score = 0;
+        state.extra = 33;
+      },
+      jump() {
+        const p = this.player;
+        if (p.jumps >= 2) return;
+        p.vy = p.jumps === 0 ? -700 : -600;
+        p.jumps += 1;
+      },
+      press() { this.jump(); },
+      update(dt) {
+        if (tapped.has("Space") || tapped.has("ArrowUp") || tapped.has("KeyW")) this.jump();
+
+        this.speed = Math.min(720, 330 + this.dist / 55);
+        this.dist += this.speed * dt;
+        state.score = Math.floor(this.dist / 12);
+        state.extra = Math.round(this.speed / 10);
+
+        const p = this.player;
+        p.vy += 2100 * dt;
+        p.y += p.vy * dt;
+        if (p.y >= this.groundY - p.h) { p.y = this.groundY - p.h; p.vy = 0; p.jumps = 0; }
+
+        for (const c of this.clouds) {
+          c.x -= this.speed * 0.16 * c.s * dt;
+          if (c.x < -70) { c.x = GAME_W + rand(20, 180); c.y = rand(50, 150); }
+        }
+
+        this.spawnIn -= dt;
+        if (this.spawnIn <= 0) {
+          const h = rand(30, 62);
+          this.obstacles.push({ x: GAME_W + 30, y: this.groundY - h, w: rand(20, 40), h: h });
+          // Gap scales with speed so the next obstacle is always clearable.
+          this.spawnIn = Math.max(0.66, (330 / this.speed) * rand(1, 1.9));
+        }
+        this.coinIn -= dt;
+        if (this.coinIn <= 0) {
+          this.coins.push({ x: GAME_W + 30, y: this.groundY - rand(80, 150), r: 11 });
+          this.coinIn = rand(1.4, 3);
+        }
+
+        for (let i = this.obstacles.length - 1; i >= 0; i--) {
+          const o = this.obstacles[i];
+          o.x -= this.speed * dt;
+          if (o.x + o.w < -20) { this.obstacles.splice(i, 1); continue; }
+          if (p.x + 6 < o.x + o.w && p.x + p.w - 6 > o.x && p.y + 6 < o.y + o.h && p.y + p.h > o.y + 2) {
+            finish("Ouch!", "You ran " + state.score + " metres before hitting that one.");
+            return;
+          }
+        }
+        for (let i = this.coins.length - 1; i >= 0; i--) {
+          const c = this.coins[i];
+          c.x -= this.speed * dt;
+          if (c.x < -20) { this.coins.splice(i, 1); continue; }
+          if (Math.abs(c.x - (p.x + p.w / 2)) < c.r + p.w / 2 && Math.abs(c.y - (p.y + p.h / 2)) < c.r + p.h / 2) {
+            this.coins.splice(i, 1);
+            this.dist += 240;
+          }
+        }
+      },
+      drawChick(p) {
+        const airborne = p.y < this.groundY - p.h - 0.5;
+        const cx = p.x + p.w / 2;
+        const feet = p.y + p.h;
+        const bodyY = p.y + p.h * 0.62;
+        const bodyRX = p.w * 0.5;
+        const bodyRY = p.h * 0.29;
+        const headY = p.y + p.h * 0.25;
+        const headR = p.w * 0.33;
+        const phase = this.dist / 22;
+
+        ctx.strokeStyle = CHICK_LEG;
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        for (let i = 0; i < 2; i++) {
+          const hipX = cx - 5 + i * 10;
+          const swing = airborne ? (i === 0 ? 7 : -4) : Math.sin(phase + i * Math.PI) * 7;
+          ctx.beginPath();
+          ctx.moveTo(hipX, bodyY + bodyRY - 3);
+          ctx.lineTo(hipX + swing, feet - 1);
+          ctx.lineTo(hipX + swing + 6, feet - 1);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = CHICK_BODY;
+        ctx.beginPath();
+        ctx.ellipse(cx, bodyY, bodyRX, bodyRY, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = CHICK_WING;
+        ctx.beginPath();
+        ctx.ellipse(cx - 3, bodyY, bodyRX * 0.5, bodyRY * 0.6, airborne ? -0.7 : Math.sin(phase) * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = CHICK_BODY;
+        ctx.beginPath();
+        ctx.arc(cx + 3, headY, headR, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = CHICK_BODY;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(cx + 1, headY - headR + 2);
+        ctx.lineTo(cx - 2, headY - headR - 5);
+        ctx.moveTo(cx + 5, headY - headR + 2);
+        ctx.lineTo(cx + 7, headY - headR - 5);
+        ctx.stroke();
+
+        ctx.fillStyle = CHICK_BEAK;
+        ctx.beginPath();
+        ctx.moveTo(cx + headR + 2, headY - 2);
+        ctx.lineTo(cx + headR + 10, headY + 1.5);
+        ctx.lineTo(cx + headR + 2, headY + 5);
+        ctx.closePath();
+        ctx.fill();
+
+        circle(cx + headR * 0.55 + 1, headY - 2, 2.8, CHICK_EYE);
+        circle(cx + headR * 0.55 + 2, headY - 3, 1, "#ffffff");
+      },
+      draw() {
+        backdrop();
+        for (const c of this.clouds) {
+          circle(c.x, c.y, 18 * c.s, palette.surface);
+          circle(c.x + 20 * c.s, c.y + 6 * c.s, 14 * c.s, palette.surface);
+          circle(c.x - 20 * c.s, c.y + 8 * c.s, 12 * c.s, palette.surface);
+        }
+        ctx.fillStyle = palette.muted;
+        ctx.fillRect(0, this.groundY, GAME_W, 4);
+        ctx.fillStyle = palette.border;
+        const off = this.dist % 60;
+        for (let x = -off; x < GAME_W; x += 60) ctx.fillRect(x, this.groundY + 18, 26, 3);
+        for (const o of this.obstacles) fillRR(o.x, o.y, o.w, o.h, 5, palette.danger);
+        for (const c of this.coins) {
+          circle(c.x, c.y, c.r, palette.warning);
+          circle(c.x, c.y, c.r - 4, palette.bg);
+        }
+        const p = this.player;
+        this.drawChick(p);
+        badge(state.score + " m");
+      }
+    };
+
+    const catcher = {
+      key: "catcher",
+      title: "Catcher",
+      intro: "Catch the blue drops with the basket and let the red ones fall. Three mistakes and it is over.",
+      extraLabel: "Lives",
+      bestLabel: "Best",
+      hint: "Move the basket with the mouse, your finger, or the left and right arrow keys. Five catches in a row raise the multiplier.",
+      init() {
+        this.basket = { x: GAME_W / 2 - 60, y: GAME_H - 56, w: 120, h: 22 };
+        this.items = [];
+        this.lives = 3;
+        this.combo = 0;
+        this.time = 0;
+        this.spawnIn = 0.5;
+        state.score = 0;
+        state.extra = this.lives;
+      },
+      update(dt) {
+        const b = this.basket;
+        if (pointer.active) b.x = pointer.x - b.w / 2;
+        let dir = 0;
+        if (keys.has("ArrowLeft") || keys.has("KeyA")) dir -= 1;
+        if (keys.has("ArrowRight") || keys.has("KeyD")) dir += 1;
+        if (dir) b.x += dir * 620 * dt;
+        b.x = clamp(b.x, 6, GAME_W - b.w - 6);
+
+        this.time += dt;
+        this.spawnIn -= dt;
+        if (this.spawnIn <= 0) {
+          const badChance = Math.min(0.34, 0.12 + this.time * 0.005);
+          const fall = Math.min(540, 210 + this.time * 8);
+          this.items.push({ x: rand(30, GAME_W - 30), y: -20, r: 14, bad: Math.random() < badChance, vy: fall * rand(0.85, 1.2) });
+          this.spawnIn = Math.max(0.3, 0.85 - this.time * 0.012);
+        }
+
+        for (let i = this.items.length - 1; i >= 0; i--) {
+          const it = this.items[i];
+          it.y += it.vy * dt;
+          const caught = it.y + it.r >= b.y && it.y - it.r <= b.y + b.h && it.x >= b.x - it.r && it.x <= b.x + b.w + it.r;
+          if (caught) {
+            this.items.splice(i, 1);
+            if (it.bad) {
+              this.lives -= 1;
+              this.combo = 0;
+              state.extra = this.lives;
+              if (this.lives <= 0) { finish("Game over", "You collected " + state.score + " points."); return; }
+            } else {
+              this.combo += 1;
+              state.score += 10 * Math.min(5, 1 + Math.floor(this.combo / 5));
+            }
+            continue;
+          }
+          if (it.y - it.r > GAME_H) {
+            this.items.splice(i, 1);
+            if (!it.bad) this.combo = 0;
+          }
+        }
+      },
+      draw() {
+        backdrop();
+        for (const it of this.items) {
+          circle(it.x, it.y, it.r, it.bad ? palette.danger : palette.accent);
+          if (it.bad) {
+            ctx.strokeStyle = palette.surface;
+            ctx.lineWidth = 3;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(it.x - 5, it.y - 5); ctx.lineTo(it.x + 5, it.y + 5);
+            ctx.moveTo(it.x + 5, it.y - 5); ctx.lineTo(it.x - 5, it.y + 5);
+            ctx.stroke();
+          }
+        }
+        const b = this.basket;
+        fillRR(b.x + 8, b.y - 9, b.w - 16, 11, 5, palette.success);
+        fillRR(b.x, b.y, b.w, b.h, 8, palette.success);
+        badge("Multiplier x" + Math.min(5, 1 + Math.floor(this.combo / 5)));
+      }
+    };
+
+    const GAMES = { breakout: breakout, pong: pong, runner: runner, catcher: catcher };
+    let game = breakout;
+
+    function syncHud() {
+      hudScore.textContent = String(state.score);
+      hudBest.textContent = String(best[state.key] || 0);
+      hudBestLabel.textContent = game.bestLabel;
+      hudExtra.textContent = String(state.extra);
+      hudExtraLabel.textContent = game.extraLabel;
+    }
+
+    function showOverlay(title, text, buttonLabel) {
+      overlayTitle.textContent = title;
+      overlayText.textContent = text;
+      overlayButton.textContent = buttonLabel;
+      overlay.hidden = false;
+    }
+
+    function selectGame(key) {
+      if (!GAMES[key]) return;
+      state.key = key;
+      state.running = false;
+      state.paused = false;
+      state.over = false;
+      game = GAMES[key];
+      game.init();
+      tabs.forEach((t) => t.setAttribute("aria-pressed", t.dataset.game === key ? "true" : "false"));
+      hintEl.textContent = game.hint;
+      startButton.textContent = "Start";
+      pauseButton.textContent = "Pause";
+      pauseButton.disabled = true;
+      syncHud();
+      showOverlay(game.title, game.intro, "Start game");
+      draw();
+    }
+
+    function startGame() {
+      game.init();
+      state.running = true;
+      state.paused = false;
+      state.over = false;
+      startButton.textContent = "Restart";
+      pauseButton.textContent = "Pause";
+      pauseButton.disabled = false;
+      overlay.hidden = true;
+      syncHud();
+      try { canvas.focus({ preventScroll: true }); } catch (e) { canvas.focus(); }
+    }
+
+    function togglePause(force) {
+      if (!state.running) return;
+      state.paused = force === undefined ? !state.paused : force;
+      pauseButton.textContent = state.paused ? "Resume" : "Pause";
+      if (state.paused) showOverlay("Paused", "The game is waiting - take your time.", "Resume");
+      else overlay.hidden = true;
+    }
+
+    function finish(title, text) {
+      state.running = false;
+      state.paused = false;
+      state.over = true;
+      if (game.bestFromScore !== false && state.score > (best[state.key] || 0)) {
+        best[state.key] = state.score;
+        saveBest();
+      }
+      startButton.textContent = "Play again";
+      pauseButton.textContent = "Pause";
+      pauseButton.disabled = true;
+      syncHud();
+      showOverlay(title, text, "Play again");
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, GAME_W, GAME_H);
+      game.draw();
+    }
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.max(1, Math.round(rect.width * dpr));
+      const h = Math.max(1, Math.round(rect.width * (GAME_H / GAME_W) * dpr));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      const s = canvas.width / GAME_W;
+      ctx.setTransform(s, 0, 0, s, 0, 0);
+      draw();
+    }
+
+    function toLocal(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) / rect.width * GAME_W,
+        y: (e.clientY - rect.top) / rect.height * GAME_H
+      };
+    }
+
+    canvas.addEventListener("pointerdown", (e) => {
+      const pt = toLocal(e);
+      pointer.x = pt.x;
+      pointer.y = pt.y;
+      pointer.active = true;
+      e.preventDefault();
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      if (!state.running || state.over) { startGame(); return; }
+      if (state.paused) { togglePause(false); return; }
+      if (game.press) game.press();
+    });
+    canvas.addEventListener("pointermove", (e) => {
+      const pt = toLocal(e);
+      pointer.x = pt.x;
+      pointer.y = pt.y;
+      pointer.active = true;
+    });
+    canvas.addEventListener("pointerup", () => { pointer.active = false; });
+    canvas.addEventListener("pointercancel", () => { pointer.active = false; });
+    canvas.addEventListener("pointerleave", () => { pointer.active = false; });
+
+    const GAME_KEYS = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space", "KeyA", "KeyD", "KeyW", "KeyS"]);
+    let inView = true;
+
+    window.addEventListener("keydown", (e) => {
+      const tag = (e.target && e.target.tagName) || "";
+      if (tag === "BUTTON" || tag === "A" || tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+      if (!inView || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.code === "KeyP") { togglePause(); return; }
+      if (!GAME_KEYS.has(e.code)) return;
+      if (!keys.has(e.code)) tapped.add(e.code);
+      keys.add(e.code);
+      if (e.code === "Space" && (!state.running || state.over)) { e.preventDefault(); startGame(); return; }
+      if (e.code === "Space" && state.paused) { e.preventDefault(); togglePause(false); return; }
+      // Only swallow the scroll keys while a game is actually running.
+      if (state.running) e.preventDefault();
+    });
+    window.addEventListener("keyup", (e) => { keys.delete(e.code); });
+    window.addEventListener("blur", () => { keys.clear(); });
+
+    startButton.addEventListener("click", startGame);
+    pauseButton.addEventListener("click", () => togglePause());
+    // The overlay covers the canvas, so the whole panel - not just the button -
+    // has to be a start/resume target, otherwise a tap on it does nothing.
+    overlay.addEventListener("click", () => {
+      if (state.paused) togglePause(false);
+      else startGame();
+    });
+    tabs.forEach((t) => t.addEventListener("click", () => selectGame(t.dataset.game)));
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) togglePause(true);
+    });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries[0].isIntersecting;
+        if (!inView) togglePause(true);
+      }, { threshold: 0.2 }).observe(canvas);
+    }
+
+    let lastFrame = 0;
+    function frame(ts) {
+      const dt = lastFrame ? Math.min((ts - lastFrame) / 1000, 1 / 30) : 0;
+      lastFrame = ts;
+      if (state.running && !state.paused && dt > 0) { game.update(dt); syncHud(); }
+      tapped.clear();
+      draw();
+      requestAnimationFrame(frame);
+    }
+
+    selectGame("breakout");
+    resize();
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(canvas);
+    else window.addEventListener("resize", resize);
+    requestAnimationFrame(frame);
+
+    const backToTop = document.getElementById("backToTop");
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("menuToggle");
+      var nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
+      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
+      });
+      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", function (e) {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
+    })();
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", function () {
+        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        var next = isDark ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("site-theme", next); } catch (e) {}
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var banner = document.getElementById("newsBanner");
+      var closeBtn = document.getElementById("newsBannerClose");
+      if (!banner || !closeBtn) return;
+      closeBtn.addEventListener("click", function () {
+        banner.setAttribute("hidden", "");
+        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+<script data-share-script>
+    (function () {
+      var root = document.querySelector('.footer-share');
+      if (!root) return;
+      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+      var url = encodeURIComponent(pageUrl);
+      var title = encodeURIComponent(document.title);
+      var targets = {
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+      };
+      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+        var href = targets[el.getAttribute('data-share')];
+        if (href) el.setAttribute('href', href);
+      });
+      var favBtn = root.querySelector('[data-share="favorite"]');
+      var hint = root.querySelector('[data-share-hint]');
+      if (favBtn && hint) {
+        favBtn.addEventListener('click', function () {
+          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+          hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
