@@ -178,6 +178,7 @@ function isBlockStart(line, nextLine) {
   if (line.trim() === "[[toc]]") return true;
   if (/^```/.test(line.trim())) return true;
   if (/^:::(note|info|warning)\s*$/i.test(line.trim())) return true;
+  if (/^:::html\s*$/i.test(line.trim())) return true;
   if (/^#{2,4}\s+/.test(line)) return true;
   if (/^-{3,}\s*$/.test(line.trim())) return true;
   if (/^[-*]\s+/.test(line)) return true;
@@ -215,6 +216,20 @@ function markdownToHtml(markdown) {
       i++;
       const code = escapeHtml(codeLines.join("\n"));
       htmlParts.push(`<div class="code-block"><div class="code-block-header"><span class="code-lang">${lang}</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-${lang}">${code}</code></pre></div>`);
+      continue;
+    }
+
+    // A ":::html" fence emits its body verbatim, so an article can embed an
+    // interactive widget the Markdown subset cannot express.
+    if (/^:::html\s*$/i.test(line.trim())) {
+      const rawLines = [];
+      i++;
+      while (i < lines.length && lines[i].trim() !== ":::") {
+        rawLines.push(lines[i]);
+        i++;
+      }
+      i++;
+      htmlParts.push(rawLines.join("\n"));
       continue;
     }
 
@@ -315,6 +330,7 @@ function markdownToHtml(markdown) {
 function countWords(markdown) {
   const stripped = markdown
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/:::html[\s\S]*?\n:::/g, " ")
     .replace(/[*_`#>|-]/g, " ");
   const words = stripped.trim().split(/\s+/).filter(Boolean);
   return words.length;

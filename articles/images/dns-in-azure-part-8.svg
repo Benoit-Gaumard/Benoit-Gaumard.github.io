@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="DNS in Azure Part 8 - resolution decision tree">
+  <defs>
+    <linearGradient id="dns8bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#146b60"/>
+      <stop offset="100%" stop-color="#0d2430"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#dns8bg)"/>
+
+  <text x="600" y="106" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="600" fill="#9fdfd3" text-anchor="middle" letter-spacing="4">DNS IN AZURE &#183; PART 8</text>
+
+  <!-- root -->
+  <rect x="450" y="150" width="300" height="62" rx="12" fill="#ffffff" opacity="0.97"/>
+  <text x="600" y="189" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#0d2430" text-anchor="middle">A VM asks for a name</text>
+
+  <!-- connectors -->
+  <g stroke="#9fdfd3" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M600 212 V240 H210 V270"/>
+    <path d="M600 212 V240 H470 V270"/>
+    <path d="M600 212 V240 H730 V270"/>
+    <path d="M600 212 V240 H990 V270"/>
+  </g>
+
+  <!-- leaves -->
+  <rect x="95" y="270" width="230" height="86" rx="12" fill="#124f52" stroke="#9fdfd3" stroke-width="3"/>
+  <text x="210" y="305" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">Public name</text>
+  <text x="210" y="333" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#9fdfd3" text-anchor="middle">Azure DNS recursive</text>
+
+  <rect x="355" y="270" width="230" height="86" rx="12" fill="#124f52" stroke="#9fdfd3" stroke-width="3"/>
+  <text x="470" y="305" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">Azure private</text>
+  <text x="470" y="333" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#9fdfd3" text-anchor="middle">private DNS zone</text>
+
+  <rect x="615" y="270" width="230" height="86" rx="12" fill="#124f52" stroke="#9fdfd3" stroke-width="3"/>
+  <text x="730" y="305" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">PaaS private</text>
+  <text x="730" y="333" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#9fdfd3" text-anchor="middle">privatelink zone</text>
+
+  <rect x="875" y="270" width="230" height="86" rx="12" fill="#124f52" stroke="#9fdfd3" stroke-width="3"/>
+  <text x="990" y="305" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="middle">On-premises</text>
+  <text x="990" y="333" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#9fdfd3" text-anchor="middle">forwarding ruleset</text>
+
+  <text x="600" y="460" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">The DNS Resolution Decision Tree</text>
+  <text x="600" y="512" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#9fdfd3" text-anchor="middle">answer four questions, get the architecture</text>
+</svg>

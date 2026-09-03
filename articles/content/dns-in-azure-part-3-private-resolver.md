@@ -16,6 +16,15 @@ featured = true
 
 For years the fix was to run your own DNS servers in a hub VNet - two VMs, forwarders both ways, and a patching schedule. The **Azure DNS Private Resolver**, generally available since October 2022, closes both gaps as a managed service. This post is about how it works and which architecture to pick.
 
+- **[Part 1](/articles/dns-in-azure-part-1-fundamentals/)** - fundamentals and Azure-provided name resolution
+- **[Part 2](/articles/dns-in-azure-part-2-private-dns-zones/)** - private DNS zones and virtual network links
+- **Part 3 (this post)** - Azure DNS Private Resolver
+- **[Part 4](/articles/dns-in-azure-part-4-private-endpoints/)** - Private Link and Private Endpoints
+- **[Part 5](/articles/dns-in-azure-part-5-private-endpoint-dns/)** - Private Endpoints and private DNS
+- **[Part 6](/articles/dns-in-azure-part-6-private-dns-fallback/)** - private DNS fallback to internet
+- **[Part 7](/articles/dns-in-azure-part-7-dns-security-policies/)** - DNS security policies
+- **[Part 8](/articles/dns-in-azure-part-8-decision-tree/)** - the resolution decision tree
+
 [[toc]]
 
 ## Anatomy of the resolver
@@ -123,7 +132,7 @@ Microsoft's diagram of the same flow, showing the query travelling from the on-p
 *Source: [Azure DNS Private Resolver architecture](https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver) - © Microsoft, Azure Architecture Center.*
 
 :::warning
-This is also the pattern that makes `privatelink.*` zones reachable from on-premises - which is exactly what you need for a hybrid client to hit a Private Endpoint. Forward each `privatelink.*` suffix you use to the inbound endpoint, or you will get the public IP and a firewall drop.
+This is also the pattern that makes `privatelink.*` zones reachable from on-premises - which is exactly what you need for a hybrid client to hit a Private Endpoint. Forward each **public** suffix you use (`blob.core.windows.net`, not `privatelink.blob.core.windows.net`) to the inbound endpoint, or you will get the public IP and a firewall drop. [Part 5](/articles/dns-in-azure-part-5-private-endpoint-dns/) explains exactly why the public suffix is the right target.
 :::
 
 ## Pattern 2: Azure resolving on-premises names, centralized
@@ -298,7 +307,7 @@ Historically the biggest complaint about this architecture was visibility: the p
 - Allow, alert on, or block queries based on prioritised rules over domain lists
 - Subscribe to Microsoft's managed **threat intelligence** feed to block known malicious domains
 
-A policy applies only to VNets in its own region, so plan one per region you operate in. If your only reason for running a DNS VM was logging, this is your exit path.
+A policy applies only to VNets in its own region, so plan one per region you operate in. If your only reason for running a DNS VM was logging, this is your exit path. [Part 7](/articles/dns-in-azure-part-7-dns-security-policies/) covers the whole feature - traffic rules, domain lists, threat intelligence, and the KQL to make sense of the logs.
 
 ## Troubleshooting checklist
 
@@ -330,7 +339,7 @@ az network dns-resolver forwarding-rule list \
   --output table
 ```
 
-## Wrapping up the series
+## Where this leaves us
 
 Three posts, one throughline:
 
@@ -338,6 +347,10 @@ Three posts, one throughline:
 - **Part 2** - private DNS zones give you real namespaces and real records, but they only exist for virtual networks you explicitly link, and they always win over forwarding rules.
 - **Part 3** - the resolver adds the two hybrid directions the platform could not do on its own, driven by rulesets evaluated in a documented, predictable order.
 
-If I had to compress the whole series into one piece of advice: **centralize DNS, and be able to draw the query path on a whiteboard.** The architecture you can explain in thirty seconds is the one you will still be able to debug at 2 a.m.
+That covers name resolution as an infrastructure service. The second half of the series is about the thing everyone actually wants to resolve.
+
+**[Part 4](/articles/dns-in-azure-part-4-private-endpoints/)** takes apart Private Link and Private Endpoints as a networking construct, **[Part 5](/articles/dns-in-azure-part-5-private-endpoint-dns/)** covers the `privatelink` CNAME chain and private DNS zone groups, **[Part 6](/articles/dns-in-azure-part-6-private-dns-fallback/)** explains the NXDOMAIN behaviour and the fallback policy that fixes it, **[Part 7](/articles/dns-in-azure-part-7-dns-security-policies/)** finally gets you query logs and filtering, and **[Part 8](/articles/dns-in-azure-part-8-decision-tree/)** turns the whole series into an interactive decision tree.
+
+If I had to compress the story so far into one piece of advice: **centralize DNS, and be able to draw the query path on a whiteboard.** The architecture you can explain in thirty seconds is the one you will still be able to debug at 2 a.m.
 
 Enjoy!

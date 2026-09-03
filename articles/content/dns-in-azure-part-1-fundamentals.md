@@ -2,7 +2,7 @@
 author = "Benoit G"
 title = "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution"
 date = "2026-09-01"
-description = "Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road."
+description = "Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road."
 tags = ["DNS", "Networking"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-1.svg"
@@ -11,11 +11,16 @@ featured = true
 
 DNS is the least glamorous service in your landing zone and the one that generates the most 2 a.m. incident bridges. Nothing looks broken - the VM is up, the NSG is open, the peering is connected - and yet the application cannot find its database. Nine times out of ten the answer is a name that resolved to the wrong address, or did not resolve at all.
 
-This is the first of a three-part series on **private** name resolution in Azure. Public Azure DNS zones (the ones you delegate a registered domain to) are a different topic, and I already covered them in [How to Delegate a Domain to Azure DNS](/articles/how-to-delegate-a-domain-to-azure-dns/). Here I want to walk through what happens inside a virtual network.
+This is the first of an eight-part series on **private** name resolution in Azure. Public Azure DNS zones (the ones you delegate a registered domain to) are a different topic, and I already covered them in [How to Delegate a Domain to Azure DNS](/articles/how-to-delegate-a-domain-to-azure-dns/). Here I want to walk through what happens inside a virtual network.
 
 - **Part 1 (this post)** - core concepts, the platform virtual IP, and Azure-provided name resolution
 - **[Part 2](/articles/dns-in-azure-part-2-private-dns-zones/)** - Azure Private DNS zones, virtual network links, and zone design
 - **[Part 3](/articles/dns-in-azure-part-3-private-resolver/)** - Azure DNS Private Resolver and the hybrid patterns built on it
+- **[Part 4](/articles/dns-in-azure-part-4-private-endpoints/)** - Private Link and Private Endpoints
+- **[Part 5](/articles/dns-in-azure-part-5-private-endpoint-dns/)** - Private Endpoints and private DNS
+- **[Part 6](/articles/dns-in-azure-part-6-private-dns-fallback/)** - private DNS fallback to internet
+- **[Part 7](/articles/dns-in-azure-part-7-dns-security-policies/)** - DNS security policies
+- **[Part 8](/articles/dns-in-azure-part-8-decision-tree/)** - the resolution decision tree
 
 I assume you already know what a DNS record is. If terms like *recursive query* or *conditional forwarder* are fuzzy, the vocabulary section below should be enough to follow along.
 

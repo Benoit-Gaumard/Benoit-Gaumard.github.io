@@ -326,4 +326,6 @@ Both remaining gaps are hybrid gaps - and both are what the Azure DNS Private Re
 
 **[Part 3](/articles/dns-in-azure-part-3-private-resolver/)** covers the Azure DNS Private Resolver: inbound endpoints, outbound endpoints, forwarding rulesets, the centralized and distributed architectures, the query-evaluation order that explains most "why did it forward there?" incidents, and how to get DNS query logging without a third-party server.
 
+The rest of the series then moves on to Private Link: **[Part 4](/articles/dns-in-azure-part-4-private-endpoints/)** on Private Endpoints, **[Part 5](/articles/dns-in-azure-part-5-private-endpoint-dns/)** on the `privatelink` DNS chain, **[Part 6](/articles/dns-in-azure-part-6-private-dns-fallback/)** on fallback to internet, **[Part 7](/articles/dns-in-azure-part-7-dns-security-policies/)** on DNS security policies, and **[Part 8](/articles/dns-in-azure-part-8-decision-tree/)** which ties it all together in an interactive decision tree.
+
 See you there.

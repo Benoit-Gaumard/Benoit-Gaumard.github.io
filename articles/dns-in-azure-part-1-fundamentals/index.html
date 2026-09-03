@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.">
+  <meta name="description" content="Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
   <script>
@@ -48,7 +48,7 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="benoit-gaumard.io">
   <meta property="og:title" content="DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution | Benoit Gaumard">
-  <meta property="og:description" content="Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.">
+  <meta property="og:description" content="Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.">
   <meta property="og:url" content="https://benoit-gaumard.io/articles/dns-in-azure-part-1-fundamentals/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -63,7 +63,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution",
-  "description": "Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.",
+  "description": "Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.",
   "url": "https://benoit-gaumard.io/articles/dns-in-azure-part-1-fundamentals/",
   "author": {
     "@type": "Person",
@@ -505,7 +505,7 @@
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=DNS">DNS</a></div>
       <h1 class="article-title">DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution</h1>
-      <p class="article-description">Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.</p>
+      <p class="article-description">Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
@@ -520,8 +520,8 @@
 
     <article class="article-body">
       <p>DNS is the least glamorous service in your landing zone and the one that generates the most 2 a.m. incident bridges. Nothing looks broken - the VM is up, the NSG is open, the peering is connected - and yet the application cannot find its database. Nine times out of ten the answer is a name that resolved to the wrong address, or did not resolve at all.</p>
-<p>This is the first of a three-part series on <strong>private</strong> name resolution in Azure. Public Azure DNS zones (the ones you delegate a registered domain to) are a different topic, and I already covered them in <a href="/articles/how-to-delegate-a-domain-to-azure-dns/">How to Delegate a Domain to Azure DNS</a>. Here I want to walk through what happens inside a virtual network.</p>
-<ul><li><strong>Part 1 (this post)</strong> - core concepts, the platform virtual IP, and Azure-provided name resolution</li><li><strong><a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a></strong> - Azure Private DNS zones, virtual network links, and zone design</li><li><strong><a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a></strong> - Azure DNS Private Resolver and the hybrid patterns built on it</li></ul>
+<p>This is the first of an eight-part series on <strong>private</strong> name resolution in Azure. Public Azure DNS zones (the ones you delegate a registered domain to) are a different topic, and I already covered them in <a href="/articles/how-to-delegate-a-domain-to-azure-dns/">How to Delegate a Domain to Azure DNS</a>. Here I want to walk through what happens inside a virtual network.</p>
+<ul><li><strong>Part 1 (this post)</strong> - core concepts, the platform virtual IP, and Azure-provided name resolution</li><li><strong><a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a></strong> - Azure Private DNS zones, virtual network links, and zone design</li><li><strong><a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a></strong> - Azure DNS Private Resolver and the hybrid patterns built on it</li><li><strong><a href="/articles/dns-in-azure-part-4-private-endpoints/">Part 4</a></strong> - Private Link and Private Endpoints</li><li><strong><a href="/articles/dns-in-azure-part-5-private-endpoint-dns/">Part 5</a></strong> - Private Endpoints and private DNS</li><li><strong><a href="/articles/dns-in-azure-part-6-private-dns-fallback/">Part 6</a></strong> - private DNS fallback to internet</li><li><strong><a href="/articles/dns-in-azure-part-7-dns-security-policies/">Part 7</a></strong> - DNS security policies</li><li><strong><a href="/articles/dns-in-azure-part-8-decision-tree/">Part 8</a></strong> - the resolution decision tree</li></ul>
 <p>I assume you already know what a DNS record is. If terms like <em>recursive query</em> or <em>conditional forwarder</em> are fuzzy, the vocabulary section below should be enough to follow along.</p>
 <nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#a-shared-vocabulary">A shared vocabulary</a></li><li class="toc-level-2"><a href="#the-four-ways-to-resolve-a-private-name-in-azure">The four ways to resolve a private name in Azure</a></li><li class="toc-level-2"><a href="#168-63-129-16-the-address-behind-everything">168.63.129.16: the address behind everything</a></li><li class="toc-level-2"><a href="#where-a-vm-actually-gets-its-resolver">Where a VM actually gets its resolver</a></li><li class="toc-level-2"><a href="#azure-provided-name-resolution">Azure-provided name resolution</a></li><li class="toc-level-3"><a href="#a-single-vnet-lookup-step-by-step">A single-VNet lookup, step by step</a></li><li class="toc-level-3"><a href="#proving-it">Proving it</a></li><li class="toc-level-2"><a href="#where-it-falls-apart-the-second-virtual-network">Where it falls apart: the second virtual network</a></li><li class="toc-level-2"><a href="#scorecard">Scorecard</a></li><li class="toc-level-2"><a href="#key-takeaways">Key takeaways</a></li><li class="toc-level-2"><a href="#next-in-this-series">Next in this series</a></li></ul></nav>
 <h2 id="a-shared-vocabulary">A shared vocabulary</h2>

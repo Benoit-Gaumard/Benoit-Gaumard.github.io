@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="DNS in Azure Part 6 - Private DNS fallback behaviour">
+  <defs>
+    <linearGradient id="dns6bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8a6410"/>
+      <stop offset="100%" stop-color="#2e2410"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#dns6bg)"/>
+
+  <text x="600" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="600" fill="#f2d79a" text-anchor="middle" letter-spacing="4">DNS IN AZURE &#183; PART 6</text>
+
+  <!-- query -->
+  <rect x="90" y="215" width="250" height="150" rx="14" fill="#4a3a12" stroke="#f2d79a" stroke-width="3"/>
+  <text x="215" y="272" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">Query</text>
+  <text x="215" y="308" font-family="Segoe UI, Arial, sans-serif" font-size="19" fill="#f2d79a" text-anchor="middle">app.corp.internal</text>
+  <text x="215" y="340" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#f2d79a" text-anchor="middle">no record in the zone</text>
+
+  <!-- private zone -->
+  <rect x="415" y="190" width="370" height="200" rx="18" fill="#ffffff" opacity="0.97"/>
+  <text x="600" y="235" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#2e2410" text-anchor="middle">Private DNS zone</text>
+  <rect x="445" y="256" width="310" height="52" rx="10" fill="#fbf1da"/>
+  <text x="600" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#8a6410" text-anchor="middle">NXDOMAIN?</text>
+  <rect x="445" y="320" width="310" height="52" rx="10" fill="#fbf1da"/>
+  <text x="600" y="354" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#8a6410" text-anchor="middle">or fall back to public?</text>
+
+  <!-- public dns -->
+  <rect x="860" y="215" width="250" height="150" rx="14" fill="#4a3a12" stroke="#f2d79a" stroke-width="3"/>
+  <text x="985" y="272" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">Public DNS</text>
+  <text x="985" y="310" font-family="Segoe UI, Arial, sans-serif" font-size="19" fill="#f2d79a" text-anchor="middle">internet answer</text>
+
+  <g stroke="#f2d79a" stroke-width="5" stroke-linecap="round">
+    <line x1="340" y1="290" x2="405" y2="290"/>
+    <line x1="795" y1="290" x2="855" y2="290"/>
+  </g>
+
+  <text x="600" y="470" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">Private DNS Fallback</text>
+  <text x="600" y="522" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#f2d79a" text-anchor="middle">resolution policy &#183; split-horizon &#183; when NXDOMAIN is safer</text>
+</svg>
