@@ -23,6 +23,7 @@ colors:
   probe-cyan: "#0d93b0"
   link-blue: "#0969b5"
   panel-veil: "rgba(255, 255, 255, 0.97)"
+  overlay-veil: "rgba(238, 247, 255, 0.84)"
   night-void: "#0c1420"
   night-surface: "#16233a"
   night-surface-soft: "#1c2c42"
@@ -32,6 +33,7 @@ colors:
   night-ink-muted: "#9db3c7"
   night-azure-signal: "#4fa8ea"
   night-panel-veil: "rgba(16, 26, 41, 0.97)"
+  night-overlay-veil: "rgba(10, 17, 28, 0.84)"
   # Deliberately literal, not tokenised - documented so they read as system, not drift.
   aurora-cyan: "rgba(15, 176, 212, 0.22)"
   aurora-violet: "rgba(123, 97, 255, 0.16)"

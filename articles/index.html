@@ -441,8 +441,9 @@
       color: var(--cp-text-muted);
     }
 
-    .articles-sidebar { position: sticky; top: 5.5rem; }
+    .articles-sidebar { position: sticky; top: 5.5rem; display: flex; flex-direction: column; gap: 1.25rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
     .sidebar-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface); }
+    .sidebar-panel[hidden] { display: none; }
     .category-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
     .category-list button {
       display: flex; align-items: center; justify-content: space-between; gap: .75rem; width: 100%;
@@ -453,6 +454,16 @@
     .category-list button.is-active { background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 700; }
     .category-count { color: var(--cp-text-muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
     .category-list button.is-active .category-count { color: var(--cp-accent); }
+
+    .recent-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
+    .recent-list a {
+      display: flex; flex-direction: column; gap: .15rem;
+      padding: .5rem .6rem; border-radius: 8px;
+      color: var(--cp-text); font-size: 0.9rem; line-height: 1.35; text-decoration: none;
+    }
+    .recent-list a:hover { background: var(--cp-surface-soft); color: var(--cp-accent); }
+    .recent-date { color: var(--cp-text-muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+    .recent-list a:hover .recent-date { color: var(--cp-accent); }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
     .footer-inner { padding-block: 2rem 1.5rem; }
@@ -494,7 +505,7 @@
 
     @media (max-width: 60rem) {
       .articles-layout { grid-template-columns: 1fr; }
-      .articles-sidebar { position: static; order: -1; }
+      .articles-sidebar { position: static; order: -1; max-height: none; overflow-y: visible; }
       .category-list { flex-direction: row; flex-wrap: wrap; }
       .category-list button { width: auto; }
     }
@@ -1085,10 +1096,14 @@
         </section>
       </div>
 
-      <aside class="articles-sidebar" aria-label="Categories">
+      <aside class="articles-sidebar" aria-label="Categories and recent posts">
         <div class="sidebar-panel">
           <h2 class="sec-label" id="categories-title">Categories</h2>
           <ul class="category-list" id="categoryList"></ul>
+        </div>
+        <div class="sidebar-panel" id="recentPanel" hidden>
+          <h2 class="sec-label" id="recent-title">Recent Posts</h2>
+          <ul class="recent-list" id="recentList"></ul>
         </div>
       </aside>
     </div>
@@ -1181,11 +1196,17 @@
       resultsCount: document.getElementById("resultsCount"),
       articleCards: document.getElementById("articleCards"),
       categoryList: document.getElementById("categoryList"),
+      recentPanel: document.getElementById("recentPanel"),
+      recentList: document.getElementById("recentList"),
     };
 
     const state = { articles: [], category: new URLSearchParams(location.search).get("category") || "", favorites: new Set(), favoritesOnly: false };
 
     const FAVORITES_STORAGE_KEY = "articles-favorites";
+    // Virtual category: it is not present in any article's categories array,
+    // renderList resolves it against the featured flag instead.
+    const FEATURED_CATEGORY = "Featured Posts";
+    const RECENT_COUNT = 10;
 
     function loadFavorites() {
       try {
@@ -1316,9 +1337,27 @@
     function renderFeatured() {
       const featured = state.articles.filter((a) => a.featured).sort((a, b) => (a.date < b.date ? 1 : -1));
       elements.featuredSection.removeAttribute("data-loading");
-      elements.featuredSection.hidden = featured.length === 0;
+      // The strip highlights the collection as a whole, so it steps aside as
+      // soon as a category narrows the list below it.
+      elements.featuredSection.hidden = featured.length === 0 || Boolean(state.category);
       elements.featuredGrid.replaceChildren();
+      if (elements.featuredSection.hidden) return;
       featured.forEach((a) => elements.featuredGrid.append(createFeaturedCard(a)));
+    }
+
+    function renderRecent() {
+      // state.articles is already sorted newest first by init().
+      const recent = state.articles.slice(0, RECENT_COUNT);
+      elements.recentPanel.hidden = recent.length === 0;
+      elements.recentList.replaceChildren();
+      recent.forEach((article) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = article.url;
+        link.innerHTML = `<span>${escapeHtml(article.title)}</span><span class="recent-date">${formatDate(article.date)}</span>`;
+        item.append(link);
+        elements.recentList.append(item);
+      });
     }
 
     function renderCategories() {
@@ -1335,6 +1374,18 @@
       allButton.addEventListener("click", () => setCategory(""));
       allItem.append(allButton);
       elements.categoryList.append(allItem);
+
+      const featuredCount = state.articles.filter((a) => a.featured).length;
+      if (featuredCount) {
+        const featuredItem = document.createElement("li");
+        const featuredButton = document.createElement("button");
+        featuredButton.type = "button";
+        featuredButton.className = state.category === FEATURED_CATEGORY ? "is-active" : "";
+        featuredButton.innerHTML = `<span>${escapeHtml(FEATURED_CATEGORY)}</span><span class="category-count">${featuredCount}</span>`;
+        featuredButton.addEventListener("click", () => setCategory(FEATURED_CATEGORY));
+        featuredItem.append(featuredButton);
+        elements.categoryList.append(featuredItem);
+      }
 
       categories.forEach(([name, count]) => {
         const li = document.createElement("li");
@@ -1355,6 +1406,7 @@
       else url.searchParams.delete("category");
       history.pushState({}, "", url);
       renderCategories();
+      renderFeatured();
       renderList();
     }
 
@@ -1371,7 +1423,11 @@
     function renderList() {
       const query = normalize(elements.searchInput.value.trim());
       const filtered = state.articles.filter((a) => {
-        if (state.category && !a.categories.includes(state.category)) return false;
+        if (state.category === FEATURED_CATEGORY) {
+          if (!a.featured) return false;
+        } else if (state.category && !a.categories.includes(state.category)) {
+          return false;
+        }
         if (state.favoritesOnly && !state.favorites.has(a.url)) return false;
         if (query) {
           const haystack = normalize(`${a.title} ${a.description} ${a.tags.join(" ")}`);
@@ -1406,6 +1462,7 @@
       renderStats();
       renderFeatured();
       renderCategories();
+      renderRecent();
       renderList();
     }
 
@@ -1418,6 +1475,7 @@
     window.addEventListener("popstate", () => {
       state.category = new URLSearchParams(location.search).get("category") || "";
       renderCategories();
+      renderFeatured();
       renderList();
     });
 

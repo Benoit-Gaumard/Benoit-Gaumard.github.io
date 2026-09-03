@@ -1,0 +1,61 @@
+name: Submit a website
+description: Suggest a website for the friends' blogroll
+title: "Website: "
+labels: ["friends-websites"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a site for the [blogroll](https://benoit-gaumard.io/friends-websites/).
+
+        This is a personal blogroll, so submissions are added disabled and only appear
+        once reviewed and enabled by hand. Commas are not accepted in any field.
+  - type: input
+    id: site-owner
+    attributes:
+      label: Site owner
+      description: The name of the person or team publishing the site.
+      placeholder: Florent Appointaire
+    validations:
+      required: true
+  - type: input
+    id: website-url
+    attributes:
+      label: Website URL
+      description: Full HTTPS address of the site home page. The title, description and favicon are fetched automatically.
+      placeholder: https://cloudyjourney.fr/
+    validations:
+      required: true
+  - type: input
+    id: website-category
+    attributes:
+      label: Website category
+      description: The kind of site, for example Blog, Podcast or Newsletter.
+      placeholder: Blog
+    validations:
+      required: true
+  - type: input
+    id: website-topic
+    attributes:
+      label: Website topic
+      description: The main subject covered, for example Infra, Network or Security.
+      placeholder: Infra
+    validations:
+      required: true
+  - type: input
+    id: country
+    attributes:
+      label: Country
+      description: Where the author is based.
+      placeholder: France
+    validations:
+      required: true
+  - type: checkboxes
+    id: website-checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: The site publishes original technical content and is actively maintained.
+          required: true
+        - label: None of the fields above contain a comma.
+          required: true

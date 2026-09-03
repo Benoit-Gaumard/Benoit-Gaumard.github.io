@@ -1,0 +1,43 @@
+name: Submit a Microsoft portal
+description: Suggest a Microsoft portal for the portals directory
+title: "Portal: "
+labels: ["microsoft-portals"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a portal for the [Microsoft portals directory](https://benoit-gaumard.io/microsoft-portals/).
+
+        Only addresses on Microsoft-operated domains are accepted. A bot checks the
+        submission and opens a pull request, which is reviewed by hand before it goes live.
+  - type: input
+    id: portal-name
+    attributes:
+      label: Portal name
+      description: The official name of the console.
+      placeholder: Microsoft Entra admin center
+    validations:
+      required: true
+  - type: input
+    id: portal-url
+    attributes:
+      label: Portal URL
+      description: Full HTTPS address on a Microsoft domain.
+      placeholder: https://entra.microsoft.com
+    validations:
+      required: true
+  - type: input
+    id: portal-category
+    attributes:
+      label: Portal category
+      description: Reuse an existing category from the page when one fits, otherwise propose a new one.
+      placeholder: Entra Id
+    validations:
+      required: true
+  - type: checkboxes
+    id: portal-checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: This is an official Microsoft portal, not a blog, documentation page or third-party tool.
+          required: true

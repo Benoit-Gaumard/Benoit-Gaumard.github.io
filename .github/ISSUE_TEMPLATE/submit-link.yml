@@ -1,0 +1,53 @@
+name: Submit a link
+description: Suggest a resource for the Favorite Links collection
+title: "Link: "
+labels: ["favorite-links"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a link for [My Favorite Links](https://benoit-gaumard.io/favorite-links/).
+
+        A bot checks the submission and opens a pull request automatically. Every entry is
+        reviewed by hand before it goes live, so nothing is published without a human look.
+  - type: input
+    id: link-title
+    attributes:
+      label: Link title
+      description: Short, descriptive name for the resource.
+      placeholder: AzAdvertizer
+    validations:
+      required: true
+  - type: input
+    id: link-url
+    attributes:
+      label: Link URL
+      description: Full HTTPS address. Shortened URLs are rejected.
+      placeholder: https://www.azadvertizer.net
+    validations:
+      required: true
+  - type: input
+    id: link-category
+    attributes:
+      label: Link category
+      description: Reuse an existing category from the page when one fits, otherwise propose a new one.
+      placeholder: Governance
+    validations:
+      required: true
+  - type: textarea
+    id: link-description
+    attributes:
+      label: Why is it useful?
+      description: One or two sentences. Optional, but it helps the review.
+      placeholder: Searchable catalogue of Azure built-in policies, initiatives and aliases.
+    validations:
+      required: false
+  - type: checkboxes
+    id: link-checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: The resource is publicly reachable and useful without a paid account.
+          required: true
+        - label: I have no commercial interest in this link, or I disclose it in the description above.
+          required: false
