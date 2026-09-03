@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.">
+  <meta name="description" content="Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
   <script>
@@ -47,9 +47,9 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="benoit-gaumard.io">
-  <meta property="og:title" content="Terraform and Entra ID Authentication | Benoit Gaumard">
-  <meta property="og:description" content="How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.">
-  <meta property="og:url" content="https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/">
+  <meta property="og:title" content="DNS in Azure, Part 2: Private DNS Zones | Benoit Gaumard">
+  <meta property="og:description" content="Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.">
+  <meta property="og:url" content="https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -57,14 +57,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
-  <link rel="canonical" href="https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Terraform and Entra ID Authentication",
-  "description": "How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.",
-  "url": "https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/",
+  "headline": "DNS in Azure, Part 2: Private DNS Zones",
+  "description": "Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.",
+  "url": "https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/",
   "author": {
     "@type": "Person",
     "name": "Benoit Gaumard",
@@ -98,14 +98,14 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Terraform and Entra ID Authentication",
-      "item": "https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/"
+      "name": "DNS in Azure, Part 2: Private DNS Zones",
+      "item": "https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/"
     }
   ]
 }
   </script>
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
-  <title>Terraform and Entra ID Authentication | Benoit Gaumard</title>
+  <title>DNS in Azure, Part 2: Private DNS Zones | Benoit Gaumard</title>
 
   <style>
     :root {
@@ -503,57 +503,29 @@
   <main id="top" tabindex="-1">
     <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
-      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Azure">Azure</a></div>
-      <h1 class="article-title">Terraform and Entra ID Authentication</h1>
-      <p class="article-description">How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.</p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=DNS">DNS</a></div>
+      <h1 class="article-title">DNS in Azure, Part 2: Private DNS Zones</h1>
+      <p class="article-description">Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
-        <span>September 11, 2024</span>
+        <span>September 2, 2026</span>
         <span class="dot">&middot;</span>
-        <span>1 min read</span>
+        <span>12 min read</span>
       </div>
-      <div class="article-tags"><span class="article-tag">#Entra ID</span><span class="article-tag">#Terraform</span></div>
+      <div class="article-tags"><span class="article-tag">#DNS</span><span class="article-tag">#Networking</span><span class="article-tag">#Private Endpoint</span></div>
     </div>
 
-    <div class="article-feature-image"><img src="/articles/images/terraform.svg" alt="Terraform and Entra ID Authentication"></div>
+    <div class="article-feature-image"><img src="/articles/images/dns-in-azure-part-2.svg" alt="DNS in Azure, Part 2: Private DNS Zones"></div>
 
     <article class="article-body">
-      <p>The <code>azurerm</code> provider and the remote backend require authentication. The best practice is to disable the storage account access key and enable Entra ID (Azure AD) authentication instead.</p>
-<figure class="article-figure"><img src="/articles/images/terraform-entra-id/image1.png" alt="Storage account configuration disabling key-based authentication" loading="lazy"></figure>
-<p>This storage account configuration will cause the following error during the <code>terraform init</code> phase:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">Status=403 Code="KeyBasedAuthenticationNotPermitted" Message="Key based authentication is not permitted on this storage account.</code></pre></div>
-<p>To use Entra ID authentication, here is the configuration to apply to your Terraform configuration.</p>
-<p>On the <code>backend.tf</code> file, add the <code>use_azuread_auth = true</code> parameter:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">terraform {
-  backend "azurerm" {
-    resource_group_name  = "&lt;YOUR_BACKEND_STORAGE_RESOURCE_GROUP_NAME&gt;"
-    storage_account_name = "&lt;YOUR_BACKEND_STORAGE_ACCOUNT_NAME&gt;"
-    container_name       = "&lt;YOUR_BACKEND_CONTAINER_NAME&gt;"
-    key                  = "&lt;YOUR_BACKEND_KEY_.tfstate&gt;"
-    use_azuread_auth     = true
-  }
-}</code></pre></div>
-<p>On the <code>provider.tf</code> file, add the <code>storage_use_azuread = true</code> parameter:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "4.1.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  storage_use_azuread         = true
-  skip_provider_registration  = true
-  features {}
-}</code></pre></div>
-<p>If you look at the storage account activity log, the "List Storage Account Keys" operations happened before <code>use_azuread_auth = true</code> was enabled, and Terraform listed the keys when accessing the state file. After switching to Entra ID authentication, the keys are no longer listed.</p>
-<figure class="article-figure"><img src="/articles/images/terraform-entra-id/image2.png" alt="Storage account activity log after enabling Entra ID authentication" loading="lazy"></figure>
-<p>If using this access method on the remote backend, your user or service principal needs the <strong>Storage Blob Data Owner</strong> role on the container scope.</p>
-<p>Using Entra ID authentication for the remote backend is a best practice aligned with RBAC and least privilege.</p>
-    </article>
+      <p>In <a href="/articles/dns-in-azure-part-1-fundamentals/">Part 1</a> I finished on a fairly blunt conclusion: Azure-provided name resolution stops being useful the moment you own more than one virtual network. You get a namespace you did not choose, records you cannot create by hand, and no way to share any of it across VNets.</p>
+<p><strong>Azure Private DNS zones</strong> are the answer to all three. This post covers how the service is built, the behaviours that surprise people on day one, the role it plays in Private Endpoints, and how to lay out zones so you are not re-architecting them in eighteen months.</p>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#what-private-dns-zones-actually-give-you">What private DNS zones actually give you</a></li><li class="toc-level-2"><a href="#the-resource-model">The resource model</a></li><li class="toc-level-2"><a href="#registration-versus-resolution">Registration versus resolution</a></li><li class="toc-level-2"><a href="#the-suffix-trap">The suffix trap</a></li><li class="toc-level-2"><a href="#resolution-order-inside-a-vnet">Resolution order inside a VNet</a></li><li class="toc-level-2"><a href="#walkthrough-two-vnets-one-zone">Walkthrough: two VNets, one zone</a></li><li class="toc-level-2"><a href="#global-resource-regional-control-plane">Global resource, regional control plane</a></li><li class="toc-level-2"><a href="#private-endpoints-and-the-privatelink-zones">Private Endpoints and the privatelink zones</a></li><li class="toc-level-2"><a href="#limits-that-shape-your-design">Limits that shape your design</a></li><li class="toc-level-2"><a href="#zone-design-patterns">Zone design patterns</a></li><li class="toc-level-2"><a href="#building-it-with-bicep">Building it with Bicep</a></li><li class="toc-level-2"><a href="#verifying-a-zone-works">Verifying a zone works</a></li><li class="toc-level-2"><a href="#scorecard">Scorecard</a></li><li class="toc-level-2"><a href="#next-in-this-series">Next in this series</a></li></ul></nav>
+<h2 id="what-private-dns-zones-actually-give-you">What private DNS zones actually give you</h2>
+<p>A private DNS zone is a namespace you own, hosted by the platform, resolvable only from virtual networks you explicitly attach it to. Compared to the default <code>internal.cloudapp.net</code> namespace:</p>
+<ul><li>You pick the name. <code>corp.internal</code>, <code>prod.contoso.com</code>, whatever fits your naming standard.</li><li>You can create records by hand - A, AAAA, CNAME, MX, PTR, SRV, TXT, SOA.</li><li>One zone can serve many virtual networks, in many regions, across many subscriptions.</li><li>VM records can still be managed automatically if you want them to be.</li><li>There is no infrastructure to build. No VM, no patching, no availability design.</li></ul>
+<div class="callout callout-info"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Info</span><p>Records in a private zone are never resolvable from the internet. A private zone can share a name with a public zone you own, and that is a perfectly normal split-horizon setup - internal clients get the private answer, everyone else gets the public one.</p></div></div>
     <aside class="article-ad" aria-label="Advertisement">
       <span class="article-ad-label">Advertisement</span>
       <ins class="adsbygoogle"
@@ -564,6 +536,160 @@ provider "azurerm" {
            data-ad-slot="4494484671"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
+<h2 id="the-resource-model">The resource model</h2>
+<p>Two resource types do all the work, both under the <code>Microsoft.Network</code> provider:</p>
+<div class="table-wrap"><table><thead><tr><th>Resource</th><th>Type</th><th>What it does</th></tr></thead><tbody><tr><td>Private DNS zone</td><td><code>Microsoft.Network/privateDnsZones</code></td><td>Holds the namespace and its record sets</td></tr><tr><td>Virtual network link</td><td><code>Microsoft.Network/privateDnsZones/virtualNetworkLinks</code></td><td>Attaches one VNet to one zone</td></tr></tbody></table></div>
+<p>The link is the part people underestimate. <strong>A zone with no links resolves nothing.</strong> Creating the zone and populating records is only half the job - until a virtual network is linked, clients in that VNet have no idea the zone exists.</p>
+<p>The relationships are worth stating precisely, because the asymmetry matters:</p>
+<ul><li>A zone can be linked to <strong>many</strong> virtual networks.</li><li>A virtual network can be linked to <strong>many</strong> zones for resolution.</li><li>A virtual network can be linked to exactly <strong>one</strong> zone with autoregistration enabled.</li><li>Links can cross subscriptions inside the same tenant, and cross-tenant linking is supported through PowerShell / CLI / ARM.</li></ul>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># Create the zone (note: the zone itself has no location - it is global)
+az network private-dns zone create \
+  --resource-group rg-dns-hub \
+  --name corp.internal
+
+# Link a virtual network for resolution only
+az network private-dns link vnet create \
+  --resource-group rg-dns-hub \
+  --zone-name corp.internal \
+  --name link-vnet-spoke-a \
+  --virtual-network /subscriptions/&lt;sub&gt;/resourceGroups/rg-net/providers/Microsoft.Network/virtualNetworks/vnet-spoke-a \
+  --registration-enabled false</code></pre></div>
+<h2 id="registration-versus-resolution">Registration versus resolution</h2>
+<p>Every link carries a boolean, <code>registrationEnabled</code>, and it is the single most misread setting in the service.</p>
+<div class="table-wrap"><table><thead><tr><th>Link type</th><th>Clients can resolve records in the zone</th><th>VMs in the VNet auto-create their own A records</th></tr></thead><tbody><tr><td>Resolution (<code>registrationEnabled = false</code>)</td><td>Yes</td><td>No</td></tr><tr><td>Registration (<code>registrationEnabled = true</code>)</td><td>Yes</td><td>Yes</td></tr></tbody></table></div>
+<p>A registration link is a resolution link <em>plus</em> automatic record management. It is not an alternative to it.</p>
+<p>When autoregistration is on, the platform maintains an A record per VM in that VNet. Three details you need to know before you rely on it:</p>
+<ul><li>Records created this way carry an <code>isAutoRegistered</code> property set to <code>true</code>. You cannot edit them by hand, and manual records with the same name will conflict.</li><li>Their TTL is <strong>10 seconds</strong>, not the usual hour. That is deliberate - it keeps ephemeral compute honest - but it means these names are effectively uncached.</li><li>The record is deleted when the VM is deleted. Deallocating a VM does not remove it.</li></ul>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Autoregistration only covers virtual machines. Private Endpoints, App Service, container workloads and everything else still need records created by you, by policy, or by the resource provider.</p></div></div>
+<p>Microsoft's diagram of a single registration-linked virtual network shows what the platform maintains on your behalf - one auto-registered A record per VM, and PTR answers for the matching reverse lookups:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/dns/media/private-dns-scenarios/single-vnet-resolution.png" alt="Autoregistration in a single virtual network linked to a private DNS zone" loading="lazy"><figcaption>A registration-linked virtual network: the platform maintains an A record per VM and answers PTR queries</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/dns/private-dns-scenarios" target="_blank" rel="noopener noreferrer">Azure Private DNS scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># Link a virtual network WITH autoregistration - only one such link per VNet
+az network private-dns link vnet create \
+  --resource-group rg-dns-hub \
+  --zone-name corp.internal \
+  --name link-vnet-hub-reg \
+  --virtual-network vnet-hub \
+  --registration-enabled true</code></pre></div>
+<h2 id="the-suffix-trap">The suffix trap</h2>
+<p>Here is the one that catches every team on their first migration.</p>
+<p>Linking a private zone to a virtual network <strong>does not change the DNS suffix</strong> the guest OS receives. DHCP option 15 still hands out the VNet's <code>internal.cloudapp.net</code> namespace. So on a VM linked to <code>corp.internal</code> with autoregistration:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">Resolve-DnsName web01              # answers from &lt;random&gt;.internal.cloudapp.net
+Resolve-DnsName web01.corp.internal # answers from your private zone</code></pre></div>
+<p>Both work, and both may return the same address - but they came from different zones. The consequences are practical:</p>
+<ul><li>Always configure applications, connection strings and certificates with the <strong>FQDN</strong>. Single-label names are a trap.</li><li>If you need the private zone suffix appended automatically, set it yourself in the guest OS (DNS suffix search list on Windows, <code>search</code> in <code>/etc/resolv.conf</code> or the netplan/NetworkManager equivalent on Linux).</li></ul>
+<p>This is by design, not an oversight: Microsoft keeps the platform suffix stable so you stay in control of what your VMs append.</p>
+<h2 id="resolution-order-inside-a-vnet">Resolution order inside a VNet</h2>
+<p>When a VM in a linked VNet sends a query to <code>168.63.129.16</code>, the platform evaluates it in this order:</p>
+<ol><li>Is there a <strong>linked private DNS zone</strong> matching the queried name? If so, answer from it. If the record does not exist in that zone, return NXDOMAIN - the platform does <strong>not</strong> fall through to public DNS for a name inside a zone it is authoritative for.</li><li>Otherwise, resolve through Azure DNS as a normal recursive public lookup.</li></ol>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Step 1 is why a half-populated private zone is worse than no zone at all. Link <code>contoso.com</code> as a private zone with only three records, and every other <code>*.contoso.com</code> name that used to resolve publicly from that VNet now returns NXDOMAIN. This is the classic self-inflicted outage with split-horizon zones - if you take over a namespace privately, you own <strong>all</strong> of it.</p></div></div>
+<p>There is a second, equally important caveat: if the virtual network is configured with <strong>custom DNS servers</strong> instead of the default, linked private zones are no longer consulted automatically. Your custom server must forward to <code>168.63.129.16</code> (or you must use a Private DNS Resolver, covered in Part 3) for the zone to be reachable.</p>
+<h2 id="walkthrough-two-vnets-one-zone">Walkthrough: two VNets, one zone</h2>
+<p>Zone <code>corp.internal</code> exists in a hub resource group. <code>vnet-hub</code> is linked with autoregistration; <code>vnet-spoke-a</code> is linked for resolution only. Both use the default DNS servers setting.</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">        vnet-spoke-a                              vnet-hub
+        (resolution link)                      (registration link)
+   ┌────────────────────┐                   ┌────────────────────┐
+   │  app01             │                   │  db01              │
+   │  10.40.1.5         │                   │  10.30.1.4         │
+   └─────────┬──────────┘                   └────────────────────┘
+             │ 1. db01.corp.internal                   ▲
+             ▼                                         │ auto-registered A record
+     ┌──────────────────┐                              │
+     │  168.63.129.16   │                              │
+     └────────┬─────────┘                              │
+              │ 2. zone corp.internal is linked        │
+              ▼                                        │
+     ┌──────────────────────────────────────┐          │
+     │  Private DNS zone: corp.internal     │──────────┘
+     │  db01  A  10.30.1.4  (TTL 10)        │
+     └────────────────┬─────────────────────┘
+                      │ 3. answer: 10.30.1.4
+                      ▼
+                  app01 connects over the peering</code></pre></div>
+<ol><li><code>app01</code> queries <code>db01.corp.internal</code> (FQDN, because the suffix is not appended for it) and sends it to the platform VIP.</li><li>The platform sees a private zone named <code>corp.internal</code> linked to <code>vnet-spoke-a</code> and resolves against it.</li><li>The A record - registered automatically when <code>db01</code> booted in <code>vnet-hub</code> - is returned.</li></ol>
+<p>Note that <code>vnet-spoke-a</code> never needed a registration link, and the two VNets do not need to know anything about each other's namespaces. That is the whole improvement over Part 1.</p>
+<p>Microsoft's version of the same scenario adds a useful detail: records auto-registered from the registration-linked VNet coexist with records you create manually for the resolution-linked one, and PTR lookups only work for the addresses the platform registered:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/dns/media/private-dns-scenarios/multi-vnet-resolution.png" alt="Two virtual networks sharing one private DNS zone, one linked for registration and one for resolution" loading="lazy"><figcaption>One zone serving two virtual networks: registration link on the left, resolution link on the right, with auto-registered and manual records side by side</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/dns/private-dns-scenarios" target="_blank" rel="noopener noreferrer">Azure Private DNS scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<h2 id="global-resource-regional-control-plane">Global resource, regional control plane</h2>
+<p>Private DNS zones are <strong>global</strong>. The data plane is replicated across regions, so a zone can serve virtual networks in West Europe and East US simultaneously. This is the recommended pattern: one zone per namespace, linked widely - not one zone per region.</p>
+<p>The nuance is that a zone still lives in a resource group, and resource groups are regional. During a regional outage affecting the resource group's location you may be unable to <strong>modify</strong> the zone - create records, add links - while DNS resolution for the linked virtual networks keeps working normally.</p>
+<p>Practical consequence: put your shared zones in a resource group in a region you consider primary, and do not assume you can make emergency record changes during a failover of that same region.</p>
+<h2 id="private-endpoints-and-the-privatelink-zones">Private Endpoints and the privatelink zones</h2>
+<p>If you use Azure Private Link - and in a landing zone you will - private DNS zones stop being optional.</p>
+<p>A Private Endpoint gives a PaaS resource a private IP in your VNet, but the client still connects using the <strong>public</strong> FQDN, for example <code>mystorage.blob.core.windows.net</code>. The certificate is issued for that name, so you cannot invent your own. Resolution has to be redirected instead:</p>
+<ol><li>The public name has a CNAME to a <code>privatelink.*</code> name, maintained by Microsoft.</li><li>You host that <code>privatelink.*</code> zone privately and put an A record in it pointing at the endpoint's private IP.</li><li>Clients in linked VNets follow the CNAME into your private zone and get the private address. Clients outside get the public one.</li></ol>
+<p>Microsoft's diagram traces that chain end to end - the public name, the CNAME into <code>privatelink.database.windows.net</code>, the A record in the private zone, and finally the connection to the endpoint's private IP:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/private-link/media/private-endpoint-dns/single-vnet-azure-dns.png" alt="DNS resolution flow for a Private Endpoint through a privatelink zone" loading="lazy"><figcaption>The Private Endpoint resolution chain: public FQDN, CNAME to the privatelink zone, A record, private connection</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns-integration" target="_blank" rel="noopener noreferrer">Private endpoint DNS integration <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<p>The zone names are fixed - you must use exactly what Microsoft publishes. A few of the common ones:</p>
+<div class="table-wrap"><table><thead><tr><th>Service</th><th>Private DNS zone name</th></tr></thead><tbody><tr><td>Blob storage</td><td><code>privatelink.blob.core.windows.net</code></td></tr><tr><td>Azure SQL Database</td><td><code>privatelink.database.windows.net</code></td></tr><tr><td>Key Vault</td><td><code>privatelink.vaultcore.azure.net</code></td></tr><tr><td>Azure Container Registry</td><td><code>privatelink.azurecr.io</code></td></tr><tr><td>App Service / Functions</td><td><code>privatelink.azurewebsites.net</code></td></tr><tr><td>Cosmos DB (SQL API)</td><td><code>privatelink.documents.azure.com</code></td></tr></tbody></table></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Do not manage these records by hand. Enable the <strong>Private DNS zone group</strong> on the Private Endpoint so the platform writes the A record for you, and enforce it with the built-in Azure Policy definitions (<code>Configure ... to use private DNS zones</code>) so nobody creates an endpoint that resolves to nothing. Manual <code>privatelink</code> records are one of the most common sources of stale DNS in Azure.</p></div></div>
+<h2 id="limits-that-shape-your-design">Limits that shape your design</h2>
+<p>These are the numbers to design against, not to discover in production:</p>
+<div class="table-wrap"><table><thead><tr><th>Resource</th><th>Limit</th></tr></thead><tbody><tr><td>Private DNS zones per subscription</td><td>1,000</td></tr><tr><td>Record sets per zone</td><td>25,000</td></tr><tr><td>Records per record set</td><td>20</td></tr><tr><td>Virtual network links per zone</td><td>1,000</td></tr><tr><td>Virtual network links per zone <strong>with autoregistration</strong></td><td>100</td></tr><tr><td>Zones a virtual network can be linked to</td><td>1,000</td></tr><tr><td>Zones a virtual network can be linked to with autoregistration</td><td>1</td></tr></tbody></table></div>
+<p>Two restrictions also matter:</p>
+<ul><li>Single-label zones are not supported. <code>corp</code> is invalid; <code>corp.internal</code> is fine.</li><li>You cannot create NS delegations inside a private zone. To use a child domain, create it as its own zone and link it directly.</li></ul>
+<p>The <strong>100 autoregistration links</strong> ceiling is the one that bites at scale. If your standard is "every spoke registers into the shared zone", you hit the wall at 100 spokes. Link widely for resolution, sparingly for registration.</p>
+<h2 id="zone-design-patterns">Zone design patterns</h2>
+<p>There is no universally correct layout, but there are three that show up repeatedly.</p>
+<div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Layout</th><th>Good for</th><th>Watch out for</th></tr></thead><tbody><tr><td><strong>Zone per application</strong></td><td><code>app1.corp.internal</code>, <code>app2.corp.internal</code>, each delegated to its team</td><td>Autonomy, fast-moving product teams</td><td>Zone sprawl, inconsistent TTL and naming, more links to manage</td></tr><tr><td><strong>Zone per environment</strong></td><td><code>dev.corp.internal</code>, <code>prod.corp.internal</code>, owned centrally</td><td>Clean separation, simple RBAC boundaries</td><td>Central team becomes a ticket queue for record changes</td></tr><tr><td><strong>Centralized in a hub</strong></td><td>All zones live in a shared connectivity subscription, linked outward</td><td>Consistency, one place to audit, matches Cloud Adoption Framework</td><td>Requires discipline and automation to stay responsive</td></tr></tbody></table></div>
+<p>My default recommendation for a landing zone: <strong>all <code>privatelink.*</code> zones centralized in the connectivity subscription and enforced by policy</strong>, plus application zones split per environment with RBAC delegated at the zone level. That gives platform teams control over the part that breaks silently and gives application teams control over the part they change daily.</p>
+<p>This is also what the Cloud Adoption Framework prescribes - a single set of private DNS zones held in the connectivity subscription, serving every workload subscription:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/media/private-link-example-central-dns.png" alt="Central DNS resolution and name resolution for Private Link resources" loading="lazy"><figcaption>Centralized private DNS zones in the connectivity subscription serving all workload subscriptions</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale" target="_blank" rel="noopener noreferrer">Private Link and DNS integration at scale <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Cloud Adoption Framework.</em></p>
+<h2 id="building-it-with-bicep">Building it with Bicep</h2>
+<p>Zones and links are trivial to express as code, which is exactly how they should be managed:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bicep</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bicep">param zoneName string = 'corp.internal'
+param vnetId string
+
+resource zone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
+  name: zoneName
+  location: 'global'
+}
+
+resource link 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01' = {
+  parent: zone
+  name: 'link-${uniqueString(vnetId)}'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnetId
+    }
+  }
+}
+
+resource apiRecord 'Microsoft.Network/privateDnsZones/A@2024-06-01' = {
+  parent: zone
+  name: 'api'
+  properties: {
+    ttl: 3600
+    aRecords: [
+      {
+        ipv4Address: '10.30.1.20'
+      }
+    ]
+  }
+}</code></pre></div>
+<p>Note <code>location: 'global'</code> on all three - a reminder that the zone is not a regional resource even though its resource group is.</p>
+<h2 id="verifying-a-zone-works">Verifying a zone works</h2>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">Resolve-DnsName api.corp.internal -Server 168.63.129.16</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">dig @168.63.129.16 api.corp.internal +short</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># List what a VNet is actually linked to - the first thing to check
+# when a record "exists" but does not resolve
+az network private-dns link vnet list \
+  --resource-group rg-dns-hub \
+  --zone-name corp.internal \
+  --output table</code></pre></div>
+<p>If the record exists in the portal but the query returns NXDOMAIN, the cause is almost always one of: no link to the querying VNet, the VNet is using custom DNS servers, or you are querying the wrong zone because of the suffix trap.</p>
+<h2 id="scorecard">Scorecard</h2>
+<div class="table-wrap"><table><thead><tr><th>Works well</th><th>Still missing</th></tr></thead><tbody><tr><td>Custom namespaces, all common record types</td><td>On-premises clients cannot resolve these zones on their own</td></tr><tr><td>Fully managed, no servers to run or patch</td><td>Custom DNS servers on the VNet bypass linked zones unless they forward to the VIP</td></tr><tr><td>Global data plane across regions</td><td>Control plane depends on the resource group's region</td></tr><tr><td>Automatic record lifecycle for VMs</td><td>Autoregistration capped at 100 VNet links per zone</td></tr><tr><td>RBAC can be delegated per zone</td><td>Azure cannot resolve on-premises namespaces from a VNet</td></tr><tr><td>The foundation for Private Endpoints</td><td>No WINS / NetBIOS</td></tr></tbody></table></div>
+<p>Both remaining gaps are hybrid gaps - and both are what the Azure DNS Private Resolver was built to close.</p>
+<h2 id="next-in-this-series">Next in this series</h2>
+<p><strong><a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a></strong> covers the Azure DNS Private Resolver: inbound endpoints, outbound endpoints, forwarding rulesets, the centralized and distributed architectures, the query-evaluation order that explains most "why did it forward there?" incidents, and how to get DNS query logging without a third-party server.</p>
+<p>See you there.</p>
+    </article>
 
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>

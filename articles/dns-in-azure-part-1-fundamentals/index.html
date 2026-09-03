@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.">
+  <meta name="description" content="Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
   <script>
@@ -47,9 +47,9 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="benoit-gaumard.io">
-  <meta property="og:title" content="Terraform and Entra ID Authentication | Benoit Gaumard">
-  <meta property="og:description" content="How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.">
-  <meta property="og:url" content="https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/">
+  <meta property="og:title" content="DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution | Benoit Gaumard">
+  <meta property="og:description" content="Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.">
+  <meta property="og:url" content="https://benoit-gaumard.io/articles/dns-in-azure-part-1-fundamentals/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -57,14 +57,14 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
-  <link rel="canonical" href="https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/dns-in-azure-part-1-fundamentals/">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Terraform and Entra ID Authentication",
-  "description": "How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.",
-  "url": "https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/",
+  "headline": "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution",
+  "description": "Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.",
+  "url": "https://benoit-gaumard.io/articles/dns-in-azure-part-1-fundamentals/",
   "author": {
     "@type": "Person",
     "name": "Benoit Gaumard",
@@ -98,14 +98,14 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Terraform and Entra ID Authentication",
-      "item": "https://benoit-gaumard.io/articles/azure-terraform-entra-id-authentication/"
+      "name": "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution",
+      "item": "https://benoit-gaumard.io/articles/dns-in-azure-part-1-fundamentals/"
     }
   ]
 }
   </script>
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
-  <title>Terraform and Entra ID Authentication | Benoit Gaumard</title>
+  <title>DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution | Benoit Gaumard</title>
 
   <style>
     :root {
@@ -503,57 +503,34 @@
   <main id="top" tabindex="-1">
     <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
-      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Azure">Azure</a></div>
-      <h1 class="article-title">Terraform and Entra ID Authentication</h1>
-      <p class="article-description">How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.</p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=DNS">DNS</a></div>
+      <h1 class="article-title">DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution</h1>
+      <p class="article-description">Part 1 of a three-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
-        <span>September 11, 2024</span>
+        <span>September 1, 2026</span>
         <span class="dot">&middot;</span>
-        <span>1 min read</span>
+        <span>11 min read</span>
       </div>
-      <div class="article-tags"><span class="article-tag">#Entra ID</span><span class="article-tag">#Terraform</span></div>
+      <div class="article-tags"><span class="article-tag">#DNS</span><span class="article-tag">#Networking</span></div>
     </div>
 
-    <div class="article-feature-image"><img src="/articles/images/terraform.svg" alt="Terraform and Entra ID Authentication"></div>
+    <div class="article-feature-image"><img src="/articles/images/dns-in-azure-part-1.svg" alt="DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution"></div>
 
     <article class="article-body">
-      <p>The <code>azurerm</code> provider and the remote backend require authentication. The best practice is to disable the storage account access key and enable Entra ID (Azure AD) authentication instead.</p>
-<figure class="article-figure"><img src="/articles/images/terraform-entra-id/image1.png" alt="Storage account configuration disabling key-based authentication" loading="lazy"></figure>
-<p>This storage account configuration will cause the following error during the <code>terraform init</code> phase:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">Status=403 Code="KeyBasedAuthenticationNotPermitted" Message="Key based authentication is not permitted on this storage account.</code></pre></div>
-<p>To use Entra ID authentication, here is the configuration to apply to your Terraform configuration.</p>
-<p>On the <code>backend.tf</code> file, add the <code>use_azuread_auth = true</code> parameter:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">terraform {
-  backend "azurerm" {
-    resource_group_name  = "&lt;YOUR_BACKEND_STORAGE_RESOURCE_GROUP_NAME&gt;"
-    storage_account_name = "&lt;YOUR_BACKEND_STORAGE_ACCOUNT_NAME&gt;"
-    container_name       = "&lt;YOUR_BACKEND_CONTAINER_NAME&gt;"
-    key                  = "&lt;YOUR_BACKEND_KEY_.tfstate&gt;"
-    use_azuread_auth     = true
-  }
-}</code></pre></div>
-<p>On the <code>provider.tf</code> file, add the <code>storage_use_azuread = true</code> parameter:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "4.1.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  storage_use_azuread         = true
-  skip_provider_registration  = true
-  features {}
-}</code></pre></div>
-<p>If you look at the storage account activity log, the "List Storage Account Keys" operations happened before <code>use_azuread_auth = true</code> was enabled, and Terraform listed the keys when accessing the state file. After switching to Entra ID authentication, the keys are no longer listed.</p>
-<figure class="article-figure"><img src="/articles/images/terraform-entra-id/image2.png" alt="Storage account activity log after enabling Entra ID authentication" loading="lazy"></figure>
-<p>If using this access method on the remote backend, your user or service principal needs the <strong>Storage Blob Data Owner</strong> role on the container scope.</p>
-<p>Using Entra ID authentication for the remote backend is a best practice aligned with RBAC and least privilege.</p>
-    </article>
+      <p>DNS is the least glamorous service in your landing zone and the one that generates the most 2 a.m. incident bridges. Nothing looks broken - the VM is up, the NSG is open, the peering is connected - and yet the application cannot find its database. Nine times out of ten the answer is a name that resolved to the wrong address, or did not resolve at all.</p>
+<p>This is the first of a three-part series on <strong>private</strong> name resolution in Azure. Public Azure DNS zones (the ones you delegate a registered domain to) are a different topic, and I already covered them in <a href="/articles/how-to-delegate-a-domain-to-azure-dns/">How to Delegate a Domain to Azure DNS</a>. Here I want to walk through what happens inside a virtual network.</p>
+<ul><li><strong>Part 1 (this post)</strong> - core concepts, the platform virtual IP, and Azure-provided name resolution</li><li><strong><a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a></strong> - Azure Private DNS zones, virtual network links, and zone design</li><li><strong><a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a></strong> - Azure DNS Private Resolver and the hybrid patterns built on it</li></ul>
+<p>I assume you already know what a DNS record is. If terms like <em>recursive query</em> or <em>conditional forwarder</em> are fuzzy, the vocabulary section below should be enough to follow along.</p>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#a-shared-vocabulary">A shared vocabulary</a></li><li class="toc-level-2"><a href="#the-four-ways-to-resolve-a-private-name-in-azure">The four ways to resolve a private name in Azure</a></li><li class="toc-level-2"><a href="#168-63-129-16-the-address-behind-everything">168.63.129.16: the address behind everything</a></li><li class="toc-level-2"><a href="#where-a-vm-actually-gets-its-resolver">Where a VM actually gets its resolver</a></li><li class="toc-level-2"><a href="#azure-provided-name-resolution">Azure-provided name resolution</a></li><li class="toc-level-3"><a href="#a-single-vnet-lookup-step-by-step">A single-VNet lookup, step by step</a></li><li class="toc-level-3"><a href="#proving-it">Proving it</a></li><li class="toc-level-2"><a href="#where-it-falls-apart-the-second-virtual-network">Where it falls apart: the second virtual network</a></li><li class="toc-level-2"><a href="#scorecard">Scorecard</a></li><li class="toc-level-2"><a href="#key-takeaways">Key takeaways</a></li><li class="toc-level-2"><a href="#next-in-this-series">Next in this series</a></li></ul></nav>
+<h2 id="a-shared-vocabulary">A shared vocabulary</h2>
+<p>Half of the confusion in DNS troubleshooting comes from two people using the same word for different things. Here is the vocabulary I use for the rest of the series.</p>
+<div class="table-wrap"><table><thead><tr><th>Term</th><th>What it means in practice</th></tr></thead><tbody><tr><td><strong>A / AAAA record</strong></td><td>Maps a hostname to an IPv4 / IPv6 address. <code>api.corp.internal</code> → <code>10.20.0.7</code>.</td></tr><tr><td><strong>CNAME record</strong></td><td>An alias pointing one name at another name. Cannot coexist with other records at the same name.</td></tr><tr><td><strong>PTR record</strong></td><td>The reverse direction: an IP address back to a hostname. Lives in a reverse lookup zone.</td></tr><tr><td><strong>NS record</strong></td><td>Declares which name servers are authoritative for a zone. The building block of delegation.</td></tr><tr><td><strong>SOA record</strong></td><td>Zone metadata: primary server, serial number, default negative-caching TTL.</td></tr><tr><td><strong>Authoritative server</strong></td><td>Holds the real data for a zone and answers without asking anyone else.</td></tr><tr><td><strong>Recursive query</strong></td><td>"Give me the final answer." The client hands off the work and waits for a definitive response.</td></tr><tr><td><strong>Iterative query</strong></td><td>"Give me whatever you have." The server may answer with a referral to another server instead.</td></tr><tr><td><strong>Forwarder</strong></td><td>Send <em>everything</em> I cannot answer to this upstream server.</td></tr><tr><td><strong>Conditional forwarder</strong></td><td>Send queries for <em>this specific suffix</em> to that server. BIND calls this a forward zone.</td></tr><tr><td><strong>Split-horizon DNS</strong></td><td>The same zone name exists in two places, and clients get a different answer depending on where they are. Extremely common in Azure.</td></tr><tr><td><strong>TTL</strong></td><td>How long a resolver is allowed to cache an answer. The reason your fix "did not work" for ten minutes.</td></tr></tbody></table></div>
+<div class="callout callout-info"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Info</span><p>Split-horizon deserves a flag now because it is the mechanism behind Private Endpoints, which we get to in Part 2. <code>myaccount.blob.core.windows.net</code> resolving to a public IP from your laptop and a private IP from a VNet is not a bug - it is the whole design.</p></div></div>
+<p>Microsoft's own illustration of split-horizon makes the idea concrete: the same <code>contoso.com</code> name exists in a public zone and a private zone, and the answer depends entirely on who is asking.</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/dns/media/private-dns-scenarios/split-brain-resolution.png" alt="Split-horizon DNS resolution with a public and a private zone sharing one name" loading="lazy"><figcaption>The same name served from a public zone to internet clients and from a private zone to virtual network clients</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/dns/private-dns-scenarios" target="_blank" rel="noopener noreferrer">Azure Private DNS scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
     <aside class="article-ad" aria-label="Advertisement">
       <span class="article-ad-label">Advertisement</span>
       <ins class="adsbygoogle"
@@ -564,6 +541,93 @@ provider "azurerm" {
            data-ad-slot="4494484671"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
+<h2 id="the-four-ways-to-resolve-a-private-name-in-azure">The four ways to resolve a private name in Azure</h2>
+<p>Before diving into mechanics, it helps to see the whole menu. Every private resolution design in Azure is one of these four, or a combination:</p>
+<div class="table-wrap"><table><thead><tr><th>Option</th><th>What it gives you</th><th>Where it hurts</th></tr></thead><tbody><tr><td><strong>Azure-provided DNS</strong></td><td>Zero configuration, automatic records for VMs in one VNet</td><td>One opaque namespace per VNet, A and PTR records only</td></tr><tr><td><strong>Azure Private DNS zones</strong></td><td>Your own namespaces, manual records, shared across VNets</td><td>Not reachable from on-premises on its own</td></tr><tr><td><strong>Your own DNS servers</strong></td><td>Total control, works with existing AD DS estates</td><td>You own the VMs, the patching, the availability, the bill</td></tr><tr><td><strong>Azure DNS Private Resolver</strong></td><td>Managed hybrid forwarding in both directions</td><td>Additional resource to design and size</td></tr></tbody></table></div>
+<p>This post covers the first one. It is the one you get whether you asked for it or not, so it is worth understanding even though you will almost certainly move past it.</p>
+<h2 id="168-63-129-16-the-address-behind-everything">168.63.129.16: the address behind everything</h2>
+<p>If you have spent any time in Azure you have seen <code>168.63.129.16</code>. It looks like a public address - and technically it is registered to Microsoft - but it does not behave like one. It is a <strong>platform virtual IP</strong>, identical in every region and every virtual network, that acts as the communication channel between your VM and the Azure fabric.</p>
+<p>That single address serves several purposes at once:</p>
+<ul><li>Delivering DHCP leases to your network interfaces</li><li>Carrying VM agent health and "ready state" signals back to the platform</li><li>Answering load balancer health probes</li><li>Serving DNS queries</li></ul>
+<p>A few properties are worth committing to memory:</p>
+<ul><li>The route to it is injected by the platform, not by you. Run <code>route print</code> on a Windows VM or <code>ip route</code> on Linux and you will find it pointing at the subnet gateway.</li><li>It is included in the <strong>VirtualNetwork</strong> service tag, so the default NSG rules already permit it. You do not need to open anything.</li><li>It is reachable from inside a VNet only. There is no path to it from on-premises, which is exactly why Part 3 exists.</li><li>You <em>can</em> block it with an NSG rule if you deliberately want to force every lookup through your own resolver. That is a legitimate design choice, just make sure you understand what else you are cutting off.</li></ul>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Blocking <code>168.63.129.16</code> wholesale is riskier than it looks. DHCP, health probes, and VM agent communication share the same address. If you want to restrict DNS specifically, restrict UDP/TCP 53 rather than the address as a whole.</p></div></div>
+<h2 id="where-a-vm-actually-gets-its-resolver">Where a VM actually gets its resolver</h2>
+<p>Azure runs DHCP for you, and DHCP is how the resolver address reaches the guest OS. The value it hands out comes from the <strong>DNS servers</strong> setting, which can be configured in two places:</p>
+<div class="table-wrap"><table><thead><tr><th>Scope</th><th>Behaviour</th><th>Recommendation</th></tr></thead><tbody><tr><td>Virtual network</td><td>Applies to every NIC in the VNet</td><td>Use this</td></tr><tr><td>Network interface</td><td>Overrides the VNet value for one NIC</td><td>Avoid unless you have a very specific reason</td></tr></tbody></table></div>
+<p>Leave it on <strong>Default (Azure-provided)</strong> and DHCP pushes <code>168.63.129.16</code>. Set it to <strong>Custom</strong> and DHCP pushes your addresses instead.</p>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Changing the DNS servers setting on a virtual network does not restart anything. Existing VMs keep their old value until their DHCP lease renews or the NIC is reset. In practice, plan a reboot - or at minimum an <code>ipconfig /renew</code> / <code>nmcli con up</code> - or you will spend an hour debugging a change that never landed.</p></div></div>
+<p>Verify what the guest actually received:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell"># Windows
+Get-DnsClientServerAddress -AddressFamily IPv4
+ipconfig /all</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># Linux (systemd-resolved)
+resolvectl status
+cat /etc/resolv.conf</code></pre></div>
+<h2 id="azure-provided-name-resolution">Azure-provided name resolution</h2>
+<p>When you create a virtual network, Azure quietly assigns it a private DNS namespace of the form <code>&lt;random-string&gt;.internal.cloudapp.net</code>. You do not choose it, you cannot rename it, and it is unique per VNet.</p>
+<p>Two things then happen automatically:</p>
+<ol><li>The suffix is pushed to VMs through <strong>DHCP option 15</strong>, so the guest OS appends it to single-label names. Pinging <code>web01</code> becomes a query for <code>web01.&lt;random&gt;.internal.cloudapp.net</code>.</li><li>Every VM deployed into the VNet gets an <strong>A record</strong> registered in that namespace, plus <strong>PTR records</strong> in reverse lookup zones for the subnets in use.</li></ol>
+<p>The result is that basic host-to-host resolution works out of the box, with no zone to create and nothing to maintain.</p>
+<h3 id="a-single-vnet-lookup-step-by-step">A single-VNet lookup, step by step</h3>
+<p>Take a VNet <code>vnet-lab</code> with <code>10.30.0.0/16</code>, one subnet <code>10.30.1.0/24</code>, and two VMs: <code>web01</code> at <code>10.30.1.4</code> and <code>db01</code> at <code>10.30.1.5</code>. The DNS servers setting is left at the default.</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">  ┌──────────────┐   1. query: db01.&lt;random&gt;.internal.cloudapp.net
+  │ web01        │ ─────────────────────────────┐
+  │ 10.30.1.4    │                              │
+  └──────────────┘                              ▼
+                                     ┌────────────────────┐
+                                     │   168.63.129.16    │
+                                     │  platform VIP      │
+                                     └─────────┬──────────┘
+                                               │ 2. forwarded to
+                                               ▼
+                                     ┌────────────────────┐
+                                     │  Azure-provided    │
+                                     │  DNS service       │
+                                     │  &lt;random&gt;.internal │
+                                     └─────────┬──────────┘
+                                               │ 3. answer: 10.30.1.5
+  ┌──────────────┐                             │
+  │ web01        │ ◀───────────────────────────┘
+  └──────────────┘</code></pre></div>
+<ol><li><code>web01</code> has no cached entry, so the guest OS appends the DHCP-supplied suffix and sends a recursive query to its configured resolver - <code>168.63.129.16</code>.</li><li>The query crosses the platform virtual IP and reaches the Azure-provided DNS service.</li><li>The service is authoritative for that VNet's namespace, finds the A record for <code>db01</code>, and returns <code>10.30.1.5</code>.</li></ol>
+<p>Because of the suffix, <code>ping db01</code> works just as well as the FQDN. That convenience disappears the moment you move to private zones, which trips people up constantly - I come back to it in Part 2.</p>
+<h3 id="proving-it">Proving it</h3>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell"># Windows - see the suffix and the answer
+Resolve-DnsName db01 -Type A
+Resolve-DnsName 10.30.1.5 -Type PTR</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># Linux - query the platform VIP explicitly
+dig @168.63.129.16 db01.&lt;random&gt;.internal.cloudapp.net +short
+dig @168.63.129.16 -x 10.30.1.5 +short</code></pre></div>
+<p>If <code>dig</code> against <code>168.63.129.16</code> answers but your application still fails, the problem is almost never Azure DNS - it is the search suffix, a stale cache, or the app resolving a different name than you think.</p>
+<h2 id="where-it-falls-apart-the-second-virtual-network">Where it falls apart: the second virtual network</h2>
+<p>Everything above holds for exactly one virtual network. Now peer <code>vnet-lab</code> with <code>vnet-app</code>, which has its own, different <code>internal.cloudapp.net</code> namespace.</p>
+<p><code>web01</code> in <code>vnet-lab</code> wants to reach <code>api01</code> in <code>vnet-app</code>. Two problems appear at once:</p>
+<ul><li>The DHCP suffix is wrong. <code>web01</code> appends <em>its</em> VNet's suffix, so a single-label query never matches. You must use the full FQDN of the other VNet's namespace.</li><li>Even with the correct FQDN, the query fails. The Azure-provided DNS service only answers for the namespace of <strong>the VNet the query came from</strong>. A query arriving from <code>vnet-lab</code> cannot see <code>vnet-app</code>'s records.</li></ul>
+<p>The only way to bridge the two with Azure-provided DNS alone is to put a DNS server inside each VNet and chain them:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram"> vnet-lab (10.30.0.0/16)          │  peering  │      vnet-app (10.40.0.0/16)
+                                  │           │
+ ┌────────┐    ┌──────────────┐   │           │   ┌──────────────┐    ┌────────────────┐
+ │ web01  │───▶│ DNS server 1 │───┼───────────┼──▶│ DNS server 2 │───▶│ 168.63.129.16  │
+ └────────┘    │ 10.30.1.10   │   │           │   │ 10.40.1.10   │    │ Azure DNS      │
+               └──────────────┘   │           │   └──────────────┘    └────────────────┘
+             conditional forwarder                  standard forwarder
+             for &lt;random2&gt;.internal…                to the platform VIP</code></pre></div>
+<ol><li><code>vnet-lab</code> is configured with custom DNS servers pointing to <code>10.30.1.10</code>.</li><li>DNS server 1 holds a conditional forwarder for <code>vnet-app</code>'s namespace pointing at <code>10.40.1.10</code>.</li><li>DNS server 2 has a plain forwarder to <code>168.63.129.16</code>, which resolves the record against <code>vnet-app</code>'s namespace.</li></ol>
+<p>It works. It is also a DNS server per virtual network, forever, with an opaque random suffix in every conditional forwarder. Add a third VNet and you are editing forwarders on every server. This does not scale past a lab.</p>
+<p>This is the pattern Microsoft documents as the "before" picture in its DNS Private Resolver architecture guidance - a pair of DNS forwarder VMs sitting in the hub, carrying every query between on-premises and the platform resolver:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/_images/dns-forwarder-architecture.svg" alt="Hybrid DNS resolution using self-managed DNS forwarder virtual machines" loading="lazy"><figcaption>The pre-resolver pattern: self-managed DNS forwarder VMs relaying queries between on-premises and Azure</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver" target="_blank" rel="noopener noreferrer">Azure DNS Private Resolver architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Azure Architecture Center.</em></p>
+<p>Every VM in that diagram is one you build, size, patch and pay for. Part 3 replaces the whole box with a managed service.</p>
+<h2 id="scorecard">Scorecard</h2>
+<div class="table-wrap"><table><thead><tr><th>Works well</th><th>Does not work</th></tr></thead><tbody><tr><td>Zero configuration and zero cost</td><td>One namespace per VNet, and you do not choose the name</td></tr><tr><td>Automatic A record lifecycle for VMs</td><td>Only A and PTR records, only auto-registered</td></tr><tr><td>Automatic PTR records for reverse lookups</td><td>No manual records of any kind</td></tr><tr><td>Scales and stays available without your help</td><td>No cross-VNet resolution without your own DNS servers</td></tr><tr><td>Query logging is available via DNS resolver policy</td><td>Not reachable from on-premises</td></tr><tr><td></td><td>No WINS / NetBIOS</td></tr></tbody></table></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>The one genuinely useful takeaway from this post is not "use Azure-provided DNS" - you will not. It is understanding that <strong>every</strong> private resolution path in Azure eventually terminates at <code>168.63.129.16</code>, and that the DNS servers setting on the virtual network decides who gets asked first. Every pattern in Parts 2 and 3 is built on those two facts.</p></div></div>
+<h2 id="key-takeaways">Key takeaways</h2>
+<ul><li><code>168.63.129.16</code> is the platform virtual IP that carries DHCP, health probes, VM agent traffic, and DNS. It is identical everywhere and reachable only from inside a VNet.</li><li>The DNS servers setting on a virtual network decides what DHCP pushes to your VMs. Set it at the VNet level, and remember it does not apply until the lease renews.</li><li>Azure-provided DNS gives every VNet a random <code>internal.cloudapp.net</code> namespace with automatic A and PTR records - and nothing else.</li><li>The moment you have more than one virtual network, Azure-provided DNS stops being a viable answer.</li></ul>
+<h2 id="next-in-this-series">Next in this series</h2>
+<p>In <strong><a href="/articles/dns-in-azure-part-2-private-dns-zones/">Part 2</a></strong> I move on to Azure Private DNS zones: how the zone and virtual network link resources fit together, what autoregistration really does to your records, the suffix trap that catches everyone on their first migration, and how to design zones so you do not repaint them a year later.</p>
+<p>See you there.</p>
+    </article>
 
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
