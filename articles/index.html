@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Articles and how-to guides by Benoit Gaumard about Azure, Terraform, GitHub, and cloud engineering.">
+  <meta name="description" content="Practical guides, field notes, reference material on cloud, infrastructure, automation and more.">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="benoit-gaumard.io" />
   <meta property="og:title" content="Articles | Benoit Gaumard" />
-  <meta property="og:description" content="Articles and how-to guides by Benoit Gaumard about Azure, Terraform, GitHub, and cloud engineering." />
+  <meta property="og:description" content="Practical guides, field notes, reference material on cloud, infrastructure, automation and more." />
   <meta property="og:url" content="https://benoit-gaumard.io/articles/" />
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -20,7 +20,7 @@
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Articles",
-    "description": "Articles and how-to guides by Benoit Gaumard about Azure, Terraform, GitHub, and cloud engineering.",
+    "description": "Practical guides, field notes, reference material on cloud, infrastructure, automation and more.",
     "url": "https://benoit-gaumard.io/articles/",
     "isPartOf": {
       "@type": "WebSite",
@@ -284,11 +284,10 @@
 
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.5rem; }
-    .intro-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
-    .rss-link { display: inline-flex; align-items: center; min-height: 1.5rem; gap: .35rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
-    .rss-link:hover { color: var(--cp-accent-hover); }
+    .rss-link { display: inline-flex; align-items: center; min-height: 2.25rem; gap: .35rem; padding: .375rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); font-size: 0.85rem; font-weight: 650; text-decoration: none; white-space: nowrap; }
+    .rss-link:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 2rem; }
     .stat-card {
@@ -385,6 +384,7 @@
     .results-count { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
     .results-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
     .results-bar-left { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+    .results-bar-right { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
     .view-toggle {
       display: inline-flex;
       padding: 2px;
@@ -432,8 +432,21 @@
       background: var(--cp-warning-bg);
       color: var(--cp-warning);
     }
+    .featured-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      min-height: 2.25rem;
+      color: var(--cp-text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .featured-toggle:hover { color: var(--cp-accent); }
+    .featured-toggle input { width: 1rem; height: 1rem; margin: 0; accent-color: var(--cp-accent); cursor: pointer; }
     .active-filter { display: inline-flex; align-items: center; gap: .4rem; margin: 0 0 1.25rem; padding: .3rem .7rem; border-radius: 999px; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.85rem; font-weight: 600; }
     .active-filter button { border: 0; background: transparent; color: inherit; cursor: pointer; font-weight: 700; padding: 0 0 0 .2rem; }
+    .active-filter + .active-filter { margin-left: .5rem; }
 
     .article-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.25rem; }
     .article-card {
@@ -519,6 +532,8 @@
     .articles-sidebar { position: sticky; top: 5.5rem; display: flex; flex-direction: column; gap: 1.25rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
     .sidebar-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface); }
     .sidebar-panel[hidden] { display: none; }
+    .sidebar-disclaimer { border-left: 3px solid var(--cp-border-strong); background: var(--cp-surface-soft); }
+    .sidebar-disclaimer p { margin: 0; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.55; }
     .category-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
     .category-list button {
       display: flex; align-items: center; justify-content: space-between; gap: .75rem; width: 100%;
@@ -529,6 +544,24 @@
     .category-list button.is-active { background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 700; }
     .category-count { color: var(--cp-text-muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
     .category-list button.is-active .category-count { color: var(--cp-accent); }
+
+    .tag-cloud { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag-cloud button {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .25rem .6rem; border: 1px solid var(--cp-border); border-radius: 999px;
+      background: var(--cp-surface-soft); color: var(--cp-text-muted);
+      font: inherit; font-size: 0.75rem; line-height: 1.4; cursor: pointer;
+      transition: border-color .15s, color .15s, background .15s;
+    }
+    .tag-cloud button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .tag-cloud button.is-active { background: var(--cp-accent-soft); border-color: var(--cp-accent); color: var(--cp-accent); font-weight: 700; }
+    .tag-count { font-size: 0.75rem; font-variant-numeric: tabular-nums; opacity: .65; }
+    .tag-toggle {
+      margin-top: .75rem; padding: 0; border: 0; background: transparent;
+      color: var(--cp-link); font: inherit; font-size: 0.8rem; cursor: pointer;
+    }
+    .tag-toggle:hover { text-decoration: underline; }
+    .tag-toggle[hidden] { display: none; }
 
     .recent-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
     .recent-list a {
@@ -721,14 +754,8 @@
 
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
-      <div class="intro-top">
-        <h1 id="page-title">Articles</h1>
-        <a class="rss-link" href="/articles/rss.xml">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
-          RSS feed
-        </a>
-      </div>
-      <p class="intro-text">Articles and how-to guides about Azure, Terraform, GitHub, and cloud engineering.</p>
+      <h1 id="page-title">Articles</h1>
+      <p class="intro-text">Practical guides, field notes, reference material on cloud, infrastructure, automation and more.</p>
     </section>
 
     <section class="stats-grid" id="statsGrid" aria-label="Article statistics"></section>
@@ -743,17 +770,27 @@
           <div class="results-bar">
             <div class="results-bar-left">
               <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+              <label class="featured-toggle" for="featuredToggle">
+                <input type="checkbox" id="featuredToggle" checked>
+                <span>Show featured articles</span>
+              </label>
               <p class="results-count" id="resultsCount" aria-live="polite"></p>
             </div>
-            <div class="view-toggle" role="group" aria-label="Article view">
-              <button type="button" id="viewCards" aria-pressed="true" title="Card view">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 1.5h5v5h-5v-5Zm0 8h5v5h-5v-5Zm8-8h5v5h-5v-5Zm0 8h5v5h-5v-5Z"/></svg>
-                Cards
-              </button>
-              <button type="button" id="viewList" aria-pressed="false" title="List view">
-                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 2.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Z"/></svg>
-                List
-              </button>
+            <div class="results-bar-right">
+              <div class="view-toggle" role="group" aria-label="Article view">
+                <button type="button" id="viewCards" aria-pressed="true" title="Card view">
+                  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 1.5h5v5h-5v-5Zm0 8h5v5h-5v-5Zm8-8h5v5h-5v-5Zm0 8h5v5h-5v-5Z"/></svg>
+                  Cards
+                </button>
+                <button type="button" id="viewList" aria-pressed="false" title="List view">
+                  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 2.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Z"/></svg>
+                  List
+                </button>
+              </div>
+              <a class="rss-link" href="/articles/rss.xml" title="Subscribe to the RSS feed">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
+                RSS feed
+              </a>
             </div>
           </div>
         </section>
@@ -763,7 +800,8 @@
           <div class="featured-grid" id="featuredGrid"></div>
         </section>
 
-        <section aria-label="All articles">
+        <section aria-labelledby="posts-title">
+          <h2 class="sec-label" id="posts-title">Posts</h2>
           <div class="article-cards" id="articleCards"><!-- articles:static:start -->
         <a class="article-card" href="/articles/azure-lighthouse-cross-tenant-management/">
           <div class="card-thumb"><img src="/articles/images/azure-lighthouse.svg" alt="" loading="lazy" width="1200" height="630"></div>
@@ -1303,10 +1341,22 @@
         </section>
       </div>
 
-      <aside class="articles-sidebar" aria-label="Categories and recent posts">
+      <aside class="articles-sidebar" aria-label="Disclaimer, categories, archives, tags and recent posts">
+        <div class="sidebar-panel sidebar-disclaimer">
+          <p>The opinions expressed on this site are my own personal opinions and do not represent my employer&rsquo;s view in any way.</p>
+        </div>
         <div class="sidebar-panel">
           <h2 class="sec-label" id="categories-title">Categories</h2>
           <ul class="category-list" id="categoryList"></ul>
+        </div>
+        <div class="sidebar-panel" id="archivePanel" hidden>
+          <h2 class="sec-label" id="archives-title">Archives</h2>
+          <ul class="category-list" id="archiveList"></ul>
+        </div>
+        <div class="sidebar-panel" id="tagPanel" hidden>
+          <h2 class="sec-label" id="tags-title">Tags</h2>
+          <ul class="tag-cloud" id="tagList"></ul>
+          <button type="button" class="tag-toggle" id="tagToggle" aria-expanded="false" hidden></button>
         </div>
         <div class="sidebar-panel" id="recentPanel" hidden>
           <h2 class="sec-label" id="recent-title">Recent Posts</h2>
@@ -1400,23 +1450,34 @@
       searchInput: document.getElementById("searchInput"),
       activeFilterWrap: document.getElementById("activeFilterWrap"),
       favoritesFilter: document.getElementById("favoritesFilter"),
+      featuredToggle: document.getElementById("featuredToggle"),
       resultsCount: document.getElementById("resultsCount"),
       articleCards: document.getElementById("articleCards"),
       viewCards: document.getElementById("viewCards"),
       viewList: document.getElementById("viewList"),
       categoryList: document.getElementById("categoryList"),
+      archivePanel: document.getElementById("archivePanel"),
+      archiveList: document.getElementById("archiveList"),
+      tagPanel: document.getElementById("tagPanel"),
+      tagList: document.getElementById("tagList"),
+      tagToggle: document.getElementById("tagToggle"),
       recentPanel: document.getElementById("recentPanel"),
       recentList: document.getElementById("recentList"),
     };
 
-    const state = { articles: [], category: new URLSearchParams(location.search).get("category") || "", favorites: new Set(), favoritesOnly: false, view: "cards" };
+    const params = new URLSearchParams(location.search);
+    const state = { articles: [], category: params.get("category") || "", tag: params.get("tag") || "", month: params.get("month") || "", tagsExpanded: false, favorites: new Set(), favoritesOnly: false, showFeatured: true, view: "cards" };
 
     const FAVORITES_STORAGE_KEY = "articles-favorites";
     const VIEW_STORAGE_KEY = "articles-view";
+    const FEATURED_STORAGE_KEY = "articles-show-featured";
     // Virtual category: it is not present in any article's categories array,
     // renderList resolves it against the featured flag instead.
     const FEATURED_CATEGORY = "Featured Posts";
     const RECENT_COUNT = 10;
+    // The tag cloud has ~40 entries; showing them all would push "Recent Posts"
+    // out of the sticky sidebar, so the long tail hides behind a toggle.
+    const TAGS_COLLAPSED_COUNT = 18;
 
     function loadFavorites() {
       try {
@@ -1434,6 +1495,25 @@
       } catch (error) {
         state.view = "cards";
       }
+    }
+
+    function loadShowFeatured() {
+      try {
+        state.showFeatured = localStorage.getItem(FEATURED_STORAGE_KEY) !== "false";
+      } catch (error) {
+        state.showFeatured = true;
+      }
+      elements.featuredToggle.checked = state.showFeatured;
+    }
+
+    function setShowFeatured(showFeatured) {
+      state.showFeatured = showFeatured;
+      try {
+        localStorage.setItem(FEATURED_STORAGE_KEY, String(showFeatured));
+      } catch (error) {
+        /* storage unavailable, the choice just won't persist */
+      }
+      renderFeatured();
     }
 
     function applyView() {
@@ -1596,8 +1676,8 @@
       elements.featuredSection.removeAttribute("data-loading");
       // The strip highlights the collection as a whole, so it steps aside as
       // soon as the toolbar above it narrows the list below.
-      const isNarrowed = Boolean(state.category) || state.favoritesOnly || elements.searchInput.value.trim() !== "";
-      elements.featuredSection.hidden = featured.length === 0 || isNarrowed;
+      const isNarrowed = Boolean(state.category) || Boolean(state.tag) || Boolean(state.month) || state.favoritesOnly || elements.searchInput.value.trim() !== "";
+      elements.featuredSection.hidden = !state.showFeatured || featured.length === 0 || isNarrowed;
       elements.featuredGrid.replaceChildren();
       if (elements.featuredSection.hidden) return;
       featured.forEach((a) => elements.featuredGrid.append(createFeaturedCard(a)));
@@ -1664,23 +1744,128 @@
 
     function setCategory(category) {
       state.category = category;
-      const url = new URL(location.href);
-      if (category) url.searchParams.set("category", category);
-      else url.searchParams.delete("category");
-      history.pushState({}, "", url);
+      syncUrl();
       renderCategories();
+      renderArchives();
+      renderTags();
       renderFeatured();
       renderList();
     }
 
-    function renderActiveFilter() {
-      elements.activeFilterWrap.replaceChildren();
-      if (!state.category) return;
+    // "2026-09" -> "September 2026". The day is pinned to noon UTC so the label
+    // cannot slip to the previous month for visitors behind UTC.
+    function formatMonth(key) {
+      const [year, month] = key.split("-");
+      return new Date(Date.UTC(Number(year), Number(month) - 1, 1, 12)).toLocaleDateString(undefined, { year: "numeric", month: "long", timeZone: "UTC" });
+    }
+
+    function renderArchives() {
+      const counts = new Map();
+      state.articles.forEach((a) => {
+        const key = a.date.slice(0, 7);
+        counts.set(key, (counts.get(key) || 0) + 1);
+      });
+      // Keys are zero-padded ISO year-month, so a plain string sort is chronological.
+      const months = [...counts.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+
+      elements.archivePanel.hidden = months.length === 0;
+      elements.archiveList.replaceChildren();
+      if (!months.length) return;
+
+      const allItem = document.createElement("li");
+      const allButton = document.createElement("button");
+      allButton.type = "button";
+      allButton.className = state.month ? "" : "is-active";
+      allButton.innerHTML = `<span>All dates</span><span class="category-count">${state.articles.length}</span>`;
+      allButton.addEventListener("click", () => setMonth(""));
+      allItem.append(allButton);
+      elements.archiveList.append(allItem);
+
+      months.forEach(([key, count]) => {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = state.month === key ? "is-active" : "";
+        button.innerHTML = `<span>${escapeHtml(formatMonth(key))}</span><span class="category-count">${count}</span>`;
+        button.addEventListener("click", () => setMonth(state.month === key ? "" : key));
+        li.append(button);
+        elements.archiveList.append(li);
+      });
+    }
+
+    function setMonth(month) {
+      state.month = month;
+      syncUrl();
+      renderArchives();
+      renderFeatured();
+      renderList();
+    }
+
+    function renderTags() {
+      const counts = new Map();
+      state.articles.forEach((a) => a.tags.forEach((t) => counts.set(t, (counts.get(t) || 0) + 1)));
+      const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+      elements.tagPanel.hidden = tags.length === 0;
+      elements.tagList.replaceChildren();
+      if (!tags.length) return;
+
+      const hasOverflow = tags.length > TAGS_COLLAPSED_COUNT;
+      // An active tag from the long tail (or a shared ?tag= link) must stay
+      // visible, otherwise the filter looks like it came from nowhere.
+      const activeIndex = state.tag ? tags.findIndex(([name]) => name === state.tag) : -1;
+      const showAll = state.tagsExpanded || activeIndex >= TAGS_COLLAPSED_COUNT;
+      const visible = hasOverflow && !showAll ? tags.slice(0, TAGS_COLLAPSED_COUNT) : tags;
+
+      visible.forEach(([name, count]) => {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = state.tag === name ? "is-active" : "";
+        button.setAttribute("aria-pressed", String(state.tag === name));
+        button.innerHTML = `<span>#${escapeHtml(name)}</span><span class="tag-count">${count}</span>`;
+        button.addEventListener("click", () => setTag(state.tag === name ? "" : name));
+        li.append(button);
+        elements.tagList.append(li);
+      });
+
+      elements.tagToggle.hidden = !hasOverflow || activeIndex >= TAGS_COLLAPSED_COUNT;
+      elements.tagToggle.textContent = showAll ? "Show fewer tags" : `Show all ${tags.length} tags`;
+      elements.tagToggle.setAttribute("aria-expanded", String(showAll));
+    }
+
+    function setTag(tag) {
+      state.tag = tag;
+      syncUrl();
+      renderTags();
+      renderFeatured();
+      renderList();
+    }
+
+    function syncUrl() {
+      const url = new URL(location.href);
+      if (state.category) url.searchParams.set("category", state.category);
+      else url.searchParams.delete("category");
+      if (state.tag) url.searchParams.set("tag", state.tag);
+      else url.searchParams.delete("tag");
+      if (state.month) url.searchParams.set("month", state.month);
+      else url.searchParams.delete("month");
+      history.pushState({}, "", url);
+    }
+
+    function activeFilterBadge(label, value, clear) {
       const badge = document.createElement("span");
       badge.className = "active-filter";
-      badge.innerHTML = `Category: ${escapeHtml(state.category)} <button type="button" aria-label="Clear category filter">&times;</button>`;
-      badge.querySelector("button").addEventListener("click", () => setCategory(""));
-      elements.activeFilterWrap.append(badge);
+      badge.innerHTML = `${label}: ${escapeHtml(value)} <button type="button" aria-label="Clear ${label.toLowerCase()} filter">&times;</button>`;
+      badge.querySelector("button").addEventListener("click", clear);
+      return badge;
+    }
+
+    function renderActiveFilter() {
+      elements.activeFilterWrap.replaceChildren();
+      if (state.category) elements.activeFilterWrap.append(activeFilterBadge("Category", state.category, () => setCategory("")));
+      if (state.month) elements.activeFilterWrap.append(activeFilterBadge("Date", formatMonth(state.month), () => setMonth("")));
+      if (state.tag) elements.activeFilterWrap.append(activeFilterBadge("Tag", `#${state.tag}`, () => setTag("")));
     }
 
     function renderList() {
@@ -1691,6 +1876,8 @@
         } else if (state.category && !a.categories.includes(state.category)) {
           return false;
         }
+        if (state.tag && !a.tags.includes(state.tag)) return false;
+        if (state.month && !a.date.startsWith(state.month)) return false;
         if (state.favoritesOnly && !state.favorites.has(a.url)) return false;
         if (query) {
           const haystack = normalize(`${a.title} ${a.description} ${a.tags.join(" ")}`);
@@ -1719,6 +1906,7 @@
     async function init() {
       loadFavorites();
       loadView();
+      loadShowFeatured();
       applyView();
       updateFavoritesFilter();
       const response = await fetch("./articles.json", { cache: "no-store" });
@@ -1727,11 +1915,14 @@
       renderStats();
       renderFeatured();
       renderCategories();
+      renderArchives();
+      renderTags();
       renderRecent();
       renderList();
     }
 
     elements.searchInput.addEventListener("input", renderResults);
+    elements.featuredToggle.addEventListener("change", () => setShowFeatured(elements.featuredToggle.checked));
     elements.viewCards.addEventListener("click", () => setView("cards"));
     elements.viewList.addEventListener("click", () => setView("list"));
     elements.favoritesFilter.addEventListener("click", () => {
@@ -1739,9 +1930,18 @@
       updateFavoritesFilter();
       renderResults();
     });
+    elements.tagToggle.addEventListener("click", () => {
+      state.tagsExpanded = !state.tagsExpanded;
+      renderTags();
+    });
     window.addEventListener("popstate", () => {
-      state.category = new URLSearchParams(location.search).get("category") || "";
+      const next = new URLSearchParams(location.search);
+      state.category = next.get("category") || "";
+      state.tag = next.get("tag") || "";
+      state.month = next.get("month") || "";
       renderCategories();
+      renderArchives();
+      renderTags();
       renderFeatured();
       renderList();
     });
