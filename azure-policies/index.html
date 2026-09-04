@@ -542,7 +542,10 @@
       font-size: 0.78rem;
       line-height: 1.5;
       tab-size: 2;
-      white-space: pre;
+      /* pre, not pre-wrap, would hand the table a min-content width as wide as
+         the longest description string and stretch every column with it. */
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
     .json-button {
       display: inline-flex; align-items: center; gap: .3rem;
@@ -1169,48 +1172,17 @@
       // inside the card, depending on which view rendered the button.
       function memberToggle(row) {
         const count = row.policyCount ?? (row.policies || []).length;
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "member-toggle";
-        button.setAttribute("aria-expanded", "false");
+        const button = disclosureButton(row, count.toLocaleString(), memberPanel, "member-toggle");
         button.setAttribute("aria-label", `${count} policies in this initiative`);
-        button.innerHTML = `<span>${count.toLocaleString()}</span>${CARET_ICON}`;
-
-        button.addEventListener("click", (event) => {
-          event.stopPropagation();
-          const expanded = button.getAttribute("aria-expanded") === "true";
-          const tableRow = button.closest("tr");
-          const card = button.closest(".policy-card");
-
-          if (expanded) {
-            const open = tableRow ? tableRow.nextElementSibling : card.querySelector(".member-panel");
-            if (open && (open.classList.contains("member-row") || open.classList.contains("member-panel"))) open.remove();
-            button.setAttribute("aria-expanded", "false");
-            return;
-          }
-
-          if (tableRow) {
-            const detail = document.createElement("tr");
-            detail.className = "member-row";
-            const cell = document.createElement("td");
-            cell.colSpan = tableRow.children.length;
-            cell.append(memberPanel(row));
-            detail.append(cell);
-            tableRow.after(detail);
-          } else if (card) {
-            card.append(memberPanel(row));
-          }
-          button.setAttribute("aria-expanded", "true");
-        });
         return button;
       }
 
       // Same disclosure mechanics as the initiative member list, pointed at a
       // different panel builder.
-      function disclosureButton(row, label, buildPanel) {
+      function disclosureButton(row, label, buildPanel, className) {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "json-button";
+        button.className = className || "json-button";
         button.setAttribute("aria-expanded", "false");
         button.innerHTML = `<span>${label}</span>${CARET_ICON}`;
 
@@ -1277,6 +1249,7 @@
         cell.className = "id-cell";
         cell.innerHTML = `<code>${row.name}</code>`;
         cell.append(copyButtonFor(row));
+        if (config.showJson) cell.append(disclosureButton(row, "JSON", jsonPanel));
         idTd.append(cell);
 
         tr.append(favTd, nameTd, categoryTd, middleTd, typeTd, idTd);
@@ -1333,6 +1306,7 @@
         foot.className = "policy-card-foot id-cell";
         foot.innerHTML = `<code>${row.name}</code>`;
         foot.append(copyButtonFor(row));
+        if (config.showJson) foot.append(disclosureButton(row, "JSON", jsonPanel));
         card.append(foot);
 
         return card;
@@ -1489,6 +1463,7 @@
       countLabel: "policies",
       countLabelSingular: "policy",
       middleLabel: "Mode",
+      showJson: true,
       middleValue: (row) => row.mode ?? "",
     });
 
