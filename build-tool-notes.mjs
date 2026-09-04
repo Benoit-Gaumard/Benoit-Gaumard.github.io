@@ -202,6 +202,38 @@ const NOTES = {
       <h3>Good to know</h3>
       <p>If a property has no alias, no policy can evaluate it — that is the usual reason a rule that looks correct never matches anything. The same list is available from the CLI with <code>az provider show</code>, but searching it here is faster when you only need to confirm that an alias exists and how it is spelled.</p>`,
   },
+  "azure-built-in-roles": {
+    h: "About Azure built-in roles",
+    b: `<p>Azure role-based access control grants permissions through role definitions. A role definition is a list of allowed control-plane operations (<code>Actions</code>), operations carved back out of them (<code>NotActions</code>), and the equivalent pair for operations on the data inside a resource (<code>DataActions</code> and <code>NotDataActions</code>). Built-in roles are the ones Microsoft ships and maintains; their definition IDs are the same GUID in every tenant, which is why they can be referenced safely from templates and pipelines.</p>
+      <h3>Reading a role definition</h3>
+      <ul>
+        <li><code>Actions</code> are management operations - creating, reading, updating or deleting the resource itself.</li>
+        <li><code>DataActions</code> reach the data a resource holds: the blobs in a storage account, the secrets in a key vault, the messages in a queue. A role with no <code>DataActions</code> cannot read your data, however broad its management rights look.</li>
+        <li><code>NotActions</code> is a subtraction, not a deny. It removes an operation from this role only; another assignment can still grant it.</li>
+        <li>A wildcard such as <code>Microsoft.Compute/*</code> covers every current and future operation in that namespace, so the effective reach of a role grows as Azure does.</li>
+      </ul>
+      <h3>Choosing the right role</h3>
+      <p>Start from the narrowest role whose actions cover the task, and assign it at the narrowest scope that works - a resource before a resource group, a resource group before a subscription. Owner, Contributor and User Access Administrator are flagged as privileged here because they can grant access to others or bypass the guardrails placed on a scope, so they deserve a Privileged Identity Management workflow rather than a standing assignment.</p>
+      <h3>Where this data comes from</h3>
+      <p>The dataset is rebuilt several times a day from Microsoft's generated Azure RBAC reference, so a role added or reworded upstream shows up here without anyone editing this page. The per-action descriptions come from the same source, which is why they read the way they do in the portal.</p>`,
+  },
+  "entra-built-in-roles": {
+    h: "About Microsoft Entra ID built-in roles",
+    b: `<p>Entra ID roles govern the directory itself - users, groups, applications, devices, authentication methods and the Microsoft 365 services that trust it. They are a different system from Azure RBAC: an Entra role never grants access to a subscription or a resource group, and an Azure role never lets you reset a password or consent to an application. The one bridge between them is the Global Administrator's ability to elevate access to User Access Administrator at the root management group, which is a deliberate, auditable action.</p>
+      <h3>Template ID, not role ID</h3>
+      <p>Each built-in role has a template ID that is identical in every tenant, and a role definition ID that is only stable within one tenant. Automation should reference the template ID - that is the GUID listed here - so the same script works against any directory.</p>
+      <h3>Privileged roles</h3>
+      <p>Microsoft flags a role as privileged when it can manage access to the directory or to Microsoft 365 services, directly or by proxy: creating credentials on an application, resetting an administrator's password, or assigning other roles. Those roles are the ones worth putting behind Privileged Identity Management with approval and time limits, and worth alerting on when assigned permanently.</p>
+      <h3>Practical guidance</h3>
+      <ul>
+        <li>Prefer a narrow role over Global Administrator; most day-to-day tasks are covered by a specific administrator role listed here.</li>
+        <li>Scope role assignments to an administrative unit when the role supports it, so a helpdesk role does not reach the whole directory.</li>
+        <li>Keep at least two, and no more than a handful, of permanent Global Administrators, and exclude a break-glass account from Conditional Access.</li>
+        <li>Read the permissions rather than the name: several reader-sounding roles can read sensitive data, and some administrator roles are narrower than they sound.</li>
+      </ul>
+      <h3>Where this data comes from</h3>
+      <p>The dataset is rebuilt several times a day from Microsoft's generated Entra ID roles reference, so a role or permission added upstream appears here without anyone editing this page.</p>`,
+  },
   "azure-taggable-resources": {
     h: "About tag support in Azure",
     b: `<p>Not every Azure resource type accepts tags, and among those that do, not all propagate tags into the cost report. This page lists both facts per resource type, from the official tag-support reference data.</p>

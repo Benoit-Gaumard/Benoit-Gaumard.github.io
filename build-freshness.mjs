@@ -35,6 +35,8 @@ const FILES = [
   "azure-taggable-resources/tag-support.json",
   "azure-policy-aliases/policy-aliases.json",
   "azure-policies/policydefinitions.json",
+  "azure-built-in-roles/roles.json",
+  "entra-built-in-roles/roles.json",
 ];
 
 const manifest = {};
