@@ -792,6 +792,8 @@
           <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search policy name, description, or category">
           <select id="policiesCategoryFilter" aria-label="Filter policies by category"><option value="">All categories</option></select>
           <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
+          <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated"> Hide deprecated</label>
+          <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview"> Hide preview</label>
           <button class="clear-button" id="policiesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
@@ -818,6 +820,8 @@
           <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search initiative name, description, or category">
           <select id="initiativesCategoryFilter" aria-label="Filter initiatives by category"><option value="">All categories</option></select>
           <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated"> Hide deprecated</label>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview"> Hide preview</label>
           <button class="clear-button" id="initiativesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
@@ -951,6 +955,16 @@
     }
 
     const STAR_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+
+    // Azure marks lifecycle in the display name with a leading tag: 381 of the
+    // 2,859 built-in policies are "[Deprecated]" and 165 are "[Preview]".
+    // Matching the prefix rather than the whole string keeps a policy that
+    // merely mentions preview in its description out of the filter.
+    const LIFECYCLE_PREFIX = /^\s*\[([^\]]+)\]/;
+    function lifecycleTag(row) {
+      const match = LIFECYCLE_PREFIX.exec(row.displayName || "");
+      return match ? match[1].trim().toLowerCase() : "";
+    }
     const CARET_ICON = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 
     // An initiative lists its members by policy definition GUID; the readable
@@ -1122,6 +1136,8 @@
         search: document.getElementById(config.searchId),
         categoryFilter: document.getElementById(config.categoryFilterId),
         favoritesOnly: document.getElementById(config.favoritesOnlyId),
+        hideDeprecated: document.getElementById(config.hideDeprecatedId),
+        hidePreview: document.getElementById(config.hidePreviewId),
         favCount: document.getElementById(config.favCountId),
         clearFilters: document.getElementById(config.clearId),
         tableWrap: document.querySelector(`#${config.panelId} .table-wrap`),
@@ -1379,14 +1395,21 @@
       function applyFilter() {
         const query = normalize(state.query.trim());
         const category = elements.categoryFilter.value;
+        const hideDeprecated = elements.hideDeprecated.checked;
+        const hidePreview = elements.hidePreview.checked;
         state.filtered = state.rows.filter((row) => {
           if (state.favoritesOnly && !state.favorites.has(row.name)) return false;
+          if (hideDeprecated || hidePreview) {
+            const tag = lifecycleTag(row);
+            if (hideDeprecated && tag === "deprecated") return false;
+            if (hidePreview && tag === "preview") return false;
+          }
           if (category && row.category !== category) return false;
           if (query && !normalize(`${row.displayName} ${row.description} ${row.category}`).includes(query)) return false;
           return true;
         });
         state.visible = PAGE_SIZE;
-        elements.clearFilters.hidden = !query && !category && !state.favoritesOnly;
+        elements.clearFilters.hidden = !query && !category && !state.favoritesOnly && !hideDeprecated && !hidePreview;
         renderTable();
       }
 
@@ -1401,10 +1424,14 @@
         state.favoritesOnly = elements.favoritesOnly.checked;
         applyFilter();
       });
+      elements.hideDeprecated.addEventListener("change", applyFilter);
+      elements.hidePreview.addEventListener("change", applyFilter);
       elements.clearFilters.addEventListener("click", () => {
         elements.search.value = "";
         elements.categoryFilter.value = "";
         elements.favoritesOnly.checked = false;
+        elements.hideDeprecated.checked = false;
+        elements.hidePreview.checked = false;
         state.query = "";
         state.favoritesOnly = false;
         applyFilter();
@@ -1452,6 +1479,8 @@
       searchId: "policiesSearch",
       categoryFilterId: "policiesCategoryFilter",
       favoritesOnlyId: "policiesFavoritesOnly",
+      hideDeprecatedId: "policiesHideDeprecated",
+      hidePreviewId: "policiesHidePreview",
       favCountId: "policiesFavCount",
       clearId: "policiesClear",
       tableBodyId: "policiesTableBody",
@@ -1472,6 +1501,8 @@
       searchId: "initiativesSearch",
       categoryFilterId: "initiativesCategoryFilter",
       favoritesOnlyId: "initiativesFavoritesOnly",
+      hideDeprecatedId: "initiativesHideDeprecated",
+      hidePreviewId: "initiativesHidePreview",
       favCountId: "initiativesFavCount",
       clearId: "initiativesClear",
       tableBodyId: "initiativesTableBody",
