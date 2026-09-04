@@ -659,6 +659,7 @@ ${ARTICLE_CSS}
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .copy-code-button, .article-toc,
+      .article-share, .adsbygoogle,
       .breadcrumb { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
@@ -887,6 +888,38 @@ ${content}
       }
     })();
   </script>
+<script data-article-share-script>
+    (function () {
+      var root = document.querySelector('.article-share');
+      if (!root) return;
+      var hint = root.querySelector('[data-article-share-hint]');
+
+      function say(message) {
+        if (hint) hint.textContent = message;
+      }
+
+      var copyBtn = root.querySelector('[data-article-share="copy"]');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          // The build-time URL is canonical; location.href would carry any
+          // tracking query string the visitor arrived with.
+          var value = copyBtn.getAttribute('data-share-url') || location.href;
+          function done() { say('Link copied to the clipboard.'); }
+          function failed() { say(value); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, failed);
+          } else {
+            failed();
+          }
+        });
+      }
+
+      var printBtn = root.querySelector('[data-article-share="print"]');
+      if (printBtn) {
+        printBtn.addEventListener('click', function () { window.print(); });
+      }
+    })();
+  </script>
 
 </body>
 </html>
@@ -910,12 +943,22 @@ const ARTICLE_CSS = `
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
     .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem; aspect-ratio: 16 / 9;
+      max-width: 50rem; margin: 0 auto 2.5rem;
       border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
       box-shadow: var(--cp-shadow); overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .article-feature-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
+    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Square service and product logos get one shared band instead: the height
+       is fixed so every logo hero matches, and the sources are vector, so the
+       small ones scale up to it without softening. */
+    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    @media (max-width: 32rem) {
+      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
+    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -972,15 +1015,56 @@ const ARTICLE_CSS = `
     .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
     .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
     .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    /* Reuses the shell's .share-btn so this reads as the same control as the
+       "Share this site" row in the footer; only the layout differs. */
+    .article-share {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
+      margin: 1.75rem 0 0; padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
+    }
+    .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .article-share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .article-share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .article-share-hint:empty { display: none; }
     @media (max-width: 40rem) {
       .article-meta { font-size: 0.8rem; }
+      .article-share { flex-direction: column; align-items: flex-start; }
+      .article-share-links { width: 100%; }
     }`;
+
+// The footer's "Share this site" row shares the site; a reader who just
+// finished an article wants to share *that*. Links are built here rather than
+// at runtime because the canonical URL and the title are already known, so they
+// work without JavaScript - only Copy and Print need a script.
+function articleShareBar(article) {
+  const url = encodeURIComponent(`${SITE_URL}${article.url}`);
+  const title = encodeURIComponent(article.title);
+  const icon = {
+    x: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>',
+    linkedin: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>',
+    facebook: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>',
+    copy: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    print: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>',
+  };
+
+  return `    <div class="article-share">
+      <span class="article-share-label" id="share-label">Share on</span>
+      <div class="article-share-links" role="group" aria-labelledby="share-label">
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=${url}&amp;text=${title}" target="_blank" rel="noopener">${icon.x}X</a>
+        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener">${icon.linkedin}LinkedIn</a>
+        <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener">${icon.facebook}Facebook</a>
+        <button class="share-btn" type="button" data-article-share="copy" data-share-url="${SITE_URL}${article.url}">${icon.copy}Copy link</button>
+        <button class="share-btn" type="button" data-article-share="print">${icon.print}Print</button>
+      </div>
+      <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
+    </div>`;
+}
 
 function renderArticlePage(article) {
   const categoriesHtml = article.categories.map((c) => `<a class="article-category-tag" href="/articles/?category=${encodeURIComponent(c)}">${escapeHtml(c)}</a>`).join("");
   const tagsHtml = article.tags.length ? `<div class="article-tags">${article.tags.map((t) => `<span class="article-tag">#${escapeHtml(t)}</span>`).join("")}</div>` : "";
   const featureImageHtml = article.featureImage
-    ? `<div class="article-feature-image"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}"></div>`
+    ? `<div class="article-feature-image is-${article.featureImageShape || "banner"}"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}"></div>`
     : "";
 
   const { body, trailing } = injectMidArticleAd(article.bodyHtml, AD_SLOT_ARTICLE);
@@ -1005,6 +1089,8 @@ function renderArticlePage(article) {
     <article class="article-body">
       ${body}
     </article>
+
+${articleShareBar(article)}
 ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(AD_SLOT_ARTICLE_SECONDARY) + "\n" : ""}
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
@@ -1106,6 +1192,72 @@ function renderPrivacyPage() {
 
 // ---------- Build ----------
 
+// The feature images come in two shapes that no single box can serve: about
+// half are 1200x630 / 1792x1024 banners drawn for the purpose, the other half
+// are square service or product logos as small as 18x18. A fixed 16/9 box with
+// object-fit: contain stretched a 150px logo to 450px, which is why some heroes
+// looked enormous next to the banners. Measuring the source lets each shape get
+// its own normalised box, so every logo hero is the same height as every other
+// logo hero and every banner matches every other banner.
+const BANNER_MIN_RATIO = 1.4;
+
+function readSvgSize(text) {
+  const attr = (name) => {
+    const m = text.match(new RegExp(`<svg[^>]*\\s${name}="([\\d.]+)`, "i"));
+    return m ? Number(m[1]) : 0;
+  };
+  const width = attr("width");
+  const height = attr("height");
+  if (width > 0 && height > 0) return { width, height };
+  const box = text.match(/viewBox="\s*[\d.+-]+[\s,]+[\d.+-]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i);
+  if (box) return { width: Number(box[1]), height: Number(box[2]) };
+  return null;
+}
+
+function readPngSize(buffer) {
+  if (buffer.length < 24 || buffer.readUInt32BE(0) !== 0x89504e47) return null;
+  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+}
+
+// Walks the JPEG marker chain to the first start-of-frame, which is the only
+// place the dimensions live.
+function readJpegSize(buffer) {
+  if (buffer.length < 4 || buffer.readUInt16BE(0) !== 0xffd8) return null;
+  let offset = 2;
+  while (offset + 9 < buffer.length) {
+    if (buffer[offset] !== 0xff) { offset++; continue; }
+    const marker = buffer[offset + 1];
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) { offset += 2; continue; }
+    const length = buffer.readUInt16BE(offset + 2);
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      return { height: buffer.readUInt16BE(offset + 5), width: buffer.readUInt16BE(offset + 7) };
+    }
+    offset += 2 + length;
+  }
+  return null;
+}
+
+async function featureImageShape(src) {
+  if (!src) return null;
+  const file = join(HERE, "..", src.replace(/^\//, ""));
+  try {
+    let size = null;
+    if (/\.svg$/i.test(src)) size = readSvgSize(await readFile(file, "utf8"));
+    else {
+      const buffer = await readFile(file);
+      size = /\.png$/i.test(src) ? readPngSize(buffer) : readJpegSize(buffer);
+    }
+    if (!size || !size.width || !size.height) {
+      console.warn(`  feature image size unreadable, treating as a banner: ${src}`);
+      return "banner";
+    }
+    return size.width / size.height >= BANNER_MIN_RATIO ? "banner" : "logo";
+  } catch {
+    console.warn(`  feature image missing, treating as a banner: ${src}`);
+    return "banner";
+  }
+}
+
 async function loadArticle(filename) {
   const raw = await readFile(join(contentDir, filename), "utf8");
   const { data, body } = parseFrontMatter(raw);
@@ -1126,6 +1278,7 @@ async function loadArticle(filename) {
     tags: Array.isArray(data.tags) ? data.tags : [],
     categories: Array.isArray(data.categories) ? data.categories : [],
     featureImage: data.featureImage || null,
+    featureImageShape: await featureImageShape(data.featureImage || null),
     featured: data.featured === true,
     draft: data.draft === true,
     noindex: data.noindex === true,

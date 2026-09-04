@@ -37,6 +37,7 @@ const FILES = [
   "azure-policies/policydefinitions.json",
   "azure-built-in-roles/roles.json",
   "entra-built-in-roles/roles.json",
+  "graph-permissions/permissions.json",
 ];
 
 const manifest = {};

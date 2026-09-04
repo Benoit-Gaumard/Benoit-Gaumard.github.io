@@ -222,6 +222,8 @@ const NOTES = {
     b: `<p>Entra ID roles govern the directory itself - users, groups, applications, devices, authentication methods and the Microsoft 365 services that trust it. They are a different system from Azure RBAC: an Entra role never grants access to a subscription or a resource group, and an Azure role never lets you reset a password or consent to an application. The one bridge between them is the Global Administrator's ability to elevate access to User Access Administrator at the root management group, which is a deliberate, auditable action.</p>
       <h3>Template ID, not role ID</h3>
       <p>Each built-in role has a template ID that is identical in every tenant, and a role definition ID that is only stable within one tenant. Automation should reference the template ID - that is the GUID listed here - so the same script works against any directory.</p>
+      <h3>Roles are not Graph API permissions</h3>
+      <p>The <code>microsoft.directory/...</code> strings listed against each role are Entra RBAC resource actions, not Microsoft Graph scopes such as <code>Directory.Read.All</code>. The two models are parallel and Microsoft publishes no mapping between them: a Graph permission decides what an application's <em>token</em> may attempt, while the role decides what the <em>identity</em> may do in the directory, and many operations need both. A call that fails with <code>Authorization_RequestDenied</code> despite the correct scope is almost always missing the role. The full scope catalog is on the <a href="/graph-permissions/">Microsoft Graph permissions</a> page.</p>
       <h3>Privileged roles</h3>
       <p>Microsoft flags a role as privileged when it can manage access to the directory or to Microsoft 365 services, directly or by proxy: creating credentials on an application, resetting an administrator's password, or assigning other roles. Those roles are the ones worth putting behind Privileged Identity Management with approval and time limits, and worth alerting on when assigned permanently.</p>
       <h3>Practical guidance</h3>
@@ -233,6 +235,27 @@ const NOTES = {
       </ul>
       <h3>Where this data comes from</h3>
       <p>The dataset is rebuilt several times a day from Microsoft's generated Entra ID roles reference, so a role or permission added upstream appears here without anyone editing this page.</p>`,
+  },
+  "graph-permissions": {
+    h: "About Microsoft Graph permissions",
+    b: `<p>A Graph permission, also called a scope, is what an application asks for so that its access token is allowed to reach a given part of Microsoft Graph. Every permission exists in up to two flavours, and the difference decides who can consent to it and what the call can reach.</p>
+      <h3>Delegated, application and resource-specific</h3>
+      <ul>
+        <li><strong>Delegated</strong> permissions are used when a user is signed in. The effective access is the intersection of the permission and what that user is already allowed to do, so a delegated <code>User.ReadWrite.All</code> still cannot edit a user the signed-in account has no rights over.</li>
+        <li><strong>Application</strong> permissions are used with no signed-in user, typically by a daemon or a pipeline. There is no user to intersect with, so the permission is the whole story - which is why almost all of them require admin consent.</li>
+        <li><strong>Resource-specific consent (RSC)</strong> permissions are scoped to a single Teams team, chat or user rather than the tenant, and are consented by the owner of that resource.</li>
+      </ul>
+      <h3>Permissions are not Entra ID roles</h3>
+      <p>This is the distinction that costs the most debugging time. A Graph permission decides what the <em>token</em> may attempt; an <a href="/entra-built-in-roles/">Entra ID directory role</a> decides what the <em>identity</em> may do in the directory. Many operations need both, and Microsoft publishes no mapping between the two - the models are deliberately parallel. If a call fails with <code>Authorization_RequestDenied</code> despite the right scope, the missing piece is usually the role, not the permission.</p>
+      <h3>Choosing the least privileged permission</h3>
+      <ul>
+        <li>Prefer the narrowest permission a call accepts; each Graph API method documents its own least privileged option.</li>
+        <li>Prefer delegated over application whenever a user is present, so the user's own limits still apply.</li>
+        <li>Watch for the <code>.All</code> suffix - it means tenant-wide, not "all properties".</li>
+        <li>Identifiers listed here are the same GUIDs in every tenant, so they are safe to hard-code in an app manifest or a consent URL.</li>
+      </ul>
+      <h3>Where this data comes from</h3>
+      <p>The dataset is rebuilt several times a day from Microsoft's published permissions reference. The same catalog can be read from Graph itself on the Microsoft Graph service principal, but only by a caller holding <code>Application.Read.All</code>; the reference is public and additionally carries the RSC permissions.</p>`,
   },
   "azure-taggable-resources": {
     h: "About tag support in Azure",

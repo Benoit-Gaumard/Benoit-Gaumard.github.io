@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and description.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Microsoft Graph Permissions | Benoit Gaumard" />
+  <meta property="og:description" content="Browse every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and description." />
+  <meta property="og:url" content="https://benoit-gaumard.io/graph-permissions/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://benoit-gaumard.io/graph-permissions/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Microsoft Graph Permissions",
+    "description": "Browse every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and description.",
+    "url": "https://benoit-gaumard.io/graph-permissions/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Benoit Gaumard",
+      "url": "https://benoit-gaumard.io/"
+    }
+  }
+  </script>
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+      try {
+        if (localStorage.getItem("news-banner-dismissed") === "2026-08-21") {
+          document.documentElement.setAttribute("data-news-banner", "hidden");
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Microsoft Graph Permissions | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #157f57;
+      --cp-success-bg: #eefaf5;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fdf2f2;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-danger: #f3696a;
+      --cp-danger-bg: #3c1919;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-violet: #a58cf5;
+      --cp-violet-bg: #251d47;
+      --cp-cyan: #4bd7f4;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-overlay: rgba(10, 17, 28, 0.84);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+      --cp-highlight-bg: #3c3410;
+      --cp-highlight-border: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
+
+        .news-banner {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .5rem 1rem;
+      background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    :root[data-news-banner="hidden"] .news-banner { display: none; }
+    .news-banner[hidden] { display: none; }
+    .news-banner-track {
+      flex: 1 1 auto;
+      overflow: hidden;
+      white-space: nowrap;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+    }
+    .news-banner-text {
+      display: inline-block;
+      padding-left: 100%;
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: news-banner-scroll 28s linear infinite;
+    }
+    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
+    @keyframes news-banner-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .news-banner-close {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .16);
+      color: #fff;
+      cursor: pointer;
+    }
+    .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
+    @media (prefers-reduced-motion: reduce) {
+      .news-banner-text { animation: none; padding-left: 0; }
+      .news-banner-track { white-space: normal; -webkit-mask-image: none; mask-image: none; }
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { min-height: 1.5rem; display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.75rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    #page-title { display: flex; align-items: center; gap: .3em; }
+    .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
+    .page-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: 0.85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+    .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .refresh-meta strong { color: var(--cp-text); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
+    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .stat-card.is-success .stat-value { color: var(--cp-success); }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .filter-bar input, .filter-bar select {
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
+    .filter-bar input { flex: 2 1 16rem; max-width: 28rem; }
+    .filter-bar select { flex: 1 1 12rem; width: 12rem; max-width: 100%; min-width: 0; }
+    .filter-toggle { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; max-width: none; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
+    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
+
+
+    .table-wrap {
+      overflow-x: auto;
+      min-height: 60vh;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--cp-surface-soft);
+      text-align: left;
+      padding: .7rem .9rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      color: var(--cp-text-muted);
+      border-bottom: 1px solid var(--cp-border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover { color: var(--cp-text); }
+    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
+    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
+    tbody td { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .15rem .6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+    }
+    .tag-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
+    .tag-badge.is-no { background: var(--cp-danger-bg); color: var(--cp-danger); }
+    #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: 0.85rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: 0.75rem; text-transform: uppercase; }
+    .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-surface-soft); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      main { padding-top: 1.75rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar input:not([type="checkbox"]), .filter-bar select { max-width: none; width: 100%; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+  
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statsGrid:empty { min-height: 90px; }
+      @media (max-width: 48rem) {
+        #statsGrid:empty { min-height: 107px; }
+      }
+      @media (max-width: 32rem) {
+        #statsGrid:empty { min-height: 211px; }
+      }
+    }
+
+    /* The table is the last thing on the page and can settle anywhere between
+       5,000px and 89,000px, so a fixed reservation would be wrong at most
+       widths. Holding a viewport-relative box while the body is empty keeps the
+       footer below the fold at first paint, so its arrival moves nothing the
+       visitor can see. :has() releases it as soon as the first row renders. */
+    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+    @media print {
+      /* Printing a tool page should yield the data, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  
+    /* Share links */
+    .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
+    .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .footer-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+    .role-badge { display: inline-flex; align-items: center; padding: .1rem .5rem; border-radius: 999px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .role-badge.is-privileged { background: var(--cp-warning-bg, #fdf3e2); color: var(--cp-warning, #8a5a00); }
+    .stat-card.is-warning .stat-value { color: var(--cp-warning, #8a5a00); }
+
+    tbody tr.role-row { cursor: pointer; }
+    tbody tr.role-row:hover { background: var(--cp-accent-soft); }
+    tbody tr.role-row:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: -3px; }
+    .role-head { display: flex; align-items: center; gap: .5rem; }
+    .role-caret { flex: 0 0 auto; transition: transform .15s ease; opacity: .6; }
+    tbody tr.role-row[aria-expanded="true"] .role-caret { transform: rotate(90deg); opacity: 1; }
+    .role-name { font-weight: 700; color: var(--cp-text); }
+    .role-desc { display: block; margin-top: .25rem; max-width: 70ch; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.45; }
+    .num-cell { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .id-cell { white-space: nowrap; }
+    .id-cell code { font-size: 0.78rem; }
+    /* The role name carries a full sentence of description, so hold a real
+       minimum for it: a percentage collapses once the extra count columns push
+       the table past the wrapper and it starts scrolling. */
+    thead th:first-child, tbody td:first-child { min-width: 22rem; }
+    /* Four count columns fit a 1280px viewport only if they stop paying the
+       full cell padding on both sides. */
+    thead th.num-col, tbody td.num-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
+    /* Same reason as the detail headings: these are property names, and
+       NOTDATAACTIONS is not one of them. */
+    thead th.num-col { text-transform: none; letter-spacing: 0; }
+
+    tbody tr.detail-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
+    .detail-panel { padding: 1.1rem 1.25rem 1.35rem; }
+    .detail-panel > p { margin: 0 0 .9rem; max-width: 80ch; color: var(--cp-text-muted); line-height: 1.6; }
+    .detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin-bottom: 1rem; font-size: 0.8rem; }
+    .detail-meta code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .copy-button { display: inline-flex; align-items: center; gap: .35rem; min-height: 1.9rem; padding: .25rem .6rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .detail-group { margin-top: 1.1rem; }
+    .detail-group:first-of-type { margin-top: 0; }
+    .detail-group h3 { margin: 0 0 .45rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    /* Actions / NotActions / DataActions / NotDataActions are literal role
+       definition property names, so they keep their casing rather than being
+       flattened to NOTDATAACTIONS by the label style. */
+    .detail-group h3.is-bucket { text-transform: none; letter-spacing: 0; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cp-text); }
+    .perm-list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); overflow: hidden; }
+    .perm-list li { display: grid; grid-template-columns: minmax(24rem, 1.6fr) 1.4fr; gap: .35rem 1.25rem; padding: .5rem .75rem; border-bottom: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .perm-list li:last-child { border-bottom: 0; }
+    .perm-list code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; color: var(--cp-text); }
+    .perm-list .perm-desc { color: var(--cp-text-muted); line-height: 1.5; }
+    .scope-list { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .scope-list code { padding: .15rem .45rem; border-radius: 4px; background: var(--cp-surface); border: 1px solid var(--cp-border); font-size: 0.75rem; }
+    .detail-empty { color: var(--cp-text-muted); font-size: 0.8rem; }
+    .kv-list li { grid-template-columns: minmax(8rem, .45fr) 2fr; }
+    .kv-list .perm-key { font-weight: 700; color: var(--cp-text); }
+    .yn-badge { display: inline-flex; align-items: center; padding: .12rem .55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .yn-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
+    .yn-badge.is-no { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .badge-cell { text-align: center; white-space: nowrap; }
+    thead th.badge-col, tbody td.badge-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
+    @media (max-width: 48rem) {
+      .perm-list li { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 32rem) {
+      /* The shared shell keeps flex-basis 16rem on the filter controls when the
+         bar becomes a column, where the basis is read as a height - which grows
+         the search box to ~250px. Reset the basis, keep the min-height. */
+      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; }
+    }
+
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://benoit-gaumard.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tools",
+        "item": "https://benoit-gaumard.io/tools/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Microsoft Graph Permissions",
+        "item": "https://benoit-gaumard.io/graph-permissions/"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to content</a>
+  <div class="news-banner" id="newsBanner">
+    <div class="news-banner-track">
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+    </div>
+    <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/articles/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+<main id="top" tabindex="-1">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
+      <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="28" height="28"></span>Microsoft Graph Permissions</h1>
+      <p class="intro-text">Every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and the description a user or admin actually sees, from the official <a href="https://learn.microsoft.com/en-us/graph/permissions-reference" target="_blank" rel="noopener">Graph permissions reference</a>.</p>
+      <p class="refresh-meta">
+        <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+      </p>
+    </section>
+
+    <section class="stats-grid" id="statsGrid" aria-label="Graph permission statistics"></section>
+
+    <section aria-label="Microsoft Graph permissions">
+      <div class="filter-bar">
+        <input id="search" type="search" placeholder="Filter by permission, description or ID..." autocomplete="off" spellcheck="false" aria-label="Filter by permission, description or ID">
+        <select id="resourceFilter" aria-label="Filter by resource"><option value="">All resources</option></select>
+        <select id="typeFilter" aria-label="Filter by permission type">
+          <option value="">All types</option>
+          <option value="delegated">Delegated</option>
+          <option value="application">Application</option>
+          <option value="rsc">Resource-specific (RSC)</option>
+        </select>
+        <label class="filter-toggle"><input type="checkbox" id="adminConsentFilter"> Admin consent only</label>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-key="name">Permission <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="resource">Resource <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="hasDelegated" class="badge-col">Delegated <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="hasApplication" class="badge-col">Application <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="needsAdminConsent" class="badge-col">Admin consent <span class="sort-arrow">&#9650;</span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <p id="resultCount" aria-live="polite"></p>
+    </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">About Microsoft Graph permissions</h2>
+      <p>A Graph permission, also called a scope, is what an application asks for so that its access token is allowed to reach a given part of Microsoft Graph. Every permission exists in up to two flavours, and the difference decides who can consent to it and what the call can reach.</p>
+      <h3>Delegated, application and resource-specific</h3>
+      <ul>
+        <li><strong>Delegated</strong> permissions are used when a user is signed in. The effective access is the intersection of the permission and what that user is already allowed to do, so a delegated <code>User.ReadWrite.All</code> still cannot edit a user the signed-in account has no rights over.</li>
+        <li><strong>Application</strong> permissions are used with no signed-in user, typically by a daemon or a pipeline. There is no user to intersect with, so the permission is the whole story - which is why almost all of them require admin consent.</li>
+        <li><strong>Resource-specific consent (RSC)</strong> permissions are scoped to a single Teams team, chat or user rather than the tenant, and are consented by the owner of that resource.</li>
+      </ul>
+      <h3>Permissions are not Entra ID roles</h3>
+      <p>This is the distinction that costs the most debugging time. A Graph permission decides what the <em>token</em> may attempt; an <a href="/entra-built-in-roles/">Entra ID directory role</a> decides what the <em>identity</em> may do in the directory. Many operations need both, and Microsoft publishes no mapping between the two - the models are deliberately parallel. If a call fails with <code>Authorization_RequestDenied</code> despite the right scope, the missing piece is usually the role, not the permission.</p>
+      <h3>Choosing the least privileged permission</h3>
+      <ul>
+        <li>Prefer the narrowest permission a call accepts; each Graph API method documents its own least privileged option.</li>
+        <li>Prefer delegated over application whenever a user is present, so the user's own limits still apply.</li>
+        <li>Watch for the <code>.All</code> suffix - it means tenant-wide, not "all properties".</li>
+        <li>Identifiers listed here are the same GUIDs in every tenant, so they are safe to hard-code in an app manifest or a consent URL.</li>
+      </ul>
+      <h3>Where this data comes from</h3>
+      <p>The dataset is rebuilt several times a day from Microsoft's published permissions reference. The same catalog can be read from Graph itself on the Microsoft Graph service principal, but only by a caller holding <code>Application.Read.All</code>; the reference is public and additionally carries the RSC permissions.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="/tools/">Tools</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-share">
+        <span class="footer-share-label">Share this site</span>
+        <div class="footer-share-links">
+          <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="share-btn" data-share="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+            Twitter
+          </a>
+          <a class="share-btn" data-share="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+            Reddit
+          </a>
+          <a class="share-btn" data-share="mail" href="mailto:?body=https%3A%2F%2Fbenoit-gaumard.io%2F">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Mail
+          </a>
+          <button class="share-btn" type="button" data-share="favorite">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Add to favorites
+          </button>
+        </div>
+        <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+<script>
+    const PAGE_SIZE = 100;
+    const state = { visible: PAGE_SIZE, permissions: [], filtered: [], byKey: {}, sortKey: "name", sortDir: "asc", query: "" };
+    const elements = {
+      statsGrid: document.getElementById("statsGrid"),
+      refreshedAt: document.getElementById("refreshedAt"),
+      currentYear: document.getElementById("currentYear"),
+      search: document.getElementById("search"),
+      resourceFilter: document.getElementById("resourceFilter"),
+      typeFilter: document.getElementById("typeFilter"),
+      adminConsentFilter: document.getElementById("adminConsentFilter"),
+      tableBody: document.getElementById("tableBody"),
+      resultCount: document.getElementById("resultCount"),
+      backToTop: document.getElementById("backToTop"),
+      headers: [...document.querySelectorAll("thead th[data-key]")],
+    };
+
+    function normalize(value) {
+      return String(value).toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    function renderStats(stats) {
+      elements.statsGrid.replaceChildren();
+      stats.forEach(function (stat) {
+        const el = document.createElement("div");
+        el.className = "stat-card" + (stat.tone ? " is-" + stat.tone : "");
+        el.innerHTML = '<div class="stat-value">' + stat.value.toLocaleString() + '</div><div class="stat-label">' + stat.label + '</div>';
+        elements.statsGrid.append(el);
+      });
+    }
+
+    function fillSelect(select, values) {
+      values.forEach(function (value) { select.append(new Option(value, value)); });
+    }
+
+    // Copying a GUID out of a table is the single most common reason to be on
+    // this page, so every id gets a button rather than asking for a selection.
+    function copyButton(label, value) {
+      return '<button type="button" class="copy-button" data-copy="' + escapeHtml(value) + '">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+        escapeHtml(label) + '</button>';
+    }
+
+    function permissionList(pairs) {
+      if (!pairs || !pairs.length) return '<p class="detail-empty">None.</p>';
+      return '<ul class="perm-list">' + pairs.map(function (pair) {
+        return '<li><code>' + escapeHtml(pair[0]) + '</code><span class="perm-desc">' + (pair[1] ? escapeHtml(pair[1]) : "&mdash;") + '</span></li>';
+      }).join("") + '</ul>';
+    }
+
+    function closeDetail(row) {
+      const detail = row.nextElementSibling;
+      if (detail && detail.classList.contains("detail-row")) detail.remove();
+      row.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleDetail(row) {
+      if (row.getAttribute("aria-expanded") === "true") { closeDetail(row); return; }
+      const item = state.byKey[row.dataset.key];
+      if (!item) return;
+      const detail = document.createElement("tr");
+      detail.className = "detail-row";
+      const cell = document.createElement("td");
+      cell.colSpan = elements.headers.length;
+      cell.innerHTML = '<div class="detail-panel">' + detailPanel(item) + "</div>";
+      detail.append(cell);
+      row.after(detail);
+      row.setAttribute("aria-expanded", "true");
+    }
+
+    function renderLoadMore(total, shownCount) {
+      const wrap = document.querySelector(".table-wrap");
+      if (!wrap) return;
+      let button = wrap.parentElement.querySelector(".load-more");
+      if (shownCount >= total) {
+        if (button) button.remove();
+        return;
+      }
+      const remaining = total - shownCount;
+      if (!button) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.className = "load-more";
+        button.addEventListener("click", function () {
+          state.visible += PAGE_SIZE;
+          renderTable();
+          const next = document.querySelector(".load-more");
+          if (next) next.focus();
+        });
+        wrap.insertAdjacentElement("afterend", button);
+      }
+      button.textContent = "Load " + Math.min(PAGE_SIZE, remaining).toLocaleString() + " more (" + remaining.toLocaleString() + " remaining)";
+    }
+
+    function sortRows(rows) {
+      return rows.slice().sort(function (a, b) {
+        let av = a[state.sortKey];
+        let bv = b[state.sortKey];
+        if (typeof av === "number" || typeof bv === "number") {
+          av = Number(av) || 0;
+          bv = Number(bv) || 0;
+        } else {
+          av = normalize(av == null ? "" : av);
+          bv = normalize(bv == null ? "" : bv);
+        }
+        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
+        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    function markSortedHeader() {
+      elements.headers.forEach(function (th) {
+        th.removeAttribute("aria-sort");
+        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+      });
+    }
+
+    function wireTableInteractions() {
+      elements.tableBody.addEventListener("click", function (event) {
+        const copy = event.target.closest("[data-copy]");
+        if (copy) {
+          event.stopPropagation();
+          const value = copy.dataset.copy;
+          const done = function () {
+            const original = copy.lastChild.textContent;
+            copy.lastChild.textContent = "Copied";
+            setTimeout(function () { copy.lastChild.textContent = original; }, 1200);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, function () {});
+          }
+          return;
+        }
+        const row = event.target.closest("tr.role-row");
+        if (row) toggleDetail(row);
+      });
+
+      elements.tableBody.addEventListener("keydown", function (event) {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        const row = event.target.closest("tr.role-row");
+        if (!row || event.target.closest("[data-copy]")) return;
+        event.preventDefault();
+        toggleDetail(row);
+      });
+
+      elements.headers.forEach(function (th) {
+        th.addEventListener("click", function () {
+          const key = th.dataset.key;
+          if (state.sortKey === key) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+          else { state.sortKey = key; state.sortDir = key === "roleName" || key === "displayName" ? "asc" : "desc"; }
+          renderTable();
+        });
+      });
+    }
+
+    // The shared url-state script hydrates at parse time, before the JSON has
+    // arrived: its restored values are then overwritten by the first render,
+    // and a select value set before its options exist is dropped outright.
+    // Re-apply the query string once the data and the option lists are in place.
+    function hydrateFromUrl() {
+      if (!window.URLSearchParams) return;
+      const params = new URLSearchParams(location.search);
+      if (!params.toString()) return;
+      document.querySelectorAll("main input[id], main select[id]").forEach(function (el) {
+        const value = params.get(el.id);
+        if (value === null) return;
+        if (el.type === "checkbox") el.checked = value === "1";
+        else el.value = value;
+      });
+      state.query = elements.search.value;
+    }
+
+    function wireChrome() {
+      let scrollTicking = false;
+      window.addEventListener("scroll", function () {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(function () {
+          elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+          scrollTicking = false;
+        });
+      }, { passive: true });
+      elements.backToTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    function yesNo(flag) {
+      return '<span class="yn-badge ' + (flag ? "is-yes" : "is-no") + '">' + (flag ? "Yes" : "&mdash;") + "</span>";
+    }
+
+    function variantBlock(label, variant, withConsent) {
+      const rows = [];
+      if (variant.displayText) rows.push(["Display text", escapeHtml(variant.displayText)]);
+      if (variant.description) rows.push(["Description", escapeHtml(variant.description)]);
+      rows.push(["Identifier", "<code>" + escapeHtml(variant.id) + "</code> " + copyButton("Copy", variant.id)]);
+      if (withConsent) rows.push(["Admin consent", yesNo(variant.adminConsent)]);
+      return '<div class="detail-group"><h3 class="is-bucket">' + label + "</h3>" +
+        '<ul class="perm-list kv-list">' + rows.map(function (row) {
+          return '<li><span class="perm-key">' + row[0] + '</span><span class="perm-desc">' + row[1] + "</span></li>";
+        }).join("") + "</ul></div>";
+    }
+
+    function detailPanel(permission) {
+      let html = '<div class="detail-meta">' +
+        copyButton("Copy permission", permission.name) +
+        '<a href="' + escapeHtml(permission.docUrl) + '" target="_blank" rel="noopener">View on Microsoft Learn</a>' +
+        (permission.personalAccounts ? '<span class="role-badge">Personal Microsoft accounts</span>' : "") +
+        "</div>";
+
+      if (permission.delegated) html += variantBlock("Delegated", permission.delegated, true);
+      if (permission.application) html += variantBlock("Application", permission.application, true);
+      if (permission.rsc) html += variantBlock("Resource-specific consent", permission.rsc, false);
+      return html;
+    }
+
+    function renderTable() {
+      const rows = sortRows(state.filtered);
+      const shown = rows.slice(0, state.visible);
+
+      elements.tableBody.replaceChildren();
+      const fragment = document.createDocumentFragment();
+      shown.forEach(function (permission) {
+        const tr = document.createElement("tr");
+        tr.className = "role-row";
+        tr.dataset.key = permission.name;
+        tr.tabIndex = 0;
+        tr.setAttribute("role", "button");
+        tr.setAttribute("aria-expanded", "false");
+        tr.innerHTML =
+          '<td><span class="role-head"><svg class="role-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><code class="role-name">' + escapeHtml(permission.name) + "</code>" +
+            (permission.rsc ? '<span class="role-badge">RSC</span>' : "") +
+          "</span>" + (permission.summary ? '<span class="role-desc">' + escapeHtml(permission.summary) + "</span>" : "") + "</td>" +
+          "<td>" + escapeHtml(permission.resource || "") + "</td>" +
+          '<td class="badge-cell">' + yesNo(permission.hasDelegated) + "</td>" +
+          '<td class="badge-cell">' + yesNo(permission.hasApplication) + "</td>" +
+          '<td class="badge-cell">' + (permission.rsc && !permission.delegated && !permission.application ? '<span class="yn-badge is-no">n/a</span>' : yesNo(permission.needsAdminConsent)) + "</td>";
+        fragment.append(tr);
+      });
+      elements.tableBody.append(fragment);
+
+      elements.resultCount.textContent = shown.length < rows.length
+        ? "Showing " + shown.length.toLocaleString() + " of " + rows.length.toLocaleString() + " matching permissions."
+        : rows.length.toLocaleString() + " permission" + (rows.length === 1 ? "" : "s") + " shown.";
+
+      renderLoadMore(rows.length, shown.length);
+      markSortedHeader();
+    }
+
+    function applyFilter() {
+      state.visible = PAGE_SIZE;
+      const query = normalize(state.query.trim());
+      const resource = elements.resourceFilter.value;
+      const type = elements.typeFilter.value;
+      const adminConsentOnly = elements.adminConsentFilter.checked;
+      state.filtered = state.permissions.filter(function (permission) {
+        if (resource && permission.resource !== resource) return false;
+        if (type && permission.types.indexOf(type) === -1) return false;
+        if (adminConsentOnly && !permission.needsAdminConsent) return false;
+        if (query && permission.haystack.indexOf(query) === -1) return false;
+        return true;
+      });
+      renderTable();
+    }
+
+    async function init() {
+      elements.currentYear.textContent = new Date().getFullYear();
+      try {
+        const response = await fetch("./permissions.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("Data request failed: " + response.status);
+        const payload = await response.json();
+
+        state.permissions = (payload.permissions || []).map(function (permission) {
+          const variants = [permission.delegated, permission.application, permission.rsc].filter(Boolean);
+          // The delegated wording is what a user sees on the consent screen, so
+          // it leads; application wording only shows when there is no delegated
+          // flavour.
+          const summary = (permission.delegated || permission.application || permission.rsc || {}).displayText || "";
+          const searchable = [permission.name, summary]
+            .concat(variants.map(function (v) { return v.description || ""; }))
+            .concat(variants.map(function (v) { return v.id || ""; }))
+            .join(" ");
+          return Object.assign({}, permission, {
+            types: permission.types || [],
+            summary: summary,
+            hasDelegated: permission.delegated ? 1 : 0,
+            hasApplication: permission.application ? 1 : 0,
+            needsAdminConsent: (permission.delegated && permission.delegated.adminConsent) || (permission.application && permission.application.adminConsent) ? 1 : 0,
+            haystack: normalize(searchable),
+          });
+        });
+        state.filtered = state.permissions;
+        state.byKey = {};
+        state.permissions.forEach(function (permission) { state.byKey[permission.name] = permission; });
+
+        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
+          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+
+        renderStats([
+          { label: "Permissions", value: payload.totalPermissions || state.permissions.length },
+          { label: "Delegated", value: payload.delegatedCount || 0 },
+          { label: "Application", value: payload.applicationCount || 0 },
+          { label: "Need admin consent", value: payload.adminConsentCount || 0, tone: "warning" },
+        ]);
+
+        fillSelect(elements.resourceFilter, payload.resources || []);
+        hydrateFromUrl();
+        applyFilter();
+      } catch (error) {
+        console.error(error);
+        elements.resultCount.textContent = "Unable to load the Graph permissions data.";
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", function () {
+      state.query = elements.search.value;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(applyFilter, 120);
+    });
+    elements.resourceFilter.addEventListener("change", applyFilter);
+    elements.typeFilter.addEventListener("change", applyFilter);
+    elements.adminConsentFilter.addEventListener("change", applyFilter);
+
+    wireTableInteractions();
+    wireChrome();
+    init();
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("menuToggle");
+      var nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
+      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
+      toggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
+      });
+      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", function (e) {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
+    })();
+  </script>
+  <script>
+    (function () {
+      var toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", function () {
+        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        var next = isDark ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("site-theme", next); } catch (e) {}
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var banner = document.getElementById("newsBanner");
+      var closeBtn = document.getElementById("newsBannerClose");
+      if (!banner || !closeBtn) return;
+      closeBtn.addEventListener("click", function () {
+        banner.setAttribute("hidden", "");
+        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+  <script data-url-state>
+    (function () {
+      var scope = document.querySelector("main");
+      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
+      var controls = [].slice
+        .call(scope.querySelectorAll("input[id], select[id]"))
+        .filter(function (el) {
+          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
+          return !el.closest("[data-no-url-state]");
+        });
+      if (!controls.length) return;
+
+      var params = new URLSearchParams(location.search);
+      var hydrating = false;
+
+      function readValue(el) {
+        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+      }
+
+      if (params.toString()) {
+        hydrating = true;
+        var applied = [];
+        controls.forEach(function (el) {
+          var v = params.get(el.id);
+          if (v === null) return;
+          if (el.type === "checkbox") el.checked = v === "1";
+          else el.value = v;
+          applied.push(el);
+        });
+        // let each page's own listeners recompute from the restored values
+        applied.forEach(function (el) {
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        hydrating = false;
+      }
+
+      var pending = null;
+      function sync() {
+        if (hydrating) return;
+        clearTimeout(pending);
+        pending = setTimeout(function () {
+          var p = new URLSearchParams();
+          controls.forEach(function (el) {
+            var v = readValue(el);
+            if (v !== "" && v != null) p.set(el.id, v);
+          });
+          var qs = p.toString();
+          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
+        }, 250);
+      }
+
+      controls.forEach(function (el) {
+        el.addEventListener("input", sync);
+        el.addEventListener("change", sync);
+      });
+    })();
+  </script>
+<script data-share-script>
+    (function () {
+      var root = document.querySelector('.footer-share');
+      if (!root) return;
+      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+      var url = encodeURIComponent(pageUrl);
+      var title = encodeURIComponent(document.title);
+      var targets = {
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+      };
+      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+        var href = targets[el.getAttribute('data-share')];
+        if (href) el.setAttribute('href', href);
+      });
+      var favBtn = root.querySelector('[data-share="favorite"]');
+      var hint = root.querySelector('[data-share-hint]');
+      if (favBtn && hint) {
+        favBtn.addEventListener('click', function () {
+          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+          hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

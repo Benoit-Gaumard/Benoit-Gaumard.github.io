@@ -98,6 +98,8 @@
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
       --cp-danger-bg: #fdf2f2;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -409,6 +411,23 @@
       white-space: nowrap;
     }
     .id-cell { display: flex; align-items: center; gap: .5rem; }
+    /* The star column costs width the ID column used to have; without this the
+       browser is free to break a GUID across eight lines. And once the ID is
+       incompressible it starts winning space from the name, so the name column
+       is given the share it needs to keep descriptions to a few lines. */
+    .id-cell code { white-space: nowrap; overflow-wrap: normal; }
+    /* Star, category, mode/count and type shrink to their content; the name
+       column absorbs everything left over, so a description stays a few lines
+       tall instead of being squeezed into a ribbon. */
+    thead th:nth-child(2) { width: 100%; }
+    thead th:nth-child(3), thead th:nth-child(4), thead th:nth-child(5) { width: 1%; }
+    /* One mode value, Microsoft.MachineLearningServices.v2.Data, is a 41-char
+       token with no break opportunity: left alone it pins the column at its own
+       width and starves the name column of nearly 300px. */
+    tbody td:nth-child(4) { overflow-wrap: anywhere; }
+    /* Only Type is safe to keep on one line: some policy modes are long
+       (Microsoft.KeyVault.Data), and pinning them would hand the column 280px. */
+    tbody td:nth-child(5) { white-space: nowrap; }
     .copy-button {
       display: grid;
       place-items: center;
@@ -424,6 +443,117 @@
     }
     .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
     .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); }
+
+    /* The Policies/Initiatives tabs and the Cards/List switch share one row, so
+       the layout choice reads as a property of the panel below it rather than
+       as a third tab. */
+    .panel-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .panel-toolbar .view-toggle { margin-bottom: 0; }
+    .filter-toggle { display: inline-flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
+    .filter-toggle .fav-count { color: var(--cp-text-muted); font-weight: 600; }
+
+    .fav-col { width: 1%; cursor: default; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .fav-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .fav-button:hover { border-color: var(--cp-warning); color: var(--cp-warning); }
+    .fav-button[aria-pressed="true"] { border-color: var(--cp-warning); background: var(--cp-warning-bg); color: var(--cp-warning); }
+
+    .policy-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .9rem; align-items: start; }
+    .policy-cards[hidden], .table-wrap[hidden] { display: none; }
+    .policy-card {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .policy-card-head { display: flex; align-items: flex-start; gap: .6rem; }
+    .policy-card-head .policy-name { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
+    /* Descriptions run to several hundred characters; clamping keeps a grid of
+       cards from turning into columns of wildly different heights. */
+    .policy-card .policy-desc { margin: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .policy-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .6rem; font-size: 0.78rem; color: var(--cp-text-muted); }
+    .policy-card-foot { margin-top: auto; }
+    .policy-card .id-cell code { font-size: 0.75rem; }
+
+    /* The policy count doubles as the disclosure control: the number a reader
+       wants to question is the thing they click to see behind. */
+    .member-toggle {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .15rem .45rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface-soft); color: var(--cp-text);
+      font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .member-toggle:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .member-toggle svg { flex: none; opacity: .6; transition: transform .15s ease; }
+    .member-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    .member-toggle[disabled] { opacity: .55; cursor: default; }
+    .member-toggle[disabled]:hover { border-color: var(--cp-border); color: var(--cp-text); }
+    tr.member-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
+    .member-panel { padding: .85rem 1rem 1rem; }
+    .policy-card .member-panel { padding: .25rem 0 0; }
+    .member-list { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+    .member-list li {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
+      padding: .4rem .6rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface); font-size: 0.82rem;
+    }
+    .member-name { flex: 1 1 18rem; font-weight: 600; }
+    .member-id { color: var(--cp-text-muted); font-size: 0.75rem; overflow-wrap: anywhere; }
+    .member-empty { margin: 0; color: var(--cp-text-muted); font-size: 0.82rem; line-height: 1.55; }
+
+    .json-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+    .json-view {
+      margin: 0;
+      max-height: 32rem;
+      overflow: auto;
+      padding: .85rem 1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      tab-size: 2;
+      white-space: pre;
+    }
+    .json-button {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .15rem .5rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface-soft); color: var(--cp-text);
+      font: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    }
+    .json-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .json-button svg { flex: none; opacity: .6; transition: transform .15s ease; }
+    .json-button[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
     .result-count { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
@@ -478,7 +608,11 @@
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
       .filter-bar { flex-direction: column; align-items: stretch; }
-      .filter-bar input { max-width: none; }
+      /* flex-basis becomes a height once the bar is a column, which grew the
+         search box and the category select to ~250px tall. The checkbox inside
+         .filter-toggle must be excluded or it stretches to the full width too. */
+      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; width: 100%; max-width: none; }
+      .filter-toggle { align-self: flex-start; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -627,27 +761,41 @@
     <section class="stats-grid" id="statsGrid" aria-label="Policy statistics"></section>
 
     <section aria-label="Policies and initiatives">
-      <div class="view-toggle" role="tablist">
-        <button class="view-toggle-button is-active" id="tabPolicies" type="button" role="tab" aria-selected="true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-          Policies
-        </button>
-        <button class="view-toggle-button" id="tabInitiatives" type="button" role="tab" aria-selected="false">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Initiatives
-        </button>
+      <div class="panel-toolbar">
+        <div class="view-toggle" role="tablist">
+          <button class="view-toggle-button is-active" id="tabPolicies" type="button" role="tab" aria-selected="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+            Policies
+          </button>
+          <button class="view-toggle-button" id="tabInitiatives" type="button" role="tab" aria-selected="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Initiatives
+          </button>
+        </div>
+        <div class="view-toggle" role="group" aria-label="Choose view">
+          <button class="view-toggle-button is-active" type="button" data-view="list" aria-pressed="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            List
+          </button>
+          <button class="view-toggle-button" type="button" data-view="cards" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+            Cards
+          </button>
+        </div>
       </div>
 
       <div id="policiesPanel" role="tabpanel">
         <div class="filter-bar">
           <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search policy name, description, or category">
           <select id="policiesCategoryFilter" aria-label="Filter policies by category"><option value="">All categories</option></select>
+          <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
           <button class="clear-button" id="policiesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
+                <th class="fav-col"><span class="sr-only">Favorite</span></th>
                 <th data-key="displayName">Policy <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="mode">Mode <span class="sort-arrow">&#9650;</span></th>
@@ -658,6 +806,7 @@
             <tbody id="policiesTableBody"></tbody>
           </table>
         </div>
+        <div class="policy-cards" id="policiesCards" hidden></div>
         <p class="result-count" id="policiesResultCount" aria-live="polite"></p>
       </div>
 
@@ -665,12 +814,14 @@
         <div class="filter-bar">
           <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search initiative name, description, or category">
           <select id="initiativesCategoryFilter" aria-label="Filter initiatives by category"><option value="">All categories</option></select>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
           <button class="clear-button" id="initiativesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
+                <th class="fav-col"><span class="sr-only">Favorite</span></th>
                 <th data-key="displayName">Initiative <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="policyCount">Policies <span class="sort-arrow">&#9650;</span></th>
@@ -681,6 +832,7 @@
             <tbody id="initiativesTableBody"></tbody>
           </table>
         </div>
+        <div class="policy-cards" id="initiativesCards" hidden></div>
         <p class="result-count" id="initiativesResultCount" aria-live="polite"></p>
       </div>
     </section>
@@ -763,9 +915,160 @@
 
   <script>
     const PAGE_SIZE = 100;
+    const VIEW_MODE_KEY = "azurePoliciesViewMode";
 
     function normalize(value) {
       return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function loadViewMode() {
+      // List is the default: this is a dense reference table, and cards are the
+      // deliberate choice rather than the one you land on.
+      try {
+        return localStorage.getItem(VIEW_MODE_KEY) === "cards" ? "cards" : "list";
+      } catch {
+        return "list";
+      }
+    }
+
+    function loadFavorites(key) {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(key)) || []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveFavorites(key, favorites) {
+      try {
+        localStorage.setItem(key, JSON.stringify([...favorites]));
+      } catch {
+        /* private mode or a full quota: the session still works, it just will not persist */
+      }
+    }
+
+    const STAR_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+    const CARET_ICON = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+
+    // An initiative lists its members by policy definition GUID; the readable
+    // name for each lives in the policies dataset, so the two are joined here
+    // rather than duplicating 2,853 names into the initiatives file.
+    const policyIndex = new Map();
+
+    function memberPanel(row) {
+      const panel = document.createElement("div");
+      panel.className = "member-panel";
+      const members = row.policies || [];
+
+      if (!members.length) {
+        const note = document.createElement("p");
+        note.className = "member-empty";
+        note.textContent = "The member policies are not in this dataset yet. They are collected by the scheduled refresh and will appear here after the next run.";
+        panel.append(note);
+        return panel;
+      }
+
+      const list = document.createElement("ul");
+      list.className = "member-list";
+      members.forEach((member) => {
+        const policy = policyIndex.get(member.id);
+        const item = document.createElement("li");
+
+        const name = document.createElement("span");
+        name.className = "member-name";
+        // A member can point at a definition outside the built-in set, in which
+        // case the GUID is all we can honestly show.
+        name.textContent = policy ? policy.displayName : member.id;
+        item.append(name);
+
+        if (policy && policy.category) {
+          const badge = document.createElement("span");
+          badge.className = "category-badge";
+          badge.textContent = policy.category;
+          item.append(badge);
+        }
+
+        const id = document.createElement("code");
+        id.className = "member-id";
+        id.textContent = member.id;
+        item.append(id);
+
+        list.append(item);
+      });
+      panel.append(list);
+      return panel;
+    }
+
+    // ~10 MB of rule bodies: fetched once, on the first definition a visitor
+    // opens, so browsing and searching stay as cheap as they are today.
+    let rulesPromise = null;
+    function loadRules() {
+      if (!rulesPromise) {
+        rulesPromise = fetch("./policyrules.json", { cache: "no-store" })
+          .then((response) => {
+            if (!response.ok) throw new Error(`Rule request failed: ${response.status}`);
+            return response.json();
+          })
+          .then((payload) => payload.rules || {})
+          .catch((error) => {
+            console.error(error);
+            rulesPromise = null; // let a later click retry rather than caching the failure
+            throw error;
+          });
+      }
+      return rulesPromise;
+    }
+
+    function jsonPanel(row) {
+      const panel = document.createElement("div");
+      panel.className = "member-panel";
+
+      const status = document.createElement("p");
+      status.className = "member-empty";
+      status.textContent = "Loading the definition...";
+      panel.append(status);
+
+      loadRules().then((rules) => {
+        const rule = rules[row.name];
+        if (!rule) {
+          status.textContent = "The rule body for this definition is not in the dataset yet. It is collected by the scheduled refresh and will appear here after the next run.";
+          return;
+        }
+
+        const json = JSON.stringify(rule, null, 2);
+        const actions = document.createElement("div");
+        actions.className = "json-actions";
+
+        const copy = document.createElement("button");
+        copy.type = "button";
+        copy.className = "json-button";
+        copy.textContent = "Copy JSON";
+        copy.addEventListener("click", (event) => {
+          event.stopPropagation();
+          writeClipboard(json).then(() => {
+            copy.textContent = "Copied";
+            setTimeout(() => { copy.textContent = "Copy JSON"; }, 1500);
+          });
+        });
+
+        const learn = document.createElement("a");
+        learn.className = "json-button";
+        learn.href = `https://www.azadvertizer.net/azpolicyadvertizer/${encodeURIComponent(row.name)}.html`;
+        learn.target = "_blank";
+        learn.rel = "noopener";
+        learn.textContent = "Open in AzAdvertizer";
+
+        const block = document.createElement("pre");
+        block.className = "json-view";
+        block.textContent = json;
+
+        actions.append(copy, learn);
+        panel.replaceChildren(actions, block);
+      }).catch(() => {
+        status.textContent = "Unable to load the definition bodies. Check the connection and try again.";
+      });
+
+      return panel;
     }
 
     function copyIconMarkup(copied) {
@@ -774,7 +1077,7 @@
         : '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9.5V3.5a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
     }
 
-    async function copyToClipboard(text, button) {
+    async function writeClipboard(text) {
       try {
         await navigator.clipboard.writeText(text);
       } catch {
@@ -787,6 +1090,12 @@
         document.execCommand("copy");
         textarea.remove();
       }
+    }
+
+    // Icon buttons swap their glyph for a tick; text buttons swap their label,
+    // so the write itself is shared and the feedback is left to the caller.
+    async function copyToClipboard(text, button) {
+      await writeClipboard(text);
       button.classList.add("is-copied");
       button.innerHTML = copyIconMarkup(true);
       button.setAttribute("aria-label", "Copied");
@@ -800,12 +1109,21 @@
     // Both tabs (policies/initiatives) share the same search+category+sortable-table behavior,
     // just bound to different DOM ids, data files, and row shapes.
     function createBrowser(config) {
-      const state = { rows: [], filtered: [], sortKey: "displayName", sortDir: "asc", query: "", category: "", visible: PAGE_SIZE };
+      const state = {
+        rows: [], filtered: [], sortKey: "displayName", sortDir: "asc",
+        query: "", category: "", visible: PAGE_SIZE,
+        favorites: loadFavorites(config.favoritesKey), favoritesOnly: false,
+        view: loadViewMode(),
+      };
       const elements = {
         search: document.getElementById(config.searchId),
         categoryFilter: document.getElementById(config.categoryFilterId),
+        favoritesOnly: document.getElementById(config.favoritesOnlyId),
+        favCount: document.getElementById(config.favCountId),
         clearFilters: document.getElementById(config.clearId),
+        tableWrap: document.querySelector(`#${config.panelId} .table-wrap`),
         tableBody: document.getElementById(config.tableBodyId),
+        cards: document.getElementById(config.cardsId),
         resultCount: document.getElementById(config.resultCountId),
         headers: [...document.querySelectorAll(`#${config.panelId} thead th[data-key]`)],
       };
@@ -814,8 +1132,132 @@
         categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
       }
 
+      function updateFavCount() {
+        elements.favCount.textContent = `(${state.favorites.size})`;
+      }
+
+      // One button definition for both views, so a star behaves identically
+      // whether it sits in a table row or on a card.
+      function favButton(row) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "fav-button";
+        button.innerHTML = STAR_ICON;
+
+        const paint = (isFavorite) => {
+          button.setAttribute("aria-pressed", String(isFavorite));
+          button.setAttribute("aria-label", isFavorite ? "Remove from favorites" : "Add to favorites");
+          button.setAttribute("title", isFavorite ? "Remove from favorites" : "Add to favorites");
+          button.querySelector("svg").setAttribute("fill", isFavorite ? "currentColor" : "none");
+        };
+        paint(state.favorites.has(row.name));
+
+        button.addEventListener("click", () => {
+          const isFavorite = state.favorites.has(row.name);
+          if (isFavorite) state.favorites.delete(row.name);
+          else state.favorites.add(row.name);
+          saveFavorites(config.favoritesKey, state.favorites);
+          paint(!isFavorite);
+          updateFavCount();
+          // Un-starring while the filter is on should make the entry leave.
+          if (state.favoritesOnly) applyFilter();
+        });
+        return button;
+      }
+
+      // Toggles the member list, in a detail row under the table row or inline
+      // inside the card, depending on which view rendered the button.
+      function memberToggle(row) {
+        const count = row.policyCount ?? (row.policies || []).length;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "member-toggle";
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", `${count} policies in this initiative`);
+        button.innerHTML = `<span>${count.toLocaleString()}</span>${CARET_ICON}`;
+
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          const tableRow = button.closest("tr");
+          const card = button.closest(".policy-card");
+
+          if (expanded) {
+            const open = tableRow ? tableRow.nextElementSibling : card.querySelector(".member-panel");
+            if (open && (open.classList.contains("member-row") || open.classList.contains("member-panel"))) open.remove();
+            button.setAttribute("aria-expanded", "false");
+            return;
+          }
+
+          if (tableRow) {
+            const detail = document.createElement("tr");
+            detail.className = "member-row";
+            const cell = document.createElement("td");
+            cell.colSpan = tableRow.children.length;
+            cell.append(memberPanel(row));
+            detail.append(cell);
+            tableRow.after(detail);
+          } else if (card) {
+            card.append(memberPanel(row));
+          }
+          button.setAttribute("aria-expanded", "true");
+        });
+        return button;
+      }
+
+      // Same disclosure mechanics as the initiative member list, pointed at a
+      // different panel builder.
+      function disclosureButton(row, label, buildPanel) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "json-button";
+        button.setAttribute("aria-expanded", "false");
+        button.innerHTML = `<span>${label}</span>${CARET_ICON}`;
+
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          const tableRow = button.closest("tr");
+          const card = button.closest(".policy-card");
+
+          if (expanded) {
+            const open = tableRow ? tableRow.nextElementSibling : card.querySelector(".member-panel");
+            if (open && (open.classList.contains("member-row") || open.classList.contains("member-panel"))) open.remove();
+            button.setAttribute("aria-expanded", "false");
+            return;
+          }
+
+          if (tableRow) {
+            const detail = document.createElement("tr");
+            detail.className = "member-row";
+            const cell = document.createElement("td");
+            cell.colSpan = tableRow.children.length;
+            cell.append(buildPanel(row));
+            detail.append(cell);
+            tableRow.after(detail);
+          } else if (card) {
+            card.append(buildPanel(row));
+          }
+          button.setAttribute("aria-expanded", "true");
+        });
+        return button;
+      }
+
+      function copyButtonFor(row) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-button";
+        button.setAttribute("aria-label", "Copy ID");
+        button.innerHTML = copyIconMarkup(false);
+        button.addEventListener("click", () => copyToClipboard(row.name, button));
+        return button;
+      }
+
       function renderRow(row) {
         const tr = document.createElement("tr");
+
+        const favTd = document.createElement("td");
+        favTd.append(favButton(row));
 
         const nameTd = document.createElement("td");
         nameTd.innerHTML = `<span class="policy-name">${row.displayName ?? ""}</span>${row.description ? `<span class="policy-desc">${row.description}</span>` : ""}`;
@@ -824,7 +1266,8 @@
         categoryTd.innerHTML = row.category ? `<span class="category-badge">${row.category}</span>` : "-";
 
         const middleTd = document.createElement("td");
-        middleTd.textContent = config.middleValue(row);
+        if (config.expandable) middleTd.append(memberToggle(row));
+        else middleTd.textContent = config.middleValue(row);
 
         const typeTd = document.createElement("td");
         typeTd.textContent = row.policyType ?? "";
@@ -833,17 +1276,66 @@
         const cell = document.createElement("div");
         cell.className = "id-cell";
         cell.innerHTML = `<code>${row.name}</code>`;
-        const copyButton = document.createElement("button");
-        copyButton.type = "button";
-        copyButton.className = "copy-button";
-        copyButton.setAttribute("aria-label", "Copy ID");
-        copyButton.innerHTML = copyIconMarkup(false);
-        copyButton.addEventListener("click", () => copyToClipboard(row.name, copyButton));
-        cell.append(copyButton);
+        cell.append(copyButtonFor(row));
         idTd.append(cell);
 
-        tr.append(nameTd, categoryTd, middleTd, typeTd, idTd);
+        tr.append(favTd, nameTd, categoryTd, middleTd, typeTd, idTd);
         return tr;
+      }
+
+      function renderCard(row) {
+        const card = document.createElement("article");
+        card.className = "policy-card";
+
+        const head = document.createElement("div");
+        head.className = "policy-card-head";
+        const name = document.createElement("span");
+        name.className = "policy-name";
+        name.textContent = row.displayName ?? "";
+        head.append(name, favButton(row));
+        card.append(head);
+
+        if (row.description) {
+          const description = document.createElement("p");
+          description.className = "policy-desc";
+          description.textContent = row.description;
+          card.append(description);
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "policy-card-meta";
+        if (row.category) {
+          const badge = document.createElement("span");
+          badge.className = "category-badge";
+          badge.textContent = row.category;
+          meta.append(badge);
+        }
+        const middle = config.middleValue(row);
+        // A "Policies: 0" line asserts something useful and says nothing, so
+        // the card stays quiet when there is no count to show.
+        if (config.expandable) {
+          const label = document.createElement("span");
+          label.textContent = `${config.middleLabel}:`;
+          meta.append(label, memberToggle(row));
+        } else if (middle !== "" && middle !== 0 && middle !== null && middle !== undefined) {
+          const span = document.createElement("span");
+          span.textContent = `${config.middleLabel}: ${middle}`;
+          meta.append(span);
+        }
+        if (row.policyType) {
+          const span = document.createElement("span");
+          span.textContent = row.policyType;
+          meta.append(span);
+        }
+        card.append(meta);
+
+        const foot = document.createElement("div");
+        foot.className = "policy-card-foot id-cell";
+        foot.innerHTML = `<code>${row.name}</code>`;
+        foot.append(copyButtonFor(row));
+        card.append(foot);
+
+        return card;
       }
 
       function renderTable() {
@@ -856,10 +1348,20 @@
         });
 
         const shown = rows.slice(0, state.visible);
-        elements.tableBody.replaceChildren();
+        const isCards = state.view === "cards";
+        elements.tableWrap.hidden = isCards;
+        elements.cards.hidden = !isCards;
+
         const fragment = document.createDocumentFragment();
-        shown.forEach((row) => fragment.append(renderRow(row)));
-        elements.tableBody.append(fragment);
+        if (isCards) {
+          shown.forEach((row) => fragment.append(renderCard(row)));
+          elements.cards.replaceChildren(fragment);
+          elements.tableBody.replaceChildren();
+        } else {
+          shown.forEach((row) => fragment.append(renderRow(row)));
+          elements.tableBody.replaceChildren(fragment);
+          elements.cards.replaceChildren();
+        }
 
         elements.resultCount.textContent = shown.length < rows.length
           ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching ${config.countLabel}.`
@@ -893,8 +1395,8 @@
             const next = document.getElementById(config.panelId).querySelector(".load-more");
             if (next) next.focus();
           });
-          const wrap = panel.querySelector(".table-wrap");
-          if (wrap) wrap.insertAdjacentElement("afterend", button);
+          const anchor = panel.querySelector(state.view === "cards" ? ".policy-cards" : ".table-wrap");
+          if (anchor) anchor.insertAdjacentElement("afterend", button);
           else panel.append(button);
         }
         button.textContent = label;
@@ -904,12 +1406,13 @@
         const query = normalize(state.query.trim());
         const category = elements.categoryFilter.value;
         state.filtered = state.rows.filter((row) => {
+          if (state.favoritesOnly && !state.favorites.has(row.name)) return false;
           if (category && row.category !== category) return false;
           if (query && !normalize(`${row.displayName} ${row.description} ${row.category}`).includes(query)) return false;
           return true;
         });
         state.visible = PAGE_SIZE;
-        elements.clearFilters.hidden = !query && !category;
+        elements.clearFilters.hidden = !query && !category && !state.favoritesOnly;
         renderTable();
       }
 
@@ -920,10 +1423,16 @@
         searchTimer = setTimeout(applyFilter, 150);
       });
       elements.categoryFilter.addEventListener("change", applyFilter);
+      elements.favoritesOnly.addEventListener("change", () => {
+        state.favoritesOnly = elements.favoritesOnly.checked;
+        applyFilter();
+      });
       elements.clearFilters.addEventListener("click", () => {
         elements.search.value = "";
         elements.categoryFilter.value = "";
+        elements.favoritesOnly.checked = false;
         state.query = "";
+        state.favoritesOnly = false;
         applyFilter();
         elements.search.focus();
       });
@@ -941,6 +1450,14 @@
       });
 
       return {
+        setView(view) {
+          state.view = view;
+          // The Load more button is anchored to whichever container is showing,
+          // so drop it and let renderTable put it back in the right place.
+          const stale = document.getElementById(config.panelId).querySelector(".load-more");
+          if (stale) stale.remove();
+          renderTable();
+        },
         async load() {
           const response = await fetch(config.file, { cache: "no-store" });
           if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
@@ -949,6 +1466,7 @@
           state.filtered = state.rows;
           const categories = [...new Set(state.rows.map((row) => row.category).filter(Boolean))].sort();
           populateCategoryFilter(categories);
+          updateFavCount();
           renderTable();
           return payload;
         },
@@ -959,13 +1477,18 @@
       panelId: "policiesPanel",
       searchId: "policiesSearch",
       categoryFilterId: "policiesCategoryFilter",
+      favoritesOnlyId: "policiesFavoritesOnly",
+      favCountId: "policiesFavCount",
       clearId: "policiesClear",
       tableBodyId: "policiesTableBody",
+      cardsId: "policiesCards",
       resultCountId: "policiesResultCount",
+      favoritesKey: "azurePoliciesFavorites",
       file: "./policydefinitions.json",
       listKey: "policies",
       countLabel: "policies",
       countLabelSingular: "policy",
+      middleLabel: "Mode",
       middleValue: (row) => row.mode ?? "",
     });
 
@@ -973,13 +1496,19 @@
       panelId: "initiativesPanel",
       searchId: "initiativesSearch",
       categoryFilterId: "initiativesCategoryFilter",
+      favoritesOnlyId: "initiativesFavoritesOnly",
+      favCountId: "initiativesFavCount",
       clearId: "initiativesClear",
       tableBodyId: "initiativesTableBody",
+      cardsId: "initiativesCards",
       resultCountId: "initiativesResultCount",
+      favoritesKey: "azureInitiativesFavorites",
       file: "./policysetdefinitions.json",
       listKey: "initiatives",
       countLabel: "initiatives",
       countLabelSingular: "initiative",
+      middleLabel: "Policies",
+      expandable: true,
       middleValue: (row) => row.policyCount ?? 0,
     });
 
@@ -992,6 +1521,7 @@
       policiesPanel: document.getElementById("policiesPanel"),
       initiativesPanel: document.getElementById("initiativesPanel"),
       backToTop: document.getElementById("backToTop"),
+      viewButtons: [...document.querySelectorAll("[data-view]")],
     };
 
     function renderStats(policiesPayload, initiativesPayload) {
@@ -1021,14 +1551,40 @@
     elements.tabPolicies.addEventListener("click", () => selectTab("policies"));
     elements.tabInitiatives.addEventListener("click", () => selectTab("initiatives"));
 
+    // One switch drives both panels: the layout is a reading preference, not a
+    // property of whichever tab happens to be open.
+    function selectView(view) {
+      elements.viewButtons.forEach((button) => {
+        const isActive = button.dataset.view === view;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+      try { localStorage.setItem(VIEW_MODE_KEY, view); } catch { /* ignore */ }
+      policiesBrowser.setView(view);
+      initiativesBrowser.setView(view);
+    }
+    elements.viewButtons.forEach((button) => {
+      button.addEventListener("click", () => selectView(button.dataset.view));
+    });
+
     async function init() {
       elements.currentYear.textContent = new Date().getFullYear();
+      // The browsers already read the stored layout for their first render;
+      // this only brings the buttons in line with it.
+      const storedView = loadViewMode();
+      elements.viewButtons.forEach((button) => {
+        const isActive = button.dataset.view === storedView;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
       try {
         const [policiesPayload, initiativesPayload] = await Promise.all([
           policiesBrowser.load(),
           initiativesBrowser.load(),
         ]);
         renderStats(policiesPayload, initiativesPayload);
+        // Feed the GUID -> readable name join used by the initiative member list.
+        (policiesPayload.policies || []).forEach((policy) => policyIndex.set(policy.name, policy));
         const generatedAt = new Date(Math.max(
           new Date(policiesPayload.generatedAt).getTime(),
           new Date(initiativesPayload.generatedAt).getTime()

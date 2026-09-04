@@ -356,12 +356,22 @@
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
     .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem; aspect-ratio: 16 / 9;
+      max-width: 50rem; margin: 0 auto 2.5rem;
       border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
       box-shadow: var(--cp-shadow); overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .article-feature-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
+    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Square service and product logos get one shared band instead: the height
+       is fixed so every logo hero matches, and the sources are vector, so the
+       small ones scale up to it without softening. */
+    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    @media (max-width: 32rem) {
+      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
+    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -418,13 +428,27 @@
     .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
     .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
     .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    /* Reuses the shell's .share-btn so this reads as the same control as the
+       "Share this site" row in the footer; only the layout differs. */
+    .article-share {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
+      margin: 1.75rem 0 0; padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
+    }
+    .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .article-share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .article-share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .article-share-hint:empty { display: none; }
     @media (max-width: 40rem) {
       .article-meta { font-size: 0.8rem; }
+      .article-share { flex-direction: column; align-items: flex-start; }
+      .article-share-links { width: 100%; }
     }
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .copy-code-button, .article-toc,
+      .article-share, .adsbygoogle,
       .breadcrumb { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
@@ -516,7 +540,7 @@
       <div class="article-tags"><span class="article-tag">#API</span></div>
     </div>
 
-    <div class="article-feature-image"><img src="/articles/images/rest-api.jpeg" alt="Azure REST APIs, Versions, and Lifecycle"></div>
+    <div class="article-feature-image is-banner"><img src="/articles/images/rest-api.jpeg" alt="Azure REST APIs, Versions, and Lifecycle"></div>
 
     <article class="article-body">
       <p>Microsoft provides a list of all REST APIs available for Azure in the <a href="https://learn.microsoft.com/en-us/rest/api/azure/" target="_blank" rel="noopener noreferrer">REST API browser <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>. For example, the API dedicated to Compute lets you select <a href="https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines" target="_blank" rel="noopener noreferrer">Virtual Machines <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> and gives you access to all the actions you can perform on that object - for example, to <a href="https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all" target="_blank" rel="noopener noreferrer">list all VMs <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> in an Azure subscription.</p>
@@ -544,6 +568,18 @@
 <h2 id="lifecycle">Lifecycle</h2>
 <p>All the versions listed are supported. The retention period is quite long, allowing application developers enough time to make necessary modifications without being caught off guard before an API is deprecated. Each API has its own lifecycle, and there is no official fixed timeline regarding the retention period of older versions.</p>
     </article>
+
+    <div class="article-share">
+      <span class="article-share-label" id="share-label">Share on</span>
+      <div class="article-share-links" role="group" aria-labelledby="share-label">
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-rest-apis-versions-and-lifecycle%2F&amp;text=Azure%20REST%20APIs%2C%20Versions%2C%20and%20Lifecycle" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
+        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-rest-apis-versions-and-lifecycle%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+        <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-rest-apis-versions-and-lifecycle%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>Facebook</a>
+        <button class="share-btn" type="button" data-article-share="copy" data-share-url="https://benoit-gaumard.io/articles/azure-rest-apis-versions-and-lifecycle/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</button>
+        <button class="share-btn" type="button" data-article-share="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
+      </div>
+      <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
+    </div>
 
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
@@ -697,6 +733,38 @@
           var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
           hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
         });
+      }
+    })();
+  </script>
+<script data-article-share-script>
+    (function () {
+      var root = document.querySelector('.article-share');
+      if (!root) return;
+      var hint = root.querySelector('[data-article-share-hint]');
+
+      function say(message) {
+        if (hint) hint.textContent = message;
+      }
+
+      var copyBtn = root.querySelector('[data-article-share="copy"]');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          // The build-time URL is canonical; location.href would carry any
+          // tracking query string the visitor arrived with.
+          var value = copyBtn.getAttribute('data-share-url') || location.href;
+          function done() { say('Link copied to the clipboard.'); }
+          function failed() { say(value); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, failed);
+          } else {
+            failed();
+          }
+        });
+      }
+
+      var printBtn = root.querySelector('[data-article-share="print"]');
+      if (printBtn) {
+        printBtn.addEventListener('click', function () { window.print(); });
       }
     })();
   </script>

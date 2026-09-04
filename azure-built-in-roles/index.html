@@ -527,9 +527,17 @@
     .role-desc { display: block; margin-top: .25rem; max-width: 70ch; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.45; }
     .num-cell { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .id-cell { white-space: nowrap; }
-    /* The role name carries a full sentence of description, so give it the room
-       rather than letting the browser balance it against three short columns. */
-    thead th:first-child { width: 40%; }
+    .id-cell code { font-size: 0.78rem; }
+    /* The role name carries a full sentence of description, so hold a real
+       minimum for it: a percentage collapses once the extra count columns push
+       the table past the wrapper and it starts scrolling. */
+    thead th:first-child, tbody td:first-child { min-width: 22rem; }
+    /* Four count columns fit a 1280px viewport only if they stop paying the
+       full cell padding on both sides. */
+    thead th.num-col, tbody td.num-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
+    /* Same reason as the detail headings: these are property names, and
+       NOTDATAACTIONS is not one of them. */
+    thead th.num-col { text-transform: none; letter-spacing: 0; }
 
     tbody tr.detail-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
     .detail-panel { padding: 1.1rem 1.25rem 1.35rem; }
@@ -541,6 +549,10 @@
     .detail-group { margin-top: 1.1rem; }
     .detail-group:first-of-type { margin-top: 0; }
     .detail-group h3 { margin: 0 0 .45rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    /* Actions / NotActions / DataActions / NotDataActions are literal role
+       definition property names, so they keep their casing rather than being
+       flattened to NOTDATAACTIONS by the label style. */
+    .detail-group h3.is-bucket { text-transform: none; letter-spacing: 0; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cp-text); }
     .perm-list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); overflow: hidden; }
     .perm-list li { display: grid; grid-template-columns: minmax(24rem, 1.6fr) 1.4fr; gap: .35rem 1.25rem; padding: .5rem .75rem; border-bottom: 1px solid var(--cp-border); font-size: 0.8rem; }
     .perm-list li:last-child { border-bottom: 0; }
@@ -549,6 +561,13 @@
     .scope-list { display: flex; flex-wrap: wrap; gap: .4rem; }
     .scope-list code { padding: .15rem .45rem; border-radius: 4px; background: var(--cp-surface); border: 1px solid var(--cp-border); font-size: 0.75rem; }
     .detail-empty { color: var(--cp-text-muted); font-size: 0.8rem; }
+    .kv-list li { grid-template-columns: minmax(8rem, .45fr) 2fr; }
+    .kv-list .perm-key { font-weight: 700; color: var(--cp-text); }
+    .yn-badge { display: inline-flex; align-items: center; padding: .12rem .55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .yn-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
+    .yn-badge.is-no { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .badge-cell { text-align: center; white-space: nowrap; }
+    thead th.badge-col, tbody td.badge-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
     @media (max-width: 48rem) {
       .perm-list li { grid-template-columns: 1fr; }
     }
@@ -638,6 +657,13 @@
         <input id="search" type="search" placeholder="Filter by role, description or action..." autocomplete="off" spellcheck="false" aria-label="Filter by role, description or action">
         <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
         <select id="providerFilter" aria-label="Filter by resource provider"><option value="">All providers</option></select>
+        <select id="actionTypeFilter" aria-label="Filter by action type">
+          <option value="">All action types</option>
+          <option value="actions">Has Actions</option>
+          <option value="notActions">Has NotActions</option>
+          <option value="dataActions">Has DataActions</option>
+          <option value="notDataActions">Has NotDataActions</option>
+        </select>
         <label class="filter-toggle"><input type="checkbox" id="privilegedOnlyFilter"> Privileged only</label>
       </div>
       <div class="table-wrap">
@@ -646,8 +672,10 @@
             <tr>
               <th data-key="roleName">Role <span class="sort-arrow">&#9650;</span></th>
               <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="controlCount">Actions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="dataCount">Data actions <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="nActions" class="num-col">Actions <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="nNotActions" class="num-col">NotActions <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="nDataActions" class="num-col">DataActions <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="nNotDataActions" class="num-col">NotDataActions <span class="sort-arrow">&#9650;</span></th>
               <th data-key="id">Role definition ID <span class="sort-arrow">&#9650;</span></th>
             </tr>
           </thead>
@@ -744,6 +772,7 @@
       search: document.getElementById("search"),
       categoryFilter: document.getElementById("categoryFilter"),
       providerFilter: document.getElementById("providerFilter"),
+      actionTypeFilter: document.getElementById("actionTypeFilter"),
       privilegedOnlyFilter: document.getElementById("privilegedOnlyFilter"),
       tableBody: document.getElementById("tableBody"),
       resultCount: document.getElementById("resultCount"),
@@ -896,6 +925,23 @@
       });
     }
 
+    // The shared url-state script hydrates at parse time, before the JSON has
+    // arrived: its restored values are then overwritten by the first render,
+    // and a select value set before its options exist is dropped outright.
+    // Re-apply the query string once the data and the option lists are in place.
+    function hydrateFromUrl() {
+      if (!window.URLSearchParams) return;
+      const params = new URLSearchParams(location.search);
+      if (!params.toString()) return;
+      document.querySelectorAll("main input[id], main select[id]").forEach(function (el) {
+        const value = params.get(el.id);
+        if (value === null) return;
+        if (el.type === "checkbox") el.checked = value === "1";
+        else el.value = value;
+      });
+      state.query = elements.search.value;
+    }
+
     function wireChrome() {
       let scrollTicking = false;
       window.addEventListener("scroll", function () {
@@ -931,9 +977,11 @@
         ["DataActions", role.dataActions],
         ["NotDataActions", role.notDataActions],
       ];
+      // Every bucket is rendered, empty ones included: "NotDataActions: None"
+      // is an answer, whereas a missing heading leaves the reader wondering
+      // whether the role has none or the page failed to show them.
       groups.forEach(function (group) {
-        if (!group[1] || !group[1].length) return;
-        html += '<div class="detail-group"><h3>' + group[0] + " (" + group[1].length.toLocaleString() + ")</h3>" + permissionList(group[1]) + "</div>";
+        html += '<div class="detail-group"><h3 class="is-bucket">' + group[0] + " (" + group[1].length.toLocaleString() + ")</h3>" + permissionList(group[1]) + "</div>";
       });
       return html;
     }
@@ -956,8 +1004,10 @@
             (role.isPrivileged ? '<span class="role-badge is-privileged">Privileged</span>' : "") +
           "</span>" + (role.description ? '<span class="role-desc">' + escapeHtml(role.description) + "</span>" : "") + "</td>" +
           "<td>" + escapeHtml(role.category || "") + "</td>" +
-          '<td class="num-cell">' + role.controlCount.toLocaleString() + "</td>" +
-          '<td class="num-cell">' + role.dataCount.toLocaleString() + "</td>" +
+          '<td class="num-cell">' + role.nActions.toLocaleString() + "</td>" +
+          '<td class="num-cell">' + role.nNotActions.toLocaleString() + "</td>" +
+          '<td class="num-cell">' + role.nDataActions.toLocaleString() + "</td>" +
+          '<td class="num-cell">' + role.nNotDataActions.toLocaleString() + "</td>" +
           '<td class="id-cell"><code>' + escapeHtml(role.id) + "</code></td>";
         fragment.append(tr);
       });
@@ -976,10 +1026,12 @@
       const query = normalize(state.query.trim());
       const category = elements.categoryFilter.value;
       const provider = elements.providerFilter.value;
+      const actionType = elements.actionTypeFilter.value;
       const privilegedOnly = elements.privilegedOnlyFilter.checked;
       state.filtered = state.roles.filter(function (role) {
         if (category && role.categories.indexOf(category) === -1) return false;
         if (provider && role.providers.indexOf(provider) === -1) return false;
+        if (actionType && !role[actionType].length) return false;
         if (privilegedOnly && !role.isPrivileged) return false;
         if (query && role.haystack.indexOf(query) === -1) return false;
         return true;
@@ -1012,8 +1064,10 @@
             notDataActions: notDataActions,
             categories: role.categories || [],
             providers: role.providers || [],
-            controlCount: actions.length + notActions.length,
-            dataCount: dataActions.length + notDataActions.length,
+            nActions: actions.length,
+            nNotActions: notActions.length,
+            nDataActions: dataActions.length,
+            nNotDataActions: notDataActions.length,
             haystack: normalize(searchable),
           });
         });
@@ -1028,7 +1082,7 @@
         renderStats([
           { label: "Built-in roles", value: payload.totalRoles || state.roles.length },
           { label: "Categories", value: payload.totalCategories || 0 },
-          { label: "Distinct actions", value: payload.totalActions || 0 },
+          { label: "Action entries", value: payload.totalActions || 0 },
           { label: "Privileged roles", value: payload.privilegedCount || 0, tone: "warning" },
         ]);
 
@@ -1036,7 +1090,8 @@
         const providers = [...new Set(state.roles.flatMap(function (role) { return role.providers; }))].sort(function (a, b) { return a.localeCompare(b); });
         fillSelect(elements.providerFilter, providers);
 
-        renderTable();
+        hydrateFromUrl();
+        applyFilter();
       } catch (error) {
         console.error(error);
         elements.resultCount.textContent = "Unable to load the built-in roles data.";
@@ -1051,6 +1106,7 @@
     });
     elements.categoryFilter.addEventListener("change", applyFilter);
     elements.providerFilter.addEventListener("change", applyFilter);
+    elements.actionTypeFilter.addEventListener("change", applyFilter);
     elements.privilegedOnlyFilter.addEventListener("change", applyFilter);
 
     wireTableInteractions();

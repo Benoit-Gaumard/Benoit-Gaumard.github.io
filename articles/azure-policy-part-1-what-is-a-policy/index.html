@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production.">
+  <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+      try {
+        if (localStorage.getItem("news-banner-dismissed") === "2026-08-21") {
+          document.documentElement.setAttribute("data-news-banner", "hidden");
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="benoit-gaumard.io">
+  <meta property="og:title" content="Azure Policy, Part 1: What Is an Azure Policy? | Benoit Gaumard">
+  <meta property="og:description" content="Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production.">
+  <meta property="og:url" content="https://benoit-gaumard.io/articles/azure-policy-part-1-what-is-a-policy/">
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/azure-policy-part-1-what-is-a-policy/">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Azure Policy, Part 1: What Is an Azure Policy?",
+  "description": "Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production.",
+  "url": "https://benoit-gaumard.io/articles/azure-policy-part-1-what-is-a-policy/",
+  "author": {
+    "@type": "Person",
+    "name": "Benoit Gaumard",
+    "url": "https://benoit-gaumard.io/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Benoit Gaumard",
+    "url": "https://benoit-gaumard.io/"
+  },
+  "inLanguage": "en"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://benoit-gaumard.io/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Articles",
+      "item": "https://benoit-gaumard.io/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Azure Policy, Part 1: What Is an Azure Policy?",
+      "item": "https://benoit-gaumard.io/articles/azure-policy-part-1-what-is-a-policy/"
+    }
+  ]
+}
+  </script>
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
+  <title>Azure Policy, Part 1: What Is an Azure Policy? | Benoit Gaumard</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #157f57;
+      --cp-success-bg: #eefaf5;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
+      --cp-info: #0c7d8f;
+      --cp-info-bg: #e6f6f8;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-info: #4fd3e8;
+      --cp-info-bg: #123238;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
+    .news-banner {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .5rem 1rem;
+      background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    :root[data-news-banner="hidden"] .news-banner { display: none; }
+    .news-banner[hidden] { display: none; }
+    .news-banner-track {
+      flex: 1 1 auto;
+      overflow: hidden;
+      white-space: nowrap;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+    }
+    .news-banner-text {
+      display: inline-block;
+      padding-left: 100%;
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: news-banner-scroll 28s linear infinite;
+    }
+    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
+    @keyframes news-banner-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .news-banner-close {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .16);
+      color: #fff;
+      cursor: pointer;
+    }
+    .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
+    @media (prefers-reduced-motion: reduce) {
+      .news-banner-text { animation: none; padding-left: 0; }
+      .news-banner-track { white-space: normal; -webkit-mask-image: none; mask-image: none; }
+    }
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner { width: min(90rem, calc(100% - 2rem)); margin-inline: auto; }
+    .header-inner { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { min-height: 1.5rem; display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+    main { padding-block: 2.5rem 4rem; }
+    .empty-state { padding: 2.5rem; border: 1px dashed var(--cp-border-strong); border-radius: 12px; text-align: center; color: var(--cp-text-muted); }
+    .back-to-top {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 30;
+      display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0;
+      border: 1px solid var(--cp-border); border-radius: 50%;
+      background: var(--cp-accent); color: var(--cp-accent-fg); cursor: pointer;
+      box-shadow: var(--cp-shadow); opacity: 0; transform: translateY(.75rem); pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: 0.85rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: 0.75rem; text-transform: uppercase; }
+    .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-surface-soft); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+
+    .article-header { margin: 0 0 2rem; }
+    .article-breadcrumb { margin: 0 0 1.25rem; font-size: 0.85rem; }
+    .article-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
+    .article-breadcrumb a:hover { color: var(--cp-link); }
+    .article-categories { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .article-category-tag {
+      display: inline-flex; align-items: center; min-height: 1.5rem; padding: .2rem .7rem; border-radius: 999px;
+      background: var(--cp-accent-soft); color: var(--cp-accent-hover); font-size: 0.75rem; font-weight: 700; text-decoration: none;
+    }
+    .article-title { margin: 0; font-size: clamp(1.9rem, 4.4vw, 2.85rem); line-height: 1.12; }
+    .article-description { margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; line-height: 1.6; }
+    .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: 1.25rem; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .article-meta .dot { opacity: .5; }
+    .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
+    .article-feature-image {
+      max-width: 50rem; margin: 0 auto 2.5rem;
+      border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
+      box-shadow: var(--cp-shadow); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
+    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Square service and product logos get one shared band instead: the height
+       is fixed so every logo hero matches, and the sources are vector, so the
+       small ones scale up to it without softening. */
+    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    @media (max-width: 32rem) {
+      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
+    }
+    .article-body {
+      margin: 0; font-size: 1.05rem; line-height: 1.75;
+      background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
+      padding: clamp(1.5rem, 4vw, 3rem); box-shadow: 0 1px 2px var(--cp-border);
+    }
+    .article-body h2, .article-body h3, .article-body h4 { scroll-margin-top: 5.5rem; }
+    .article-body h2 { margin: 2.2rem 0 1rem; font-size: 1.5rem; }
+    .article-body h3 { margin: 1.8rem 0 .85rem; font-size: 1.25rem; }
+    .article-body h4 { margin: 1.5rem 0 .7rem; font-size: 1.05rem; }
+    .article-body p { margin: 0 0 1.1rem; overflow-wrap: anywhere; }
+    .article-body ul, .article-body ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+    .article-body li { margin-bottom: .4rem; }
+    .article-body hr { border: 0; border-top: 1px solid var(--cp-border); margin: 2rem 0; }
+    .article-body blockquote { margin: 0 0 1.1rem; padding: .25rem 1.1rem; border-left: 3px solid var(--cp-accent); color: var(--cp-text-muted); }
+    .article-body a { overflow-wrap: anywhere; }
+    .article-body a .external-icon { vertical-align: middle; }
+    .article-body code { background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 4px; padding: .1rem .35rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; overflow-wrap: anywhere; }
+    .article-figure { margin: 0 0 1.5rem; }
+    .article-figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--cp-border); display: block; }
+    .article-figure figcaption { margin-top: .5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-align: center; }
+    .table-wrap { overflow-x: auto; margin: 0 0 1.1rem; }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
+    .article-body th { background: var(--cp-surface-soft); }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: 0.8rem; }
+    .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button:hover { background: rgba(255,255,255,.1); }
+    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
+    .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
+    /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
+    .code-block code.language-diagram { line-height: 1.15; }
+    .callout { display: flex; gap: .75rem; margin: 0 0 1.3rem; padding: 1rem 1.15rem; border-radius: 10px; border: 1px solid var(--cp-border); }
+    .callout-icon { flex: 0 0 auto; margin-top: .15rem; }
+    .callout-label { display: block; margin-bottom: .3rem; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .callout-body p:last-child { margin-bottom: 0; }
+    .callout-note { background: var(--cp-accent-soft); color: var(--cp-text); }
+    .callout-note .callout-icon, .callout-note .callout-label { color: var(--cp-accent); }
+    .callout-info { background: var(--cp-info-bg); color: var(--cp-text); }
+    .callout-info .callout-icon, .callout-info .callout-label { color: var(--cp-info); }
+    .callout-warning { background: var(--cp-warning-bg); color: var(--cp-text); }
+    .callout-warning .callout-icon, .callout-warning .callout-label { color: var(--cp-warning); }
+    .article-toc { margin: 0 0 1.6rem; padding: 1rem 1.25rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); }
+    .article-toc strong { display: block; margin-bottom: .5rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    .article-toc ul { margin: 0; padding: 0; list-style: none; }
+    .article-toc li { margin: 0; }
+    .article-toc a { display: block; padding: .25rem 0; color: var(--cp-text); text-decoration: none; font-size: 0.9rem; }
+    .article-toc a:hover { color: var(--cp-link); }
+    .toc-level-3 a { padding-left: 1rem; font-size: 0.85rem; color: var(--cp-text-muted); }
+    .toc-level-4 a { padding-left: 2rem; font-size: 0.85rem; color: var(--cp-text-muted); }
+    .article-footer-nav { margin: 2rem 0 0; display: flex; justify-content: space-between; gap: 1rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+    .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    /* Reuses the shell's .share-btn so this reads as the same control as the
+       "Share this site" row in the footer; only the layout differs. */
+    .article-share {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
+      margin: 1.75rem 0 0; padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
+    }
+    .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .article-share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .article-share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .article-share-hint:empty { display: none; }
+    @media (max-width: 40rem) {
+      .article-meta { font-size: 0.8rem; }
+      .article-share { flex-direction: column; align-items: flex-start; }
+      .article-share-links { width: 100%; }
+    }
+    @media print {
+      /* Printing an article should yield the writing, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .copy-code-button, .article-toc,
+      .article-share, .adsbygoogle,
+      .breadcrumb { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, figure, pre, .code-block { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+      .code-block, .code-block code { border: 1px solid #bbb; }
+    }
+
+
+
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+  
+    /* Share links */
+    .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
+    .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .footer-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+  </style>
+</head>
+<body class="">
+  <a class="skip-link" href="#top">Skip to content</a>
+  <div class="news-banner" id="newsBanner">
+    <div class="news-banner-track">
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+    </div>
+    <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/articles/" aria-current="page"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" tabindex="-1">
+    <div class="article-header">
+      <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=Governance">Governance</a><a class="article-category-tag" href="/articles/?category=Azure%20Policy">Azure Policy</a></div>
+      <h1 class="article-title">Azure Policy, Part 1: What Is an Azure Policy?</h1>
+      <p class="article-description">Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production.</p>
+      <div class="article-meta">
+        <span>Benoit G</span>
+        <span class="dot">&middot;</span>
+        <span>September 4, 2026</span>
+        <span class="dot">&middot;</span>
+        <span>12 min read</span>
+      </div>
+      <div class="article-tags"><span class="article-tag">#Azure Policy</span><span class="article-tag">#Governance</span><span class="article-tag">#Compliance</span><span class="article-tag">#JSON</span></div>
+    </div>
+
+    <div class="article-feature-image is-banner"><img src="/articles/images/azure-policy-part-1.svg" alt="Azure Policy, Part 1: What Is an Azure Policy?"></div>
+
+    <article class="article-body">
+      <p>Everybody in a governance meeting says "we'll put a policy on it". Very few people in that meeting could tell you what the JSON looks like, why the policy did not block anything, or why the compliance dashboard says 94% when nothing has ever been enforced.</p>
+<p>Azure Policy is not complicated, but it <em>is</em> made of five distinct objects that people constantly confuse: a <strong>definition</strong>, an <strong>initiative</strong>, an <strong>assignment</strong>, an <strong>exclusion</strong>, and an <strong>exemption</strong>. Mixing them up is how you end up with a governance estate nobody trusts.</p>
+<p>This is the first of a seven-part series that takes those objects apart one at a time, then shows how to manage the whole thing as code.</p>
+<ul><li><strong>Part 1 (this post)</strong> - what a policy definition actually is</li><li><strong><a href="/articles/azure-policy-part-2-initiatives/">Part 2</a></strong> - initiatives, also known as policy set definitions</li><li><strong><a href="/articles/azure-policy-part-3-assignments/">Part 3</a></strong> - assignments, scope, and enforcement</li><li><strong><a href="/articles/azure-policy-part-4-exclusions-notscopes/">Part 4</a></strong> - exclusions and <code>notScopes</code></li><li><strong><a href="/articles/azure-policy-part-5-exemptions/">Part 5</a></strong> - exemptions</li><li><strong><a href="/articles/azure-policy-part-6-policy-as-code/">Part 6</a></strong> - Azure Policy as code</li><li><strong><a href="/articles/azure-policy-part-7-epac/">Part 7</a></strong> - EPAC and the alternatives</li></ul>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#the-one-sentence-definition">The one-sentence definition</a></li><li class="toc-level-2"><a href="#policy-is-not-rbac">Policy is not RBAC</a></li><li class="toc-level-2"><a href="#anatomy-of-a-definition">Anatomy of a definition</a></li><li class="toc-level-2"><a href="#the-condition-side">The condition side</a></li><li class="toc-level-3"><a href="#fields">Fields</a></li><li class="toc-level-3"><a href="#aliases">Aliases</a></li><li class="toc-level-3"><a href="#condition-operators">Condition operators</a></li><li class="toc-level-3"><a href="#counting-things">Counting things</a></li><li class="toc-level-2"><a href="#the-effect-side">The effect side</a></li><li class="toc-level-3"><a href="#the-order-effects-run-in">The order effects run in</a></li><li class="toc-level-3"><a href="#denyaction-briefly">denyAction, briefly</a></li><li class="toc-level-2"><a href="#modes">Modes</a></li><li class="toc-level-2"><a href="#when-does-evaluation-actually-happen">When does evaluation actually happen?</a></li><li class="toc-level-2"><a href="#versioning">Versioning</a></li><li class="toc-level-2"><a href="#built-in-or-custom">Built-in or custom?</a></li><li class="toc-level-2"><a href="#the-limits-that-actually-bite">The limits that actually bite</a></li><li class="toc-level-2"><a href="#putting-it-together">Putting it together</a></li><li class="toc-level-2"><a href="#where-next">Where next</a></li></ul></nav>
+<h2 id="the-one-sentence-definition">The one-sentence definition</h2>
+<p>An Azure Policy definition is a <strong>rule written in JSON that Azure Resource Manager evaluates against your resources, and an action to take when the rule matches</strong>.</p>
+<p>That is it. A condition and an effect. Everything else - initiatives, assignments, exemptions, compliance dashboards - is packaging and plumbing around that single idea.</p>
+<p>The important consequence: <strong>a definition on its own does nothing</strong>. It is inert. It has to be assigned to a scope before a single resource is evaluated. I have lost count of the number of times someone has created a beautiful custom definition, gone to the compliance blade, and found nothing there. Nothing was wrong. Nothing was assigned. That is Part 3.</p>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
+<h2 id="policy-is-not-rbac">Policy is not RBAC</h2>
+<p>The single most useful mental model is this one:</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Azure RBAC</th><th>Azure Policy</th></tr></thead><tbody><tr><td>Question it answers</td><td><em>Who</em> can do it?</td><td><em>What</em> is allowed to exist?</td></tr><tr><td>Evaluated against</td><td>The caller's identity</td><td>The resource payload</td></tr><tr><td>Typical outcome</td><td>403 because you lack a permission</td><td>403 because the resource shape is not permitted</td></tr><tr><td>Applies to existing resources</td><td>No</td><td>Yes - continuously re-evaluated</td></tr><tr><td>Can fix things</td><td>No</td><td>Yes, with <code>modify</code> and <code>deployIfNotExists</code></td></tr></tbody></table></div>
+<p>An Owner on a subscription has every permission in Azure and still cannot create a VM in a banned region if a <code>deny</code> policy says so. Conversely, policy will never stop someone reading a storage key. The two systems are orthogonal, and you need both.</p>
+<p>The second consequence of "evaluated against the resource" is the one people miss: <strong>policy keeps evaluating resources that already exist</strong>. RBAC is a gate at the door. Policy is a gate at the door <em>and</em> a continuous audit of everyone already in the building.</p>
+<h2 id="anatomy-of-a-definition">Anatomy of a definition</h2>
+<p>Here is a complete, realistic custom definition. Everything below is a variation on this shape.</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{
+  "properties": {
+    "displayName": "Storage accounts must disable public blob access",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Denies creation or update of a storage account that allows public blob access.",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "Storage"
+    },
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        },
+        "allowedValues": [ "Audit", "Deny", "Disabled" ],
+        "defaultValue": "Audit"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts"
+          },
+          {
+            "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess",
+            "notEquals": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}</code></pre></div>
+<p>Six things to notice.</p>
+<ul><li><strong><code>displayName</code></strong> is capped at 128 characters and <strong><code>description</code></strong> at 512. Write them for the person who will read the deny message at 2 a.m., not for the auditor.</li><li><strong><code>policyType</code></strong> is read-only. You cannot set it. Azure sets it to <code>Custom</code>, <code>Builtin</code>, or <code>Static</code> (the last one being Microsoft-managed regulatory compliance content).</li><li><strong><code>metadata.category</code></strong> drives grouping in the portal. Pick an existing category name rather than inventing one, or your definition ends up in a bucket of one.</li><li><strong><code>parameters</code></strong> turn a hard-coded rule into a reusable one. Parameterising the effect is not optional in a serious estate - it is what lets you ship the same definition as <code>Audit</code> in dev and <code>Deny</code> in prod.</li><li><strong><code>policyRule.if</code></strong> is the condition.</li><li><strong><code>policyRule.then</code></strong> is the effect.</li></ul>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Always parameterise <code>effect</code>, and always name the parameter <code>effect</code>. Every policy-as-code tool in Part 7 assumes that convention, and it is what makes staged rollouts (audit first, deny later) a config change rather than a rewrite.</p></div></div>
+<h2 id="the-condition-side">The condition side</h2>
+<p>The <code>if</code> block is built from <strong>logical operators</strong> and <strong>conditions</strong>.</p>
+<p>The logical operators are <code>allOf</code> (AND), <code>anyOf</code> (OR), and <code>not</code>. They nest freely, which is how you end up with policy rules that need a code review.</p>
+<p>A condition compares something on the resource with a value. The something is either a <code>field</code>, a <code>value</code> expression, or a <code>count</code> expression.</p>
+<h3 id="fields">Fields</h3>
+<p>The universally available fields are:</p>
+<div class="table-wrap"><table><thead><tr><th>Field</th><th>What it holds</th></tr></thead><tbody><tr><td><code>name</code></td><td>The resource name</td></tr><tr><td><code>fullName</code></td><td>Parent-prefixed name, for example <code>myServer/myDatabase</code></td></tr><tr><td><code>type</code></td><td>The full resource type, for example <code>Microsoft.Storage/storageAccounts</code></td></tr><tr><td><code>kind</code></td><td>The resource kind where one exists</td></tr><tr><td><code>location</code></td><td>Normalised location; use <code>global</code> for location-agnostic resources</td></tr><tr><td><code>id</code></td><td>The full resource ID</td></tr><tr><td><code>identity.type</code></td><td><code>None</code>, <code>SystemAssigned</code>, <code>UserAssigned</code>, or <code>SystemAssigned, UserAssigned</code></td></tr><tr><td><code>tags</code></td><td>Written as <code>tags['costCentre']</code> or <code>tags.costCentre</code></td></tr></tbody></table></div>
+<p>Anything else - a storage account's TLS version, a VM's SKU, an NSG rule - is reached through an <strong>alias</strong>.</p>
+<h3 id="aliases">Aliases</h3>
+<p>An alias is Azure Policy's stable pointer into a resource provider's property bag. <code>Microsoft.Storage/storageAccounts/allowBlobPublicAccess</code> in the example above is one.</p>
+<p>Aliases matter for two reasons. First, you cannot write a meaningful custom policy without them. Second, <strong>not every property has one</strong>, and discovering that a property is unreachable after you have designed a control is a bad afternoon.</p>
+<p>Array aliases end in <code>[*]</code> and let you reason about collections - every NSG rule, every subnet, every IP configuration.</p>
+<p>I keep a searchable copy of every supported alias here: <strong><a href="/azure-policy-aliases/">Azure Policy Aliases</a></strong>. If you prefer the terminal, I wrote up the PowerShell approach in <a href="/articles/search-azure-policy-aliases/">Search Azure Policy Aliases and Send Output to an Interactive Table</a>.</p>
+<h3 id="condition-operators">Condition operators</h3>
+<p>The full current set:</p>
+<div class="table-wrap"><table><thead><tr><th>Category</th><th>Operators</th></tr></thead><tbody><tr><td>Equality</td><td><code>equals</code>, <code>notEquals</code></td></tr><tr><td>Wildcard</td><td><code>like</code>, <code>notLike</code> - one <code>*</code> maximum</td></tr><tr><td>Pattern</td><td><code>match</code>, <code>notMatch</code>, <code>matchInsensitively</code>, <code>notMatchInsensitively</code></td></tr><tr><td>Substring</td><td><code>contains</code>, <code>notContains</code> - no wildcards allowed in the value</td></tr><tr><td>Set</td><td><code>in</code>, <code>notIn</code>, <code>containsKey</code>, <code>notContainsKey</code></td></tr><tr><td>Numeric or date</td><td><code>less</code>, <code>lessOrEquals</code>, <code>greater</code>, <code>greaterOrEquals</code></td></tr><tr><td>Presence</td><td><code>exists</code></td></tr></tbody></table></div>
+<p>Two traps worth memorising. <code>match</code> and <code>notMatch</code> are <strong>case-sensitive</strong> - every other string condition is not. And in a <code>match</code> pattern, <code>#</code> means a digit, <code>?</code> means a letter, and <code>.</code> means any character. That is not a regular expression, and treating it like one produces rules that silently never fire.</p>
+<h3 id="counting-things">Counting things</h3>
+<p><code>count</code> is how you express "at least one subnet without an NSG" or "more than three inbound rules allowing any source".</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{
+  "count": {
+    "field": "Microsoft.Network/networkSecurityGroups/securityRules[*]",
+    "where": {
+      "allOf": [
+        { "field": "Microsoft.Network/networkSecurityGroups/securityRules[*].direction", "equals": "Inbound" },
+        { "field": "Microsoft.Network/networkSecurityGroups/securityRules[*].access", "equals": "Allow" },
+        { "field": "Microsoft.Network/networkSecurityGroups/securityRules[*].sourceAddressPrefix", "in": [ "*", "Internet", "0.0.0.0/0" ] }
+      ]
+    }
+  },
+  "greater": 0
+}</code></pre></div>
+<p>There is also a <em>value count</em> form that iterates over an array parameter rather than a resource array, which is how you write "the resource must carry every tag in this list".</p>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>If a template function inside a <code>value</code> expression throws, <strong>policy evaluation fails, and a failed evaluation is an implicit deny</strong>. A malformed <code>substring()</code> on a resource name shorter than you expected will block deployments across the whole scope. Guard functions with <code>if()</code>, and roll new rules out with enforcement disabled first - see Part 3.</p></div></div>
+<h2 id="the-effect-side">The effect side</h2>
+<p>The effect is what happens when the condition matches. The current supported set:</p>
+<div class="table-wrap"><table><thead><tr><th>Effect</th><th>What it does</th></tr></thead><tbody><tr><td><code>audit</code></td><td>Records non-compliance. Changes nothing.</td></tr><tr><td><code>deny</code></td><td>Blocks the create or update request.</td></tr><tr><td><code>denyAction</code></td><td>Blocks a specific <em>action</em> - today only <code>delete</code>.</td></tr><tr><td><code>append</code></td><td>Adds fields to the request payload before it is processed.</td></tr><tr><td><code>modify</code></td><td>Adds, updates, or removes properties and tags, and can remediate existing resources.</td></tr><tr><td><code>deployIfNotExists</code></td><td>Deploys an ARM template when a related resource is missing.</td></tr><tr><td><code>auditIfNotExists</code></td><td>Reports non-compliance when a related resource is missing.</td></tr><tr><td><code>disabled</code></td><td>Turns the rule off without deleting anything.</td></tr><tr><td><code>manual</code></td><td>Compliance is set by a human attestation, for non-technical controls.</td></tr><tr><td><code>mutate</code></td><td>Mutates Kubernetes objects - <code>Microsoft.Kubernetes.Data</code> mode only.</td></tr><tr><td><code>addToNetworkGroup</code></td><td>Populates an Azure Virtual Network Manager network group - <code>Microsoft.Network.Data</code> mode only.</td></tr></tbody></table></div>
+<p><code>modify</code> and <code>deployIfNotExists</code> are the two that make Azure Policy an automation engine rather than a reporting tool. Both require the assignment to carry a <strong>managed identity</strong>, and the definition to declare the roles that identity needs in a <code>roleDefinitionIds</code> array. That is Part 3 territory, and it is where most of the operational pain lives.</p>
+<h3 id="the-order-effects-run-in">The order effects run in</h3>
+<p>This matters more than people expect, because effects layer cumulatively and the most restrictive one wins.</p>
+<ol><li><code>disabled</code> - checked first, decides whether the rule is evaluated at all</li><li><code>append</code> and <code>modify</code> - they change the request, which can prevent a later <code>audit</code> or <code>deny</code> from ever triggering</li><li><code>deny</code> - before <code>audit</code>, so a blocked request is not double-logged</li><li><code>audit</code></li><li><code>manual</code></li><li><code>auditIfNotExists</code></li><li><code>denyAction</code> - evaluated last</li></ol>
+<p><code>auditIfNotExists</code> and <code>deployIfNotExists</code> then evaluate <em>after</em> the resource provider returns success, because both of them ask a question about a related resource that may only exist once the main one does.</p>
+<div class="callout callout-info"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Info</span><p>This ordering is why <code>append</code>/<code>modify</code> and <code>deny</code> on the same property is a design smell. The modify fixes the payload, the deny never fires, and your compliance dashboard shows a control that has never actually blocked anything. Pick one.</p></div></div>
+<h3 id="denyaction-briefly">denyAction, briefly</h3>
+<p><code>denyAction</code> is the newest genuinely useful effect and the least known. It blocks a <em>verb</em> rather than a shape - today only <code>delete</code> - and returns <code>403 Forbidden</code>. It is how you protect a production resource group from accidental deletion without resorting to locks that also block legitimate automation.</p>
+<p>Its <code>cascadeBehaviors</code> setting (default <code>deny</code>) controls whether deleting a parent that would cascade into a protected child is also blocked. And a short list of types is deliberately exempt from <code>denyAction</code> so you cannot lock yourself out - policy assignments, deny assignments, locks, subscriptions, and deployment stacks among them.</p>
+<h2 id="modes">Modes</h2>
+<p><code>mode</code> tells Azure <em>which</em> resources the definition is even considered for.</p>
+<div class="table-wrap"><table><thead><tr><th>Mode</th><th>Use it for</th></tr></thead><tbody><tr><td><code>all</code></td><td>Everything: resource groups, subscriptions, and all resource types</td></tr><tr><td><code>indexed</code></td><td>Only resource types that support tags and location</td></tr></tbody></table></div>
+<p>If you write a tag or location policy and leave it in <code>all</code>, you will generate a flood of non-compliant results for resources that can never carry a tag. Use <code>indexed</code> for anything tag- or location-based, and <code>all</code> for everything else.</p>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>A missing <code>mode</code> behaves differently depending on the tool: Azure PowerShell defaults it to <code>all</code>, Azure CLI leaves it <code>null</code>, and a <code>null</code> mode is treated as <code>indexed</code> for backward compatibility. Set it explicitly. Always.</p></div></div>
+<p>Beyond those two there are <strong>resource provider modes</strong>, which push evaluation down into a specific provider rather than Resource Manager:</p>
+<ul><li>Generally available: <code>Microsoft.Kubernetes.Data</code>, <code>Microsoft.KeyVault.Data</code>, <code>Microsoft.Network.Data</code></li><li>In preview: <code>Microsoft.ManagedHSM.Data</code>, <code>Microsoft.DataFactory.Data</code>, <code>Microsoft.MachineLearningServices.v2.Data</code>, <code>Microsoft.LoadTestService.Data</code></li></ul>
+<p>Resource provider modes generally support built-in definitions only, and exemptions do not work at the component level inside them. If your governance story depends on exempting one pod in one namespace, check that constraint before you promise it.</p>
+<h2 id="when-does-evaluation-actually-happen">When does evaluation actually happen?</h2>
+<p>A definition does not run continuously. Evaluation is triggered by:</p>
+<ul><li><strong>A resource being created or updated</strong> in an assigned scope - this is the only moment <code>deny</code> can block anything</li><li><strong>A policy or initiative being newly assigned or updated</strong> - allow roughly 30 minutes before it takes effect</li><li><strong>The standard compliance cycle</strong>, which runs about every 24 hours</li><li><strong>An on-demand evaluation scan</strong> that you trigger yourself</li></ul>
+<p>This is why the dashboard lags reality. You changed a definition, you checked compliance five minutes later, nothing moved. Nothing was wrong. Trigger a scan, or wait.</p>
+<p>It is also why <code>deny</code> is not retroactive. Existing non-compliant resources are <em>reported</em>, never deleted. Turning a control on does not clean up the estate - remediation does, and that is Part 3.</p>
+<h2 id="versioning">Versioning</h2>
+<p>Built-in definitions carry a <code>{Major}.{Minor}.{Patch}</code> version, and assignments can pin to one:</p>
+<ul><li><code>1.*.*</code> - stay on major version 1, take minor and patch updates automatically</li><li><code>1.2.*</code> - pin to a minor version path</li></ul>
+<p>Patch updates are always taken automatically and cannot be opted out of, because that path is reserved for text corrections and break-glass security fixes. If you have ever been surprised by a built-in changing behaviour under you, this is the mechanism you want to understand before Part 6.</p>
+<h2 id="built-in-or-custom">Built-in or custom?</h2>
+<p>Azure ships well over a thousand built-in definitions. The right instinct is: <strong>use a built-in unless you have proven you cannot</strong>.</p>
+<p>Built-ins are versioned, maintained, prepopulated with the correct <code>roleDefinitionIds</code>, and mapped to regulatory compliance frameworks. A custom definition is a permanent maintenance liability that you now own.</p>
+<p>You can browse the whole catalogue, including initiatives, here: <strong><a href="/azure-policies/">Azure Policies</a></strong>.</p>
+<p>Write a custom definition when the built-in genuinely does not exist, or when it exists but cannot be parameterised the way your standard requires. Not when you could not find it.</p>
+<h2 id="the-limits-that-actually-bite">The limits that actually bite</h2>
+<div class="table-wrap"><table><thead><tr><th>Where</th><th>What</th><th>Maximum</th></tr></thead><tbody><tr><td>Scope</td><td>Policy definitions</td><td>500</td></tr><tr><td>Scope</td><td>Initiative definitions</td><td>200</td></tr><tr><td>Tenant</td><td>Initiative definitions</td><td>2,500</td></tr><tr><td>Policy definition</td><td>Parameters</td><td>20</td></tr><tr><td>Policy rule</td><td>Nested conditionals</td><td>512</td></tr><tr><td>Definition or assignment request body</td><td>Bytes</td><td>1,048,576</td></tr></tbody></table></div>
+<p>The one that surprises people is <strong>20 parameters per definition</strong>. A "one policy to rule them all" design hits that wall fast, and the fix is almost always to split the rule into several definitions and group them with an initiative - which is exactly what Part 2 is about.</p>
+<p>There are evaluation-time limits too: a function returning a string longer than 131,072 characters, or an object nested deeper than 128 levels, causes evaluation to fail. And a failed evaluation, as noted above, behaves like a deny.</p>
+<h2 id="putting-it-together">Putting it together</h2>
+<p>Read the example from the top of the article as English and it should now be unambiguous:</p>
+<p>&gt; For every resource that supports tags and location (<code>mode: indexed</code>), if the type is a storage account <strong>and</strong> <code>allowBlobPublicAccess</code> is not <code>false</code>, then apply whatever effect the assignment passes in - audit by default.</p>
+<p>That definition, sitting in your subscription, still does nothing at all. It has no scope. Nobody has assigned it.</p>
+<h2 id="where-next">Where next</h2>
+<p>Part 1 gave you the atom. Real governance estates are not built from single definitions - a "secure storage" standard is eight or ten rules that have to be assigned, parameterised, and reported on together.</p>
+<p><strong><a href="/articles/azure-policy-part-2-initiatives/">Part 2</a></strong> covers initiatives: how to group definitions, how parameters flow from the initiative down to its members, why <code>policyDefinitionReferenceId</code> is the most important string in the whole file, and the one initiative property you can never change after assignment.</p>
+<p>Enjoy!</p>
+    </article>
+
+    <div class="article-share">
+      <span class="article-share-label" id="share-label">Share on</span>
+      <div class="article-share-links" role="group" aria-labelledby="share-label">
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-policy-part-1-what-is-a-policy%2F&amp;text=Azure%20Policy%2C%20Part%201%3A%20What%20Is%20an%20Azure%20Policy%3F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
+        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-policy-part-1-what-is-a-policy%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+        <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-policy-part-1-what-is-a-policy%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>Facebook</a>
+        <button class="share-btn" type="button" data-article-share="copy" data-share-url="https://benoit-gaumard.io/articles/azure-policy-part-1-what-is-a-policy/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</button>
+        <button class="share-btn" type="button" data-article-share="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
+      </div>
+      <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="article-footer-nav">
+      <a href="/articles/">&larr; Back to all articles</a>
+      <a href="/articles/rss.xml">RSS feed</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="/tools/">Tools</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-share">
+        <span class="footer-share-label">Share this site</span>
+        <div class="footer-share-links">
+          <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="share-btn" data-share="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+            Twitter
+          </a>
+          <a class="share-btn" data-share="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+            Reddit
+          </a>
+          <a class="share-btn" data-share="mail" href="mailto:?body=https%3A%2F%2Fbenoit-gaumard.io%2F">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Mail
+          </a>
+          <button class="share-btn" type="button" data-share="favorite">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Add to favorites
+          </button>
+        </div>
+        <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    document.querySelectorAll('[data-code-copy]').forEach((button) => {
+      button.addEventListener("click", () => {
+        const code = button.closest(".code-block").querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const original = button.textContent;
+          button.textContent = "Copied!";
+          button.classList.add("is-copied");
+          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
+        });
+      });
+    });
+    let scrollTicking = false;
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    (function () {
+      const toggle = document.getElementById("menuToggle");
+      const nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      const closeMenu = () => { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); };
+      const openMenu = () => { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); };
+      toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        nav.classList.contains("nav-open") ? closeMenu() : openMenu();
+      });
+      nav.addEventListener("click", (e) => { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", (e) => {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", () => { if (window.innerWidth > 760) closeMenu(); });
+    })();
+    (function () {
+      const toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", () => {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const next = isDark ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("site-theme", next); } catch (e) {}
+      });
+    })();
+    (function () {
+      const banner = document.getElementById("newsBanner");
+      const closeBtn = document.getElementById("newsBannerClose");
+      if (!banner || !closeBtn) return;
+      closeBtn.addEventListener("click", () => {
+        banner.setAttribute("hidden", "");
+        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+<script data-share-script>
+    (function () {
+      var root = document.querySelector('.footer-share');
+      if (!root) return;
+      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+      var url = encodeURIComponent(pageUrl);
+      var title = encodeURIComponent(document.title);
+      var targets = {
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+      };
+      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+        var href = targets[el.getAttribute('data-share')];
+        if (href) el.setAttribute('href', href);
+      });
+      var favBtn = root.querySelector('[data-share="favorite"]');
+      var hint = root.querySelector('[data-share-hint]');
+      if (favBtn && hint) {
+        favBtn.addEventListener('click', function () {
+          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+          hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+        });
+      }
+    })();
+  </script>
+<script data-article-share-script>
+    (function () {
+      var root = document.querySelector('.article-share');
+      if (!root) return;
+      var hint = root.querySelector('[data-article-share-hint]');
+
+      function say(message) {
+        if (hint) hint.textContent = message;
+      }
+
+      var copyBtn = root.querySelector('[data-article-share="copy"]');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          // The build-time URL is canonical; location.href would carry any
+          // tracking query string the visitor arrived with.
+          var value = copyBtn.getAttribute('data-share-url') || location.href;
+          function done() { say('Link copied to the clipboard.'); }
+          function failed() { say(value); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, failed);
+          } else {
+            failed();
+          }
+        });
+      }
+
+      var printBtn = root.querySelector('[data-article-share="print"]');
+      if (printBtn) {
+        printBtn.addEventListener('click', function () { window.print(); });
+      }
+    })();
+  </script>
+
+</body>
+</html>

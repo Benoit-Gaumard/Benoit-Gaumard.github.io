@@ -201,7 +201,7 @@ This is the workbench of a working Azure engineer that happens to also be his po
 
 The frame around that instrument is a light PowerShell metaphor: a terminal chrome bar on the homepage hero, `PS>` prefixes on section labels, `.\Start-Collaboration.ps1` as a contact heading. It is a costume, worn lightly and only where the site talks about its author. It never enters a tool page, where the data is the point.
 
-The system's real signature is the **shared shell**: an identical sticky header, aurora backdrop, dismissible banner, footer, theme toggle, and back-to-top across 65 pages built by hand with no build step and no dependencies. Twenty-eight unrelated utilities read as one product because that shell never varies. That consistency is not decoration - it is the load-bearing structure of the whole design.
+The system's real signature is the **shared shell**: an identical sticky header, aurora backdrop, dismissible banner, footer, theme toggle, and back-to-top across 66 pages built by hand with no build step and no dependencies. Twenty-nine unrelated utilities read as one product because that shell never varies. That consistency is not decoration - it is the load-bearing structure of the whole design.
 
 **Key Characteristics:**
 - Cool blue-frost neutrals; colour reserved almost entirely for status

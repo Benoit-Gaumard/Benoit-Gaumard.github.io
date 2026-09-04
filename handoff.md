@@ -4,7 +4,7 @@ Purpose of this file: let another AI coding assistant pick up work on this repo 
 
 ## 1. What this repo is
 
-**Scope:** the site is the 65 standalone pages at the repo root. The Hugo blog under `blog/` is an external blog the owner is retiring - out of scope, never audited, not counted.
+**Scope:** the site is the 66 standalone pages at the repo root. The Hugo blog under `blog/` is an external blog the owner is retiring - out of scope, never audited, not counted.
 
 Personal site + tools hub for Benoit Gaumard, deployed to **https://benoit-gaumard.io** via GitHub Pages.
 
@@ -64,19 +64,19 @@ using the **"scan-benoit-gaumard.io"** Entra app. The 3 secrets (`AZURE_CLIENT_I
 ## 5. Sitewide components added this project (in case they need extending)
 
 - **Dark/light theme toggle** - `data-theme` attribute + FOUC-prevention script (see §2).
-- **News/welcome banner** - `.news-banner` marquee at top of every page, dismiss button, versioned localStorage key `news-banner-dismissed`. **To push a new announcement**: change the message text in the banner HTML on all pages AND bump the version string (currently `"2026-08-21"`) in both the FOUC-check script and the close-button handler, on all 65 pages (33 direct + 32 generated articles) - this is a full sitewide codemod, see the pattern below.
+- **News/welcome banner** - `.news-banner` marquee at top of every page, dismiss button, versioned localStorage key `news-banner-dismissed`. **To push a new announcement**: change the message text in the banner HTML on all pages AND bump the version string (currently `"2026-08-21"`) in both the FOUC-check script and the close-button handler, on all 66 pages (34 direct + 32 generated articles) - this is a full sitewide codemod, see the pattern below.
   - **Gotcha, fixed 2026-08-29**: the close handler sets `hidden` on the banner, but `.news-banner { display: flex }` is an author rule and beats the UA `[hidden] { display: none }`, so for a long time clicking Dismiss did nothing on the current page (it only took effect on the next load, via `data-news-banner`). All 63 pages now carry `.news-banner[hidden] { display: none; }` right after the `:root[data-news-banner="hidden"]` rule. **Keep that rule** if you ever rewrite the banner CSS.
 - **Azure Regions interactive map** - Leaflet.js via CDN, Cards/List/Map 3-way toggle.
 - **Emoji Sheet & Icons "Per page" pagination** - Previous/Next + a `<select id="perPage">` (50/100/200/All) dropdown, replacing older "Show more" or unlimited-render patterns.
 
 ### Sitewide codemod recipe (used repeatedly, works well)
-When a change needs to touch all ~65 pages:
-1. Write a throwaway Node script (`.mjs`) with a hardcoded list of the ~33 direct-patch files (all hand-authored pages + `articles/index.html`, **excluding** the 32 generated `articles/<slug>/index.html` files).
+When a change needs to touch all ~66 pages:
+1. Write a throwaway Node script (`.mjs`) with a hardcoded list of the ~34 direct-patch files (all hand-authored pages + `articles/index.html`, **excluding** the 32 generated `articles/<slug>/index.html` files).
 2. For each file: read, normalize `\r\n` → `\n`, do plain-substring `.replace()` calls against known-unique anchors (e.g. `.site-header {` for CSS insertion, `<body>` for HTML insertion, `</body>` for a closing script, the exact theme-FOUC script block for extending it), convert back to `\r\n`, write.
 3. Separately, make the equivalent edits directly inside `articles/build-articles.mjs`'s `pageShell()` template (anchors differ slightly, e.g. body tag is `` <body class="${bodyClass}"> `` not bare `<body>`), then run `node articles/build-articles.mjs` to regenerate all 32 article pages (this also touches `articles/articles.json`/`articles/rss.xml` with a trivial timestamp diff - expected).
 4. Delete the throwaway codemod script before committing.
-5. Verify coverage with a throwaway Python script grepping all 65 output files for the expected marker string(s).
-6. `index.html` and `index_fr.html` sometimes have structural quirks vs the other 63 pages (e.g. an extra blank line after `<body>`) - anchor on the shortest reliable unique substring (`<body>` alone, not `<body>\n<header...>`) to avoid missing them.
+5. Verify coverage with a throwaway Python script grepping all 66 output files for the expected marker string(s).
+6. `index.html` and `index_fr.html` sometimes have structural quirks vs the other 64 pages (e.g. an extra blank line after `<body>`) - anchor on the shortest reliable unique substring (`<body>` alone, not `<body>\n<header...>`) to avoid missing them.
 
 ## 6. Git workflow quirks - READ THIS BEFORE YOU PANIC
 

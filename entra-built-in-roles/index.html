@@ -527,9 +527,17 @@
     .role-desc { display: block; margin-top: .25rem; max-width: 70ch; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.45; }
     .num-cell { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .id-cell { white-space: nowrap; }
-    /* The role name carries a full sentence of description, so give it the room
-       rather than letting the browser balance it against three short columns. */
-    thead th:first-child { width: 40%; }
+    .id-cell code { font-size: 0.78rem; }
+    /* The role name carries a full sentence of description, so hold a real
+       minimum for it: a percentage collapses once the extra count columns push
+       the table past the wrapper and it starts scrolling. */
+    thead th:first-child, tbody td:first-child { min-width: 22rem; }
+    /* Four count columns fit a 1280px viewport only if they stop paying the
+       full cell padding on both sides. */
+    thead th.num-col, tbody td.num-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
+    /* Same reason as the detail headings: these are property names, and
+       NOTDATAACTIONS is not one of them. */
+    thead th.num-col { text-transform: none; letter-spacing: 0; }
 
     tbody tr.detail-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
     .detail-panel { padding: 1.1rem 1.25rem 1.35rem; }
@@ -541,6 +549,10 @@
     .detail-group { margin-top: 1.1rem; }
     .detail-group:first-of-type { margin-top: 0; }
     .detail-group h3 { margin: 0 0 .45rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    /* Actions / NotActions / DataActions / NotDataActions are literal role
+       definition property names, so they keep their casing rather than being
+       flattened to NOTDATAACTIONS by the label style. */
+    .detail-group h3.is-bucket { text-transform: none; letter-spacing: 0; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cp-text); }
     .perm-list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); overflow: hidden; }
     .perm-list li { display: grid; grid-template-columns: minmax(24rem, 1.6fr) 1.4fr; gap: .35rem 1.25rem; padding: .5rem .75rem; border-bottom: 1px solid var(--cp-border); font-size: 0.8rem; }
     .perm-list li:last-child { border-bottom: 0; }
@@ -549,6 +561,13 @@
     .scope-list { display: flex; flex-wrap: wrap; gap: .4rem; }
     .scope-list code { padding: .15rem .45rem; border-radius: 4px; background: var(--cp-surface); border: 1px solid var(--cp-border); font-size: 0.75rem; }
     .detail-empty { color: var(--cp-text-muted); font-size: 0.8rem; }
+    .kv-list li { grid-template-columns: minmax(8rem, .45fr) 2fr; }
+    .kv-list .perm-key { font-weight: 700; color: var(--cp-text); }
+    .yn-badge { display: inline-flex; align-items: center; padding: .12rem .55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .yn-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
+    .yn-badge.is-no { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .badge-cell { text-align: center; white-space: nowrap; }
+    thead th.badge-col, tbody td.badge-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
     @media (max-width: 48rem) {
       .perm-list li { grid-template-columns: 1fr; }
     }
@@ -659,6 +678,8 @@
       <p>Entra ID roles govern the directory itself - users, groups, applications, devices, authentication methods and the Microsoft 365 services that trust it. They are a different system from Azure RBAC: an Entra role never grants access to a subscription or a resource group, and an Azure role never lets you reset a password or consent to an application. The one bridge between them is the Global Administrator's ability to elevate access to User Access Administrator at the root management group, which is a deliberate, auditable action.</p>
       <h3>Template ID, not role ID</h3>
       <p>Each built-in role has a template ID that is identical in every tenant, and a role definition ID that is only stable within one tenant. Automation should reference the template ID - that is the GUID listed here - so the same script works against any directory.</p>
+      <h3>Roles are not Graph API permissions</h3>
+      <p>The <code>microsoft.directory/...</code> strings listed against each role are Entra RBAC resource actions, not Microsoft Graph scopes such as <code>Directory.Read.All</code>. The two models are parallel and Microsoft publishes no mapping between them: a Graph permission decides what an application's <em>token</em> may attempt, while the role decides what the <em>identity</em> may do in the directory, and many operations need both. A call that fails with <code>Authorization_RequestDenied</code> despite the correct scope is almost always missing the role. The full scope catalog is on the <a href="/graph-permissions/">Microsoft Graph permissions</a> page.</p>
       <h3>Privileged roles</h3>
       <p>Microsoft flags a role as privileged when it can manage access to the directory or to Microsoft 365 services, directly or by proxy: creating credentials on an application, resetting an administrator's password, or assigning other roles. Those roles are the ones worth putting behind Privileged Identity Management with approval and time limits, and worth alerting on when assigned permanently.</p>
       <h3>Practical guidance</h3>
@@ -894,6 +915,23 @@
       });
     }
 
+    // The shared url-state script hydrates at parse time, before the JSON has
+    // arrived: its restored values are then overwritten by the first render,
+    // and a select value set before its options exist is dropped outright.
+    // Re-apply the query string once the data and the option lists are in place.
+    function hydrateFromUrl() {
+      if (!window.URLSearchParams) return;
+      const params = new URLSearchParams(location.search);
+      if (!params.toString()) return;
+      document.querySelectorAll("main input[id], main select[id]").forEach(function (el) {
+        const value = params.get(el.id);
+        if (value === null) return;
+        if (el.type === "checkbox") el.checked = value === "1";
+        else el.value = value;
+      });
+      state.query = elements.search.value;
+    }
+
     function wireChrome() {
       let scrollTicking = false;
       window.addEventListener("scroll", function () {
@@ -1008,7 +1046,8 @@
         ]);
 
         fillSelect(elements.serviceFilter, payload.services || []);
-        renderTable();
+        hydrateFromUrl();
+        applyFilter();
       } catch (error) {
         console.error(error);
         elements.resultCount.textContent = "Unable to load the built-in roles data.";
