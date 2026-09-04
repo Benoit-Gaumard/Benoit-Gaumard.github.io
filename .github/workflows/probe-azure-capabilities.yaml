@@ -1,0 +1,26 @@
+name: Probe Azure Capabilities
+
+# Read-only, manual only. Reports what the scan-benoit-gaumard.io app is allowed
+# to read, so the three documentation-sourced tool pages can be moved onto the
+# live APIs with knowledge rather than optimism. Writes nothing, commits nothing.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Probe ARM and Microsoft Graph access
+        shell: pwsh
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: ./.github/probe-azure-capabilities.ps1
