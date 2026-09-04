@@ -41,6 +41,9 @@ jobs:
 
       - name: Save weekly dated snapshot
         if: github.event.schedule == '0 18 * * 1' || (github.event_name == 'workflow_dispatch' && inputs.snapshot)
+        # policyrules.json is deliberately not snapshotted: at ~10 MB a weekly
+        # copy would add half a gigabyte to the repository every year, and the
+        # index files are what the catalog diffs are actually read from.
         run: |
           mkdir -p azure-policies/history
           snapshot_date=$(date -u +%Y-%m-%d)
@@ -51,7 +54,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add azure-policies/policydefinitions.json azure-policies/policysetdefinitions.json
+          git add azure-policies/policydefinitions.json azure-policies/policysetdefinitions.json azure-policies/policyrules.json
           if [ -d azure-policies/history ]; then
             git add azure-policies/history
           fi
