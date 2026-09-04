@@ -51,6 +51,12 @@ Read literally: this baseline applies to everything under `mg-corp-prod`, **exce
 
 Exclusions inherit like scopes do. Excluding a management group excludes everything beneath it. Excluding a resource group excludes every resource inside it.
 
+In the portal it is a picker on the assignment - subscription, resource group, or individual resource - and what it writes is exactly the array above:
+
+![The Exclusions picker on a policy assignment in the Azure portal](https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/request-exclusion.png "Selecting a subscription, resource group or resource to exclude from an initiative assignment")
+
+*Source: [Tutorial: Build policies to enforce compliance](https://learn.microsoft.com/en-us/azure/governance/policy/tutorials/create-and-manage) - © Microsoft, Microsoft Learn.*
+
 ## The one thing you must understand
 
 Here is the sentence that decides whether you use exclusions correctly:

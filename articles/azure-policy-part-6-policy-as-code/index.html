@@ -535,7 +535,7 @@
         <span class="dot">&middot;</span>
         <span>September 4, 2026</span>
         <span class="dot">&middot;</span>
-        <span>10 min read</span>
+        <span>11 min read</span>
       </div>
       <div class="article-tags"><span class="article-tag">#Azure Policy</span><span class="article-tag">#Governance</span><span class="article-tag">#DevOps</span><span class="article-tag">#CI/CD</span><span class="article-tag">#Bicep</span><span class="article-tag">#Terraform</span></div>
     </div>
@@ -580,6 +580,9 @@
 <h2 id="microsoft-s-workflow-create-test-deploy">Microsoft's workflow: create, test, deploy</h2>
 <p>Microsoft's guidance page, <em>Design Azure Policy as Code workflows</em>, is short and worth reading. The recommended loop:</p>
 <ol><li><strong>Get everything into source control.</strong> Export what already exists before writing anything new.</li><li><strong>Create or update definitions</strong> as JSON in the repository.</li><li><strong>Create or update initiatives</strong> - after their member definitions exist.</li><li><strong>Test and validate</strong> by assigning in the environment furthest from production, with <code>enforcementMode</code> disabled, scoped to a dedicated validation resource group or subscription.</li><li><strong>Enable remediation tasks</strong> - grant the managed identity its <code>roleDefinitionIds</code>, trigger remediation, then verify three things: the task completed, compliance updated, and <em>the resource properties actually changed</em>.</li><li><strong>Promote to enforced assignments</strong>, ring by ring.</li></ol>
+<p>Microsoft's own diagram of that loop, which is worth pinning somewhere your team will see it:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/policy-as-code/policy-as-code-workflow.png" alt="Create, test and deploy workflow for Azure Policy as Code" loading="lazy"><figcaption>Create definitions, create the initiative, assign with enforcement disabled, check compliance, grant the managed identity permissions and remediate, then enable enforcement</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-as-code" target="_blank" rel="noopener noreferrer">Design Azure Policy as Code workflows <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
 <p>Step 4 has a caveat Microsoft states explicitly and people ignore: <code>enforcementMode</code> is not a substitute for real testing. A definition should be tested with both <code>PUT</code> and <code>PATCH</code> requests, against compliant and non-compliant resources, and against edge cases like a property being absent entirely. A rule that assumes a property exists behaves very differently on a <code>PATCH</code> that does not include it.</p>
 <h2 id="the-four-hard-problems">The four hard problems</h2>
 <p>Any tool you choose - or build - has to solve these. This is the checklist to judge Part 7's options against.</p>

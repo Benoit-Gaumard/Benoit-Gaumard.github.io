@@ -124,6 +124,12 @@ An initiative cannot contain another initiative. There is no nesting. If you wan
 
 Two built-ins and one custom definition, all driven by two initiative-level parameters, grouped into two themes. That is the whole pattern.
 
+The portal builds the same object through a wizard, and its tabs map one-to-one onto that JSON: **Policies** is `policyDefinitions`, **Groups** is `policyDefinitionGroups`, and the two parameter tabs are the initiative parameters and the member parameters they feed.
+
+![The New initiative definition blade in the Azure portal](https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/initiative-definition.png "Creating an initiative in the portal - Basics, Policies, Groups, Initiative parameters and Policy parameters")
+
+*Source: [Tutorial: Build policies to enforce compliance](https://learn.microsoft.com/en-us/azure/governance/policy/tutorials/create-and-manage) - © Microsoft, Microsoft Learn.*
+
 ## The four properties that matter
 
 ### policyDefinitionId
@@ -181,6 +187,12 @@ For **Regulatory Compliance** initiatives it is the whole mechanism. Microsoft's
 ```
 
 Those `policyMetadata` objects are created by Microsoft only. You can reference them from a custom initiative to slot your own controls into an existing framework view, but you cannot invent a new framework.
+
+The payoff is the **Controls** view: compliance rolled up per named framework control rather than per policy definition, which is the shape an auditor actually asks for.
+
+![Regulatory compliance view of a NIST SP 800-53 initiative assignment in the Azure portal](https://learn.microsoft.com/en-us/azure/governance/policy/media/regulatory-compliance/regulatory-compliance-overview.png "A NIST SP 800-53 R4 initiative assignment showing non-compliant controls, policies and resources, with a Controls tab grouped by domain")
+
+*Source: [Regulatory Compliance in initiative definitions](https://learn.microsoft.com/en-us/azure/governance/policy/concepts/regulatory-compliance) - © Microsoft, Microsoft Learn.*
 
 ## Version pinning inside an initiative
 
