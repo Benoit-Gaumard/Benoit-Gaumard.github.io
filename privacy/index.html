@@ -355,12 +355,22 @@
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
     .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem; aspect-ratio: 16 / 9;
+      max-width: 50rem; margin: 0 auto 2.5rem;
       border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
       box-shadow: var(--cp-shadow); overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .article-feature-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
+    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Square service and product logos get one shared band instead: the height
+       is fixed so every logo hero matches, and the sources are vector, so the
+       small ones scale up to it without softening. */
+    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    @media (max-width: 32rem) {
+      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
+    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -417,13 +427,27 @@
     .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
     .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
     .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    /* Reuses the shell's .share-btn so this reads as the same control as the
+       "Share this site" row in the footer; only the layout differs. */
+    .article-share {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
+      margin: 1.75rem 0 0; padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
+    }
+    .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .article-share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .article-share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .article-share-hint:empty { display: none; }
     @media (max-width: 40rem) {
       .article-meta { font-size: 0.8rem; }
+      .article-share { flex-direction: column; align-items: flex-start; }
+      .article-share-links { width: 100%; }
     }
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .copy-code-button, .article-toc,
+      .article-share, .adsbygoogle,
       .breadcrumb { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
@@ -713,6 +737,38 @@
           var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
           hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
         });
+      }
+    })();
+  </script>
+<script data-article-share-script>
+    (function () {
+      var root = document.querySelector('.article-share');
+      if (!root) return;
+      var hint = root.querySelector('[data-article-share-hint]');
+
+      function say(message) {
+        if (hint) hint.textContent = message;
+      }
+
+      var copyBtn = root.querySelector('[data-article-share="copy"]');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          // The build-time URL is canonical; location.href would carry any
+          // tracking query string the visitor arrived with.
+          var value = copyBtn.getAttribute('data-share-url') || location.href;
+          function done() { say('Link copied to the clipboard.'); }
+          function failed() { say(value); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, failed);
+          } else {
+            failed();
+          }
+        });
+      }
+
+      var printBtn = root.querySelector('[data-article-share="print"]');
+      if (printBtn) {
+        printBtn.addEventListener('click', function () { window.print(); });
       }
     })();
   </script>

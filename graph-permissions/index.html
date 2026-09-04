@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Browse every Microsoft Entra ID built-in directory role with its template ID, privileged classification and a description for each allowed resource action.">
+  <meta name="description" content="Browse every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and description.">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="benoit-gaumard.io" />
-  <meta property="og:title" content="Entra ID Built-in Roles | Benoit Gaumard" />
-  <meta property="og:description" content="Browse every Microsoft Entra ID built-in directory role with its template ID, privileged classification and a description for each allowed resource action." />
-  <meta property="og:url" content="https://benoit-gaumard.io/entra-built-in-roles/" />
+  <meta property="og:title" content="Microsoft Graph Permissions | Benoit Gaumard" />
+  <meta property="og:description" content="Browse every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and description." />
+  <meta property="og:url" content="https://benoit-gaumard.io/graph-permissions/" />
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="canonical" href="https://benoit-gaumard.io/entra-built-in-roles/" />
+  <link rel="canonical" href="https://benoit-gaumard.io/graph-permissions/" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Entra ID Built-in Roles",
-    "description": "Browse every Microsoft Entra ID built-in directory role with its template ID, privileged classification and a description for each allowed resource action.",
-    "url": "https://benoit-gaumard.io/entra-built-in-roles/",
+    "name": "Microsoft Graph Permissions",
+    "description": "Browse every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and description.",
+    "url": "https://benoit-gaumard.io/graph-permissions/",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "browserRequirements": "Requires JavaScript",
@@ -79,7 +79,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <title>Entra ID Built-in Roles | Benoit Gaumard</title>
+  <title>Microsoft Graph Permissions | Benoit Gaumard</title>
   <style>
     :root {
       color-scheme: light;
@@ -599,8 +599,8 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Entra ID Built-in Roles",
-        "item": "https://benoit-gaumard.io/entra-built-in-roles/"
+        "name": "Microsoft Graph Permissions",
+        "item": "https://benoit-gaumard.io/graph-permissions/"
       }
     ]
   }
@@ -643,28 +643,36 @@
 <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
-      <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="28" height="28"></span>Entra ID Built-in Roles</h1>
-      <p class="intro-text">Every Microsoft Entra ID built-in directory role with its template ID, privileged classification and the description Microsoft gives each allowed resource action, from the official <a href="https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference" target="_blank" rel="noopener">built-in roles reference</a>.</p>
+      <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="28" height="28"></span>Microsoft Graph Permissions</h1>
+      <p class="intro-text">Every Microsoft Graph API permission - delegated, application and resource-specific consent - with its identifier, consent requirement and the description a user or admin actually sees, from the official <a href="https://learn.microsoft.com/en-us/graph/permissions-reference" target="_blank" rel="noopener">Graph permissions reference</a>.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
       </p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Built-in role statistics"></section>
+    <section class="stats-grid" id="statsGrid" aria-label="Graph permission statistics"></section>
 
-    <section aria-label="Entra ID built-in roles">
+    <section aria-label="Microsoft Graph permissions">
       <div class="filter-bar">
-        <input id="search" type="search" placeholder="Filter by role, description or permission..." autocomplete="off" spellcheck="false" aria-label="Filter by role, description or permission">
-        <select id="serviceFilter" aria-label="Filter by service"><option value="">All services</option></select>
-        <label class="filter-toggle"><input type="checkbox" id="privilegedOnlyFilter"> Privileged only</label>
+        <input id="search" type="search" placeholder="Filter by permission, description or ID..." autocomplete="off" spellcheck="false" aria-label="Filter by permission, description or ID">
+        <select id="resourceFilter" aria-label="Filter by resource"><option value="">All resources</option></select>
+        <select id="typeFilter" aria-label="Filter by permission type">
+          <option value="">All types</option>
+          <option value="delegated">Delegated</option>
+          <option value="application">Application</option>
+          <option value="rsc">Resource-specific (RSC)</option>
+        </select>
+        <label class="filter-toggle"><input type="checkbox" id="adminConsentFilter"> Admin consent only</label>
       </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th data-key="displayName">Role <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="permissionCount">Permissions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="templateId">Template ID <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="name">Permission <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="resource">Resource <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="hasDelegated" class="badge-col">Delegated <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="hasApplication" class="badge-col">Application <span class="sort-arrow">&#9650;</span></th>
+              <th data-key="needsAdminConsent" class="badge-col">Admin consent <span class="sort-arrow">&#9650;</span></th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -674,23 +682,25 @@
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Microsoft Entra ID built-in roles</h2>
-      <p>Entra ID roles govern the directory itself - users, groups, applications, devices, authentication methods and the Microsoft 365 services that trust it. They are a different system from Azure RBAC: an Entra role never grants access to a subscription or a resource group, and an Azure role never lets you reset a password or consent to an application. The one bridge between them is the Global Administrator's ability to elevate access to User Access Administrator at the root management group, which is a deliberate, auditable action.</p>
-      <h3>Template ID, not role ID</h3>
-      <p>Each built-in role has a template ID that is identical in every tenant, and a role definition ID that is only stable within one tenant. Automation should reference the template ID - that is the GUID listed here - so the same script works against any directory.</p>
-      <h3>Roles are not Graph API permissions</h3>
-      <p>The <code>microsoft.directory/...</code> strings listed against each role are Entra RBAC resource actions, not Microsoft Graph scopes such as <code>Directory.Read.All</code>. The two models are parallel and Microsoft publishes no mapping between them: a Graph permission decides what an application's <em>token</em> may attempt, while the role decides what the <em>identity</em> may do in the directory, and many operations need both. A call that fails with <code>Authorization_RequestDenied</code> despite the correct scope is almost always missing the role. The full scope catalog is on the <a href="/graph-permissions/">Microsoft Graph permissions</a> page.</p>
-      <h3>Privileged roles</h3>
-      <p>Microsoft flags a role as privileged when it can manage access to the directory or to Microsoft 365 services, directly or by proxy: creating credentials on an application, resetting an administrator's password, or assigning other roles. Those roles are the ones worth putting behind Privileged Identity Management with approval and time limits, and worth alerting on when assigned permanently.</p>
-      <h3>Practical guidance</h3>
+      <h2 id="notes-heading">About Microsoft Graph permissions</h2>
+      <p>A Graph permission, also called a scope, is what an application asks for so that its access token is allowed to reach a given part of Microsoft Graph. Every permission exists in up to two flavours, and the difference decides who can consent to it and what the call can reach.</p>
+      <h3>Delegated, application and resource-specific</h3>
       <ul>
-        <li>Prefer a narrow role over Global Administrator; most day-to-day tasks are covered by a specific administrator role listed here.</li>
-        <li>Scope role assignments to an administrative unit when the role supports it, so a helpdesk role does not reach the whole directory.</li>
-        <li>Keep at least two, and no more than a handful, of permanent Global Administrators, and exclude a break-glass account from Conditional Access.</li>
-        <li>Read the permissions rather than the name: several reader-sounding roles can read sensitive data, and some administrator roles are narrower than they sound.</li>
+        <li><strong>Delegated</strong> permissions are used when a user is signed in. The effective access is the intersection of the permission and what that user is already allowed to do, so a delegated <code>User.ReadWrite.All</code> still cannot edit a user the signed-in account has no rights over.</li>
+        <li><strong>Application</strong> permissions are used with no signed-in user, typically by a daemon or a pipeline. There is no user to intersect with, so the permission is the whole story - which is why almost all of them require admin consent.</li>
+        <li><strong>Resource-specific consent (RSC)</strong> permissions are scoped to a single Teams team, chat or user rather than the tenant, and are consented by the owner of that resource.</li>
+      </ul>
+      <h3>Permissions are not Entra ID roles</h3>
+      <p>This is the distinction that costs the most debugging time. A Graph permission decides what the <em>token</em> may attempt; an <a href="/entra-built-in-roles/">Entra ID directory role</a> decides what the <em>identity</em> may do in the directory. Many operations need both, and Microsoft publishes no mapping between the two - the models are deliberately parallel. If a call fails with <code>Authorization_RequestDenied</code> despite the right scope, the missing piece is usually the role, not the permission.</p>
+      <h3>Choosing the least privileged permission</h3>
+      <ul>
+        <li>Prefer the narrowest permission a call accepts; each Graph API method documents its own least privileged option.</li>
+        <li>Prefer delegated over application whenever a user is present, so the user's own limits still apply.</li>
+        <li>Watch for the <code>.All</code> suffix - it means tenant-wide, not "all properties".</li>
+        <li>Identifiers listed here are the same GUIDs in every tenant, so they are safe to hard-code in an app manifest or a consent URL.</li>
       </ul>
       <h3>Where this data comes from</h3>
-      <p>The dataset is rebuilt several times a day from Microsoft's generated Entra ID roles reference, so a role or permission added upstream appears here without anyone editing this page.</p>
+      <p>The dataset is rebuilt several times a day from Microsoft's published permissions reference. The same catalog can be read from Graph itself on the Microsoft Graph service principal, but only by a caller holding <code>Application.Read.All</code>; the reference is public and additionally carries the RSC permissions.</p>
     </section>
   </main>
 
@@ -756,14 +766,15 @@
 
 <script>
     const PAGE_SIZE = 100;
-    const state = { visible: PAGE_SIZE, roles: [], filtered: [], byKey: {}, sortKey: "displayName", sortDir: "asc", query: "" };
+    const state = { visible: PAGE_SIZE, permissions: [], filtered: [], byKey: {}, sortKey: "name", sortDir: "asc", query: "" };
     const elements = {
       statsGrid: document.getElementById("statsGrid"),
       refreshedAt: document.getElementById("refreshedAt"),
       currentYear: document.getElementById("currentYear"),
       search: document.getElementById("search"),
-      serviceFilter: document.getElementById("serviceFilter"),
-      privilegedOnlyFilter: document.getElementById("privilegedOnlyFilter"),
+      resourceFilter: document.getElementById("resourceFilter"),
+      typeFilter: document.getElementById("typeFilter"),
+      adminConsentFilter: document.getElementById("adminConsentFilter"),
       tableBody: document.getElementById("tableBody"),
       resultCount: document.getElementById("resultCount"),
       backToTop: document.getElementById("backToTop"),
@@ -947,22 +958,32 @@
       });
     }
 
-    function detailPanel(role) {
-      // The description is already under the role name in the row above.
+    function yesNo(flag) {
+      return '<span class="yn-badge ' + (flag ? "is-yes" : "is-no") + '">' + (flag ? "Yes" : "&mdash;") + "</span>";
+    }
+
+    function variantBlock(label, variant, withConsent) {
+      const rows = [];
+      if (variant.displayText) rows.push(["Display text", escapeHtml(variant.displayText)]);
+      if (variant.description) rows.push(["Description", escapeHtml(variant.description)]);
+      rows.push(["Identifier", "<code>" + escapeHtml(variant.id) + "</code> " + copyButton("Copy", variant.id)]);
+      if (withConsent) rows.push(["Admin consent", yesNo(variant.adminConsent)]);
+      return '<div class="detail-group"><h3 class="is-bucket">' + label + "</h3>" +
+        '<ul class="perm-list kv-list">' + rows.map(function (row) {
+          return '<li><span class="perm-key">' + row[0] + '</span><span class="perm-desc">' + row[1] + "</span></li>";
+        }).join("") + "</ul></div>";
+    }
+
+    function detailPanel(permission) {
       let html = '<div class="detail-meta">' +
-        copyButton("Copy template ID", role.templateId) +
-        copyButton("Copy name", role.displayName) +
-        '<a href="' + escapeHtml(role.docUrl) + '" target="_blank" rel="noopener">View on Microsoft Learn</a>' +
+        copyButton("Copy permission", permission.name) +
+        '<a href="' + escapeHtml(permission.docUrl) + '" target="_blank" rel="noopener">View on Microsoft Learn</a>' +
+        (permission.personalAccounts ? '<span class="role-badge">Personal Microsoft accounts</span>' : "") +
         "</div>";
 
-      if (role.services && role.services.length) {
-        html += '<div class="detail-group"><h3>Services</h3><div class="scope-list">' +
-          role.services.map(function (service) { return "<code>" + escapeHtml(service) + "</code>"; }).join("") +
-          "</div></div>";
-      }
-
-      html += '<div class="detail-group"><h3>Allowed resource actions (' + (role.permissions || []).length.toLocaleString() + ")</h3>" +
-        permissionList(role.permissions) + "</div>";
+      if (permission.delegated) html += variantBlock("Delegated", permission.delegated, true);
+      if (permission.application) html += variantBlock("Application", permission.application, true);
+      if (permission.rsc) html += variantBlock("Resource-specific consent", permission.rsc, false);
       return html;
     }
 
@@ -972,26 +993,28 @@
 
       elements.tableBody.replaceChildren();
       const fragment = document.createDocumentFragment();
-      shown.forEach(function (role) {
+      shown.forEach(function (permission) {
         const tr = document.createElement("tr");
         tr.className = "role-row";
-        tr.dataset.key = role.templateId;
+        tr.dataset.key = permission.name;
         tr.tabIndex = 0;
         tr.setAttribute("role", "button");
         tr.setAttribute("aria-expanded", "false");
         tr.innerHTML =
-          '<td><span class="role-head"><svg class="role-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span class="role-name">' + escapeHtml(role.displayName) + "</span>" +
-            (role.isPrivileged ? '<span class="role-badge is-privileged">Privileged</span>' : "") +
-          "</span>" + (role.description ? '<span class="role-desc">' + escapeHtml(role.description) + "</span>" : "") + "</td>" +
-          '<td class="num-cell">' + role.permissionCount.toLocaleString() + "</td>" +
-          '<td class="id-cell"><code>' + escapeHtml(role.templateId) + "</code></td>";
+          '<td><span class="role-head"><svg class="role-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><code class="role-name">' + escapeHtml(permission.name) + "</code>" +
+            (permission.rsc ? '<span class="role-badge">RSC</span>' : "") +
+          "</span>" + (permission.summary ? '<span class="role-desc">' + escapeHtml(permission.summary) + "</span>" : "") + "</td>" +
+          "<td>" + escapeHtml(permission.resource || "") + "</td>" +
+          '<td class="badge-cell">' + yesNo(permission.hasDelegated) + "</td>" +
+          '<td class="badge-cell">' + yesNo(permission.hasApplication) + "</td>" +
+          '<td class="badge-cell">' + (permission.rsc && !permission.delegated && !permission.application ? '<span class="yn-badge is-no">n/a</span>' : yesNo(permission.needsAdminConsent)) + "</td>";
         fragment.append(tr);
       });
       elements.tableBody.append(fragment);
 
       elements.resultCount.textContent = shown.length < rows.length
-        ? "Showing " + shown.length.toLocaleString() + " of " + rows.length.toLocaleString() + " matching roles."
-        : rows.length.toLocaleString() + " role" + (rows.length === 1 ? "" : "s") + " shown.";
+        ? "Showing " + shown.length.toLocaleString() + " of " + rows.length.toLocaleString() + " matching permissions."
+        : rows.length.toLocaleString() + " permission" + (rows.length === 1 ? "" : "s") + " shown.";
 
       renderLoadMore(rows.length, shown.length);
       markSortedHeader();
@@ -1000,12 +1023,14 @@
     function applyFilter() {
       state.visible = PAGE_SIZE;
       const query = normalize(state.query.trim());
-      const service = elements.serviceFilter.value;
-      const privilegedOnly = elements.privilegedOnlyFilter.checked;
-      state.filtered = state.roles.filter(function (role) {
-        if (service && role.services.indexOf(service) === -1) return false;
-        if (privilegedOnly && !role.isPrivileged) return false;
-        if (query && role.haystack.indexOf(query) === -1) return false;
+      const resource = elements.resourceFilter.value;
+      const type = elements.typeFilter.value;
+      const adminConsentOnly = elements.adminConsentFilter.checked;
+      state.filtered = state.permissions.filter(function (permission) {
+        if (resource && permission.resource !== resource) return false;
+        if (type && permission.types.indexOf(type) === -1) return false;
+        if (adminConsentOnly && !permission.needsAdminConsent) return false;
+        if (query && permission.haystack.indexOf(query) === -1) return false;
         return true;
       });
       renderTable();
@@ -1014,43 +1039,50 @@
     async function init() {
       elements.currentYear.textContent = new Date().getFullYear();
       try {
-        const response = await fetch("./roles.json", { cache: "no-store" });
+        const response = await fetch("./permissions.json", { cache: "no-store" });
         if (!response.ok) throw new Error("Data request failed: " + response.status);
         const payload = await response.json();
 
-        state.roles = (payload.roles || []).map(function (role) {
-          const permissions = role.permissions || [];
-          const searchable = [role.displayName, role.description]
-            .concat(permissions.map(function (p) { return p[0]; }))
+        state.permissions = (payload.permissions || []).map(function (permission) {
+          const variants = [permission.delegated, permission.application, permission.rsc].filter(Boolean);
+          // The delegated wording is what a user sees on the consent screen, so
+          // it leads; application wording only shows when there is no delegated
+          // flavour.
+          const summary = (permission.delegated || permission.application || permission.rsc || {}).displayText || "";
+          const searchable = [permission.name, summary]
+            .concat(variants.map(function (v) { return v.description || ""; }))
+            .concat(variants.map(function (v) { return v.id || ""; }))
             .join(" ");
-          return Object.assign({}, role, {
-            permissions: permissions,
-            services: role.services || [],
-            permissionCount: permissions.length,
+          return Object.assign({}, permission, {
+            types: permission.types || [],
+            summary: summary,
+            hasDelegated: permission.delegated ? 1 : 0,
+            hasApplication: permission.application ? 1 : 0,
+            needsAdminConsent: (permission.delegated && permission.delegated.adminConsent) || (permission.application && permission.application.adminConsent) ? 1 : 0,
             haystack: normalize(searchable),
           });
         });
-        state.filtered = state.roles;
+        state.filtered = state.permissions;
         state.byKey = {};
-        state.roles.forEach(function (role) { state.byKey[role.templateId] = role; });
+        state.permissions.forEach(function (permission) { state.byKey[permission.name] = permission; });
 
         elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
           year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
         });
 
         renderStats([
-          { label: "Built-in roles", value: payload.totalRoles || state.roles.length },
-          { label: "Permissions", value: payload.totalPermissions || 0 },
-          { label: "Services", value: payload.totalServices || 0 },
-          { label: "Privileged roles", value: payload.privilegedCount || 0, tone: "warning" },
+          { label: "Permissions", value: payload.totalPermissions || state.permissions.length },
+          { label: "Delegated", value: payload.delegatedCount || 0 },
+          { label: "Application", value: payload.applicationCount || 0 },
+          { label: "Need admin consent", value: payload.adminConsentCount || 0, tone: "warning" },
         ]);
 
-        fillSelect(elements.serviceFilter, payload.services || []);
+        fillSelect(elements.resourceFilter, payload.resources || []);
         hydrateFromUrl();
         applyFilter();
       } catch (error) {
         console.error(error);
-        elements.resultCount.textContent = "Unable to load the built-in roles data.";
+        elements.resultCount.textContent = "Unable to load the Graph permissions data.";
       }
     }
 
@@ -1060,8 +1092,9 @@
       clearTimeout(searchTimer);
       searchTimer = setTimeout(applyFilter, 120);
     });
-    elements.serviceFilter.addEventListener("change", applyFilter);
-    elements.privilegedOnlyFilter.addEventListener("change", applyFilter);
+    elements.resourceFilter.addEventListener("change", applyFilter);
+    elements.typeFilter.addEventListener("change", applyFilter);
+    elements.adminConsentFilter.addEventListener("change", applyFilter);
 
     wireTableInteractions();
     wireChrome();
