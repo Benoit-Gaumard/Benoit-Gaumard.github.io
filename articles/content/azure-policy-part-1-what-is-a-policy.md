@@ -206,6 +206,12 @@ The effect is what happens when the condition matches. The current supported set
 
 `modify` and `deployIfNotExists` are the two that make Azure Policy an automation engine rather than a reporting tool. Both require the assignment to carry a **managed identity**, and the definition to declare the roles that identity needs in a `roleDefinitionIds` array. That is Part 3 territory, and it is where most of the operational pain lives.
 
+Of the whole list, `deny` is the one your users will meet. This is what it looks like from the other side - the deployment fails and the resource comes back `Forbidden`:
+
+![A deployment blocked by a deny policy, with the resource marked Forbidden](https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/rg-deployment-denied.png "A failed deployment where the resource status reads Forbidden because a deny policy blocked it")
+
+*Source: [Tutorial: Build policies to enforce compliance](https://learn.microsoft.com/en-us/azure/governance/policy/tutorials/create-and-manage) - © Microsoft, Microsoft Learn.*
+
 ### The order effects run in
 
 This matters more than people expect, because effects layer cumulatively and the most restrictive one wins.
@@ -262,6 +268,12 @@ A definition does not run continuously. Evaluation is triggered by:
 - **An on-demand evaluation scan** that you trigger yourself
 
 This is why the dashboard lags reality. You changed a definition, you checked compliance five minutes later, nothing moved. Nothing was wrong. Trigger a scan, or wait.
+
+The dashboard in question is the **Compliance** blade, which rolls everything up into one percentage and a breakdown per assignment:
+
+![The Azure Policy compliance page in the Azure portal](https://learn.microsoft.com/en-us/azure/governance/policy/media/getting-compliance-data/compliance-page-small.png "Overall resource compliance, resources by compliance state, and the count of non-compliant initiatives and policies")
+
+*Source: [Get policy compliance data](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data) - © Microsoft, Microsoft Learn.*
 
 It is also why `deny` is not retroactive. Existing non-compliant resources are *reported*, never deleted. Turning a control on does not clean up the estate - remediation does, and that is Part 3.
 

@@ -81,6 +81,12 @@ Scope is the single most consequential field. An assignment can target:
 
 **Assignments inherit downwards, always, and cannot be turned off from below.** An assignment on `mg-corp-prod` applies to every subscription, every resource group, and every resource beneath it. A subscription owner cannot delete or override it. That is the entire point - it is what makes a management group hierarchy a governance tool rather than a folder structure.
 
+Microsoft's reference hierarchy makes the blast radius obvious. One assignment on **Landing zones** reaches every subscription under `Corp` and `Online`; one on **Platform** reaches identity, management, connectivity and security:
+
+![Management group and subscription organisation in a reference Azure hierarchy](https://learn.microsoft.com/en-us/azure/governance/media/mg-org.png "A tenant root group with Platform, Landing zones, Decommissioned and Sandbox management groups, and the subscriptions beneath each")
+
+*Source: [Organize your resources with management groups](https://learn.microsoft.com/en-us/azure/governance/management-groups/overview) - © Microsoft, Microsoft Learn.*
+
 If you do not have a deliberate management group design yet, policy will not save you. That comes first: [What Is an Azure Landing Zone?](/articles/what-is-an-azure-landing-zone/) and [Don't Build Your Cloud Home on Shaky Foundations](/articles/dont-build-your-cloud-home-on-shaky-foundations/).
 
 :::info
@@ -124,6 +130,12 @@ The identity then needs Azure RBAC roles. The definition declares which ones in 
 ```
 
 Note those are full role **IDs**, not role names. Built-in definitions come with the correct list already populated; custom definitions are your responsibility.
+
+Remediation has its own blade, listing every assigned `deployIfNotExists` policy and how many resources a task would act on:
+
+![The Remediation blade in Azure Policy, listing policies to remediate](https://learn.microsoft.com/en-us/azure/governance/policy/media/remediate-resources/select-remediation.png "The Policies to remediate tab showing assigned deployIfNotExists policies, their assignment, resource count and scope")
+
+*Source: [Remediate non-compliant resources](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources) - © Microsoft, Microsoft Learn.*
 
 ### The four things that go wrong
 
@@ -255,6 +267,12 @@ All policy objects are readable by any role that can read the scope. There is no
 8. **Keep the audit-only overrides** on members the estate has not caught up with, and burn that list down deliberately.
 
 The step people skip is 2. Assignments take up to 30 minutes to take effect and up to 24 hours for a full compliance picture. Checking five minutes later and concluding "it works" is how a deny reaches production untested.
+
+The Cloud Adoption Framework compresses the same idea into three phases, specifically for the `deployIfNotExists` and `modify` policies that act rather than report:
+
+![Three-phase rollout of DeployIfNotExists and Modify policies](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/media/dine-phases.png "Disable automated actions, then enable on a specific policy or reduced scope, then enable everywhere")
+
+*Source: [Adopt policy-driven guardrails](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/dine-guidance) - © Microsoft, Cloud Adoption Framework.*
 
 ## What an assignment cannot do
 

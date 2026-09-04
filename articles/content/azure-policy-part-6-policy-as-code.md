@@ -78,6 +78,12 @@ Microsoft's guidance page, *Design Azure Policy as Code workflows*, is short and
 5. **Enable remediation tasks** - grant the managed identity its `roleDefinitionIds`, trigger remediation, then verify three things: the task completed, compliance updated, and *the resource properties actually changed*.
 6. **Promote to enforced assignments**, ring by ring.
 
+Microsoft's own diagram of that loop, which is worth pinning somewhere your team will see it:
+
+![Create, test and deploy workflow for Azure Policy as Code](https://learn.microsoft.com/en-us/azure/governance/policy/media/policy-as-code/policy-as-code-workflow.png "Create definitions, create the initiative, assign with enforcement disabled, check compliance, grant the managed identity permissions and remediate, then enable enforcement")
+
+*Source: [Design Azure Policy as Code workflows](https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-as-code) - © Microsoft, Microsoft Learn.*
+
 Step 4 has a caveat Microsoft states explicitly and people ignore: `enforcementMode` is not a substitute for real testing. A definition should be tested with both `PUT` and `PATCH` requests, against compliant and non-compliant resources, and against edge cases like a property being absent entirely. A rule that assumes a property exists behaves very differently on a `PATCH` that does not include it.
 
 ## The four hard problems

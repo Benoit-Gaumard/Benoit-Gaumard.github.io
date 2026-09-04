@@ -152,7 +152,13 @@ There is also a **compliance substate**, which is the genuinely useful part:
 
 So you can answer the question that actually matters at review time: *is this exemption still needed?* If the substate says the resource would now be compliant, the vendor shipped the fix, the team upgraded, and the exemption can be deleted.
 
-It is not a property you set - Policy Insights populates it. In the portal, add the column via **Edit columns**. Or query it:
+It is not a property you set - Policy Insights populates it. In the portal, add the column via **Edit columns** on the resource compliance list:
+
+![Compliance details for a policy assignment, with per-resource compliance state](https://learn.microsoft.com/en-us/azure/governance/policy/media/getting-compliance-data/compliance-details-small.png "Resource compliance for one assignment, where Edit columns exposes the compliance substate alongside the state")
+
+*Source: [Get policy compliance data](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data) - © Microsoft, Microsoft Learn.*
+
+Or query it:
 
 ```kusto
 policyresources

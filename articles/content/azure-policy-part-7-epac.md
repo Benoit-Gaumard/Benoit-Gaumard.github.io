@@ -63,6 +63,10 @@ One folder per object type from Parts 1 to 5, plus:
 - **`policyEnrollments/`** for the newer `enforcementMode: Enroll` opt-in model from Part 3
 - **`policyDocumentations/`** which drives `Build-PolicyDocumentation`, generating Markdown and CSV describing what your estate actually enforces - genuinely useful when an auditor asks
 
+![The EPAC Definitions folder structure in VS Code](https://azure.github.io/enterprise-azure-policy-as-code/Images/definitions-folder-structure.png "policyAssignments, policyDefinitions, policyDocumentations, policyExemptions and policySetDefinitions alongside global-settings.jsonc")
+
+*Source: [EPAC documentation](https://azure.github.io/enterprise-azure-policy-as-code/start-implementing/) - © Microsoft, `Azure/enterprise-azure-policy-as-code` (MIT).*
+
 Subfolders inside each are free-form: organise by category, by owner, by framework, whatever suits. File names are irrelevant - EPAC registers a definition by its `name` attribute, not its filename - and `.jsonc` is supported, so **you can comment your policy files**. After Part 4's complaint that `notScopes` entries have nowhere to record a justification, that alone is worth something.
 
 ## global-settings.jsonc
@@ -120,6 +124,12 @@ Use an **intermediate root management group**, not the Tenant Root Group. Two re
 
 Also: `epac-dev` should have a `deploymentRootScope` **outside** your production hierarchy. A separate management group subtree - ideally in a separate tenant - so that testing a `Deny` cannot reach anything real.
 
+EPAC's own sample shows the shape: a production hierarchy under `contoso`, and a parallel `epac-contoso` subtree that mirrors it node for node.
+
+![A sample management group structure with a parallel EPAC development hierarchy](https://azure.github.io/enterprise-azure-policy-as-code/Images/sample-epac-mg-structure.png "A contoso hierarchy of landing zones, platform, sandbox and decommissioned, mirrored by an epac-contoso subtree for testing")
+
+*Source: [EPAC documentation](https://azure.github.io/enterprise-azure-policy-as-code/start-implementing/) - © Microsoft, `Azure/enterprise-azure-policy-as-code` (MIT).*
+
 ### globalNotScopes
 
 Exclusions ([Part 4](/articles/azure-policy-part-4-exclusions-notscopes/)) applied across every assignment in that environment, rather than repeated in each file. It accepts resource group **name patterns**, which is the clean answer to platform-managed resource groups:
@@ -154,6 +164,12 @@ It also means the portal shows a meaningful **Assigned by** value on assignments
 
 Under `full`, EPAC deletes objects with **no** `pacOwnerId` - portal-created leftovers - but does **not** delete objects stamped with a *different* `pacOwnerId`. That is a deliberate shared-responsibility model: a security team and a platform team can run separate EPAC instances against overlapping scopes without deleting each other's work.
 
+Two repositories, two `pacOwnerId` values, overlapping subtrees, and neither one removing the other's objects:
+
+![Two EPAC repositories owning overlapping management group subtrees](https://azure.github.io/enterprise-azure-policy-as-code/Images/shared-hierarchical.png "EPAC Repo A owns the root management group and EPAC Repo C owns a subtree below it, each with its own pacOwnerId")
+
+*Source: [EPAC documentation](https://azure.github.io/enterprise-azure-policy-as-code/settings-desired-state/) - © Microsoft, `Azure/enterprise-azure-policy-as-code` (MIT).*
+
 **The adoption path that works:**
 
 1. Start with `ownedOnly`. Deploy your policies. Nothing existing is touched.
@@ -183,6 +199,12 @@ Build-DeploymentPlans -PacEnvironmentSelector "tenant" `
 Deploy-PolicyPlan     -PacEnvironmentSelector "tenant" -InputFolder ./Output
 Deploy-RolesPlan      -PacEnvironmentSelector "tenant" -InputFolder ./Output
 ```
+
+The whole flow, from the `Definitions` folder through the two plan artefacts to the two deploy stages, each with its own role:
+
+![The EPAC deployment scripts and their required Azure roles](https://azure.github.io/enterprise-azure-policy-as-code/Images/epac-deployment-scripts.png "Build-DeploymentPlans as Resource Policy Reader produces policy-plan.json and roles-plan.json, consumed by Deploy-PolicyPlan and Deploy-RolesPlan behind approval gates")
+
+*Source: [EPAC documentation](https://azure.github.io/enterprise-azure-policy-as-code/) - © Microsoft, `Azure/enterprise-azure-policy-as-code` (MIT).*
 
 Three properties make this design good:
 

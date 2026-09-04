@@ -535,7 +535,7 @@
         <span class="dot">&middot;</span>
         <span>September 4, 2026</span>
         <span class="dot">&middot;</span>
-        <span>8 min read</span>
+        <span>9 min read</span>
       </div>
       <div class="article-tags"><span class="article-tag">#Azure Policy</span><span class="article-tag">#Governance</span><span class="article-tag">#Compliance</span><span class="article-tag">#Initiative</span></div>
     </div>
@@ -638,6 +638,9 @@
   }
 }</code></pre></div>
 <p>Two built-ins and one custom definition, all driven by two initiative-level parameters, grouped into two themes. That is the whole pattern.</p>
+<p>The portal builds the same object through a wizard, and its tabs map one-to-one onto that JSON: <strong>Policies</strong> is <code>policyDefinitions</code>, <strong>Groups</strong> is <code>policyDefinitionGroups</code>, and the two parameter tabs are the initiative parameters and the member parameters they feed.</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/initiative-definition.png" alt="The New initiative definition blade in the Azure portal" loading="lazy"><figcaption>Creating an initiative in the portal - Basics, Policies, Groups, Initiative parameters and Policy parameters</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/governance/policy/tutorials/create-and-manage" target="_blank" rel="noopener noreferrer">Tutorial: Build policies to enforce compliance <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
 <h2 id="the-four-properties-that-matter">The four properties that matter</h2>
 <h3 id="policydefinitionid">policyDefinitionId</h3>
 <p>The full resource ID of the member definition. Built-ins live at <code>/providers/Microsoft.Authorization/policyDefinitions/{guid}</code>. Custom ones live under a subscription or a management group.</p>
@@ -665,6 +668,9 @@
   }
 ]</code></pre></div>
 <p>Those <code>policyMetadata</code> objects are created by Microsoft only. You can reference them from a custom initiative to slot your own controls into an existing framework view, but you cannot invent a new framework.</p>
+<p>The payoff is the <strong>Controls</strong> view: compliance rolled up per named framework control rather than per policy definition, which is the shape an auditor actually asks for.</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/regulatory-compliance/regulatory-compliance-overview.png" alt="Regulatory compliance view of a NIST SP 800-53 initiative assignment in the Azure portal" loading="lazy"><figcaption>A NIST SP 800-53 R4 initiative assignment showing non-compliant controls, policies and resources, with a Controls tab grouped by domain</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/regulatory-compliance" target="_blank" rel="noopener noreferrer">Regulatory Compliance in initiative definitions <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
 <h2 id="version-pinning-inside-an-initiative">Version pinning inside an initiative</h2>
 <p>Each member can pin the version of the built-in it references:</p>
 <div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{

@@ -633,7 +633,10 @@
 <p>There is also a <strong>compliance substate</strong>, which is the genuinely useful part:</p>
 <p>&gt; The compliance substate shows what the resource's compliance state <strong>would be if the exemption were removed</strong>.</p>
 <p>So you can answer the question that actually matters at review time: <em>is this exemption still needed?</em> If the substate says the resource would now be compliant, the vendor shipped the fix, the team upgraded, and the exemption can be deleted.</p>
-<p>It is not a property you set - Policy Insights populates it. In the portal, add the column via <strong>Edit columns</strong>. Or query it:</p>
+<p>It is not a property you set - Policy Insights populates it. In the portal, add the column via <strong>Edit columns</strong> on the resource compliance list:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/getting-compliance-data/compliance-details-small.png" alt="Compliance details for a policy assignment, with per-resource compliance state" loading="lazy"><figcaption>Resource compliance for one assignment, where Edit columns exposes the compliance substate alongside the state</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data" target="_blank" rel="noopener noreferrer">Get policy compliance data <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<p>Or query it:</p>
 <div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">policyresources
 | where type == "microsoft.policyinsights/policystates"
 | extend complianceState = tostring(properties.complianceState),
