@@ -61,6 +61,7 @@
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
   <script>
     (function () {
       try {
@@ -416,18 +417,40 @@
        incompressible it starts winning space from the name, so the name column
        is given the share it needs to keep descriptions to a few lines. */
     .id-cell code { white-space: nowrap; overflow-wrap: normal; }
-    /* Star, category, mode/count and type shrink to their content; the name
-       column absorbs everything left over, so a description stays a few lines
-       tall instead of being squeezed into a ribbon. */
+    /* Star, category, effect/mode/version (or the member count) and type shrink
+       to their content; the name column absorbs everything left over, so a
+       description stays a few lines tall instead of being squeezed into a ribbon.
+       The two tables no longer have the same column count, hence the scoping. */
     thead th:nth-child(2) { width: 100%; }
-    thead th:nth-child(3), thead th:nth-child(4), thead th:nth-child(5) { width: 1%; }
+    #policiesPanel thead th:nth-child(n+3):nth-child(-n+7),
+    #initiativesPanel thead th:nth-child(n+3):nth-child(-n+6) { width: 1%; }
     /* One mode value, Microsoft.MachineLearningServices.v2.Data, is a 41-char
        token with no break opportunity: left alone it pins the column at its own
        width and starves the name column of nearly 300px. */
-    tbody td:nth-child(4) { overflow-wrap: anywhere; }
+    #policiesPanel tbody td:nth-child(5) { overflow-wrap: anywhere; }
     /* Only Type is safe to keep on one line: some policy modes are long
        (Microsoft.KeyVault.Data), and pinning them would hand the column 280px. */
-    tbody td:nth-child(5) { white-space: nowrap; }
+    #policiesPanel tbody td:nth-child(7),
+    #initiativesPanel tbody td:nth-child(6) { white-space: nowrap; }
+    /* Version columns: policies column 6, initiatives column 5. */
+    #policiesPanel tbody td:nth-child(6),
+    #initiativesPanel tbody td:nth-child(5) { white-space: nowrap; }
+    .effect-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    /* Deny blocks a deployment, audit only reports it and disabled does
+       nothing: the three outcomes are worth telling apart at a glance. */
+    .effect-badge.is-deny { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
+    .effect-badge.is-audit { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
+    .effect-badge.is-remediate { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
     .copy-button {
       display: grid;
       place-items: center;
@@ -557,6 +580,26 @@
     .json-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
     .json-button svg { flex: none; opacity: .6; transition: transform .15s ease; }
     .json-button[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    /* The policy name is the row's disclosure control, so it has to read as a
+       name first and as a button second: no chrome, just a caret and a hover cue. */
+    .name-toggle {
+      display: flex;
+      align-items: flex-start;
+      gap: .35rem;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+    }
+    .name-toggle:hover, .name-toggle[aria-expanded="true"] { color: var(--cp-link); }
+    .name-toggle svg { flex: none; margin-top: .2rem; opacity: .5; transition: transform .15s ease; }
+    .name-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    .policy-card-head .name-toggle { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
     .result-count { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
@@ -758,6 +801,8 @@
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
         <span>Source: <a href="https://learn.microsoft.com/en-us/powershell/module/az.resources/get-azpolicydefinition" target="_blank" rel="noopener">Get-AzPolicyDefinition</a></span>
+        <a href="policies-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Policies history</a>
+        <a href="initiatives-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Initiatives history</a>
       </p>
     </section>
 
@@ -791,9 +836,11 @@
         <div class="filter-bar">
           <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search policy name, description, or category">
           <select id="policiesCategoryFilter" aria-label="Filter policies by category"><option value="">All categories</option></select>
+          <select id="policiesEffectFilter" aria-label="Filter policies by effect"><option value="">All effects</option></select>
+          <select id="policiesModeFilter" aria-label="Filter policies by mode"><option value="">All modes</option></select>
           <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
-          <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated"> Hide deprecated</label>
-          <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview"> Hide preview</label>
+          <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated" checked> Hide deprecated</label>
+          <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview" checked> Hide preview</label>
           <button class="clear-button" id="policiesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
@@ -803,7 +850,9 @@
                 <th class="fav-col"><span class="sr-only">Favorite</span></th>
                 <th data-key="displayName">Policy <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="effect">Effect <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="mode">Mode <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="version">Version <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="policyType">Type <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="name">ID <span class="sort-arrow">&#9650;</span></th>
               </tr>
@@ -820,8 +869,8 @@
           <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search initiative name, description, or category">
           <select id="initiativesCategoryFilter" aria-label="Filter initiatives by category"><option value="">All categories</option></select>
           <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
-          <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated"> Hide deprecated</label>
-          <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview"> Hide preview</label>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated" checked> Hide deprecated</label>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview" checked> Hide preview</label>
           <button class="clear-button" id="initiativesClear" type="button" hidden>Clear</button>
         </div>
         <div class="table-wrap">
@@ -832,6 +881,7 @@
                 <th data-key="displayName">Initiative <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="policyCount">Policies <span class="sort-arrow">&#9650;</span></th>
+                <th data-key="version">Version <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="policyType">Type <span class="sort-arrow">&#9650;</span></th>
                 <th data-key="name">ID <span class="sort-arrow">&#9650;</span></th>
               </tr>
@@ -928,6 +978,19 @@
       return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
+    // "1.10.0" sorts before "1.9.0" as text, so versions are compared segment
+    // by segment, with any -preview/-deprecated suffix left as the tiebreaker.
+    function compareVersions(a, b) {
+      const parse = (value) => String(value ?? "").split("-")[0].split(".").map((part) => Number.parseInt(part, 10) || 0);
+      const left = parse(a);
+      const right = parse(b);
+      for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
+        const diff = (left[i] ?? 0) - (right[i] ?? 0);
+        if (diff) return diff;
+      }
+      return normalize(a).localeCompare(normalize(b));
+    }
+
     function loadViewMode() {
       // List is the default: this is a dense reference table, and cards are the
       // deliberate choice rather than the one you land on.
@@ -961,9 +1024,37 @@
     // Matching the prefix rather than the whole string keeps a policy that
     // merely mentions preview in its description out of the filter.
     const LIFECYCLE_PREFIX = /^\s*\[([^\]]+)\]/;
+    // The version carries the same marker as a suffix, and it is not always
+    // redundant: 10 policies ship a "-preview" version under a plain name.
+    const LIFECYCLE_SUFFIX = /-(preview|deprecated)\b/i;
     function lifecycleTag(row) {
       const match = LIFECYCLE_PREFIX.exec(row.displayName || "");
-      return match ? match[1].trim().toLowerCase() : "";
+      if (match) return match[1].trim().toLowerCase();
+      const suffix = LIFECYCLE_SUFFIX.exec(row.version || "");
+      return suffix ? suffix[1].toLowerCase() : "";
+    }
+
+    // Deny/DenyAction stop a deployment, the audit family only reports it, and
+    // the deploy/modify family changes the resource; anything else stays neutral.
+    const EFFECT_TONES = {
+      deny: "is-deny",
+      denyaction: "is-deny",
+      audit: "is-audit",
+      auditifnotexists: "is-audit",
+      manual: "is-audit",
+      append: "is-remediate",
+      modify: "is-remediate",
+      mutate: "is-remediate",
+      deployifnotexists: "is-remediate",
+      addtonetworkgroup: "is-remediate",
+    };
+
+    function effectBadge(effect) {
+      const badge = document.createElement("span");
+      const tone = EFFECT_TONES[String(effect).toLowerCase()];
+      badge.className = tone ? `effect-badge ${tone}` : "effect-badge";
+      badge.textContent = effect;
+      return badge;
     }
     const CARET_ICON = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 
@@ -1128,13 +1219,13 @@
     function createBrowser(config) {
       const state = {
         rows: [], filtered: [], sortKey: "displayName", sortDir: "asc",
-        query: "", category: "", visible: PAGE_SIZE,
+        query: "", visible: PAGE_SIZE,
         favorites: loadFavorites(config.favoritesKey), favoritesOnly: false,
         view: loadViewMode(),
       };
       const elements = {
         search: document.getElementById(config.searchId),
-        categoryFilter: document.getElementById(config.categoryFilterId),
+        filters: config.filters.map((filter) => ({ key: filter.key, select: document.getElementById(filter.id) })),
         favoritesOnly: document.getElementById(config.favoritesOnlyId),
         hideDeprecated: document.getElementById(config.hideDeprecatedId),
         hidePreview: document.getElementById(config.hidePreviewId),
@@ -1147,8 +1238,18 @@
         headers: [...document.querySelectorAll(`#${config.panelId} thead th[data-key]`)],
       };
 
-      function populateCategoryFilter(categories) {
-        categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
+      // Every dropdown offers exactly the values present in the dataset, so a
+      // filter can never produce an empty result on its own. A field the
+      // scheduled refresh has not published yet has no values at all, and a
+      // dropdown whose only entry is "All" is a dead control, so it stays out
+      // of the bar until the data arrives.
+      function populateFilters() {
+        elements.filters.forEach(({ key, select }) => {
+          const values = [...new Set(state.rows.map((row) => row[key]).filter(Boolean))]
+            .sort((a, b) => String(a).localeCompare(String(b)));
+          values.forEach((value) => select.append(new Option(value, value)));
+          select.hidden = values.length === 0;
+        });
       }
 
       function updateFavCount() {
@@ -1200,7 +1301,12 @@
         button.type = "button";
         button.className = className || "json-button";
         button.setAttribute("aria-expanded", "false");
-        button.innerHTML = `<span>${label}</span>${CARET_ICON}`;
+        // Policy names carry ampersands and angle brackets often enough that
+        // the label has to go in as text, not as markup.
+        const text = document.createElement("span");
+        text.textContent = label;
+        button.append(text);
+        button.insertAdjacentHTML("beforeend", CARET_ICON);
 
         button.addEventListener("click", (event) => {
           event.stopPropagation();
@@ -1241,21 +1347,69 @@
         return button;
       }
 
+      // Effect, mode and version only exist on policies, the member count only
+      // on initiatives, so the columns between Category and Type are declared
+      // per browser instead of branching on the tab inside every renderer.
+      function columnCell(column, row) {
+        const td = document.createElement("td");
+        if (column.toggle) {
+          td.append(memberToggle(row));
+          return td;
+        }
+        const value = column.value(row);
+        if (!value) {
+          td.textContent = "-";
+        } else if (column.badge) {
+          td.append(effectBadge(value));
+        } else if (column.mono) {
+          const code = document.createElement("code");
+          code.textContent = value;
+          td.append(code);
+        } else {
+          td.textContent = value;
+        }
+        return td;
+      }
+
+      // The name is the disclosure control: clicking a policy opens the row and
+      // shows its definition, which is what the separate JSON button used to do.
+      function nameCell(row) {
+        const td = document.createElement("td");
+        const label = row.displayName ?? "";
+
+        if (config.showJson) {
+          const button = disclosureButton(row, label, jsonPanel, "name-toggle");
+          button.setAttribute("aria-label", `${label} - show the JSON definition`);
+          // The caret leads on a name: trailing after a title that wraps to
+          // three lines it reads as punctuation rather than as an expander.
+          button.prepend(button.querySelector("svg"));
+          td.append(button);
+        } else {
+          const name = document.createElement("span");
+          name.className = "policy-name";
+          name.textContent = label;
+          td.append(name);
+        }
+
+        if (row.description) {
+          const description = document.createElement("span");
+          description.className = "policy-desc";
+          description.textContent = row.description;
+          td.append(description);
+        }
+        return td;
+      }
+
       function renderRow(row) {
         const tr = document.createElement("tr");
 
         const favTd = document.createElement("td");
         favTd.append(favButton(row));
 
-        const nameTd = document.createElement("td");
-        nameTd.innerHTML = `<span class="policy-name">${row.displayName ?? ""}</span>${row.description ? `<span class="policy-desc">${row.description}</span>` : ""}`;
+        const nameTd = nameCell(row);
 
         const categoryTd = document.createElement("td");
         categoryTd.innerHTML = row.category ? `<span class="category-badge">${row.category}</span>` : "-";
-
-        const middleTd = document.createElement("td");
-        if (config.expandable) middleTd.append(memberToggle(row));
-        else middleTd.textContent = config.middleValue(row);
 
         const typeTd = document.createElement("td");
         typeTd.textContent = row.policyType ?? "";
@@ -1265,10 +1419,9 @@
         cell.className = "id-cell";
         cell.innerHTML = `<code>${row.name}</code>`;
         cell.append(copyButtonFor(row));
-        if (config.showJson) cell.append(disclosureButton(row, "JSON", jsonPanel));
         idTd.append(cell);
 
-        tr.append(favTd, nameTd, categoryTd, middleTd, typeTd, idTd);
+        tr.append(favTd, nameTd, categoryTd, ...config.columns.map((column) => columnCell(column, row)), typeTd, idTd);
         return tr;
       }
 
@@ -1278,10 +1431,18 @@
 
         const head = document.createElement("div");
         head.className = "policy-card-head";
-        const name = document.createElement("span");
-        name.className = "policy-name";
-        name.textContent = row.displayName ?? "";
-        head.append(name, favButton(row));
+        // Cards follow the table: the name is the control that opens the JSON.
+        if (config.showJson) {
+          const button = disclosureButton(row, row.displayName ?? "", jsonPanel, "name-toggle");
+          button.setAttribute("aria-label", `${row.displayName ?? ""} - show the JSON definition`);
+          button.prepend(button.querySelector("svg"));
+          head.append(button, favButton(row));
+        } else {
+          const name = document.createElement("span");
+          name.className = "policy-name";
+          name.textContent = row.displayName ?? "";
+          head.append(name, favButton(row));
+        }
         card.append(head);
 
         if (row.description) {
@@ -1299,18 +1460,25 @@
           badge.textContent = row.category;
           meta.append(badge);
         }
-        const middle = config.middleValue(row);
         // A "Policies: 0" line asserts something useful and says nothing, so
-        // the card stays quiet when there is no count to show.
-        if (config.expandable) {
-          const label = document.createElement("span");
-          label.textContent = `${config.middleLabel}:`;
-          meta.append(label, memberToggle(row));
-        } else if (middle !== "" && middle !== 0 && middle !== null && middle !== undefined) {
+        // the card stays quiet when there is no value to show.
+        config.columns.forEach((column) => {
+          if (column.toggle) {
+            const label = document.createElement("span");
+            label.textContent = `${column.label}:`;
+            meta.append(label, memberToggle(row));
+            return;
+          }
+          const value = column.value(row);
+          if (!value) return;
+          if (column.badge) {
+            meta.append(effectBadge(value));
+            return;
+          }
           const span = document.createElement("span");
-          span.textContent = `${config.middleLabel}: ${middle}`;
+          span.textContent = `${column.label}: ${value}`;
           meta.append(span);
-        }
+        });
         if (row.policyType) {
           const span = document.createElement("span");
           span.textContent = row.policyType;
@@ -1322,18 +1490,20 @@
         foot.className = "policy-card-foot id-cell";
         foot.innerHTML = `<code>${row.name}</code>`;
         foot.append(copyButtonFor(row));
-        if (config.showJson) foot.append(disclosureButton(row, "JSON", jsonPanel));
         card.append(foot);
 
         return card;
       }
 
       function renderTable() {
+        const direction = state.sortDir === "asc" ? 1 : -1;
         const rows = [...state.filtered].sort((a, b) => {
-          const av = state.sortKey === "policyCount" ? (a[state.sortKey] ?? 0) : normalize(a[state.sortKey]);
-          const bv = state.sortKey === "policyCount" ? (b[state.sortKey] ?? 0) : normalize(b[state.sortKey]);
-          if (av < bv) return state.sortDir === "asc" ? -1 : 1;
-          if (av > bv) return state.sortDir === "asc" ? 1 : -1;
+          if (state.sortKey === "policyCount") return ((a.policyCount ?? 0) - (b.policyCount ?? 0)) * direction;
+          if (state.sortKey === "version") return compareVersions(a.version, b.version) * direction;
+          const av = normalize(a[state.sortKey]);
+          const bv = normalize(b[state.sortKey]);
+          if (av < bv) return -direction;
+          if (av > bv) return direction;
           return 0;
         });
 
@@ -1394,7 +1564,11 @@
 
       function applyFilter() {
         const query = normalize(state.query.trim());
-        const category = elements.categoryFilter.value;
+        const active = elements.filters
+          .map(({ key, select }) => ({ key, value: select.value }))
+          .filter(({ value }) => value);
+        // Deprecated and preview definitions are hidden out of the box: they are
+        // the minority you look up on purpose, not the ones you browse for.
         const hideDeprecated = elements.hideDeprecated.checked;
         const hidePreview = elements.hidePreview.checked;
         state.filtered = state.rows.filter((row) => {
@@ -1404,12 +1578,12 @@
             if (hideDeprecated && tag === "deprecated") return false;
             if (hidePreview && tag === "preview") return false;
           }
-          if (category && row.category !== category) return false;
+          if (active.some(({ key, value }) => row[key] !== value)) return false;
           if (query && !normalize(`${row.displayName} ${row.description} ${row.category}`).includes(query)) return false;
           return true;
         });
         state.visible = PAGE_SIZE;
-        elements.clearFilters.hidden = !query && !category && !state.favoritesOnly && !hideDeprecated && !hidePreview;
+        elements.clearFilters.hidden = !query && !active.length && !state.favoritesOnly && hideDeprecated && hidePreview;
         renderTable();
       }
 
@@ -1419,7 +1593,7 @@
         clearTimeout(searchTimer);
         searchTimer = setTimeout(applyFilter, 150);
       });
-      elements.categoryFilter.addEventListener("change", applyFilter);
+      elements.filters.forEach(({ select }) => select.addEventListener("change", applyFilter));
       elements.favoritesOnly.addEventListener("change", () => {
         state.favoritesOnly = elements.favoritesOnly.checked;
         applyFilter();
@@ -1428,10 +1602,11 @@
       elements.hidePreview.addEventListener("change", applyFilter);
       elements.clearFilters.addEventListener("click", () => {
         elements.search.value = "";
-        elements.categoryFilter.value = "";
+        elements.filters.forEach(({ select }) => { select.value = ""; });
         elements.favoritesOnly.checked = false;
-        elements.hideDeprecated.checked = false;
-        elements.hidePreview.checked = false;
+        // Clear returns the bar to its defaults, and hiding both is the default.
+        elements.hideDeprecated.checked = true;
+        elements.hidePreview.checked = true;
         state.query = "";
         state.favoritesOnly = false;
         applyFilter();
@@ -1464,11 +1639,11 @@
           if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
           const payload = await response.json();
           state.rows = payload[config.listKey];
-          state.filtered = state.rows;
-          const categories = [...new Set(state.rows.map((row) => row.category).filter(Boolean))].sort();
-          populateCategoryFilter(categories);
+          populateFilters();
           updateFavCount();
-          renderTable();
+          // The hide toggles start on, so the first paint has to go through the
+          // filter rather than straight to the full list.
+          applyFilter();
           return payload;
         },
       };
@@ -1477,7 +1652,11 @@
     const policiesBrowser = createBrowser({
       panelId: "policiesPanel",
       searchId: "policiesSearch",
-      categoryFilterId: "policiesCategoryFilter",
+      filters: [
+        { id: "policiesCategoryFilter", key: "category" },
+        { id: "policiesEffectFilter", key: "effect" },
+        { id: "policiesModeFilter", key: "mode" },
+      ],
       favoritesOnlyId: "policiesFavoritesOnly",
       hideDeprecatedId: "policiesHideDeprecated",
       hidePreviewId: "policiesHidePreview",
@@ -1491,15 +1670,20 @@
       listKey: "policies",
       countLabel: "policies",
       countLabelSingular: "policy",
-      middleLabel: "Mode",
       showJson: true,
-      middleValue: (row) => row.mode ?? "",
+      columns: [
+        { key: "effect", label: "Effect", badge: true, value: (row) => row.effect ?? "" },
+        { key: "mode", label: "Mode", value: (row) => row.mode ?? "" },
+        { key: "version", label: "Version", mono: true, value: (row) => row.version ?? "" },
+      ],
     });
 
     const initiativesBrowser = createBrowser({
       panelId: "initiativesPanel",
       searchId: "initiativesSearch",
-      categoryFilterId: "initiativesCategoryFilter",
+      filters: [
+        { id: "initiativesCategoryFilter", key: "category" },
+      ],
       favoritesOnlyId: "initiativesFavoritesOnly",
       hideDeprecatedId: "initiativesHideDeprecated",
       hidePreviewId: "initiativesHidePreview",
@@ -1513,9 +1697,11 @@
       listKey: "initiatives",
       countLabel: "initiatives",
       countLabelSingular: "initiative",
-      middleLabel: "Policies",
       expandable: true,
-      middleValue: (row) => row.policyCount ?? 0,
+      columns: [
+        { key: "policyCount", label: "Policies", toggle: true, value: (row) => row.policyCount ?? 0 },
+        { key: "version", label: "Version", mono: true, value: (row) => row.version ?? "" },
+      ],
     });
 
     const elements = {
@@ -1677,7 +1863,16 @@
       var hydrating = false;
 
       function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+        // A checkbox is only worth a query parameter when it differs from its
+        // own default. Writing "1" for a checked box would have been enough
+        // while every toggle here started unchecked, but "Hide deprecated" and
+        // "Hide preview" start checked, and unchecking them has to survive a
+        // reload just as clearly.
+        if (el.type === "checkbox") {
+          if (el.checked === el.defaultChecked) return "";
+          return el.checked ? "1" : "0";
+        }
+        return el.value;
       }
 
       if (params.toString()) {
