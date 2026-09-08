@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Overview of all RSS feeds tracked by RSS Watcher and their latest publication dates.">
+  <meta name="description" content="Track every built-in Azure Policy initiative (policy set) added, removed, or edited by Microsoft, as recorded by the scheduled catalog refresh.">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="benoit-gaumard.io" />
-  <meta property="og:title" content="Feeds Activity | RSS Watcher | Benoit Gaumard" />
-  <meta property="og:description" content="Overview of all RSS feeds tracked by RSS Watcher and their latest publication dates." />
-  <meta property="og:url" content="https://benoit-gaumard.io/rss-watcher/activity/" />
+  <meta property="og:title" content="Initiatives History | Azure Policies | Benoit Gaumard" />
+  <meta property="og:description" content="Track every built-in Azure Policy initiative (policy set) added, removed, or edited by Microsoft, as recorded by the scheduled catalog refresh." />
+  <meta property="og:url" content="https://benoit-gaumard.io/azure-policies/initiatives-history/" />
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
   <meta name="twitter:card" content="summary_large_image" />
-  <!-- Operational status table with no standalone editorial value: kept for
-       readers, kept out of the index. -->
+    <!-- A derived change log of the catalog next door: useful to a reader, not a
+       page worth competing with /azure-policies/ in the index. -->
   <meta name="robots" content="noindex, follow" />
-  <link rel="canonical" href="https://benoit-gaumard.io/rss-watcher/activity/" />
+  <link rel="canonical" href="https://benoit-gaumard.io/azure-policies/initiatives-history/" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Feeds Activity | RSS Watcher",
-    "description": "Overview of all RSS feeds tracked by RSS Watcher and their latest publication dates.",
-    "url": "https://benoit-gaumard.io/rss-watcher/activity/",
+    "name": "Initiatives History | Azure Policies",
+    "description": "Track every built-in Azure Policy initiative (policy set) added, removed, or edited by Microsoft, as recorded by the scheduled catalog refresh.",
+    "url": "https://benoit-gaumard.io/azure-policies/initiatives-history/",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "browserRequirements": "Requires JavaScript",
@@ -83,7 +83,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <title>Feeds Activity | RSS Watcher | Benoit Gaumard</title>
+  <title>Initiatives History | Azure Policies | Benoit Gaumard</title>
   <style>
     :root {
       color-scheme: light;
@@ -177,7 +177,10 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
     .skip-link {
       position: absolute;
       left: .5rem;
@@ -294,11 +297,18 @@
     main { padding-block: 2.5rem 4rem; }
     .intro { max-width: 52rem; margin-bottom: 1.75rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    #page-title { display: flex; align-items: center; gap: .3em; }
+    .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
+    .page-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: 0.85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
     .refresh-meta strong { color: var(--cp-text); }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 2rem; }
+    [role="tabpanel"] { min-height: 70vh; }
+    .stats-grid { min-height: 7rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
     .stat-card {
       padding: 1.1rem 1.25rem;
       border: 1px solid var(--cp-border);
@@ -308,35 +318,61 @@
     }
     .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
     .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
-    .stat-card .stat-sub { margin-top: .3rem; color: var(--cp-text-muted); font-size: 0.8rem; }
-    .stat-card.is-danger .stat-value { color: var(--cp-danger); }
-    .stat-card.is-success .stat-value { color: var(--cp-success); }
 
-    .section-title { margin: 0 0 .9rem; font-size: 1.2rem; }
-
-    .added-section { margin-bottom: 2rem; }
-    .added-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .9rem; }
-    .added-card {
-      padding: 1rem 1.1rem;
+    .view-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
       border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      margin-bottom: 1.25rem;
+    }
+    .view-toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .view-toggle-button:hover { color: var(--cp-text); }
+    .view-toggle-button.is-active { background: var(--cp-accent-soft); color: var(--cp-accent); }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .filter-bar input, .filter-bar select {
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
       border-radius: 8px;
       background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
     }
-    .added-card h3 { margin: 0; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .added-card p { margin: .35rem 0 0; color: var(--cp-text-muted); font-size: 0.8rem; }
-
-    .table-toolbar { margin-bottom: 1rem; }
-    .table-toolbar input {
-      width: 100%;
-      max-width: 24rem;
+    .filter-bar input { flex: 2 1 16rem; max-width: 30rem; min-width: 0; }
+    .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
+    .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
+    .clear-button[hidden] { display: none; }    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
       min-height: 2.75rem;
       border: 1px solid var(--cp-border-strong);
-      border-radius: 6px;
+      border-radius: 8px;
       background: var(--cp-surface);
       color: var(--cp-text);
-      padding: .625rem .75rem;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
     }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
+
     .table-wrap {
       overflow-x: auto;
       border: 1px solid var(--cp-border);
@@ -363,26 +399,211 @@
     thead th:hover { color: var(--cp-text); }
     thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
     thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
-    tbody td { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
+    tbody td { padding: .55rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
     tbody tr:last-child td { border-bottom: 0; }
-    tbody tr.is-dead { background: var(--cp-danger-bg); }
-    .feed-name { font-weight: 600; }
-    .feed-lang { display: inline-flex; align-items: center; gap: .35rem; }
-    .feed-lang .flag { width: 1.1rem; height: .75rem; border-radius: 2px; box-shadow: 0 0 0 1px var(--cp-border); flex: 0 0 auto; }
-    .feed-link { display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap; }
-    .activity-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: .15rem .6rem;
+    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
+    .policy-name { font-weight: 600; }
+    .policy-desc { display: block; margin-top: .2rem; color: var(--cp-text-muted); font-size: 0.8rem; font-weight: 400; overflow-wrap: anywhere; }
+    .category-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
       border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .id-cell { display: flex; align-items: center; gap: .5rem; }
+    /* The star column costs width the ID column used to have; without this the
+       browser is free to break a GUID across eight lines. And once the ID is
+       incompressible it starts winning space from the name, so the name column
+       is given the share it needs to keep descriptions to a few lines. */
+    .id-cell code { white-space: nowrap; overflow-wrap: normal; }
+    /* Star, category, effect/mode/version (or the member count) and type shrink
+       to their content; the name column absorbs everything left over, so a
+       description stays a few lines tall instead of being squeezed into a ribbon.
+       The two tables no longer have the same column count, hence the scoping. */
+    thead th:nth-child(2) { width: 100%; }
+    #policiesPanel thead th:nth-child(n+3):nth-child(-n+7),
+    #initiativesPanel thead th:nth-child(n+3):nth-child(-n+6) { width: 1%; }
+    /* One mode value, Microsoft.MachineLearningServices.v2.Data, is a 41-char
+       token with no break opportunity: left alone it pins the column at its own
+       width and starves the name column of nearly 300px. */
+    #policiesPanel tbody td:nth-child(5) { overflow-wrap: anywhere; }
+    /* Only Type is safe to keep on one line: some policy modes are long
+       (Microsoft.KeyVault.Data), and pinning them would hand the column 280px. */
+    #policiesPanel tbody td:nth-child(7),
+    #initiativesPanel tbody td:nth-child(6) { white-space: nowrap; }
+    /* Version columns: policies column 6, initiatives column 5. */
+    #policiesPanel tbody td:nth-child(6),
+    #initiativesPanel tbody td:nth-child(5) { white-space: nowrap; }
+    .effect-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    /* Deny blocks a deployment, audit only reports it and disabled does
+       nothing: the three outcomes are worth telling apart at a glance. */
+    .effect-badge.is-deny { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
+    .effect-badge.is-audit { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
+    .effect-badge.is-remediate { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
+    .copy-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
       background: var(--cp-surface-soft);
       color: var(--cp-text-muted);
+      cursor: pointer;
     }
-    .activity-badge.is-fresh { background: var(--cp-success-bg); color: var(--cp-success); }
-    .activity-badge.is-dead { background: var(--cp-danger-bg); color: var(--cp-danger); }
-    #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
+    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); }
+
+    /* The Policies/Initiatives tabs and the Cards/List switch share one row, so
+       the layout choice reads as a property of the panel below it rather than
+       as a third tab. */
+    .panel-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .panel-toolbar .view-toggle { margin-bottom: 0; }
+    .filter-toggle { display: inline-flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
+    .filter-toggle .fav-count { color: var(--cp-text-muted); font-weight: 600; }
+
+    .fav-col { width: 1%; cursor: default; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .fav-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .fav-button:hover { border-color: var(--cp-warning); color: var(--cp-warning); }
+    .fav-button[aria-pressed="true"] { border-color: var(--cp-warning); background: var(--cp-warning-bg); color: var(--cp-warning); }
+
+    .policy-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .9rem; align-items: start; }
+    .policy-cards[hidden], .table-wrap[hidden] { display: none; }
+    .policy-card {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .policy-card-head { display: flex; align-items: flex-start; gap: .6rem; }
+    .policy-card-head .policy-name { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
+    /* Descriptions run to several hundred characters; clamping keeps a grid of
+       cards from turning into columns of wildly different heights. */
+    .policy-card .policy-desc { margin: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .policy-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .6rem; font-size: 0.78rem; color: var(--cp-text-muted); }
+    .policy-card-foot { margin-top: auto; }
+    .policy-card .id-cell code { font-size: 0.75rem; }
+
+    /* The policy count doubles as the disclosure control: the number a reader
+       wants to question is the thing they click to see behind. */
+    .member-toggle {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .15rem .45rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface-soft); color: var(--cp-text);
+      font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .member-toggle:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .member-toggle svg { flex: none; opacity: .6; transition: transform .15s ease; }
+    .member-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    .member-toggle[disabled] { opacity: .55; cursor: default; }
+    .member-toggle[disabled]:hover { border-color: var(--cp-border); color: var(--cp-text); }
+    tr.member-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
+    .member-panel { padding: .85rem 1rem 1rem; }
+    .policy-card .member-panel { padding: .25rem 0 0; }
+    .member-list { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+    .member-list li {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
+      padding: .4rem .6rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface); font-size: 0.82rem;
+    }
+    .member-name { flex: 1 1 18rem; font-weight: 600; }
+    .member-id { color: var(--cp-text-muted); font-size: 0.75rem; overflow-wrap: anywhere; }
+    .member-empty { margin: 0; color: var(--cp-text-muted); font-size: 0.82rem; line-height: 1.55; }
+
+    .json-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+    .json-view {
+      margin: 0;
+      max-height: 32rem;
+      overflow: auto;
+      padding: .85rem 1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      tab-size: 2;
+      /* pre, not pre-wrap, would hand the table a min-content width as wide as
+         the longest description string and stretch every column with it. */
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .json-button {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .15rem .5rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface-soft); color: var(--cp-text);
+      font: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    }
+    .json-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .json-button svg { flex: none; opacity: .6; transition: transform .15s ease; }
+    .json-button[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    /* The policy name is the row's disclosure control, so it has to read as a
+       name first and as a button second: no chrome, just a caret and a hover cue. */
+    .name-toggle {
+      display: flex;
+      align-items: flex-start;
+      gap: .35rem;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+    }
+    .name-toggle:hover, .name-toggle[aria-expanded="true"] { color: var(--cp-link); }
+    .name-toggle svg { flex: none; margin-top: .2rem; opacity: .5; transition: transform .15s ease; }
+    .name-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    .policy-card-head .name-toggle { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
+    .result-count { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
     .footer-inner { padding-block: 2rem 1.5rem; }
@@ -435,6 +656,12 @@
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      /* flex-basis becomes a height once the bar is a column, which grew the
+         search box and the category select to ~250px tall. The checkbox inside
+         .filter-toggle must be excluded or it stretches to the full width too. */
+      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; width: 100%; max-width: none; }
+      .filter-toggle { align-self: flex-start; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -444,27 +671,25 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-      /* the date arrives after load; hold its box so .refresh-meta wraps the
-       same before and after, and the rows below it do not move */
-    #refreshedAt { display: inline-block; min-width: 9.5rem; }
-
+  
     /* Filled by script: hold the box only while empty, so the page below does
        not jump when the data lands, and no blank hole survives a render. */
     @supports (min-height: 1px) {
-      #statsGrid:empty { min-height: 111px; }
-      #addedCards:empty { min-height: 93px; }
-      @media (max-width: 48rem) {
-        #statsGrid:empty { min-height: 216px; }
-        #addedCards:empty { min-height: 200px; }
-      }
+      #statsGrid:empty { min-height: 112px; }
       @media (max-width: 32rem) {
-        #statsGrid:empty { min-height: 320px; }
-        #addedCards:empty { min-height: 439px; }
+        #statsGrid:empty { min-height: 194px; }
       }
     }
-    /* the table can settle past 10,000px, so hold a viewport-relative box
-       instead of a fixed one and let :has() release it on first render */
-    .table-wrap:has(tbody:empty) { min-height: 65vh; }    @media print {
+
+    /* The table is the last thing on the page and can settle anywhere between
+       5,000px and 89,000px, so a fixed reservation would be wrong at most
+       widths. Holding a viewport-relative box while the body is empty keeps the
+       footer below the fold at first paint, so its arrival moves nothing the
+       visitor can see. :has() releases it as soon as the first row renders. */
+    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+    @media print {
       /* Printing a tool page should yield the data, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
@@ -492,7 +717,14 @@
         scroll-behavior: auto !important;
       }
     }
-
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+  
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -502,6 +734,74 @@
     .share-btn svg { flex: none; }
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+
+    /* Change log ------------------------------------------------------------ */
+    .timeline-day { margin-bottom: 1.5rem; }
+    .timeline-heading {
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem .75rem;
+      margin: 0 0 .6rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .timeline-date { font-size: 0.95rem; font-weight: 700; }
+    .timeline-tally { margin-left: auto; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .change-list { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+    .change-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: .55rem .75rem;
+      padding: .65rem .85rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-panel);
+    }
+    .change-main { min-width: 0; display: flex; flex-direction: column; gap: .35rem; }
+    .change-name { font-weight: 600; overflow-wrap: anywhere; }
+    .change-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .55rem; font-size: 0.78rem; color: var(--cp-text-muted); }
+    /* Added, removed and modified are the whole point of the page, so the three
+       read apart at a glance rather than as three grey words. */
+    .change-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+    .change-badge.is-added { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
+    .change-badge.is-removed { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
+    .change-badge.is-modified { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
+    .field-diff { display: grid; gap: .3rem; margin: .15rem 0 0; padding: 0; list-style: none; }
+    .field-diff li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem; font-size: 0.8rem; }
+    .field-name { font-weight: 600; color: var(--cp-text); }
+    .field-from, .field-to {
+      padding: .1rem .35rem; border-radius: 4px;
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.75rem; overflow-wrap: anywhere;
+    }
+    .field-from { background: var(--cp-danger-bg); color: var(--cp-danger); text-decoration: line-through; }
+    .field-to { background: var(--cp-success-bg); color: var(--cp-success); }
+    .field-arrow { color: var(--cp-text-muted); }
+    .change-id { display: flex; align-items: center; gap: .4rem; }
+    .change-id code { font-size: 0.72rem; color: var(--cp-text-muted); }
+    .empty-state {
+      padding: 3rem 1rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      text-align: center;
+    }
+    .empty-state h2 { margin: 0; font-size: 1.05rem; }
+    .empty-state p { margin: .5rem auto 0; max-width: 42rem; color: var(--cp-text-muted); font-size: 0.9rem; line-height: 1.6; }
+    @media (max-width: 32rem) {
+      .timeline-tally { margin-left: 0; flex-basis: 100%; }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -523,8 +823,14 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Feeds Activity | RSS Watcher",
-        "item": "https://benoit-gaumard.io/rss-watcher/activity/"
+        "name": "Azure Policies",
+        "item": "https://benoit-gaumard.io/azure-policies/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "Initiatives History",
+        "item": "https://benoit-gaumard.io/azure-policies/initiatives-history/"
       }
     ]
   }
@@ -566,41 +872,45 @@
 
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
-      <h1 id="page-title">Feeds Activity</h1>
-      <p class="intro-text">Overview of all RSS feeds and their latest publication dates.</p>
+      <p class="tool-breadcrumb"><a href="/azure-policies/">&larr; Azure Policies</a></p>
+      <h1 id="page-title"><span class="page-icon" aria-hidden="true">🕓</span>Initiatives history</h1>
+      <p class="intro-text">What Microsoft changed in the built-in Azure Policy <strong>initiatives</strong> (policy sets). The <strong>Refresh Azure Policies</strong> workflow scans the tenant four times a day and records the difference with the previous run.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
-        <a href="../">Back to RSS Watcher</a>
+        <span>Retention: <strong id="retention">-</strong></span>
+        <a href="../policies-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Policies history</a>
       </p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Feed statistics"></section>
+    <section class="stats-grid" id="statsGrid" aria-label="Change statistics"></section>
 
-    <section class="added-section">
-      <h2 class="section-title">Last 5 Added Feeds</h2>
-      <div class="added-cards" id="addedCards"></div>
+    <section aria-label="Change log">
+      <div class="filter-bar">
+        <input id="search" type="search" placeholder="Search an initiative name, category, or ID..." autocomplete="off" spellcheck="false" aria-label="Search a name, category, or ID">
+        <select id="changeFilter" aria-label="Filter by change type">
+          <option value="">All changes</option>
+          <option value="added">Added</option>
+          <option value="removed">Removed</option>
+          <option value="modified">Modified</option>
+        </select>
+        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
+        <select id="periodFilter" aria-label="Filter by period">
+          <option value="">Full history</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+        <button class="clear-button" id="clearFilters" type="button" hidden>Clear</button>
+      </div>
+      <div id="timeline"></div>
+      <p class="result-count" id="resultCount" aria-live="polite"></p>
     </section>
 
-    <section aria-label="All feeds">
-      <div class="table-toolbar">
-        <input id="search" type="search" placeholder="Filter by feed name or category..." autocomplete="off" spellcheck="false" aria-label="Filter by feed name or category">
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th data-key="name">Feed <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="country">Language <span class="sort-arrow">&#9650;</span></th>
-              <th>RSS Feed</th>
-              <th data-key="lastPublication">Last Publication <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="activityRank">Last Activity <span class="sort-arrow">&#9650;</span></th>
-            </tr>
-          </thead>
-          <tbody id="feedsTableBody"></tbody>
-        </table>
-      </div>
-      <p id="resultCount" aria-live="polite"></p>
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">How this log is built</h2>
+      <p>Azure does not publish a changelog for its built-in initiatives, so this one is derived. Every time the scheduled workflow refreshes <a href="/azure-policies/">the catalog</a>, it compares the fresh scan with the copy it is about to replace and records what moved.</p>
+      <p>An initiative counts as <strong>modified</strong> when its name, category, version, type, or the number of policies it groups changes. Descriptions are not tracked: Microsoft rewords them constantly without changing what a initiative does, and a real edit bumps the version anyway.</p>
+      <p>The log only starts where the workflow started recording it, and entries are kept for <span id="retentionInline">180</span> days. A brand new initiative is one Microsoft published between two scans, not necessarily one released that day.</p>
     </section>
   </main>
 
@@ -665,217 +975,317 @@
   </button>
 
   <script>
-    const FLAGS = {
-      EN: '<svg class="flag" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247d"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L26,17.3 M60,0 L34,17.3 M0,40 L26,22.7 M60,40 L34,22.7" stroke="#cf142b" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="14"/><path d="M30,0 V40 M0,20 H60" stroke="#cf142b" stroke-width="8"/></svg>',
-      FR: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>',
-    };
-    const DEAD_AFTER_DAYS = 30;
-    const state = { feeds: [], filtered: [], sortKey: "activityRank", sortDir: "asc", query: "" };
-    const elements = {
-      statsGrid: document.getElementById("statsGrid"),
-      addedCards: document.getElementById("addedCards"),
-      tableBody: document.getElementById("feedsTableBody"),
-      resultCount: document.getElementById("resultCount"),
-      refreshedAt: document.getElementById("refreshedAt"),
-      currentYear: document.getElementById("currentYear"),
-      search: document.getElementById("search"),
-      backToTop: document.getElementById("backToTop"),
-      headers: [...document.querySelectorAll("thead th[data-key]")],
-    };
+    const PAGE_SIZE = 60;
+    // This page is one half of the change log; its sibling covers the other kind.
+    const KIND = "initiative";
 
     function normalize(value) {
-      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const CHANGE_LABELS = { added: "Added", removed: "Removed", modified: "Modified" };
+    const FIELD_LABELS = {
+      displayName: "Name",
+      category: "Category",
+      effect: "Effect",
+      mode: "Mode",
+      version: "Version",
+      policyType: "Type",
+      policyCount: "Policies",
+    };
+
+    const state = { entries: [], filtered: [], visible: PAGE_SIZE, query: "" };
+
+    const elements = {
+      search: document.getElementById("search"),
+      changeFilter: document.getElementById("changeFilter"),
+      categoryFilter: document.getElementById("categoryFilter"),
+      periodFilter: document.getElementById("periodFilter"),
+      clearFilters: document.getElementById("clearFilters"),
+      timeline: document.getElementById("timeline"),
+      resultCount: document.getElementById("resultCount"),
+      statsGrid: document.getElementById("statsGrid"),
+      refreshedAt: document.getElementById("refreshedAt"),
+      retention: document.getElementById("retention"),
+      retentionInline: document.getElementById("retentionInline"),
+      currentYear: document.getElementById("currentYear"),
+      backToTop: document.getElementById("backToTop"),
+    };
+
+    const COPY_ICON = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9.5V3.5a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    const TICK_ICON = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M3.5 8.5l3 3 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    async function copyId(text, button) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      button.classList.add("is-copied");
+      button.innerHTML = TICK_ICON;
+      setTimeout(() => {
+        button.classList.remove("is-copied");
+        button.innerHTML = COPY_ICON;
+      }, 1500);
     }
 
-    function dayCount(iso) {
-      const now = new Date();
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const target = new Date(iso);
-      const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
-      return Math.round((startOfToday - startOfTarget) / 86400000);
+    function dayKey(entry) {
+      // Grouping on the UTC date the scan ran keeps a day from splitting in two
+      // for readers east or west of the workflow's clock.
+      return String(entry.detectedAt ?? "").slice(0, 10);
     }
 
-    function isDead(feed) {
-      return !feed.ok || !feed.lastPublication || dayCount(feed.lastPublication) >= DEAD_AFTER_DAYS;
+    function formatDay(key) {
+      const date = new Date(`${key}T00:00:00Z`);
+      if (Number.isNaN(date.getTime())) return key;
+      return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
     }
 
-    function activityLabel(feed) {
-      if (!feed.ok) return "Dead (error)";
-      if (!feed.lastPublication) return "Dead";
-      const days = dayCount(feed.lastPublication);
-      if (days >= DEAD_AFTER_DAYS) return "Dead";
-      if (days <= 0) return "Today";
-      if (days === 1) return "Yesterday";
-      return `${days} days ago`;
+    function badge(text, className) {
+      const span = document.createElement("span");
+      span.className = className;
+      span.textContent = text;
+      return span;
     }
 
-    function activityRank(feed) {
-      if (!feed.ok || !feed.lastPublication) return Number.POSITIVE_INFINITY;
-      return dayCount(feed.lastPublication);
+    function renderEntry(entry) {
+      const item = document.createElement("li");
+      item.className = "change-item";
+      item.append(badge(CHANGE_LABELS[entry.change] ?? entry.change, `change-badge is-${entry.change}`));
+
+      const mainCell = document.createElement("div");
+      mainCell.className = "change-main";
+
+      const name = document.createElement("span");
+      name.className = "change-name";
+      name.textContent = entry.displayName || entry.name;
+      mainCell.append(name);
+
+      const meta = document.createElement("div");
+      meta.className = "change-meta";
+      if (entry.category) meta.append(badge(entry.category, "category-badge"));
+
+      const id = document.createElement("span");
+      id.className = "change-id";
+      const code = document.createElement("code");
+      code.textContent = entry.name;
+      const copy = document.createElement("button");
+      copy.type = "button";
+      copy.className = "copy-button";
+      copy.setAttribute("aria-label", "Copy ID");
+      copy.innerHTML = COPY_ICON;
+      copy.addEventListener("click", () => copyId(entry.name, copy));
+      id.append(code, copy);
+      meta.append(id);
+      mainCell.append(meta);
+
+      if (entry.change === "modified" && entry.fields && entry.fields.length) {
+        const list = document.createElement("ul");
+        list.className = "field-diff";
+        entry.fields.forEach((field) => {
+          const row = document.createElement("li");
+          const label = document.createElement("span");
+          label.className = "field-name";
+          label.textContent = `${FIELD_LABELS[field.field] ?? field.field}:`;
+          const from = document.createElement("span");
+          from.className = "field-from";
+          from.textContent = field.from || "(empty)";
+          const arrow = document.createElement("span");
+          arrow.className = "field-arrow";
+          arrow.textContent = "→";
+          const to = document.createElement("span");
+          to.className = "field-to";
+          to.textContent = field.to || "(empty)";
+          row.append(label, from, arrow, to);
+          list.append(row);
+        });
+        mainCell.append(list);
+      }
+
+      item.append(mainCell);
+      return item;
     }
 
-    function formatDate(iso) {
-      if (!iso) return "-";
-      return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-    }
+    function renderTimeline() {
+      elements.timeline.replaceChildren();
 
-    function computeStats(feeds) {
-      const categories = new Set();
-      feeds.forEach((feed) => feed.category.split(",").map((c) => c.trim()).filter(Boolean).forEach((c) => categories.add(c)));
-      const languages = new Set(feeds.map((f) => f.country));
-      const activeToday = feeds.filter((f) => f.ok && f.lastPublication && dayCount(f.lastPublication) <= 0).length;
-      const thisWeek = feeds.filter((f) => f.ok && f.lastPublication && dayCount(f.lastPublication) <= 6).length;
-      const dead = feeds.filter(isDead).length;
-      const langCounts = [...languages].sort().map((lang) => `${lang} ${feeds.filter((f) => f.country === lang).length}`).join(" \u00b7 ");
-      return { total: feeds.length, categories: categories.size, activeToday, thisWeek, dead, languages: languages.size, langCounts };
-    }
+      if (!state.filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML = state.entries.length
+          ? "<h2>No change matches these filters</h2><p>Widen the period or clear the filters to see the rest of the log.</p>"
+          : "<h2>No change recorded yet</h2><p>The scheduled refresh writes its first entries the next time Microsoft adds, removes, or edits a built-in initiative. Until then the catalog next door is already up to date.</p>";
+        elements.timeline.append(empty);
+        elements.resultCount.textContent = "";
+        const stale = document.querySelector(".load-more");
+        if (stale) stale.remove();
+        return;
+      }
 
-    function renderStats(feeds) {
-      const stats = computeStats(feeds);
-      const cards = [
-        { label: "Total Feeds", value: stats.total },
-        { label: "Categories", value: stats.categories },
-        { label: "Active Today", value: stats.activeToday, tone: "success" },
-        { label: "This Week", value: stats.thisWeek },
-        { label: "Dead Feeds (30d+)", value: stats.dead, tone: "danger" },
-        { label: "Languages", value: stats.languages, sub: stats.langCounts },
-      ];
-      elements.statsGrid.replaceChildren();
-      cards.forEach((card) => {
-        const el = document.createElement("div");
-        el.className = `stat-card${card.tone ? ` is-${card.tone}` : ""}`;
-        el.innerHTML = `<div class="stat-value">${card.value.toLocaleString()}</div><div class="stat-label">${card.label}</div>${card.sub ? `<div class="stat-sub">${card.sub}</div>` : ""}`;
-        elements.statsGrid.append(el);
+      const shown = state.filtered.slice(0, state.visible);
+      const days = new Map();
+      shown.forEach((entry) => {
+        const key = dayKey(entry);
+        if (!days.has(key)) days.set(key, []);
+        days.get(key).push(entry);
       });
-    }
 
-    function renderAdded(feeds) {
-      const added = [...feeds]
-        .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt) || a.name.localeCompare(b.name))
-        .slice(0, 5);
-      elements.addedCards.replaceChildren();
-      added.forEach((feed) => {
-        const el = document.createElement("div");
-        el.className = "added-card";
-        const addedDate = new Date(feed.addedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-        el.innerHTML = `<h3 title="${escapeHtml(feed.name)}">${escapeHtml(feed.name)}</h3><p>${escapeHtml(feed.category || "General")} \u00b7 Added ${addedDate}</p>`;
-        elements.addedCards.append(el);
-      });
-    }
-
-    function renderTable() {
-      const rows = [...state.filtered].sort((a, b) => {
-        let av = a[state.sortKey];
-        let bv = b[state.sortKey];
-        if (state.sortKey === "activityRank") { av = activityRank(a); bv = activityRank(b); }
-        if (state.sortKey === "lastPublication") { av = av ? new Date(av).getTime() : -Infinity; bv = bv ? new Date(bv).getTime() : -Infinity; }
-        if (typeof av === "string") { av = normalize(av); bv = normalize(bv); }
-        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
-        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
-        return 0;
-      });
-
-      elements.tableBody.replaceChildren();
       const fragment = document.createDocumentFragment();
-      rows.forEach((feed) => {
-        const tr = document.createElement("tr");
-        const dead = isDead(feed);
-        if (dead) tr.classList.add("is-dead");
+      days.forEach((entries, key) => {
+        const section = document.createElement("section");
+        section.className = "timeline-day";
 
-        const nameTd = document.createElement("td");
-        nameTd.className = "feed-name";
-        nameTd.textContent = feed.name;
+        const heading = document.createElement("div");
+        heading.className = "timeline-heading";
+        heading.append(badge(formatDay(key), "timeline-date"));
 
-        const categoryTd = document.createElement("td");
-        categoryTd.textContent = feed.category || "-";
+        const tally = document.createElement("div");
+        tally.className = "timeline-tally";
+        ["added", "removed", "modified"].forEach((change) => {
+          const count = entries.filter((entry) => entry.change === change).length;
+          if (count) tally.append(badge(`${count} ${CHANGE_LABELS[change].toLowerCase()}`, `change-badge is-${change}`));
+        });
+        heading.append(tally);
+        section.append(heading);
 
-        const langTd = document.createElement("td");
-        langTd.innerHTML = `<span class="feed-lang">${FLAGS[feed.country] || ""}${escapeHtml(feed.country)}</span>`;
-
-        const linkTd = document.createElement("td");
-        const link = document.createElement("a");
-        link.className = "feed-link";
-        link.href = feed.url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "Open \u2197";
-        linkTd.append(link);
-
-        const pubTd = document.createElement("td");
-        pubTd.textContent = formatDate(feed.lastPublication);
-
-        const activityTd = document.createElement("td");
-        const badge = document.createElement("span");
-        const label = activityLabel(feed);
-        badge.className = `activity-badge ${dead ? "is-dead" : (label === "Today" || label === "Yesterday") ? "is-fresh" : ""}`.trim();
-        badge.textContent = label;
-        activityTd.append(badge);
-
-        tr.append(nameTd, categoryTd, langTd, linkTd, pubTd, activityTd);
-        fragment.append(tr);
+        const list = document.createElement("ul");
+        list.className = "change-list";
+        entries.forEach((entry) => list.append(renderEntry(entry)));
+        section.append(list);
+        fragment.append(section);
       });
-      elements.tableBody.append(fragment);
-      elements.resultCount.textContent = `${rows.length.toLocaleString()} feed${rows.length === 1 ? "" : "s"} shown`;
+      elements.timeline.append(fragment);
 
-      elements.headers.forEach((th) => {
-        th.removeAttribute("aria-sort");
-        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+      elements.resultCount.textContent = shown.length < state.filtered.length
+        ? `Showing ${shown.length.toLocaleString()} of ${state.filtered.length.toLocaleString()} matching changes.`
+        : `${state.filtered.length.toLocaleString()} change${state.filtered.length === 1 ? "" : "s"} shown.`;
+      renderLoadMore();
+    }
+
+    function renderLoadMore() {
+      const existing = document.querySelector(".load-more");
+      if (existing) existing.remove();
+      if (state.visible >= state.filtered.length) return;
+
+      const remaining = state.filtered.length - state.visible;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "load-more";
+      button.textContent = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
+      button.addEventListener("click", () => {
+        state.visible += PAGE_SIZE;
+        renderTimeline();
+        const next = document.querySelector(".load-more");
+        if (next) next.focus();
       });
+      elements.timeline.insertAdjacentElement("afterend", button);
     }
 
     function applyFilter() {
       const query = normalize(state.query.trim());
-      state.filtered = state.feeds.filter((feed) => {
-        if (!query) return true;
-        const haystack = normalize(`${feed.name} ${feed.category} ${feed.subcategory}`);
-        return haystack.includes(query);
+      const change = elements.changeFilter.value;
+      const category = elements.categoryFilter.value;
+      const days = Number.parseInt(elements.periodFilter.value, 10);
+      const cutoff = Number.isNaN(days) ? null : Date.now() - days * 86400000;
+
+      state.filtered = state.entries.filter((entry) => {
+        if (change && entry.change !== change) return false;
+        if (category && entry.category !== category) return false;
+        if (cutoff !== null) {
+          const stamp = new Date(entry.detectedAt).getTime();
+          if (Number.isNaN(stamp) || stamp < cutoff) return false;
+        }
+        if (query && !normalize(`${entry.displayName} ${entry.category} ${entry.name}`).includes(query)) return false;
+        return true;
       });
-      renderTable();
+
+      state.visible = PAGE_SIZE;
+      elements.clearFilters.hidden = !query && !change && !category && !elements.periodFilter.value;
+      renderStats();
+      renderTimeline();
     }
 
-    async function initialize() {
-      elements.currentYear.textContent = new Date().getFullYear();
-      try {
-        const response = await fetch("../feeds-status.json");
-        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
-        const payload = await response.json();
-        state.feeds = payload.feeds;
-        state.filtered = payload.feeds;
-        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
-          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-        });
-        renderStats(state.feeds);
-        renderAdded(state.feeds);
-        renderTable();
-      } catch (error) {
-        console.error(error);
-        elements.resultCount.textContent = "Unable to load feed status data.";
-      }
+    function renderStats() {
+      const counts = { added: 0, removed: 0, modified: 0 };
+      state.filtered.forEach((entry) => {
+        if (counts[entry.change] !== undefined) counts[entry.change] += 1;
+      });
+      const stats = [
+        { label: "Added", value: counts.added },
+        { label: "Removed", value: counts.removed },
+        { label: "Modified", value: counts.modified },
+        { label: "Days with changes", value: new Set(state.filtered.map(dayKey)).size },
+      ];
+      elements.statsGrid.replaceChildren();
+      stats.forEach((stat) => {
+        const card = document.createElement("div");
+        card.className = "stat-card";
+        card.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
+        elements.statsGrid.append(card);
+      });
     }
 
     let searchTimer;
     elements.search.addEventListener("input", () => {
       state.query = elements.search.value;
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(applyFilter, 100);
+      searchTimer = setTimeout(applyFilter, 150);
+    });
+    [elements.changeFilter, elements.categoryFilter, elements.periodFilter]
+      .forEach((select) => select.addEventListener("change", applyFilter));
+    elements.clearFilters.addEventListener("click", () => {
+      elements.search.value = "";
+      elements.changeFilter.value = "";
+      elements.categoryFilter.value = "";
+      elements.periodFilter.value = "";
+      state.query = "";
+      applyFilter();
+      elements.search.focus();
     });
 
-    elements.headers.forEach((th) => {
-      th.addEventListener("click", () => {
-        const key = th.dataset.key;
-        if (state.sortKey === key) {
-          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-        } else {
-          state.sortKey = key;
-          state.sortDir = "asc";
+    async function init() {
+      elements.currentYear.textContent = new Date().getFullYear();
+      try {
+        const response = await fetch("../policy-changes.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+        const payload = await response.json();
+
+        // One file holds both kinds; this page owns one of them. Newest first is
+        // how the file is written, but a hand-edited order would silently
+        // scramble the timeline, so the order is asserted here rather than trusted.
+        state.entries = (payload.entries || [])
+          .filter((entry) => entry.kind === KIND)
+          .sort((a, b) => String(b.detectedAt ?? "").localeCompare(String(a.detectedAt ?? "")));
+
+        const categories = [...new Set(state.entries.map((entry) => entry.category).filter(Boolean))].sort();
+        categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
+
+        const retention = payload.retentionDays;
+        if (retention) {
+          elements.retention.textContent = `${retention} days`;
+          elements.retentionInline.textContent = String(retention);
         }
-        renderTable();
-      });
-    });
+
+        const generatedAt = payload.generatedAt ? new Date(payload.generatedAt) : null;
+        elements.refreshedAt.textContent = !generatedAt || Number.isNaN(generatedAt.getTime())
+          ? "Not recorded yet"
+          : generatedAt.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+
+        applyFilter();
+      } catch (error) {
+        console.error(error);
+        elements.timeline.innerHTML = '<div class="empty-state"><h2>The change log could not be loaded</h2><p>Please refresh the page or try again later.</p></div>';
+        elements.refreshedAt.textContent = "Unavailable";
+      }
+    }
+    init();
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
@@ -889,8 +1299,6 @@
     elements.backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
-
-    initialize();
   </script>
   <script>
     (function () {
@@ -951,7 +1359,16 @@
       var hydrating = false;
 
       function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+        // A checkbox is only worth a query parameter when it differs from its
+        // own default. Writing "1" for a checked box would have been enough
+        // while every toggle here started unchecked, but "Hide deprecated" and
+        // "Hide preview" start checked, and unchecking them has to survive a
+        // reload just as clearly.
+        if (el.type === "checkbox") {
+          if (el.checked === el.defaultChecked) return "";
+          return el.checked ? "1" : "0";
+        }
+        return el.value;
       }
 
       if (params.toString()) {
