@@ -43,7 +43,6 @@ const ANALYTICS_SNIPPET = `<!-- seo:analytics -->
       wait_for_update: 500
     });
     gtag('set', 'ads_data_redaction', true);
-    gtag('set', 'url_passthrough', true);
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>
   <script>
@@ -330,7 +329,7 @@ function formatRssDate(dateStr) {
   return new Date(`${dateStr}T12:00:00Z`).toUTCString();
 }
 
-function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false, noindex = false }) {
+function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false, noindex = false, share = true }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -639,6 +638,7 @@ ${extraHead}
       body::before { animation: none; }
     }
 ${ARTICLE_CSS}
+${SHARE_CSS}
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
@@ -733,7 +733,7 @@ ${content}
           <a href="/m365-release-updates/">M365 Updates</a>
         </div>
       </div>
-      <div class="footer-bottom">
+${share ? shareBox({ variant: "footer-share", url: `${SITE_URL}/`, title: "Benoit Gaumard" }) + "\n" : ""}      <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
@@ -805,6 +805,38 @@ ${content}
       closeBtn.addEventListener("click", () => {
         banner.setAttribute("hidden", "");
         try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+    (function () {
+      const roots = document.querySelectorAll("[data-share-root]");
+      if (!roots.length) return;
+      const isArticleUrl = location.protocol.indexOf("http") === 0;
+      roots.forEach((root) => {
+        // The footer variant always advertises the site root; the article
+        // variant follows whatever page the reader is actually on.
+        const pageUrl = root.classList.contains("footer-share")
+          ? location.origin + "/"
+          : isArticleUrl ? location.href.split("#")[0] : "${SITE_URL}/";
+        const url = encodeURIComponent(pageUrl);
+        const title = encodeURIComponent(document.title);
+        const targets = {
+          linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url,
+          twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+          reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title,
+          mail: "mailto:?subject=" + title + "&body=" + title + "%20-%20" + url
+        };
+        root.querySelectorAll("a[data-share]").forEach((el) => {
+          const href = targets[el.getAttribute("data-share")];
+          if (href) el.setAttribute("href", href);
+        });
+        const favBtn = root.querySelector('[data-share="favorite"]');
+        const hint = root.querySelector("[data-share-hint]");
+        if (favBtn && hint) {
+          favBtn.addEventListener("click", () => {
+            const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+            hint.textContent = "Press " + (isMac ? "\\u2318" : "Ctrl") + " + D to add this site to your favorites.";
+          });
+        }
       });
     })();
   </script>
@@ -894,6 +926,60 @@ const ARTICLE_CSS = `
       .article-meta { font-size: 0.8rem; }
     }`;
 
+// Sharing sits at the top of an article, right under the tags, so a reader who
+// wants to pass the piece on does not have to reach the end to find the links.
+// Every other page keeps the site-level variant in the footer.
+const SHARE_CSS = `
+    .share-box { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--cp-border); }
+    .share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .footer-share { justify-content: center; }
+    .footer-share .share-links { justify-content: center; }
+    .footer-share .share-hint { text-align: center; }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }`;
+
+const SHARE_ICONS = {
+  linkedin: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>`,
+  twitter: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>`,
+  reddit: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>`,
+  mail: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+  favorite: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+};
+
+// The hrefs are rendered server-side so they work without JavaScript; the
+// runtime script only refreshes them from location.href, which keeps previews
+// and any future domain change honest.
+function shareBox({ variant, url, title, indent = "      " }) {
+  const u = encodeURIComponent(url);
+  const t = encodeURIComponent(title);
+  const links = [
+    ["linkedin", "LinkedIn", `https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
+    ["twitter", "Twitter", `https://twitter.com/intent/tweet?url=${u}&amp;text=${t}`],
+    ["reddit", "Reddit", `https://www.reddit.com/submit?url=${u}&amp;title=${t}`],
+    ["mail", "Mail", `mailto:?subject=${t}&amp;body=${t}%20-%20${u}`],
+  ];
+  const anchors = links
+    .map(([key, label, href]) =>
+      `${indent}    <a class="share-btn" data-share="${key}" href="${href}"${key === "mail" ? "" : ` target="_blank" rel="noopener"`}>\n${indent}      ${SHARE_ICONS[key]}\n${indent}      ${label}\n${indent}    </a>`
+    )
+    .join("\n");
+  return `${indent}<div class="share-box ${variant}" data-share-root>
+${indent}  <span class="share-label">Share on</span>
+${indent}  <div class="share-links">
+${anchors}
+${indent}    <button class="share-btn" type="button" data-share="favorite">
+${indent}      ${SHARE_ICONS.favorite}
+${indent}      Add to favorites
+${indent}    </button>
+${indent}  </div>
+${indent}  <p class="share-hint" data-share-hint role="status" aria-live="polite"></p>
+${indent}</div>`;
+}
+
 function renderArticlePage(article) {
   const categoriesHtml = article.categories.map((c) => `<a class="article-category-tag" href="/articles/?category=${encodeURIComponent(c)}">${escapeHtml(c)}</a>`).join("");
   const tagsHtml = article.tags.length ? `<div class="article-tags">${article.tags.map((t) => `<span class="article-tag">#${escapeHtml(t)}</span>`).join("")}</div>` : "";
@@ -916,6 +1002,7 @@ function renderArticlePage(article) {
         <span>${article.readingMinutes} min read</span>
       </div>
       ${tagsHtml}
+${shareBox({ variant: "article-share", url: `${SITE_URL}${article.url}`, title: article.title })}
     </div>
 
     ${featureImageHtml}
@@ -936,6 +1023,7 @@ ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(A
     content,
     ads: true,
     noindex: article.noindex,
+    share: false,
   });
 }
 
