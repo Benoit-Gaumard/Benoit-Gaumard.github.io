@@ -1,6 +1,397 @@
 {
-  "generatedAt": "2026-09-08T07:20:59.481Z",
+  "generatedAt": "2026-09-08T08:16:10.122Z",
   "articles": [
+    {
+      "slug": "azure-policy-part-1-what-is-a-policy",
+      "title": "Azure Policy, Part 1: What Is an Azure Policy?",
+      "description": "Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "Governance",
+        "Compliance",
+        "JSON"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-1.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 13,
+      "url": "/articles/azure-policy-part-1-what-is-a-policy/"
+    },
+    {
+      "slug": "azure-policy-part-2-initiatives",
+      "title": "Azure Policy, Part 2: What Is an Initiative (Policy Set)?",
+      "description": "Part 2 of the Azure Policy series: policy set definitions explained - grouping definitions, policyDefinitionReferenceId, passing parameters down, definition groups and regulatory compliance, version pinning, and the initiative parameter you can never change.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "Governance",
+        "Compliance",
+        "Initiative"
+      ],
+      "categories": [
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-2.svg",
+      "featureImageShape": "banner",
+      "featured": false,
+      "noindex": false,
+      "readingMinutes": 9,
+      "url": "/articles/azure-policy-part-2-initiatives/"
+    },
+    {
+      "slug": "azure-policy-part-3-assignments",
+      "title": "Azure Policy, Part 3: What Is a Policy Assignment?",
+      "description": "Part 3 of the Azure Policy series: assignments are where governance becomes real. Scope and inheritance, enforcementMode, managed identities and remediation permissions, resourceSelectors and overrides for safe rollout, and non-compliance messages.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "Governance",
+        "RBAC",
+        "Remediation"
+      ],
+      "categories": [
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-3.svg",
+      "featureImageShape": "banner",
+      "featured": false,
+      "noindex": false,
+      "readingMinutes": 11,
+      "url": "/articles/azure-policy-part-3-assignments/"
+    },
+    {
+      "slug": "azure-policy-part-4-exclusions-notscopes",
+      "title": "Azure Policy, Part 4: What Is an Exclusion (notScopes)?",
+      "description": "Part 4 of the Azure Policy series: exclusions explained. How notScopes carves a hole in an assignment scope, why excluded resources vanish from compliance entirely, the governance debt it creates, and when an exclusion is genuinely the right answer.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "Governance",
+        "Compliance",
+        "notScopes"
+      ],
+      "categories": [
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-4.svg",
+      "featureImageShape": "banner",
+      "featured": false,
+      "noindex": false,
+      "readingMinutes": 8,
+      "url": "/articles/azure-policy-part-4-exclusions-notscopes/"
+    },
+    {
+      "slug": "azure-policy-part-5-exemptions",
+      "title": "Azure Policy, Part 5: What Is a Policy Exemption?",
+      "description": "Part 5 of the Azure Policy series: exemptions explained. Waiver versus Mitigated, expiresOn, exempting a single initiative member, identity-based exemptions, compliance substate, the RBAC you need, and how to stop exemptions becoming permanent.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "Governance",
+        "Compliance",
+        "Exemption",
+        "RBAC"
+      ],
+      "categories": [
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-5.svg",
+      "featureImageShape": "banner",
+      "featured": false,
+      "noindex": false,
+      "readingMinutes": 9,
+      "url": "/articles/azure-policy-part-5-exemptions/"
+    },
+    {
+      "slug": "azure-policy-part-6-policy-as-code",
+      "title": "Azure Policy, Part 6: Azure Policy as Code",
+      "description": "Part 6 of the Azure Policy series: why the portal stops working at scale, Microsoft's create-test-deploy workflow, the deployment ordering problem, drift and desired state, the managed identity permission gap, and what to put in your repository.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "Governance",
+        "DevOps",
+        "CI/CD",
+        "Bicep",
+        "Terraform"
+      ],
+      "categories": [
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-6.svg",
+      "featureImageShape": "banner",
+      "featured": false,
+      "noindex": false,
+      "readingMinutes": 11,
+      "url": "/articles/azure-policy-part-6-policy-as-code/"
+    },
+    {
+      "slug": "azure-policy-part-7-epac",
+      "title": "Azure Policy, Part 7: EPAC and the Alternatives",
+      "description": "Part 7 of the Azure Policy series: Enterprise Azure Policy as Code (EPAC) explained end to end - folder structure, global-settings.jsonc, pacEnvironments, desired state strategies, the three-stage pipeline, ALZ integration - plus an honest comparison with ALZ, Terraform, AzOps and doing nothing.",
+      "author": "Benoit G",
+      "date": "2026-09-04",
+      "tags": [
+        "Azure Policy",
+        "EPAC",
+        "Governance",
+        "DevOps",
+        "CI/CD",
+        "PowerShell"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "Governance",
+        "Azure Policy"
+      ],
+      "featureImage": "/articles/images/azure-policy-part-7.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 15,
+      "url": "/articles/azure-policy-part-7-epac/"
+    },
+    {
+      "slug": "azure-lighthouse-cross-tenant-management",
+      "title": "Azure Lighthouse: The Most Underrated Feature in Azure",
+      "description": "Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "Azure Lighthouse",
+        "Entra ID",
+        "RBAC",
+        "Multi-tenant",
+        "Governance",
+        "ARM",
+        "Bicep"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "Governance"
+      ],
+      "featureImage": "/articles/images/azure-lighthouse.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 13,
+      "url": "/articles/azure-lighthouse-cross-tenant-management/"
+    },
+    {
+      "slug": "dns-in-azure-part-3-private-resolver",
+      "title": "DNS in Azure, Part 3: Azure DNS Private Resolver",
+      "description": "Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Hybrid"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-3.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 14,
+      "url": "/articles/dns-in-azure-part-3-private-resolver/"
+    },
+    {
+      "slug": "dns-in-azure-part-4-private-endpoints",
+      "title": "DNS in Azure, Part 4: Private Link and Private Endpoints",
+      "description": "Part 4 of the DNS in Azure series: what a Private Endpoint really is, sub-resources, the approval workflow, routing and NSG behaviour, Private Link Service, and why turning off public network access is a separate job.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Private Endpoint",
+        "Private Link"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-4.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 12,
+      "url": "/articles/dns-in-azure-part-4-private-endpoints/"
+    },
+    {
+      "slug": "dns-in-azure-part-5-private-endpoint-dns",
+      "title": "DNS in Azure, Part 5: Private Endpoints and Private DNS",
+      "description": "Part 5 of the DNS in Azure series: the privatelink CNAME chain, the exact zone name for every service, private DNS zone groups, running zones at scale with Azure Policy, and making Private Endpoints resolve from on-premises.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Private Endpoint",
+        "Private Link"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-5.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 9,
+      "url": "/articles/dns-in-azure-part-5-private-endpoint-dns/"
+    },
+    {
+      "slug": "dns-in-azure-part-6-private-dns-fallback",
+      "title": "DNS in Azure, Part 6: Private DNS Fallback to Internet",
+      "description": "Part 6 of the DNS in Azure series: why a privatelink zone returns NXDOMAIN for names you do not own, how the NxDomainRedirect resolution policy fixes cross-tenant Private Link, and when you should deliberately leave it off.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Private Endpoint",
+        "Private Link"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-6.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 7,
+      "url": "/articles/dns-in-azure-part-6-private-dns-fallback/"
+    },
+    {
+      "slug": "dns-in-azure-part-7-dns-security-policies",
+      "title": "DNS in Azure, Part 7: DNS Security Policies",
+      "description": "Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Security",
+        "Log Analytics"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS",
+        "Security"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-7.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 8,
+      "url": "/articles/dns-in-azure-part-7-dns-security-policies/"
+    },
+    {
+      "slug": "dns-in-azure-part-8-decision-tree",
+      "title": "DNS in Azure, Part 8: The Resolution Decision Tree",
+      "description": "Part 8 of the DNS in Azure series: an interactive decision tree that takes you from a client asking for a name to the exact Azure architecture that answers it - Azure DNS, private zones, privatelink, forwarding rulesets, or on-premises.",
+      "author": "Benoit G",
+      "date": "2026-09-03",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Architecture",
+        "Private Endpoint"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-8.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 5,
+      "url": "/articles/dns-in-azure-part-8-decision-tree/"
+    },
+    {
+      "slug": "dns-in-azure-part-2-private-dns-zones",
+      "title": "DNS in Azure, Part 2: Private DNS Zones",
+      "description": "Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.",
+      "author": "Benoit G",
+      "date": "2026-09-02",
+      "tags": [
+        "DNS",
+        "Networking",
+        "Private Endpoint"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-2.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 12,
+      "url": "/articles/dns-in-azure-part-2-private-dns-zones/"
+    },
+    {
+      "slug": "dns-in-azure-part-1-fundamentals",
+      "title": "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution",
+      "description": "Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.",
+      "author": "Benoit G",
+      "date": "2026-09-01",
+      "tags": [
+        "DNS",
+        "Networking"
+      ],
+      "categories": [
+        "Featured",
+        "Azure",
+        "DNS"
+      ],
+      "featureImage": "/articles/images/dns-in-azure-part-1.svg",
+      "featureImageShape": "banner",
+      "featured": true,
+      "noindex": false,
+      "readingMinutes": 11,
+      "url": "/articles/dns-in-azure-part-1-fundamentals/"
+    },
     {
       "slug": "how-to-creat-a-new-article",
       "title": "How to Create a New Article",
@@ -15,6 +406,7 @@
         "Documentation"
       ],
       "featureImage": "/articles/images/how-to-create-a-new-article.svg",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 2,
@@ -36,6 +428,7 @@
         "GitHub"
       ],
       "featureImage": "/articles/images/github-azure-oidc.svg",
+      "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
       "readingMinutes": 2,
@@ -57,6 +450,7 @@
         "Governance"
       ],
       "featureImage": "/articles/images/azure-landing-zone.svg",
+      "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
       "readingMinutes": 3,
@@ -78,6 +472,7 @@
         "Bastion"
       ],
       "featureImage": "/articles/images/bastion/bastion.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 2,
@@ -96,6 +491,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/azure-dns-zone.png",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 5,
@@ -115,6 +511,7 @@
         "Git"
       ],
       "featureImage": "/articles/images/git.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -134,6 +531,7 @@
         "GitHub"
       ],
       "featureImage": "/articles/images/github-color.svg",
+      "featureImageShape": "logo",
       "featured": true,
       "noindex": false,
       "readingMinutes": 4,
@@ -154,6 +552,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/SQL-Database.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -173,6 +572,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/Virtual-Machine.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -192,6 +592,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/Network-Security-Groups.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 2,
@@ -211,6 +612,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/entra-id.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -230,6 +632,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/bicep.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 3,
@@ -248,6 +651,7 @@
         "GitHub"
       ],
       "featureImage": "/articles/images/github-actions.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -266,6 +670,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/Tags.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 2,
@@ -284,6 +689,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/Policy.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -302,6 +708,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/rest-api.jpeg",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -321,6 +728,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/rest-api.jpeg",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -340,6 +748,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/Users.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -358,6 +767,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/shaky-foundations.jpeg",
+      "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
       "readingMinutes": 2,
@@ -376,6 +786,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/kql-query.jpeg",
+      "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
       "readingMinutes": 1,
@@ -396,6 +807,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/githubtest.png",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -416,6 +828,7 @@
         "Tools"
       ],
       "featureImage": "/articles/images/VSCode.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -434,6 +847,7 @@
         "Tools"
       ],
       "featureImage": "/articles/images/cyber-attack-map.jpg",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -453,6 +867,7 @@
         "Hugo"
       ],
       "featureImage": "/articles/images/hugo.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -472,6 +887,7 @@
         "Hugo"
       ],
       "featureImage": "/articles/images/website-migration.png",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 4,
@@ -491,6 +907,7 @@
         "GitHub"
       ],
       "featureImage": "/articles/images/githubtest.png",
+      "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -510,6 +927,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/terraform.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -528,6 +946,7 @@
         "Azure"
       ],
       "featureImage": "/articles/images/cost-management.svg",
+      "featureImageShape": "logo",
       "featured": true,
       "noindex": false,
       "readingMinutes": 7,
@@ -547,6 +966,7 @@
         "Tools"
       ],
       "featureImage": "/articles/images/terraform.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -566,6 +986,7 @@
         "Git"
       ],
       "featureImage": "/articles/images/git.svg",
+      "featureImageShape": "logo",
       "featured": true,
       "noindex": false,
       "readingMinutes": 1,
@@ -585,6 +1006,7 @@
         "GitHub"
       ],
       "featureImage": "/articles/images/github-color.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,
@@ -604,6 +1026,7 @@
         "GitHub"
       ],
       "featureImage": "/articles/images/github-color.svg",
+      "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
       "readingMinutes": 1,

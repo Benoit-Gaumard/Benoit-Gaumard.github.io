@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="DNS in Azure Part 5 - Private Endpoints and privatelink DNS zones">
+  <defs>
+    <linearGradient id="dns5bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a5fa8"/>
+      <stop offset="100%" stop-color="#101f38"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#dns5bg)"/>
+
+  <text x="600" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="600" fill="#a9cdf2" text-anchor="middle" letter-spacing="4">DNS IN AZURE &#183; PART 5</text>
+
+  <!-- the CNAME chain -->
+  <rect x="80" y="180" width="300" height="72" rx="12" fill="#ffffff" opacity="0.97"/>
+  <text x="230" y="215" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#101f38" text-anchor="middle">sa1.blob.core.windows.net</text>
+  <text x="230" y="240" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#1a5fa8" text-anchor="middle">public name asked by the client</text>
+
+  <rect x="450" y="180" width="300" height="72" rx="12" fill="#ffffff" opacity="0.97"/>
+  <text x="600" y="211" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#101f38" text-anchor="middle">CNAME &#8594;</text>
+  <text x="600" y="238" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#1a5fa8" text-anchor="middle">sa1.privatelink.blob...</text>
+
+  <rect x="820" y="180" width="300" height="72" rx="12" fill="#ffffff" opacity="0.97"/>
+  <text x="970" y="215" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#101f38" text-anchor="middle">A &#8594; 10.0.1.4</text>
+  <text x="970" y="240" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#1a5fa8" text-anchor="middle">private endpoint NIC</text>
+
+  <g stroke="#a9cdf2" stroke-width="5" stroke-linecap="round">
+    <line x1="382" y1="216" x2="444" y2="216"/>
+    <line x1="752" y1="216" x2="814" y2="216"/>
+  </g>
+
+  <!-- zone -->
+  <rect x="330" y="300" width="540" height="96" rx="14" fill="#20365c" stroke="#a9cdf2" stroke-width="3"/>
+  <text x="600" y="338" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">privatelink.blob.core.windows.net</text>
+  <text x="600" y="372" font-family="Segoe UI, Arial, sans-serif" font-size="19" fill="#a9cdf2" text-anchor="middle">private DNS zone linked to the VNet</text>
+
+  <text x="600" y="472" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">Private Endpoints and Private DNS</text>
+  <text x="600" y="524" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#a9cdf2" text-anchor="middle">the CNAME chain &#183; zone groups &#183; hybrid resolution</text>
+</svg>

@@ -23,6 +23,7 @@ colors:
   probe-cyan: "#0d93b0"
   link-blue: "#0969b5"
   panel-veil: "rgba(255, 255, 255, 0.97)"
+  overlay-veil: "rgba(238, 247, 255, 0.84)"
   night-void: "#0c1420"
   night-surface: "#16233a"
   night-surface-soft: "#1c2c42"
@@ -32,6 +33,7 @@ colors:
   night-ink-muted: "#9db3c7"
   night-azure-signal: "#4fa8ea"
   night-panel-veil: "rgba(16, 26, 41, 0.97)"
+  night-overlay-veil: "rgba(10, 17, 28, 0.84)"
   # Deliberately literal, not tokenised - documented so they read as system, not drift.
   aurora-cyan: "rgba(15, 176, 212, 0.22)"
   aurora-violet: "rgba(123, 97, 255, 0.16)"
@@ -199,7 +201,7 @@ This is the workbench of a working Azure engineer that happens to also be his po
 
 The frame around that instrument is a light PowerShell metaphor: a terminal chrome bar on the homepage hero, `PS>` prefixes on section labels, `.\Start-Collaboration.ps1` as a contact heading. It is a costume, worn lightly and only where the site talks about its author. It never enters a tool page, where the data is the point.
 
-The system's real signature is the **shared shell**: an identical sticky header, aurora backdrop, dismissible banner, footer, theme toggle, and back-to-top across 63 pages built by hand with no build step and no dependencies. Twenty-six unrelated utilities read as one product because that shell never varies. That consistency is not decoration - it is the load-bearing structure of the whole design.
+The system's real signature is the **shared shell**: an identical sticky header, aurora backdrop, dismissible banner, footer, theme toggle, and back-to-top across 66 pages built by hand with no build step and no dependencies. Twenty-nine unrelated utilities read as one product because that shell never varies. That consistency is not decoration - it is the load-bearing structure of the whole design.
 
 **Key Characteristics:**
 - Cool blue-frost neutrals; colour reserved almost entirely for status

@@ -177,6 +177,7 @@ function isBlockStart(line, nextLine) {
   if (line.trim() === "[[toc]]") return true;
   if (/^```/.test(line.trim())) return true;
   if (/^:::(note|info|warning)\s*$/i.test(line.trim())) return true;
+  if (/^:::html\s*$/i.test(line.trim())) return true;
   if (/^#{2,4}\s+/.test(line)) return true;
   if (/^-{3,}\s*$/.test(line.trim())) return true;
   if (/^[-*]\s+/.test(line)) return true;
@@ -214,6 +215,20 @@ function markdownToHtml(markdown) {
       i++;
       const code = escapeHtml(codeLines.join("\n"));
       htmlParts.push(`<div class="code-block"><div class="code-block-header"><span class="code-lang">${lang}</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-${lang}">${code}</code></pre></div>`);
+      continue;
+    }
+
+    // A ":::html" fence emits its body verbatim, so an article can embed an
+    // interactive widget the Markdown subset cannot express.
+    if (/^:::html\s*$/i.test(line.trim())) {
+      const rawLines = [];
+      i++;
+      while (i < lines.length && lines[i].trim() !== ":::") {
+        rawLines.push(lines[i]);
+        i++;
+      }
+      i++;
+      htmlParts.push(rawLines.join("\n"));
       continue;
     }
 
@@ -314,6 +329,7 @@ function markdownToHtml(markdown) {
 function countWords(markdown) {
   const stripped = markdown
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/:::html[\s\S]*?\n:::/g, " ")
     .replace(/[*_`#>|-]/g, " ");
   const words = stripped.trim().split(/\s+/).filter(Boolean);
   return words.length;
@@ -329,7 +345,7 @@ function formatRssDate(dateStr) {
   return new Date(`${dateStr}T12:00:00Z`).toUTCString();
 }
 
-function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false, noindex = false, share = true }) {
+function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false, noindex = false }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -638,11 +654,11 @@ ${extraHead}
       body::before { animation: none; }
     }
 ${ARTICLE_CSS}
-${SHARE_CSS}
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .copy-code-button, .article-toc,
+      .article-share, .adsbygoogle,
       .breadcrumb { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
@@ -672,6 +688,16 @@ ${SHARE_CSS}
       }
     }
 
+  
+    /* Share links */
+    .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
+    .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .footer-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
   </style>
 </head>
 <body class="${bodyClass}">
@@ -733,7 +759,33 @@ ${content}
           <a href="/m365-release-updates/">M365 Updates</a>
         </div>
       </div>
-${share ? shareBox({ variant: "footer-share", url: `${SITE_URL}/`, title: "Benoit Gaumard" }) + "\n" : ""}      <div class="footer-bottom">
+      <div class="footer-share">
+        <span class="footer-share-label">Share this site</span>
+        <div class="footer-share-links">
+          <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="share-btn" data-share="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+            Twitter
+          </a>
+          <a class="share-btn" data-share="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+            Reddit
+          </a>
+          <a class="share-btn" data-share="mail" href="mailto:?body=https%3A%2F%2Fbenoit-gaumard.io%2F">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Mail
+          </a>
+          <button class="share-btn" type="button" data-share="favorite">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Add to favorites
+          </button>
+        </div>
+        <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
+      </div>
+      <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
       </div>
@@ -807,39 +859,67 @@ ${share ? shareBox({ variant: "footer-share", url: `${SITE_URL}/`, title: "Benoi
         try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
       });
     })();
+  </script>
+<script data-share-script>
     (function () {
-      const roots = document.querySelectorAll("[data-share-root]");
-      if (!roots.length) return;
-      const isArticleUrl = location.protocol.indexOf("http") === 0;
-      roots.forEach((root) => {
-        // The footer variant always advertises the site root; the article
-        // variant follows whatever page the reader is actually on.
-        const pageUrl = root.classList.contains("footer-share")
-          ? location.origin + "/"
-          : isArticleUrl ? location.href.split("#")[0] : "${SITE_URL}/";
-        const url = encodeURIComponent(pageUrl);
-        const title = encodeURIComponent(document.title);
-        const targets = {
-          linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url,
-          twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
-          reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title,
-          mail: "mailto:?subject=" + title + "&body=" + title + "%20-%20" + url
-        };
-        root.querySelectorAll("a[data-share]").forEach((el) => {
-          const href = targets[el.getAttribute("data-share")];
-          if (href) el.setAttribute("href", href);
-        });
-        const favBtn = root.querySelector('[data-share="favorite"]');
-        const hint = root.querySelector("[data-share-hint]");
-        if (favBtn && hint) {
-          favBtn.addEventListener("click", () => {
-            const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-            hint.textContent = "Press " + (isMac ? "\\u2318" : "Ctrl") + " + D to add this site to your favorites.";
-          });
-        }
+      var root = document.querySelector('.footer-share');
+      if (!root) return;
+      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+      var url = encodeURIComponent(pageUrl);
+      var title = encodeURIComponent(document.title);
+      var targets = {
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+      };
+      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+        var href = targets[el.getAttribute('data-share')];
+        if (href) el.setAttribute('href', href);
       });
+      var favBtn = root.querySelector('[data-share="favorite"]');
+      var hint = root.querySelector('[data-share-hint]');
+      if (favBtn && hint) {
+        favBtn.addEventListener('click', function () {
+          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+          hint.textContent = 'Press ' + (isMac ? '\\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+        });
+      }
     })();
   </script>
+<script data-article-share-script>
+    (function () {
+      var root = document.querySelector('.article-share');
+      if (!root) return;
+      var hint = root.querySelector('[data-article-share-hint]');
+
+      function say(message) {
+        if (hint) hint.textContent = message;
+      }
+
+      var copyBtn = root.querySelector('[data-article-share="copy"]');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          // The build-time URL is canonical; location.href would carry any
+          // tracking query string the visitor arrived with.
+          var value = copyBtn.getAttribute('data-share-url') || location.href;
+          function done() { say('Link copied to the clipboard.'); }
+          function failed() { say(value); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, failed);
+          } else {
+            failed();
+          }
+        });
+      }
+
+      var printBtn = root.querySelector('[data-article-share="print"]');
+      if (printBtn) {
+        printBtn.addEventListener('click', function () { window.print(); });
+      }
+    })();
+  </script>
+
 </body>
 </html>
 `;
@@ -862,12 +942,22 @@ const ARTICLE_CSS = `
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
     .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem; aspect-ratio: 16 / 9;
+      max-width: 50rem; margin: 0 auto 2.5rem;
       border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
       box-shadow: var(--cp-shadow); overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .article-feature-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
+    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Square service and product logos get one shared band instead: the height
+       is fixed so every logo hero matches, and the sources are vector, so the
+       small ones scale up to it without softening. */
+    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    @media (max-width: 32rem) {
+      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
+    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -900,6 +990,8 @@ const ARTICLE_CSS = `
     .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
     .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
     .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
+    /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
+    .code-block code.language-diagram { line-height: 1.15; }
     .callout { display: flex; gap: .75rem; margin: 0 0 1.3rem; padding: 1rem 1.15rem; border-radius: 10px; border: 1px solid var(--cp-border); }
     .callout-icon { flex: 0 0 auto; margin-top: .15rem; }
     .callout-label { display: block; margin-bottom: .3rem; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
@@ -922,69 +1014,58 @@ const ARTICLE_CSS = `
     .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
     .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
     .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    /* Reuses the shell's .share-btn so this reads as the same control as the
+       "Share this site" row in the footer; only the layout differs. */
+    .article-share {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
+      margin: 1.75rem 0 2rem; padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
+    }
+    .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .article-share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .article-share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .article-share-hint:empty { display: none; }
     @media (max-width: 40rem) {
       .article-meta { font-size: 0.8rem; }
+      .article-share { flex-direction: column; align-items: flex-start; }
+      .article-share-links { width: 100%; }
     }`;
 
-// Sharing sits at the top of an article, right under the tags, so a reader who
-// wants to pass the piece on does not have to reach the end to find the links.
-// Every other page keeps the site-level variant in the footer.
-const SHARE_CSS = `
-    .share-box { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--cp-border); }
-    .share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
-    .share-links { display: flex; flex-wrap: wrap; gap: 8px; }
-    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
-    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
-    .share-btn svg { flex: none; }
-    .share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
-    .footer-share { justify-content: center; }
-    .footer-share .share-links { justify-content: center; }
-    .footer-share .share-hint { text-align: center; }
-    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }`;
+// The footer's "Share this site" row shares the site; a reader looking at an
+// article wants to share *that*. The bar sits in the header, under the tags and
+// above the feature image, so passing a piece on does not mean scrolling past
+// it first. Links are built here rather than at runtime because the canonical
+// URL and the title are already known, so they work without JavaScript - only
+// Copy and Print need a script.
+function articleShareBar(article) {
+  const url = encodeURIComponent(`${SITE_URL}${article.url}`);
+  const title = encodeURIComponent(article.title);
+  const icon = {
+    x: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>',
+    linkedin: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>',
+    facebook: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>',
+    copy: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    print: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>',
+  };
 
-const SHARE_ICONS = {
-  linkedin: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>`,
-  twitter: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>`,
-  reddit: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>`,
-  mail: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
-  favorite: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
-};
-
-// The hrefs are rendered server-side so they work without JavaScript; the
-// runtime script only refreshes them from location.href, which keeps previews
-// and any future domain change honest.
-function shareBox({ variant, url, title, indent = "      " }) {
-  const u = encodeURIComponent(url);
-  const t = encodeURIComponent(title);
-  const links = [
-    ["linkedin", "LinkedIn", `https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
-    ["twitter", "Twitter", `https://twitter.com/intent/tweet?url=${u}&amp;text=${t}`],
-    ["reddit", "Reddit", `https://www.reddit.com/submit?url=${u}&amp;title=${t}`],
-    ["mail", "Mail", `mailto:?subject=${t}&amp;body=${t}%20-%20${u}`],
-  ];
-  const anchors = links
-    .map(([key, label, href]) =>
-      `${indent}    <a class="share-btn" data-share="${key}" href="${href}"${key === "mail" ? "" : ` target="_blank" rel="noopener"`}>\n${indent}      ${SHARE_ICONS[key]}\n${indent}      ${label}\n${indent}    </a>`
-    )
-    .join("\n");
-  return `${indent}<div class="share-box ${variant}" data-share-root>
-${indent}  <span class="share-label">Share on</span>
-${indent}  <div class="share-links">
-${anchors}
-${indent}    <button class="share-btn" type="button" data-share="favorite">
-${indent}      ${SHARE_ICONS.favorite}
-${indent}      Add to favorites
-${indent}    </button>
-${indent}  </div>
-${indent}  <p class="share-hint" data-share-hint role="status" aria-live="polite"></p>
-${indent}</div>`;
+  return `    <div class="article-share">
+      <span class="article-share-label" id="share-label">Share on</span>
+      <div class="article-share-links" role="group" aria-labelledby="share-label">
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=${url}&amp;text=${title}" target="_blank" rel="noopener">${icon.x}X</a>
+        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener">${icon.linkedin}LinkedIn</a>
+        <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener">${icon.facebook}Facebook</a>
+        <button class="share-btn" type="button" data-article-share="copy" data-share-url="${SITE_URL}${article.url}">${icon.copy}Copy link</button>
+        <button class="share-btn" type="button" data-article-share="print">${icon.print}Print</button>
+      </div>
+      <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
+    </div>`;
 }
 
 function renderArticlePage(article) {
   const categoriesHtml = article.categories.map((c) => `<a class="article-category-tag" href="/articles/?category=${encodeURIComponent(c)}">${escapeHtml(c)}</a>`).join("");
   const tagsHtml = article.tags.length ? `<div class="article-tags">${article.tags.map((t) => `<span class="article-tag">#${escapeHtml(t)}</span>`).join("")}</div>` : "";
   const featureImageHtml = article.featureImage
-    ? `<div class="article-feature-image"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}"></div>`
+    ? `<div class="article-feature-image is-${article.featureImageShape || "banner"}"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}"></div>`
     : "";
 
   const { body, trailing } = injectMidArticleAd(article.bodyHtml, AD_SLOT_ARTICLE);
@@ -1002,14 +1083,16 @@ function renderArticlePage(article) {
         <span>${article.readingMinutes} min read</span>
       </div>
       ${tagsHtml}
-${shareBox({ variant: "article-share", url: `${SITE_URL}${article.url}`, title: article.title })}
     </div>
+
+${articleShareBar(article)}
 
     ${featureImageHtml}
 
     <article class="article-body">
       ${body}
     </article>
+
 ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(AD_SLOT_ARTICLE_SECONDARY) + "\n" : ""}
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
@@ -1023,7 +1106,6 @@ ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(A
     content,
     ads: true,
     noindex: article.noindex,
-    share: false,
   });
 }
 
@@ -1112,6 +1194,72 @@ function renderPrivacyPage() {
 
 // ---------- Build ----------
 
+// The feature images come in two shapes that no single box can serve: about
+// half are 1200x630 / 1792x1024 banners drawn for the purpose, the other half
+// are square service or product logos as small as 18x18. A fixed 16/9 box with
+// object-fit: contain stretched a 150px logo to 450px, which is why some heroes
+// looked enormous next to the banners. Measuring the source lets each shape get
+// its own normalised box, so every logo hero is the same height as every other
+// logo hero and every banner matches every other banner.
+const BANNER_MIN_RATIO = 1.4;
+
+function readSvgSize(text) {
+  const attr = (name) => {
+    const m = text.match(new RegExp(`<svg[^>]*\\s${name}="([\\d.]+)`, "i"));
+    return m ? Number(m[1]) : 0;
+  };
+  const width = attr("width");
+  const height = attr("height");
+  if (width > 0 && height > 0) return { width, height };
+  const box = text.match(/viewBox="\s*[\d.+-]+[\s,]+[\d.+-]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i);
+  if (box) return { width: Number(box[1]), height: Number(box[2]) };
+  return null;
+}
+
+function readPngSize(buffer) {
+  if (buffer.length < 24 || buffer.readUInt32BE(0) !== 0x89504e47) return null;
+  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+}
+
+// Walks the JPEG marker chain to the first start-of-frame, which is the only
+// place the dimensions live.
+function readJpegSize(buffer) {
+  if (buffer.length < 4 || buffer.readUInt16BE(0) !== 0xffd8) return null;
+  let offset = 2;
+  while (offset + 9 < buffer.length) {
+    if (buffer[offset] !== 0xff) { offset++; continue; }
+    const marker = buffer[offset + 1];
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) { offset += 2; continue; }
+    const length = buffer.readUInt16BE(offset + 2);
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      return { height: buffer.readUInt16BE(offset + 5), width: buffer.readUInt16BE(offset + 7) };
+    }
+    offset += 2 + length;
+  }
+  return null;
+}
+
+async function featureImageShape(src) {
+  if (!src) return null;
+  const file = join(HERE, "..", src.replace(/^\//, ""));
+  try {
+    let size = null;
+    if (/\.svg$/i.test(src)) size = readSvgSize(await readFile(file, "utf8"));
+    else {
+      const buffer = await readFile(file);
+      size = /\.png$/i.test(src) ? readPngSize(buffer) : readJpegSize(buffer);
+    }
+    if (!size || !size.width || !size.height) {
+      console.warn(`  feature image size unreadable, treating as a banner: ${src}`);
+      return "banner";
+    }
+    return size.width / size.height >= BANNER_MIN_RATIO ? "banner" : "logo";
+  } catch {
+    console.warn(`  feature image missing, treating as a banner: ${src}`);
+    return "banner";
+  }
+}
+
 async function loadArticle(filename) {
   const raw = await readFile(join(contentDir, filename), "utf8");
   const { data, body } = parseFrontMatter(raw);
@@ -1132,6 +1280,7 @@ async function loadArticle(filename) {
     tags: Array.isArray(data.tags) ? data.tags : [],
     categories: Array.isArray(data.categories) ? data.categories : [],
     featureImage: data.featureImage || null,
+    featureImageShape: await featureImageShape(data.featureImage || null),
     featured: data.featured === true,
     draft: data.draft === true,
     noindex: data.noindex === true,

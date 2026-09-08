@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.">
+  <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+      try {
+        if (localStorage.getItem("news-banner-dismissed") === "2026-08-21") {
+          document.documentElement.setAttribute("data-news-banner", "hidden");
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="benoit-gaumard.io">
+  <meta property="og:title" content="DNS in Azure, Part 2: Private DNS Zones | Benoit Gaumard">
+  <meta property="og:description" content="Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.">
+  <meta property="og:url" content="https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/">
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "DNS in Azure, Part 2: Private DNS Zones",
+  "description": "Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.",
+  "url": "https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/",
+  "author": {
+    "@type": "Person",
+    "name": "Benoit Gaumard",
+    "url": "https://benoit-gaumard.io/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Benoit Gaumard",
+    "url": "https://benoit-gaumard.io/"
+  },
+  "inLanguage": "en"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://benoit-gaumard.io/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Articles",
+      "item": "https://benoit-gaumard.io/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "DNS in Azure, Part 2: Private DNS Zones",
+      "item": "https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/"
+    }
+  ]
+}
+  </script>
+  <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
+  <title>DNS in Azure, Part 2: Private DNS Zones | Benoit Gaumard</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #157f57;
+      --cp-success-bg: #eefaf5;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
+      --cp-info: #0c7d8f;
+      --cp-info-bg: #e6f6f8;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-info: #4fd3e8;
+      --cp-info-bg: #123238;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
+    .news-banner {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .5rem 1rem;
+      background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    :root[data-news-banner="hidden"] .news-banner { display: none; }
+    .news-banner[hidden] { display: none; }
+    .news-banner-track {
+      flex: 1 1 auto;
+      overflow: hidden;
+      white-space: nowrap;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+    }
+    .news-banner-text {
+      display: inline-block;
+      padding-left: 100%;
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: news-banner-scroll 28s linear infinite;
+    }
+    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
+    @keyframes news-banner-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .news-banner-close {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .16);
+      color: #fff;
+      cursor: pointer;
+    }
+    .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
+    @media (prefers-reduced-motion: reduce) {
+      .news-banner-text { animation: none; padding-left: 0; }
+      .news-banner-track { white-space: normal; -webkit-mask-image: none; mask-image: none; }
+    }
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner { width: min(90rem, calc(100% - 2rem)); margin-inline: auto; }
+    .header-inner { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .brand { min-height: 1.5rem; display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+    main { padding-block: 2.5rem 4rem; }
+    .empty-state { padding: 2.5rem; border: 1px dashed var(--cp-border-strong); border-radius: 12px; text-align: center; color: var(--cp-text-muted); }
+    .back-to-top {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 30;
+      display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0;
+      border: 1px solid var(--cp-border); border-radius: 50%;
+      background: var(--cp-accent); color: var(--cp-accent-fg); cursor: pointer;
+      box-shadow: var(--cp-shadow); opacity: 0; transform: translateY(.75rem); pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: 0.85rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: 0.75rem; text-transform: uppercase; }
+    .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+    /* Reserving the height keeps the ad slot from shifting the article once it fills. */
+    .article-ad { margin: 2.2rem 0; display: flex; flex-direction: column; gap: .35rem; min-height: 280px; }
+    .article-ad-label { font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-text-muted); }
+    .article-ad ins { min-height: 250px; }
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-surface-soft); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+
+    .article-header { margin: 0 0 2rem; }
+    .article-breadcrumb { margin: 0 0 1.25rem; font-size: 0.85rem; }
+    .article-breadcrumb a { color: var(--cp-text-muted); text-decoration: none; }
+    .article-breadcrumb a:hover { color: var(--cp-link); }
+    .article-categories { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .article-category-tag {
+      display: inline-flex; align-items: center; min-height: 1.5rem; padding: .2rem .7rem; border-radius: 999px;
+      background: var(--cp-accent-soft); color: var(--cp-accent-hover); font-size: 0.75rem; font-weight: 700; text-decoration: none;
+    }
+    .article-title { margin: 0; font-size: clamp(1.9rem, 4.4vw, 2.85rem); line-height: 1.12; }
+    .article-description { margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; line-height: 1.6; }
+    .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin-top: 1.25rem; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .article-meta .dot { opacity: .5; }
+    .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
+    .article-feature-image {
+      max-width: 50rem; margin: 0 auto 2.5rem;
+      border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
+      box-shadow: var(--cp-shadow); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
+    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Square service and product logos get one shared band instead: the height
+       is fixed so every logo hero matches, and the sources are vector, so the
+       small ones scale up to it without softening. */
+    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
+    @media (max-width: 32rem) {
+      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
+    }
+    .article-body {
+      margin: 0; font-size: 1.05rem; line-height: 1.75;
+      background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
+      padding: clamp(1.5rem, 4vw, 3rem); box-shadow: 0 1px 2px var(--cp-border);
+    }
+    .article-body h2, .article-body h3, .article-body h4 { scroll-margin-top: 5.5rem; }
+    .article-body h2 { margin: 2.2rem 0 1rem; font-size: 1.5rem; }
+    .article-body h3 { margin: 1.8rem 0 .85rem; font-size: 1.25rem; }
+    .article-body h4 { margin: 1.5rem 0 .7rem; font-size: 1.05rem; }
+    .article-body p { margin: 0 0 1.1rem; overflow-wrap: anywhere; }
+    .article-body ul, .article-body ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+    .article-body li { margin-bottom: .4rem; }
+    .article-body hr { border: 0; border-top: 1px solid var(--cp-border); margin: 2rem 0; }
+    .article-body blockquote { margin: 0 0 1.1rem; padding: .25rem 1.1rem; border-left: 3px solid var(--cp-accent); color: var(--cp-text-muted); }
+    .article-body a { overflow-wrap: anywhere; }
+    .article-body a .external-icon { vertical-align: middle; }
+    .article-body code { background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 4px; padding: .1rem .35rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; overflow-wrap: anywhere; }
+    .article-figure { margin: 0 0 1.5rem; }
+    .article-figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--cp-border); display: block; }
+    .article-figure figcaption { margin-top: .5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-align: center; }
+    .table-wrap { overflow-x: auto; margin: 0 0 1.1rem; }
+    .article-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
+    .article-body th { background: var(--cp-surface-soft); }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: 0.8rem; }
+    .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button:hover { background: rgba(255,255,255,.1); }
+    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
+    .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
+    /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
+    .code-block code.language-diagram { line-height: 1.15; }
+    .callout { display: flex; gap: .75rem; margin: 0 0 1.3rem; padding: 1rem 1.15rem; border-radius: 10px; border: 1px solid var(--cp-border); }
+    .callout-icon { flex: 0 0 auto; margin-top: .15rem; }
+    .callout-label { display: block; margin-bottom: .3rem; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .callout-body p:last-child { margin-bottom: 0; }
+    .callout-note { background: var(--cp-accent-soft); color: var(--cp-text); }
+    .callout-note .callout-icon, .callout-note .callout-label { color: var(--cp-accent); }
+    .callout-info { background: var(--cp-info-bg); color: var(--cp-text); }
+    .callout-info .callout-icon, .callout-info .callout-label { color: var(--cp-info); }
+    .callout-warning { background: var(--cp-warning-bg); color: var(--cp-text); }
+    .callout-warning .callout-icon, .callout-warning .callout-label { color: var(--cp-warning); }
+    .article-toc { margin: 0 0 1.6rem; padding: 1rem 1.25rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); }
+    .article-toc strong { display: block; margin-bottom: .5rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
+    .article-toc ul { margin: 0; padding: 0; list-style: none; }
+    .article-toc li { margin: 0; }
+    .article-toc a { display: block; padding: .25rem 0; color: var(--cp-text); text-decoration: none; font-size: 0.9rem; }
+    .article-toc a:hover { color: var(--cp-link); }
+    .toc-level-3 a { padding-left: 1rem; font-size: 0.85rem; color: var(--cp-text-muted); }
+    .toc-level-4 a { padding-left: 2rem; font-size: 0.85rem; color: var(--cp-text-muted); }
+    .article-footer-nav { margin: 2rem 0 0; display: flex; justify-content: space-between; gap: 1rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; min-height: 1.5rem; }
+    .article-footer-nav a { display: inline-flex; align-items: center; gap: .4rem; color: var(--cp-accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+    .article-footer-nav a:hover { color: var(--cp-accent-hover); }
+    /* Reuses the shell's .share-btn so this reads as the same control as the
+       "Share this site" row in the footer; only the layout differs. */
+    .article-share {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
+      margin: 1.75rem 0 2rem; padding: 1rem 1.25rem;
+      border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
+    }
+    .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .article-share-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .article-share-hint { flex-basis: 100%; margin: 0; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .article-share-hint:empty { display: none; }
+    @media (max-width: 40rem) {
+      .article-meta { font-size: 0.8rem; }
+      .article-share { flex-direction: column; align-items: flex-start; }
+      .article-share-links { width: 100%; }
+    }
+    @media print {
+      /* Printing an article should yield the writing, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .copy-code-button, .article-toc,
+      .article-share, .adsbygoogle,
+      .breadcrumb { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, figure, pre, .code-block { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+      .code-block, .code-block code { border: 1px solid #bbb; }
+    }
+
+
+
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+  
+    /* Share links */
+    .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
+    .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .footer-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+  </style>
+</head>
+<body class="">
+  <a class="skip-link" href="#top">Skip to content</a>
+  <div class="news-banner" id="newsBanner">
+    <div class="news-banner-track">
+      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+    </div>
+    <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/articles/" aria-current="page"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" tabindex="-1">
+    <div class="article-header">
+      <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
+      <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=DNS">DNS</a></div>
+      <h1 class="article-title">DNS in Azure, Part 2: Private DNS Zones</h1>
+      <p class="article-description">Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.</p>
+      <div class="article-meta">
+        <span>Benoit G</span>
+        <span class="dot">&middot;</span>
+        <span>September 2, 2026</span>
+        <span class="dot">&middot;</span>
+        <span>12 min read</span>
+      </div>
+      <div class="article-tags"><span class="article-tag">#DNS</span><span class="article-tag">#Networking</span><span class="article-tag">#Private Endpoint</span></div>
+    </div>
+
+    <div class="article-share">
+      <span class="article-share-label" id="share-label">Share on</span>
+      <div class="article-share-links" role="group" aria-labelledby="share-label">
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fdns-in-azure-part-2-private-dns-zones%2F&amp;text=DNS%20in%20Azure%2C%20Part%202%3A%20Private%20DNS%20Zones" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
+        <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fdns-in-azure-part-2-private-dns-zones%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+        <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fdns-in-azure-part-2-private-dns-zones%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>Facebook</a>
+        <button class="share-btn" type="button" data-article-share="copy" data-share-url="https://benoit-gaumard.io/articles/dns-in-azure-part-2-private-dns-zones/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</button>
+        <button class="share-btn" type="button" data-article-share="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
+      </div>
+      <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="article-feature-image is-banner"><img src="/articles/images/dns-in-azure-part-2.svg" alt="DNS in Azure, Part 2: Private DNS Zones"></div>
+
+    <article class="article-body">
+      <p>In <a href="/articles/dns-in-azure-part-1-fundamentals/">Part 1</a> I finished on a fairly blunt conclusion: Azure-provided name resolution stops being useful the moment you own more than one virtual network. You get a namespace you did not choose, records you cannot create by hand, and no way to share any of it across VNets.</p>
+<p><strong>Azure Private DNS zones</strong> are the answer to all three. This post covers how the service is built, the behaviours that surprise people on day one, the role it plays in Private Endpoints, and how to lay out zones so you are not re-architecting them in eighteen months.</p>
+<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#what-private-dns-zones-actually-give-you">What private DNS zones actually give you</a></li><li class="toc-level-2"><a href="#the-resource-model">The resource model</a></li><li class="toc-level-2"><a href="#registration-versus-resolution">Registration versus resolution</a></li><li class="toc-level-2"><a href="#the-suffix-trap">The suffix trap</a></li><li class="toc-level-2"><a href="#resolution-order-inside-a-vnet">Resolution order inside a VNet</a></li><li class="toc-level-2"><a href="#walkthrough-two-vnets-one-zone">Walkthrough: two VNets, one zone</a></li><li class="toc-level-2"><a href="#global-resource-regional-control-plane">Global resource, regional control plane</a></li><li class="toc-level-2"><a href="#private-endpoints-and-the-privatelink-zones">Private Endpoints and the privatelink zones</a></li><li class="toc-level-2"><a href="#limits-that-shape-your-design">Limits that shape your design</a></li><li class="toc-level-2"><a href="#zone-design-patterns">Zone design patterns</a></li><li class="toc-level-2"><a href="#building-it-with-bicep">Building it with Bicep</a></li><li class="toc-level-2"><a href="#verifying-a-zone-works">Verifying a zone works</a></li><li class="toc-level-2"><a href="#scorecard">Scorecard</a></li><li class="toc-level-2"><a href="#next-in-this-series">Next in this series</a></li></ul></nav>
+<h2 id="what-private-dns-zones-actually-give-you">What private DNS zones actually give you</h2>
+<p>A private DNS zone is a namespace you own, hosted by the platform, resolvable only from virtual networks you explicitly attach it to. Compared to the default <code>internal.cloudapp.net</code> namespace:</p>
+<ul><li>You pick the name. <code>corp.internal</code>, <code>prod.contoso.com</code>, whatever fits your naming standard.</li><li>You can create records by hand - A, AAAA, CNAME, MX, PTR, SRV, TXT, SOA.</li><li>One zone can serve many virtual networks, in many regions, across many subscriptions.</li><li>VM records can still be managed automatically if you want them to be.</li><li>There is no infrastructure to build. No VM, no patching, no availability design.</li></ul>
+<div class="callout callout-info"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Info</span><p>Records in a private zone are never resolvable from the internet. A private zone can share a name with a public zone you own, and that is a perfectly normal split-horizon setup - internal clients get the private answer, everyone else gets the public one.</p></div></div>
+    <aside class="article-ad" aria-label="Advertisement">
+      <span class="article-ad-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6636684537203477"
+           data-ad-slot="4494484671"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
+<h2 id="the-resource-model">The resource model</h2>
+<p>Two resource types do all the work, both under the <code>Microsoft.Network</code> provider:</p>
+<div class="table-wrap"><table><thead><tr><th>Resource</th><th>Type</th><th>What it does</th></tr></thead><tbody><tr><td>Private DNS zone</td><td><code>Microsoft.Network/privateDnsZones</code></td><td>Holds the namespace and its record sets</td></tr><tr><td>Virtual network link</td><td><code>Microsoft.Network/privateDnsZones/virtualNetworkLinks</code></td><td>Attaches one VNet to one zone</td></tr></tbody></table></div>
+<p>The link is the part people underestimate. <strong>A zone with no links resolves nothing.</strong> Creating the zone and populating records is only half the job - until a virtual network is linked, clients in that VNet have no idea the zone exists.</p>
+<p>The relationships are worth stating precisely, because the asymmetry matters:</p>
+<ul><li>A zone can be linked to <strong>many</strong> virtual networks.</li><li>A virtual network can be linked to <strong>many</strong> zones for resolution.</li><li>A virtual network can be linked to exactly <strong>one</strong> zone with autoregistration enabled.</li><li>Links can cross subscriptions inside the same tenant, and cross-tenant linking is supported through PowerShell / CLI / ARM.</li></ul>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># Create the zone (note: the zone itself has no location - it is global)
+az network private-dns zone create \
+  --resource-group rg-dns-hub \
+  --name corp.internal
+
+# Link a virtual network for resolution only
+az network private-dns link vnet create \
+  --resource-group rg-dns-hub \
+  --zone-name corp.internal \
+  --name link-vnet-spoke-a \
+  --virtual-network /subscriptions/&lt;sub&gt;/resourceGroups/rg-net/providers/Microsoft.Network/virtualNetworks/vnet-spoke-a \
+  --registration-enabled false</code></pre></div>
+<h2 id="registration-versus-resolution">Registration versus resolution</h2>
+<p>Every link carries a boolean, <code>registrationEnabled</code>, and it is the single most misread setting in the service.</p>
+<div class="table-wrap"><table><thead><tr><th>Link type</th><th>Clients can resolve records in the zone</th><th>VMs in the VNet auto-create their own A records</th></tr></thead><tbody><tr><td>Resolution (<code>registrationEnabled = false</code>)</td><td>Yes</td><td>No</td></tr><tr><td>Registration (<code>registrationEnabled = true</code>)</td><td>Yes</td><td>Yes</td></tr></tbody></table></div>
+<p>A registration link is a resolution link <em>plus</em> automatic record management. It is not an alternative to it.</p>
+<p>When autoregistration is on, the platform maintains an A record per VM in that VNet. Three details you need to know before you rely on it:</p>
+<ul><li>Records created this way carry an <code>isAutoRegistered</code> property set to <code>true</code>. You cannot edit them by hand, and manual records with the same name will conflict.</li><li>Their TTL is <strong>10 seconds</strong>, not the usual hour. That is deliberate - it keeps ephemeral compute honest - but it means these names are effectively uncached.</li><li>The record is deleted when the VM is deleted. Deallocating a VM does not remove it.</li></ul>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Autoregistration only covers virtual machines. Private Endpoints, App Service, container workloads and everything else still need records created by you, by policy, or by the resource provider.</p></div></div>
+<p>Microsoft's diagram of a single registration-linked virtual network shows what the platform maintains on your behalf - one auto-registered A record per VM, and PTR answers for the matching reverse lookups:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/dns/media/private-dns-scenarios/single-vnet-resolution.png" alt="Autoregistration in a single virtual network linked to a private DNS zone" loading="lazy"><figcaption>A registration-linked virtual network: the platform maintains an A record per VM and answers PTR queries</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/dns/private-dns-scenarios" target="_blank" rel="noopener noreferrer">Azure Private DNS scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># Link a virtual network WITH autoregistration - only one such link per VNet
+az network private-dns link vnet create \
+  --resource-group rg-dns-hub \
+  --zone-name corp.internal \
+  --name link-vnet-hub-reg \
+  --virtual-network vnet-hub \
+  --registration-enabled true</code></pre></div>
+<h2 id="the-suffix-trap">The suffix trap</h2>
+<p>Here is the one that catches every team on their first migration.</p>
+<p>Linking a private zone to a virtual network <strong>does not change the DNS suffix</strong> the guest OS receives. DHCP option 15 still hands out the VNet's <code>internal.cloudapp.net</code> namespace. So on a VM linked to <code>corp.internal</code> with autoregistration:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">Resolve-DnsName web01              # answers from &lt;random&gt;.internal.cloudapp.net
+Resolve-DnsName web01.corp.internal # answers from your private zone</code></pre></div>
+<p>Both work, and both may return the same address - but they came from different zones. The consequences are practical:</p>
+<ul><li>Always configure applications, connection strings and certificates with the <strong>FQDN</strong>. Single-label names are a trap.</li><li>If you need the private zone suffix appended automatically, set it yourself in the guest OS (DNS suffix search list on Windows, <code>search</code> in <code>/etc/resolv.conf</code> or the netplan/NetworkManager equivalent on Linux).</li></ul>
+<p>This is by design, not an oversight: Microsoft keeps the platform suffix stable so you stay in control of what your VMs append.</p>
+<h2 id="resolution-order-inside-a-vnet">Resolution order inside a VNet</h2>
+<p>When a VM in a linked VNet sends a query to <code>168.63.129.16</code>, the platform evaluates it in this order:</p>
+<ol><li>Is there a <strong>linked private DNS zone</strong> matching the queried name? If so, answer from it. If the record does not exist in that zone, return NXDOMAIN - the platform does <strong>not</strong> fall through to public DNS for a name inside a zone it is authoritative for.</li><li>Otherwise, resolve through Azure DNS as a normal recursive public lookup.</li></ol>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Step 1 is why a half-populated private zone is worse than no zone at all. Link <code>contoso.com</code> as a private zone with only three records, and every other <code>*.contoso.com</code> name that used to resolve publicly from that VNet now returns NXDOMAIN. This is the classic self-inflicted outage with split-horizon zones - if you take over a namespace privately, you own <strong>all</strong> of it.</p></div></div>
+<p>There is a second, equally important caveat: if the virtual network is configured with <strong>custom DNS servers</strong> instead of the default, linked private zones are no longer consulted automatically. Your custom server must forward to <code>168.63.129.16</code> (or you must use a Private DNS Resolver, covered in Part 3) for the zone to be reachable.</p>
+<h2 id="walkthrough-two-vnets-one-zone">Walkthrough: two VNets, one zone</h2>
+<p>Zone <code>corp.internal</code> exists in a hub resource group. <code>vnet-hub</code> is linked with autoregistration; <code>vnet-spoke-a</code> is linked for resolution only. Both use the default DNS servers setting.</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">        vnet-spoke-a                              vnet-hub
+        (resolution link)                      (registration link)
+   ┌────────────────────┐                   ┌────────────────────┐
+   │  app01             │                   │  db01              │
+   │  10.40.1.5         │                   │  10.30.1.4         │
+   └─────────┬──────────┘                   └────────────────────┘
+             │ 1. db01.corp.internal                   ▲
+             ▼                                         │ auto-registered A record
+     ┌──────────────────┐                              │
+     │  168.63.129.16   │                              │
+     └────────┬─────────┘                              │
+              │ 2. zone corp.internal is linked        │
+              ▼                                        │
+     ┌──────────────────────────────────────┐          │
+     │  Private DNS zone: corp.internal     │──────────┘
+     │  db01  A  10.30.1.4  (TTL 10)        │
+     └────────────────┬─────────────────────┘
+                      │ 3. answer: 10.30.1.4
+                      ▼
+                  app01 connects over the peering</code></pre></div>
+<ol><li><code>app01</code> queries <code>db01.corp.internal</code> (FQDN, because the suffix is not appended for it) and sends it to the platform VIP.</li><li>The platform sees a private zone named <code>corp.internal</code> linked to <code>vnet-spoke-a</code> and resolves against it.</li><li>The A record - registered automatically when <code>db01</code> booted in <code>vnet-hub</code> - is returned.</li></ol>
+<p>Note that <code>vnet-spoke-a</code> never needed a registration link, and the two VNets do not need to know anything about each other's namespaces. That is the whole improvement over Part 1.</p>
+<p>Microsoft's version of the same scenario adds a useful detail: records auto-registered from the registration-linked VNet coexist with records you create manually for the resolution-linked one, and PTR lookups only work for the addresses the platform registered:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/dns/media/private-dns-scenarios/multi-vnet-resolution.png" alt="Two virtual networks sharing one private DNS zone, one linked for registration and one for resolution" loading="lazy"><figcaption>One zone serving two virtual networks: registration link on the left, resolution link on the right, with auto-registered and manual records side by side</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/dns/private-dns-scenarios" target="_blank" rel="noopener noreferrer">Azure Private DNS scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<h2 id="global-resource-regional-control-plane">Global resource, regional control plane</h2>
+<p>Private DNS zones are <strong>global</strong>. The data plane is replicated across regions, so a zone can serve virtual networks in West Europe and East US simultaneously. This is the recommended pattern: one zone per namespace, linked widely - not one zone per region.</p>
+<p>The nuance is that a zone still lives in a resource group, and resource groups are regional. During a regional outage affecting the resource group's location you may be unable to <strong>modify</strong> the zone - create records, add links - while DNS resolution for the linked virtual networks keeps working normally.</p>
+<p>Practical consequence: put your shared zones in a resource group in a region you consider primary, and do not assume you can make emergency record changes during a failover of that same region.</p>
+<h2 id="private-endpoints-and-the-privatelink-zones">Private Endpoints and the privatelink zones</h2>
+<p>If you use Azure Private Link - and in a landing zone you will - private DNS zones stop being optional.</p>
+<p>A Private Endpoint gives a PaaS resource a private IP in your VNet, but the client still connects using the <strong>public</strong> FQDN, for example <code>mystorage.blob.core.windows.net</code>. The certificate is issued for that name, so you cannot invent your own. Resolution has to be redirected instead:</p>
+<ol><li>The public name has a CNAME to a <code>privatelink.*</code> name, maintained by Microsoft.</li><li>You host that <code>privatelink.*</code> zone privately and put an A record in it pointing at the endpoint's private IP.</li><li>Clients in linked VNets follow the CNAME into your private zone and get the private address. Clients outside get the public one.</li></ol>
+<p>Microsoft's diagram traces that chain end to end - the public name, the CNAME into <code>privatelink.database.windows.net</code>, the A record in the private zone, and finally the connection to the endpoint's private IP:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/private-link/media/private-endpoint-dns/single-vnet-azure-dns.png" alt="DNS resolution flow for a Private Endpoint through a privatelink zone" loading="lazy"><figcaption>The Private Endpoint resolution chain: public FQDN, CNAME to the privatelink zone, A record, private connection</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns-integration" target="_blank" rel="noopener noreferrer">Private endpoint DNS integration <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
+<p>The zone names are fixed - you must use exactly what Microsoft publishes. A few of the common ones:</p>
+<div class="table-wrap"><table><thead><tr><th>Service</th><th>Private DNS zone name</th></tr></thead><tbody><tr><td>Blob storage</td><td><code>privatelink.blob.core.windows.net</code></td></tr><tr><td>Azure SQL Database</td><td><code>privatelink.database.windows.net</code></td></tr><tr><td>Key Vault</td><td><code>privatelink.vaultcore.azure.net</code></td></tr><tr><td>Azure Container Registry</td><td><code>privatelink.azurecr.io</code></td></tr><tr><td>App Service / Functions</td><td><code>privatelink.azurewebsites.net</code></td></tr><tr><td>Cosmos DB (SQL API)</td><td><code>privatelink.documents.azure.com</code></td></tr></tbody></table></div>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Do not manage these records by hand. Enable the <strong>Private DNS zone group</strong> on the Private Endpoint so the platform writes the A record for you, and enforce it with the built-in Azure Policy definitions (<code>Configure ... to use private DNS zones</code>) so nobody creates an endpoint that resolves to nothing. Manual <code>privatelink</code> records are one of the most common sources of stale DNS in Azure.</p></div></div>
+<h2 id="limits-that-shape-your-design">Limits that shape your design</h2>
+<p>These are the numbers to design against, not to discover in production:</p>
+<div class="table-wrap"><table><thead><tr><th>Resource</th><th>Limit</th></tr></thead><tbody><tr><td>Private DNS zones per subscription</td><td>1,000</td></tr><tr><td>Record sets per zone</td><td>25,000</td></tr><tr><td>Records per record set</td><td>20</td></tr><tr><td>Virtual network links per zone</td><td>1,000</td></tr><tr><td>Virtual network links per zone <strong>with autoregistration</strong></td><td>100</td></tr><tr><td>Zones a virtual network can be linked to</td><td>1,000</td></tr><tr><td>Zones a virtual network can be linked to with autoregistration</td><td>1</td></tr></tbody></table></div>
+<p>Two restrictions also matter:</p>
+<ul><li>Single-label zones are not supported. <code>corp</code> is invalid; <code>corp.internal</code> is fine.</li><li>You cannot create NS delegations inside a private zone. To use a child domain, create it as its own zone and link it directly.</li></ul>
+<p>The <strong>100 autoregistration links</strong> ceiling is the one that bites at scale. If your standard is "every spoke registers into the shared zone", you hit the wall at 100 spokes. Link widely for resolution, sparingly for registration.</p>
+<h2 id="zone-design-patterns">Zone design patterns</h2>
+<p>There is no universally correct layout, but there are three that show up repeatedly.</p>
+<div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Layout</th><th>Good for</th><th>Watch out for</th></tr></thead><tbody><tr><td><strong>Zone per application</strong></td><td><code>app1.corp.internal</code>, <code>app2.corp.internal</code>, each delegated to its team</td><td>Autonomy, fast-moving product teams</td><td>Zone sprawl, inconsistent TTL and naming, more links to manage</td></tr><tr><td><strong>Zone per environment</strong></td><td><code>dev.corp.internal</code>, <code>prod.corp.internal</code>, owned centrally</td><td>Clean separation, simple RBAC boundaries</td><td>Central team becomes a ticket queue for record changes</td></tr><tr><td><strong>Centralized in a hub</strong></td><td>All zones live in a shared connectivity subscription, linked outward</td><td>Consistency, one place to audit, matches Cloud Adoption Framework</td><td>Requires discipline and automation to stay responsive</td></tr></tbody></table></div>
+<p>My default recommendation for a landing zone: <strong>all <code>privatelink.*</code> zones centralized in the connectivity subscription and enforced by policy</strong>, plus application zones split per environment with RBAC delegated at the zone level. That gives platform teams control over the part that breaks silently and gives application teams control over the part they change daily.</p>
+<p>This is also what the Cloud Adoption Framework prescribes - a single set of private DNS zones held in the connectivity subscription, serving every workload subscription:</p>
+<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/media/private-link-example-central-dns.png" alt="Central DNS resolution and name resolution for Private Link resources" loading="lazy"><figcaption>Centralized private DNS zones in the connectivity subscription serving all workload subscriptions</figcaption></figure>
+<p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale" target="_blank" rel="noopener noreferrer">Private Link and DNS integration at scale <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Cloud Adoption Framework.</em></p>
+<h2 id="building-it-with-bicep">Building it with Bicep</h2>
+<p>Zones and links are trivial to express as code, which is exactly how they should be managed:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bicep</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bicep">param zoneName string = 'corp.internal'
+param vnetId string
+
+resource zone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
+  name: zoneName
+  location: 'global'
+}
+
+resource link 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01' = {
+  parent: zone
+  name: 'link-${uniqueString(vnetId)}'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnetId
+    }
+  }
+}
+
+resource apiRecord 'Microsoft.Network/privateDnsZones/A@2024-06-01' = {
+  parent: zone
+  name: 'api'
+  properties: {
+    ttl: 3600
+    aRecords: [
+      {
+        ipv4Address: '10.30.1.20'
+      }
+    ]
+  }
+}</code></pre></div>
+<p>Note <code>location: 'global'</code> on all three - a reminder that the zone is not a regional resource even though its resource group is.</p>
+<h2 id="verifying-a-zone-works">Verifying a zone works</h2>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">Resolve-DnsName api.corp.internal -Server 168.63.129.16</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">dig @168.63.129.16 api.corp.internal +short</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash"># List what a VNet is actually linked to - the first thing to check
+# when a record "exists" but does not resolve
+az network private-dns link vnet list \
+  --resource-group rg-dns-hub \
+  --zone-name corp.internal \
+  --output table</code></pre></div>
+<p>If the record exists in the portal but the query returns NXDOMAIN, the cause is almost always one of: no link to the querying VNet, the VNet is using custom DNS servers, or you are querying the wrong zone because of the suffix trap.</p>
+<h2 id="scorecard">Scorecard</h2>
+<div class="table-wrap"><table><thead><tr><th>Works well</th><th>Still missing</th></tr></thead><tbody><tr><td>Custom namespaces, all common record types</td><td>On-premises clients cannot resolve these zones on their own</td></tr><tr><td>Fully managed, no servers to run or patch</td><td>Custom DNS servers on the VNet bypass linked zones unless they forward to the VIP</td></tr><tr><td>Global data plane across regions</td><td>Control plane depends on the resource group's region</td></tr><tr><td>Automatic record lifecycle for VMs</td><td>Autoregistration capped at 100 VNet links per zone</td></tr><tr><td>RBAC can be delegated per zone</td><td>Azure cannot resolve on-premises namespaces from a VNet</td></tr><tr><td>The foundation for Private Endpoints</td><td>No WINS / NetBIOS</td></tr></tbody></table></div>
+<p>Both remaining gaps are hybrid gaps - and both are what the Azure DNS Private Resolver was built to close.</p>
+<h2 id="next-in-this-series">Next in this series</h2>
+<p><strong><a href="/articles/dns-in-azure-part-3-private-resolver/">Part 3</a></strong> covers the Azure DNS Private Resolver: inbound endpoints, outbound endpoints, forwarding rulesets, the centralized and distributed architectures, the query-evaluation order that explains most "why did it forward there?" incidents, and how to get DNS query logging without a third-party server.</p>
+<p>The rest of the series then moves on to Private Link: <strong><a href="/articles/dns-in-azure-part-4-private-endpoints/">Part 4</a></strong> on Private Endpoints, <strong><a href="/articles/dns-in-azure-part-5-private-endpoint-dns/">Part 5</a></strong> on the <code>privatelink</code> DNS chain, <strong><a href="/articles/dns-in-azure-part-6-private-dns-fallback/">Part 6</a></strong> on fallback to internet, <strong><a href="/articles/dns-in-azure-part-7-dns-security-policies/">Part 7</a></strong> on DNS security policies, and <strong><a href="/articles/dns-in-azure-part-8-decision-tree/">Part 8</a></strong> which ties it all together in an interactive decision tree.</p>
+<p>See you there.</p>
+    </article>
+
+
+    <div class="article-footer-nav">
+      <a href="/articles/">&larr; Back to all articles</a>
+      <a href="/articles/rss.xml">RSS feed</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="/tools/">Tools</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-share">
+        <span class="footer-share-label">Share this site</span>
+        <div class="footer-share-links">
+          <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="share-btn" data-share="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+            Twitter
+          </a>
+          <a class="share-btn" data-share="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+            Reddit
+          </a>
+          <a class="share-btn" data-share="mail" href="mailto:?body=https%3A%2F%2Fbenoit-gaumard.io%2F">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Mail
+          </a>
+          <button class="share-btn" type="button" data-share="favorite">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Add to favorites
+          </button>
+        </div>
+        <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script>
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    document.querySelectorAll('[data-code-copy]').forEach((button) => {
+      button.addEventListener("click", () => {
+        const code = button.closest(".code-block").querySelector("code").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const original = button.textContent;
+          button.textContent = "Copied!";
+          button.classList.add("is-copied");
+          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
+        });
+      });
+    });
+    let scrollTicking = false;
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    (function () {
+      const toggle = document.getElementById("menuToggle");
+      const nav = document.getElementById("primaryNav");
+      if (!toggle || !nav) return;
+      const closeMenu = () => { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); };
+      const openMenu = () => { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); };
+      toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        nav.classList.contains("nav-open") ? closeMenu() : openMenu();
+      });
+      nav.addEventListener("click", (e) => { if (e.target.tagName === "A") closeMenu(); });
+      document.addEventListener("click", (e) => {
+        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+      window.addEventListener("resize", () => { if (window.innerWidth > 760) closeMenu(); });
+    })();
+    (function () {
+      const toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", () => {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const next = isDark ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("site-theme", next); } catch (e) {}
+      });
+    })();
+    (function () {
+      const banner = document.getElementById("newsBanner");
+      const closeBtn = document.getElementById("newsBannerClose");
+      if (!banner || !closeBtn) return;
+      closeBtn.addEventListener("click", () => {
+        banner.setAttribute("hidden", "");
+        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
+      });
+    })();
+  </script>
+<script data-share-script>
+    (function () {
+      var root = document.querySelector('.footer-share');
+      if (!root) return;
+      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+      var url = encodeURIComponent(pageUrl);
+      var title = encodeURIComponent(document.title);
+      var targets = {
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+      };
+      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+        var href = targets[el.getAttribute('data-share')];
+        if (href) el.setAttribute('href', href);
+      });
+      var favBtn = root.querySelector('[data-share="favorite"]');
+      var hint = root.querySelector('[data-share-hint]');
+      if (favBtn && hint) {
+        favBtn.addEventListener('click', function () {
+          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+          hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+        });
+      }
+    })();
+  </script>
+<script data-article-share-script>
+    (function () {
+      var root = document.querySelector('.article-share');
+      if (!root) return;
+      var hint = root.querySelector('[data-article-share-hint]');
+
+      function say(message) {
+        if (hint) hint.textContent = message;
+      }
+
+      var copyBtn = root.querySelector('[data-article-share="copy"]');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          // The build-time URL is canonical; location.href would carry any
+          // tracking query string the visitor arrived with.
+          var value = copyBtn.getAttribute('data-share-url') || location.href;
+          function done() { say('Link copied to the clipboard.'); }
+          function failed() { say(value); }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done, failed);
+          } else {
+            failed();
+          }
+        });
+      }
+
+      var printBtn = root.querySelector('[data-article-share="print"]');
+      if (printBtn) {
+        printBtn.addEventListener('click', function () { window.print(); });
+      }
+    })();
+  </script>
+
+</body>
+</html>

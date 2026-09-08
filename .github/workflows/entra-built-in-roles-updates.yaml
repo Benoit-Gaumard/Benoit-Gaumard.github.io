@@ -1,0 +1,61 @@
+name: Refresh Entra ID Built-in Roles
+
+on:
+  schedule:
+    # 06:00 and 09:00 and 12:00 and 15:00 UTC (4 times daily)
+    - cron: '30 6 * * *'
+    - cron: '30 9 * * *'
+    - cron: '30 12 * * *'
+    - cron: '30 15 * * *'
+    # Weekly dated snapshot (Monday 18:30 UTC, outside the daily refresh times above) to track role changes over time
+    - cron: '30 18 * * 1'
+  workflow_dispatch:
+    inputs:
+      snapshot:
+        description: 'Also save a dated snapshot (normally only done on the weekly schedule)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: entra-built-in-roles-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest Entra ID built-in roles
+        shell: pwsh
+        env:
+          # Only used to raise the GitHub API rate limit; the data itself comes
+          # from public raw content.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./entra-built-in-roles/fetch-updates.ps1
+
+      - name: Save weekly dated snapshot
+        if: github.event.schedule == '30 18 * * 1' || (github.event_name == 'workflow_dispatch' && inputs.snapshot)
+        run: |
+          mkdir -p entra-built-in-roles/history
+          snapshot_date=$(date -u +%Y-%m-%d)
+          cp entra-built-in-roles/roles.json "entra-built-in-roles/history/roles-${snapshot_date}.json"
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add entra-built-in-roles/roles.json
+          if [ -d entra-built-in-roles/history ]; then
+            git add entra-built-in-roles/history
+          fi
+          if git diff --cached --quiet; then
+            echo "No changes to Entra ID built-in roles data."
+          else
+            git commit -m "chore: refresh Entra ID built-in roles data"
+            git push
+          fi

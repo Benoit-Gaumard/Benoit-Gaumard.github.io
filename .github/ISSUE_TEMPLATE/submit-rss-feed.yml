@@ -1,0 +1,63 @@
+name: Submit an RSS feed
+description: Suggest a feed for the RSS Watcher aggregator
+title: "Feed: "
+labels: ["rss-watcher"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feed for [RSS Watcher](https://benoit-gaumard.io/rss-watcher/).
+
+        A bot fetches the address and checks it returns a working RSS or Atom feed
+        before opening a pull request, which is reviewed by hand before it goes live.
+  - type: input
+    id: feed-name
+    attributes:
+      label: Feed name
+      description: The name of the publication, shown as the source on each item.
+      placeholder: Azure Updates
+    validations:
+      required: true
+  - type: input
+    id: feed-url
+    attributes:
+      label: Feed URL
+      description: The address of the RSS or Atom feed itself, not the site home page.
+      placeholder: https://example.com/feed/
+    validations:
+      required: true
+  - type: input
+    id: feed-category
+    attributes:
+      label: Feed category
+      description: Reuse an existing category from the page when one fits, otherwise propose a new one.
+      placeholder: Azure
+    validations:
+      required: true
+  - type: input
+    id: feed-subcategory
+    attributes:
+      label: Feed subcategory
+      description: A narrower topic within the category.
+      placeholder: Networking
+    validations:
+      required: true
+  - type: dropdown
+    id: feed-language
+    attributes:
+      label: Feed language
+      description: Only English and French feeds are aggregated.
+      options:
+        - EN
+        - FR
+    validations:
+      required: true
+  - type: checkboxes
+    id: feed-checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: This is the feed address itself, and it is publicly readable without a login.
+          required: true
+        - label: The feed is actively updated rather than dormant.
+          required: true

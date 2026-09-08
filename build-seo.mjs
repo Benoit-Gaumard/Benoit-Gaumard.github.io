@@ -19,6 +19,9 @@ import { join, relative, sep } from "node:path";
 const ROOT = process.cwd();
 const SITE = "https://benoit-gaumard.io";
 export const GA4_ID = "G-75X1Q2PPLE";
+// Kept in sync with ADSENSE_CLIENT in articles/build-articles.mjs, which covers
+// the generated article pages; this script covers the hand-authored ones.
+export const ADSENSE_CLIENT = "ca-pub-6636684537203477";
 const SKIP = new Set(["blog", "public", "node_modules", "themes", ".git", ".github", ".impeccable", ".playwright-mcp", "favicons"]);
 
 // The anchor is the one line every page shares verbatim, hand-authored and
@@ -124,6 +127,25 @@ function injectAnalytics(html) {
   return html.slice(0, i + ANCHOR.length) + eol + snippet + html.slice(i + ANCHOR.length);
 }
 
+// The AdSense loader shipped only on the 48 generated article pages, because it
+// lives in articles/build-articles.mjs pageShell(); the homepage, /tools/ and
+// the ~30 hand-authored tool pages carried no ad code at all. Auto ads need the
+// tag on every page to place anything, so it is injected here on the same
+// pages, at the same spot as in an article: immediately after the analytics
+// block, which injectAnalytics() has already guaranteed is present.
+function injectAdsense(html) {
+  if (html.includes("adsbygoogle.js")) return html;
+  const eol = html.includes("\r\n") ? "\r\n" : "\n";
+  const block = new RegExp(
+    `([ \\t]*)<script>[^<]*gtag\\('js', new Date\\(\\)\\);[\\s\\S]*?gtag\\('config', '${GA4_ID}'\\);[\\s\\S]*?<\\/script>`
+  );
+  const m = html.match(block);
+  if (!m) return html;
+  const indent = m[1];
+  const loader = `${indent}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}" crossorigin="anonymous"></script>`;
+  return html.replace(block, `${m[0]}${eol}${loader}`);
+}
+
 // AdSense requires a privacy policy reachable from every page, and the footer
 // is the one element every hand-authored page shares.
 function addPrivacyLink(html) {
@@ -184,7 +206,7 @@ function fixBrandLink(html) {
   );
 }
 
-const results = { analytics: 0, breadcrumb: 0, brand: 0, ico: 0, privacy: 0, skipped: [] };
+const results = { analytics: 0, adsense: 0, breadcrumb: 0, brand: 0, ico: 0, privacy: 0, skipped: [] };
 
 for (const file of walk(ROOT)) {
   const original = readFileSync(file, "utf8");
@@ -199,6 +221,16 @@ for (const file of walk(ROOT)) {
   } else if (withGa !== html) {
     results.analytics++;
     html = withGa;
+  }
+
+  // 404.html is the one shell page that is deliberately left out: it has no
+  // content of its own, and AdSense does not allow ads on error pages.
+  if (url !== "/404.html") {
+    const withAds = injectAdsense(html);
+    if (withAds !== html) {
+      results.adsense++;
+      html = withAds;
+    }
   }
 
   const withCrumb = injectBreadcrumb(html, url);
@@ -229,6 +261,7 @@ for (const file of walk(ROOT)) {
 }
 
 console.log(`analytics injected : ${results.analytics} page(s)`);
+console.log(`adsense injected   : ${results.adsense} page(s)`);
 console.log(`breadcrumb added   : ${results.breadcrumb} page(s)`);
 console.log(`brand link labelled: ${results.brand} page(s)`);
 console.log(`favicon.ico linked : ${results.ico} page(s)`);

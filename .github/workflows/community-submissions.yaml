@@ -1,0 +1,126 @@
+name: Community submissions
+
+# Turns a "Submit ..." issue into a pull request on the matching data file.
+# Covers favorite links, friends' websites, Microsoft portals and IT images.
+# Requires: Settings > Actions > General > "Allow GitHub Actions to create and
+# approve pull requests" to be enabled, otherwise the PR step fails.
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: community-submission-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    if: >-
+      github.event.issue.user.type != 'Bot' && (
+        contains(github.event.issue.body, '### Link URL') ||
+        contains(github.event.issue.body, '### Website URL') ||
+        contains(github.event.issue.body, '### Portal URL') ||
+        contains(github.event.issue.body, '### Feed URL') ||
+        contains(github.event.issue.body, '### Image file')
+      )
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+      SITE_URL: https://benoit-gaumard.io
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ensure labels exist
+        run: |
+          gh label create community --color 5319e7 --description "Contributed by a visitor" --force
+          gh label create invalid --color b60205 --description "Submission rejected by the validation bot" --force
+          gh label create favorite-links --color 0b6fb8 --description "Favorite links collection" --force
+          gh label create friends-websites --color 0b6fb8 --description "Friends' websites blogroll" --force
+          gh label create microsoft-portals --color 0b6fb8 --description "Microsoft portals directory" --force
+          gh label create rss-watcher --color 0b6fb8 --description "RSS Watcher feeds" --force
+          gh label create it-images --color 0b6fb8 --description "IT images gallery" --force
+
+      - name: Validate submission
+        id: parse
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node .github/scripts/apply-submission.mjs
+
+      - name: Regenerate image manifest
+        if: steps.parse.outputs.status == 'ok' && steps.parse.outputs.regenerate_manifest == 'true'
+        run: node it-images/generate-manifest.mjs
+
+      - name: Reject invalid submission
+        if: steps.parse.outputs.status == 'invalid'
+        env:
+          REASON: ${{ steps.parse.outputs.reason }}
+          FORM: ${{ steps.parse.outputs.form }}
+        run: |
+          set -euo pipefail
+          cat > comment.md <<EOF
+          Thanks for the suggestion! The automated check could not accept it:
+
+          > ${REASON}
+
+          Feel free to fix the details and send a new submission from ${SITE_URL}/${FORM}/.
+          EOF
+          gh issue comment "$ISSUE_NUMBER" --body-file comment.md
+          gh issue edit "$ISSUE_NUMBER" --add-label invalid
+          gh issue close "$ISSUE_NUMBER" --reason "not planned"
+
+      - name: Close duplicate submission
+        if: steps.parse.outputs.status == 'duplicate'
+        env:
+          REASON: ${{ steps.parse.outputs.reason }}
+        run: |
+          set -euo pipefail
+          gh issue comment "$ISSUE_NUMBER" --body "Thanks! ${REASON} No change is needed."
+          gh issue close "$ISSUE_NUMBER" --reason "completed"
+
+      - name: Open pull request
+        if: steps.parse.outputs.status == 'ok'
+        env:
+          FORM: ${{ steps.parse.outputs.form }}
+          PR_TITLE: ${{ steps.parse.outputs.pr_title }}
+          FILES: ${{ steps.parse.outputs.files }}
+          SUMMARY: ${{ steps.parse.outputs.summary }}
+          NOTE: ${{ steps.parse.outputs.note }}
+        run: |
+          set -euo pipefail
+          branch="submission/issue-${ISSUE_NUMBER}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -- $FILES
+          git commit -m "feat(${FORM}): ${PR_TITLE} (#${ISSUE_NUMBER})"
+          git push --force -u origin "$branch"
+          cat > pr-body.md <<EOF
+          Automated from #${ISSUE_NUMBER}, submitted by @${ISSUE_AUTHOR}.
+
+          | Field | Value |
+          | --- | --- |
+          ${SUMMARY}
+
+          ${NOTE}
+
+          Closes #${ISSUE_NUMBER}
+          EOF
+          pr_url=$(gh pr create \
+            --title "${PR_TITLE}" \
+            --body-file pr-body.md \
+            --label community \
+            --label "${FORM}")
+          gh issue comment "$ISSUE_NUMBER" --body "Thanks! A pull request is open for review: ${pr_url}"
