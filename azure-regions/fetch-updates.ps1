@@ -1,6 +1,10 @@
 #!/usr/bin/env pwsh
-# Refreshes azure-regions/regions.json directly from Azure via Get-AzLocation,
+# Refreshes azure-regions/regions.json directly from Azure via the ARM locations API,
 # authenticating as the "scan-benoit-gaumard.io" Entra ID service principal.
+#
+# The raw ARM payload is used rather than Get-AzLocation because the cmdlet drops the
+# fields this page needs: availabilityZoneMappings is absent entirely, and PairedRegion
+# only carries the programmatic name, never the display name.
 $ErrorActionPreference = "Stop"
 
 Import-Module Az.Accounts -ErrorAction Stop
@@ -17,8 +21,8 @@ $secureSecret = ConvertTo-SecureString -String $clientSecret -AsPlainText -Force
 $credential = [System.Management.Automation.PSCredential]::new($clientId, $secureSecret)
 Connect-AzAccount -ServicePrincipal -Credential $credential -Tenant $tenantId | Out-Null
 
-# Azure's GeographyGroup metadata (from Get-AzLocation) is finer-grained than the continent
-# buckets the site displays, so map the known groups down to the 4 continents used on the page.
+# Azure's GeographyGroup metadata is finer-grained than the continent buckets the site
+# displays, so map the known groups down to the continents used on the page.
 $continentByGeography = @{
   "Asia Pacific"   = "Asia Pacific"
   "Australia"      = "Asia Pacific"
@@ -52,69 +56,92 @@ $continentByGeography = @{
   "United States"  = "Americas"
 }
 
-Write-Host "Fetching Azure locations via Get-AzLocation..."
-$locations = Get-AzLocation
+$subscriptionId = (Get-AzContext).Subscription.Id
+if (-not $subscriptionId) { throw "No subscription in the current Azure context; cannot query the locations API." }
 
-# Get-AzLocation doesn't expose zone mappings, so pull that one field from the raw ARM API.
-$zoneEnabledLocations = @{}
-try {
-  $subscriptionId = (Get-AzContext).Subscription.Id
-  if ($subscriptionId) {
-    $response = Invoke-AzRestMethod -Path "/subscriptions/$subscriptionId/locations?api-version=2022-12-01" -Method GET
-    if ($response.StatusCode -eq 200) {
-      $body = $response.Content | ConvertFrom-Json
-      foreach ($loc in $body.value) {
-        if ($loc.metadata.availabilityZoneMappings -and $loc.metadata.availabilityZoneMappings.Count -gt 0) {
-          $zoneEnabledLocations[$loc.name] = $true
-        }
-      }
-    }
-  } else {
-    Write-Warning "No subscription in current context; availabilityZones will default to false for all regions."
-  }
-} catch {
-  Write-Warning "Could not retrieve availability zone mappings: $($_.Exception.Message)"
+Write-Host "Fetching Azure locations from the ARM locations API..."
+$response = Invoke-AzRestMethod -Path "/subscriptions/$subscriptionId/locations?api-version=2022-12-01" -Method GET
+if ($response.StatusCode -ne 200) {
+  throw "ARM locations API returned HTTP $($response.StatusCode): $($response.Content)"
 }
 
-$regions = [System.Collections.Generic.List[object]]::new()
-foreach ($location in $locations) {
-  # Only keep real, physical Azure regions (skip logical/global entries and edge-zone "Extended" locations).
-  if ($location.RegionType -ne "Physical" -or -not $location.PhysicalLocation) { continue }
+# Edge zones share the "Physical" region type but are not Azure regions, so keep only type=Region.
+$locations = @(($response.Content | ConvertFrom-Json).value | Where-Object { $_.type -eq "Region" })
+if (-not $locations.Count) { throw "ARM locations API returned no regions." }
 
-  $geography = $location.GeographyGroup
+$displayNameById = @{}
+foreach ($location in $locations) { $displayNameById[$location.name] = $location.displayName }
+
+$regions = [System.Collections.Generic.List[object]]::new()
+$logicalRegions = [System.Collections.Generic.List[object]]::new()
+
+foreach ($location in $locations) {
+  $metadata = $location.metadata
+
+  # Logical regions (global, asiapacific, unitedstates, ...) are aggregate ARM names with no
+  # datacenter behind them. They are kept aside so they feed the charts without polluting the
+  # directory, the map or the filters, which are all about real datacenters.
+  if ($metadata.regionType -ne "Physical") {
+    $logicalRegions.Add([ordered]@{
+      name        = $location.displayName
+      id          = $location.name
+      regionType  = $metadata.regionType
+      geography   = $metadata.geographyGroup
+      restricted  = $metadata.regionCategory -eq "Other"
+    })
+    continue
+  }
+
+  if (-not $metadata.physicalLocation) { continue }
+
+  $geography = $metadata.geographyGroup
   $continent = $continentByGeography[$geography]
   if (-not $continent) { $continent = $geography }
 
   $pairedRegion = $null
-  if ($location.PairedRegion -and $location.PairedRegion.Count -gt 0) {
-    $pairedRegion = $location.PairedRegion[0].DisplayName
+  if ($metadata.pairedRegion -and @($metadata.pairedRegion).Count -gt 0) {
+    $pairedName = @($metadata.pairedRegion)[0].name
+    $pairedRegion = if ($displayNameById.ContainsKey($pairedName)) { $displayNameById[$pairedName] } else { $pairedName }
   }
 
+  $hasZones = $metadata.availabilityZoneMappings -and @($metadata.availabilityZoneMappings).Count -gt 0
+
   $regions.Add([ordered]@{
-    name              = $location.DisplayName
-    id                = $location.Location
-    physicalLocation  = $location.PhysicalLocation
-    latitude          = if ($location.Latitude) { [double]$location.Latitude } else { $null }
-    longitude         = if ($location.Longitude) { [double]$location.Longitude } else { $null }
+    name              = $location.displayName
+    id                = $location.name
+    physicalLocation  = $metadata.physicalLocation
+    latitude          = if ($metadata.latitude) { [double]$metadata.latitude } else { $null }
+    longitude         = if ($metadata.longitude) { [double]$metadata.longitude } else { $null }
     geography         = $geography
     continent         = $continent
-    availabilityZones = [bool]$zoneEnabledLocations[$location.Location]
-    restricted        = $location.RegionCategory -eq "Other"
+    regionType        = $metadata.regionType
+    availabilityZones = [bool]$hasZones
+    restricted        = $metadata.regionCategory -eq "Other"
     pairedRegion      = $pairedRegion
   })
 }
 
 $sortedRegions = @($regions | Sort-Object { $_.name })
+$sortedLogicalRegions = @($logicalRegions | Sort-Object { $_.name })
+
+# Surfaced in the workflow log: an all-zero count means the scanning subscription
+# is not being shown availabilityZoneMappings, not that Azure has no zones.
+$zoneEnabled = @($sortedRegions | Where-Object { $_.availabilityZones }).Count
+Write-Host "Regions reporting availability zone mappings: $zoneEnabled / $($sortedRegions.Count)"
+if ($zoneEnabled -eq 0) {
+  Write-Warning "No region reported availabilityZoneMappings; the scanning subscription may not expose them."
+}
 
 $payload = [ordered]@{
-  generatedAt = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
-  source      = "Get-AzLocation (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)"
-  regions     = $sortedRegions
+  generatedAt    = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+  source         = "Azure Resource Manager locations API (live tenant scan via the scan-benoit-gaumard.io app)"
+  regions        = $sortedRegions
+  logicalRegions = $sortedLogicalRegions
 }
 
 $outputPath = Join-Path (Split-Path -Parent $PSCommandPath) "regions.json"
 ($payload | ConvertTo-Json -Depth 10) + "`n" | Set-Content -Path $outputPath -NoNewline -Encoding utf8
 
-Write-Host "Fetched $($sortedRegions.Count) regions into $outputPath"
+Write-Host "Fetched $($sortedRegions.Count) physical regions and $($sortedLogicalRegions.Count) logical regions into $outputPath"
 
 Disconnect-AzAccount -ErrorAction SilentlyContinue | Out-Null
