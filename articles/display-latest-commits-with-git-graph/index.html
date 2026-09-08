@@ -19,7 +19,6 @@
       wait_for_update: 500
     });
     gtag('set', 'ads_data_redaction', true);
-    gtag('set', 'url_passthrough', true);
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
   <script>
@@ -432,7 +431,7 @@
        "Share this site" row in the footer; only the layout differs. */
     .article-share {
       display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
-      margin: 1.75rem 0 0; padding: 1rem 1.25rem;
+      margin: 1.75rem 0 2rem; padding: 1rem 1.25rem;
       border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
     }
     .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -540,13 +539,6 @@
       <div class="article-tags"><span class="article-tag">#Git</span><span class="article-tag">#Productivity</span></div>
     </div>
 
-    <div class="article-feature-image is-logo"><img src="/articles/images/git.svg" alt="Display Latest Commits with Git Graph"></div>
-
-    <article class="article-body">
-      <p>A stylish way to showcase the latest commits from a repository:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git log --graph --oneline --all --decorate --topo-order --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)&lt;%an&gt;%Creset' --abbrev-commit --date=relative -n 20</code></pre></div>
-    </article>
-
     <div class="article-share">
       <span class="article-share-label" id="share-label">Share on</span>
       <div class="article-share-links" role="group" aria-labelledby="share-label">
@@ -558,6 +550,14 @@
       </div>
       <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
     </div>
+
+    <div class="article-feature-image is-logo"><img src="/articles/images/git.svg" alt="Display Latest Commits with Git Graph"></div>
+
+    <article class="article-body">
+      <p>A stylish way to showcase the latest commits from a repository:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">git log --graph --oneline --all --decorate --topo-order --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)&lt;%an&gt;%Creset' --abbrev-commit --date=relative -n 20</code></pre></div>
+    </article>
+
     <aside class="article-ad" aria-label="Advertisement">
       <span class="article-ad-label">Advertisement</span>
       <ins class="adsbygoogle"

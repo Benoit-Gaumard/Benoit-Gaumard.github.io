@@ -43,7 +43,6 @@ const ANALYTICS_SNIPPET = `<!-- seo:analytics -->
       wait_for_update: 500
     });
     gtag('set', 'ads_data_redaction', true);
-    gtag('set', 'url_passthrough', true);
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>
   <script>
@@ -1019,7 +1018,7 @@ const ARTICLE_CSS = `
        "Share this site" row in the footer; only the layout differs. */
     .article-share {
       display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .9rem;
-      margin: 1.75rem 0 0; padding: 1rem 1.25rem;
+      margin: 1.75rem 0 2rem; padding: 1rem 1.25rem;
       border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface);
     }
     .article-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -1032,10 +1031,12 @@ const ARTICLE_CSS = `
       .article-share-links { width: 100%; }
     }`;
 
-// The footer's "Share this site" row shares the site; a reader who just
-// finished an article wants to share *that*. Links are built here rather than
-// at runtime because the canonical URL and the title are already known, so they
-// work without JavaScript - only Copy and Print need a script.
+// The footer's "Share this site" row shares the site; a reader looking at an
+// article wants to share *that*. The bar sits in the header, under the tags and
+// above the feature image, so passing a piece on does not mean scrolling past
+// it first. Links are built here rather than at runtime because the canonical
+// URL and the title are already known, so they work without JavaScript - only
+// Copy and Print need a script.
 function articleShareBar(article) {
   const url = encodeURIComponent(`${SITE_URL}${article.url}`);
   const title = encodeURIComponent(article.title);
@@ -1084,13 +1085,14 @@ function renderArticlePage(article) {
       ${tagsHtml}
     </div>
 
+${articleShareBar(article)}
+
     ${featureImageHtml}
 
     <article class="article-body">
       ${body}
     </article>
 
-${articleShareBar(article)}
 ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(AD_SLOT_ARTICLE_SECONDARY) + "\n" : ""}
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
