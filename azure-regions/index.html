@@ -329,6 +329,47 @@
     .stat-value { display: block; font-size: 1.65rem; font-weight: 800; color: var(--cp-text); }
     .stat-label { display: block; margin-top: .25rem; color: var(--cp-text-muted); font-size: 0.8rem; }
 
+    .section-heading { margin: 0 0 1rem; font-size: 1.35rem; color: var(--cp-text); }
+    .section-intro { margin: -.5rem 0 1.25rem; color: var(--cp-text-muted); font-size: 0.9rem; }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .chart-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    /* The geography breakdown has one row per group, so it needs the full width
+       the two donuts do not. */
+    .chart-card.is-wide { grid-column: 1 / -1; }
+    .chart-title { margin: 0 0 1rem; font-size: 0.95rem; font-weight: 700; color: var(--cp-text); }
+    .chart-body { flex: 1 1 auto; }
+
+    .bar-rows { display: flex; flex-direction: column; gap: .6rem; }
+    .bar-row { display: grid; grid-template-columns: minmax(6rem, 9rem) 1fr auto; align-items: center; gap: .75rem; }
+    .bar-row-label { color: var(--cp-text-muted); font-size: 0.85rem; }
+    .bar-track { height: .7rem; border-radius: 999px; background: var(--cp-surface-soft); overflow: hidden; }
+    .bar-fill { display: block; height: 100%; border-radius: 999px; min-width: .35rem; }
+    .bar-row-value { color: var(--cp-text); font-size: 0.85rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .donut-chart { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+    .donut { flex: 0 0 auto; width: 8.25rem; height: 8.25rem; transform: rotate(-90deg); }
+    .donut-center { transform: rotate(90deg); transform-origin: 50% 50%; }
+    .donut-center-value { font-size: 1.5rem; font-weight: 800; fill: var(--cp-text); }
+    .donut-center-label { font-size: 0.75rem; fill: var(--cp-text-muted); }
+    .donut-legend { flex: 1 1 9rem; display: flex; flex-direction: column; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+    .donut-legend li { display: flex; align-items: center; gap: .5rem; font-size: 0.85rem; }
+    .legend-swatch { flex: 0 0 auto; width: .7rem; height: .7rem; border-radius: 3px; }
+    .legend-label { flex: 1 1 auto; color: var(--cp-text-muted); }
+    .legend-value { color: var(--cp-text); font-weight: 700; font-variant-numeric: tabular-nums; }
+
     .filter-bar {
       display: flex;
       flex-wrap: wrap;
@@ -387,6 +428,7 @@
     }
     .view-toggle-button svg { flex: 0 0 auto; }
 
+    .map-section { margin-top: 2.5rem; }
     .region-map {
       height: 34rem;
       max-height: 70vh;
@@ -395,6 +437,14 @@
       overflow: hidden;
       background: var(--cp-surface-soft);
     }
+    /* OpenStreetMap only ships one (light) tile style, so the dark theme inverts
+       the tile pane. Markers and popups live in other panes and stay untouched. */
+    :root[data-theme="dark"] .region-map .leaflet-tile-pane {
+      filter: invert(1) hue-rotate(180deg) brightness(.92) contrast(.9);
+    }
+    .map-legend { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin: .85rem 0 0; padding: 0; list-style: none; }
+    .map-legend li { display: flex; align-items: center; gap: .5rem; color: var(--cp-text-muted); font-size: 0.8rem; }
+    .map-legend .legend-dot { width: .7rem; height: .7rem; border-radius: 50%; }
     .region-map .leaflet-popup-content-wrapper, .region-map .leaflet-popup-tip {
       background: var(--cp-surface);
       color: var(--cp-text);
@@ -569,28 +619,6 @@
       white-space: nowrap;
       border: 0;
     }
-    .copyable {
-      position: relative;
-      cursor: pointer;
-      font: inherit;
-      color: inherit;
-      text-align: left;
-      width: 100%;
-    }
-    .copyable:hover { border-color: var(--cp-accent); }
-    .copyable::after {
-      content: "Copy";
-      float: right;
-      margin-left: .75rem;
-      color: var(--cp-text-muted);
-      font-size: 0.8rem;
-      opacity: 0;
-      transition: opacity .15s;
-    }
-    .copyable:hover::after, .copyable:focus-visible::after { opacity: 1; }
-    .copyable.is-copied::after { content: "Copied"; opacity: 1; color: var(--cp-accent); }
-    @media (prefers-reduced-motion: reduce) { .copyable::after { transition: none; } }
-
   
     /* Filled by script: hold the box only while empty, so the page below does
        not jump when the data lands, and no blank hole survives a render. */
@@ -606,7 +634,7 @@
     @media print {
       /* Printing a tool page should yield the data, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
-      .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
+      .theme-toggle, .section-nav, .load-more, .copy-button,
       .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
@@ -632,7 +660,7 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
@@ -722,6 +750,24 @@
       <div class="stats-grid" id="statCards"></div>
     </section>
 
+    <section aria-labelledby="charts-heading">
+      <h2 class="section-heading" id="charts-heading">Azure regions at a glance</h2>
+      <div class="charts-grid">
+        <div class="chart-card is-wide">
+          <h3 class="chart-title">Regions by geography group</h3>
+          <div class="chart-body" id="chartGeography"></div>
+        </div>
+        <div class="chart-card">
+          <h3 class="chart-title">Regions by type</h3>
+          <div class="chart-body" id="chartType"></div>
+        </div>
+        <div class="chart-card">
+          <h3 class="chart-title">Paired vs standalone regions</h3>
+          <div class="chart-body" id="chartPairing"></div>
+        </div>
+      </div>
+    </section>
+
     <section aria-label="Azure regions directory">
       <div class="filter-bar">
         <input type="text" id="searchInput" placeholder="Search by region, location, or country..." aria-label="Search by region, location, or country">
@@ -738,16 +784,21 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
             List
           </button>
-          <button type="button" class="view-toggle-button" data-view="map" aria-pressed="false">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3-6-3"/><path d="M9 4v13M15 7v13"/></svg>
-            Map
-          </button>
         </div>
         <p class="results-count" id="resultsCount" aria-live="polite"></p>
       </div>
-      <span id="copyStatus" role="status" aria-live="polite" class="visually-hidden"></span>
         <div class="region-cards" id="regionCards"></div>
-      <div class="region-map" id="regionMap" hidden></div>
+    </section>
+
+    <section class="map-section" aria-labelledby="map-heading">
+      <h2 class="section-heading" id="map-heading">Azure Regions World Map</h2>
+      <p class="section-intro">Every region with published coordinates, plotted on OpenStreetMap. The map follows the filters above.</p>
+      <div class="region-map" id="regionMap"></div>
+      <ul class="map-legend">
+        <li><span class="legend-dot" style="background: #16845b"></span> Availability zones</li>
+        <li><span class="legend-dot" style="background: #0b6fb8"></span> No availability zones</li>
+        <li><span class="legend-dot" style="background: #c93636"></span> Restricted access</li>
+      </ul>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
@@ -838,6 +889,9 @@
       resultsCount: document.getElementById("resultsCount"),
       regionCards: document.getElementById("regionCards"),
       regionMap: document.getElementById("regionMap"),
+      chartGeography: document.getElementById("chartGeography"),
+      chartType: document.getElementById("chartType"),
+      chartPairing: document.getElementById("chartPairing"),
       backToTop: document.getElementById("backToTop"),
     };
 
@@ -846,26 +900,17 @@
     const mapState = { map: null, markers: [], tileLayer: null };
 
     const MAP_TILES = {
-      light: { url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
-      dark: { url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
+      url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     };
-
-    function currentTheme() {
-      return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
-    }
 
     function initMap() {
       if (mapState.map) return;
       mapState.map = L.map(elements.regionMap, { worldCopyJump: true }).setView([20, 10], 2);
-      mapState.tileLayer = L.tileLayer(MAP_TILES[currentTheme()].url, {
-        attribution: MAP_TILES[currentTheme()].attribution,
-        maxZoom: 18,
+      mapState.tileLayer = L.tileLayer(MAP_TILES.url, {
+        attribution: MAP_TILES.attribution,
+        maxZoom: 19,
       }).addTo(mapState.map);
-    }
-
-    function updateMapTheme() {
-      if (!mapState.map) return;
-      mapState.tileLayer.setUrl(MAP_TILES[currentTheme()].url);
     }
 
     function renderMap(regions) {
@@ -899,26 +944,17 @@
 
     function applyView(view) {
       elements.regionCards.classList.toggle("list-view", view === "list");
-      elements.regionCards.hidden = view === "map";
-      elements.regionMap.hidden = view !== "map";
       viewButtons.forEach((button) => {
         const isActive = button.dataset.view === view;
         button.classList.toggle("is-active", isActive);
         button.setAttribute("aria-pressed", String(isActive));
       });
-      if (view === "map") {
-        initMap();
-        requestAnimationFrame(() => {
-          mapState.map.invalidateSize();
-          if (state.data) renderMap(getFilteredRegions());
-        });
-      }
     }
 
     function loadView() {
       try {
-        const stored = localStorage.getItem(VIEW_STORAGE_KEY);
-        return stored === "list" || stored === "map" ? stored : "cards";
+        // "map" was a third view before the map moved to its own always-on section
+        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
       } catch {
         return "cards";
       }
@@ -940,16 +976,27 @@
 
     const state = { data: null };
 
+    const CHART_PALETTE = ["#0b6fb8", "#16845b", "#a58cf5", "#e4a940", "#22a6c9", "#c93636", "#7b61ff", "#d97706", "#0f766e"];
+    const SVG_NS = "http://www.w3.org/2000/svg";
+
+    function logicalRegions() {
+      return Array.isArray(state.data.logicalRegions) ? state.data.logicalRegions : [];
+    }
+
     function renderStats() {
       const regions = state.data.regions;
-      const withAz = regions.filter((r) => r.availabilityZones).length;
-      const restricted = regions.filter((r) => r.restricted).length;
-      const geographies = new Set(regions.map((r) => r.geography)).size;
+      const logical = logicalRegions();
+      const regionTypes = new Set([
+        ...regions.map((r) => r.regionType || "Physical"),
+        ...logical.map((r) => r.regionType || "Logical"),
+      ]);
       const stats = [
         { value: regions.length, label: "Total regions" },
-        { value: withAz, label: "With availability zones" },
-        { value: restricted, label: "Restricted access" },
-        { value: geographies, label: "Geographies" },
+        { value: new Set(regions.map((r) => r.geography)).size, label: "Geography groups" },
+        { value: regionTypes.size, label: "Region types" },
+        { value: regions.filter((r) => r.availabilityZones).length, label: "With availability zones" },
+        { value: regions.filter((r) => r.pairedRegion).length, label: "Paired regions" },
+        { value: regions.filter((r) => r.restricted).length, label: "Restricted access" },
       ];
       elements.statCards.replaceChildren();
       stats.forEach((stat) => {
@@ -964,6 +1011,153 @@
         card.append(value, label);
         elements.statCards.append(card);
       });
+    }
+
+    function renderBarChart(host, items) {
+      host.replaceChildren();
+      const total = items.reduce((sum, item) => sum + item.value, 0);
+      if (!total) {
+        host.append(emptyChart());
+        return;
+      }
+      const max = Math.max(...items.map((item) => item.value));
+      const rows = document.createElement("div");
+      rows.className = "bar-rows";
+      rows.setAttribute("role", "img");
+      rows.setAttribute("aria-label", items.map((item) => `${item.label}: ${item.value}`).join(", "));
+      items.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        const label = document.createElement("span");
+        label.className = "bar-row-label";
+        label.textContent = item.label;
+        const track = document.createElement("span");
+        track.className = "bar-track";
+        const fill = document.createElement("span");
+        fill.className = "bar-fill";
+        fill.style.width = `${(item.value / max) * 100}%`;
+        fill.style.background = CHART_PALETTE[index % CHART_PALETTE.length];
+        track.append(fill);
+        const value = document.createElement("span");
+        value.className = "bar-row-value";
+        value.textContent = item.value;
+        row.append(label, track, value);
+        rows.append(row);
+      });
+      host.append(rows);
+    }
+
+    function renderDonutChart(host, items, centerLabel) {
+      host.replaceChildren();
+      const total = items.reduce((sum, item) => sum + item.value, 0);
+      if (!total) {
+        host.append(emptyChart());
+        return;
+      }
+      const size = 132;
+      const stroke = 22;
+      const radius = (size - stroke) / 2;
+      const circumference = 2 * Math.PI * radius;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "donut-chart";
+
+      const svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("class", "donut");
+      svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+      svg.setAttribute("role", "img");
+      svg.setAttribute("aria-label", items.map((item) => `${item.label}: ${item.value}`).join(", "));
+
+      let offset = 0;
+      items.forEach((item) => {
+        if (!item.value) return;
+        const arc = document.createElementNS(SVG_NS, "circle");
+        arc.setAttribute("cx", size / 2);
+        arc.setAttribute("cy", size / 2);
+        arc.setAttribute("r", radius);
+        arc.setAttribute("fill", "none");
+        arc.setAttribute("stroke", item.color);
+        arc.setAttribute("stroke-width", stroke);
+        const length = (item.value / total) * circumference;
+        arc.setAttribute("stroke-dasharray", `${length} ${circumference - length}`);
+        arc.setAttribute("stroke-dashoffset", String(-offset));
+        offset += length;
+        svg.append(arc);
+      });
+
+      // counter-rotated so the centre text reads horizontally inside the -90deg svg
+      const center = document.createElementNS(SVG_NS, "g");
+      center.setAttribute("class", "donut-center");
+      const centerValue = document.createElementNS(SVG_NS, "text");
+      centerValue.setAttribute("class", "donut-center-value");
+      centerValue.setAttribute("x", size / 2);
+      centerValue.setAttribute("y", size / 2);
+      centerValue.setAttribute("text-anchor", "middle");
+      centerValue.textContent = total;
+      const centerText = document.createElementNS(SVG_NS, "text");
+      centerText.setAttribute("class", "donut-center-label");
+      centerText.setAttribute("x", size / 2);
+      centerText.setAttribute("y", size / 2 + 16);
+      centerText.setAttribute("text-anchor", "middle");
+      centerText.textContent = centerLabel;
+      center.append(centerValue, centerText);
+      svg.append(center);
+
+      const legend = document.createElement("ul");
+      legend.className = "donut-legend";
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        const swatch = document.createElement("span");
+        swatch.className = "legend-swatch";
+        swatch.style.background = item.color;
+        const label = document.createElement("span");
+        label.className = "legend-label";
+        label.textContent = item.label;
+        const value = document.createElement("span");
+        value.className = "legend-value";
+        value.textContent = `${item.value} (${Math.round((item.value / total) * 100)}%)`;
+        li.append(swatch, label, value);
+        legend.append(li);
+      });
+
+      wrapper.append(svg, legend);
+      host.append(wrapper);
+    }
+
+    function emptyChart() {
+      const p = document.createElement("p");
+      p.className = "section-intro";
+      p.style.margin = "0";
+      p.textContent = "No data available.";
+      return p;
+    }
+
+    function renderCharts() {
+      const regions = state.data.regions;
+      const logical = logicalRegions();
+
+      const byGeography = new Map();
+      regions.forEach((region) => {
+        const key = region.geography || "Unknown";
+        byGeography.set(key, (byGeography.get(key) || 0) + 1);
+      });
+      renderBarChart(
+        elements.chartGeography,
+        [...byGeography.entries()]
+          .map(([label, value]) => ({ label, value }))
+          .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
+      );
+
+      renderDonutChart(elements.chartType, [
+        { label: "Physical", value: regions.length, color: CHART_PALETTE[0] },
+        { label: "Logical", value: logical.length, color: CHART_PALETTE[2] },
+      ], "regions");
+
+      const paired = regions.filter((region) => region.pairedRegion).length;
+      renderDonutChart(elements.chartPairing, [
+        { label: "Paired", value: paired, color: CHART_PALETTE[1] },
+        { label: "Standalone", value: regions.length - paired, color: CHART_PALETTE[3] },
+      ], "regions");
     }
 
     function populateFilters() {
@@ -1035,17 +1229,8 @@
           const labelSpan = document.createElement("span");
           labelSpan.className = "meta-label";
           labelSpan.textContent = label;
-          let valueSpan;
-          if (label === "Programmatic name") {
-            valueSpan = document.createElement("button");
-            valueSpan.type = "button";
-            valueSpan.className = "meta-value copyable";
-            valueSpan.setAttribute("aria-label", "Copy programmatic name " + value);
-            valueSpan.addEventListener("click", () => copyValue(value, valueSpan));
-          } else {
-            valueSpan = document.createElement("span");
-            valueSpan.className = "meta-value";
-          }
+          const valueSpan = document.createElement("span");
+          valueSpan.className = "meta-value";
           valueSpan.textContent = value;
           li.append(labelSpan, valueSpan);
           meta.append(li);
@@ -1075,37 +1260,13 @@
 
 
 
-    // the row is the button: one element per value rather than a value plus an
-    // icon button, which matters on lists that run to hundreds of rows
-    async function copyValue(text, el) {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.append(textarea);
-        textarea.select();
-        try { document.execCommand("copy"); } catch { return; }
-        textarea.remove();
-      }
-      el.classList.add("is-copied");
-      const status = document.getElementById("copyStatus");
-      if (status) status.textContent = text + " copied";
-      window.clearTimeout(el._copyTimer);
-      el._copyTimer = window.setTimeout(() => {
-        el.classList.remove("is-copied");
-        if (status) status.textContent = "";
-      }, 1400);
-    }
-
-
     async function init() {
       const response = await fetch("./regions.json", { cache: "no-store" });
       showRefreshedAt();
       state.data = await response.json();
+      initMap();
       renderStats();
+      renderCharts();
       populateFilters();
       renderCards();
     }
@@ -1170,7 +1331,6 @@
         if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
         else document.documentElement.removeAttribute("data-theme");
         try { localStorage.setItem("site-theme", next); } catch (e) {}
-        if (typeof updateMapTheme === "function") updateMapTheme();
       });
     })();
   </script>
