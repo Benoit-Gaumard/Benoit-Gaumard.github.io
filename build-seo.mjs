@@ -46,7 +46,6 @@ export function analyticsSnippet(indent = "  ") {
     `${indent}    wait_for_update: 500`,
     `${indent}  });`,
     `${indent}  gtag('set', 'ads_data_redaction', true);`,
-    `${indent}  gtag('set', 'url_passthrough', true);`,
     `${indent}</script>`,
     `${indent}<script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>`,
     `${indent}<script>`,
