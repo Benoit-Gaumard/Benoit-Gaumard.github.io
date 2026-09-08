@@ -551,6 +551,7 @@
     .member-empty { margin: 0; color: var(--cp-text-muted); font-size: 0.82rem; line-height: 1.55; }
 
     .json-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+    .json-source { color: var(--cp-text-muted); font-size: 0.78rem; }
     .json-view {
       margin: 0;
       max-height: 32rem;
@@ -1158,18 +1159,17 @@
           });
         });
 
-        const learn = document.createElement("a");
-        learn.className = "json-button";
-        learn.href = `https://www.azadvertizer.net/azpolicyadvertizer/${encodeURIComponent(row.name)}.html`;
-        learn.target = "_blank";
-        learn.rel = "noopener";
-        learn.textContent = "Open in AzAdvertizer";
-
         const block = document.createElement("pre");
         block.className = "json-view";
         block.textContent = json;
 
-        actions.append(copy, learn);
+        // The reference is this body itself, read from Azure by
+        // Get-AzPolicyDefinition in the scheduled refresh.
+        const source = document.createElement("span");
+        source.className = "json-source";
+        source.textContent = "Source: Get-AzPolicyDefinition";
+
+        actions.append(copy, source);
         panel.replaceChildren(actions, block);
       }).catch(() => {
         status.textContent = "Unable to load the definition bodies. Check the connection and try again.";
