@@ -58,7 +58,7 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 
 ## Evidence on Hand
 
-- **7 Microsoft certifications** - AZ-900, AI-900, SC-900, AZ-500, AZ-700, AZ-104, AZ-305 - backed by a public Microsoft Learn transcript URL.
+- **8 Microsoft certifications** - AZ-900, AI-900, SC-900, AZ-500, AZ-700, AZ-104, AZ-305, AB-731 - backed by a public Microsoft Learn transcript URL.
 - **22 named large-account clients** supported at Microsoft (Thales, CEA, Orano, ENGIE, EDF, Schneider Electric, Orange Business, Sopra Steria, Stellantis, Forvia, Naval Group, Coopérative U, Colas, BNP Paribas, Société Générale, BRED, Groupe BPCE, AXA, CNP, Vinci, Amadeus, HB Antwerp).
 - **Career timeline from 2005**: Bouygues Construction/Structis, BNP Paribas Arval, AXA, Crédit Agricole CIB, Microsoft since 2016.
 - **Live refreshed datasets** under each tool slug, plus weekly dated snapshots in `<slug>/history/`.
