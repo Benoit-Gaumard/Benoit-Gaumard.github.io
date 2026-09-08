@@ -124,6 +124,14 @@ foreach ($location in $locations) {
 $sortedRegions = @($regions | Sort-Object { $_.name })
 $sortedLogicalRegions = @($logicalRegions | Sort-Object { $_.name })
 
+# Surfaced in the workflow log: an all-zero count means the scanning subscription
+# is not being shown availabilityZoneMappings, not that Azure has no zones.
+$zoneEnabled = @($sortedRegions | Where-Object { $_.availabilityZones }).Count
+Write-Host "Regions reporting availability zone mappings: $zoneEnabled / $($sortedRegions.Count)"
+if ($zoneEnabled -eq 0) {
+  Write-Warning "No region reported availabilityZoneMappings; the scanning subscription may not expose them."
+}
+
 $payload = [ordered]@{
   generatedAt    = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
   source         = "Azure Resource Manager locations API (live tenant scan via the scan-benoit-gaumard.io app)"
