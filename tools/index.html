@@ -89,6 +89,8 @@
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
     }
     :root[data-theme="dark"] {
       color-scheme: dark;
@@ -317,6 +319,32 @@
     }
     .view-toggle-button svg { flex: 0 0 auto; }
 
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .75rem;
+    }
+    .favorites-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      min-height: 2.25rem;
+      padding: .375rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 650;
+    }
+    .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .favorites-filter[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      background: var(--cp-warning-bg);
+      color: var(--cp-warning);
+    }
+
     .tools-toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -388,7 +416,7 @@
     .drag-handle {
       position: absolute;
       top: .5rem;
-      right: .5rem;
+      right: 2.6rem;
       display: grid;
       place-items: center;
       width: 2rem;
@@ -406,13 +434,36 @@
     }
     .tool-card.is-dragging .drag-handle { cursor: grabbing; }
 
+    .favorite-button {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      z-index: 2;
+      display: grid;
+      width: 1.75rem;
+      height: 1.75rem;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-panel-strong);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+    }
+    .favorite-button:hover { color: var(--cp-accent); }
+    .favorite-button[aria-pressed="true"] {
+      border-color: var(--cp-warning);
+      color: var(--cp-warning);
+    }
+
     .tool-cards.list-view {
       grid-template-columns: 1fr;
       gap: .6rem;
     }
     .tool-cards.list-view .tool-card {
       display: grid;
-      grid-template-columns: auto auto 1fr auto auto;
+      grid-template-columns: auto auto auto 1fr auto auto;
       grid-template-rows: auto auto;
       column-gap: 1rem;
       row-gap: .1rem;
@@ -426,20 +477,25 @@
       grid-row: 1 / 3;
       grid-column: 1;
     }
-    .tool-cards.list-view .tool-card .tool-icon {
+    .tool-cards.list-view .favorite-button {
+      position: static;
       grid-row: 1 / 3;
       grid-column: 2;
+    }
+    .tool-cards.list-view .tool-card .tool-icon {
+      grid-row: 1 / 3;
+      grid-column: 3;
       width: 2.5rem;
       height: 2.5rem;
     }
     .tool-cards.list-view .tool-card h2 {
       grid-row: 1;
-      grid-column: 3;
+      grid-column: 4;
       font-size: 1rem;
     }
     .tool-cards.list-view .tool-card p {
       grid-row: 2;
-      grid-column: 3;
+      grid-column: 4;
       overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 1;
@@ -448,14 +504,14 @@
     }
     .tool-cards.list-view .tool-card .tool-updated {
       grid-row: 1 / 3;
-      grid-column: 4;
+      grid-column: 5;
       align-self: center;
       margin: 0;
       white-space: nowrap;
     }
     .tool-cards.list-view .tool-card .tool-arrow {
       grid-row: 1 / 3;
-      grid-column: 5;
+      grid-column: 6;
       align-self: center;
     }
     .tool-card .tool-icon {
@@ -712,6 +768,7 @@
         <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-label="Search tools">
       </div>
       <div class="tools-toolbar">
+        <div class="toolbar-group">
         <div class="view-toggle" role="group" aria-label="Choose view">
           <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
@@ -721,6 +778,8 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
             List
           </button>
+        </div>
+        <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
         </div>
         <button type="button" class="reset-order-button" id="resetOrderButton" hidden>Reset order</button>
       </div>
@@ -934,7 +993,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -1031,6 +1090,29 @@
     const searchInput = document.getElementById("toolSearch");
     let emptyState = null;
 
+    const FAVORITES_STORAGE_KEY = "tools-my-favorites";
+    const favoritesFilter = document.getElementById("favoritesFilter");
+    let favoritesOnly = false;
+
+    function loadFavorites() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+        return new Set(Array.isArray(saved) ? saved : []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    const favorites = loadFavorites();
+
+    function saveFavorites() {
+      try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...favorites]));
+      } catch (error) {
+        console.warn("Unable to save favorites", error);
+      }
+    }
+
     function normalize(value) {
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
@@ -1041,7 +1123,7 @@
       let visibleCount = 0;
       cards.forEach((card) => {
         const haystack = normalize(`${card.querySelector("h2")?.textContent ?? ""} ${card.querySelector("p")?.textContent ?? ""}`);
-        const matches = !query || haystack.includes(query);
+        const matches = (!query || haystack.includes(query)) && (!favoritesOnly || favorites.has(toolId(card)));
         card.classList.toggle("is-hidden", !matches);
         if (matches) visibleCount++;
       });
@@ -1050,11 +1132,15 @@
       if (!visibleCount && !emptyState) {
         emptyState = document.createElement("div");
         emptyState.className = "empty-state";
-        emptyState.textContent = "No tools match your search.";
         toolCards.append(emptyState);
       } else if (visibleCount && emptyState) {
         emptyState.remove();
         emptyState = null;
+      }
+      if (emptyState) {
+        emptyState.textContent = favoritesOnly && !favorites.size
+          ? "No favorite tools yet. Add some with the star button."
+          : "No tools match your search.";
       }
     }
     // dates come from the same git-stamped manifest the data pages read, so the
@@ -1218,8 +1304,65 @@
       });
     }
 
+    function starIcon(filled) {
+      return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false" class="${filled ? "" : "is-empty"}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+    }
+
+    function updateFavoritesFilter() {
+      favoritesFilter.innerHTML = `${starIcon(favoritesOnly)} My favorites (${favorites.size.toLocaleString()})`;
+      favoritesFilter.setAttribute("aria-pressed", String(favoritesOnly));
+    }
+
+    // Tool cards are anchors, so the star has to be a span-based control:
+    // a nested <button> would be invalid HTML inside a link.
+    function addFavoriteButton(card) {
+      const id = toolId(card);
+      const title = card.querySelector("h2")?.textContent?.trim() ?? "this tool";
+      const button = document.createElement("span");
+      button.className = "favorite-button";
+      button.setAttribute("role", "button");
+      button.setAttribute("tabindex", "0");
+
+      const render = () => {
+        const isFavorite = favorites.has(id);
+        button.setAttribute("aria-pressed", String(isFavorite));
+        button.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${title} ${isFavorite ? "from" : "to"} favorites`);
+        button.title = isFavorite ? "Remove from favorites" : "Add to favorites";
+        button.innerHTML = starIcon(isFavorite);
+      };
+      render();
+
+      const toggleFavorite = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (favorites.has(id)) favorites.delete(id);
+        else favorites.add(id);
+        saveFavorites();
+        render();
+        updateFavoritesFilter();
+        if (favoritesOnly) filterCards();
+      };
+
+      button.addEventListener("click", toggleFavorite);
+      button.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") toggleFavorite(event);
+      });
+      card.prepend(button);
+    }
+
+    function enableFavorites() {
+      toolCards.querySelectorAll(".tool-card").forEach(addFavoriteButton);
+      updateFavoritesFilter();
+      favoritesFilter.addEventListener("click", () => {
+        favoritesOnly = !favoritesOnly;
+        updateFavoritesFilter();
+        filterCards();
+      });
+    }
+
     applySavedOrder();
     enableReordering();
+    enableFavorites();
 
     resetOrderButton.addEventListener("click", () => {
       try {
