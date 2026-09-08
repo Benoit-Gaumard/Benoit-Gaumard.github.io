@@ -529,7 +529,7 @@
       color: var(--cp-text-muted);
     }
 
-    .articles-sidebar { position: sticky; top: 5.5rem; display: flex; flex-direction: column; gap: 1.25rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+    .articles-sidebar { position: sticky; top: 5.5rem; align-self: start; display: flex; flex-direction: column; gap: 1.25rem; }
     .sidebar-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface); }
     .sidebar-panel[hidden] { display: none; }
     .sidebar-disclaimer { border-left: 3px solid var(--cp-border-strong); background: var(--cp-surface-soft); }
@@ -613,7 +613,7 @@
 
     @media (max-width: 60rem) {
       .articles-layout { grid-template-columns: 1fr; }
-      .articles-sidebar { position: static; order: -1; max-height: none; overflow-y: visible; }
+      .articles-sidebar { position: static; order: -1; }
       .category-list { flex-direction: row; flex-wrap: wrap; }
       .category-list button { width: auto; }
     }
@@ -1475,7 +1475,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G / Home</a>
+          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
