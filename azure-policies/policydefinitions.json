@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-10T13:20:07.415Z",
+  "generatedAt": "2026-09-10T15:41:14.826Z",
   "source": "Get-AzPolicyDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
-  "totalPolicies": 2859,
+  "totalPolicies": 2861,
   "totalCategories": 98,
   "policies": [
     {
@@ -203,17 +203,6 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/123a3936-f020-408a-ba0c-47873faf1534"
     },
     {
-      "name": "b7ddfbdc-1260-477d-91fd-98bd9be789a6",
-      "displayName": "[Deprecated]: API App should only be accessible over HTTPS",
-      "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks. We recommend all customers who are still using API Apps to implement the built-in policy called 'App Service apps should only be accessible over HTTPS', which is scoped to include API apps in addition to Web Apps.",
-      "category": "App Service",
-      "effect": "Audit",
-      "mode": "Indexed",
-      "version": "1.0.0-deprecated",
-      "policyType": "BuiltIn",
-      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b7ddfbdc-1260-477d-91fd-98bd9be789a6"
-    },
-    {
       "name": "c85538c1-b527-4ce4-bdb4-1dabcb3fd90d",
       "displayName": "[Deprecated]: API App should only be accessible over HTTPS",
       "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks.",
@@ -223,6 +212,17 @@
       "version": "1.0.0-deprecated",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/c85538c1-b527-4ce4-bdb4-1dabcb3fd90d"
+    },
+    {
+      "name": "b7ddfbdc-1260-477d-91fd-98bd9be789a6",
+      "displayName": "[Deprecated]: API App should only be accessible over HTTPS",
+      "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks. We recommend all customers who are still using API Apps to implement the built-in policy called 'App Service apps should only be accessible over HTTPS', which is scoped to include API apps in addition to Web Apps.",
+      "category": "App Service",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-deprecated",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b7ddfbdc-1260-477d-91fd-98bd9be789a6"
     },
     {
       "name": "0c192fe8-9cbb-4516-85b3-0ade8bd03886",
@@ -8662,6 +8662,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ff1f1879-a60d-4f23-9641-41e7391ec19a"
     },
     {
+      "name": "6313cbe8-6fb7-451b-a9e3-3f23b59843ca",
+      "displayName": "Azure Application Gateway should be running TLS version 1.2 or newer",
+      "description": "Setting the minimum TLS protocol version to 1.2 or newer improves security by ensuring your Azure Application Gateway only negotiates TLS 1.2 or newer with clients. This policy evaluates the gateway-wide TLS policy as well as the listener-specific TLS policies configured on SSL profiles, for both predefined and custom TLS policies. Using versions of TLS less than 1.2 is not recommended since they have well documented security vulnerabilities.",
+      "category": "Network",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6313cbe8-6fb7-451b-a9e3-3f23b59843ca"
+    },
+    {
       "name": "8a04f872-51e9-4313-97fb-fc1c3543011c",
       "displayName": "Azure Application Gateway should have Resource logs enabled",
       "description": "Enable Resource logs for Azure Application Gateway (plus WAF) and stream to a Log Analytics workspace. Get detailed visibility into inbound web traffic and actions taken to mitigate attacks.",
@@ -10464,6 +10475,17 @@
       "version": "1.0.1",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/17f4b1cc-c55c-4d94-b1f9-2978f6ac2957"
+    },
+    {
+      "name": "403594a1-5989-4edd-8ea3-cac19a8cc43a",
+      "displayName": "Azure Service Bus namespaces should be running TLS version 1.2 or newer",
+      "description": "Setting the minimum TLS version to 1.2 or newer improves security by ensuring your Azure Service Bus namespace can only be accessed from clients using TLS 1.2 or newer. Using versions of TLS less than 1.2 is not recommended since they have well documented security vulnerabilities.",
+      "category": "Network",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/403594a1-5989-4edd-8ea3-cac19a8cc43a"
     },
     {
       "name": "cfb11c26-f069-4c14-8e36-56c394dae5af",
@@ -13893,7 +13915,7 @@
       "category": "Monitoring",
       "effect": "DeployIfNotExists",
       "mode": "Indexed",
-      "version": "6.12.0",
+      "version": "6.14.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/2ea82cdd-f2e8-4500-af75-67a2e084ca74"
     },
@@ -13926,7 +13948,7 @@
       "category": "Monitoring",
       "effect": "DeployIfNotExists",
       "mode": "Indexed",
-      "version": "3.14.0",
+      "version": "3.16.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/56a3e4f8-649b-4fac-887e-5564d11e8d3a"
     },
@@ -13937,7 +13959,7 @@
       "category": "Monitoring",
       "effect": "DeployIfNotExists",
       "mode": "Indexed",
-      "version": "3.15.0",
+      "version": "3.17.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/59c3d93f-900b-4827-a8bd-562e7b956e7c"
     },
@@ -13959,7 +13981,7 @@
       "category": "Monitoring",
       "effect": "DeployIfNotExists",
       "mode": "Indexed",
-      "version": "4.11.0",
+      "version": "4.13.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/58e891b9-ce13-4ac3-86e4-ac3e1f20cb07"
     },
@@ -14091,7 +14113,7 @@
       "category": "Compute",
       "effect": "Modify",
       "mode": "Indexed",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e87a87f5-e6dd-4919-be21-abb0a4ea4630"
     },
@@ -15234,8 +15256,8 @@
       "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. It blocks approval of private endpoint connections to Container Registries from subscriptions outside the mission tenant (unless explicitly excluded) to preserve enclave boundaries and reduce data exposure risk. Learn more at https://learn.microsoft.com/azure/container-registry/container-registry-private-link.",
       "category": "Mission",
       "effect": "Audit",
-      "mode": "Indexed",
-      "version": "1.0.0",
+      "mode": "All",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/696cb1d3-2dcf-4b44-aa7a-caccd18b1b96"
     },
@@ -15399,8 +15421,8 @@
       "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. This policy enforces restrictions on external private endpoints linked to Cosmos DB to maintain network isolation and prevent unauthorized cross-tenant access.",
       "category": "Mission",
       "effect": "Audit",
-      "mode": "Indexed",
-      "version": "1.0.0",
+      "mode": "All",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ea79b84d-f538-475d-a6ef-7951747a3455"
     },
@@ -25487,7 +25509,7 @@
       "category": "Monitoring",
       "effect": "AuditIfNotExists",
       "mode": "Indexed",
-      "version": "3.10.0",
+      "version": "3.12.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/32ade945-311e-4249-b8a4-a549924234d7"
     },
@@ -28522,8 +28544,8 @@
       "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. Restrict Site Configuration Access Rules to Specified Sources.",
       "category": "Mission",
       "effect": "Audit",
-      "mode": "Indexed",
-      "version": "1.0.0",
+      "mode": "All",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/32a7ec27-785d-4efb-98bd-9a0fffc7777c"
     },
@@ -29754,8 +29776,8 @@
       "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. This policy enforces tenant-level network isolation by denying the creation of private endpoints that link storage accounts to external tenants. It helps prevent unintended data exposure and ensures that private connectivity remains within approved boundaries of the organization.",
       "category": "Mission",
       "effect": "Audit",
-      "mode": "Indexed",
-      "version": "1.0.0",
+      "mode": "All",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ead83ca5-588e-4a27-9d7c-f4df41484dd4"
     },
@@ -29832,7 +29854,7 @@
       "category": "Storage",
       "effect": "Audit",
       "mode": "Indexed",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4733ea7b-a883-42fe-8cac-97454c2a9e4a"
     },
@@ -29887,7 +29909,7 @@
       "category": "Storage",
       "effect": "Audit",
       "mode": "Indexed",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/8c6a50c6-9ffd-4ae7-986f-5fa6111f9a54"
     },
@@ -29931,7 +29953,7 @@
       "category": "Storage",
       "effect": "Audit",
       "mode": "Indexed",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/34c877ad-507e-4c82-993e-3452a6e0ad3c"
     },
@@ -30008,7 +30030,7 @@
       "category": "Storage",
       "effect": "Audit",
       "mode": "Indexed",
-      "version": "1.0.3",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6fac406b-40ca-413b-bf8e-0bf964659c25"
     },
@@ -30041,7 +30063,7 @@
       "category": "Storage",
       "effect": "AuditIfNotExists",
       "mode": "Indexed",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6edd7eda-6dd8-40f7-810d-67160c639cd9"
     },
