@@ -2,11 +2,8 @@ name: Refresh Entra ID Built-in Roles
 
 on:
   schedule:
-    # 06:00 and 09:00 and 12:00 and 15:00 UTC (4 times daily)
+    # 06:30 UTC (once daily, in the morning)
     - cron: '30 6 * * *'
-    - cron: '30 9 * * *'
-    - cron: '30 12 * * *'
-    - cron: '30 15 * * *'
     # Weekly dated snapshot (Monday 18:30 UTC, outside the daily refresh times above) to track role changes over time
     - cron: '30 18 * * 1'
   workflow_dispatch:

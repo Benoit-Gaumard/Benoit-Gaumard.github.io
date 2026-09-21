@@ -2,11 +2,8 @@ name: Refresh Microsoft Graph Permissions
 
 on:
   schedule:
-    # 06:00 and 09:00 and 12:00 and 15:00 UTC (4 times daily)
+    # 06:45 UTC (once daily, in the morning)
     - cron: '45 6 * * *'
-    - cron: '45 9 * * *'
-    - cron: '45 12 * * *'
-    - cron: '45 15 * * *'
     # Weekly dated snapshot (Monday 18:45 UTC, outside the daily refresh times above) to track permission changes over time
     - cron: '45 18 * * 1'
   workflow_dispatch:

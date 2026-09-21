@@ -2,11 +2,8 @@ name: Refresh Azure Policy Aliases
 
 on:
   schedule:
-    # 06:00 and 09:00 and 12:00 and 15:00 UTC (4 times daily)
+    # 06:00 UTC (once daily, in the morning)
     - cron: '0 6 * * *'
-    - cron: '0 9 * * *'
-    - cron: '0 12 * * *'
-    - cron: '0 15 * * *'
     # Weekly dated snapshot (Monday 18:00 UTC, outside the daily refresh times above) to track new aliases over time
     - cron: '0 18 * * 1'
   workflow_dispatch:
