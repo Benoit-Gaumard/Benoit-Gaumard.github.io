@@ -28,7 +28,7 @@ A 2026-08-29 design critique flagged that "the homepage of a tools hub previews 
 
 ## Positioning
 
-**The Azure data is authoritative and refreshes itself.** `azure-regions`, `azure-policies` and `azure-policy-aliases` query Azure directly through `Get-Az*` cmdlets under a service principal, rather than scraping Microsoft Learn or a third-party doc site. Fifteen GitHub Actions workflows refresh the datasets up to four times a day, and the three Azure-authoritative pipelines also write weekly dated snapshots so catalogs can be diffed over time.
+**The Azure data is authoritative and refreshes itself.** `azure-regions`, `azure-policies` and `azure-policy-aliases` query Azure directly through `Get-Az*` cmdlets under a service principal, rather than scraping Microsoft Learn or a third-party doc site. Fifteen GitHub Actions workflows refresh the datasets once a day, and the three Azure-authoritative pipelines also write weekly dated snapshots so catalogs can be diffed over time.
 
 That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy: these pages are not hand-maintained lists that quietly rot.
 
