@@ -405,6 +405,17 @@
     .workflow-meta div { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
     .workflow-meta dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
     .workflow-meta dd { margin: 0; font-weight: 600; overflow-wrap: break-word; }
+    .workflow-schedule { min-width: 0; font-size: 0.85rem; }
+    .workflow-schedule-title { margin: 0 0 .4rem; color: var(--cp-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: .03em; }
+    .workflow-schedule-list { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+    .workflow-schedule-list strong, .workflow-schedule-list small { display: block; }
+    .workflow-schedule-list small { color: var(--cp-text-muted); font-size: 0.8rem; }
+    .workflow-schedule-details { margin-top: .5rem; color: var(--cp-text-muted); overflow-wrap: anywhere; }
+    .workflow-schedule-details summary { cursor: pointer; min-height: 1.5rem; }
+    .workflow-schedule-details ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+    .workflow-schedule-details li + li { margin-top: .5rem; }
+    .workflow-schedule-details code { color: var(--cp-text); }
+    .workflow-schedule-details small { display: block; }
     .workflow-error { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; }
     .workflow-link { align-self: flex-start; display: inline-flex; align-items: center; min-height: 1.5rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
     .workflow-link:hover { text-decoration: underline; }
@@ -428,6 +439,8 @@
       font-size: 1rem;
     }
     .workflow-cards.list-view .workflow-badge, .workflow-cards.list-view .workflow-meta, .workflow-cards.list-view .workflow-error { display: none; }
+    .workflow-cards.list-view .workflow-schedule { flex: 0 1 20rem; }
+    .workflow-cards.list-view .workflow-note { display: none; }
     .workflow-cards.list-view .workflow-link { flex: 0 0 auto; align-self: center; white-space: nowrap; }
 
     .site-footer {
@@ -493,6 +506,10 @@
       .header-links a:hover { background: var(--cp-surface-soft); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
+      .workflow-cards.list-view .workflow-card { flex-wrap: wrap; }
+      .workflow-cards.list-view .workflow-card-header { flex-basis: 100%; }
+      .workflow-cards.list-view .workflow-card-header h2 { white-space: normal; overflow: visible; }
+      .workflow-cards.list-view .workflow-schedule { flex: 1 1 15rem; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
@@ -623,6 +640,7 @@
       <p class="intro-text">Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, RSS Watcher, GitHub IP Ranges, and Azure IP Ranges data across this site.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="lastChecked">Loading...</strong></span>
+        <span>Schedule timezone: <strong id="scheduleTimezone"></strong> (UTC also shown)</span>
       </p>
     </section>
 
@@ -656,6 +674,10 @@
       </ul>
       <h3>Why show the status</h3>
       <p>Stale data is worse than missing data, because nothing looks wrong. Surfacing the last successful run for each workflow makes it obvious when a feed has changed address, an API has started rate-limiting, or a schedule has silently stopped firing.</p>
+      <h3>Scheduled times, not guaranteed start times</h3>
+      <p>The catalog includes every cron-triggered workflow, including the weekly favicon refresh. Schedules are generated from the repository's workflow YAML files at each deployment, so they remain available even when GitHub run details cannot be loaded.</p>
+      <p>Each schedule shows your browser's local time and the original UTC time. Local times and weekdays refer to the next scheduled occurrence, taking daylight saving time into account; expand Cron details to see that date and the source expression. A local time may change when the clocks change, while the UTC schedule stays the same.</p>
+      <p>GitHub Actions can delay scheduled runs, and a disabled workflow will not run. These are planned trigger times, not a promise that a job starts immediately. Started reports the actual start of the latest run, which may also have been triggered manually.</p>
     </section>
   </main>
 
@@ -719,6 +741,182 @@
     </svg>
   </button>
 
+  <script id="workflow-catalog" type="application/json">
+[
+  {
+    "name": "Refresh Azure Release Updates",
+    "file": "azure-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh M365 Release Updates",
+    "file": "m365-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh AWS Release Updates",
+    "file": "aws-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh RSS Watcher Updates",
+    "file": "rss-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh GitHub IP Ranges",
+    "file": "github-ip-ranges-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh Azure IP Ranges",
+    "file": "azure-ip-ranges-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh Microsoft Tech Community RSS Feeds",
+    "file": "microsoft-techcommunity-rss-feeds-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh Azure Taggable Resources",
+    "file": "azure-taggable-resources-updates.yaml",
+    "schedules": [
+      "0 6 * * *"
+    ]
+  },
+  {
+    "name": "Refresh Azure Policy Aliases",
+    "file": "azure-policy-aliases-updates.yaml",
+    "schedules": [
+      "0 6 * * *",
+      "0 18 * * 1"
+    ]
+  },
+  {
+    "name": "Refresh Azure Regions",
+    "file": "azure-regions-updates.yaml",
+    "schedules": [
+      "0 6 * * *",
+      "0 18 * * 1"
+    ]
+  },
+  {
+    "name": "Refresh Azure Policies",
+    "file": "azure-policies-updates.yaml",
+    "schedules": [
+      "0 6 * * *",
+      "0 18 * * 1"
+    ]
+  },
+  {
+    "name": "Refresh Azure Built-in Roles",
+    "file": "azure-built-in-roles-updates.yaml",
+    "schedules": [
+      "15 6 * * *",
+      "15 18 * * 1"
+    ]
+  },
+  {
+    "name": "Refresh Entra ID Built-in Roles",
+    "file": "entra-built-in-roles-updates.yaml",
+    "schedules": [
+      "30 6 * * *",
+      "30 18 * * 1"
+    ]
+  },
+  {
+    "name": "Refresh Microsoft Graph Permissions",
+    "file": "graph-permissions-updates.yaml",
+    "schedules": [
+      "45 6 * * *",
+      "45 18 * * 1"
+    ]
+  },
+  {
+    "name": "Refresh cached favicons",
+    "file": "favicons-refresh.yaml",
+    "schedules": [
+      "0 4 * * 0"
+    ]
+  }
+]
+  </script>
+  <script id="workflow-schedule-helpers">
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function nextScheduledOccurrence(cron, now) {
+      const match = cron.match(/^(\d{1,2}) (\d{1,2}) \* \* (\*|[0-6])$/);
+      if (!match) return null;
+      const minute = Number(match[1]);
+      const hour = Number(match[2]);
+      if (minute > 59 || hour > 23) return null;
+      const weekly = match[3] !== "*";
+      const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, minute));
+      if (weekly) next.setUTCDate(next.getUTCDate() + (Number(match[3]) - next.getUTCDay() + 7) % 7);
+      if (next <= now) next.setUTCDate(next.getUTCDate() + (weekly ? 7 : 1));
+      return { date: next, weekly };
+    }
+
+    function describeSchedule(cron, timeZone, now) {
+      const occurrence = nextScheduledOccurrence(cron, now);
+      if (!occurrence) return null;
+      const { date, weekly } = occurrence;
+      const label = (zone) => {
+        const day = weekly ? new Intl.DateTimeFormat("en-US", { timeZone: zone, weekday: "long" }).format(date) : "Daily";
+        const time = new Intl.DateTimeFormat("en-GB", {
+          timeZone: zone, hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+        }).format(date);
+        return `${day} at ${time}`;
+      };
+      return {
+        local: label(timeZone),
+        utc: `${label("UTC")} UTC`,
+        next: new Intl.DateTimeFormat("en-GB", { timeZone, dateStyle: "medium", timeStyle: "short" }).format(date),
+        iso: date.toISOString()
+      };
+    }
+
+    function renderSchedule(workflow, timeZone, now = new Date()) {
+      const schedules = workflow.schedules.map((cron) => ({ cron, description: describeSchedule(cron, timeZone, now) }));
+      return `
+        <div class="workflow-schedule">
+          <p class="workflow-schedule-title">Schedule (local)</p>
+          <ul class="workflow-schedule-list">${schedules.map(({ cron, description }) => `
+            <li>${description
+              ? `<strong>${escapeHtml(description.local)}</strong><small>${escapeHtml(description.utc)}</small>`
+              : `<strong>Schedule not interpreted</strong><small>UTC cron: <code>${escapeHtml(cron)}</code></small>`}
+            </li>`).join("")}
+          </ul>
+          <details class="workflow-schedule-details">
+            <summary>Cron details</summary>
+            <ul>${schedules.map(({ cron, description }) => `
+              <li><code>${escapeHtml(cron)}</code> (UTC)${description
+                ? `<small>Next planned: <time datetime="${description.iso}">${escapeHtml(description.next)}</time> (${escapeHtml(timeZone)})</small>`
+                : "<small>See the workflow on GitHub for this schedule.</small>"}</li>`).join("")}
+            </ul>
+          </details>
+        </div>`;
+    }
+  </script>
   <script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
@@ -758,22 +956,9 @@
     });
 
     const REPO = "Benoit-Gaumard/Benoit-Gaumard.github.io";
-    const WORKFLOWS = [
-      { name: "Refresh Azure Release Updates", file: "azure-updates.yaml" },
-      { name: "Refresh M365 Release Updates", file: "m365-updates.yaml" },
-      { name: "Refresh AWS Release Updates", file: "aws-updates.yaml" },
-      { name: "Refresh RSS Watcher Updates", file: "rss-updates.yaml" },
-      { name: "Refresh GitHub IP Ranges", file: "github-ip-ranges-updates.yaml" },
-      { name: "Refresh Azure IP Ranges", file: "azure-ip-ranges-updates.yaml" },
-      { name: "Refresh Microsoft Tech Community RSS Feeds", file: "microsoft-techcommunity-rss-feeds-updates.yaml" },
-      { name: "Refresh Azure Taggable Resources", file: "azure-taggable-resources-updates.yaml" },
-      { name: "Refresh Azure Policy Aliases", file: "azure-policy-aliases-updates.yaml" },
-      { name: "Refresh Azure Regions", file: "azure-regions-updates.yaml" },
-      { name: "Refresh Azure Policies", file: "azure-policies-updates.yaml" },
-      { name: "Refresh Azure Built-in Roles", file: "azure-built-in-roles-updates.yaml" },
-      { name: "Refresh Entra ID Built-in Roles", file: "entra-built-in-roles-updates.yaml" },
-      { name: "Refresh Microsoft Graph Permissions", file: "graph-permissions-updates.yaml" },
-    ];
+    const WORKFLOWS = JSON.parse(document.getElementById("workflow-catalog").textContent);
+    const LOCAL_TIME_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById("scheduleTimezone").textContent = LOCAL_TIME_ZONE;
 
     function statusInfo(run) {
       if (!run) return { className: "is-unknown", label: "Unknown" };
@@ -816,8 +1001,8 @@
     }
 
     function renderCard(cardEl, workflow, run, error) {
-      const badgeUrl = `https://github.com/${REPO}/actions/workflows/${workflow.file}/badge.svg?cb=${Date.now()}`;
-      const workflowUrl = `https://github.com/${REPO}/actions/workflows/${workflow.file}`;
+      const badgeUrl = `https://github.com/${REPO}/actions/workflows/${encodeURIComponent(workflow.file)}/badge.svg?cb=${Date.now()}`;
+      const workflowUrl = `https://github.com/${REPO}/actions/workflows/${encodeURIComponent(workflow.file)}`;
       if (error || !run) {
         // The runs endpoint is public but GitHub allows only 60 unauthenticated
         // requests per hour per IP, and this page asks for one per workflow on
@@ -827,10 +1012,11 @@
         const rateLimited = error && /\b(403|429)\b/.test(error.message || "");
         cardEl.innerHTML = `
           <div class="workflow-card-header">
-            <h2>${workflow.name}</h2>
+            <h2>${escapeHtml(workflow.name)}</h2>
             <span class="status-pill is-unknown">Status via badge</span>
           </div>
-          <img class="workflow-badge" src="${badgeUrl}" alt="${workflow.name} status badge" width="148" height="20" loading="lazy" decoding="async">
+          <img class="workflow-badge" src="${badgeUrl}" alt="${escapeHtml(workflow.name)} status badge" width="148" height="20" loading="lazy" decoding="async">
+          ${renderSchedule(workflow, LOCAL_TIME_ZONE)}
           <p class="workflow-note">${rateLimited
             ? "Run detail needs the GitHub API, which allows 60 unauthenticated requests an hour. The badge above is live and unmetered."
             : "Run detail is temporarily unavailable. The badge above is live."}</p>
@@ -842,10 +1028,11 @@
       const duration = run.status === "completed" ? formatDuration(run.run_started_at, run.updated_at) : "In progress\u2026";
       cardEl.innerHTML = `
         <div class="workflow-card-header">
-          <h2>${workflow.name}</h2>
+          <h2>${escapeHtml(workflow.name)}</h2>
           <span class="status-pill ${info.className}">${info.label}</span>
         </div>
-        <img class="workflow-badge" src="${badgeUrl}" alt="${workflow.name} status badge" width="148" height="20" loading="lazy" decoding="async">
+        <img class="workflow-badge" src="${badgeUrl}" alt="${escapeHtml(workflow.name)} status badge" width="148" height="20" loading="lazy" decoding="async">
+        ${renderSchedule(workflow, LOCAL_TIME_ZONE)}
         <dl class="workflow-meta">
           <div><dt>Run</dt><dd>#${run.run_number}</dd></div>
           <div><dt>Branch</dt><dd>${run.head_branch || "-"}</dd></div>
@@ -858,7 +1045,7 @@
 
     async function loadWorkflow(workflow, cardEl) {
       try {
-        const res = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${workflow.file}/runs?per_page=1`, {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${encodeURIComponent(workflow.file)}/runs?per_page=1`, {
           headers: { Accept: "application/vnd.github+json" },
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -877,10 +1064,11 @@
         card.className = "workflow-card";
         card.innerHTML = `
           <div class="workflow-card-header">
-            <h2>${workflow.name}</h2>
+            <h2>${escapeHtml(workflow.name)}</h2>
             <span class="status-pill is-unknown">Loading\u2026</span>
           </div>
-          <img class="workflow-badge" src="https://github.com/${REPO}/actions/workflows/${workflow.file}/badge.svg" alt="${workflow.name} status badge" width="148" height="20" loading="lazy" decoding="async">
+          <img class="workflow-badge" src="https://github.com/${REPO}/actions/workflows/${encodeURIComponent(workflow.file)}/badge.svg" alt="${escapeHtml(workflow.name)} status badge" width="148" height="20" loading="lazy" decoding="async">
+          ${renderSchedule(workflow, LOCAL_TIME_ZONE)}
         `;
         container.append(card);
         loadWorkflow(workflow, card);
