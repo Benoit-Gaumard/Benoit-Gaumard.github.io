@@ -577,8 +577,17 @@
 <style data-site-ui>
   .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
   .site-header .header-links a { min-height:2.75rem; }
+  .site-branding { display:inline-flex;align-items:center;gap:.5rem;max-width:100%;flex:none; }
+  .site-brand-name { display:inline-flex;align-items:center;min-height:2.75rem;color:var(--cp-text);font-size:1rem;font-weight:700;text-decoration:none;white-space:nowrap; }
+  .site-brand-name:hover { color:var(--cp-link);text-decoration:underline;text-underline-offset:.2rem; }
+  .site-brand-name:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-footer .footer-group { gap:.25rem; }
   .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-footer .footer-main { grid-template-columns:minmax(16rem,1.3fr) minmax(8rem,.7fr) minmax(10rem,.8fr) minmax(14rem,1.2fr); }
+  .site-footer .site-footer-extra > a { overflow-wrap:anywhere; }
+  .site-footer .footer-bottom { flex-wrap:wrap;justify-content:center;align-items:center;text-align:center; }
+  .site-footer .footer-bottom > span { min-width:0;line-height:1.5; }
+  .site-footer .footer-bottom > span:first-child { width:100%; }
   .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
   .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
   .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
@@ -588,8 +597,7 @@
   .back-to-top.visible { visibility:visible; }
   button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
   button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
-  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
-  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
   .site-ux-status:empty { display:none; }
   .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
@@ -627,10 +635,18 @@
   .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-tool-link:focus-visible { outline-offset:-3px; }
   @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  @media(max-width:40rem) {
+    :root { --header-h:6.875rem; }
+    .site-header .header-inner:has(.site-branding) { flex-wrap:wrap;gap:.25rem .5rem;padding-block:.5rem; }
+    .site-header .header-inner > .site-branding { flex-basis:100%; }
+    .site-header .header-actions { margin-left:auto; }
+    .site-tool-panel { max-height:min(36rem,calc(100dvh - 13rem)); }
+    body:not(:has(.section-nav)) main :is([id],.tool-card) { scroll-margin-top:8rem; }
+  }
   .site-footer .footer-main > * { min-width:0; }
   @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
-  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
-  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .site-footer .footer-bottom{padding-bottom:2.75rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
 </style>
 <script data-site-ui>(function siteRuntime(config) {
   const french = config.language === "fr";
@@ -955,7 +971,7 @@
   </div>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <span class="site-branding"><a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a><a class="site-brand-name" href="https://benoit-gaumard.io/">benoit-gaumard.io</a></span>
       <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
         <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -1150,14 +1166,15 @@ az keyvault update \
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
-          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+          <span class="site-branding"><a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a><a class="site-brand-name" href="https://benoit-gaumard.io/">benoit-gaumard.io</a></span>
+          <p>Azure Infrastructure and DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
           <strong>Explore</strong>
           <a href="/">Home</a>
           <a href="/articles/">Articles</a>
           <a href="/tools/">Tools</a>
+          <a href="/privacy/">Privacy &amp; cookies</a>
         </nav>
         <div class="footer-group">
           <strong>Tools</strong>
@@ -1166,6 +1183,14 @@ az keyvault update \
           <a href="/azure-release-updates/">Azure Updates</a>
           <a href="/m365-release-updates/">M365 Updates</a>
         </div>
+<!-- footer-extra:start -->
+        <nav class="footer-group site-footer-extra" aria-label="Extra links">
+          <strong>Extra links</strong>
+          <a href="https://www.quickquotemaker.com/" target="_blank" rel="noopener noreferrer" hreflang="en">quickquotemaker.com</a>
+          <a href="https://www.travelstorymaker.com/" target="_blank" rel="noopener noreferrer" hreflang="en">travelstorymaker.com</a>
+        </nav>
+<!-- footer-extra:end -->
+
       </div>
       <div class="footer-share">
         <span class="footer-share-label">Share this site</span>
@@ -1194,9 +1219,7 @@ az keyvault update \
         <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
       </div>
       <div class="footer-bottom">
-        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
-        <a href="/privacy/">Privacy &amp; cookies</a>
-        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
+        <span>&copy; <span id="currentYear">2026</span> Benoit Gaumard - Built with ❤️ - All Rights Reserved</span>
       </div>
     </div>
   </footer>

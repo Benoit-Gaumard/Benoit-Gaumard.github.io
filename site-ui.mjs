@@ -51,8 +51,17 @@ function toolSwitcherMarkup(path) {
 export const siteStyles = `
   .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
   .site-header .header-links a { min-height:2.75rem; }
+  .site-branding { display:inline-flex;align-items:center;gap:.5rem;max-width:100%;flex:none; }
+  .site-brand-name { display:inline-flex;align-items:center;min-height:2.75rem;color:var(--cp-text);font-size:1rem;font-weight:700;text-decoration:none;white-space:nowrap; }
+  .site-brand-name:hover { color:var(--cp-link);text-decoration:underline;text-underline-offset:.2rem; }
+  .site-brand-name:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-footer .footer-group { gap:.25rem; }
   .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-footer .footer-main { grid-template-columns:minmax(16rem,1.3fr) minmax(8rem,.7fr) minmax(10rem,.8fr) minmax(14rem,1.2fr); }
+  .site-footer .site-footer-extra > a { overflow-wrap:anywhere; }
+  .site-footer .footer-bottom { flex-wrap:wrap;justify-content:center;align-items:center;text-align:center; }
+  .site-footer .footer-bottom > span { min-width:0;line-height:1.5; }
+  .site-footer .footer-bottom > span:first-child { width:100%; }
   .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
   .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
   .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
@@ -62,8 +71,7 @@ export const siteStyles = `
   .back-to-top.visible { visibility:visible; }
   button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
   button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
-  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
-  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
   .site-ux-status:empty { display:none; }
   .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
@@ -101,10 +109,18 @@ export const siteStyles = `
   .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-tool-link:focus-visible { outline-offset:-3px; }
   @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  @media(max-width:40rem) {
+    :root { --header-h:6.875rem; }
+    .site-header .header-inner:has(.site-branding) { flex-wrap:wrap;gap:.25rem .5rem;padding-block:.5rem; }
+    .site-header .header-inner > .site-branding { flex-basis:100%; }
+    .site-header .header-actions { margin-left:auto; }
+    .site-tool-panel { max-height:min(36rem,calc(100dvh - 13rem)); }
+    body:not(:has(.section-nav)) main :is([id],.tool-card) { scroll-margin-top:8rem; }
+  }
   .site-footer .footer-main > * { min-width:0; }
   @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
-  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
-  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .site-footer .footer-bottom{padding-bottom:2.75rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
 `;
 
 function siteRuntime(config) {
@@ -460,13 +476,37 @@ export function enhancePage(input, { path = "/", errorPage = false } = {}) {
     return `<style${attrs}>${fixed}</style>`;
   });
   html = html.replace(/<footer\b[\s\S]*?<\/footer>/g, footer => {
+    footer = footer.replace(/Azure Infra &amp; DevOps Consultant/g, "Azure Infrastructure and DevOps Consultant")
+      .replace(/Consultant Azure Infra &amp; DevOps/g, "Consultant Azure Infrastructure et DevOps");
+    footer = footer.replace(/<span>(?:&copy;|©)\s*<span id="currentYear">[^<]*<\/span>\s*Benoit Gaumard[^<]*<\/span>/,
+      '<span>&copy; <span id="currentYear">2026</span> Benoit Gaumard - Built with ❤️ - All Rights Reserved</span>');
+    const privacyLink = footer.match(/<a\b[^>]*href="\/privacy\/"[^>]*>[\s\S]*?<\/a>/)?.[0];
+    if (privacyLink) {
+      const explore = /(<nav class="footer-group"[^>]*>\s*<strong>(?:Explore|Explorer)<\/strong>[\s\S]*?)(\s*<\/nav>)/;
+      if (!explore.test(footer)) throw new Error(`Missing Explore footer group: ${path}`);
+      footer = footer.replace(/\s*<a\b[^>]*href="\/privacy\/"[^>]*>[\s\S]*?<\/a>/g, "")
+        .replace(explore, `$1\n          ${privacyLink}$2`);
+    }
+    const extraLabel = config.language === "fr" ? "Liens supplémentaires" : "Extra links";
+    const extraLinks = `<!-- footer-extra:start -->
+        <nav class="footer-group site-footer-extra" aria-label="${extraLabel}">
+          <strong>${extraLabel}</strong>
+          <a href="https://www.quickquotemaker.com/" target="_blank" rel="noopener noreferrer" hreflang="en">quickquotemaker.com</a>
+          <a href="https://www.travelstorymaker.com/" target="_blank" rel="noopener noreferrer" hreflang="en">travelstorymaker.com</a>
+        </nav>
+<!-- footer-extra:end -->`;
+    footer = footer.replace(/\n?<!-- footer-extra:start -->[\s\S]*?<!-- footer-extra:end -->\n?/g, "")
+      .replace(/(<div class="footer-main">[\s\S]*?)(\n\s*<\/div>\s*<div class="footer-(?:share|bottom)">)/, `$1\n${extraLinks}\n$2`);
     footer = footer.replace(/<a\b([^>]*\bclass="brand"[^>]*)>\s*<span class="brand-mark">B\.<\/span>\s*G\s*<\/a>/g, (_match, attributes) => {
       const label = config.language === "fr" ? "Benoit Gaumard - accueil" : "Benoit Gaumard - home";
       return `<a${attributes.replace(/\saria-label="[^"]*"/g, "")} aria-label="${label}"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>`;
     });
-    return footer.includes("data-privacy-choices") ? footer
-      : footer.replace(/(<a\b[^>]*href="\/privacy\/"[^>]*>[\s\S]*?<\/a>)/, `$1\n        <button class="site-privacy-choices" data-privacy-choices type="button">${config.language === "fr" ? "Modifier mes choix de confidentialité" : "Change privacy choices"}</button>`);
+    return footer.replace(/\s*<button\b[^>]*\bdata-privacy-choices\b[^>]*>[\s\S]*?<\/button>/g, "");
   });
+  html = html.replace(/<(header|footer)\b[\s\S]*?<\/\1>/g, section => section
+    .replace(/<span class="site-branding">(<a\b[^>]*class="brand"[^>]*>[\s\S]*?<\/a>)<a class="site-brand-name"[^>]*>[\s\S]*?<\/a><\/span>/g, "$1")
+    .replace(/<a\b[^>]*class="brand"[^>]*>[\s\S]*?<\/a>/g, brand =>
+      `<span class="site-branding">${brand}<a class="site-brand-name" href="https://benoit-gaumard.io/">benoit-gaumard.io</a></span>`));
   if (path === "/privacy/" || errorPage) {
     html = html.replace(/\s*<script\b[^>]*src=["'][^"']*pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js[^"']*["'][^>]*><\/script>/g, "");
     html = html.replace(/<aside\b[^>]*class="article-ad"[\s\S]*?<\/aside>/g, "");

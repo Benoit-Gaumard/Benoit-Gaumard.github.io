@@ -52,7 +52,7 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 
 ## Brand Commitments
 
-- Name: **Benoit Gaumard**. Role: Azure Infra & DevOps Consultant at Microsoft. Location: Paris and Île-de-France, France.
+- Name: **Benoit Gaumard**. Role: Azure Infrastructure and DevOps Consultant at Microsoft. Location: Paris and Île-de-France, France.
 - The homepage uses a PowerShell / terminal framing (`PS>` prompts, `whoami`, `.\Start-Collaboration.ps1`). Tool pages use a plain, utilitarian voice.
 - Existing assets: `favicon.svg`, `linkedin-photo.jpg`.
 
