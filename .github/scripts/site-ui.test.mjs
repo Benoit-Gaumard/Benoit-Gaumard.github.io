@@ -25,7 +25,7 @@ test("privacy and error pages never retain the advertising loader", () => {
     const html = enhancePage(read(path), { path: route, errorPage: route === "/404.html" });
     assert.doesNotMatch(html, /src="[^"]*adsbygoogle\.js/);
     assert.doesNotMatch(html, /<ins class="adsbygoogle"/);
-    assert.match(html, /data-privacy-choices/);
+    assert.match(html, /href="\/privacy\/"/);
   }
 });
 test("generator and SEO enrichment preserve the shared shell and ad-free utility pages", () => {
@@ -43,8 +43,33 @@ test("footer branding uses the header icon and preserves localized home links", 
     const source = `<html lang="${language}"><head></head><body><footer><a class="brand" href="${href}"><span class="brand-mark">B.</span>G</a></footer></body></html>`;
     const html = enhancePage(source, { path: href });
     assert.ok(html.includes(`<a class="brand" href="${href}" aria-label="Benoit Gaumard - ${label}"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>`));
+    assert.match(html, /<span class="site-branding"><a class="brand"[\s\S]*?<\/a><a class="site-brand-name" href="https:\/\/benoit-gaumard\.io\/">benoit-gaumard\.io<\/a><\/span>/);
     assert.doesNotMatch(html, /<span class="brand-mark">/);
     assert.equal(enhancePage(html, { path: href }), html);
+  }
+});
+test("header and footer site names use the supplied destination without changing logo links", () => {
+  for (const [file, route, home] of [["index.html", "/", "/"], ["index_fr.html", "/index_fr.html", "/index_fr.html"], ["tools/index.html", "/tools/", "/"]]) {
+    const html = enhancePage(read(file), { path: route });
+    assert.equal(enhancePage(html, { path: route }), html, file);
+    for (const tag of ["header", "footer"]) {
+      const section = html.match(new RegExp(`<${tag}\\b[\\s\\S]*?<\\/${tag}>`))[0];
+      assert.equal([...section.matchAll(/class="site-brand-name"/g)].length, 1, file + " " + tag);
+      assert.match(section, /class="site-brand-name" href="https:\/\/benoit-gaumard\.io\/">benoit-gaumard\.io<\/a>/);
+      assert.ok(section.includes(`<a class="brand" href="${home}"`), file + " " + tag);
+    }
+  }
+});
+test("the shared footer keeps both owner-supplied external site links", () => {
+  for (const [file, route, label] of [["index.html", "/", "Extra links"], ["index_fr.html", "/index_fr.html", "Liens supplémentaires"], ["privacy/index.html", "/privacy/", "Extra links"]]) {
+    const html = enhancePage(read(file), { path: route });
+    assert.equal(enhancePage(html, { path: route }), html, file);
+    const extra = html.match(/<!-- footer-extra:start -->([\s\S]*?)<!-- footer-extra:end -->/)?.[1];
+    assert.ok(extra, file);
+    assert.ok(extra.includes(`<strong>${label}</strong>`));
+    assert.match(extra, /href="https:\/\/www\.quickquotemaker\.com\/" target="_blank" rel="noopener noreferrer" hreflang="en">quickquotemaker\.com<\/a>/);
+    assert.match(extra, /href="https:\/\/www\.travelstorymaker\.com\/" target="_blank" rel="noopener noreferrer" hreflang="en">travelstorymaker\.com<\/a>/);
+    assert.equal([...extra.matchAll(/<a\b/g)].length, 2);
   }
 });
 test("French and English language flags remain available alongside country flags", () => {
@@ -100,7 +125,10 @@ test("footer text links are compact without shrinking header or language control
   assert.match(siteStyles, /\.site-footer \.footer-group \{ gap:\.25rem; \}/);
   assert.match(siteStyles, /\.site-footer \.footer-group > a \{ min-height:1\.5rem; \}/);
   assert.match(siteStyles, /@media\(max-width:32rem\)[^\n]*\.site-footer \.footer-group > a\{min-height:2rem;\}/);
+  assert.doesNotMatch(siteStyles, /\.site-footer-extra[^{}]*\{[^}]*(?:gap|min-height|line-height):/);
   assert.doesNotMatch(siteStyles, /\.site-header \.header-links a,\.site-footer/);
+  assert.match(siteStyles, /\.site-footer \.footer-bottom \{[^}]*justify-content:center;align-items:center;text-align:center;/);
+  assert.match(siteStyles, /\.site-footer \.footer-bottom > span:first-child \{ width:100%; \}/);
 });
 test("saved favorite stars share yellow highlighting without recoloring other toggles", () => {
   const selector = 'button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"]';
@@ -171,10 +199,27 @@ test("all standalone inline scripts remain parseable after the shell migration",
     assert.ok(html.indexOf("gtag('consent', 'default'") < html.indexOf('src="https://www.googletagmanager'), path);
     const header = html.match(/<header\b[\s\S]*?<\/header>/)[0];
     const footer = html.match(/<footer\b[\s\S]*?<\/footer>/)[0];
+    assert.doesNotMatch(footer, /\bInfra (?:and|&amp;) DevOps/, path);
+    assert.match(footer, path === "index_fr.html" ? /Consultant Azure Infrastructure et DevOps/ : /Azure Infrastructure and DevOps Consultant/, path);
+    assert.doesNotMatch(footer, /data-privacy-choices|site-privacy-choices|Change privacy choices|Modifier mes choix de confidentialité/, path);
+    assert.match(footer, /href="\/privacy\/"/, path);
+    const explore = footer.match(/<nav class="footer-group"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+    assert.match(explore, /href="\/privacy\/"(?: hreflang="en")?>Privacy &amp; cookies<\/a>/, path);
+    assert.equal([...footer.matchAll(/href="\/privacy\/"/g)].length, 1, path);
+    assert.doesNotMatch(footer.match(/<div class="footer-bottom">[\s\S]*?<\/div>/)[0], /href="\/privacy\/"/, path);
+    assert.match(footer, /&copy; <span id="currentYear">2026<\/span> Benoit Gaumard - Built with ❤️ - All Rights Reserved/, path);
+    assert.equal([...footer.matchAll(/class="footer-group site-footer-extra"/g)].length, 1, path);
+    assert.equal([...footer.matchAll(/href="https:\/\/www\.quickquotemaker\.com\/"/g)].length, 1, path);
+    assert.equal([...footer.matchAll(/href="https:\/\/www\.travelstorymaker\.com\/"/g)].length, 1, path);
     const headerLogo = header.match(/<img class="mark" src="([^"]+)"/);
     const footerLogo = footer.match(/<img class="mark" src="([^"]+)"/);
     assert.ok(headerLogo && footerLogo, path);
     assert.equal(footerLogo[1], headerLogo[1], path);
+    for (const section of [header, footer]) {
+      assert.equal([...section.matchAll(/class="site-brand-name"/g)].length, 1, path);
+      assert.match(section, /class="site-brand-name" href="https:\/\/benoit-gaumard\.io\/">benoit-gaumard\.io<\/a>/, path);
+      assert.doesNotMatch(section, /https:\/\/tools\.benoit-gaumard\.io\//, path);
+    }
     assert.doesNotMatch(footer, /<span class="brand-mark">/);
     assert.match(footer, /<a class="brand" href="[^"]+" aria-label="Benoit Gaumard - (?:home|accueil)">/, path);
   }

@@ -209,12 +209,17 @@ test("decisions and dangerous examples are ordered and do not hide warnings", ()
   assert.doesNotMatch(read("articles/content/terraform-vs-bicep-the-match.md"), /🟢|🔴|🟠/);
 });
 
-test("privacy has actual consent controls, purposes and no advertising loader or slots", () => {
+test("privacy keeps consent information without the removed buttons or advertising slots", () => {
   const html = read("privacy/index.html");
   assert.doesNotMatch(html, /data-ad-slot=|src="[^"]*adsbygoogle\.js/);
   assert.match(html, /<script\b[^>]*src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-75X1Q2PPLE"/);
   assert.match(html, /id="privacy-summary"/);
-  assert.match(html, /data-privacy-choices>Change my privacy choices/);
+  assert.doesNotMatch(withoutScripts(html), /data-privacy-choices|Change my privacy choices|This action asks|pressing the button/);
+  assert.match(html, /Consent manager, where available/);
+  assert.match(html, /href="https:\/\/www\.google\.com\/settings\/ads"/);
+  for (const purpose of ["ad_storage", "analytics_storage", "ad_user_data", "ad_personalization"]) {
+    assert.match(html, new RegExp(`${purpose}: 'denied'`));
+  }
   assert.match(html, /Voluntarily forwarded draft fields/);
   assert.match(html, /not a legal compliance certification/);
   assert.doesNotMatch(html, /clear this site's cookies.*reload any page|I never ask you for your name/);

@@ -259,14 +259,18 @@ runSuite("article-reading", async ({ context, test, base, assert, fs, path, root
         assert.equal(await page.locator(".library-group:visible").count(), 1);
       }
     });
-    await test(`Privacy summary, no ads and honest unavailable consent manager at ${width}px`, async () => {
+    await test(`Privacy summary, no choice buttons and unchanged consent defaults at ${width}px`, async () => {
       await page.goto(base + "/privacy/");
       assert.equal(await page.locator("ins.adsbygoogle,script[src*='adsbygoogle.js']").count(), 0);
       assert.equal(await page.locator("#privacy-summary").isVisible(), true);
-      const before = await page.evaluate(() => JSON.stringify(localStorage));
-      await page.getByRole("button", { name: "Change my privacy choices", exact: true }).first().click();
-      await page.waitForFunction(() => /unavailable|not available|could not/i.test(document.getElementById("siteUxStatus")?.textContent || ""), null, { timeout: 15000 });
-      assert.equal(await page.evaluate(() => JSON.stringify(localStorage)), before);
+      assert.equal(await page.locator("[data-privacy-choices]").count(), 0);
+      assert.equal(await page.getByRole("button", { name: "Change my privacy choices", exact: true }).count(), 0);
+      assert.doesNotMatch(await page.locator("#article-content").textContent(), /This action asks|pressing the button/);
+      const defaults = await page.evaluate(() => {
+        const entry = (window.dataLayer || []).find(item => item[0] === "consent" && item[1] === "default");
+        return entry?.[2];
+      });
+      for (const purpose of ["ad_storage", "analytics_storage", "ad_user_data", "ad_personalization"]) assert.equal(defaults[purpose], "denied");
       assert.equal(await page.evaluate(() => (window.dataLayer || []).some(item => item[0] === "consent" && item[1] === "update")), false);
       await capture(page, `article-privacy-${width}.png`);
     });
@@ -312,7 +316,7 @@ runSuite("article-reading", async ({ context, test, base, assert, fs, path, root
       assert.equal(await page.locator(".reading-toc a").count(), 9);
       assert.equal(await page.locator("#article-content h2").count(), 9);
       assert.equal(await page.locator("#article-content .table-wrap tbody tr").count(), 5);
-      assert.equal(await page.locator("main [data-privacy-choices]").count(), 2);
+      assert.equal(await page.locator("main [data-privacy-choices]").count(), 0);
       assert.equal(await page.locator("ins.adsbygoogle,script[src*='adsbygoogle.js'],.article-share,.article-feature-image,.series-nav,.article-related").count(), 0);
       assert.match(await page.locator(".article-footer-nav").textContent(), /Back to home/);
       if (javaScriptEnabled && ((width === 1440 && theme === "light") || (width === 390 && theme === "dark"))) {

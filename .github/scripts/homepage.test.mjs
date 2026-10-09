@@ -66,13 +66,15 @@ for (const { file, html } of pages) {
     }
   });
 
-  test(`${file}: the hero has no contact buttons and the contact section retains both destinations`, () => {
+  test(`${file}: the hero has no contact buttons and the contact section retains LinkedIn and GitHub without email`, () => {
     const hero = block(html, '<div class="glass term hero"', '<nav class="section-nav"');
     assert.doesNotMatch(hero, /mailto:|linkedin\.com|class="btn\b/);
     assert.doesNotMatch(html, /hero-actions/);
     const contact = block(html, '<!-- CONTACT -->', '</main>');
-    assert.match(contact, /href="mailto:contact@benoit-gaumard\.io"/);
+    assert.doesNotMatch(contact, /mailto:|Email me|M'écrire/);
     assert.match(contact, /href="https:\/\/www\.linkedin\.com\/in\/benoit-gaumard\/"/);
+    assert.match(contact, /href="https:\/\/github\.com\/Benoit-Gaumard"/);
+    assert.equal([...contact.matchAll(/<a class="btn /g)].length, 2);
     const introduction = file === 'index_fr.html'
       ? "Bonjour, je suis consultant et architecte cloud, spécialisé dans Microsoft Azure et les services associés. Au sein de Microsoft, je suis passionné par l’architecture cloud, l’automatisation, l’infrastructure as code (IaC), le DevOps et les solutions cloud-native."
       : "Hi, I'm a Cloud Consultant and Architect focused on Microsoft Azure and related services. As part of Microsoft, I’m passionate about cloud architecture, automation, infrastructure as code (IaC), DevOps and cloud-native solutions.";
@@ -252,17 +254,26 @@ test('French navigation identifies English-only site destinations', () => {
     const pathname = new URL(href, 'https://benoit-gaumard.io').pathname;
     if (!destinations.has(pathname)) continue;
     assert.match(attributes, /hreflang="en"/, href);
-    assert.match(content, /en anglais/, href);
+    if (pathname === '/privacy/') assert.equal(content, 'Privacy &amp; cookies');
+    else assert.match(content, /en anglais/, href);
   }
   assert.match(pages[1].html, /Les intitulés officiels et les pages de référence Microsoft Learn sont en anglais\./);
 });
 
 test('French role vocabulary is consistent without translating product names', () => {
   const html = pages[1].html;
-  assert.match(html, /<p class="role">Consultant Azure Infra &amp; DevOps<\/p>/);
-  assert.match(html, /<h3>Consultant Azure Infra &amp; DevOps<\/h3>/);
-  assert.match(block(html, '<div class="footer-about">', '</div>'), /Consultant Azure Infra &amp; DevOps/);
+  assert.match(html, /<p class="role">Consultant Azure Infrastructure et DevOps<\/p>/);
+  assert.match(html, /<h3>Consultant Azure Infrastructure et DevOps<\/h3>/);
+  assert.match(block(html, '<div class="footer-about">', '</div>'), /Consultant Azure Infrastructure et DevOps/);
   for (const product of ['Azure API Management', 'Azure Automation Runbooks', 'Logic Apps', 'GitHub Actions', 'Windows Server']) {
     assert.ok(html.includes(product), product);
   }
+});
+
+test('English role wording spells out Infrastructure in the hero, Microsoft role and footer', () => {
+  const html = pages[0].html;
+  assert.match(html, /<p class="role">Azure Infrastructure and DevOps Consultant\s*<\/p>/);
+  assert.match(html, /<h3>Infrastructure and DevOps Consultant<\/h3>/);
+  assert.match(block(html, '<div class="footer-about">', '</div>'), /Azure Infrastructure and DevOps Consultant/);
+  for (const { html } of pages) assert.doesNotMatch(html, /\bInfra (?:and|&amp;) DevOps/);
 });

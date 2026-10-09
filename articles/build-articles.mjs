@@ -13,7 +13,7 @@ const contentDir = join(HERE, "content");
 const SITE_URL = "https://benoit-gaumard.io";
 const DEFAULT_AUTHOR = "Benoit Gaumard";
 const WORDS_PER_MINUTE = 200;
-const PRIVACY_UPDATED = "2026-10-07";
+const PRIVACY_UPDATED = "2026-10-09";
 
 // ---------- Measurement and advertising ----------
 
@@ -751,7 +751,7 @@ ${content}
       <div class="footer-main">
         <div class="footer-about">
           <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
-          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+          <p>Azure Infrastructure and DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
           <strong>Explore</strong>
@@ -1397,8 +1397,6 @@ function renderPrivacyPage() {
 
   const body = `      <h2 id="privacy-summary">In brief</h2>
       <p>There is no site account. Calculations run locally; favourites and interface preferences are stored in this browser. Suggestions are prepared locally and are sent to GitHub only when you choose to continue and submit them there. GitHub hosting, Google Analytics and advertising involve third-party processing described below.</p>
-      <p><button class="share-btn" type="button" data-privacy-choices>Change my privacy choices</button></p>
-      <p>This action asks the consent manager to reopen. If it is unavailable or blocked, the site reports that honestly; pressing the button does not accept cookies or change your choice by itself.</p>
       <h2 id="who-runs-this-site">Who runs this site</h2>
       <p>benoit-gaumard.io is a personal website published by Benoit Gaumard, an Azure infrastructure and DevOps consultant. It hosts free tools, reference data, and technical articles about Microsoft Azure, GitHub, and cloud operations. It is a personal project and is not operated by any employer.</p>
       <p>For any question about this policy, you can reach me through <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
@@ -1409,7 +1407,7 @@ function renderPrivacyPage() {
         <tr><td data-label="Purpose">Local tools and preferences</td><td data-label="Data and destination">Calculator inputs, favourites, theme, view and filter preferences in this browser. Some filters can also appear in a shareable URL.</td><td data-label="Control">Use the tool's reset/favourite controls, or manage local site storage in browser settings. Shared URLs disclose their query parameters to recipients and hosting services.</td></tr>
         <tr><td data-label="Purpose">Suggestions</td><td data-label="Data and destination">Voluntarily forwarded draft fields and, on submission, your GitHub issue and profile.</td><td data-label="Control">Review before opening/submitting. Manage the resulting issue on GitHub.</td></tr>
         <tr><td data-label="Purpose">Page delivery</td><td data-label="Data and destination">Connection information processed by GitHub Pages. Linked or embedded third-party images can also receive a request.</td><td data-label="Control">See the provider's privacy policy; external destinations have their own policies.</td></tr>
-        <tr><td data-label="Purpose">Audience measurement</td><td data-label="Data and destination">Page and technical measurement data sent to Google Analytics under the tag's consent settings.</td><td data-label="Control">Change privacy choices. Denied storage is not the same as no network requests.</td></tr>
+        <tr><td data-label="Purpose">Audience measurement</td><td data-label="Data and destination">Page and technical measurement data sent to Google Analytics under the tag's consent settings.</td><td data-label="Control">Consent manager, where available. Denied storage is not the same as no network requests.</td></tr>
         <tr><td data-label="Purpose">Advertising</td><td data-label="Data and destination">Google and advertising partners may process ad requests and, where permitted by choices and configuration, cookies and personalisation data.</td><td data-label="Control">Consent manager and Google's advertising settings.</td></tr>
       </tbody></table></div>
       <ul>
@@ -1439,7 +1437,7 @@ function renderPrivacyPage() {
       <ul>
         <li><strong>Your selected choices</strong> control the permitted purposes through the configured consent manager; accepting one purpose is not a blanket description of all others.</li>
         <li><strong>If you refuse</strong>, you keep access to the tools and articles. Restricted advertising or measurement requests may still occur; denied storage does not mean no third-party processing.</li>
-        <li><strong>To change your mind later</strong>, use <button class="share-btn" type="button" data-privacy-choices>Change my privacy choices</button>. This requests the consent manager, not consent itself. If unavailable, consult <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a> for Google-wide choices; those are not a substitute for this site's consent dialogue.</li>
+        <li><strong>Google-wide advertising choices</strong> are available in <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>; those are not a substitute for this site's consent dialogue.</li>
       </ul>
       <p>Local storage remembers requested interface features such as theme, favourites and view preferences. These controls are separate from advertising choices. Removing local storage clears those saved preferences; it is not the normal route for reopening the consent manager.</p>
 
