@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Choose a hybrid DNS pattern from the client and destination, then trace its inbound or outbound query path."
 title = "DNS in Azure, Part 3: Azure DNS Private Resolver"
 date = "2026-09-03"
 description = "Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers."
@@ -7,6 +8,8 @@ tags = ["DNS", "Networking", "Hybrid"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-3.svg"
 featured = true
+leadSections = ["Choosing a pattern"]
+related = ["dns-in-azure-part-4-private-endpoints", "dns-in-azure-part-8-decision-tree"]
 +++
 
 [Part 1](/articles/dns-in-azure-part-1-fundamentals/) established that everything private in Azure eventually terminates at `168.63.129.16`. [Part 2](/articles/dns-in-azure-part-2-private-dns-zones/) showed how private DNS zones make that address genuinely useful. Both ended on the same two gaps:
@@ -26,6 +29,12 @@ For years the fix was to run your own DNS servers in a hub VNet - two VMs, forwa
 - **[Part 8](/articles/dns-in-azure-part-8-decision-tree/)** - the resolution decision tree
 
 [[toc]]
+
+## Choose by client and destination
+
+Start with the selection table below, then open the matching pattern. All diagrams have original-file links; the text at each pattern states client, destination, path, configuration and limitation without relying on colours or small labels.
+
+Technical execution validation and quota review date: **not recorded**. Validate current regional availability, per-endpoint queries/second and per-resource quotas in [Private Resolver documentation](https://learn.microsoft.com/azure/dns/dns-private-resolver-overview). A listed limit is not a measured workload capacity.
 
 ## Anatomy of the resolver
 
@@ -96,6 +105,8 @@ Two consequences worth internalising:
 
 ## Pattern 1: on-premises resolving Azure private zones
 
+**Client:** on-premises. **Destination:** Azure private zone. **Path:** local resolver → reachable inbound endpoint → zones linked to the resolver VNet. **Configure:** conditional forwarding and zone links. **Limit:** the on-premises resolver needs network reachability to the inbound IP; it cannot query Azure's platform IP directly.
+
 The canonical starting point. A resolver sits in the hub VNet, and the private zones are linked to that hub.
 
 ```diagram
@@ -136,6 +147,8 @@ This is also the pattern that makes `privatelink.*` zones reachable from on-prem
 :::
 
 ## Pattern 2: Azure resolving on-premises names, centralized
+
+**Client:** spoke workload. **Destination:** on-premises namespace. **Path:** spoke custom DNS → hub inbound endpoint → matching rule/outbound endpoint → on-premises DNS. **Configure:** spoke DNS setting, ruleset and destination reachability. **Limit:** the central inbound path is part of availability/capacity planning; avoid loops.
 
 Now the other direction. This is the architecture you should reach for by default.
 
@@ -195,6 +208,8 @@ Rule domain names are written as a fully qualified suffix with a trailing dot - 
 
 ## Pattern 3: Azure resolving on-premises names, distributed
 
+**Client:** spoke using Azure-provided DNS. **Destination:** on-premises namespace. **Path:** linked forwarding ruleset → outbound endpoint → on-premises DNS. **Configure:** a ruleset link for each participating VNet. **Limit:** the ruleset is not a network route; target reachability and DNS ports still need validation.
+
 Same goal, different plumbing. Spokes keep the **default** DNS servers setting (`168.63.129.16`), and the **ruleset is linked directly to each spoke VNet**.
 
 ```diagram
@@ -224,6 +239,8 @@ The cost is operational: a ruleset link per spoke, so more objects to manage and
 
 ## Pattern 4: isolated VNets with a wildcard rule
 
+**Client:** VNet without direct peering to the hub. **Destination:** names forwarded by the wildcard. **Path:** linked ruleset → outbound endpoint → configured resolver. **Configure:** wildcard rule and links deliberately. **Limit:** a broad rule changes many names; exclude recursive loops and validate private/public outcomes.
+
 Sometimes a workload must sit in a VNet with **no peering at all** - a compliance boundary, a third-party landing area - and you still want its DNS centrally controlled and logged.
 
 Link a ruleset to that isolated VNet containing a single wildcard rule for `.` pointing at your central DNS service. Every query the platform does not answer from a linked private zone gets forwarded out.
@@ -246,6 +263,8 @@ Remember the reserved namespaces. A `.` rule will **not** capture Microsoft's pl
 
 ## Pattern 5: Azure-to-Azure through the hub
 
+**Client:** spoke workload. **Destination:** Azure private zone. **Path:** spoke → hub inbound endpoint → hub-linked zone. **Configure:** spoke DNS settings and central zone links. **Limit:** this centralises resolution, not application connectivity; each application path still needs routing.
+
 You can also use the resolver purely for Azure-internal resolution, and it is often the cleanest way to manage private zones at scale.
 
 Rather than linking every private DNS zone to every spoke VNet - which burns through the 1,000-link-per-zone budget and makes troubleshooting miserable - link all zones to the **hub VNet only**, and point each spoke's DNS servers setting at the inbound endpoint.
@@ -267,11 +286,11 @@ Microsoft documents this as the hub-and-spoke-with-ruleset topology:
 
 | If you need... | Use |
 |---|---|
-| On-premises to resolve Azure private zones | Inbound endpoint + zones linked to the resolver's VNet (Pattern 1) |
-| Azure to resolve on-premises zones, normal volumes | Centralized: spokes point at the inbound endpoint (Pattern 2) |
-| Azure to resolve on-premises zones, very high QPS | Distributed: ruleset linked per spoke (Pattern 3) |
-| Central control for a VNet with no peering | Wildcard ruleset linked to the isolated VNet (Pattern 4) |
-| Simple private zone management across many spokes | Zones on the hub, spokes point at the inbound endpoint (Pattern 5) |
+| On-premises to resolve Azure private zones | [Pattern 1: inbound endpoint and zone links](#pattern-1-on-premises-resolving-azure-private-zones) |
+| Azure to resolve on-premises zones through a central DNS IP | [Pattern 2: centralized](#pattern-2-azure-resolving-on-premises-names-centralized) |
+| Azure-provided DNS with direct ruleset association | [Pattern 3: distributed](#pattern-3-azure-resolving-on-premises-names-distributed) |
+| Central forwarding for a VNet without peering | [Pattern 4: wildcard rule](#pattern-4-isolated-vnets-with-a-wildcard-rule) |
+| Central zone management across spokes | [Pattern 5: Azure-to-Azure](#pattern-5-azure-to-azure-through-the-hub) |
 
 If you are unsure, start centralized. It is simpler to reason about, and DNS is a service where being able to explain the path out loud matters more than shaving milliseconds.
 

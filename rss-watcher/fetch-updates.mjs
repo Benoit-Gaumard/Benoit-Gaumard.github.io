@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveFeedIcon } from "./cache-icons.mjs";
 
 // Owner's style rule: no em-dashes or en-dashes anywhere on the site, including
 // in text fetched from upstream feeds. Applied at write time so a scheduled
@@ -106,11 +107,12 @@ function parseItems(xml) {
 
 function extractFeedIcon(xml, feedUrl) {
   // Only look at channel/feed-level metadata, not per-item images.
-  const channelXml = xml.replace(/<item\b[^>]*>[\s\S]*?<\/item>/gi, "").replace(/<entry\b[^>]*>[\s\S]*?<\/entry>/gi, "");
+  const channelXml = xml.replace(/<((?:[\w.-]+:)?(?:item|entry))\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "");
   const imageBlock = channelXml.match(/<image\b[^>]*>([\s\S]*?)<\/image>/i);
   const imageUrl = imageBlock ? extractTag(imageBlock[1], "url") : "";
-  const icon = imageUrl || extractTag(channelXml, "icon") || extractTag(channelXml, "logo");
-  if (icon) return icon;
+  const icon = imageUrl || extractTag(channelXml, "(?:[\\w.-]+:)?icon") || extractTag(channelXml, "(?:[\\w.-]+:)?logo");
+  const resolved = resolveFeedIcon(icon, feedUrl);
+  if (resolved) return resolved;
   try {
     const { hostname } = new URL(feedUrl);
     return `https://www.google.com/s2/favicons?sz=64&domain=${hostname}`;
@@ -203,6 +205,7 @@ ${entries}
 }
 
 async function fetchFeed(feed) {
+  const attemptedAt = new Date().toISOString();
   try {
     const response = await fetch(feed.url, {
       headers: { "User-Agent": USER_AGENT, Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml, */*" },
@@ -210,15 +213,15 @@ async function fetchFeed(feed) {
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const xml = await response.text();
-    const icon = extractFeedIcon(xml, feed.url);
+    const icon = extractFeedIcon(xml, response.url || feed.url);
     const items = parseItems(xml)
       .filter((item) => item.title && item.link && item.pubDate)
       .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
       .slice(0, MAX_ITEMS_PER_FEED)
       .map((item) => ({ ...item, source: feed.name, categories: feed.categories, subcategory: feed.subcategory, icon, country: feed.country }));
-    return { ok: true, name: feed.name, count: items.length, items };
+    return { ok: true, name: feed.name, attemptedAt, count: items.length, items };
   } catch (error) {
-    return { ok: false, name: feed.name, error: error.message };
+    return { ok: false, name: feed.name, attemptedAt, error: error.message };
   }
 }
 
@@ -282,6 +285,9 @@ const feedsStatus = results.map((r) => {
     ok: r.ok,
     error: r.ok ? null : r.error,
     lastPublication: r.ok && r.items.length ? r.items[0].pubDate : null,
+    lastAttemptAt: r.attemptedAt,
+    latestTitle: r.ok && r.items.length ? r.items[0].title : null,
+    latestLink: r.ok && r.items.length ? r.items[0].link : null,
     addedAt: feedsMeta[r.name] || now,
   };
 });

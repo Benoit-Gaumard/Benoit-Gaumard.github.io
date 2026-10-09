@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Understand rule priority and domain matching, observe DNS queries and plan a controlled filtering rollout."
 title = "DNS in Azure, Part 7: DNS Security Policies"
 date = "2026-09-03"
 description = "Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down."
@@ -7,6 +8,7 @@ tags = ["DNS", "Networking", "Security", "Log Analytics"]
 categories = ["Featured", "Azure", "DNS", "Security"]
 featureImage = "/articles/images/dns-in-azure-part-7.svg"
 featured = true
+related = ["dns-in-azure-part-8-decision-tree"]
 +++
 
 Six parts in, one complaint has come up in every single one: you cannot see what the platform resolver is doing. `168.63.129.16` answers queries and keeps no receipts. For years the only way to get DNS logs in Azure was to put a VM in the path - which meant building, sizing, patching and monitoring a DNS server whose sole purpose was to write a log file.
@@ -25,6 +27,14 @@ Six parts in, one complaint has come up in every single one: you cannot see what
 [[toc]]
 
 ## Why DNS is a security control
+
+Start with the object chain: **regional resolver policy → VNet link → traffic rules → referenced domain lists**. Diagnostic settings send observations to your chosen logging destination. Customer-managed domain lists and the Microsoft threat-intelligence list have different owners; treat neither as automatically appropriate for blocking.
+
+Evaluation example: a priority `100` allow rule for `contoso.com` matches `app.contoso.com`; a lower-priority `300` block rule for that child does not win over that higher-priority allow. Inspect both priority and parent-domain matching instead of reading rules as an unordered list. Confirm current semantics in [DNS security policy documentation](https://learn.microsoft.com/azure/dns/dns-security-policy).
+
+Rollout checklist: inventory resolver paths → enable logging → observe with Alert → review proposed exceptions and query dependencies → trial a narrow Block rule → test allowed and blocked names → retain a documented reversal path. These are gates, not a guarantee that a deployment cannot disrupt service.
+
+Technical execution validation and limits review date: **not recorded**. Validate feature availability, rule behaviour and the actual workspace schema before applying examples.
 
 Almost every attack begins with a name lookup. Command-and-control beacons, data exfiltration over DNS tunnels, phishing payload retrieval, cryptominers - they all need to resolve something before they can do anything else.
 
@@ -160,6 +170,10 @@ You use it like any other domain list - reference it from a traffic rule, choose
 Start in Alert. Run it for a couple of weeks, see what turns up, and then flip to Block once you know what is in your own traffic. In most estates the alert volume is close to zero, which makes the eventual switch easy to sign off - and the exceptions you do find are usually security tooling doing something that looks malicious on purpose.
 
 ## Query logging: the part you have been waiting for
+
+Run the following KQL in the **Log Analytics workspace receiving these diagnostic logs**, not Resource Graph. First confirm the table/column schema and time range. Expected records identify time, client, query and verdict; absence of rows may mean missing diagnostics or ingestion delay, not no DNS activity.
+
+For a blocked-resolution diagnosis, capture the returned name/verdict, correlate client and timestamp with the matching rule, inspect the domain list and priority, then test the specific name after an approved change. Do not disable the whole policy just to make one lookup succeed.
 
 Configure **diagnostic settings** on the resolver policy and send logs to a Log Analytics workspace, a storage account, or an Event Hub. Queries land in the `DNSQueryLogs` table.
 

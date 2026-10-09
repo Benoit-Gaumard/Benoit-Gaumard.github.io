@@ -52,8 +52,10 @@ $payload = [ordered]@{
   resources          = $sortedResources
 }
 
-$outputPath = Join-Path (Split-Path -Parent $PSCommandPath) "policy-aliases.json"
-($payload | ConvertTo-Json -Depth 10 -Compress) + "`n" | Set-Content -Path $outputPath -NoNewline -Encoding utf8
+$scriptDir = Split-Path -Parent $PSCommandPath
+$outputPath = Join-Path $scriptDir "policy-aliases.json"
+$payload | ConvertTo-Json -Depth 10 -Compress | node (Join-Path $scriptDir "alias-history.mjs")
+if ($LASTEXITCODE -ne 0) { throw "Alias catalogue and history could not be published." }
 
 Write-Host "Fetched $($sortedResources.Count) resource types ($($providers.Count) providers, $totalAliases aliases) into $outputPath"
 

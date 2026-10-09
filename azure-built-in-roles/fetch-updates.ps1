@@ -9,17 +9,16 @@
 # source is public, so this refresh needs no tenant and no secret.
 $ErrorActionPreference = "Stop"
 
+$scriptDir = Split-Path -Parent $PSCommandPath
+. (Join-Path $scriptDir "role-history.ps1")
+$outputPath = Join-Path $scriptDir "roles.json"
+$changesPath = Join-Path $scriptDir "role-changes.json"
+$previous = if (Test-Path $outputPath) { Get-Content -LiteralPath $outputPath -Raw | ConvertFrom-Json } else { $null }
+$existingHistory = if (Test-Path $changesPath) { Get-Content -LiteralPath $changesPath -Raw | ConvertFrom-Json } else { $null }
+
 $RepoApi = "https://api.github.com/repos/MicrosoftDocs/azure-docs/contents/articles/role-based-access-control/built-in-roles"
 $RawBase = "https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/role-based-access-control/built-in-roles"
 $DocBase = "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
-
-# Used when the GitHub contents API is unavailable or rate-limited.
-$FallbackFiles = @(
-  "ai-machine-learning.md", "analytics.md", "compute.md", "containers.md", "databases.md",
-  "devops.md", "general.md", "hybrid-multicloud.md", "identity.md", "integration.md",
-  "internet-of-things.md", "management-and-governance.md", "migration.md", "monitor.md",
-  "networking.md", "privileged.md", "security.md", "storage.md", "web-and-mobile.md"
-)
 
 # Microsoft's own category labels, which do not always survive the slugging.
 $CategoryLabels = @{
@@ -48,14 +47,10 @@ $headers = @{ "User-Agent" = "benoit-gaumard.io-refresh" }
 if ($env:GITHUB_TOKEN) { $headers["Authorization"] = "Bearer $($env:GITHUB_TOKEN)" }
 
 function Get-CategoryFile {
-  try {
-    $entries = Invoke-RestMethod -Uri $RepoApi -Headers $headers
-    $names = @($entries | Where-Object { $_.type -eq "file" -and $_.name -like "*.md" } | ForEach-Object { $_.name })
-    if ($names.Count -gt 0) { return $names }
-  } catch {
-    Write-Warning "Category listing failed ($($_.Exception.Message)); using the built-in list."
-  }
-  return $FallbackFiles
+  $entries = Invoke-RestMethod -Uri $RepoApi -Headers $headers
+  $names = @($entries | Where-Object { $_.type -eq "file" -and $_.name -like "*.md" } | ForEach-Object { $_.name })
+  if ($names.Count -eq 0) { throw "No role category files found; refusing an incomplete refresh." }
+  return $names
 }
 
 function ConvertTo-PlainText([string]$text) {
@@ -114,17 +109,14 @@ foreach ($file in (Get-CategoryFile)) {
   $category = if ($CategoryLabels.ContainsKey($slug)) { $CategoryLabels[$slug] } else { (Get-Culture).TextInfo.ToTitleCase($slug -replace '-', ' ') }
   Write-Host "Reading $file ($category)..."
 
-  try {
-    $markdown = Invoke-RestMethod -Uri "$RawBase/$file" -Headers $headers
-  } catch {
-    Write-Warning "Skipping $file : $($_.Exception.Message)"
-    continue
-  }
+  # A skipped category would look like removed roles in the history.
+  $markdown = Invoke-RestMethod -Uri "$RawBase/$file" -Headers $headers
   if ($markdown -isnot [string]) { $markdown = [string]$markdown }
   $markdown = $markdown -replace "`r`n", "`n"
 
   # Each "## <role name>" block owns one fenced role definition JSON.
   $sections = [regex]::Split($markdown, "(?m)^## ")
+  $parsedRoles = 0
   foreach ($section in ($sections | Select-Object -Skip 1)) {
     $newline = $section.IndexOf("`n")
     if ($newline -lt 0) { continue }
@@ -137,12 +129,12 @@ foreach ($file in (Get-CategoryFile)) {
     try {
       $definition = $jsonMatch.Groups["body"].Value | ConvertFrom-Json
     } catch {
-      Write-Warning "Unparsable role definition under '$heading' in $file"
-      continue
+      throw "Unparsable role definition under '$heading' in ${file}: $($_.Exception.Message)"
     }
 
     $roleId = $definition.name
-    if (-not $roleId) { continue }
+    if (-not $roleId) { throw "Missing role ID under '$heading' in $file." }
+    $parsedRoles++
 
     if ($roleById.Contains($roleId)) {
       # A role can be documented in several categories (Owner is both General
@@ -151,6 +143,7 @@ foreach ($file in (Get-CategoryFile)) {
       if ($existing.categories -notcontains $category) { $existing.categories = @($existing.categories) + $category }
       continue
     }
+    if ($parsedRoles -eq 0) { throw "No roles parsed from $file; refusing an incomplete refresh." }
 
     $descriptions = Get-ActionDescription $section
 
@@ -221,7 +214,9 @@ $payload = [ordered]@{
   roles           = $roles
 }
 
-$outputPath = Join-Path (Split-Path -Parent $PSCommandPath) "roles.json"
+$history = New-RoleHistory -Previous $previous -Current ([pscustomobject]$payload) -Existing $existingHistory
 ($payload | ConvertTo-Json -Depth 10 -Compress) + "`n" | Set-Content -Path $outputPath -NoNewline -Encoding utf8
+($history | ConvertTo-Json -Depth 15) + "`n" | Set-Content -Path $changesPath -NoNewline -Encoding utf8
 
 Write-Host "Fetched $($roles.Count) built-in roles ($($categories.Count) categories, $totalActions actions) into $outputPath"
+Write-Host "Recorded $($history.lastRunEntries) role changes; $($history.totalEntries) retained."

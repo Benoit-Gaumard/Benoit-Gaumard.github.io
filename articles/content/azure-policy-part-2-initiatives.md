@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Group definitions into an initiative, distinguish member IDs and trace how parameter values reach each policy."
 title = "Azure Policy, Part 2: What Is an Initiative (Policy Set)?"
 date = "2026-09-04"
 description = "Part 2 of the Azure Policy series: policy set definitions explained - grouping definitions, policyDefinitionReferenceId, passing parameters down, definition groups and regulatory compliance, version pinning, and the initiative parameter you can never change."
@@ -7,9 +8,23 @@ tags = ["Azure Policy", "Governance", "Compliance", "Initiative"]
 categories = ["Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-2.svg"
 featured = false
+related = ["azure-policy-part-3-assignments"]
 +++
 
-Nobody has ever had a governance requirement that fitted into one policy definition.
+## Read the parameter path
+
+An initiative groups related definitions so you can assign and review them together. Start with the [comparison](#definition-versus-initiative), then trace the [JSON example](#anatomy-of-an-initiative) using these four distinct properties:
+
+- **Definition ID:** `policyDefinitionId` locates the reusable rule. It is an Azure resource ID, not a member nickname.
+- **Member reference:** `policyDefinitionReferenceId: storageNoPublicBlobAccess` names this rule's occurrence inside this initiative. Exemptions and member messages use this reference.
+- **Parameters:** assignment value `effect = Audit` → initiative parameter `effect` → member parameter `effect` → the referenced definition's `then.effect`. A member can map to a differently named parameter; match the target definition.
+- **Groups:** `groupNames` labels members for reporting; it does not create a nested initiative or a separate assignment.
+
+These are explanations of the example, not an execution record. Technical validation: **not recorded**. Confirm member definitions, parameter names and version support against [initiative structure](https://learn.microsoft.com/azure/governance/policy/concepts/initiative-definition-structure).
+
+The decision before [assigning it](#assigning-it): group controls with the same ownership/lifecycle; split them when scopes or approval processes genuinely differ.
+
+A governance baseline often needs more than one policy definition.
 
 "Storage accounts must be secure" is not a rule, it is ten rules: no public blob access, TLS 1.2 minimum, HTTPS only, infrastructure encryption, no shared key authorisation, private endpoints, soft delete, diagnostic settings shipped to a workspace, a customer-managed key, and a network ruleset that defaults to deny.
 

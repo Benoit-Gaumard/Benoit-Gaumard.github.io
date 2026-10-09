@@ -121,5 +121,990 @@
     { "category": "Virtual desktop infrastructure", "resource": "Virtual desktop host pool", "provider": "Microsoft.DesktopVirtualization/hostPools", "abbreviation": "vdpool" },
     { "category": "Virtual desktop infrastructure", "resource": "Virtual desktop application group", "provider": "Microsoft.DesktopVirtualization/applicationGroups", "abbreviation": "vdag" },
     { "category": "Virtual desktop infrastructure", "resource": "Virtual desktop workspace", "provider": "Microsoft.DesktopVirtualization/workspaces", "abbreviation": "vdws" }
-  ]
+  ],
+  "namingRulesCheckedAt": "2026-10-06T14:28:20Z",
+  "namingRulesSource": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules",
+  "namingRules": {
+    "microsoft.analysisservices/servers": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "resource group",
+      "requirements": "Lowercase letters and numbers Start with a lowercase letter.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftanalysisservices"
+    },
+    "microsoft.apimanagement/service": {
+      "minLength": 1,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start with a letter and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftapimanagement"
+    },
+    "microsoft.app/containerapps": {
+      "minLength": 2,
+      "maxLength": 32,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Lowercase letters, numbers, and hyphens. Start with a letter and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftapp"
+    },
+    "microsoft.app/managedenvironments": {
+      "minLength": null,
+      "maxLength": null,
+      "format": "hyphenated",
+      "pattern": "^[-\\w._()]+$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": false,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.app/managedenvironments",
+      "notes": [
+        "The template reference specifies a character pattern but no complete length range. Format validation is partial."
+      ]
+    },
+    "microsoft.appconfiguration/configurationstores": {
+      "minLength": 5,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Can't contain a sequence of more than two hyphens. Can't start with or end with a hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftappconfiguration"
+    },
+    "microsoft.automation/automationaccounts": {
+      "minLength": 6,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group & region (See note below)",
+      "requirements": "Alphanumerics and hyphens Start with a letter and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftautomation"
+    },
+    "microsoft.batch/batchaccounts": {
+      "minLength": 3,
+      "maxLength": 24,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "Region",
+      "requirements": "Lowercase letters and numbers",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftbatch"
+    },
+    "microsoft.botservice/botservices": {
+      "minLength": 2,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftbotservice"
+    },
+    "microsoft.cache/redisenterprise": {
+      "minLength": 1,
+      "maxLength": 60,
+      "format": "hyphenated",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.cache/redisenterprise"
+    },
+    "microsoft.cdn/profiles": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics and hyphens Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcdn"
+    },
+    "microsoft.cdn/profiles/endpoints": {
+      "minLength": 1,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcdn"
+    },
+    "microsoft.cognitiveservices/accounts": {
+      "minLength": 2,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics and hyphens Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcognitiveservices"
+    },
+    "microsoft.communication/communicationservices": {
+      "minLength": 1,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Can't start or end with hyphen. Can't use underscores.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcommunication"
+    },
+    "microsoft.compute/availabilitysets": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute"
+    },
+    "microsoft.compute/diskencryptionsets": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, and hyphens",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute"
+    },
+    "microsoft.compute/disks": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, and hyphens",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute"
+    },
+    "microsoft.compute/galleries": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, and periods Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute"
+    },
+    "microsoft.compute/snapshots": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute"
+    },
+    "microsoft.compute/virtualmachines": {
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Can't use spaces, control characters, or these characters: ~ ! @ # $ % ^ & * ( ) = + _ [ ] { } \\ | ; : . ' \" , < > / ? Windows virtual machines can't include periods or end with hyphens. Linux virtual machines can't end with periods or hyphens.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute",
+      "notes": [
+        "Resource name only. Windows host names are limited to 15 characters; Linux host names to 64. This generator does not validate host names."
+      ]
+    },
+    "microsoft.compute/virtualmachinescalesets": {
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Can't use spaces, control characters, or these characters: ~ ! @ # $ % ^ & * ( ) = + _ [ ] { } \\ | ; : . ' \" , < > / ? Can't start with underscore. Can't end with period or hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcompute",
+      "notes": [
+        "Resource name only. Windows host names are limited to 15 characters; Linux host names to 64. This generator does not validate host names."
+      ]
+    },
+    "microsoft.containerinstance/containergroups": {
+      "minLength": 1,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Lowercase letters, numbers, and hyphens Can't start or end with hyphen. Consecutive hyphens aren't allowed.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerinstance"
+    },
+    "microsoft.containerregistry/registries": {
+      "minLength": 5,
+      "maxLength": 50,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "global",
+      "requirements": "Alphanumerics",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerregistry"
+    },
+    "microsoft.containerservice/managedclusters": {
+      "minLength": 1,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, and hyphens Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftcontainerservice"
+    },
+    "microsoft.dashboard/grafana": {
+      "minLength": 2,
+      "maxLength": 30,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9-]{0,28}[a-z0-9]$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.dashboard/grafana"
+    },
+    "microsoft.databricks/workspaces": {
+      "minLength": 3,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, and hyphens",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdatabricks"
+    },
+    "microsoft.datafactory/factories": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdatafactory"
+    },
+    "microsoft.datalakestore/accounts": {
+      "minLength": 3,
+      "maxLength": 24,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "global",
+      "requirements": "Lowercase letters and numbers",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdatalakestore"
+    },
+    "microsoft.datamigration/services": {
+      "minLength": 2,
+      "maxLength": 62,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, hyphens, periods, and underscores Start with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdatamigration"
+    },
+    "microsoft.dataprotection/backupvaults": {
+      "minLength": 2,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics and hyphens Start with a letter.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdataprotection"
+    },
+    "microsoft.dbformysql/servers": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Lowercase letters, hyphens, and numbers Can't start or end with hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdbformysql"
+    },
+    "microsoft.dbforpostgresql/flexibleservers": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.dbforpostgresql/flexibleservers"
+    },
+    "microsoft.desktopvirtualization/applicationgroups": {
+      "minLength": 3,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with a letter or number. End with letter, number, or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdesktopvirtualization"
+    },
+    "microsoft.desktopvirtualization/hostpools": {
+      "minLength": 3,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with a letter or number. End with letter, number, or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdesktopvirtualization"
+    },
+    "microsoft.desktopvirtualization/workspaces": {
+      "minLength": 3,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with a letter or number. End with letter, number, or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdesktopvirtualization"
+    },
+    "microsoft.devices/iothubs": {
+      "minLength": 3,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Can't end with hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdevices"
+    },
+    "microsoft.devopsinfrastructure/pools": {
+      "minLength": null,
+      "maxLength": null,
+      "format": "hyphenated",
+      "pattern": "^[a-z0-9][a-z0-9.-]*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": false,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.devopsinfrastructure/pools",
+      "notes": [
+        "The template reference specifies a character pattern but no complete length range. Format validation is partial."
+      ]
+    },
+    "microsoft.digitaltwins/digitaltwinsinstances": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.digitaltwins/digitaltwinsinstances"
+    },
+    "microsoft.documentdb/databaseaccounts": {
+      "minLength": 3,
+      "maxLength": 44,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Lowercase letters, numbers, and hyphens Start with lowercase letter or number.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftdocumentdb"
+    },
+    "microsoft.eventgrid/domains": {
+      "minLength": 3,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics and hyphens",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsofteventgrid"
+    },
+    "microsoft.eventgrid/domains/topics": {
+      "minLength": 3,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "domain",
+      "requirements": "Alphanumerics and hyphens",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsofteventgrid"
+    },
+    "microsoft.eventhub/namespaces": {
+      "minLength": 6,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start with a letter. End with letter or number.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsofteventhub"
+    },
+    "microsoft.eventhub/namespaces/eventhubs": {
+      "minLength": 1,
+      "maxLength": 256,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "namespace",
+      "requirements": "Alphanumerics, periods, hyphens, and underscores Start and end with letter or number.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsofteventhub"
+    },
+    "microsoft.fabric/capacities": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits, without separators.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.fabric/capacities"
+    },
+    "microsoft.insights/actiongroups": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Can't use: :<>+/&%\\?| or control characters Can't end with space or period.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftinsights"
+    },
+    "microsoft.insights/components": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Can't use: %&\\?/ or control characters Can't end with space or period.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftinsights"
+    },
+    "microsoft.keyvault/vaults": {
+      "minLength": 3,
+      "maxLength": 24,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start with a letter. End with letter or number. Can't contain consecutive hyphens.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftkeyvault"
+    },
+    "microsoft.kusto/clusters": {
+      "minLength": 4,
+      "maxLength": 22,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "global",
+      "requirements": "Lowercase letters and numbers Start with a letter.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftkusto"
+    },
+    "microsoft.loadtestservice/loadtests": {
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Can't use: <>*&@:?+/\\,;=.|[]\" or space Can't start with underscore, hyphen, or number. Can't end with underscore or hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftloadtestservice"
+    },
+    "microsoft.logic/integrationaccounts": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, hyphens, underscores, periods, and parentheses",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftlogic"
+    },
+    "microsoft.logic/workflows": {
+      "minLength": 1,
+      "maxLength": 43,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, hyphens, underscores, periods, and parentheses",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftlogic"
+    },
+    "microsoft.machinelearningservices/workspaces": {
+      "minLength": 3,
+      "maxLength": 33,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, hyphens, and underscores",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftmachinelearningservices"
+    },
+    "microsoft.managedidentity/userassignedidentities": {
+      "minLength": 3,
+      "maxLength": 128,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, hyphens, and underscores Start with a letter or number.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftmanagedidentity"
+    },
+    "microsoft.management/managementgroups": {
+      "minLength": 1,
+      "maxLength": 90,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "tenant",
+      "requirements": "Alphanumerics, hyphens, underscores, periods, and parentheses Start with a letter or number. Can't end with period.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftmanagement"
+    },
+    "microsoft.maps/accounts": {
+      "minLength": 1,
+      "maxLength": 98,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric.",
+      "complete": false,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftmaps",
+      "notes": [
+        "The reference associates the 98-character limit with resource-group and account naming. Resource-group constraints are not checked by this generator."
+      ]
+    },
+    "microsoft.migrate/assessmentprojects": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.migrate/assessmentprojects"
+    },
+    "microsoft.network/applicationgateways": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/applicationsecuritygroups": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/azurefirewalls": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/bastionhosts": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/expressroutecircuits": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/firewallpolicies": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/loadbalancers": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/networkinterfaces": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/networksecuritygroups": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/networkwatchers": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/privateendpoints": {
+      "minLength": 2,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/publicipaddresses": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/routetables": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/trafficmanagerprofiles": {
+      "minLength": 1,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start and end with alphanumeric. Note: A period/dot (.) is not allowed in the profile name.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/virtualnetworkgateways": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/virtualnetworks": {
+      "minLength": 2,
+      "maxLength": 64,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/virtualnetworks/subnets": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "virtual network",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/virtualwans": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.network/vpngateways": {
+      "minLength": 1,
+      "maxLength": 80,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, underscores, periods, and hyphens Start with alphanumeric. End with alphanumeric or underscore.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftnetwork"
+    },
+    "microsoft.operationalinsights/workspaces": {
+      "minLength": 4,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics and hyphens Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftoperationalinsights"
+    },
+    "microsoft.powerbidedicated/capacities": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "region",
+      "requirements": "Lowercase letters or numbers Start with lowercase letter.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftpowerbidedicated"
+    },
+    "microsoft.purview/accounts": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.purview/accounts"
+    },
+    "microsoft.recoveryservices/vaults": {
+      "minLength": 2,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics and hyphens Start with a letter.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftrecoveryservices"
+    },
+    "microsoft.resources/resourcegroups": {
+      "minLength": 1,
+      "maxLength": 90,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "subscription",
+      "requirements": "Underscores, hyphens, periods, parentheses, and letters or digits as defined by the Char.IsLetterOrDigit function Valid characters are members of the following categories in UnicodeCategory : UppercaseLetter , LowercaseLetter , TitlecaseLetter , ModifierLetter , OtherLetter , DecimalDigitNumber . Can't end with period.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftresources"
+    },
+    "microsoft.search/searchservices": {
+      "minLength": 2,
+      "maxLength": 60,
+      "format": "hyphenated",
+      "pattern": "^(?=.{2,60}$)[a-z0-9][a-z0-9]+(-[a-z0-9]+)*$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.search/searchservices"
+    },
+    "microsoft.servicebus/namespaces": {
+      "minLength": 6,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start with a letter. End with a letter or number. For more information, see Create namespace .",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftservicebus"
+    },
+    "microsoft.servicebus/namespaces/queues": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "namespace",
+      "requirements": "Alphanumerics, periods, hyphens, underscores, and slashes Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftservicebus"
+    },
+    "microsoft.servicebus/namespaces/topics": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "namespace",
+      "requirements": "Alphanumerics, periods, hyphens, underscores, and slashes Start and end with alphanumeric.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftservicebus"
+    },
+    "microsoft.servicefabric/clusters": {
+      "minLength": 4,
+      "maxLength": 23,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "region",
+      "requirements": "Lowercase letters, numbers, and hyphens Start with lowercase letter. End with lowercase letter or number.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftservicefabric"
+    },
+    "microsoft.signalrservice/signalr": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Alphanumerics and hyphens Start with a letter. End with letter or number.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftsignalrservice"
+    },
+    "microsoft.signalrservice/webpubsub": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9-]{1,61}[a-z0-9]$",
+      "scope": "Check the resource reference",
+      "requirements": "Lowercase ASCII letters and digits with single hyphens between components.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/templates/microsoft.signalrservice/webpubsub"
+    },
+    "microsoft.sql/managedinstances": {
+      "minLength": 1,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Lowercase letters, numbers, and hyphens Can't start or end with hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftsql"
+    },
+    "microsoft.sql/servers": {
+      "minLength": 1,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Lowercase letters, numbers, and hyphens Can't start or end with hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftsql"
+    },
+    "microsoft.sql/servers/databases": {
+      "minLength": 1,
+      "maxLength": 128,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "server",
+      "requirements": "Can't use: <>*%&:\\/? or control characters Can't end with period or space.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftsql"
+    },
+    "microsoft.storage/storageaccounts": {
+      "minLength": 3,
+      "maxLength": 24,
+      "format": "compact",
+      "pattern": "^[a-z][a-z0-9]*$",
+      "scope": "global",
+      "requirements": "Lowercase letters and numbers",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftstorage"
+    },
+    "microsoft.storage/storageaccounts/fileservices/shares": {
+      "minLength": 3,
+      "maxLength": 63,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "storage account",
+      "requirements": "Lowercase letters, numbers, and hyphens Can't start or end with hyphen. Can't use consecutive hyphens.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftstorage"
+    },
+    "microsoft.storagesync/storagesyncservices": {
+      "minLength": 1,
+      "maxLength": 260,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumerics, spaces, periods, hyphens, and underscores Can't end with period or space.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftstoragesync"
+    },
+    "microsoft.synapse/workspaces": {
+      "minLength": 1,
+      "maxLength": 50,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "global",
+      "requirements": "Lowercase letters, hyphens, and numbers Start and end with letter or number. Can't contain -ondemand .",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftsynapse",
+      "forbiddenSubstrings": [
+        "-ondemand"
+      ]
+    },
+    "microsoft.timeseriesinsights/environments": {
+      "minLength": 1,
+      "maxLength": 90,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Can't use: '<>%&:\\?/# or control characters",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsofttimeseriesinsights"
+    },
+    "microsoft.web/serverfarms": {
+      "minLength": 1,
+      "maxLength": 60,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "resource group",
+      "requirements": "Alphanumeric, hyphens, and Unicode characters that can be mapped to Punycode",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftweb"
+    },
+    "microsoft.web/sites": {
+      "minLength": 2,
+      "maxLength": 60,
+      "format": "hyphenated",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "scope": "Global or per domain; see note below.",
+      "requirements": "Alphanumeric, hyphens, and Unicode characters that can be mapped to Punycode Can't start or end with hyphen.",
+      "complete": true,
+      "source": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules#microsoftweb",
+      "notes": [
+        "Uniqueness depends on the hosting domain. Function Apps derive a 32-character host ID; collisions in a shared storage account are not checked here."
+      ]
+    }
+  }
 }

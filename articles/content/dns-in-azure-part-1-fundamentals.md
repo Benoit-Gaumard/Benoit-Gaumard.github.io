@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Identify which resolver a client uses and distinguish Azure-provided DNS from private and hybrid resolution."
 title = "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution"
 date = "2026-09-01"
 description = "Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road."
@@ -7,6 +8,8 @@ tags = ["DNS", "Networking"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-1.svg"
 featured = true
+collapsible = ["A shared vocabulary"]
+related = ["dns-in-azure-part-2-private-dns-zones", "dns-in-azure-part-8-decision-tree"]
 +++
 
 DNS is the least glamorous service in your landing zone and the one that generates the most 2 a.m. incident bridges. Nothing looks broken - the VM is up, the NSG is open, the peering is connected - and yet the application cannot find its database. Nine times out of ten the answer is a name that resolved to the wrong address, or did not resolve at all.
@@ -25,6 +28,16 @@ This is the first of an eight-part series on **private** name resolution in Azur
 I assume you already know what a DNS record is. If terms like *recursive query* or *conditional forwarder* are fuzzy, the vocabulary section below should be enough to follow along.
 
 [[toc]]
+
+## Start learning or diagnose a lookup
+
+**Learning:** open the glossary below, then read [four resolution paths](#the-four-ways-to-resolve-a-private-name-in-azure). **Diagnosing:** go straight to [where the VM gets its resolver](#where-a-vm-actually-gets-its-resolver) and [the read-only proof](#proving-it), or use [the decision tree](/articles/dns-in-azure-part-8-decision-tree/).
+
+Quick diagnostic record: client/VNet → configured DNS server → queried FQDN → returned CNAME/A record → expected destination. Record each separately; a correct DNS answer does not prove network or application access.
+
+The four paths use stable terms: **Azure-provided resolution** for the platform's local namespace; **private DNS zone** for records you own; **Private Resolver** for managed hybrid forwarding; **custom DNS server** for a resolver you operate. The VNet/NIC DNS setting decides the initial resolver, not the name of the destination service.
+
+Technical execution validation: **not recorded**. Use [Azure name resolution guidance](https://learn.microsoft.com/azure/virtual-network/virtual-networks-name-resolution-for-vms-and-role-instances) to verify service behaviour in your environment.
 
 ## A shared vocabulary
 

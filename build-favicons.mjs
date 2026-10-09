@@ -11,7 +11,8 @@
 //   node build-favicons.mjs --limit 20 stop after 20 downloads (for testing)
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const OUT_DIR = "favicons";
 const MANIFEST = join(OUT_DIR, "manifest.json");
@@ -34,7 +35,7 @@ export function baseNameFor(domain) {
   return domain.toLowerCase().replace(/[^a-z0-9.-]/g, "_");
 }
 
-function sniffExtension(buf) {
+export function sniffExtension(buf) {
   const hex = (n) => buf.subarray(0, n).toString("hex");
   if (hex(8) === "89504e470d0a1a0a") return "png";
   if (hex(3) === "ffd8ff") return "jpg";
@@ -215,4 +216,6 @@ async function main() {
   }
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((e) => { console.error(e); process.exit(1); });
+}

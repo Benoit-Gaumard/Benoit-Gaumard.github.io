@@ -214,7 +214,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -354,23 +354,6 @@
     .article-meta .dot { opacity: .5; }
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
-    .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem;
-      border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
-      box-shadow: var(--cp-shadow); overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
-    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
-    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    /* Square service and product logos get one shared band instead: the height
-       is fixed so every logo hero matches, and the sources are vector, so the
-       small ones scale up to it without softening. */
-    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
-    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
-    @media (max-width: 32rem) {
-      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
-    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -395,12 +378,13 @@
     .article-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
     .article-body th { background: var(--cp-surface-soft); }
-    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; color: #e3edf7; color-scheme: dark; }
     .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: 0.8rem; }
     .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
-    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button { border: 1px solid #b9d3ea; background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .copy-code-button:hover { background: rgba(255,255,255,.1); }
-    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .copy-code-button.is-copied { border-color: #9ee8c8; color: #9ee8c8; }
+    .copy-code-button:focus-visible, .code-details > summary:focus-visible { outline-color: #b9d3ea; }
     .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
     .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
     /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
@@ -443,6 +427,106 @@
       .article-share { flex-direction: column; align-items: flex-start; }
       .article-share-links { width: 100%; }
     }
+    .article-header { max-width: 75ch; margin-inline: auto; margin-bottom: 1rem; }
+    .article-page .article-header { max-width: none; margin-inline: 0; }
+    .article-title { font-size: clamp(1.7rem, 3.3vw, 2.65rem); }
+    .article-breadcrumb, .article-categories { margin-bottom: .6rem; }
+    .article-description { margin-top: .7rem; }
+    .article-meta { margin-top: .7rem; }
+    .article-tags { margin-top: .5rem; }
+    .article-body { min-width: 0; padding: clamp(1rem, 2.2vw, 2rem); }
+    .article-page main { padding-top: 1.25rem; }
+    .article-body > :is(p, ul, ol, h2, h3, h4, .callout),
+    .article-body .library-entry > :is(p, ul, ol),
+    .article-body .reference-section > :is(p, ul, ol),
+    .callout-body { max-width: var(--reading-prose-width, min(42rem, 72ch)); margin-inline: auto; }
+    .article-body > :is(h2, h3, h4) { max-width: var(--reading-heading-width, 42rem); }
+    .article-body > h2:first-child { margin-top: .4rem; }
+    .callout-body { min-width: 0; }
+    .reading-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .reading-layout:has(> .reading-toc:not([open])) { grid-template-columns: minmax(0, 1fr); --reading-prose-width: none; --reading-heading-width: none; }
+    .reading-layout > .reading-toc { scroll-margin-top: 6rem; }
+    .reading-layout > .reading-toc:not([open]) { justify-self: start; max-width: 100%; position: static; }
+    .reading-toc { border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); padding: .7rem 1rem; }
+    .reading-toc summary, .article-share summary, .series-map summary, .library-group > summary { cursor: pointer; min-height: 2.75rem; align-content: center; font-weight: 600; }
+    .reading-toc[open] .toc-label-show, .reading-toc:not([open]) .toc-label-hide { display: none; }
+    .reading-toc nav { max-height: 55vh; overflow: auto; }
+    .reading-toc ul { list-style: none; padding: 0; margin: .5rem 0; }
+    .reading-toc a { display: block; padding: .35rem .2rem; font-size: .9rem; }
+    .reading-toc .toc-level-4 { display: none; }
+    .article-share { display: block; padding: .2rem .8rem; margin: .6rem 0 1rem; }
+    .article-share-links { padding-block: .5rem; }
+    .series-nav, .article-related { margin: 1rem 0; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); }
+    .series-nav > p { margin: 0 0 .5rem; }
+    .series-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
+    .series-map ol { line-height: 1.6; padding-left: 1.5rem; }
+    .series-map [aria-current="page"] { font-weight: 700; }
+    .article-related h2 { font-size: 1.15rem; margin-top: 0; }
+    .article-related li { margin-block: .55rem; }
+    .article-feature-image { max-width: 50rem; margin: 1rem auto 1.5rem; border: 1px solid var(--cp-border); border-radius: 14px; background: var(--cp-surface-soft); overflow: hidden; }
+    .article-feature-image > a:focus-visible { outline-offset: -3px; }
+    .article-feature-image img { display: block; border: 0; border-radius: 0; }
+    .article-feature-image.is-banner > a { display: block; aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; }
+    .article-feature-image.is-logo > a { display: flex; align-items: center; justify-content: center; height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+    .article-feature-image figcaption { margin: 0; padding: .5rem .75rem; }
+    .article-figure figcaption { max-width: 72ch; margin-inline: auto; }
+    .article-figure figcaption a { display: inline-block; padding: .3rem; }
+    .image-dialog { color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 10px; max-width: 96vw; max-height: 94vh; padding: 1rem; }
+    .image-dialog::backdrop { background: var(--cp-text-muted); opacity: .8; }
+    .image-dialog figure { margin: 1rem 0; }
+    .image-dialog img { max-width: 100%; max-height: 72vh; object-fit: contain; }
+    .image-dialog figcaption { max-width: 72ch; }
+    .copy-code-button { min-height: 2.75rem; padding: .4rem .7rem; }
+    .code-block pre { white-space: pre; overflow-wrap: normal; }
+    .code-block pre code { white-space: pre; overflow-wrap: normal; }
+    .code-details summary { padding: .7rem 1rem; cursor: pointer; }
+    .library-controls, .zone-controls { padding: 1rem; margin-bottom: 1rem; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 10px; display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+    .library-controls label, .zone-controls label { display: grid; gap: .3rem; }
+    .library-controls input, .library-controls select, .zone-controls input { max-width: 100%; min-height: 2.75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: .5rem; background: var(--cp-surface); color: var(--cp-text); }
+    .library-controls p, .zone-controls p { flex-basis: 100%; margin: 0; }
+    .library-group { border: 1px solid var(--cp-border); border-radius: 10px; padding: .6rem 1rem; margin-bottom: 1rem; }
+    .library-entry { min-width: 0; margin-block: 1rem 2rem; }
+    .library-entry h3 { scroll-margin-top: 6rem; }
+    .query-context { font-size: .9rem; color: var(--cp-text-muted); }
+    .query-output { overflow-wrap: anywhere; }
+    .reference-section { margin-bottom: 1.25rem; }
+    .reference-section > summary { cursor: pointer; font-size: 1.15rem; font-weight: 600; padding: .75rem; background: var(--cp-surface-soft); }
+    .table-wrap [hidden], .library-group[hidden], .library-entry[hidden] { display: none !important; }
+    @media (min-width: 75rem) {
+      .reading-layout { grid-template-columns: 16rem minmax(0, 1fr); }
+      .reading-toc { position: sticky; top: 5.5rem; }
+      .reading-toc nav { max-height: calc(100vh - 12rem); }
+      .reading-layout:not(:has(.reading-toc)) { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 40rem) {
+      .article-feature-image.is-logo > a { height: 10rem; padding: 1.25rem; }
+      .article-tags { display: none; }
+      .article-body { font-size: 1rem; line-height: 1.65; }
+      .article-body table, .article-body tbody, .article-body tr, .article-body td { display: block; }
+      .article-body thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+      .article-body tr { margin-bottom: .8rem; border: 1px solid var(--cp-border); border-radius: 8px; }
+      .article-body td { border: 0; padding: .55rem .7rem; overflow-wrap: anywhere; }
+      .article-body td::before { content: attr(data-label); display: block; font-weight: 700; color: var(--cp-text-muted); font-size: .8rem; }
+      .article-body td + td { border-top: 1px solid var(--cp-border); }
+      .table-wrap { overflow: visible; }
+      .library-controls > label, .zone-controls > label { width: 100%; }
+      .series-nav { font-size: .9rem; padding: .7rem; }
+      .series-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; }
+      .series-nav > p { flex-basis: 100%; margin: 0; }
+      .series-links { flex: 1; }
+      .series-map[open] { flex-basis: 100%; }
+      .series-map summary { min-height: 2.5rem; }
+      .reading-toc { padding: .2rem .75rem; }
+      .article-description { font-size: 1rem; line-height: 1.5; }
+    }
+    @media print {
+      .reading-toc, .article-share, .article-feature-image, .library-controls, .zone-controls, .copy-code-button { display: none !important; }
+      .reading-layout { display: block; }
+      .article-body { border: 0; box-shadow: none; padding: 0; }
+      .code-block pre { white-space: pre-wrap; }
+    }
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
@@ -477,7 +561,7 @@
       }
     }
 
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -488,12 +572,382 @@
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
   </style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/articles/azure-policy-part-2-initiatives/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/articles/azure-policy-part-2-initiatives/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
-<body class="">
+<body class="article-page">
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -528,19 +982,21 @@
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=Governance">Governance</a><a class="article-category-tag" href="/articles/?category=Azure%20Policy">Azure Policy</a></div>
       <h1 class="article-title">Azure Policy, Part 2: What Is an Initiative (Policy Set)?</h1>
-      <p class="article-description">Part 2 of the Azure Policy series: policy set definitions explained - grouping definitions, policyDefinitionReferenceId, passing parameters down, definition groups and regulatory compliance, version pinning, and the initiative parameter you can never change.</p>
+      <p class="article-description">Group definitions into an initiative, distinguish member IDs and trace how parameter values reach each policy.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
-        <span>September 4, 2026</span>
+        <span>Published September 4, 2026</span>
         <span class="dot">&middot;</span>
-        <span>9 min read</span>
+        <span>About 9 min reading · not implementation time</span>
       </div>
       <div class="article-tags"><span class="article-tag">#Azure Policy</span><span class="article-tag">#Governance</span><span class="article-tag">#Compliance</span><span class="article-tag">#Initiative</span></div>
     </div>
 
-    <div class="article-share">
-      <span class="article-share-label" id="share-label">Share on</span>
+    <figure class="article-feature-image article-figure is-banner"><a href="/articles/images/azure-policy-part-2.svg" data-image-zoom aria-label="Enlarge article illustration"><img src="/articles/images/azure-policy-part-2.svg" alt="Azure Policy, Part 2: What Is an Initiative (Policy Set)?" loading="eager" fetchpriority="high" decoding="async"></a><figcaption>Article illustration · <a href="/articles/images/azure-policy-part-2.svg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+
+    <details class="article-share">
+      <summary id="share-label">Share this article</summary>
       <div class="article-share-links" role="group" aria-labelledby="share-label">
         <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-policy-part-2-initiatives%2F&amp;text=Azure%20Policy%2C%20Part%202%3A%20What%20Is%20an%20Initiative%20(Policy%20Set)%3F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
         <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-policy-part-2-initiatives%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
@@ -549,22 +1005,24 @@
         <button class="share-btn" type="button" data-article-share="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
       </div>
       <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
-    </div>
+    </details>
 
-    <div class="article-feature-image is-banner"><img src="/articles/images/azure-policy-part-2.svg" alt="Azure Policy, Part 2: What Is an Initiative (Policy Set)?"></div>
+    <nav class="series-nav" aria-label="Azure Policy series"><p><strong>Azure Policy · Part 2 of 7</strong></p><div class="series-links"><a href="/articles/azure-policy-part-1-what-is-a-policy/">← Previous part</a><a href="/articles/azure-policy-part-3-assignments/">Next part →</a></div><details class="series-map"><summary>All 7 parts</summary><ol><li><a href="/articles/azure-policy-part-1-what-is-a-policy/">What Is an Azure Policy?</a></li><li><a href="/articles/azure-policy-part-2-initiatives/" aria-current="page">What Is an Initiative (Policy Set)?</a></li><li><a href="/articles/azure-policy-part-3-assignments/">What Is a Policy Assignment?</a></li><li><a href="/articles/azure-policy-part-4-exclusions-notscopes/">What Is an Exclusion (notScopes)?</a></li><li><a href="/articles/azure-policy-part-5-exemptions/">What Is a Policy Exemption?</a></li><li><a href="/articles/azure-policy-part-6-policy-as-code/">Azure Policy as Code</a></li><li><a href="/articles/azure-policy-part-7-epac/">EPAC and the Alternatives</a></li></ol></details></nav>
 
-    <article class="article-body">
-      <p>Nobody has ever had a governance requirement that fitted into one policy definition.</p>
-<p>"Storage accounts must be secure" is not a rule, it is ten rules: no public blob access, TLS 1.2 minimum, HTTPS only, infrastructure encryption, no shared key authorisation, private endpoints, soft delete, diagnostic settings shipped to a workspace, a customer-managed key, and a network ruleset that defaults to deny.</p>
+    <div class="reading-layout">
+    <details class="reading-toc"><summary aria-controls="article-toc-navigation"><span class="toc-label-show">Show table of contents</span><span class="toc-label-hide">Hide table of contents</span></summary><nav id="article-toc-navigation" aria-label="Table of contents"><ul><li class="toc-level-2"><a href="#read-the-parameter-path">Read the parameter path</a></li><li class="toc-level-2"><a href="#definition-versus-initiative">Definition versus initiative</a></li><li class="toc-level-2"><a href="#anatomy-of-an-initiative">Anatomy of an initiative</a></li><li class="toc-level-2"><a href="#the-four-properties-that-matter">The four properties that matter</a></li><li class="toc-level-3"><a href="#policydefinitionid">policyDefinitionId</a></li><li class="toc-level-3"><a href="#policydefinitionreferenceid">policyDefinitionReferenceId</a></li><li class="toc-level-3"><a href="#parameters">parameters</a></li><li class="toc-level-3"><a href="#groupnames-and-policydefinitiongroups">groupNames and policyDefinitionGroups</a></li><li class="toc-level-2"><a href="#version-pinning-inside-an-initiative">Version pinning inside an initiative</a></li><li class="toc-level-2"><a href="#where-to-create-an-initiative">Where to create an initiative</a></li><li class="toc-level-2"><a href="#limits-worth-knowing">Limits worth knowing</a></li><li class="toc-level-2"><a href="#how-many-initiatives-should-you-actually-have">How many initiatives should you actually have?</a></li><li class="toc-level-2"><a href="#assigning-it">Assigning it</a></li></ul></nav></details>
+    <article class="article-body" id="article-content">
+      <h2 id="read-the-parameter-path">Read the parameter path</h2>
+<p>An initiative groups related definitions so you can assign and review them together. Start with the <a href="#definition-versus-initiative">comparison</a>, then trace the <a href="#anatomy-of-an-initiative">JSON example</a> using these four distinct properties:</p>
+<ul><li><strong>Definition ID:</strong> <code>policyDefinitionId</code> locates the reusable rule. It is an Azure resource ID, not a member nickname.</li><li><strong>Member reference:</strong> <code>policyDefinitionReferenceId: storageNoPublicBlobAccess</code> names this rule's occurrence inside this initiative. Exemptions and member messages use this reference.</li><li><strong>Parameters:</strong> assignment value <code>effect = Audit</code> → initiative parameter <code>effect</code> → member parameter <code>effect</code> → the referenced definition's <code>then.effect</code>. A member can map to a differently named parameter; match the target definition.</li><li><strong>Groups:</strong> <code>groupNames</code> labels members for reporting; it does not create a nested initiative or a separate assignment.</li></ul>
+<p>These are explanations of the example, not an execution record. Technical validation: <strong>not recorded</strong>. Confirm member definitions, parameter names and version support against <a href="https://learn.microsoft.com/azure/governance/policy/concepts/initiative-definition-structure" target="_blank" rel="noopener noreferrer">initiative structure <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</p>
+<p>The decision before <a href="#assigning-it">assigning it</a>: group controls with the same ownership/lifecycle; split them when scopes or approval processes genuinely differ.</p>
+<p>A governance baseline often needs more than one policy definition.</p>
+<p>&quot;Storage accounts must be secure&quot; is not a rule, it is ten rules: no public blob access, TLS 1.2 minimum, HTTPS only, infrastructure encryption, no shared key authorisation, private endpoints, soft delete, diagnostic settings shipped to a workspace, a customer-managed key, and a network ruleset that defaults to deny.</p>
 <p>You could assign those ten definitions individually. Ten assignments, ten sets of parameters to keep in sync, ten rows in the compliance blade, and ten things to exclude when the payments team gets its exception. Do that across twelve standards and your assignment list becomes unusable.</p>
 <p>The <strong>initiative</strong> exists to stop that happening.</p>
-<ul><li><strong><a href="/articles/azure-policy-part-1-what-is-a-policy/">Part 1</a></strong> - what a policy definition actually is</li><li><strong>Part 2 (this post)</strong> - initiatives, also known as policy set definitions</li><li><strong><a href="/articles/azure-policy-part-3-assignments/">Part 3</a></strong> - assignments, scope, and enforcement</li><li><strong><a href="/articles/azure-policy-part-4-exclusions-notscopes/">Part 4</a></strong> - exclusions and <code>notScopes</code></li><li><strong><a href="/articles/azure-policy-part-5-exemptions/">Part 5</a></strong> - exemptions</li><li><strong><a href="/articles/azure-policy-part-6-policy-as-code/">Part 6</a></strong> - Azure Policy as code</li><li><strong><a href="/articles/azure-policy-part-7-epac/">Part 7</a></strong> - EPAC and the alternatives</li></ul>
-<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#definition-versus-initiative">Definition versus initiative</a></li><li class="toc-level-2"><a href="#anatomy-of-an-initiative">Anatomy of an initiative</a></li><li class="toc-level-2"><a href="#the-four-properties-that-matter">The four properties that matter</a></li><li class="toc-level-3"><a href="#policydefinitionid">policyDefinitionId</a></li><li class="toc-level-3"><a href="#policydefinitionreferenceid">policyDefinitionReferenceId</a></li><li class="toc-level-3"><a href="#parameters">parameters</a></li><li class="toc-level-3"><a href="#groupnames-and-policydefinitiongroups">groupNames and policyDefinitionGroups</a></li><li class="toc-level-2"><a href="#version-pinning-inside-an-initiative">Version pinning inside an initiative</a></li><li class="toc-level-2"><a href="#where-to-create-an-initiative">Where to create an initiative</a></li><li class="toc-level-2"><a href="#limits-worth-knowing">Limits worth knowing</a></li><li class="toc-level-2"><a href="#how-many-initiatives-should-you-actually-have">How many initiatives should you actually have?</a></li><li class="toc-level-2"><a href="#assigning-it">Assigning it</a></li></ul></nav>
-<h2 id="definition-versus-initiative">Definition versus initiative</h2>
-<p>An <strong>initiative</strong> - the API calls it a <code>policySetDefinition</code>, the portal calls it an initiative, everyone in a meeting calls it a policy set, and they are all the same object - is a named, versioned, parameterised <strong>container of policy definitions</strong>.</p>
-<div class="table-wrap"><table><thead><tr><th></th><th>Policy definition</th><th>Initiative</th></tr></thead><tbody><tr><td>Resource type</td><td><code>Microsoft.Authorization/policyDefinitions</code></td><td><code>Microsoft.Authorization/policySetDefinitions</code></td></tr><tr><td>Contains</td><td>One <code>if</code>/<code>then</code> rule</td><td>References to many definitions</td></tr><tr><td>Assignable</td><td>Yes</td><td>Yes</td></tr><tr><td>Compliance reporting</td><td>One result</td><td>One rolled-up result, plus per-member detail</td></tr><tr><td>Typical count in a mature estate</td><td>Hundreds</td><td>A dozen</td></tr></tbody></table></div>
-<p>The critical property: <strong>an initiative is assigned exactly like a definition</strong>. One assignment, one scope, one set of parameters, one managed identity, one place to put an exception. That is the entire value proposition.</p>
-<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>An initiative cannot contain another initiative. There is no nesting. If you want a "platform baseline" made of three themed sets, you assign three initiatives - or you build one flat initiative that references all the member definitions directly.</p></div></div>
+
+
     <aside class="article-ad" aria-label="Advertisement">
       <span class="article-ad-label">Advertisement</span>
       <ins class="adsbygoogle"
@@ -575,82 +1033,87 @@
            data-ad-slot="4494484671"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
+<h2 id="definition-versus-initiative">Definition versus initiative</h2>
+<p>An <strong>initiative</strong> - the API calls it a <code>policySetDefinition</code>, the portal calls it an initiative, everyone in a meeting calls it a policy set, and they are all the same object - is a named, versioned, parameterised <strong>container of policy definitions</strong>.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Criterion, Policy definition, Initiative table"><table><thead><tr><th scope="col">Criterion</th><th scope="col">Policy definition</th><th scope="col">Initiative</th></tr></thead><tbody><tr><td data-label="Criterion">Resource type</td><td data-label="Policy definition"><code>Microsoft.Authorization/policyDefinitions</code></td><td data-label="Initiative"><code>Microsoft.Authorization/policySetDefinitions</code></td></tr><tr><td data-label="Criterion">Contains</td><td data-label="Policy definition">One <code>if</code>/<code>then</code> rule</td><td data-label="Initiative">References to many definitions</td></tr><tr><td data-label="Criterion">Assignable</td><td data-label="Policy definition">Yes</td><td data-label="Initiative">Yes</td></tr><tr><td data-label="Criterion">Compliance reporting</td><td data-label="Policy definition">One result</td><td data-label="Initiative">One rolled-up result, plus per-member detail</td></tr><tr><td data-label="Criterion">Typical count in a mature estate</td><td data-label="Policy definition">Hundreds</td><td data-label="Initiative">A dozen</td></tr></tbody></table></div>
+<p>The critical property: <strong>an initiative is assigned exactly like a definition</strong>. One assignment, one scope, one set of parameters, one managed identity, one place to put an exception. That is the entire value proposition.</p>
+<div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>An initiative cannot contain another initiative. There is no nesting. If you want a &quot;platform baseline&quot; made of three themed sets, you assign three initiatives - or you build one flat initiative that references all the member definitions directly.</p></div></div>
 <h2 id="anatomy-of-an-initiative">Anatomy of an initiative</h2>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{
-  "properties": {
-    "displayName": "Storage security baseline",
-    "description": "Baseline controls every storage account in the estate must meet.",
-    "policyType": "Custom",
-    "metadata": {
-      "version": "1.2.0",
-      "category": "Storage"
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy json code">Copy</button></div><details class="code-details"><summary>Show complete script (72 lines)</summary><pre tabindex="0" aria-label="json code"><code class="language-json">{
+  &quot;properties&quot;: {
+    &quot;displayName&quot;: &quot;Storage security baseline&quot;,
+    &quot;description&quot;: &quot;Baseline controls every storage account in the estate must meet.&quot;,
+    &quot;policyType&quot;: &quot;Custom&quot;,
+    &quot;metadata&quot;: {
+      &quot;version&quot;: &quot;1.2.0&quot;,
+      &quot;category&quot;: &quot;Storage&quot;
     },
-    "parameters": {
-      "effect": {
-        "type": "String",
-        "metadata": {
-          "displayName": "Effect",
-          "description": "Effect applied to every member definition"
+    &quot;parameters&quot;: {
+      &quot;effect&quot;: {
+        &quot;type&quot;: &quot;String&quot;,
+        &quot;metadata&quot;: {
+          &quot;displayName&quot;: &quot;Effect&quot;,
+          &quot;description&quot;: &quot;Effect applied to every member definition&quot;
         },
-        "allowedValues": [ "Audit", "Deny", "Disabled" ],
-        "defaultValue": "Audit"
+        &quot;allowedValues&quot;: [ &quot;Audit&quot;, &quot;Deny&quot;, &quot;Disabled&quot; ],
+        &quot;defaultValue&quot;: &quot;Audit&quot;
       },
-      "allowedLocations": {
-        "type": "Array",
-        "metadata": {
-          "displayName": "Allowed locations",
-          "description": "Regions storage accounts may be created in",
-          "strongType": "location"
+      &quot;allowedLocations&quot;: {
+        &quot;type&quot;: &quot;Array&quot;,
+        &quot;metadata&quot;: {
+          &quot;displayName&quot;: &quot;Allowed locations&quot;,
+          &quot;description&quot;: &quot;Regions storage accounts may be created in&quot;,
+          &quot;strongType&quot;: &quot;location&quot;
         },
-        "defaultValue": [ "westeurope", "northeurope" ]
+        &quot;defaultValue&quot;: [ &quot;westeurope&quot;, &quot;northeurope&quot; ]
       }
     },
-    "policyDefinitions": [
+    &quot;policyDefinitions&quot;: [
       {
-        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/13502221-8df0-4414-9937-de9c5c4e396b",
-        "policyDefinitionReferenceId": "storageNoPublicBlobAccess",
-        "definitionVersion": "1.*.*",
-        "groupNames": [ "dataProtection" ],
-        "parameters": {
-          "effect": { "value": "[parameters('effect')]" }
+        &quot;policyDefinitionId&quot;: &quot;/providers/Microsoft.Authorization/policyDefinitions/13502221-8df0-4414-9937-de9c5c4e396b&quot;,
+        &quot;policyDefinitionReferenceId&quot;: &quot;storageNoPublicBlobAccess&quot;,
+        &quot;definitionVersion&quot;: &quot;1.*.*&quot;,
+        &quot;groupNames&quot;: [ &quot;dataProtection&quot; ],
+        &quot;parameters&quot;: {
+          &quot;effect&quot;: { &quot;value&quot;: &quot;[parameters('effect')]&quot; }
         }
       },
       {
-        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/404c3081-a854-4457-ae30-26a93ef643f9",
-        "policyDefinitionReferenceId": "storageSecureTransfer",
-        "definitionVersion": "1.*.*",
-        "groupNames": [ "dataProtection" ],
-        "parameters": {
-          "effect": { "value": "[parameters('effect')]" }
+        &quot;policyDefinitionId&quot;: &quot;/providers/Microsoft.Authorization/policyDefinitions/404c3081-a854-4457-ae30-26a93ef643f9&quot;,
+        &quot;policyDefinitionReferenceId&quot;: &quot;storageSecureTransfer&quot;,
+        &quot;definitionVersion&quot;: &quot;1.*.*&quot;,
+        &quot;groupNames&quot;: [ &quot;dataProtection&quot; ],
+        &quot;parameters&quot;: {
+          &quot;effect&quot;: { &quot;value&quot;: &quot;[parameters('effect')]&quot; }
         }
       },
       {
-        "policyDefinitionId": "/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/policyDefinitions/storage-allowed-locations",
-        "policyDefinitionReferenceId": "storageAllowedLocations",
-        "groupNames": [ "residency" ],
-        "parameters": {
-          "effect": { "value": "[parameters('effect')]" },
-          "listOfAllowedLocations": { "value": "[parameters('allowedLocations')]" }
+        &quot;policyDefinitionId&quot;: &quot;/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/policyDefinitions/storage-allowed-locations&quot;,
+        &quot;policyDefinitionReferenceId&quot;: &quot;storageAllowedLocations&quot;,
+        &quot;groupNames&quot;: [ &quot;residency&quot; ],
+        &quot;parameters&quot;: {
+          &quot;effect&quot;: { &quot;value&quot;: &quot;[parameters('effect')]&quot; },
+          &quot;listOfAllowedLocations&quot;: { &quot;value&quot;: &quot;[parameters('allowedLocations')]&quot; }
         }
       }
     ],
-    "policyDefinitionGroups": [
+    &quot;policyDefinitionGroups&quot;: [
       {
-        "name": "dataProtection",
-        "displayName": "Data protection",
-        "category": "Security"
+        &quot;name&quot;: &quot;dataProtection&quot;,
+        &quot;displayName&quot;: &quot;Data protection&quot;,
+        &quot;category&quot;: &quot;Security&quot;
       },
       {
-        "name": "residency",
-        "displayName": "Data residency",
-        "category": "Compliance"
+        &quot;name&quot;: &quot;residency&quot;,
+        &quot;displayName&quot;: &quot;Data residency&quot;,
+        &quot;category&quot;: &quot;Compliance&quot;
       }
     ]
   }
-}</code></pre></div>
+}</code></pre></details></div>
 <p>Two built-ins and one custom definition, all driven by two initiative-level parameters, grouped into two themes. That is the whole pattern.</p>
 <p>The portal builds the same object through a wizard, and its tabs map one-to-one onto that JSON: <strong>Policies</strong> is <code>policyDefinitions</code>, <strong>Groups</strong> is <code>policyDefinitionGroups</code>, and the two parameter tabs are the initiative parameters and the member parameters they feed.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/initiative-definition.png" alt="The New initiative definition blade in the Azure portal" loading="lazy"><figcaption>Creating an initiative in the portal - Basics, Policies, Groups, Initiative parameters and Policy parameters</figcaption></figure>
+<figure class="article-figure"><a href="https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/initiative-definition.png" data-image-zoom aria-label="Enlarge: The New initiative definition blade in the Azure portal"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/initiative-definition.png" alt="The New initiative definition blade in the Azure portal" loading="lazy"></a><figcaption>Creating an initiative in the portal - Basics, Policies, Groups, Initiative parameters and Policy parameters <a href="https://learn.microsoft.com/en-us/azure/governance/policy/media/create-and-manage/initiative-definition.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/governance/policy/tutorials/create-and-manage" target="_blank" rel="noopener noreferrer">Tutorial: Build policies to enforce compliance <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
 <h2 id="the-four-properties-that-matter">The four properties that matter</h2>
 <h3 id="policydefinitionid">policyDefinitionId</h3>
@@ -670,24 +1133,24 @@
 <div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Once an initiative is assigned, <strong>initiative-level parameters cannot be added or altered</strong>. Adding a new required parameter to a live initiative is therefore a breaking change. Always give parameters a <code>defaultValue</code> so that adding one later does not force you to recreate every assignment.</p></div></div>
 <h3 id="groupnames-and-policydefinitiongroups">groupNames and policyDefinitionGroups</h3>
 <p>Groups are metadata that organise members into themes. <code>policyDefinitionGroups</code> declares them, <code>groupNames</code> on each member assigns membership, and the portal renders compliance grouped accordingly.</p>
-<p>For a custom baseline this is cosmetic but genuinely useful - "12 of 40 controls failing" is noise; "all 12 failures are in <em>Data protection</em>" is a decision.</p>
+<p>For a custom baseline this is cosmetic but genuinely useful - &quot;12 of 40 controls failing&quot; is noise; &quot;all 12 failures are in <em>Data protection</em>&quot; is a decision.</p>
 <p>For <strong>Regulatory Compliance</strong> initiatives it is the whole mechanism. Microsoft's built-in ISO 27001, NIST, PCI-DSS and CIS initiatives use groups to map each member definition to a named control in the framework, via an <code>additionalMetadataId</code> pointing at a read-only <code>policyMetadata</code> object:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">"policyDefinitionGroups": [
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy json code">Copy</button></div><pre tabindex="0" aria-label="json code"><code class="language-json">&quot;policyDefinitionGroups&quot;: [
   {
-    "name": "NIST_SP_800-53_R4_AC-1",
-    "additionalMetadataId": "/providers/Microsoft.PolicyInsights/policyMetadata/NIST_SP_800-53_R4_AC-1"
+    &quot;name&quot;: &quot;NIST_SP_800-53_R4_AC-1&quot;,
+    &quot;additionalMetadataId&quot;: &quot;/providers/Microsoft.PolicyInsights/policyMetadata/NIST_SP_800-53_R4_AC-1&quot;
   }
 ]</code></pre></div>
 <p>Those <code>policyMetadata</code> objects are created by Microsoft only. You can reference them from a custom initiative to slot your own controls into an existing framework view, but you cannot invent a new framework.</p>
 <p>The payoff is the <strong>Controls</strong> view: compliance rolled up per named framework control rather than per policy definition, which is the shape an auditor actually asks for.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/regulatory-compliance/regulatory-compliance-overview.png" alt="Regulatory compliance view of a NIST SP 800-53 initiative assignment in the Azure portal" loading="lazy"><figcaption>A NIST SP 800-53 R4 initiative assignment showing non-compliant controls, policies and resources, with a Controls tab grouped by domain</figcaption></figure>
+<figure class="article-figure"><a href="https://learn.microsoft.com/en-us/azure/governance/policy/media/regulatory-compliance/regulatory-compliance-overview.png" data-image-zoom aria-label="Enlarge: Regulatory compliance view of a NIST SP 800-53 initiative assignment in the Azure portal"><img src="https://learn.microsoft.com/en-us/azure/governance/policy/media/regulatory-compliance/regulatory-compliance-overview.png" alt="Regulatory compliance view of a NIST SP 800-53 initiative assignment in the Azure portal" loading="lazy"></a><figcaption>A NIST SP 800-53 R4 initiative assignment showing non-compliant controls, policies and resources, with a Controls tab grouped by domain <a href="https://learn.microsoft.com/en-us/azure/governance/policy/media/regulatory-compliance/regulatory-compliance-overview.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <p><em>Source: <a href="https://learn.microsoft.com/en-us/azure/governance/policy/concepts/regulatory-compliance" target="_blank" rel="noopener noreferrer">Regulatory Compliance in initiative definitions <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> - © Microsoft, Microsoft Learn.</em></p>
 <h2 id="version-pinning-inside-an-initiative">Version pinning inside an initiative</h2>
 <p>Each member can pin the version of the built-in it references:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{
-  "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0ec8fc28-...",
-  "policyDefinitionReferenceId": "allowedLocationsSQL",
-  "definitionVersion": "1.2.*"
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy json code">Copy</button></div><pre tabindex="0" aria-label="json code"><code class="language-json">{
+  &quot;policyDefinitionId&quot;: &quot;/providers/Microsoft.Authorization/policyDefinitions/0ec8fc28-...&quot;,
+  &quot;policyDefinitionReferenceId&quot;: &quot;allowedLocationsSQL&quot;,
+  &quot;definitionVersion&quot;: &quot;1.2.*&quot;
 }</code></pre></div>
 <p>If you omit <code>definitionVersion</code>, the member resolves to the latest major version at assignment time and automatically ingests minor updates.</p>
 <p>Whether that default is acceptable is a real decision, not a detail. Automatic minor ingestion means Microsoft can add an allowed value or change a <code>roleDefinitionIds</code> list under a control you have attested to an auditor. Pinning to <code>1.2.*</code> gives you a stable surface at the cost of having to review and bump deliberately.</p>
@@ -697,14 +1160,14 @@
 <p>Create it as high as the definitions it references allow, and no higher. A management group scope makes the initiative visible to every child scope, which is what you want for a platform baseline. Creating it on one subscription means it can only ever be assigned there or below.</p>
 <p>There is a limit that shapes this: <strong>200 initiative definitions per scope</strong>, 2,500 per tenant, and 500 policy definitions per scope. Those are generous, but a team that generates an initiative per application will find the ceiling.</p>
 <h2 id="limits-worth-knowing">Limits worth knowing</h2>
-<div class="table-wrap"><table><thead><tr><th>Where</th><th>What</th><th>Maximum</th></tr></thead><tbody><tr><td>Initiative definition</td><td>Policy definitions</td><td>1,000</td></tr><tr><td>Initiative definition</td><td>Parameters</td><td>400</td></tr><tr><td>Scope</td><td>Initiative definitions</td><td>200</td></tr><tr><td>Tenant</td><td>Initiative definitions</td><td>2,500</td></tr><tr><td>Scope</td><td>Policy or initiative assignments</td><td>200</td></tr></tbody></table></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Where, What, Maximum table"><table><thead><tr><th scope="col">Where</th><th scope="col">What</th><th scope="col">Maximum</th></tr></thead><tbody><tr><td data-label="Where">Initiative definition</td><td data-label="What">Policy definitions</td><td data-label="Maximum">1,000</td></tr><tr><td data-label="Where">Initiative definition</td><td data-label="What">Parameters</td><td data-label="Maximum">400</td></tr><tr><td data-label="Where">Scope</td><td data-label="What">Initiative definitions</td><td data-label="Maximum">200</td></tr><tr><td data-label="Where">Tenant</td><td data-label="What">Initiative definitions</td><td data-label="Maximum">2,500</td></tr><tr><td data-label="Where">Scope</td><td data-label="What">Policy or initiative assignments</td><td data-label="Maximum">200</td></tr></tbody></table></div>
 <p>A thousand members per initiative is far more than anyone should ever build. The practical ceiling is human: an initiative nobody can review in one sitting is an initiative nobody reviews.</p>
 <h2 id="how-many-initiatives-should-you-actually-have">How many initiatives should you actually have?</h2>
 <p>Two failure modes, both common.</p>
 <p><strong>One giant initiative.</strong> Everything in a single set. Every change is a change to the thing that governs the entire estate, so nobody dares touch it, and the assignment carries an exception list forty entries long. Blast radius is total.</p>
 <p><strong>One initiative per definition.</strong> All the overhead of initiatives with none of the benefit. The assignment list is as unmanageable as it was before.</p>
 <p>The shape that works in practice is <strong>themed baselines aligned to how exceptions get granted</strong>:</p>
-<ul><li>A platform baseline every subscription gets - tagging, allowed regions, diagnostic settings</li><li>A security baseline aligned to your control framework</li><li>Workload-specific sets - data platform, Kubernetes, networking</li><li>A "landing zone type" set for sandbox versus corp versus online</li></ul>
+<ul><li>A platform baseline every subscription gets - tagging, allowed regions, diagnostic settings</li><li>A security baseline aligned to your control framework</li><li>Workload-specific sets - data platform, Kubernetes, networking</li><li>A &quot;landing zone type&quot; set for sandbox versus corp versus online</li></ul>
 <p>The test for whether the split is right: <strong>when a team asks for an exception, does the initiative boundary make the answer obvious?</strong> If granting one exception forces you to punch a hole in a set covering nine unrelated controls, your boundaries are wrong. Exemptions can target a single <code>policyDefinitionReferenceId</code>, which softens this - but a clean boundary is still better than a clever exemption.</p>
 <h2 id="assigning-it">Assigning it</h2>
 <p>The one thing an initiative shares with a definition: <strong>on its own, it does nothing at all</strong>.</p>
@@ -712,11 +1175,13 @@
 <p><strong><a href="/articles/azure-policy-part-3-assignments/">Part 3</a></strong> covers assignments: scope and inheritance, <code>enforcementMode</code>, managed identities and the remediation permissions everybody gets wrong the first time, <code>resourceSelectors</code> and <code>overrides</code> for safe staged rollouts, and non-compliance messages.</p>
 <p>Enjoy!</p>
     </article>
+    </div>
 
 
+    <nav class="series-nav" aria-label="Azure Policy series"><p><strong>Azure Policy · Part 2 of 7</strong></p><div class="series-links"><a href="/articles/azure-policy-part-1-what-is-a-policy/">← Previous part</a><a href="/articles/azure-policy-part-3-assignments/">Next part →</a></div><details class="series-map"><summary>All 7 parts</summary><ol><li><a href="/articles/azure-policy-part-1-what-is-a-policy/">What Is an Azure Policy?</a></li><li><a href="/articles/azure-policy-part-2-initiatives/" aria-current="page">What Is an Initiative (Policy Set)?</a></li><li><a href="/articles/azure-policy-part-3-assignments/">What Is a Policy Assignment?</a></li><li><a href="/articles/azure-policy-part-4-exclusions-notscopes/">What Is an Exclusion (notScopes)?</a></li><li><a href="/articles/azure-policy-part-5-exemptions/">What Is a Policy Exemption?</a></li><li><a href="/articles/azure-policy-part-6-policy-as-code/">Azure Policy as Code</a></li><li><a href="/articles/azure-policy-part-7-epac/">EPAC and the Alternatives</a></li></ol></details></nav>
+    <aside class="article-related" aria-label="Related reading"><h2>Continue with</h2><ul><li><a href="/articles/azure-policy-part-3-assignments/">Azure Policy, Part 3: What Is a Policy Assignment?</a><br><span>Part 3 of the Azure Policy series: assignments are where governance becomes real. Scope and inheritance, enforcementMode, managed identities and remediation permissions, resourceSelectors and overrides for safe rollout, and non-compliance messages.</span></li></ul></aside>
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
-      <a href="/articles/rss.xml">RSS feed</a>
     </div>
   </main>
 
@@ -724,7 +1189,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -770,6 +1235,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -785,12 +1251,7 @@
     document.querySelectorAll('[data-code-copy]').forEach((button) => {
       button.addEventListener("click", () => {
         const code = button.closest(".code-block").querySelector("code").textContent;
-        navigator.clipboard.writeText(code).then(() => {
-          const original = button.textContent;
-          button.textContent = "Copied!";
-          button.classList.add("is-copied");
-          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
-        });
+        window.SiteUX.copy(code, "Code", button);
       });
     });
     let scrollTicking = false;
@@ -804,43 +1265,9 @@
       });
     }, { passive: true });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    (function () {
-      const toggle = document.getElementById("menuToggle");
-      const nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      const closeMenu = () => { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); };
-      const openMenu = () => { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); };
-      toggle.addEventListener("click", (e) => {
-        e.stopPropagation();
-        nav.classList.contains("nav-open") ? closeMenu() : openMenu();
-      });
-      nav.addEventListener("click", (e) => { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", (e) => {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", () => { if (window.innerWidth > 760) closeMenu(); });
-    })();
-    (function () {
-      const toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", () => {
-        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        const next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-    (function () {
-      const banner = document.getElementById("newsBanner");
-      const closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
+
+
+
   </script>
 <script data-share-script>
     (function () {
@@ -885,13 +1312,9 @@
           // The build-time URL is canonical; location.href would carry any
           // tracking query string the visitor arrived with.
           var value = copyBtn.getAttribute('data-share-url') || location.href;
-          function done() { say('Link copied to the clipboard.'); }
-          function failed() { say(value); }
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(value).then(done, failed);
-          } else {
-            failed();
-          }
+          window.SiteUX.copy(value, "Article link", copyBtn).then(function (copied) {
+            say(copied ? "Link copied to the clipboard." : "Copy unavailable. Use the manual copy dialog.");
+          });
         });
       }
 
@@ -902,5 +1325,135 @@
     })();
   </script>
 
-</body>
+  <script data-article-reading>
+  (function articleReadingRuntime() {
+  const toc = document.querySelector(".reading-toc");
+  if (toc) {
+    toc.open = matchMedia("(min-width: 75rem)").matches;
+    toc.addEventListener("toggle", () => {
+      if (document.activeElement === toc.querySelector("summary")) {
+        toc.scrollIntoView({ block: "nearest", behavior: "instant" });
+      }
+    });
+    toc.addEventListener("click", event => {
+      const link = event.target.closest("a[href^='#']");
+      if (!link) return;
+      const target = document.getElementById(link.hash.slice(1));
+      if (target) {
+        for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+        target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
+      if (matchMedia("(max-width: 74.99rem)").matches) toc.open = false;
+    });
+  }
+  const share = document.querySelector(".article-share");
+  if (share) share.open = matchMedia("(min-width: 40rem)").matches;
+  const revealReference = () => {
+    let target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+    if (!target) return;
+    if (target.tagName === "SUMMARY") target.parentElement.open = true;
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+  };
+  window.addEventListener("hashchange", revealReference);
+  revealReference();
+  let printState = [];
+  window.addEventListener("beforeprint", () => {
+    printState = [...document.querySelectorAll(".article-body details")].map(detail => [detail, detail.open]);
+    printState.forEach(([detail]) => { detail.open = true; });
+  });
+  window.addEventListener("afterprint", () => printState.forEach(([detail, open]) => { detail.open = open; }));
+
+  let imageDialog, imageOpener;
+  document.querySelectorAll("[data-image-zoom]").forEach(link => link.addEventListener("click", event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (!imageDialog) {
+      imageDialog = document.createElement("dialog");
+      imageDialog.className = "image-dialog";
+      imageDialog.setAttribute("aria-label", "Image viewer");
+      imageDialog.innerHTML = '<button type="button" class="share-btn" data-image-close>Close image</button><figure><img alt=""><figcaption></figcaption></figure><a target="_blank" rel="noopener">Open original image</a>';
+      document.body.append(imageDialog);
+      imageDialog.querySelector("[data-image-close]").addEventListener("click", () => imageDialog.close());
+      imageDialog.addEventListener("close", () => imageOpener?.focus());
+      imageDialog.addEventListener("click", e => { if (e.target === imageDialog) imageDialog.close(); });
+    }
+    imageOpener = link;
+    const source = link.querySelector("img");
+    imageDialog.querySelector("img").src = link.href;
+    imageDialog.querySelector("img").alt = source?.alt || "";
+    imageDialog.querySelector("figcaption").textContent = link.closest("figure")?.querySelector("figcaption")?.firstChild?.textContent || source?.alt || "";
+    imageDialog.querySelector("a").href = link.href;
+    imageDialog.showModal();
+    imageDialog.querySelector("button").focus();
+  }));
+
+  document.querySelectorAll("[data-copy-section]").forEach(button => button.addEventListener("click", () => {
+    const section = document.getElementById(button.dataset.copySection);
+    if (section) window.SiteUX.copy(section.innerText, "Checklist", button);
+  }));
+
+  const zoneTable = document.querySelector("[data-zone-table]");
+  if (zoneTable) {
+    const rows = [...zoneTable.querySelectorAll("tbody tr")];
+    const search = document.getElementById("zone-search");
+    const status = document.getElementById("zone-count");
+    rows.forEach(row => row.querySelectorAll("code").forEach(code => {
+      if (!code.textContent.includes("privatelink.")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "share-btn";
+      button.textContent = "Copy zone";
+      button.setAttribute("aria-label", "Copy " + code.textContent);
+      button.addEventListener("click", () => window.SiteUX.copy(code.textContent, "Private DNS zone", button));
+      code.after(button);
+    }));
+    const filter = () => {
+      let count = 0;
+      rows.forEach(row => { row.hidden = !row.textContent.toLowerCase().includes(search.value.trim().toLowerCase()); if (!row.hidden) count++; });
+      status.textContent = count + " of " + rows.length + " services" + (count ? "" : ". Try another service or zone name.");
+    };
+    search.addEventListener("input", filter);
+    document.getElementById("zone-reset").addEventListener("click", () => { search.value = ""; filter(); search.focus(); });
+    filter();
+  }
+
+  const library = document.querySelector("[data-reference-library]");
+  if (library) {
+    const groups = [...library.querySelectorAll(".library-group")];
+    const input = document.getElementById("library-search");
+    const category = document.getElementById("library-category");
+    const count = document.getElementById("library-count");
+    const entries = [...library.querySelectorAll(".library-entry")];
+    if (matchMedia("(max-width: 40rem)").matches) groups.forEach(group => { group.open = false; });
+    const filter = () => {
+      let visible = 0;
+      groups.forEach(group => {
+        let groupVisible = 0;
+        group.querySelectorAll(".library-entry").forEach(entry => {
+          entry.hidden = !(category.value === "" || group.dataset.category === category.value) || !entry.textContent.toLowerCase().includes(input.value.trim().toLowerCase());
+          if (!entry.hidden) { visible++; groupVisible++; }
+        });
+        group.hidden = !groupVisible;
+        if (input.value.trim() || category.value) group.open = !!groupVisible;
+      });
+      count.textContent = visible + " of " + entries.length + " entries" + (visible ? "" : ". Clear the search or choose another category.");
+    };
+    input.addEventListener("input", filter);
+    category.addEventListener("change", filter);
+    document.getElementById("library-reset").addEventListener("click", () => { input.value = ""; category.value = ""; filter(); input.focus(); });
+    const revealHash = () => {
+      let target;
+      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+      const group = target?.closest(".library-group");
+      if (group) { input.value = ""; category.value = ""; filter(); group.open = true; target.scrollIntoView({ block: "start", behavior: "instant" }); }
+    };
+    window.addEventListener("hashchange", revealHash);
+    filter();
+    revealHash();
+  }
+})();
+  </script>
+  </body>
 </html>

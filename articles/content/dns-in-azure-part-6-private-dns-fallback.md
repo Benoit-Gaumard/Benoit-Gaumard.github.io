@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Decide whether a public fallback is acceptable, inventory the link policy and compare lookup results."
 title = "DNS in Azure, Part 6: Private DNS Fallback to Internet"
 date = "2026-09-03"
 description = "Part 6 of the DNS in Azure series: why a privatelink zone returns NXDOMAIN for names you do not own, how the NxDomainRedirect resolution policy fixes cross-tenant Private Link, and when you should deliberately leave it off."
@@ -7,6 +8,8 @@ tags = ["DNS", "Networking", "Private Endpoint", "Private Link"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-6.svg"
 featured = true
+leadSections = ["Should you enable it?", "Finding what you have today"]
+related = ["dns-in-azure-part-7-dns-security-policies", "dns-in-azure-part-5-private-endpoint-dns"]
 +++
 
 [Part 5](/articles/dns-in-azure-part-5-private-endpoint-dns/) ended on a specific sentence: if the `privatelink` zone is linked but has no record for the name you asked for, you get **NXDOMAIN**, not a public answer.
@@ -25,6 +28,14 @@ For years that was simply how it worked, and it produced one of the most frustra
 [[toc]]
 
 ## A zone is authoritative for everything under it
+
+First decide whether a public answer is acceptable, then inventory the existing links using the sections above. The setting belongs to **one private DNS zone's virtual network link**, not a tenant-wide fallback switch.
+
+**Before:** a matching linked private zone has no record; resolution returns NXDOMAIN. **After `NxDomainRedirect`:** the eligible missing-record query can be retried publicly. Existing private records still return private answers; this setting does not create a missing Private Endpoint, grant network access or bypass a public-access restriction.
+
+Change checklist: record link ID/current policy → query a known private name and a missing partner name from the actual client → approve public fallback if intended → change one link → repeat both queries → test application connectivity separately. Revert the link to `Default` if the public fallback is not acceptable.
+
+Technical execution validation: **not recorded**. Verify supported zones and current behaviour in [Private DNS fallback documentation](https://learn.microsoft.com/azure/dns/private-dns-fallback).
 
 The behaviour is not a bug. It is what "authoritative" means.
 

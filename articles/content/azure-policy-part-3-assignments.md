@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Choose scope, enforcement and identity permissions before applying a policy or starting remediation."
 title = "Azure Policy, Part 3: What Is a Policy Assignment?"
 date = "2026-09-04"
 description = "Part 3 of the Azure Policy series: assignments are where governance becomes real. Scope and inheritance, enforcementMode, managed identities and remediation permissions, resourceSelectors and overrides for safe rollout, and non-compliance messages."
@@ -7,13 +8,36 @@ tags = ["Azure Policy", "Governance", "RBAC", "Remediation"]
 categories = ["Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-3.svg"
 featured = false
+related = ["azure-policy-part-4-exclusions-notscopes", "azure-policy-part-5-exemptions"]
 +++
 
-Definitions and initiatives are documents. They describe rules. They enforce nothing, evaluate nothing, and appear nowhere in your compliance score.
+## Before applying an assignment
+
+:::warning
+Record the exact scope and descendants, selected definition/version, parameter values and rollback owner before deployment. Start with a small test scope and `DoNotEnforce` when observing compliance; do not read a production `Default` example as a safe trial. Remediation is a separate change that can modify resources even while enforcement is disabled.
+:::
+
+- **Scope:** management group → subscriptions → resource groups → resources; inspect inherited assignments too.
+- **Mode:** `DoNotEnforce` observes without enforcing the configured effect; `Default` enables it. Neither grants permissions to the caller.
+- **Identity:** Modify/DeployIfNotExists needs its own managed identity and appropriate resource permissions; the deployment identity is a different actor.
+- **After deployment:** verify assignment ID, compliance scope, a known compliant/non-compliant resource, and any explicitly approved remediation result.
+
+| Symptom | Verification |
+|---|---|
+| Assignment exists but no expected effect | Scope, exclusions, selectors, evaluation timing and enforcement mode |
+| Remediation fails | Assignment identity, role assignment scope and role propagation |
+| New resources work but old ones differ | Existing resources may need an explicit remediation task |
+| Unexpected blocking | Other inherited assignments and the effective definition/parameters |
+
+Bad message: "Denied." Better message: "Storage must disable public blob access under the storage baseline; see the platform exception process." State the required correction, not just the control name.
+
+Technical execution validation: **not recorded**. Review [assignment structure](https://learn.microsoft.com/azure/governance/policy/concepts/assignment-structure) and the printable [rollout sequence](#a-rollout-sequence-that-will-not-page-you). Browse the [Policies catalogue](/azure-policies/) for definition context.
+
+Definitions and initiatives describe rules; assignments apply them.
 
 The **assignment** is the object that binds a definition or initiative to a piece of your resource hierarchy and says: *from now on, here, this applies*.
 
-It is the only object in Azure Policy that can break production. It deserves more respect than it usually gets.
+Changes to an assignment or its referenced definitions can affect production. Review both.
 
 - **[Part 1](/articles/azure-policy-part-1-what-is-a-policy/)** - what a policy definition actually is
 - **[Part 2](/articles/azure-policy-part-2-initiatives/)** - initiatives, also known as policy set definitions
@@ -59,12 +83,12 @@ Here is a full one:
     ],
     "metadata": {
       "assignedBy": "Cloud Centre of Excellence"
-    },
-    "identity": {
-      "identityType": "SystemAssigned"
-    },
-    "location": "westeurope"
-  }
+    }
+  },
+  "identity": {
+    "type": "SystemAssigned"
+  },
+  "location": "westeurope"
 }
 ```
 
@@ -139,15 +163,12 @@ Remediation has its own blade, listing every assigned `deployIfNotExists` policy
 
 ### The four things that go wrong
 
-This is where most Azure Policy projects lose a week. In order of frequency:
-
-**1. Permissions are only granted automatically in the portal.** Create the same assignment through Bicep, Terraform, the REST API, or any CLI, and the role assignments for the managed identity are **not** created for you. You must create them yourself. Every policy-as-code approach in Part 6 has to solve this explicitly - which is precisely why EPAC has a separate "deploy roles" pipeline stage.
-
-**2. Granting those roles needs elevated rights.** You need **User Access Administrator**, or **Role Based Access Control Administrator**, on top of **Resource Policy Contributor**. A pipeline identity with only policy rights will create the assignment and then fail every remediation silently.
-
-**3. Changing the definition does not update the assignment's identity.** If you edit `roleDefinitionIds` on a definition that is already assigned, the new permissions are **not** granted - not even in the portal. You must grant them manually.
-
-**4. The requester's permissions matter too.** For a `deployIfNotExists` policy, the assignment identity performs the ARM deployment, but **the identity of whoever created or updated the resource is used for the evaluation**. The classic symptom: a diagnostic-settings policy where the assignment identity has `Microsoft.Insights/diagnosticSettings/write`, but the deploying service principal lacks the corresponding `read` - and the policy quietly evaluates as compliant when it should not.
+| Symptom | Check and correction |
+|---|---|
+| IaC assignment succeeds but remediation lacks permissions | Inspect the assignment identity's role assignments; do not assume the portal's permission-assignment workflow runs in CLI/IaC |
+| Pipeline cannot grant required roles | Separate Policy write rights from RBAC role-assignment rights; have an authorised role administrator grant only the intended roles/scopes |
+| Definition changed and remediation now fails | Compare updated `roleDefinitionIds` with the identity's actual assignments; definition edits do not automatically grant new roles |
+| Evaluation and deployment disagree | Distinguish the requesting identity used in evaluation from the managed identity executing the deployment; inspect read as well as write permissions and the evaluation details |
 
 :::warning
 Remediation is not automatic for resources that already exist. Assigning a `deployIfNotExists` policy fixes resources created *after* the assignment. Existing ones need a **remediation task**, which you create explicitly. One task can cover up to 50,000 resources. For a management group assignment, the task must be created after evaluation has run - you cannot bundle it into assignment creation the way you can for a subscription.

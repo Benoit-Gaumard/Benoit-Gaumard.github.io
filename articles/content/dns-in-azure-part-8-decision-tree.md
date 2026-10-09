@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Answer a few questions to choose a DNS resolution path, then copy or share the diagnostic."
 title = "DNS in Azure, Part 8: The Resolution Decision Tree"
 date = "2026-09-03"
 description = "Part 8 of the DNS in Azure series: an interactive decision tree that takes you from a client asking for a name to the exact Azure architecture that answers it - Azure DNS, private zones, privatelink, forwarding rulesets, or on-premises."
@@ -7,13 +8,10 @@ tags = ["DNS", "Networking", "Architecture", "Private Endpoint"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-8.svg"
 featured = true
+related = ["dns-in-azure-part-1-fundamentals", "dns-in-azure-part-3-private-resolver"]
 +++
 
-Seven posts of theory. This one is the lookup table.
-
-A VM in Azure asks for a name. Where does the answer come from - the internet, Azure DNS, a private DNS zone, a `privatelink` zone, or a DNS server sitting in a datacentre three hundred kilometres away? And what exactly do you have to configure to make that happen?
-
-Answer three or four questions below and you get the architecture, the steps, and the mistakes to avoid.
+Answer a few questions to identify a resolution path, then verify it against your real client and network. [Start the diagnostic](#dns-decision-tree) or use [all paths in text](#every-path-at-a-glance). Recommendations are design guidance; technical execution validation is **not recorded**.
 
 - **[Part 1](/articles/dns-in-azure-part-1-fundamentals/)** - fundamentals and Azure-provided name resolution
 - **[Part 2](/articles/dns-in-azure-part-2-private-dns-zones/)** - private DNS zones and virtual network links
@@ -33,12 +31,12 @@ Answer three or four questions below and you get the architecture, the steps, an
   <div class="dtree-head">
     <div class="dtree-head-text">
       <p class="dtree-eyebrow">Interactive</p>
-      <p class="dtree-title">Azure DNS resolution decision tree</p>
+      <p class="dtree-title" id="dns-tree-title">Azure DNS resolution decision tree</p>
     </div>
     <button type="button" class="dtree-restart" data-dtree-restart hidden>Start over</button>
   </div>
-  <ol class="dtree-trail" data-dtree-trail hidden></ol>
-  <div class="dtree-panel" data-dtree-panel aria-live="polite"></div>
+  <ol class="dtree-trail" data-dtree-trail aria-label="Your diagnostic path; select a step to change it" hidden></ol>
+  <div class="dtree-panel" data-dtree-panel role="group" aria-labelledby="dns-tree-title"></div>
 </div>
 
 <style>
@@ -552,8 +550,6 @@ Answer three or four questions below and you get the architecture, the steps, an
     stack.push(id);
     if (label) picks.push(label);
     render();
-    var top = root.getBoundingClientRect().top + window.pageYOffset - 24;
-    if (window.pageYOffset > top) window.scrollTo({ top: top, behavior: "smooth" });
   }
 
   function back() {
@@ -576,6 +572,7 @@ Answer three or four questions below and you get the architecture, the steps, an
       var btn = el("button", "dtree-crumb", truncate(label));
       btn.type = "button";
       btn.title = "Go back to this step";
+      btn.setAttribute("aria-label", "Change step " + (index + 1) + ": " + label);
       btn.addEventListener("click", function () {
         stack = stack.slice(0, index + 1);
         picks = picks.slice(0, index);
@@ -587,7 +584,7 @@ Answer three or four questions below and you get the architecture, the steps, an
   }
 
   function renderQuestion(node) {
-    panel.appendChild(el("p", "dtree-question", node.question));
+    panel.appendChild(el("h3", "dtree-question", node.question));
     if (node.help) panel.appendChild(el("p", "dtree-help", node.help));
     var wrap = el("div", "dtree-options");
     node.options.forEach(function (option) {
@@ -603,7 +600,7 @@ Answer three or four questions below and you get the architecture, the steps, an
 
   function renderOutcome(node) {
     panel.appendChild(el("span", "dtree-badge", "Recommended setup"));
-    panel.appendChild(el("p", "dtree-outcome-title", node.title));
+    panel.appendChild(el("h3", "dtree-outcome-title", node.title));
     if (node.summary) panel.appendChild(el("p", "dtree-summary", node.summary));
     if (node.steps && node.steps.length) {
       panel.appendChild(el("p", "dtree-section-title", "What to configure"));
@@ -622,9 +619,47 @@ Answer three or four questions below and you get the architecture, the steps, an
       });
       panel.appendChild(links);
     }
+    var actions = el("div", "dtree-links");
+    var copy = el("button", "share-btn", "Copy diagnostic");
+    copy.type = "button";
+    copy.addEventListener("click", function () {
+      var text = picks.join(" → ") + "\n\n" + node.title + "\n" + (node.summary || "") +
+        "\n\nWhat to configure:\n" + (node.steps || []).join("\n") +
+        "\n\nWatch out for:\n" + (node.watch || []).join("\n");
+      window.SiteUX.copy(text, "DNS diagnostic", copy);
+    });
+    var share = el("button", "share-btn", "Copy link to this path");
+    share.type = "button";
+    share.addEventListener("click", function () {
+      var url = new URL("https://benoit-gaumard.io/articles/dns-in-azure-part-8-decision-tree/");
+      url.searchParams.set("dnsPath", pathValue());
+      url.hash = "dns-decision-tree";
+      window.SiteUX.copy(url.href, "Diagnostic link", share);
+    });
+    actions.appendChild(copy);
+    actions.appendChild(share);
+    panel.appendChild(actions);
   }
 
-  function render() {
+  function pathValue() {
+    return stack.slice(1).map(function (id, index) {
+      return NODES[stack[index]].options.findIndex(function (option) { return option.next === id; });
+    }).join(".");
+  }
+
+  function restorePath() {
+    stack = ["start"];
+    picks = [];
+    var value = new URL(location.href).searchParams.get("dnsPath") || "";
+    if (!/^\d(?:\.\d){0,7}$/.test(value)) return;
+    value.split(".").forEach(function (index) {
+      var node = NODES[stack[stack.length - 1]];
+      var option = node.options && node.options[Number(index)];
+      if (option) { stack.push(option.next); picks.push(option.label); }
+    });
+  }
+
+  function render(moveFocus) {
     var node = NODES[stack[stack.length - 1]];
     panel.textContent = "";
     if (!node) return;
@@ -637,12 +672,27 @@ Answer three or four questions below and you get the architecture, the steps, an
     }
     restart.hidden = stack.length < 2;
     renderTrail();
+    var heading = panel.querySelector("h3");
+    heading.id = "dtree-current";
+    heading.tabIndex = -1;
+    panel.setAttribute("aria-labelledby", "dtree-current");
+    if (moveFocus !== false) {
+      var url = new URL(location.href);
+      if (stack.length > 1) url.searchParams.set("dnsPath", pathValue());
+      else url.searchParams.delete("dnsPath");
+      history.replaceState(null, "", url);
+      heading.focus({ preventScroll: true });
+      var rect = heading.getBoundingClientRect();
+      if (rect.top < 100 || rect.bottom > innerHeight) heading.scrollIntoView({ block: "center", behavior: "instant" });
+    }
   }
 
   restart.addEventListener("click", function () {
     stack = ["start"];
     picks = [];
-    render();
+    window.addEventListener("popstate", function () { restorePath(); render(); });
+    restorePath();
+    render(false);
   });
 
   render();

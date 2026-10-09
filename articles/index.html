@@ -53,7 +53,9 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
+    document.documentElement.classList.add("articles-js");
     (function () {
       try {
         var stored = localStorage.getItem("site-theme");
@@ -105,7 +107,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -157,7 +159,7 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible, input:focus-visible {
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
@@ -186,7 +188,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -206,7 +208,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: inherit; text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -223,7 +225,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -286,19 +288,48 @@
     .intro { max-width: 52rem; margin-bottom: 1.5rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
-    .rss-link { display: inline-flex; align-items: center; min-height: 2.25rem; gap: .35rem; padding: .375rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); font-size: 0.85rem; font-weight: 650; text-decoration: none; white-space: nowrap; }
+    .rss-link { display: inline-flex; align-items: center; min-height: 2.75rem; gap: .35rem; padding: .375rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); font-size: 0.85rem; font-weight: 650; text-decoration: none; }
+    .rss-link svg { flex: none; }
     .rss-link:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 2rem; }
-    .stat-card {
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    [hidden] { display: none !important; }
+    .articles-js #articleCards[data-static] > .article-card:nth-of-type(n + 13) { display: none; }
+    fieldset { min-width: 0; padding: 0; border: 0; margin: 0; }
+    .catalogue-search { display: flex; align-items: flex-end; gap: .75rem; margin-bottom: 1rem; }
+    .search-field { flex: 1; min-width: 0; max-width: 42rem; }
+    .search-field label, .filter-field label { display: block; margin-bottom: .4rem; font-size: 0.9rem; font-weight: 600; }
+    .search-input-row { display: flex; gap: .5rem; }
+    .search-input-row input, .filter-field select {
+      min-height: 2.9rem; min-width: 0; width: 100%; border: 1px solid var(--cp-border-strong); border-radius: 8px;
+      padding: .5rem .75rem; background: var(--cp-surface); color: var(--cp-text);
     }
-    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
-    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .search-input-row input { flex: 1; }
+    input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .catalogue-button {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; gap: .4rem;
+      border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: .5rem .75rem;
+      background: var(--cp-surface); color: var(--cp-text); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .catalogue-button:hover { border-color: var(--cp-accent); }
+    .catalogue-button:disabled { cursor: wait; }
+    .clear-search { min-width: 2.75rem; padding: .5rem; }
+    .filter-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
+    .filter-field { min-width: 0; }
+    .featured-options { grid-column: 1 / -1; }
+    .sort-field { display: flex; align-items: center; gap: .5rem; font-size: 0.85rem; }
+    .sort-field select { min-height: 2.75rem; max-width: 100%; border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: .4rem .5rem; background: var(--cp-surface); color: var(--cp-text); }
+    .catalogue-help { margin: .75rem 0 0; max-width: 65ch; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.5; }
+    .catalogue-notice { margin-bottom: 1rem; padding: 1rem; border: 1px solid var(--cp-warning); background: var(--cp-warning-bg); border-radius: 8px; color: var(--cp-warning); line-height: 1.5; }
+    .catalogue-notice p { margin-top: 0; }
+    .catalogue-notice p:last-child { margin-bottom: 0; }
+    .catalogue-results { min-height: 20rem; }
+    .results-count { scroll-margin-top: 6rem; }
+    .pagination { display: flex; align-items: center; justify-content: center; margin: 1.5rem 0; }
+    .article-link { display: flex; flex-direction: column; flex: 1; min-width: 0; color: inherit; text-decoration: none; border-radius: inherit; scroll-margin-top: 6rem; }
+    .article-link:focus-visible { outline-offset: -3px; }
+    .article-link h3 { padding-right: 2rem; }
+    .article-link .card-meta { margin-bottom: .25rem; }
+    .article-link .read-article { margin-top: auto; padding-top: .35rem; color: var(--cp-link); font-size: 0.85rem; font-weight: 600; }
 
     .sec-label {
       display: flex;
@@ -312,48 +343,51 @@
       font-weight: 650;
     }
 
-    .articles-layout { display: grid; grid-template-columns: 1fr 18rem; gap: 2.5rem; align-items: start; min-height: 70vh; }
-    /* The featured grid is filled from JSON after load; without a reservation its
-       appearance shoves the whole article list (and the footer) down the page. */
-    #featuredSection[data-loading] { min-height: 100vh; }
+    .articles-layout { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: 2rem; align-items: start; min-width: 0; }
     .articles-main { min-width: 0; }
+    .articles-sidebar { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+    .sidebar-panel { padding: 1.25rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+    .sidebar-disclaimer { background: var(--cp-surface-soft); }
+    .sidebar-disclaimer p, .sidebar-status { margin: 0; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.55; }
+    .tag-cloud { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; }
+    .tag-cloud button { display: inline-flex; align-items: center; gap: .35rem; min-height: 2.75rem; max-width: 100%; padding: .35rem .5rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: .8rem; cursor: pointer; }
+    .tag-cloud button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .tag-cloud button.is-active { background: var(--cp-accent-soft); border-color: var(--cp-accent); color: var(--cp-accent); font-weight: 700; }
+    .tag-cloud li, .tag-cloud button span:first-child { min-width: 0; overflow-wrap: anywhere; }
+    .tag-toggle { margin-top: .75rem; }
+    .recent-list { list-style: none; display: flex; flex-direction: column; gap: .25rem; margin: 0; padding: 0; }
+    .recent-list a { display: flex; flex-direction: column; gap: .25rem; min-height: 2.75rem; padding: .5rem; border-radius: 6px; color: var(--cp-text); font-size: .85rem; line-height: 1.5; text-decoration: none; overflow-wrap: anywhere; }
+    .recent-list a:hover { background: var(--cp-surface-soft); color: var(--cp-link); }
+    .recent-date { color: var(--cp-text-muted); font-size: .75rem; }
 
-    .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
+    .featured-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
     .featured-card {
       position: relative;
       display: flex;
       flex-direction: column;
       background: var(--cp-surface);
       border: 1px solid var(--cp-border);
-      border-radius: 14px;
+      border-radius: 8px;
       overflow: hidden;
       text-decoration: none;
       color: var(--cp-text);
       transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
-    .featured-card:hover, .featured-card:focus-visible {
-      transform: translateY(-4px);
+    .featured-card:hover, .featured-card:focus-within {
       border-color: var(--cp-accent);
       box-shadow: var(--cp-shadow);
     }
-    .featured-badge {
-      position: absolute; top: .75rem; left: .75rem; z-index: 1;
-      padding: .2rem .6rem; border-radius: 999px; background: var(--cp-accent); color: var(--cp-accent-fg);
-      font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
-    }
     .featured-card .card-thumb { aspect-ratio: 1200 / 630; background: var(--cp-surface-soft); overflow: hidden; }
     .featured-card .card-thumb img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; }
-    .featured-card .card-body { padding: 1.25rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
+    .featured-card .card-body { padding: 1rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
     .featured-card h3 { margin: 0; font-size: 1.2rem; line-height: 1.3; }
     .featured-card p { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; line-height: 1.5; flex: 1; }
 
     /* The featured strip follows the same Cards/List toggle as the article list */
     .featured-grid.view-list { grid-template-columns: 1fr; gap: .75rem; }
-    .featured-grid.view-list .featured-card { flex-direction: row; align-items: stretch; }
-    .featured-grid.view-list .featured-card:hover, .featured-grid.view-list .featured-card:focus-visible { transform: translateX(3px); }
-    .featured-grid.view-list .featured-badge { top: .6rem; right: .6rem; left: auto; }
+    .featured-grid.view-list .article-link { flex-direction: row; align-items: stretch; }
     .featured-grid.view-list .card-thumb { flex: none; width: 11rem; align-self: center; border-radius: 8px; overflow: hidden; margin: .9rem 0 .9rem .9rem; }
-    .featured-grid.view-list .card-body { padding: .9rem 6rem .9rem 1.1rem; gap: .4rem; }
+    .featured-grid.view-list .card-body { padding: .9rem 3.5rem .9rem 1.1rem; gap: .4rem; min-width: 0; }
     .featured-grid.view-list .featured-card h3 { font-size: 1.05rem; }
     .featured-grid.view-list .featured-card p {
       flex: none;
@@ -363,27 +397,17 @@
       overflow: hidden;
     }
     @media (max-width: 640px) {
-      .featured-grid.view-list .featured-card { flex-direction: column; }
-      .featured-grid.view-list .card-thumb { width: auto; margin: 0; border-radius: 0; }
-      .featured-grid.view-list .card-body { padding: 1.25rem 1.4rem 1.4rem; }
-      .featured-grid.view-list .featured-badge { top: .75rem; left: .75rem; right: auto; }
+      .featured-grid.view-list .article-link { flex-direction: column; }
+      .featured-grid.view-list .card-thumb { display: none; }
+      .featured-grid.view-list .card-body { padding: 1rem 3.5rem 1rem 1rem; }
     }
 
-    .articles-toolbar { margin-bottom: 1.75rem; }
+    .articles-toolbar { margin-bottom: 1.25rem; }
     .articles-toolbar .results-bar { margin-bottom: 0; }
-    .filter-bar { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
-    .filter-bar input {
-      flex: 1 1 16rem;
-      min-height: 2.9rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      padding: .5rem .85rem;
-    }
     .results-count { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
     .results-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
     .results-bar-left { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+    .view-actions { display: flex; align-items: center; gap: .5rem; min-width: 0; }
     .results-bar-right { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
     .view-toggle {
       display: inline-flex;
@@ -396,7 +420,7 @@
       display: inline-flex;
       align-items: center;
       gap: .35rem;
-      min-height: 2rem;
+      min-height: 2.75rem;
       padding: .3rem .7rem;
       border: 0;
       border-radius: 6px;
@@ -417,7 +441,7 @@
       display: inline-flex;
       align-items: center;
       gap: .4rem;
-      min-height: 2.25rem;
+      min-height: 2.75rem;
       padding: .375rem .75rem;
       border: 1px solid var(--cp-border-strong);
       border-radius: 6px;
@@ -425,6 +449,7 @@
       color: var(--cp-text);
       cursor: pointer;
       font-weight: 650;
+      font-size: 0.85rem;
     }
     .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
     .favorites-filter[aria-pressed="true"] {
@@ -436,7 +461,7 @@
       display: inline-flex;
       align-items: center;
       gap: .45rem;
-      min-height: 2.25rem;
+      min-height: 2.75rem;
       color: var(--cp-text-muted);
       font-size: 0.85rem;
       cursor: pointer;
@@ -444,25 +469,24 @@
     }
     .featured-toggle:hover { color: var(--cp-accent); }
     .featured-toggle input { width: 1rem; height: 1rem; margin: 0; accent-color: var(--cp-accent); cursor: pointer; }
-    .active-filter { display: inline-flex; align-items: center; gap: .4rem; margin: 0 0 1.25rem; padding: .3rem .7rem; border-radius: 999px; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.85rem; font-weight: 600; }
-    .active-filter button { border: 0; background: transparent; color: inherit; cursor: pointer; font-weight: 700; padding: 0 0 0 .2rem; }
+    .active-filter { display: inline-flex; align-items: center; gap: .4rem; margin: 0 0 .75rem; padding: 0 .4rem 0 .7rem; border-radius: 6px; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.85rem; font-weight: 600; }
+    .active-filter button { min-height: 2.75rem; min-width: 2.75rem; border: 0; background: transparent; color: inherit; cursor: pointer; font-weight: 700; }
     .active-filter + .active-filter { margin-left: .5rem; }
 
-    .article-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.25rem; }
+    .article-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
     .article-card {
       position: relative;
       display: flex;
       flex-direction: column;
       background: var(--cp-surface);
       border: 1px solid var(--cp-border);
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
       text-decoration: none;
       color: var(--cp-text);
       transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
-    .article-card:hover, .article-card:focus-visible {
-      transform: translateY(-4px);
+    .article-card:hover, .article-card:focus-within {
       border-color: var(--cp-accent);
       box-shadow: var(--cp-shadow);
     }
@@ -472,12 +496,12 @@
       right: .6rem;
       z-index: 2;
       display: grid;
-      width: 2rem;
-      height: 2rem;
+      width: 2.75rem;
+      height: 2.75rem;
       place-items: center;
       padding: 0;
       border: 1px solid var(--cp-border);
-      border-radius: 50%;
+      border-radius: 6px;
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
       cursor: pointer;
@@ -490,11 +514,11 @@
     }
     .article-card .card-thumb { aspect-ratio: 1200 / 630; background: var(--cp-surface-soft); overflow: hidden; }
     .article-card .card-thumb img { width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; display: block; }
-    .article-card .card-body { padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
+    .article-card .card-body { padding: 1rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; min-width: 0; }
     .card-categories { display: flex; flex-wrap: wrap; gap: .35rem; }
     .card-category-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.75rem; font-weight: 700; }
-    .article-card h3 { margin: 0; font-size: 1.05rem; line-height: 1.35; }
-    .article-card p { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .article-card h3 { margin: 0; font-size: 1.05rem; line-height: 1.35; overflow-wrap: anywhere; }
+    .article-card p { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; }
     .card-meta .dot { opacity: .5; }
 
@@ -509,15 +533,14 @@
 
     /* List view: same card markup, laid out as a single-column row list */
     .article-cards.view-list { grid-template-columns: 1fr; gap: .75rem; }
-    .article-cards.view-list .article-card { flex-direction: row; align-items: stretch; }
-    .article-cards.view-list .article-card:hover, .article-cards.view-list .article-card:focus-visible { transform: translateX(3px); }
+    .article-cards.view-list .article-link, .article-cards.view-list a.article-card { flex-direction: row; align-items: stretch; }
     .article-cards.view-list .card-thumb { flex: none; width: 11rem; align-self: center; border-radius: 8px; overflow: hidden; margin: .9rem 0 .9rem .9rem; }
-    .article-cards.view-list .card-body { padding: .9rem 3rem .9rem 1.1rem; gap: .4rem; }
+    .article-cards.view-list .card-body { padding: .9rem 3.5rem .9rem 1.1rem; gap: .4rem; }
     .article-cards.view-list .article-card p { -webkit-line-clamp: 2; flex: none; }
     @media (max-width: 640px) {
-      .article-cards.view-list .article-card { flex-direction: column; }
-      .article-cards.view-list .card-thumb { width: auto; margin: 0; border-radius: 0; }
-      .article-cards.view-list .card-body { padding: 1.1rem 1.25rem 1.25rem; }
+      .article-cards.view-list .article-link, .article-cards.view-list a.article-card { flex-direction: column; }
+      .article-cards.view-list .card-thumb { display: none; }
+      .article-cards.view-list .card-body { padding: 1rem 3.5rem 1rem 1rem; }
     }
 
     .empty-state {
@@ -529,15 +552,21 @@
       color: var(--cp-text-muted);
     }
 
-    .articles-sidebar { position: sticky; top: 5.5rem; align-self: start; display: flex; flex-direction: column; gap: 1.25rem; }
-    .sidebar-panel { padding: 1.25rem 1.4rem; border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface); }
-    .sidebar-panel[hidden] { display: none; }
-    .sidebar-disclaimer { border-left: 3px solid var(--cp-border-strong); background: var(--cp-surface-soft); }
-    .sidebar-disclaimer p { margin: 0; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.55; }
+    .catalogue-secondary { margin-top: 2rem; }
+    #series { scroll-margin-top: 6rem; }
+    .series-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .series-card { padding: 1.25rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+    .series-card h3 { margin: 0 0 .5rem; }
+    .series-card p { margin: 0 0 1rem; color: var(--cp-text-muted); line-height: 1.5; }
+    .series-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+    .series-actions a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+    .catalogue-ad { margin: 2rem 0; padding: 1rem 0; border-block: 1px solid var(--cp-border); text-align: center; min-width: 0; }
+    .catalogue-ad .adsbygoogle { min-height: 280px; }
+    .ad-label { display: block; margin-bottom: .75rem; color: var(--cp-text-muted); font-size: .75rem; }
     .category-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
     .category-list button {
       display: flex; align-items: center; justify-content: space-between; gap: .75rem; width: 100%;
-      padding: .5rem .6rem; border: 0; border-radius: 8px; background: transparent; color: var(--cp-text);
+      min-height: 2.75rem; padding: .5rem .6rem; border: 0; border-radius: 8px; background: transparent; color: var(--cp-text);
       font-size: 0.9rem; text-align: left; cursor: pointer;
     }
     .category-list button:hover { background: var(--cp-surface-soft); }
@@ -545,33 +574,6 @@
     .category-count { color: var(--cp-text-muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
     .category-list button.is-active .category-count { color: var(--cp-accent); }
 
-    .tag-cloud { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
-    .tag-cloud button {
-      display: inline-flex; align-items: center; gap: .35rem;
-      padding: .25rem .6rem; border: 1px solid var(--cp-border); border-radius: 999px;
-      background: var(--cp-surface-soft); color: var(--cp-text-muted);
-      font: inherit; font-size: 0.75rem; line-height: 1.4; cursor: pointer;
-      transition: border-color .15s, color .15s, background .15s;
-    }
-    .tag-cloud button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .tag-cloud button.is-active { background: var(--cp-accent-soft); border-color: var(--cp-accent); color: var(--cp-accent); font-weight: 700; }
-    .tag-count { font-size: 0.75rem; font-variant-numeric: tabular-nums; opacity: .65; }
-    .tag-toggle {
-      margin-top: .75rem; padding: 0; border: 0; background: transparent;
-      color: var(--cp-link); font: inherit; font-size: 0.8rem; cursor: pointer;
-    }
-    .tag-toggle:hover { text-decoration: underline; }
-    .tag-toggle[hidden] { display: none; }
-
-    .recent-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
-    .recent-list a {
-      display: flex; flex-direction: column; gap: .15rem;
-      padding: .5rem .6rem; border-radius: 8px;
-      color: var(--cp-text); font-size: 0.9rem; line-height: 1.35; text-decoration: none;
-    }
-    .recent-list a:hover { background: var(--cp-surface-soft); color: var(--cp-accent); }
-    .recent-date { color: var(--cp-text-muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
-    .recent-list a:hover .recent-date { color: var(--cp-accent); }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
     .footer-inner { padding-block: 2rem 1.5rem; }
@@ -611,11 +613,11 @@
     .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
     .back-to-top:hover { background: var(--cp-accent-hover); }
 
+    @media (max-width: 75rem) {
+      .article-cards, .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 60rem) {
-      .articles-layout { grid-template-columns: 1fr; }
-      .articles-sidebar { position: static; order: -1; }
-      .category-list { flex-direction: row; flex-wrap: wrap; }
-      .category-list button { width: auto; }
+      .articles-layout { grid-template-columns: minmax(0, 1fr); }
     }
     @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
@@ -635,21 +637,26 @@
       .footer-about { grid-column: auto; }
       .footer-bottom { flex-direction: column; }
     }
+    @media (max-width: 40rem) {
+      .featured-grid, .article-cards, .series-grid, .filter-panel { grid-template-columns: minmax(0, 1fr); }
+      .article-card .card-thumb, .featured-card .card-thumb { max-height: 9rem; }
+      .article-card .card-thumb img, .featured-card .card-thumb img { height: 100%; object-fit: contain; }
+      .card-thumb.thumb-contain img { object-fit: contain; }
+      .results-bar-left, .results-bar-right { gap: .5rem; }
+      .sort-field { flex-wrap: wrap; }
+      .series-actions { gap: .5rem; }
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  
-    /* Filled by script: hold the box only while empty, so the page below does
-       not jump when the data lands, and no blank hole survives a render. */
-    @supports (min-height: 1px) {
-      #statsGrid:empty { min-height: 90px; }
-      @media (max-width: 32rem) { #statsGrid:empty { min-height: 194px; } }
-    }    @media print {
+
+    @media print {
       /* Printing a tool page should yield the data, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
-      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination, #catalogueControls,
+      .favorite-button, .catalogue-ad, .back-to-top { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
       body { font-size: 11pt; }
@@ -673,14 +680,7 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -717,12 +717,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/articles/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/articles/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -755,54 +1125,88 @@
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Articles</h1>
-      <p class="intro-text">Practical guides, field notes, reference material on cloud, infrastructure, automation and more.</p>
+      <p class="intro-text">Practical guides on Azure, infrastructure and DevOps.</p>
     </section>
-
-    <section class="stats-grid" id="statsGrid" aria-label="Article statistics"></section>
 
     <div class="articles-layout">
       <div class="articles-main">
         <section class="articles-toolbar" aria-label="Search and filter articles">
-          <div class="filter-bar">
-            <input id="searchInput" type="search" placeholder="Search articles..." autocomplete="off" spellcheck="false" aria-label="Search articles">
+          <noscript><p>Search and filters need JavaScript. All article links are available below. <a href="/articles/rss.xml" type="application/rss+xml">RSS Feed</a></p><style>#catalogueControls, #resultsCount { display: none; }</style></noscript>
+          <fieldset id="catalogueControls" disabled aria-label="Article catalogue controls">
+          <div class="catalogue-search">
+            <div class="search-field">
+              <label for="searchInput">Search articles</label>
+              <div class="search-input-row">
+                <input id="searchInput" type="search" placeholder="Search titles, summaries or tags" autocomplete="off" spellcheck="false">
+                <button class="catalogue-button clear-search" id="clearSearch" type="button" aria-label="Clear search" title="Clear search" hidden>&times;</button>
+              </div>
+            </div>
+            <button class="catalogue-button" id="filterToggle" type="button" aria-expanded="false" aria-controls="filterPanel">Filters</button>
+          </div>
+          <div class="filter-panel" id="filterPanel" hidden>
+            <div class="filter-field">
+              <label for="categorySelect">Category</label>
+              <select id="categorySelect"><option value="">All categories</option></select>
+            </div>
+            <div class="filter-field">
+              <label for="tagSelect">Tag</label>
+              <select id="tagSelect"><option value="">All tags</option></select>
+            </div>
+            <div class="filter-field">
+              <label for="seriesSelect">Series</label>
+              <select id="seriesSelect"><option value="">All series</option></select>
+            </div>
+            <div class="featured-options">
+              <label class="featured-toggle" for="featuredToggle">
+                <input type="checkbox" id="featuredToggle" checked aria-describedby="featuredHelp">
+                <span>Show featured selection</span>
+              </label>
+              <p class="catalogue-help" id="featuredHelp">Up to three highlights, shown when browsing all articles, newest first. Each article appears only once.</p>
+            </div>
           </div>
           <div id="activeFilterWrap"></div>
           <div class="results-bar">
             <div class="results-bar-left">
-              <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
-              <label class="featured-toggle" for="featuredToggle">
-                <input type="checkbox" id="featuredToggle" checked>
-                <span>Show featured articles</span>
-              </label>
-              <p class="results-count" id="resultsCount" aria-live="polite"></p>
+              <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ Favorite articles (0)</button>
+              <button class="catalogue-button" id="clearAllFilters" type="button" hidden>Clear all filters</button>
+              <div class="view-actions">
+                <div class="view-toggle" role="group" aria-label="Article view">
+                  <button type="button" id="viewCards" aria-pressed="true" title="Card view">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 1.5h5v5h-5v-5Zm0 8h5v5h-5v-5Zm8-8h5v5h-5v-5Zm0 8h5v5h-5v-5Z"/></svg>
+                    Cards
+                  </button>
+                  <button type="button" id="viewList" aria-pressed="false" title="List view">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 2.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Z"/></svg>
+                    List
+                  </button>
+                </div>
+                <a class="rss-link" id="rssFeedLink" href="/articles/rss.xml" type="application/rss+xml"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>RSS Feed</a>
+              </div>
             </div>
             <div class="results-bar-right">
-              <div class="view-toggle" role="group" aria-label="Article view">
-                <button type="button" id="viewCards" aria-pressed="true" title="Card view">
-                  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 1.5h5v5h-5v-5Zm0 8h5v5h-5v-5Zm8-8h5v5h-5v-5Zm0 8h5v5h-5v-5Z"/></svg>
-                  Cards
-                </button>
-                <button type="button" id="viewList" aria-pressed="false" title="List view">
-                  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 2.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Zm0 4.5h13v2h-13v-2Z"/></svg>
-                  List
-                </button>
-              </div>
-              <a class="rss-link" href="/articles/rss.xml" title="Subscribe to the RSS feed">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
-                RSS feed
-              </a>
+              <label class="sort-field" for="sortSelect">Sort
+                <select id="sortSelect"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select>
+              </label>
+              <a class="rss-link" href="#series">Start a series</a>
             </div>
           </div>
+          </fieldset>
+          <p class="results-count" id="resultsCount" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">Loading catalogue controls. Article links are available below.</p>
         </section>
+        <div class="catalogue-notice" id="preferenceNotice" role="status" hidden></div>
+        <div class="catalogue-notice" id="loadError" role="alert" hidden>
+          <p>The catalogue could not be loaded. Search and filters are unavailable; the prebuilt article links are shown below.</p>
+          <button class="catalogue-button" id="retryLoad" type="button">Retry loading catalogue</button>
+        </div>
 
-        <section aria-labelledby="featured-title" id="featuredSection" data-loading>
-          <h2 class="sec-label" id="featured-title">Featured Posts</h2>
+        <section aria-labelledby="featured-title" id="featuredSection" hidden>
+          <h2 class="sec-label" id="featured-title">Featured selection</h2>
           <div class="featured-grid" id="featuredGrid"></div>
         </section>
 
-        <section aria-labelledby="posts-title">
-          <h2 class="sec-label" id="posts-title">Posts</h2>
-          <div class="article-cards" id="articleCards"><!-- articles:static:start -->
+        <section class="catalogue-results" aria-labelledby="posts-title">
+          <h2 class="sec-label" id="posts-title">Articles</h2>
+          <div class="article-cards" id="articleCards" data-static><!-- articles:static:start -->
         <a class="article-card" href="/articles/azure-policy-part-1-what-is-a-policy/">
           <div class="card-thumb"><img src="/articles/images/azure-policy-part-1.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
@@ -812,7 +1216,7 @@
             <div class="card-meta">
               <span>September 4, 2026</span>
               <span class="dot">&middot;</span>
-              <span>13 min read</span>
+              <span>14 min read</span>
             </div>
           </div>
         </a>
@@ -851,7 +1255,7 @@
             <div class="card-meta">
               <span>September 4, 2026</span>
               <span class="dot">&middot;</span>
-              <span>8 min read</span>
+              <span>9 min read</span>
             </div>
           </div>
         </a>
@@ -864,7 +1268,7 @@
             <div class="card-meta">
               <span>September 4, 2026</span>
               <span class="dot">&middot;</span>
-              <span>9 min read</span>
+              <span>10 min read</span>
             </div>
           </div>
         </a>
@@ -877,7 +1281,7 @@
             <div class="card-meta">
               <span>September 4, 2026</span>
               <span class="dot">&middot;</span>
-              <span>11 min read</span>
+              <span>12 min read</span>
             </div>
           </div>
         </a>
@@ -890,7 +1294,7 @@
             <div class="card-meta">
               <span>September 4, 2026</span>
               <span class="dot">&middot;</span>
-              <span>15 min read</span>
+              <span>16 min read</span>
             </div>
           </div>
         </a>
@@ -898,12 +1302,12 @@
           <div class="card-thumb"><img src="/articles/images/azure-lighthouse.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Featured</span><span class="card-category-tag">Azure</span><span class="card-category-tag">Governance</span></div>
-            <h3>Azure Lighthouse: The Most Underrated Feature in Azure</h3>
-            <p>Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.</p>
+            <h3>Azure Lighthouse: Choose a Cross-Tenant Management Pattern</h3>
+            <p>Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation.</p>
             <div class="card-meta">
               <span>September 3, 2026</span>
               <span class="dot">&middot;</span>
-              <span>13 min read</span>
+              <span>14 min read</span>
             </div>
           </div>
         </a>
@@ -916,7 +1320,7 @@
             <div class="card-meta">
               <span>September 3, 2026</span>
               <span class="dot">&middot;</span>
-              <span>14 min read</span>
+              <span>15 min read</span>
             </div>
           </div>
         </a>
@@ -929,7 +1333,7 @@
             <div class="card-meta">
               <span>September 3, 2026</span>
               <span class="dot">&middot;</span>
-              <span>12 min read</span>
+              <span>13 min read</span>
             </div>
           </div>
         </a>
@@ -942,7 +1346,7 @@
             <div class="card-meta">
               <span>September 3, 2026</span>
               <span class="dot">&middot;</span>
-              <span>9 min read</span>
+              <span>10 min read</span>
             </div>
           </div>
         </a>
@@ -955,7 +1359,7 @@
             <div class="card-meta">
               <span>September 3, 2026</span>
               <span class="dot">&middot;</span>
-              <span>7 min read</span>
+              <span>8 min read</span>
             </div>
           </div>
         </a>
@@ -968,7 +1372,7 @@
             <div class="card-meta">
               <span>September 3, 2026</span>
               <span class="dot">&middot;</span>
-              <span>8 min read</span>
+              <span>10 min read</span>
             </div>
           </div>
         </a>
@@ -994,7 +1398,7 @@
             <div class="card-meta">
               <span>September 2, 2026</span>
               <span class="dot">&middot;</span>
-              <span>12 min read</span>
+              <span>13 min read</span>
             </div>
           </div>
         </a>
@@ -1007,7 +1411,7 @@
             <div class="card-meta">
               <span>September 1, 2026</span>
               <span class="dot">&middot;</span>
-              <span>11 min read</span>
+              <span>12 min read</span>
             </div>
           </div>
         </a>
@@ -1015,12 +1419,12 @@
           <div class="card-thumb"><img src="/articles/images/how-to-create-a-new-article.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Documentation</span></div>
-            <h3>How to Create a New Article</h3>
+            <h3>Contributing an Article to This Site</h3>
             <p>Everything you can use when writing a new article for /articles: frontmatter fields, headings, lists, callouts, code blocks, tables, images, and links.</p>
             <div class="card-meta">
               <span>August 19, 2026</span>
               <span class="dot">&middot;</span>
-              <span>2 min read</span>
+              <span>4 min read</span>
             </div>
           </div>
         </a>
@@ -1033,7 +1437,7 @@
             <div class="card-meta">
               <span>August 14, 2026</span>
               <span class="dot">&middot;</span>
-              <span>2 min read</span>
+              <span>3 min read</span>
             </div>
           </div>
         </a>
@@ -1046,7 +1450,7 @@
             <div class="card-meta">
               <span>August 10, 2026</span>
               <span class="dot">&middot;</span>
-              <span>3 min read</span>
+              <span>4 min read</span>
             </div>
           </div>
         </a>
@@ -1054,12 +1458,12 @@
           <div class="card-thumb"><img src="/articles/images/bastion/bastion.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span><span class="card-category-tag">Bastion</span></div>
-            <h3>Connect to an Azure VM Using the Native RDP Client Through Bastion</h3>
+            <h3>Native RDP Through Azure Bastion</h3>
             <p>Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.</p>
             <div class="card-meta">
               <span>March 6, 2026</span>
               <span class="dot">&middot;</span>
-              <span>2 min read</span>
+              <span>3 min read</span>
             </div>
           </div>
         </a>
@@ -1068,11 +1472,11 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
             <h3>How to Delegate a Domain to Azure DNS</h3>
-            <p>Step-by-step guide to delegating a domain purchased from a third-party registrar (OVH) to Azure DNS, and recreating the DNS records once delegation is complete.</p>
+            <p>Prepare an Azure public DNS zone and its records before changing registrar name servers, using OVH as the example, then verify delegation and plan rollback.</p>
             <div class="card-meta">
               <span>December 16, 2025</span>
               <span class="dot">&middot;</span>
-              <span>5 min read</span>
+              <span>6 min read</span>
             </div>
           </div>
         </a>
@@ -1098,7 +1502,7 @@
             <div class="card-meta">
               <span>February 26, 2025</span>
               <span class="dot">&middot;</span>
-              <span>4 min read</span>
+              <span>5 min read</span>
             </div>
           </div>
         </a>
@@ -1106,12 +1510,12 @@
           <div class="card-thumb"><img src="/articles/images/SQL-Database.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
-            <h3>App Service (PHP) Access to Azure SQL Database with Managed Identity</h3>
+            <h3>Connect PHP App Service to Azure SQL Without a Password</h3>
             <p>Connect a PHP app running on Azure App Service to Azure SQL Database using a system-assigned managed identity, with no stored username or password.</p>
             <div class="card-meta">
               <span>February 12, 2025</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1120,7 +1524,7 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
             <h3>Allow ICMP (Ping) on an Azure VM</h3>
-            <p>Azure VMs block ICMP (ping) by default via the Windows Firewall. Here's the firewall rule to allow it, applied through the Azure portal's run command.</p>
+            <p>Allow an ICMPv4 echo request in a Windows VM's guest firewall, then separately verify the Azure network path and test the response.</p>
             <div class="card-meta">
               <span>January 31, 2025</span>
               <span class="dot">&middot;</span>
@@ -1133,11 +1537,11 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
             <h3>Network Security Perimeter (NSP)</h3>
-            <p>An overview of Azure Network Security Perimeter: the pain points it solves for PaaS resource access control, how it compares to existing patterns, and its current limitations.</p>
+            <p>Compare controls for PaaS public access and private connectivity, understand Network Security Perimeter objects, and prepare a scoped validation plan.</p>
             <div class="card-meta">
               <span>January 31, 2025</span>
               <span class="dot">&middot;</span>
-              <span>2 min read</span>
+              <span>3 min read</span>
             </div>
           </div>
         </a>
@@ -1150,7 +1554,7 @@
             <div class="card-meta">
               <span>December 17, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1158,12 +1562,12 @@
           <div class="card-thumb"><img src="/articles/images/bicep.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
-            <h3>Terraform vs Bicep, the Match</h3>
-            <p>A side-by-side comparison of Terraform and Bicep across language, state management, learning curve, cost, and more, based on hands-on experience with both.</p>
+            <h3>Terraform vs Bicep: Choose by Team and Workload</h3>
+            <p>Compare Terraform and Bicep by scope, state, review workflow and operating cost, then choose a fit for your team instead of a universal winner.</p>
             <div class="card-meta">
               <span>December 6, 2024</span>
               <span class="dot">&middot;</span>
-              <span>3 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1171,8 +1575,8 @@
           <div class="card-thumb"><img src="/articles/images/github-actions.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
-            <h3>Display GitHub Secrets for Debug</h3>
-            <p>A quick method to print a GitHub Actions secret for debugging purposes, spaced out so it can't be read directly from the log.</p>
+            <h3>Debug GitHub Actions Secret Configuration Without Revealing Values</h3>
+            <p>Check whether a GitHub Actions secret is available without printing it, review repository and environment scope, and use OIDC for Azure instead of long-lived credentials.</p>
             <div class="card-meta">
               <span>December 2, 2024</span>
               <span class="dot">&middot;</span>
@@ -1184,8 +1588,8 @@
           <div class="card-thumb"><img src="/articles/images/Tags.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
-            <h3>Remove Old Azure Resources Based on Tags</h3>
-            <p>Automate the cleanup of temporary Azure resources using a Time-To-Live tag, plus a script to auto-tag untagged resources with their creator.</p>
+            <h3>Review Expired Azure Resources by TTL Tags Before Cleanup</h3>
+            <p>Build a scoped, read-only TTL inventory before approving resource deletion, and separately investigate creator attribution without treating the last writer as the creator.</p>
             <div class="card-meta">
               <span>November 13, 2024</span>
               <span class="dot">&middot;</span>
@@ -1224,7 +1628,7 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
             <h3>Call Azure API with PowerShell</h3>
-            <p>How to call an Azure REST API directly from PowerShell: get an access token, build the request headers, and invoke the endpoint.</p>
+            <p>Make a read-only Azure Resource Manager GET for a storage account using Azure PowerShell, with explicit context, replaceable parameters and response checks.</p>
             <div class="card-meta">
               <span>November 6, 2024</span>
               <span class="dot">&middot;</span>
@@ -1236,8 +1640,8 @@
           <div class="card-thumb"><img src="/articles/images/Users.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
-            <h3>RBAC Delete Role Assignments with 'Identity Not Found'</h3>
-            <p>Why Azure keeps RBAC role assignments for deleted users, groups, or service principals, and a PowerShell script to clean them up.</p>
+            <h3>Review RBAC Assignments with 'Identity Not Found'</h3>
+            <p>Inventory unresolved Azure RBAC principals at an explicit scope, verify deletion independently, and preview removal before approving a change.</p>
             <div class="card-meta">
               <span>November 6, 2024</span>
               <span class="dot">&middot;</span>
@@ -1250,7 +1654,7 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
             <h3>Don't Build Your Cloud Home on Shaky Foundations</h3>
-            <p>Why cloud governance and security foundations - landing zones, management groups, policies, RBAC, naming, tagging, and networking - must come before any real workload.</p>
+            <p>A grouped Azure foundations checklist: decide ownership first, then governance, platform connectivity and ongoing operations before onboarding workloads.</p>
             <div class="card-meta">
               <span>November 6, 2024</span>
               <span class="dot">&middot;</span>
@@ -1262,12 +1666,12 @@
           <div class="card-thumb"><img src="/articles/images/kql-query.jpeg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
-            <h3>KQL Query Collection</h3>
+            <h3>KQL Query Library for Azure Resource Graph</h3>
             <p>A growing collection of Kusto Query Language (KQL) queries for Azure Resource Graph, covering AKS, disks, networking, policies, RBAC, subscriptions, and tags.</p>
             <div class="card-meta">
               <span>November 6, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1288,12 +1692,12 @@
           <div class="card-thumb"><img src="/articles/images/VSCode.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Tools</span></div>
-            <h3>Draw.io VS Code Extension: A Must-Have for Your Diagrams</h3>
-            <p>Discover the benefits of integrating Draw.io with VS Code for seamless diagram creation.</p>
+            <h3>Edit and Version Draw.io Diagrams in VS Code</h3>
+            <p>Install the unofficial Draw.io integration, choose an editable file format and create your first diagram alongside source code in desktop VS Code.</p>
             <div class="card-meta">
               <span>November 5, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1302,7 +1706,7 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Tools</span></div>
             <h3>Cyber Attacks Live Maps</h3>
-            <p>A curated list of free live dashboards that visualize cyber attacks happening around the world in real time.</p>
+            <p>A directory of vendor threat visualisations, with their different scopes and limits: useful for exploration, not an exhaustive map of attacks or attribution.</p>
             <div class="card-meta">
               <span>November 3, 2024</span>
               <span class="dot">&middot;</span>
@@ -1314,12 +1718,12 @@
           <div class="card-thumb"><img src="/articles/images/hugo.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Hugo</span></div>
-            <h3>How to Host Your Hugo Website on GitHub Pages</h3>
-            <p>Step-by-step guide to publishing a local Hugo website to GitHub Pages, including the deployment pipeline and how to sync content updates.</p>
+            <h3>Host a Hugo Site on GitHub Pages with Actions</h3>
+            <p>Prepare a Hugo source repository, select GitHub Actions as the Pages source, build a pinned Hugo version and verify the deployed site.</p>
             <div class="card-meta">
               <span>November 3, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>3 min read</span>
             </div>
           </div>
         </a>
@@ -1327,12 +1731,12 @@
           <div class="card-thumb"><img src="/articles/images/website-migration.png" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Hugo</span></div>
-            <h3>From WordPress to Hugo Website</h3>
-            <p>Why I migrated this site from WordPress to Hugo, and the trade-offs between the two platforms.</p>
+            <h3>From WordPress to Hugo: Choosing a Publishing Workflow</h3>
+            <p>A decision-focused comparison of WordPress and Hugo: editing workflow, dynamic features, hosting and maintenance trade-offs, without unrecorded migration claims.</p>
             <div class="card-meta">
               <span>October 16, 2024</span>
               <span class="dot">&middot;</span>
-              <span>4 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1340,12 +1744,12 @@
           <div class="card-thumb"><img src="/articles/images/githubtest.png" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
-            <h3>How to Embed a GitHub Script in an Article</h3>
-            <p>How I keep long PowerShell scripts in a dedicated GitHub repository and embed them directly as code blocks instead of duplicating the code across posts.</p>
+            <h3>Publish a Versioned GitHub Script Snapshot in an Article</h3>
+            <p>Distinguish a source link from build-time inclusion and browser fetching, and publish a readable static script snapshot with honest provenance.</p>
             <div class="card-meta">
               <span>October 16, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1367,11 +1771,11 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Azure</span></div>
             <h3>Optimize and Reduce Costs in Azure</h3>
-            <p>Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.</p>
+            <p>Prioritise Azure cost work by effort, reversibility and commitment: establish a baseline, review usage, improve governance, then evaluate financial commitments.</p>
             <div class="card-meta">
               <span>September 11, 2024</span>
               <span class="dot">&middot;</span>
-              <span>7 min read</span>
+              <span>3 min read</span>
             </div>
           </div>
         </a>
@@ -1384,7 +1788,7 @@
             <div class="card-meta">
               <span>September 11, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1392,12 +1796,12 @@
           <div class="card-thumb"><img src="/articles/images/git.svg" alt="" loading="lazy" width="1200" height="630"></div>
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">Git</span></div>
-            <h3>Git Basics</h3>
-            <p>The fundamental Git commands every beginner should know: configuration, cloning, branching, committing, and logs.</p>
+            <h3>Git Basics: A Task-Based Command Cheat Sheet</h3>
+            <p>Find Git commands by task: setup, cloning, the daily change cycle, synchronisation, branches and diagnosis. Each example explains its effect.</p>
             <div class="card-meta">
               <span>February 28, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1406,11 +1810,11 @@
           <div class="card-body">
             <div class="card-categories"><span class="card-category-tag">GitHub</span></div>
             <h3>GitHub Branch Naming Convention</h3>
-            <p>A practical branch naming convention for GitHub projects: standard format, common prefixes, best practices, and special branches.</p>
+            <p>A suggested team convention, not a GitHub requirement: readable branch names with a purpose, ticket identifier and short description.</p>
             <div class="card-meta">
               <span>February 26, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
@@ -1423,59 +1827,81 @@
             <div class="card-meta">
               <span>February 26, 2024</span>
               <span class="dot">&middot;</span>
-              <span>1 min read</span>
+              <span>2 min read</span>
             </div>
           </div>
         </a>
         <!-- articles:static:end -->
       </div>
         </section>
+        <div class="pagination">
+          <button class="catalogue-button" id="loadMore" type="button" hidden>Show 12 more articles</button>
+        </div>
+        <aside class="catalogue-ad" id="catalogueAd" aria-label="Advertisement" hidden>
+          <span class="ad-label">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6636684537203477"
+               data-ad-slot="4494484671"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </aside>
+      <div class="catalogue-secondary">
+        <section id="series" aria-labelledby="series-title">
+          <h2 id="series-title">Start a series</h2>
+          <div class="series-grid">
+            <article class="series-card" data-series-card="azure-policy">
+              <h3>Azure Policy</h3>
+              <p><span data-series-count="azure-policy">7 parts</span> — from definitions and assignments to policy as code.</p>
+              <div class="series-actions">
+                <a href="/articles/azure-policy-part-1-what-is-a-policy/">Start with part 1</a>
+                <button class="catalogue-button" data-browse-series="azure-policy" type="button" hidden>Browse the series in order</button>
+              </div>
+            </article>
+            <article class="series-card" data-series-card="azure-dns">
+              <h3>DNS in Azure</h3>
+              <p><span data-series-count="azure-dns">8 parts</span> — from name resolution to Private Endpoints and the decision tree.</p>
+              <div class="series-actions">
+                <a href="/articles/dns-in-azure-part-1-fundamentals/">Start with part 1</a>
+                <button class="catalogue-button" data-browse-series="azure-dns" type="button" hidden>Browse the series in order</button>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
-
-      <aside class="articles-sidebar" aria-label="Disclaimer, categories, archives, tags and recent posts">
+      </div>
+      <aside class="articles-sidebar" id="articleSidebar" aria-label="Disclaimer, categories, archives, tags and recent posts">
         <div class="sidebar-panel sidebar-disclaimer">
           <p>The opinions expressed on this site are my own personal opinions and do not represent my employer&rsquo;s view in any way.</p>
         </div>
-        <div class="sidebar-panel">
+        <section class="sidebar-panel" aria-labelledby="categories-title">
           <h2 class="sec-label" id="categories-title">Categories</h2>
-          <ul class="category-list" id="categoryList"></ul>
-        </div>
-        <div class="sidebar-panel" id="archivePanel" hidden>
+          <ul class="category-list" id="categoryList"><li class="sidebar-status">Categories load with the catalogue.</li></ul>
+        </section>
+        <section class="sidebar-panel" id="archivePanel" aria-labelledby="archives-title">
           <h2 class="sec-label" id="archives-title">Archives</h2>
-          <ul class="category-list" id="archiveList"></ul>
-        </div>
-        <div class="sidebar-panel" id="tagPanel" hidden>
+          <ul class="category-list" id="archiveList"><li class="sidebar-status">Archives load with the catalogue.</li></ul>
+        </section>
+        <section class="sidebar-panel" id="tagPanel" aria-labelledby="tags-title">
           <h2 class="sec-label" id="tags-title">Tags</h2>
-          <ul class="tag-cloud" id="tagList"></ul>
-          <button type="button" class="tag-toggle" id="tagToggle" aria-expanded="false" hidden></button>
-        </div>
-        <div class="sidebar-panel" id="recentPanel" hidden>
+          <ul class="tag-cloud" id="tagList"><li class="sidebar-status">Tags load with the catalogue.</li></ul>
+          <button class="catalogue-button tag-toggle" id="tagToggle" type="button" aria-controls="tagList" aria-expanded="false" hidden>Show all tags</button>
+        </section>
+        <section class="sidebar-panel" id="recentPanel" aria-labelledby="recent-title">
           <h2 class="sec-label" id="recent-title">Recent Posts</h2>
-          <ul class="recent-list" id="recentList"></ul>
-        </div>
+          <ul class="recent-list" id="recentList"><li class="sidebar-status">Recent posts load with the catalogue.</li></ul>
+        </section>
+        <noscript><p class="sidebar-status">Enable JavaScript to use these menus. All article links remain available in the main list.</p></noscript>
       </aside>
     </div>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About these articles</h2>
-      <p>Practical write-ups from real Azure, GitHub, and DevOps work: the configuration that was not obvious, the error message with no useful search result, and the procedure worth writing down before it is forgotten.</p>
-      <h3>What you will find</h3>
-      <ul>
-        <li><strong>Azure infrastructure</strong> — networking, virtual machines, identity, and governance.</li>
-        <li><strong>Infrastructure as code</strong> — Terraform and Bicep, and how they compare in practice.</li>
-        <li><strong>GitHub</strong> — Actions, OIDC federation with Azure, branch and commit conventions, and contribution workflows.</li>
-        <li><strong>Operations</strong> — cost optimisation, policy and RBAC clean-up, and KQL queries for troubleshooting.</li>
-      </ul>
-      <h3>How to browse</h3>
-      <p>Use the category and tag filters to narrow the list, or the search box to look across every title and summary at once. Each article is self-contained, with the commands and configuration in copyable blocks. An <a href="/articles/rss.xml">RSS feed</a> is available if you would rather be notified when something new is published.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -1521,6 +1947,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -1531,14 +1958,18 @@
     </svg>
   </button>
 
-  <script>
+  <script data-article-catalogue>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
     const elements = {
-      statsGrid: document.getElementById("statsGrid"),
+      controls: document.getElementById("catalogueControls"),
       featuredSection: document.getElementById("featuredSection"),
       featuredGrid: document.getElementById("featuredGrid"),
       searchInput: document.getElementById("searchInput"),
+      clearSearch: document.getElementById("clearSearch"),
+      clearAllFilters: document.getElementById("clearAllFilters"),
+      filterToggle: document.getElementById("filterToggle"),
+      filterPanel: document.getElementById("filterPanel"),
       activeFilterWrap: document.getElementById("activeFilterWrap"),
       favoritesFilter: document.getElementById("favoritesFilter"),
       featuredToggle: document.getElementById("featuredToggle"),
@@ -1546,18 +1977,34 @@
       articleCards: document.getElementById("articleCards"),
       viewCards: document.getElementById("viewCards"),
       viewList: document.getElementById("viewList"),
+      categorySelect: document.getElementById("categorySelect"),
       categoryList: document.getElementById("categoryList"),
-      archivePanel: document.getElementById("archivePanel"),
-      archiveList: document.getElementById("archiveList"),
-      tagPanel: document.getElementById("tagPanel"),
+      tagSelect: document.getElementById("tagSelect"),
       tagList: document.getElementById("tagList"),
       tagToggle: document.getElementById("tagToggle"),
-      recentPanel: document.getElementById("recentPanel"),
+      seriesSelect: document.getElementById("seriesSelect"),
+      sortSelect: document.getElementById("sortSelect"),
+      archiveList: document.getElementById("archiveList"),
       recentList: document.getElementById("recentList"),
+      loadMore: document.getElementById("loadMore"),
+      loadError: document.getElementById("loadError"),
+      retryLoad: document.getElementById("retryLoad"),
+      preferenceNotice: document.getElementById("preferenceNotice"),
     };
 
-    const params = new URLSearchParams(location.search);
-    const state = { articles: [], category: params.get("category") || "", tag: params.get("tag") || "", month: params.get("month") || "", tagsExpanded: false, favorites: new Set(), favoritesOnly: false, showFeatured: true, view: "cards" };
+    const PAGE_SIZE = 12;
+    const FEATURED_LIMIT = 3;
+    const RECENT_COUNT = 10;
+    const TAGS_COLLAPSED_COUNT = 18;
+    const state = { articles: [], category: "", tag: "", month: "", series: "", sort: "newest", tagsExpanded: false, favorites: new Set(), favoritesOnly: false, showFeatured: true, view: "cards", visibleCount: PAGE_SIZE, featuredUrls: new Set(), ready: false, loading: false };
+    const SERIES = [
+      { id: "azure-policy", title: "Azure Policy", prefix: "azure-policy-part-" },
+      { id: "azure-dns", title: "DNS in Azure", prefix: "dns-in-azure-part-" },
+    ];
+    const staticCards = [...elements.articleCards.querySelectorAll(".article-card")];
+    let adRequested = false;
+    let storedView = "cards";
+    let storedShowFeatured = true;
 
     const FAVORITES_STORAGE_KEY = "articles-favorites";
     const VIEW_STORAGE_KEY = "articles-view";
@@ -1565,16 +2012,25 @@
     // Virtual category: it is not present in any article's categories array,
     // renderList resolves it against the featured flag instead.
     const FEATURED_CATEGORY = "Featured Posts";
-    const RECENT_COUNT = 10;
-    // The tag cloud has ~40 entries; showing them all would push "Recent Posts"
-    // out of the sticky sidebar, so the long tail hides behind a toggle.
-    const TAGS_COLLAPSED_COUNT = 18;
+
+    function preferenceError(error) {
+      elements.preferenceNotice.hidden = false;
+      elements.preferenceNotice.textContent = "Saved preferences are unavailable. Changes still work in this tab but may not be saved for your next visit.";
+      console.warn("Article catalogue preferences are unavailable.", error);
+    }
+
+    function savePreference(key, value) {
+      try { localStorage.setItem(key, value); }
+      catch (error) { preferenceError(error); }
+    }
 
     function loadFavorites() {
       try {
         const storedFavorites = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
-        state.favorites = new Set(Array.isArray(storedFavorites) ? storedFavorites : []);
-      } catch {
+        if (!Array.isArray(storedFavorites) || storedFavorites.some((url) => typeof url !== "string")) throw new Error("Invalid favorite article IDs");
+        state.favorites = new Set(storedFavorites);
+      } catch (error) {
+        preferenceError(error);
         state.favorites = new Set();
       }
     }
@@ -1582,29 +2038,29 @@
     function loadView() {
       try {
         const stored = localStorage.getItem(VIEW_STORAGE_KEY);
-        if (stored === "list" || stored === "cards") state.view = stored;
+        if (stored === "list" || stored === "cards") storedView = stored;
       } catch (error) {
-        state.view = "cards";
+        preferenceError(error);
       }
+      state.view = storedView;
     }
 
     function loadShowFeatured() {
       try {
-        state.showFeatured = localStorage.getItem(FEATURED_STORAGE_KEY) !== "false";
+        storedShowFeatured = localStorage.getItem(FEATURED_STORAGE_KEY) !== "false";
       } catch (error) {
-        state.showFeatured = true;
+        preferenceError(error);
       }
+      state.showFeatured = storedShowFeatured;
       elements.featuredToggle.checked = state.showFeatured;
     }
 
     function setShowFeatured(showFeatured) {
       state.showFeatured = showFeatured;
-      try {
-        localStorage.setItem(FEATURED_STORAGE_KEY, String(showFeatured));
-      } catch (error) {
-        /* storage unavailable, the choice just won't persist */
-      }
-      renderFeatured();
+      storedShowFeatured = showFeatured;
+      savePreference(FEATURED_STORAGE_KEY, String(showFeatured));
+      renderResults();
+      syncUrl(false);
     }
 
     function applyView() {
@@ -1617,12 +2073,10 @@
 
     function setView(view) {
       state.view = view;
-      try {
-        localStorage.setItem(VIEW_STORAGE_KEY, view);
-      } catch (error) {
-        /* storage unavailable, the choice just won't persist */
-      }
+      storedView = view;
+      savePreference(VIEW_STORAGE_KEY, view);
       applyView();
+      syncUrl(false);
     }
 
     function starIconMarkup(isFavorite) {
@@ -1634,11 +2088,7 @@
       if (isFavorite) state.favorites.delete(article.url);
       else state.favorites.add(article.url);
 
-      try {
-        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...state.favorites]));
-      } catch (error) {
-        console.warn("Unable to save favorites", error);
-      }
+      savePreference(FAVORITES_STORAGE_KEY, JSON.stringify([...state.favorites]));
 
       const nextState = !isFavorite;
       button.setAttribute("aria-pressed", String(nextState));
@@ -1646,11 +2096,14 @@
       button.title = nextState ? "Remove from favorites" : "Add to favorites";
       button.innerHTML = starIconMarkup(nextState);
       updateFavoritesFilter();
-      if (state.favoritesOnly) renderList();
+      if (state.favoritesOnly) {
+        elements.favoritesFilter.focus({ preventScroll: true });
+        renderResults();
+      }
     }
 
     function updateFavoritesFilter() {
-      elements.favoritesFilter.innerHTML = `${starIconMarkup(state.favoritesOnly)} My favorites (${state.favorites.size.toLocaleString()})`;
+      elements.favoritesFilter.innerHTML = `${starIconMarkup(state.favoritesOnly)} Favorite articles (${state.favorites.size.toLocaleString()})`;
       elements.favoritesFilter.setAttribute("aria-pressed", String(state.favoritesOnly));
     }
 
@@ -1663,12 +2116,12 @@
     }
 
     function formatDate(iso) {
-      return new Date(`${iso}T12:00:00Z`).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+      return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
     }
 
     function thumbHtml(article) {
       if (!article.featureImage) return "";
-      return `<div class="card-thumb"><img src="${escapeHtml(article.featureImage)}" alt="" loading="lazy"></div>`;
+      return `<div class="card-thumb${article.featureImageShape === "logo" ? " thumb-contain" : ""}"><img src="${escapeHtml(article.featureImage)}" alt="" loading="lazy" width="1200" height="630"></div>`;
     }
 
     // Feature art uses the 1200x630 frame ratio, but several articles reuse square
@@ -1690,51 +2143,38 @@
     }
 
     function categoriesHtml(article) {
-      if (!article.categories.length) return "";
-      return `<div class="card-categories">${article.categories.map((c) => `<span class="card-category-tag">${escapeHtml(c)}</span>`).join("")}</div>`;
+      const categories = article.categories.filter((category) => category !== "Featured").slice(-2);
+      if (!categories.length) return "";
+      return `<div class="card-categories">${categories.map((c) => `<span class="card-category-tag">${escapeHtml(c)}</span>`).join("")}</div>`;
     }
 
     function createFeaturedCard(article) {
-      const card = document.createElement("a");
-      card.className = "featured-card";
-      card.href = article.url;
-      card.innerHTML = `
-        <span class="featured-badge">Featured</span>
-        ${thumbHtml(article)}
-        <div class="card-body">
-          ${categoriesHtml(article)}
-          <h3>${escapeHtml(article.title)}</h3>
-          <p>${escapeHtml(article.description)}</p>
-          <div class="card-meta">
-            <span>${escapeHtml(article.author)}</span>
-            <span class="dot">&middot;</span>
-            <span>${formatDate(article.date)}</span>
-            <span class="dot">&middot;</span>
-            <span>${article.readingMinutes} min read</span>
-          </div>
-        </div>`;
-      fitThumb(card);
+      const card = createArticleCard(article);
+      card.classList.add("featured-card");
       return card;
     }
 
     function createArticleCard(article) {
-      const card = document.createElement("a");
+      const card = document.createElement("article");
       card.className = "article-card";
-      card.href = article.url;
+      card.dataset.articleUrl = article.url;
       const isFavorite = state.favorites.has(article.url);
       card.innerHTML = `
-        <button type="button" class="favorite-button" aria-pressed="${isFavorite}" aria-label="${isFavorite ? "Remove" : "Add"} ${escapeHtml(article.title)} ${isFavorite ? "from" : "to"} favorites" title="${isFavorite ? "Remove from favorites" : "Add to favorites"}">${starIconMarkup(isFavorite)}</button>
+        <a class="article-link" href="${escapeHtml(article.url)}" aria-labelledby="article-${escapeHtml(article.slug)}">
         ${thumbHtml(article)}
         <div class="card-body">
           ${categoriesHtml(article)}
-          <h3>${escapeHtml(article.title)}</h3>
-          <p>${escapeHtml(article.description)}</p>
+          <h3 id="article-${escapeHtml(article.slug)}">${escapeHtml(article.title)}</h3>
           <div class="card-meta">
-            <span>${formatDate(article.date)}</span>
+            <time datetime="${escapeHtml(article.date)}">${formatDate(article.date)}</time>
             <span class="dot">&middot;</span>
             <span>${article.readingMinutes} min read</span>
           </div>
-        </div>`;
+          <p>${escapeHtml(article.description)}</p>
+          <span class="read-article">Read article</span>
+        </div>
+        </a>
+        <button type="button" class="favorite-button" aria-pressed="${isFavorite}" aria-label="${isFavorite ? "Remove" : "Add"} ${escapeHtml(article.title)} ${isFavorite ? "from" : "to"} favorites" title="${isFavorite ? "Remove from favorites" : "Add to favorites"}">${starIconMarkup(isFavorite)}</button>`;
       const favorite = card.querySelector(".favorite-button");
       favorite.addEventListener("click", (event) => {
         event.preventDefault();
@@ -1745,109 +2185,182 @@
       return card;
     }
 
-    function renderStats() {
-      const categories = new Set(state.articles.flatMap((a) => a.categories));
-      const featured = state.articles.filter((a) => a.featured).length;
-      const stats = [
-        { label: "Articles", value: state.articles.length },
-        { label: "Categories", value: categories.size },
-        { label: "Featured", value: featured },
-      ];
-      elements.statsGrid.replaceChildren();
-      stats.forEach((stat) => {
-        const el = document.createElement("div");
-        el.className = "stat-card";
-        el.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
-        elements.statsGrid.append(el);
-      });
+    function seriesInfo(article) {
+      const series = SERIES.find((item) => article.slug.startsWith(item.prefix));
+      if (!series) return null;
+      const part = Number(article.slug.slice(series.prefix.length).split("-")[0]);
+      return Number.isInteger(part) && part > 0 ? { ...series, part } : null;
     }
 
-    function renderFeatured() {
-      const featured = state.articles.filter((a) => a.featured).sort((a, b) => (a.date < b.date ? 1 : -1));
-      elements.featuredSection.removeAttribute("data-loading");
-      // The strip highlights the collection as a whole, so it steps aside as
-      // soon as the toolbar above it narrows the list below.
-      const isNarrowed = Boolean(state.category) || Boolean(state.tag) || Boolean(state.month) || state.favoritesOnly || elements.searchInput.value.trim() !== "";
-      elements.featuredSection.hidden = !state.showFeatured || featured.length === 0 || isNarrowed;
-      elements.featuredGrid.replaceChildren();
-      if (elements.featuredSection.hidden) return;
-      featured.forEach((a) => elements.featuredGrid.append(createFeaturedCard(a)));
+    function compareArticles(a, b) {
+      const byDate = a.date.localeCompare(b.date);
+      if (byDate) return state.sort === "oldest" ? byDate : -byDate;
+      const aSeries = seriesInfo(a), bSeries = seriesInfo(b);
+      if (aSeries && bSeries && aSeries.id === bSeries.id) return aSeries.part - bSeries.part;
+      return a.title.localeCompare(b.title, "en") || a.url.localeCompare(b.url);
+    }
+
+    function filteredArticles() {
+      const query = normalize(elements.searchInput.value.trim());
+      return state.articles.filter((article) => {
+        if (state.category === FEATURED_CATEGORY) {
+          if (!article.featured) return false;
+        } else if (state.category && !article.categories.includes(state.category)) return false;
+        if (state.tag && !article.tags.includes(state.tag)) return false;
+        if (state.month && !article.date.startsWith(state.month)) return false;
+        if (state.series && seriesInfo(article)?.id !== state.series) return false;
+        if (state.favoritesOnly && !state.favorites.has(article.url)) return false;
+        return !query || normalize(`${article.title} ${article.description} ${article.tags.join(" ")}`).includes(query);
+      }).sort(compareArticles);
+    }
+
+    function renderFeatured(filtered) {
+      const isNarrowed = state.category || state.tag || state.month || state.series || state.favoritesOnly || elements.searchInput.value.trim();
+      const featured = state.showFeatured && !isNarrowed && state.sort === "newest"
+        ? filtered.filter((article) => article.featured).slice(0, FEATURED_LIMIT) : [];
+      state.featuredUrls = new Set(featured.map((article) => article.url));
+      elements.featuredSection.hidden = featured.length === 0;
+      featured.forEach((article) => elements.featuredGrid.append(createFeaturedCard(article)));
     }
 
     function renderResults() {
-      renderFeatured();
-      renderList();
+      if (!state.ready) return;
+      const active = document.activeElement;
+      const focusedArticle = active.closest("[data-article-url]");
+      const filtered = filteredArticles();
+      [elements.featuredGrid, elements.articleCards].forEach((grid) => {
+        grid.querySelectorAll(":scope > .article-card, :scope > .empty-state").forEach((card) => card.remove());
+      });
+      renderFeatured(filtered);
+      renderList(filtered);
+      applyView();
+      elements.clearSearch.hidden = !elements.searchInput.value;
+      elements.clearAllFilters.hidden = !elements.searchInput.value && !state.category && !state.tag && !state.month && !state.series && !state.favoritesOnly;
+      const filterCount = [state.category, state.tag, state.month, state.series].filter(Boolean).length;
+      elements.filterToggle.textContent = filterCount ? `Filters (${filterCount})` : "Filters";
+      elements.sortSelect.value = state.sort;
+      elements.featuredToggle.checked = state.showFeatured;
+      if (focusedArticle) {
+        const replacement = [...document.querySelectorAll("[data-article-url]")].find((card) => card.dataset.articleUrl === focusedArticle.dataset.articleUrl);
+        const target = replacement ? replacement.querySelector(active.matches(".favorite-button") ? ".favorite-button" : ".article-link") : elements.resultsCount;
+        target.focus({ preventScroll: true });
+      }
+      if (!adRequested && filtered.length) {
+        adRequested = true;
+        document.getElementById("catalogueAd").hidden = false;
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); }
+        catch (error) { console.warn("The article catalogue advertisement could not be initialized.", error); }
+      }
+    }
+
+    function fillSelect(select, label, values, selected) {
+      select.replaceChildren(new Option(label, ""));
+      values.forEach(([value, text]) => select.add(new Option(text, value)));
+      if (selected && !values.some(([value]) => value === selected)) select.add(new Option(`${selected} (not available)`, selected));
+      select.value = selected;
+    }
+
+    function renderCategories() {
+      const counts = new Map();
+      state.articles.forEach((article) => article.categories.filter((category) => category !== "Featured").forEach((category) => counts.set(category, (counts.get(category) || 0) + 1)));
+      const categories = [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+      const featuredCount = state.articles.filter((article) => article.featured).length;
+      if (featuredCount) categories.unshift([FEATURED_CATEGORY, featuredCount]);
+      fillSelect(elements.categorySelect, "All categories", categories.map(([name, count]) => [name, `${name} (${count})`]), state.category);
+      renderSidebarFilters(elements.categoryList, [["", "All categories", state.articles.length], ...categories.map(([name, count]) => [name, name, count])], state.category, setCategory);
+    }
+
+    function renderSidebarFilters(list, entries, selected, select) {
+      list.replaceChildren();
+      entries.forEach(([value, label, count]) => {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.value = value;
+        button.className = value === selected ? "is-active" : "";
+        button.setAttribute("aria-pressed", String(value === selected));
+        button.innerHTML = `<span>${escapeHtml(label)}</span><span class="category-count">${count}</span>`;
+        button.addEventListener("click", () => {
+          select(value === selected ? "" : value);
+          elements.resultsCount.focus();
+        });
+        item.append(button);
+        list.append(item);
+      });
+    }
+
+    function sidebarMessage(message) {
+      [elements.categoryList, elements.archiveList, elements.tagList, elements.recentList].forEach((list) => {
+        const item = document.createElement("li");
+        item.className = "sidebar-status";
+        item.textContent = message;
+        list.replaceChildren(item);
+      });
+      elements.tagToggle.hidden = true;
+    }
+
+    function recentArticles(articles) {
+      return [...articles].sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title, "en") || a.url.localeCompare(b.url)).slice(0, RECENT_COUNT);
     }
 
     function renderRecent() {
-      // state.articles is already sorted newest first by init().
-      const recent = state.articles.slice(0, RECENT_COUNT);
-      elements.recentPanel.hidden = recent.length === 0;
+      const articles = recentArticles(state.articles);
       elements.recentList.replaceChildren();
-      recent.forEach((article) => {
+      if (!articles.length) {
+        const item = document.createElement("li");
+        item.className = "sidebar-status";
+        item.textContent = "No published articles yet.";
+        elements.recentList.append(item);
+      }
+      articles.forEach((article) => {
         const item = document.createElement("li");
         const link = document.createElement("a");
         link.href = article.url;
-        link.innerHTML = `<span>${escapeHtml(article.title)}</span><span class="recent-date">${formatDate(article.date)}</span>`;
+        link.innerHTML = `<span>${escapeHtml(article.title)}</span><time class="recent-date" datetime="${escapeHtml(article.date)}">${formatDate(article.date)}</time>`;
         item.append(link);
         elements.recentList.append(item);
       });
     }
 
-    function renderCategories() {
-      const counts = new Map();
-      state.articles.forEach((a) => a.categories.forEach((c) => counts.set(c, (counts.get(c) || 0) + 1)));
-      const categories = [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-
-      elements.categoryList.replaceChildren();
-      const allItem = document.createElement("li");
-      const allButton = document.createElement("button");
-      allButton.type = "button";
-      allButton.className = state.category ? "" : "is-active";
-      allButton.innerHTML = `<span>All categories</span><span class="category-count">${state.articles.length}</span>`;
-      allButton.addEventListener("click", () => setCategory(""));
-      allItem.append(allButton);
-      elements.categoryList.append(allItem);
-
-      const featuredCount = state.articles.filter((a) => a.featured).length;
-      if (featuredCount) {
-        const featuredItem = document.createElement("li");
-        const featuredButton = document.createElement("button");
-        featuredButton.type = "button";
-        featuredButton.className = state.category === FEATURED_CATEGORY ? "is-active" : "";
-        featuredButton.innerHTML = `<span>${escapeHtml(FEATURED_CATEGORY)}</span><span class="category-count">${featuredCount}</span>`;
-        featuredButton.addEventListener("click", () => setCategory(FEATURED_CATEGORY));
-        featuredItem.append(featuredButton);
-        elements.categoryList.append(featuredItem);
-      }
-
-      categories.forEach(([name, count]) => {
-        const li = document.createElement("li");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = state.category === name ? "is-active" : "";
-        button.innerHTML = `<span>${escapeHtml(name)}</span><span class="category-count">${count}</span>`;
-        button.addEventListener("click", () => setCategory(name));
-        li.append(button);
-        elements.categoryList.append(li);
+    function renderSeries() {
+      const values = [];
+      SERIES.forEach((series) => {
+        const parts = state.articles.filter((article) => seriesInfo(article)?.id === series.id).sort((a, b) => seriesInfo(a).part - seriesInfo(b).part);
+        const card = document.querySelector(`[data-series-card="${series.id}"]`);
+        card.hidden = parts.length === 0;
+        if (!parts.length) return;
+        values.push([series.id, `${series.title} (${parts.length} parts)`]);
+        card.querySelector("[data-series-count]").textContent = `${parts.length} parts`;
+        card.querySelector("a").href = parts[0].url;
+        card.querySelector("a").textContent = `Start with part ${seriesInfo(parts[0]).part}`;
+        card.querySelector("button").hidden = false;
       });
+      document.getElementById("series").hidden = values.length === 0;
+      document.querySelectorAll('a[href="#series"]').forEach((link) => { link.hidden = values.length === 0; });
+      fillSelect(elements.seriesSelect, "All series", values, state.series);
     }
 
     function setCategory(category) {
       state.category = category;
-      syncUrl();
+      changeFilters();
+    }
+
+    function changeFilters() {
+      state.visibleCount = PAGE_SIZE;
       renderCategories();
       renderArchives();
       renderTags();
-      renderFeatured();
-      renderList();
+      renderSeries();
+      renderResults();
+      syncUrl();
     }
 
     // "2026-09" -> "September 2026". The day is pinned to noon UTC so the label
     // cannot slip to the previous month for visitors behind UTC.
     function formatMonth(key) {
+      if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(key)) return key;
       const [year, month] = key.split("-");
-      return new Date(Date.UTC(Number(year), Number(month) - 1, 1, 12)).toLocaleDateString(undefined, { year: "numeric", month: "long", timeZone: "UTC" });
+      return new Date(Date.UTC(Number(year), Number(month) - 1, 1, 12)).toLocaleDateString("en-US", { year: "numeric", month: "long", timeZone: "UTC" });
     }
 
     function renderArchives() {
@@ -1859,37 +2372,13 @@
       // Keys are zero-padded ISO year-month, so a plain string sort is chronological.
       const months = [...counts.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 
-      elements.archivePanel.hidden = months.length === 0;
-      elements.archiveList.replaceChildren();
-      if (!months.length) return;
-
-      const allItem = document.createElement("li");
-      const allButton = document.createElement("button");
-      allButton.type = "button";
-      allButton.className = state.month ? "" : "is-active";
-      allButton.innerHTML = `<span>All dates</span><span class="category-count">${state.articles.length}</span>`;
-      allButton.addEventListener("click", () => setMonth(""));
-      allItem.append(allButton);
-      elements.archiveList.append(allItem);
-
-      months.forEach(([key, count]) => {
-        const li = document.createElement("li");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = state.month === key ? "is-active" : "";
-        button.innerHTML = `<span>${escapeHtml(formatMonth(key))}</span><span class="category-count">${count}</span>`;
-        button.addEventListener("click", () => setMonth(state.month === key ? "" : key));
-        li.append(button);
-        elements.archiveList.append(li);
-      });
+      renderSidebarFilters(elements.archiveList, [["", "All dates", state.articles.length], ...months.map(([key, count]) => [key, formatMonth(key), count])], state.month, setMonth);
     }
 
     function setMonth(month) {
       state.month = month;
-      syncUrl();
-      renderArchives();
-      renderFeatured();
-      renderList();
+      changeFilters();
+      elements.resultsCount.focus();
     }
 
     function renderTags() {
@@ -1897,58 +2386,53 @@
       state.articles.forEach((a) => a.tags.forEach((t) => counts.set(t, (counts.get(t) || 0) + 1)));
       const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
-      elements.tagPanel.hidden = tags.length === 0;
-      elements.tagList.replaceChildren();
-      if (!tags.length) return;
-
-      const hasOverflow = tags.length > TAGS_COLLAPSED_COUNT;
-      // An active tag from the long tail (or a shared ?tag= link) must stay
-      // visible, otherwise the filter looks like it came from nowhere.
-      const activeIndex = state.tag ? tags.findIndex(([name]) => name === state.tag) : -1;
-      const showAll = state.tagsExpanded || activeIndex >= TAGS_COLLAPSED_COUNT;
-      const visible = hasOverflow && !showAll ? tags.slice(0, TAGS_COLLAPSED_COUNT) : tags;
-
-      visible.forEach(([name, count]) => {
-        const li = document.createElement("li");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = state.tag === name ? "is-active" : "";
-        button.setAttribute("aria-pressed", String(state.tag === name));
-        button.innerHTML = `<span>#${escapeHtml(name)}</span><span class="tag-count">${count}</span>`;
-        button.addEventListener("click", () => setTag(state.tag === name ? "" : name));
-        li.append(button);
-        elements.tagList.append(li);
-      });
-
-      elements.tagToggle.hidden = !hasOverflow || activeIndex >= TAGS_COLLAPSED_COUNT;
-      elements.tagToggle.textContent = showAll ? "Show fewer tags" : `Show all ${tags.length} tags`;
-      elements.tagToggle.setAttribute("aria-expanded", String(showAll));
+      fillSelect(elements.tagSelect, "All tags", tags.map(([name, count]) => [name, `${name} (${count})`]), state.tag);
+      const visible = state.tagsExpanded ? tags : tags.filter(([name], index) => index < TAGS_COLLAPSED_COUNT || name === state.tag);
+      renderSidebarFilters(elements.tagList, [["", "All tags", state.articles.length], ...visible.map(([name, count]) => [name, `#${name}`, count])], state.tag, setTag);
+      elements.tagToggle.hidden = tags.length <= TAGS_COLLAPSED_COUNT;
+      elements.tagToggle.setAttribute("aria-expanded", String(state.tagsExpanded));
+      elements.tagToggle.textContent = state.tagsExpanded ? "Show fewer tags" : `Show all ${tags.length} tags`;
     }
 
     function setTag(tag) {
       state.tag = tag;
-      syncUrl();
-      renderTags();
-      renderFeatured();
-      renderList();
+      changeFilters();
     }
 
-    function syncUrl() {
+    function syncUrl(push = true) {
       const url = new URL(location.href);
+      ["q", "searchInput", "featuredToggle", "featured", "favorites", "view", "shown", "sort", "series"].forEach((key) => url.searchParams.delete(key));
+      if (elements.searchInput.value.trim()) url.searchParams.set("q", elements.searchInput.value.trim());
       if (state.category) url.searchParams.set("category", state.category);
       else url.searchParams.delete("category");
       if (state.tag) url.searchParams.set("tag", state.tag);
       else url.searchParams.delete("tag");
       if (state.month) url.searchParams.set("month", state.month);
       else url.searchParams.delete("month");
-      history.pushState({}, "", url);
+      if (state.series) url.searchParams.set("series", state.series);
+      if (state.sort !== "newest") url.searchParams.set("sort", state.sort);
+      if (state.favoritesOnly) url.searchParams.set("favorites", "1");
+      if (state.visibleCount > PAGE_SIZE) url.searchParams.set("shown", state.visibleCount);
+      url.searchParams.set("view", state.view);
+      url.searchParams.set("featured", state.showFeatured ? "1" : "0");
+      try {
+        if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+        window.dispatchEvent(new Event("articlecataloguechange"));
+      } catch (error) {
+        elements.preferenceNotice.hidden = false;
+        elements.preferenceNotice.textContent = "The filters work, but the browser could not update the address for sharing.";
+        console.warn("Unable to update the article catalogue URL.", error);
+      }
     }
 
     function activeFilterBadge(label, value, clear) {
       const badge = document.createElement("span");
       badge.className = "active-filter";
       badge.innerHTML = `${label}: ${escapeHtml(value)} <button type="button" aria-label="Clear ${label.toLowerCase()} filter">&times;</button>`;
-      badge.querySelector("button").addEventListener("click", clear);
+      badge.querySelector("button").addEventListener("click", () => {
+        elements.searchInput.focus({ preventScroll: true });
+        clear();
+      });
       return badge;
     }
 
@@ -1957,86 +2441,226 @@
       if (state.category) elements.activeFilterWrap.append(activeFilterBadge("Category", state.category, () => setCategory("")));
       if (state.month) elements.activeFilterWrap.append(activeFilterBadge("Date", formatMonth(state.month), () => setMonth("")));
       if (state.tag) elements.activeFilterWrap.append(activeFilterBadge("Tag", `#${state.tag}`, () => setTag("")));
+      if (state.series) elements.activeFilterWrap.append(activeFilterBadge("Series", SERIES.find((series) => series.id === state.series)?.title || state.series, () => {
+        state.series = "";
+        changeFilters();
+      }));
     }
 
-    function renderList() {
-      const query = normalize(elements.searchInput.value.trim());
-      const filtered = state.articles.filter((a) => {
-        if (state.category === FEATURED_CATEGORY) {
-          if (!a.featured) return false;
-        } else if (state.category && !a.categories.includes(state.category)) {
-          return false;
-        }
-        if (state.tag && !a.tags.includes(state.tag)) return false;
-        if (state.month && !a.date.startsWith(state.month)) return false;
-        if (state.favoritesOnly && !state.favorites.has(a.url)) return false;
-        if (query) {
-          const haystack = normalize(`${a.title} ${a.description} ${a.tags.join(" ")}`);
-          if (!haystack.includes(query)) return false;
-        }
-        return true;
-      });
-
+    function renderList(filtered) {
       renderActiveFilter();
-      elements.resultsCount.textContent = filtered.length === 1 ? "1 article found." : `${filtered.length.toLocaleString()} articles found.`;
-      elements.articleCards.replaceChildren();
+      const shown = Math.min(state.visibleCount, filtered.length);
+      elements.resultsCount.textContent = `Showing ${shown} of ${filtered.length} articles${state.featuredUrls.size ? ` · including ${state.featuredUrls.size} featured` : ""}.`;
+      elements.loadMore.hidden = shown >= filtered.length;
+      elements.loadMore.textContent = `Show ${Math.min(PAGE_SIZE, filtered.length - shown)} more articles`;
+      document.getElementById("posts-title").textContent = state.featuredUrls.size ? "More articles" : state.sort === "oldest" ? "Articles · oldest first" : "Articles";
 
       if (!filtered.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.textContent = state.favoritesOnly ? "No favorite articles yet. Add some with the star button." : "No articles match your filters.";
+        const message = document.createElement("p");
+        message.textContent = !state.articles.length ? "No articles are published yet." : state.favoritesOnly && !state.favorites.size
+          ? "No favorite articles yet. Show all articles and use a star to save one."
+          : "No articles match your search and filters.";
+        const reset = document.createElement("button");
+        reset.type = "button";
+        reset.className = "catalogue-button";
+        reset.textContent = "Show all articles";
+        reset.addEventListener("click", clearAllFilters);
+        empty.append(message, reset);
         elements.articleCards.append(empty);
         return;
       }
 
       const fragment = document.createDocumentFragment();
-      filtered.forEach((a) => fragment.append(createArticleCard(a)));
+      filtered.filter((article) => !state.featuredUrls.has(article.url)).slice(0, Math.max(0, shown - state.featuredUrls.size)).forEach((article) => fragment.append(createArticleCard(article)));
       elements.articleCards.append(fragment);
     }
 
-    async function init() {
-      loadFavorites();
-      loadView();
-      loadShowFeatured();
-      applyView();
-      updateFavoritesFilter();
-      const response = await fetch("./articles.json", { cache: "no-store" });
-      const payload = await response.json();
-      state.articles = payload.articles.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-      renderStats();
-      renderFeatured();
-      renderCategories();
-      renderArchives();
-      renderTags();
-      renderRecent();
-      renderList();
+    function readUrlState() {
+      const params = new URLSearchParams(location.search);
+      state.category = params.get("category") === "Featured" ? FEATURED_CATEGORY : params.get("category") || "";
+      state.tag = params.get("tag") || "";
+      state.month = params.get("month") || "";
+      state.series = params.get("series") || "";
+      state.sort = params.get("sort") === "oldest" ? "oldest" : "newest";
+      state.view = ["cards", "list"].includes(params.get("view")) ? params.get("view") : storedView;
+      state.favoritesOnly = params.get("favorites") === "1";
+      state.showFeatured = params.has("featured") ? params.get("featured") === "1"
+        : params.has("featuredToggle") ? params.get("featuredToggle") === "1" : storedShowFeatured;
+      const shown = Number(params.get("shown"));
+      state.visibleCount = Number.isSafeInteger(shown) && shown >= PAGE_SIZE ? Math.min(12000, Math.ceil(shown / PAGE_SIZE) * PAGE_SIZE) : PAGE_SIZE;
+      elements.searchInput.value = params.get("q") ?? params.get("searchInput") ?? "";
+      elements.sortSelect.value = state.sort;
+      elements.featuredToggle.checked = state.showFeatured;
     }
 
-    elements.searchInput.addEventListener("input", renderResults);
+    function validateArticles(payload) {
+      if (!payload || !Array.isArray(payload.articles)) throw new Error("Invalid article catalogue");
+      const urls = new Set();
+      payload.articles.forEach((article) => {
+        if (!article || typeof article.slug !== "string" || !/^[a-z0-9-]+$/.test(article.slug)
+          || article.url !== `/articles/${article.slug}/` || urls.has(article.url)
+          || typeof article.title !== "string" || !article.title.trim() || typeof article.description !== "string"
+          || !/^\d{4}-\d{2}-\d{2}$/.test(article.date) || Number.isNaN(new Date(`${article.date}T12:00:00Z`).getTime())
+          || !Number.isInteger(article.readingMinutes) || article.readingMinutes < 1
+          || !Array.isArray(article.tags) || article.tags.some((tag) => typeof tag !== "string")
+          || !Array.isArray(article.categories) || article.categories.some((category) => typeof category !== "string")
+          || (article.featureImage && (typeof article.featureImage !== "string" || !/^(\/(?!\/)|https:\/\/)/.test(article.featureImage)))) {
+          throw new Error("Invalid article metadata");
+        }
+        urls.add(article.url);
+      });
+      return payload.articles.filter((article) => !article.noindex && !article.draft);
+    }
+
+    async function init() {
+      if (state.loading) return;
+      const fromRetry = document.activeElement === elements.retryLoad;
+      state.loading = true;
+      elements.controls.disabled = true;
+      elements.retryLoad.disabled = true;
+      elements.resultsCount.textContent = "Loading catalogue controls. Article links remain available below.";
+      sidebarMessage("Loading catalogue…");
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      try {
+        const response = await fetch("./articles.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`Article catalogue request returned ${response.status}`);
+        state.articles = validateArticles(await response.json());
+        const available = new Set(state.articles.map((article) => article.url));
+        state.favorites = new Set([...state.favorites].filter((url) => available.has(url)));
+        state.visibleCount = Math.min(state.visibleCount, Math.max(PAGE_SIZE, state.articles.length));
+        state.ready = true;
+        elements.articleCards.removeAttribute("data-static");
+        elements.loadError.hidden = true;
+        elements.controls.disabled = false;
+        updateFavoritesFilter();
+        renderCategories();
+        renderArchives();
+        renderTags();
+        renderSeries();
+        renderRecent();
+        renderResults();
+      } catch (error) {
+        console.error("Unable to load the article catalogue.", error);
+        state.ready = false;
+        elements.loadError.hidden = false;
+        elements.featuredSection.hidden = true;
+        elements.loadMore.hidden = true;
+        elements.articleCards.removeAttribute("data-static");
+        elements.articleCards.querySelectorAll(":scope > .article-card, :scope > .empty-state").forEach((card) => card.remove());
+        elements.articleCards.append(...staticCards);
+        fitThumb(elements.articleCards);
+        elements.resultsCount.textContent = `${staticCards.length} prebuilt article links. Search and filters are unavailable.`;
+        sidebarMessage("Menu unavailable. Use Retry loading catalogue above.");
+      } finally {
+        clearTimeout(timeout);
+        state.loading = false;
+        elements.retryLoad.disabled = false;
+        if (fromRetry) (state.ready ? elements.searchInput : elements.retryLoad).focus({ preventScroll: true });
+      }
+    }
+
+    function clearAllFilters() {
+      state.category = state.tag = state.month = state.series = "";
+      state.favoritesOnly = false;
+      elements.searchInput.value = "";
+      elements.searchInput.focus();
+      updateFavoritesFilter();
+      changeFilters();
+    }
+
+    elements.searchInput.addEventListener("input", () => {
+      state.visibleCount = PAGE_SIZE;
+      renderResults();
+      syncUrl(false);
+    });
+    elements.clearSearch.addEventListener("click", () => {
+      elements.searchInput.value = "";
+      elements.searchInput.focus();
+      state.visibleCount = PAGE_SIZE;
+      renderResults();
+      syncUrl(false);
+    });
+    elements.clearAllFilters.addEventListener("click", clearAllFilters);
+    elements.filterToggle.addEventListener("click", () => {
+      elements.filterPanel.hidden = !elements.filterPanel.hidden;
+      elements.filterToggle.setAttribute("aria-expanded", String(!elements.filterPanel.hidden));
+    });
+    elements.filterPanel.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        elements.filterPanel.hidden = true;
+        elements.filterToggle.setAttribute("aria-expanded", "false");
+        elements.filterToggle.focus();
+      }
+    });
+    elements.categorySelect.addEventListener("change", () => setCategory(elements.categorySelect.value));
+    elements.tagSelect.addEventListener("change", () => setTag(elements.tagSelect.value));
+    elements.tagToggle.addEventListener("click", () => {
+      state.tagsExpanded = !state.tagsExpanded;
+      renderTags();
+    });
+    elements.seriesSelect.addEventListener("change", () => {
+      state.series = elements.seriesSelect.value;
+      changeFilters();
+    });
+    elements.sortSelect.addEventListener("change", () => {
+      state.sort = elements.sortSelect.value;
+      state.visibleCount = PAGE_SIZE;
+      renderResults();
+      syncUrl();
+    });
     elements.featuredToggle.addEventListener("change", () => setShowFeatured(elements.featuredToggle.checked));
     elements.viewCards.addEventListener("click", () => setView("cards"));
     elements.viewList.addEventListener("click", () => setView("list"));
     elements.favoritesFilter.addEventListener("click", () => {
       state.favoritesOnly = !state.favoritesOnly;
       updateFavoritesFilter();
+      changeFilters();
+    });
+    elements.loadMore.addEventListener("click", () => {
+      const before = new Set([...document.querySelectorAll("[data-article-url]")].map((card) => card.dataset.articleUrl));
+      state.visibleCount += PAGE_SIZE;
       renderResults();
+      syncUrl(false);
+      const firstNew = [...elements.articleCards.querySelectorAll("[data-article-url]")].find((card) => !before.has(card.dataset.articleUrl));
+      if (firstNew) {
+        const link = firstNew.querySelector(".article-link");
+        link.focus({ preventScroll: true });
+        link.scrollIntoView({ block: "start", behavior: "instant" });
+      }
     });
-    elements.tagToggle.addEventListener("click", () => {
-      state.tagsExpanded = !state.tagsExpanded;
-      renderTags();
-    });
+    document.querySelectorAll("[data-browse-series]").forEach((button) => button.addEventListener("click", () => {
+      state.category = state.tag = state.month = "";
+      state.favoritesOnly = false;
+      elements.searchInput.value = "";
+      state.series = button.dataset.browseSeries;
+      state.sort = "oldest";
+      updateFavoritesFilter();
+      changeFilters();
+      elements.resultsCount.focus();
+    }));
+    elements.retryLoad.addEventListener("click", init);
     window.addEventListener("popstate", () => {
-      const next = new URLSearchParams(location.search);
-      state.category = next.get("category") || "";
-      state.tag = next.get("tag") || "";
-      state.month = next.get("month") || "";
+      readUrlState();
+      if (!state.ready) return;
+      updateFavoritesFilter();
       renderCategories();
       renderArchives();
       renderTags();
-      renderFeatured();
-      renderList();
+      renderSeries();
+      renderResults();
+      window.dispatchEvent(new Event("articlecataloguechange"));
     });
 
+    loadFavorites();
+    loadView();
+    loadShowFeatured();
+    readUrlState();
+    applyView();
+    updateFavoritesFilter();
+    fitThumb(elements.articleCards);
     init();
 
     let scrollTicking = false;
@@ -2051,124 +2675,28 @@
     }, { passive: true });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function updateShareLinks() {
+        var url = encodeURIComponent(location.href.split('#')[0]);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        root.querySelectorAll('a[data-share]').forEach(function (el) {
+          el.setAttribute('href', targets[el.getAttribute('data-share')]);
+        });
+      }
+      updateShareLinks();
+      window.addEventListener('articlecataloguechange', updateShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

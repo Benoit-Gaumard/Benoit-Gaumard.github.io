@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -206,7 +207,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -418,6 +419,8 @@
     .language-filter {
       display: inline-flex;
       align-items: center;
+      width: fit-content;
+      max-width: 100%;
       gap: .25rem;
       padding: .25rem;
       border: 1px solid var(--cp-border);
@@ -427,8 +430,11 @@
     .language-option {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      min-width: 2.75rem;
+      min-height: 2.75rem;
       gap: .4rem;
-      padding: .45rem .9rem;
+      padding: .4rem;
       border: 0;
       border-radius: 7px;
       background: transparent;
@@ -437,14 +443,15 @@
       font-size: 0.85rem;
       font-weight: 600;
     }
-    .language-option .flag { width: 1.1rem; height: .75rem; flex: 0 0 auto; border-radius: 2px; box-shadow: 0 0 0 1px var(--cp-border); }
+    .language-option .flag { display: block; width: 24px; height: 18px; flex: none; object-fit: contain; }
+    .language-option svg { display: block; flex: none; }
     .language-option:hover { color: var(--cp-text); }
     .language-option[aria-pressed="true"] { background: var(--cp-accent-soft); color: var(--cp-accent); }
 
     .list-articles { display: flex; flex-direction: column; gap: .5rem; margin: 0; padding: 0; list-style: none; }
     .list-article {
       display: grid;
-      grid-template-columns: 1.25rem 10rem 4.5rem minmax(0, 1fr) auto;
+      grid-template-columns: 1.5rem 10rem 4.5rem minmax(0, 1fr) auto;
       align-items: center;
       gap: .65rem;
       padding: .5rem .9rem;
@@ -454,8 +461,9 @@
       box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
     }
     .list-article.is-highlighted { border-color: var(--cp-highlight-border); background: var(--cp-highlight-bg); }
-    .list-icon-slot { display: flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; }
-    .list-icon { width: 1.25rem; height: 1.25rem; border-radius: 4px; object-fit: contain; background: var(--cp-surface-soft); }
+    .source-icon { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; flex: none; border-radius: 4px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: .75rem; font-weight: 650; line-height: 1; }
+    .source-icon img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: inherit; }
+    .source-icon img[hidden], .source-icon-fallback[hidden] { display: none; }
     .list-source {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -479,7 +487,7 @@
       display: inline-flex;
       align-items: center;
       gap: .4rem;
-      min-height: 2.25rem;
+      min-height: 2.75rem;
       padding: .375rem .75rem;
       border: 1px solid var(--cp-border-strong);
       border-radius: 6px;
@@ -487,6 +495,7 @@
       color: var(--cp-text);
       cursor: pointer;
       font-weight: 650;
+      font-size: .85rem;
     }
     .favorites-filter svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
     .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
@@ -495,6 +504,7 @@
       background: var(--cp-warning-bg);
       color: var(--cp-warning);
     }
+    .favorites-filter[aria-pressed="true"] svg path { fill: currentColor; }
 
     .keyword-chips { min-height: 2.25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
     .toolbar .keyword-chips { min-height: 2.25rem; flex: 1 1 100%; }
@@ -546,8 +556,7 @@
     }
     .site-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
     .site-card-title-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; }
-    .site-icon { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; border-radius: 4px; object-fit: contain; background: var(--cp-surface-soft); }
-    .site-card-head h2 { margin: 0; font-size: 1.05rem; }
+    .site-card-head h2 { margin: 0; min-width: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
     .site-tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .5rem; }
     .site-articles { display: flex; flex-direction: column; gap: .25rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
     .site-article {
@@ -792,13 +801,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -916,12 +925,410 @@
     ]
   }
   </script>
+<style data-rss-ux>    .rss-controls{border:0;padding:0;margin:0;min-width:0;}
+    .rss-primary{display:grid;grid-template-columns:minmax(0,2fr) minmax(10rem,1fr);align-items:end;gap:.75rem;margin:.75rem 0;}
+    .rss-field{min-width:0;}
+    .rss-field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
+    .rss-field input,.rss-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
+    .rss-help{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;margin:.75rem 0;}
+    .rss-options>summary,.rss-item-summary>summary{min-height:2.75rem;padding-block:.65rem;color:var(--cp-link);font-size:.85rem;cursor:pointer;}
+    .rss-item-summary{grid-column:1/-1;min-width:0;}
+    .site-article{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;}
+    .rss-item-summary p{font-size:.9rem;line-height:1.55;max-width:80ch;overflow-wrap:anywhere;color:var(--cp-text-muted);}
+    .icon-button,.language-option,.view-option,.favorites-filter,.clear-button,.submit-link-button{min-height:2.75rem;}
+    .icon-button{min-width:2.75rem;width:2.75rem;height:2.75rem;}
+    .keyword-chip button{min-width:2.75rem;min-height:2.75rem;}
+    .site-card:hover{transform:none;}
+    .site-article-title{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.5;}
+    #rssLoadMore{display:block;margin:1rem auto;}
+    @media(max-width:48rem){
+      .rss-primary{grid-template-columns:minmax(0,1fr);}
+      .rss-controls .language-filter{width:fit-content;max-width:100%;}
+      .list-article{grid-template-columns:1.5rem minmax(0,1fr) auto;grid-template-areas:"icon source day" "title title title" "actions actions actions" "summary summary summary";gap:.5rem;}
+      .list-article .list-icon-slot{grid-area:icon;}
+      .list-article .list-source{grid-area:source;white-space:normal;overflow-wrap:anywhere;}
+      .list-article .site-article-day{grid-area:day;}
+      .list-article .site-article-title{grid-area:title;min-width:0;}
+      .list-article .site-article-actions{grid-area:actions;}
+      .list-article .rss-item-summary{grid-area:summary;}
+    }
+</style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/rss-watcher/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/rss-watcher/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -940,6 +1347,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/" aria-current="page"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -955,9 +1403,9 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="28" height="28"></span>RSS Watcher</h1>
-      <p class="intro-text">Read tech news of the moment in one place. An aggregator that reads RSS feeds from many sites at once, refreshed automatically throughout the day.</p>
+      <p class="intro-text">Read retained technology headlines by source and feed language. <a href="/workflows/">View the collection schedule</a>.</p>
       <p class="refresh-meta">
-        <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+        <span>Snapshot collected: <strong id="refreshedAt">Loading...</strong></span>
         <span id="feedMeta"></span>
         <a href="feed.en.xml" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg> EN RSS feed</a>
         <a href="feed.fr.xml" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg> FR RSS feed</a>
@@ -966,57 +1414,31 @@
     </section>
 
     <section aria-label="Sites and articles">
-      <div class="toolbar">
-        <div class="field search-field">
-          <label for="search">Search updates</label>
-          <input id="search" type="search" placeholder="Search by title, description, or source..." autocomplete="off" spellcheck="false">
+      <fieldset class="rss-controls" id="rssControls" disabled aria-label="Filter RSS headlines">
+        <div class="rss-primary">
+          <div class="rss-field"><label for="search">Search headlines</label><input id="search" type="search" placeholder="Title, description or source" autocomplete="off" spellcheck="false"></div>
+          <div class="rss-field"><label for="lastUpdate">Publication period (UTC)</label><select id="lastUpdate"><option value="" selected>All retained</option><option value="0">Today</option><option value="1">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div>
         </div>
-        <div class="field">
-          <label for="source">Source</label>
-          <select id="source"><option value="">All sources</option></select>
+        <div class="rss-primary">
+          <div class="rss-field"><label for="source">Source</label><select id="source"><option value="">All sources</option></select></div>
+          <div class="language-filter" role="group" aria-label="Feed language">
+            <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true" aria-label="All languages" title="All languages"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><path d="M2 12h20"/></svg></button>
+            <button class="language-option" id="languageEn" type="button" data-lang="EN" aria-pressed="false" aria-label="English" title="English"><img class="flag" src="/flags/en.png" alt="" width="24" height="18"></button>
+            <button class="language-option" id="languageFr" type="button" data-lang="FR" aria-pressed="false" aria-label="French" title="French"><img class="flag" src="/flags/fr.png" alt="" width="24" height="18"></button>
+          </div>
         </div>
-        <div class="field">
-          <label for="category">Category</label>
-          <select id="category"><option value="">All categories</option></select>
-        </div>
-        <div class="field">
-          <label for="subcategory">Subcategory</label>
-          <select id="subcategory"><option value="">All subcategories</option></select>
-        </div>
-        <div class="field">
-          <label for="lastUpdate">Last update</label>
-          <select id="lastUpdate">
-            <option value="">All time</option>
-            <option value="0" selected>Today</option>
-            <option value="1">Yesterday</option>
-            <option value="7">Last 7 days</option>
-            <option value="14">Last 14 days</option>
-            <option value="30">Last 30 days</option>
-          </select>
-        </div>
-        <div class="field keyword-field">
-          <label for="keywordInput">Highlight keywords</label>
-          <input id="keywordInput" type="text" placeholder="Add a keyword and press Enter..." autocomplete="off" spellcheck="false">
-        </div>
-        <div class="language-filter" role="group" aria-label="Filter by language">
-          <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true">All</button>
-          <button class="language-option" id="languageEn" type="button" data-lang="EN" aria-pressed="false">
-            <svg class="flag" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247d"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L26,17.3 M60,0 L34,17.3 M0,40 L26,22.7 M60,40 L34,22.7" stroke="#cf142b" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="14"/><path d="M30,0 V40 M0,20 H60" stroke="#cf142b" stroke-width="8"/></svg>
-            EN
-          </button>
-          <button class="language-option" id="languageFr" type="button" data-lang="FR" aria-pressed="false">
-            <svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
-            FR
-          </button>
-        </div>
-
-        <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
-      </div>
+        <details class="rss-options" id="rssOptions"><summary>Categories and highlighted keywords</summary>
+          <div class="rss-primary"><div class="rss-field"><label for="category">Category</label><select id="category"><option value="">All categories</option></select></div><div class="rss-field"><label for="subcategory">Subcategory</label><select id="subcategory"><option value="">All subcategories</option></select></div></div>
+          <div class="rss-field"><label for="keywordInput">Highlight keywords</label><input id="keywordInput" type="text" placeholder="Add a keyword and press Enter" autocomplete="off" spellcheck="false"></div>
+          <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
+        </details>
+        <p class="rss-help">Language filters the configured feed language, not the interface. Favorites and keyword preferences are local to this browser; EN/FR RSS links above are separate subscription feeds.</p>
+      </fieldset>
 
       <div class="results-bar" aria-live="polite">
         <div class="results-bar-actions">
           <button class="favorites-filter" id="favoritesToggle" type="button" aria-pressed="false">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             <span id="favoritesToggleLabel">My favorites (0)</span>
           </button>
           <div class="view-toggle" role="group" aria-label="Choose view">
@@ -1032,13 +1454,14 @@
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
           <button class="submit-link-button" id="submitOpen" type="button">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Submit RSS Feed
+            Suggest a feed (GitHub account required)
           </button>
         </div>
         <p id="resultCount" aria-live="polite">Loading updates...</p>
       </div>
 
       <div class="site-grid" id="siteGrid" aria-busy="true"></div>
+      <button class="site-ux-button" id="rssLoadMore" type="button" hidden>Show more</button>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
@@ -1101,7 +1524,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -1147,6 +1570,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
         <span id="libraryCount"></span>
       </div>
     </div>
@@ -1158,39 +1582,54 @@
     </svg>
   </button>
 
-  <script>
+<script data-rss-ux>
+function matchesPeriod(iso, period, now = Date.now()) {
+  if (!period) return true;
+  const value = Date.parse(iso);
+  if (!Number.isFinite(value)) return false;
+  const date = new Date(now), today = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()), day = 86400000;
+  if (period === "yesterday" || period === "1") return value >= today - day && value < today;
+  if (period === "0") return value >= today && value < today + day;
+  const count = Number(period);
+  if (!Number.isInteger(count) || count < 1) throw new Error("Unsupported publication period");
+  return value >= today - (count - 1) * day && value < today + day;
+}
     const MAX_ARTICLES_PER_SITE = 10;
     const FAVORITES_KEY = "rssWatcherFavorites";
     const KEYWORDS_KEY = "rssWatcherKeywords";
     const VIEW_MODE_KEY = "rssWatcherViewMode";
 
-    function loadFavorites() {
+    function readPreferenceArray(key) {
       try {
-        return new Set(JSON.parse(localStorage.getItem(FAVORITES_KEY)) || []);
-      } catch {
-        return new Set();
-      }
-    }
-    function saveFavorites(favorites) {
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites]));
-    }
-
-    function loadKeywords() {
-      try {
-        return JSON.parse(localStorage.getItem(KEYWORDS_KEY)) || [];
-      } catch {
+        const values = JSON.parse(localStorage.getItem(key) || "[]");
+        if (!Array.isArray(values) || values.some(value => typeof value !== "string")) throw new Error("Invalid saved preference");
+        return values;
+      } catch (error) {
+        console.warn("RSS preferences could not be read.", error);
+        SiteUX.notice("Saved RSS preferences are unavailable; temporary preferences are being used.");
         return [];
       }
     }
+    function loadFavorites() { return new Set(readPreferenceArray(FAVORITES_KEY)); }
+    function saveFavorites(favorites) {
+      try { localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites])); }
+      catch (error) { console.warn("RSS favorites could not be saved.", error); SiteUX.notice("Favorite changed for this page only; storage is unavailable."); }
+    }
+
+    function loadKeywords() {
+      return readPreferenceArray(KEYWORDS_KEY);
+    }
     function saveKeywords(keywords) {
-      localStorage.setItem(KEYWORDS_KEY, JSON.stringify(keywords));
+      try { localStorage.setItem(KEYWORDS_KEY, JSON.stringify(keywords)); }
+      catch (error) { console.warn("RSS keywords could not be saved.", error); SiteUX.notice("Keywords apply to this page only; storage is unavailable."); }
     }
 
     function loadViewMode() {
-      return localStorage.getItem(VIEW_MODE_KEY) === "list" ? "list" : "cards";
+      try { return localStorage.getItem(VIEW_MODE_KEY) === "list" ? "list" : "cards"; }
+      catch (error) { console.warn("RSS view preference is unavailable.", error); return "cards"; }
     }
 
-    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords(), language: "", viewMode: loadViewMode() };
+    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords(), language: "", viewMode: loadViewMode(), ready: false, loading: false, restoring: true, visibleItems: 30, visibleGroups: 12, sourceLimits: new Map() };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -1217,16 +1656,69 @@
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
+    function syncRssUrl() {
+      SiteUX.updateURL(params => {
+        [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => { params.delete(control.id); if (control.value) params.set(control.id, control.value); });
+        params.delete("language"); if (state.language) params.set("language", state.language);
+        params.set("view", state.viewMode);
+        params.set("keywords", JSON.stringify(state.keywords));
+        params.delete("favoritesOnly"); if (state.favoritesOnly) params.set("favoritesOnly", "1");
+      });
+    }
+
+    function restoreRssUrl() {
+      state.restoring = true;
+      const params = new URLSearchParams(location.search);
+      [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => {
+        const value = params.get(control.id) || "";
+        if (control.tagName === "SELECT" && value && ![...control.options].some(option => option.value === value)) {
+          if (control === elements.lastUpdate) { control.value = ""; SiteUX.notice("Unsupported period; all retained dates are shown."); return; }
+          control.add(new Option(`${value} (not in snapshot)`, value));
+        }
+        control.value = value;
+      });
+      state.language = ["EN", "FR"].includes(params.get("language")) ? params.get("language") : "";
+      if (["cards", "list"].includes(params.get("view"))) state.viewMode = params.get("view");
+      state.favoritesOnly = params.get("favoritesOnly") === "1";
+      if (params.has("keywords")) {
+        try {
+          const words = JSON.parse(params.get("keywords"));
+          if (!Array.isArray(words) || words.some(word => typeof word !== "string")) throw new Error("Invalid keyword list");
+          state.keywords = words;
+        } catch (error) { console.warn("Linked keywords could not be read.", error); SiteUX.notice("The linked keyword list is invalid; local highlighting preferences were kept."); }
+      }
+      elements.languageOptions.forEach(option => option.setAttribute("aria-pressed", String(option.dataset.lang === state.language)));
+      elements.viewOptions.forEach(option => option.setAttribute("aria-pressed", String(option.dataset.view === state.viewMode)));
+      elements.favoritesToggle.setAttribute("aria-pressed", String(state.favoritesOnly));
+      renderKeywordChips();
+      applyFilters();
+      state.restoring = false;
+    }
+
+    function updateRssOptions() {
+      const active = Number(Boolean(elements.category.value)) + Number(Boolean(elements.subcategory.value)) + Number(state.keywords.length > 0);
+      document.querySelector("#rssOptions > summary").textContent = `Categories and keywords${active ? " · " + active + " active" : ""}`;
+    }
+
+    function createArticleSummary(item) {
+      const details = document.createElement("details");
+      details.className = "rss-item-summary";
+      const summary = document.createElement("summary");
+      summary.textContent = "Summary";
+      const text = document.createElement("p");
+      text.textContent = item.description || "No summary was supplied by this feed.";
+      details.append(summary, text);
+      return details;
+    }
+
     function formatDate(iso) {
-      return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+      const date = new Date(iso);
+      return !iso || Number.isNaN(date.getTime()) ? "Not recorded" : date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }) + " UTC";
     }
 
     function dayCount(iso) {
-      const now = new Date();
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const target = new Date(iso);
-      const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
-      return Math.max(0, Math.round((startOfToday - startOfTarget) / 86400000));
+      const now = new Date(), date = new Date(iso);
+      return Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())) / 86400000);
     }
 
     function hourCount(iso) {
@@ -1234,17 +1726,17 @@
     }
 
     function createDayBadge(pubDate) {
-      const days = dayCount(pubDate);
-      const isToday = days === 0;
       const badge = document.createElement("span");
-      badge.className = `update-relative site-article-day ${isToday ? "fresh" : ""}`.trim();
-      badge.textContent = isToday ? `${hourCount(pubDate)} h` : `${days} d`;
-      badge.title = formatDate(pubDate);
+      const stamp = Date.parse(pubDate), days = dayCount(pubDate);
+      badge.className = "update-relative site-article-day";
+      badge.textContent = !Number.isFinite(stamp) ? "Date unknown" : stamp > Date.now() ? "Future dated" : days === 0 ? hourCount(pubDate) + " h" : days + " d";
+      badge.title = "Published: " + formatDate(pubDate);
+      badge.setAttribute("aria-label", badge.title);
       return badge;
     }
 
     function updateFavoritesToggleLabel() {
-      elements.favoritesToggleLabel.textContent = `My favorites (${state.favorites.size})`;
+      elements.favoritesToggleLabel.textContent = `My favorites (${state.favorites.size.toLocaleString("en-US")})`;
     }
 
     function escapeRegex(value) {
@@ -1277,6 +1769,7 @@
         remove.addEventListener("click", () => {
           state.keywords = state.keywords.filter((k) => k !== keyword);
           saveKeywords(state.keywords);
+          elements.keywordInput.focus({ preventScroll: true });
           renderKeywordChips();
           render();
         });
@@ -1299,7 +1792,7 @@
     function createFavoriteButton(item) {
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "icon-button";
+      button.className = "icon-button favorite-button";
       const star = '<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
       const setState = (isFavorite) => {
         button.classList.toggle("is-active", isFavorite);
@@ -1315,7 +1808,7 @@
         saveFavorites(state.favorites);
         setState(!active);
         updateFavoritesToggleLabel();
-        if (state.favoritesOnly) applyFilters();
+        if (state.favoritesOnly) { elements.favoritesToggle.focus({ preventScroll: true }); applyFilters(); }
       });
       return button;
     }
@@ -1328,18 +1821,10 @@
       button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>';
       button.addEventListener("click", async () => {
         if (navigator.share) {
-          try { await navigator.share({ title: item.title, url: item.link }); } catch { /* user cancelled */ }
-          return;
+          try { await navigator.share({ title: item.title, url: item.link }); return; }
+          catch (error) { if (error.name === "AbortError") return; console.warn("Native article sharing is unavailable.", error); }
         }
-        try {
-          await navigator.clipboard.writeText(item.link);
-          button.classList.add("copied");
-          button.setAttribute("aria-label", "Link copied");
-          setTimeout(() => {
-            button.classList.remove("copied");
-            button.setAttribute("aria-label", "Share");
-          }, 1500);
-        } catch { /* clipboard unavailable */ }
+        await SiteUX.copy(item.link, `Article link: ${item.title}`, button);
       });
       return button;
     }
@@ -1382,6 +1867,7 @@
       actions.append(createFavoriteButton(item), createShareButton(item));
 
       li.append(day, link, actions);
+      li.append(createArticleSummary(item));
       return li;
     }
 
@@ -1389,20 +1875,7 @@
       const li = document.createElement("li");
       li.className = "list-article";
 
-      const iconSlot = document.createElement("span");
-      iconSlot.className = "list-icon-slot";
-      const itemIconSrc = item.icon ? cachedFaviconFor(hostFromUrl(item.link || "")) || cachedFaviconFor(iconDomain(item.icon)) : null;
-      if (itemIconSrc) {
-        const icon = document.createElement("img");
-        icon.className = "list-icon";
-        icon.src = itemIconSrc;
-        icon.alt = "";
-        icon.loading = "lazy";
-        icon.width = 20;
-        icon.height = 20;
-        icon.addEventListener("error", () => icon.remove(), { once: true });
-        iconSlot.append(icon);
-      }
+      const iconSlot = createSourceIcon(item, "list-icon-slot");
 
       const source = document.createElement("span");
       source.className = "list-source";
@@ -1424,30 +1897,21 @@
       actions.append(createFavoriteButton(item), createShareButton(item));
 
       li.append(iconSlot, source, day, link, actions);
+      li.append(createArticleSummary(item));
       return li;
     }
 
     function createSiteCard(group, keywordRegex) {
       const card = document.createElement("article");
       card.className = "site-card";
+      card.dataset.source = group.source;
 
       const head = document.createElement("div");
       head.className = "site-card-head";
 
       const titleRow = document.createElement("div");
       titleRow.className = "site-card-title-row";
-      const groupIconSrc = group.icon ? cachedFaviconFor(iconDomain(group.icon)) : null;
-      if (groupIconSrc) {
-        const icon = document.createElement("img");
-        icon.className = "site-icon";
-        icon.src = groupIconSrc;
-        icon.alt = "";
-        icon.loading = "lazy";
-        icon.width = 20;
-        icon.height = 20;
-        icon.addEventListener("error", () => icon.remove(), { once: true });
-        titleRow.append(icon);
-      }
+      titleRow.append(createSourceIcon(group, "site-icon-slot"));
       const title = document.createElement("h2");
       title.textContent = group.source;
       titleRow.append(title);
@@ -1471,21 +1935,38 @@
       group.articles.forEach((item) => list.append(createArticle(item, keywordRegex)));
 
       card.append(head, list);
+      card.append(Object.assign(document.createElement("p"), { className: "rss-help", textContent: `${group.articles.length} of ${group.totalCount} matching articles from this source.` }));
+      if (group.articles.length < group.totalCount) {
+        const more = document.createElement("button");
+        more.type = "button";
+        more.className = "site-ux-button";
+        more.textContent = "More from this source";
+        more.addEventListener("click", () => {
+          const old = group.articles.length;
+          state.sourceLimits.set(group.source, old + MAX_ARTICLES_PER_SITE);
+          state.groups = buildGroups(state.filteredItems);
+          render();
+          const next = [...elements.siteGrid.querySelectorAll(".site-card")].find(card => card.dataset.source === group.source)?.querySelectorAll(".site-article-title")[old];
+          if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ block: "start", behavior: "instant" }); }
+        });
+        card.append(more);
+      }
       return card;
     }
 
     function buildGroups(items) {
       const map = new Map();
       items.forEach((item) => {
-        if (!map.has(item.source)) map.set(item.source, { source: item.source, categories: item.categories, icon: item.icon, articles: [] });
+        if (!map.has(item.source)) map.set(item.source, { source: item.source, categories: item.categories, icon: item.icon, link: item.link, articles: [] });
         map.get(item.source).articles.push(item);
       });
       return [...map.values()]
-        .map((group) => ({ ...group, totalCount: group.articles.length, articles: group.articles.slice(0, MAX_ARTICLES_PER_SITE) }))
+        .map((group) => ({ ...group, totalCount: group.articles.length, articles: group.articles.slice(0, state.sourceLimits.get(group.source) || MAX_ARTICLES_PER_SITE) }))
         .sort((a, b) => new Date(b.articles[0].pubDate) - new Date(a.articles[0].pubDate));
     }
 
     function render() {
+      if (!state.ready) return;
       elements.siteGrid.replaceChildren();
       elements.siteGrid.classList.toggle("is-list-view", state.viewMode === "list");
       const keywordRegex = buildKeywordRegex();
@@ -1493,62 +1974,67 @@
       if (!state.filteredItems.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.innerHTML = state.favoritesOnly
-          ? "<h2>No favorites yet</h2><p>Click the star icon on any article to save it here.</p>"
-          : "<h2>No updates found</h2><p>Try another keyword or clear the filters.</p>";
+        const heading = document.createElement("h2");
+        heading.textContent = state.favoritesOnly ? "No retained favorites match these filters" : "No headlines match this period and filters";
+        const explanation = document.createElement("p");
+        const latest = state.updates.find(item => Number.isFinite(Date.parse(item.pubDate)));
+        explanation.textContent = latest ? `Latest retained publication: ${formatDate(latest.pubDate)}. Widen the period or reset the other filters.` : "No dated headlines are recorded in this snapshot.";
+        empty.append(heading, explanation);
+        if (elements.lastUpdate.value) {
+          const widen = document.createElement("button");
+          widen.type = "button"; widen.className = "site-ux-button"; widen.textContent = "Show latest available dates";
+          widen.addEventListener("click", () => { elements.lastUpdate.value = ""; applyFilters(); elements.lastUpdate.focus({ preventScroll: true }); });
+          empty.append(widen);
+        }
+        const reset = document.createElement("button");
+        reset.type = "button"; reset.className = "site-ux-button"; reset.textContent = "Reset filters";
+        reset.addEventListener("click", () => elements.clearFilters.click());
+        empty.append(reset);
         elements.siteGrid.append(empty);
       } else if (state.viewMode === "list") {
         const list = document.createElement("ul");
         list.className = "list-articles";
-        state.filteredItems.forEach((item) => list.append(createListArticle(item, keywordRegex)));
+        state.filteredItems.slice(0, state.visibleItems).forEach((item) => list.append(createListArticle(item, keywordRegex)));
         elements.siteGrid.append(list);
       } else {
         const fragment = document.createDocumentFragment();
-        state.groups.forEach((group) => fragment.append(createSiteCard(group, keywordRegex)));
+        state.groups.slice(0, state.visibleGroups).forEach((group) => fragment.append(createSiteCard(group, keywordRegex)));
         elements.siteGrid.append(fragment);
       }
 
       const totalArticles = state.filteredItems.length;
       const totalSites = state.groups.length;
-      elements.resultCount.textContent = `${totalArticles.toLocaleString()} article${totalArticles === 1 ? "" : "s"} across ${totalSites.toLocaleString()} site${totalSites === 1 ? "" : "s"}`;
-      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.subcategory.value && !elements.lastUpdate.value && !state.language;
+      const displayed = state.viewMode === "list" ? Math.min(state.visibleItems, totalArticles) : state.groups.slice(0, state.visibleGroups).reduce((sum, group) => sum + group.articles.length, 0);
+      elements.resultCount.textContent = `${displayed.toLocaleString()} displayed / ${totalArticles.toLocaleString()} matching articles across ${totalSites.toLocaleString()} source labels · ${elements.lastUpdate.selectedOptions[0]?.textContent || "All retained"} (UTC).`;
+      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.subcategory.value && !elements.lastUpdate.value && !state.language && !state.favoritesOnly;
+      const more = document.getElementById("rssLoadMore");
+      more.hidden = state.viewMode === "list" ? state.visibleItems >= totalArticles : state.visibleGroups >= totalSites;
+      more.textContent = state.viewMode === "list" ? `Show ${Math.min(30, totalArticles - state.visibleItems)} more articles` : `Show ${Math.min(12, totalSites - state.visibleGroups)} more source groups`;
+      updateRssOptions();
+      if (!state.restoring && state.ready) syncRssUrl();
       elements.siteGrid.setAttribute("aria-busy", "false");
     }
 
     function applyFilters() {
+      if (!state.ready) return;
+      clearTimeout(searchTimer);
       const query = normalize(elements.search.value.trim());
       const selectedSource = elements.source.value;
       const selectedCategory = elements.category.value;
       const selectedSubcategory = elements.subcategory.value;
-      const isYesterday = elements.lastUpdate.value === "1";
-      const maxAgeDays = elements.lastUpdate.value && !isYesterday ? Number(elements.lastUpdate.value) : null;
-      const cutoff = maxAgeDays === null ? null : new Date();
-      if (cutoff) {
-        cutoff.setHours(0, 0, 0, 0);
-        cutoff.setDate(cutoff.getDate() - maxAgeDays);
-      }
-      // "Yesterday" is a single-day window, not a cumulative cutoff like the other options.
-      let yesterdayStart = null;
-      let yesterdayEnd = null;
-      if (isYesterday) {
-        yesterdayEnd = new Date();
-        yesterdayEnd.setHours(0, 0, 0, 0);
-        yesterdayStart = new Date(yesterdayEnd);
-        yesterdayStart.setDate(yesterdayStart.getDate() - 1);
-      }
       state.filteredItems = state.updates.filter((item) => {
         const haystack = normalize(`${item.title} ${item.description} ${item.source} ${item.categories.join(" ")}`);
         const matchesQuery = !query || haystack.includes(query);
-        const pubDate = new Date(item.pubDate);
         return matchesQuery
           && (!selectedSource || item.source === selectedSource)
           && (!selectedCategory || item.categories.includes(selectedCategory))
           && (!selectedSubcategory || item.subcategory === selectedSubcategory)
-          && (!cutoff || pubDate >= cutoff)
-          && (!isYesterday || (pubDate >= yesterdayStart && pubDate < yesterdayEnd))
+          && matchesPeriod(item.pubDate, elements.lastUpdate.value)
           && (!state.favoritesOnly || state.favorites.has(item.id))
           && (!state.language || item.country === state.language);
       });
+      state.visibleItems = 30;
+      state.visibleGroups = 12;
       state.groups = buildGroups(state.filteredItems);
       render();
     }
@@ -1584,64 +2070,141 @@
       elements.resultCount.textContent = "Unable to load RSS updates";
       const error = document.createElement("div");
       error.className = "error-state";
-      error.innerHTML = "<h2>The updates feed could not be loaded</h2><p>Please refresh the page or try again later.</p>";
+      error.innerHTML = "<h2>The updates feed could not be loaded</h2><p>Check the connection and retry.</p>";
+      elements.refreshedAt.textContent = "Unavailable";
+      elements.feedMeta.textContent = "Feed counts unavailable";
+      elements.libraryCount.textContent = "Article count unavailable";
+      document.getElementById("rssLoadMore").hidden = true;
+      const retry = document.createElement("button");
+      retry.type = "button"; retry.className = "site-ux-button"; retry.id = "rssRetry"; retry.textContent = "Retry";
+      retry.addEventListener("click", () => initialize().then(() => {
+        (state.ready ? elements.search : document.getElementById("rssRetry")).focus({ preventScroll: true });
+      }));
+      error.append(retry);
       elements.siteGrid.replaceChildren(error);
     }
-    // Favicons are cached in /favicons/ so no visitor request ever reaches a
-    // third party. One lookup fetch replaces one request per icon.
+    // Feed logos and fallback favicons are served locally, never by third parties.
     var faviconMap = null;
+    var sourceIconMap = null;
+    const failedSourceIcons = new Set();
+    async function loadSourceIcons() {
+      if (sourceIconMap) return sourceIconMap;
+      try {
+        const manifest = await SiteUX.fetchJSON("./source-icons.json", 3000);
+        if (manifest.version !== 1 || !manifest.sources || typeof manifest.sources !== "object" || Array.isArray(manifest.sources)) throw new Error("Invalid RSS source icon manifest");
+        sourceIconMap = manifest.sources;
+      } catch (error) {
+        console.warn("RSS source logo cache unavailable; local favicons and initials remain available.", error);
+      }
+      return sourceIconMap;
+    }
+
+    function createSourceIcon(source, className) {
+      const slot = document.createElement("span");
+      slot.className = `source-icon ${className}`;
+      slot.setAttribute("aria-hidden", "true");
+      const fallback = document.createElement("span");
+      fallback.className = "source-icon-fallback";
+      fallback.textContent = (Array.from(source.source.replace(/^https?:\/\//i, "").replace(/^www\./i, ""))[0] || "?").toUpperCase();
+      slot.append(fallback);
+      const recorded = sourceIconMap?.[source.source]?.src;
+      const local = typeof recorded === "string" && /^(?:\/rss-watcher\/source-icons\/[a-f0-9]{64}|\/favicons\/[a-z0-9._-]+)\.(?:png|jpg|gif|ico|webp)$/i.test(recorded) ? recorded : null;
+      if (recorded && !local) console.warn("Invalid local RSS icon path ignored for", source.source);
+      const candidates = [...new Set([local, cachedFaviconFor(iconDomain(source.icon)), cachedFaviconFor(hostFromUrl(source.link))].filter(Boolean))];
+      const image = document.createElement("img");
+      image.alt = "";
+      image.width = image.height = 24;
+      image.loading = "eager";
+      image.decoding = "async";
+      image.hidden = true;
+      function next() {
+        image.hidden = true;
+        fallback.hidden = false;
+        let candidate = candidates.shift();
+        while (candidate && failedSourceIcons.has(candidate)) candidate = candidates.shift();
+        if (!candidate) {
+          image.remove();
+          slot.title = `Icon unavailable for ${source.source}`;
+          return;
+        }
+        image.src = candidate;
+      }
+      image.addEventListener("load", () => { image.hidden = false; fallback.hidden = true; slot.removeAttribute("title"); });
+      image.addEventListener("error", () => {
+        const failed = image.getAttribute("src");
+        if (!failedSourceIcons.has(failed)) console.warn("RSS source icon unavailable; trying a local fallback:", failed);
+        failedSourceIcons.add(failed);
+        next();
+      });
+      slot.append(image);
+      next();
+      return slot;
+    }
+
     async function loadFaviconMap() {
       if (faviconMap) return faviconMap;
       try {
-        var res = await fetch("/favicons/lookup.json", { cache: "force-cache" });
-        faviconMap = res.ok ? await res.json() : {};
+        faviconMap = await SiteUX.fetchJSON("/favicons/lookup.json", 3000);
       } catch (err) {
+        console.warn("Local favicon cache unavailable; text fallbacks remain visible.", err);
         faviconMap = {};
       }
       return faviconMap;
     }
-    // Returns null when nothing is cached, so the caller's existing initials
-    // fallback handles it rather than reaching for the network.
     function cachedFaviconFor(hostname) {
       if (!faviconMap || !hostname) return null;
       var bare = String(hostname).toLowerCase().replace(/^www\./, "");
       var file = faviconMap[bare] || faviconMap[String(hostname).toLowerCase()];
-      return file ? "/favicons/" + file : null;
+      return typeof file === "string" && /^[a-z0-9._-]+\.(?:png|jpg|gif|ico|webp)$/i.test(file) ? "/favicons/" + file : null;
     }
     function hostFromUrl(value) {
       try { return new URL(value, location.origin).hostname; } catch (err) { return null; }
     }
-    // The stored icon is a Google URL carrying the real domain as a query
-    // parameter; pull it back out so it can be looked up locally.
+    // Old snapshots use Google URLs to identify favicon domains; never display
+    // Google's icon or confuse a feed-logo CDN with the source website.
     function iconDomain(iconUrl) {
       if (!iconUrl) return null;
-      var match = String(iconUrl).match(/[?&]domain=([^&]+)/);
-      return match ? decodeURIComponent(match[1]) : hostFromUrl(iconUrl);
+      try {
+        const url = new URL(iconUrl);
+        return ["google.com", "www.google.com"].includes(url.hostname) && url.pathname === "/s2/favicons" ? url.searchParams.get("domain") : null;
+      } catch { return null; }
     }
 
 
 
     async function initialize() {
+      if (state.loading) return;
+      state.loading = true;
+      state.ready = false;
+      state.restoring = true;
+      document.getElementById("rssControls").disabled = true;
+      [elements.favoritesToggle, ...elements.viewOptions].forEach(control => { control.disabled = true; });
       try {
         elements.currentYear.textContent = new Date().getFullYear();
         updateFavoritesToggleLabel();
         renderKeywordChips();
         elements.viewOptions.forEach((option) => option.setAttribute("aria-pressed", String(option.dataset.view === state.viewMode)));
-        await loadFaviconMap();
-        const response = await fetch("updates.json");
-        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
-        const payload = await response.json();
-        state.updates = payload.items;
+        await Promise.all([loadFaviconMap(), loadSourceIcons()]);
+        const payload = await SiteUX.fetchJSON("./updates.json");
+        if (!Array.isArray(payload.items) || payload.items.some(item => !item || typeof item.id !== "string" || typeof item.title !== "string" || typeof item.description !== "string" || typeof item.source !== "string" || !Array.isArray(item.categories))) throw new Error("Invalid RSS snapshot");
+        payload.items.forEach(item => { const url = new URL(item.link); if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) throw new Error("Invalid article link"); });
+        state.updates = [...payload.items].sort((a, b) => Date.parse(b.pubDate) - Date.parse(a.pubDate));
         elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
-          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-        });
-        elements.feedMeta.textContent = `${payload.succeededCount.toLocaleString()} feeds tracked`;
+          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC"
+        }) + " UTC";
+        elements.feedMeta.textContent = `${payload.feedCount} configured · ${payload.succeededCount} collection successes · ${payload.failedCount} collection errors in this snapshot`;
         populateFilters();
         elements.libraryCount.textContent = `${state.updates.length.toLocaleString()} updates tracked`;
-        applyFilters();
+        state.ready = true;
+        document.getElementById("rssControls").disabled = false;
+        [elements.favoritesToggle, ...elements.viewOptions].forEach(control => { control.disabled = false; });
+        restoreRssUrl();
       } catch (error) {
         console.error(error);
         showError();
+      } finally {
+        state.loading = false;
+        state.restoring = false;
       }
     }
 
@@ -1662,7 +2225,8 @@
     elements.viewOptions.forEach((button) => {
       button.addEventListener("click", () => {
         state.viewMode = button.dataset.view;
-        localStorage.setItem(VIEW_MODE_KEY, state.viewMode);
+        try { localStorage.setItem(VIEW_MODE_KEY, state.viewMode); }
+        catch (error) { console.warn("RSS view preference could not be saved.", error); SiteUX.notice("View changed for this page only; storage is unavailable."); }
         elements.viewOptions.forEach((option) => option.setAttribute("aria-pressed", String(option === button)));
         render();
       });
@@ -1685,11 +2249,21 @@
       elements.category.value = "";
       elements.subcategory.value = "";
       elements.lastUpdate.value = "";
+      state.favoritesOnly = false;
+      elements.favoritesToggle.setAttribute("aria-pressed", "false");
       state.language = "";
       elements.languageOptions.forEach((option) => option.setAttribute("aria-pressed", String(option.dataset.lang === "")));
       applyFilters();
       elements.search.focus();
     });
+    document.getElementById("rssLoadMore").addEventListener("click", () => {
+      const old = state.viewMode === "list" ? Math.min(state.visibleItems, state.filteredItems.length) : state.groups.slice(0, state.visibleGroups).reduce((sum, group) => sum + group.articles.length, 0);
+      if (state.viewMode === "list") state.visibleItems += 30; else state.visibleGroups += 12;
+      render();
+      const next = elements.siteGrid.querySelectorAll(".site-article-title")[old];
+      if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ block: "start", behavior: "instant" }); }
+    });
+    window.addEventListener("popstate", () => { if (state.ready) restoreRssUrl(); });
 
     // Submit-an-RSS-feed dialog: collects the proposal on-page, then hands it to
     // a pre-filled GitHub issue form so the static site needs no backend. The
@@ -1861,107 +2435,10 @@
 
     initialize();
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
 
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');

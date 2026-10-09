@@ -2,13 +2,14 @@
 author = "Benoit G"
 title = "GitHub Branch Naming Convention"
 date = "2024-02-26"
-description = "A practical branch naming convention for GitHub projects: standard format, common prefixes, best practices, and special branches."
+description = "A suggested team convention, not a GitHub requirement: readable branch names with a purpose, ticket identifier and short description."
 tags = ["GitHub", "Productivity"]
 categories = ["GitHub"]
 featureImage = "/articles/images/github-color.svg"
+related = ["github-commit-naming-convention", "github-contribution-workflow"]
 +++
 
-If you're looking to create your own GitHub project or contribute to an existing one, understanding branch naming conventions is crucial. This guide will help you navigate and implement effective branch naming practices.
+This is a **suggested team convention**, not a rule imposed by GitHub. Follow the repository's contribution guide first. A complete example is `feat/123-add-login`: `feat` states the purpose, `123` links the work item, and `add-login` describes the change.
 
 [[toc]]
 
@@ -16,7 +17,7 @@ If you're looking to create your own GitHub project or contribute to an existing
 
 A commonly used branch naming convention follows this structure:
 
-```bash
+```text
 <category>/<issue-number>-<short-description>
 ```
 
@@ -29,6 +30,8 @@ hotfix/789-fix-crash
 ```
 
 ## Common branch prefixes
+
+Start with `feat/`, `fix/` and `docs/`; use the remaining prefixes only if they help your team's review process. For example, `docs/321-update-setup` is as traceable as a feature branch.
 
 | Prefix | Purpose |
 |---|---|
@@ -75,6 +78,8 @@ feat/user-dashboard
 
 ## Special branches
 
+These are long-lived/release workflow roles, not additional mandatory prefixes. Many teams use trunk-based development without `develop`; the repository's actual release model determines which branches exist.
+
 | Branch name | Purpose |
 |---|---|
 | `main` | The stable, production-ready branch |
@@ -82,7 +87,7 @@ feat/user-dashboard
 | `release/x.y.z` | Used to prepare for releases |
 | `hotfix/x.y.z` | Urgent fixes for production issues |
 
-Recommended workflow:
+One possible Git Flow-style workflow (not a universal recommendation):
 
 ```bash
 main → develop → feature branches → release → main
@@ -101,4 +106,6 @@ git checkout -b hotfix/1.2.3-security-patch
 - Use prefixes (`feat/`, `fix/`, `hotfix/`, etc.)
 - Follow a clear pattern: `<type>/<issue-number>-<short-description>`
 - Avoid generic names (`feature1`, `update`, `fixbug`)
-- Use Git hooks to enforce naming conventions
+- If the team agrees to enforcement, document exceptions and implement repository checks
+
+For actual Git syntax constraints, use `git check-ref-format --branch feat/123-add-login`. This validates the name, not your team's naming policy. Reference: [git-check-ref-format](https://git-scm.com/docs/git-check-ref-format).

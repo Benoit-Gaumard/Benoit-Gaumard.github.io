@@ -53,6 +53,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -104,7 +105,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -161,7 +162,7 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible {
+    button:focus-visible, a:focus-visible, input:focus-visible {
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
@@ -190,7 +191,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -210,7 +211,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: inherit; text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -227,7 +228,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -287,7 +288,7 @@
     :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
 
     main { padding-block: 2.5rem 4rem; }
-    .intro { max-width: 52rem; margin-bottom: 2.5rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.5rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.05; }
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
@@ -302,8 +303,9 @@
     .view-toggle-button {
       display: inline-flex;
       align-items: center;
+      min-height: 2.75rem;
       gap: .4rem;
-      padding: .45rem .9rem;
+      padding: .45rem .65rem;
       border: 0;
       border-radius: 7px;
       background: transparent;
@@ -329,7 +331,7 @@
       display: inline-flex;
       align-items: center;
       gap: .4rem;
-      min-height: 2.25rem;
+      min-height: 2.75rem;
       padding: .375rem .75rem;
       border: 1px solid var(--cp-border-strong);
       border-radius: 6px;
@@ -337,6 +339,7 @@
       color: var(--cp-text);
       cursor: pointer;
       font-weight: 650;
+      font-size: 0.85rem;
     }
     .favorites-filter:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
     .favorites-filter[aria-pressed="true"] {
@@ -351,12 +354,14 @@
       align-items: center;
       justify-content: space-between;
       gap: .75rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: .5rem;
     }
-    .tools-search { margin-bottom: 1.25rem; }
+    .tools-search { display: flex; align-items: flex-end; gap: .75rem; margin-bottom: .5rem; }
+    .search-field { flex: 1; min-width: 0; max-width: 36rem; }
+    .search-field label { display: block; margin-bottom: .4rem; font-size: 0.9rem; font-weight: 600; }
     .tools-search input {
       width: 100%;
-      max-width: 26rem;
+      min-width: 0;
       min-height: 2.9rem;
       border: 1px solid var(--cp-border-strong);
       border-radius: 8px;
@@ -364,6 +369,27 @@
       color: var(--cp-text);
       padding: .5rem .85rem;
     }
+    .tools-search input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .search-hint, .preference-hint { margin: .5rem 0 .75rem; color: var(--cp-text-muted); font-size: 0.85rem; line-height: 1.5; }
+    .catalog-button {
+      min-height: 2.75rem;
+      padding: .5rem .75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .catalog-button:hover { border-color: var(--cp-accent); }
+    .catalog-button[aria-pressed="true"] { background: var(--cp-accent-soft); border-color: var(--cp-accent); color: var(--cp-accent); }
+    .catalog-button[aria-disabled="true"] { color: var(--cp-text-muted); cursor: default; }
+    .results-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1rem; }
+    .result-count { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
+    .catalog-notice { padding: 1rem; border: 1px solid var(--cp-warning); border-radius: 8px; color: var(--cp-warning); background: var(--cp-warning-bg); line-height: 1.5; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    [hidden] { display: none !important; }
     .reset-order-button {
       border: 0;
       background: transparent;
@@ -371,68 +397,86 @@
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      padding: .25rem;
+      min-height: 2.75rem;
+      padding: .5rem;
     }
     .reset-order-button:hover { color: var(--cp-accent-hover); }
+    .site-ux-dialog.reset-order-dialog { width: min(32rem, calc(100% - 2rem)); }
+    .reset-order-dialog .confirm-reset-order { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+    .reset-order-dialog .confirm-reset-order:hover { background: var(--cp-accent-hover); border-color: var(--cp-accent-hover); }
 
     .tool-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1.25rem;
     }
     .tool-card {
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: .75rem;
-      padding: 1.5rem;
+      min-width: 0;
       background: var(--cp-surface);
       border: 1px solid var(--cp-border);
-      border-radius: 12px;
+      border-radius: 8px;
       text-decoration: none;
       color: var(--cp-text);
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      scroll-margin-top: 6rem;
+      scroll-margin-bottom: 1rem;
+      transition: border-color .2s ease;
     }
-    .tool-card:hover, .tool-card:focus-visible {
-      transform: translateY(-4px);
+    .tool-card:hover, .tool-card:focus-within {
       border-color: var(--cp-accent);
-      box-shadow: var(--cp-shadow);
     }
+    .tool-link { display: grid; grid-template-columns: 3rem minmax(0, 1fr); grid-template-rows: auto 1fr auto auto; align-items: start; gap: .75rem; flex: 1; min-width: 0; padding: 1.25rem; color: var(--cp-text); text-decoration: none; border-radius: inherit; }
+    .tool-link > h2 { padding-right: 2.75rem; align-self: center; }
+    .tool-link > p, .tool-link > .tool-updated, .tool-link > .tool-arrow { grid-column: 1 / -1; }
+    .tool-link:focus-visible { outline-offset: -3px; }
+    .tool-card.is-dragging, .tool-card.is-reordered { border-color: var(--cp-accent); outline: 3px solid var(--cp-accent); outline-offset: 1px; }
+    .tool-card.is-dragging .tool-link, .tool-card.is-reordered .tool-link { background: var(--cp-accent-soft); }
+    #catalog:has(.is-dragging), #catalog:has(.is-dragging) * { cursor: grabbing; }
     .tool-card.is-dragging {
       position: fixed;
       z-index: 50;
       margin: 0;
       pointer-events: none;
       cursor: grabbing;
-      transform: scale(1.03) rotate(1deg);
+      transform: none;
       box-shadow: 0 24px 48px rgba(23, 50, 77, .28);
       transition: none;
     }
     .tool-card-placeholder {
-      border: 2px dashed var(--cp-border-strong);
-      border-radius: 12px;
-      background: var(--cp-surface-soft);
-    }
-    .drag-handle {
-      position: absolute;
-      top: .5rem;
-      right: 2.6rem;
       display: grid;
       place-items: center;
-      width: 2rem;
-      height: 2rem;
+      min-width: 0;
+      border: 3px dashed var(--cp-accent);
+      border-radius: 8px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-text);
+      font-size: .9rem;
+      font-weight: 700;
+    }
+    .drag-handle {
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      flex: 0 0 auto;
       border-radius: 7px;
       color: var(--cp-text-muted);
-      opacity: .4;
       cursor: grab;
       touch-action: none;
-      transition: opacity .15s ease, background .15s ease, color .15s ease;
+      border: 1px solid var(--cp-border-strong);
+      background: var(--cp-surface-soft);
     }
     .drag-handle:hover { background: var(--cp-accent-soft); color: var(--cp-accent); }
-    .tool-card:hover .drag-handle, .tool-card:focus-within .drag-handle, .tool-card.is-dragging .drag-handle {
-      opacity: 1;
-    }
     .tool-card.is-dragging .drag-handle { cursor: grabbing; }
+    .reorder-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .75rem; border-top: 1px solid var(--cp-border); }
+    .reorder-controls .drag-handle { margin-right: auto; }
+    .reorder-controls .catalog-button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 2.75rem; min-width: 2.75rem; padding: 0; }
+    .reorder-feedback { display: none; align-items: center; padding: .25rem .5rem; border-radius: 4px; background: var(--cp-accent); color: var(--cp-accent-fg); font-size: .75rem; font-weight: 700; }
+    .tool-card.is-dragging .reorder-feedback, .tool-card.is-reordered .reorder-feedback { display: inline-flex; }
+    .reorder-arrow { display: block; flex: none; }
+    .tool-cards.list-view .reorder-arrow { transform: rotate(90deg); }
 
     .favorite-button {
       position: absolute;
@@ -440,16 +484,15 @@
       right: .5rem;
       z-index: 2;
       display: grid;
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 2.75rem;
+      height: 2.75rem;
       place-items: center;
       padding: 0;
       border: 1px solid var(--cp-border);
-      border-radius: 50%;
+      border-radius: 6px;
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
     }
     .favorite-button:hover { color: var(--cp-accent); }
     .favorite-button[aria-pressed="true"] {
@@ -461,57 +504,39 @@
       grid-template-columns: 1fr;
       gap: .6rem;
     }
-    .tool-cards.list-view .tool-card {
+    .tool-cards.list-view .tool-link {
       display: grid;
-      grid-template-columns: auto auto auto 1fr auto auto;
-      grid-template-rows: auto auto;
+      grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
       column-gap: 1rem;
       row-gap: .1rem;
-      padding: .75rem 1.25rem;
-    }
-    .tool-cards.list-view .tool-card:hover, .tool-cards.list-view .tool-card:focus-visible {
-      transform: none;
-    }
-    .tool-cards.list-view .drag-handle {
-      position: static;
-      grid-row: 1 / 3;
-      grid-column: 1;
-    }
-    .tool-cards.list-view .favorite-button {
-      position: static;
-      grid-row: 1 / 3;
-      grid-column: 2;
+      padding: 1rem 4rem 1rem 1rem;
     }
     .tool-cards.list-view .tool-card .tool-icon {
       grid-row: 1 / 3;
-      grid-column: 3;
+      grid-column: 1;
       width: 2.5rem;
       height: 2.5rem;
     }
     .tool-cards.list-view .tool-card h2 {
       grid-row: 1;
-      grid-column: 4;
+      grid-column: 2;
+      padding-right: 0;
       font-size: 1rem;
     }
     .tool-cards.list-view .tool-card p {
       grid-row: 2;
-      grid-column: 4;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      grid-column: 2;
       font-size: 0.85rem;
     }
     .tool-cards.list-view .tool-card .tool-updated {
-      grid-row: 1 / 3;
-      grid-column: 5;
-      align-self: center;
+      grid-row: 3;
+      grid-column: 2;
       margin: 0;
-      white-space: nowrap;
     }
     .tool-cards.list-view .tool-card .tool-arrow {
       grid-row: 1 / 3;
-      grid-column: 6;
+      grid-column: 3;
       align-self: center;
     }
     .tool-card .tool-icon {
@@ -531,6 +556,7 @@
     .tool-card h2 {
       margin: 0;
       font-size: 1.2rem;
+      overflow-wrap: anywhere;
     }
     .tool-card p {
       margin: 0;
@@ -546,22 +572,39 @@
       color: var(--cp-accent);
       font-size: 0.85rem;
       font-weight: 600;
+      min-height: 2.75rem;
     }
     .tool-card .tool-arrow svg {
       transition: transform .2s ease;
     }
-    .tool-card:hover .tool-arrow svg, .tool-card:focus-visible .tool-arrow svg {
+    .tool-link:hover .tool-arrow svg, .tool-link:focus-visible .tool-arrow svg {
       transform: translate(2px, -2px);
     }
 
-    .tool-card.is-hidden { display: none; }
     .empty-state {
       grid-column: 1 / -1;
       padding: 2.5rem;
       border: 1px dashed var(--cp-border-strong);
-      border-radius: 12px;
+      border-radius: 8px;
       text-align: center;
       color: var(--cp-text-muted);
+    }
+    .empty-state p { margin: 0 0 1rem; }
+    .catalog-ad { margin: 2rem 0; padding: 1rem 0; border-block: 1px solid var(--cp-border); text-align: center; min-width: 0; }
+    .ad-label { display: block; margin-bottom: .75rem; font-size: 0.75rem; color: var(--cp-text-muted); }
+    .catalog-ad .adsbygoogle { min-height: 280px; }
+    @media (max-width: 60rem) { .tool-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 40rem) {
+      .tool-cards { grid-template-columns: minmax(0, 1fr); }
+      .reorder-arrow { transform: rotate(90deg); }
+      .tool-cards.list-view .tool-link { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto; padding: 1rem; gap: .5rem; }
+      .tool-cards.list-view .tool-card .tool-icon { display: none; }
+      .tool-cards.list-view .tool-card h2 { grid-column: 1; grid-row: 1; padding-right: 3rem; }
+      .tool-cards.list-view .tool-card p { grid-column: 1; grid-row: 2; }
+      .tool-cards.list-view .tool-card .tool-updated { grid-column: 1; grid-row: 3; }
+      .tool-cards.list-view .tool-card .tool-arrow { grid-column: 1; grid-row: 4; }
+      .tools-toolbar { align-items: flex-start; }
+      main { padding-top: 1.5rem; }
     }
 
     .site-footer {
@@ -652,8 +695,6 @@
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
       .footer-bottom { flex-direction: column; }
-      .tool-cards.list-view .tool-card p { display: none; }
-      .tool-cards.list-view .tool-card .tool-updated { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -664,7 +705,8 @@
       /* Printing a tool page should yield the data, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
-      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination, #catalogControls,
+      .favorite-button, .reorder-controls, .catalog-ad, .back-to-top { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
       body { font-size: 11pt; }
@@ -722,12 +764,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/tools/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/tools/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -746,6 +1158,47 @@
         <a href="/tools/" aria-current="page"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/" aria-current="page">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -760,13 +1213,19 @@
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Tools</h1>
-      <p class="intro-text">A growing collection of small tools and reference pages. Search to narrow them down, or press Enter to open it.</p>
+      <p class="intro-text">Cloud references and everyday tools.</p>
     </section>
 
-    <section aria-label="Tool list">
+    <section id="catalog" aria-label="Tool catalogue">
+      <noscript><p>Search, filters and saved preferences need JavaScript. All tools are available below.</p><style>.catalog-ad { display: none; }</style></noscript>
+      <div id="catalogControls" hidden>
       <div class="tools-search">
-        <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-label="Search tools">
+        <div class="search-field">
+          <label for="toolSearch">Search tools</label>
+          <input id="toolSearch" type="search" placeholder="Try DNS, permissions or calculator" autocomplete="off" spellcheck="false" aria-describedby="searchHint">
+        </div>
       </div>
+      <p class="search-hint" id="searchHint">Press Enter when one result remains.</p>
       <div class="tools-toolbar">
         <div class="toolbar-group">
         <div class="view-toggle" role="group" aria-label="Choose view">
@@ -779,212 +1238,302 @@
             List
           </button>
         </div>
-        <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+        <div class="toolbar-group" role="group" aria-label="Personalize tools">
+          <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
+          <button class="catalog-button" id="reorderToggle" type="button" aria-pressed="false">Reorder tools</button>
         </div>
-        <button type="button" class="reset-order-button" id="resetOrderButton" hidden>Reset order</button>
+        </div>
+        <button type="button" class="reset-order-button" id="resetOrderButton" aria-haspopup="dialog" aria-controls="resetOrderDialog" hidden>Reset order</button>
+      </div>
+      <p class="preference-hint">Favorite tools and their order are saved only in this browser.</p>
+      <p class="preference-hint" id="reorderHint" hidden>Use the arrow buttons, or drag a handle. Moves apply to the currently visible tools.</p>
+      <div class="results-toolbar">
+        <p class="result-count" id="resultCount" role="status" aria-live="polite" aria-atomic="true"></p>
+        <div class="toolbar-group">
+          <button class="reset-order-button" id="clearFilters" type="button" hidden>Clear all filters</button>
+        </div>
+      </div>
+      <p class="sr-only" id="actionStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+      </div>
+      <p class="catalog-notice" id="catalogNotice" role="status" hidden></p>
+      <div class="empty-state" id="emptyState" hidden>
+        <p id="emptyMessage"></p>
+        <button class="catalog-button" id="clearSearch" type="button">Clear search</button>
+        <button class="catalog-button" id="emptyClearFilters" type="button">Show all tools</button>
       </div>
       <div class="tool-cards" id="toolCards">
-        <a class="tool-card" href="/azure-regions/">
+        <article class="tool-card" data-tool-id="/azure-regions/" data-families="azure-reference">
+          <a class="tool-link" href="/azure-regions/" aria-labelledby="tool-azure-regions">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Regions</h2>
+          <h2 id="tool-azure-regions">Azure Regions</h2>
           <p>Explore Azure datacenter locations and regional information worldwide.</p>
           <span class="tool-updated" data-file="azure-regions/regions.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-naming-convention/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-naming-convention/" data-families="azure-reference utilities">
+          <a class="tool-link" href="/azure-naming-convention/" aria-labelledby="tool-azure-naming-convention">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Naming Convention</h2>
+          <h2 id="tool-azure-naming-convention">Azure Naming Convention</h2>
           <p>Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations.</p>
           <span class="tool-updated" data-file="azure-naming-convention/abbreviations.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-taggable-resources/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-taggable-resources/" data-families="azure-reference">
+          <a class="tool-link" href="/azure-taggable-resources/" aria-labelledby="tool-azure-taggable-resources">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Taggable Resources</h2>
+          <h2 id="tool-azure-taggable-resources">Azure Taggable Resources</h2>
           <p>Check which Azure resource types support tags and whether tags appear in the cost report.</p>
           <span class="tool-updated" data-file="azure-taggable-resources/tag-support.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-policy-aliases/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-policy-aliases/" data-families="azure-reference">
+          <a class="tool-link" href="/azure-policy-aliases/" aria-labelledby="tool-azure-policy-aliases">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Policy Aliases</h2>
+          <h2 id="tool-azure-policy-aliases">Azure Policy Aliases</h2>
           <p>Search all supported Azure Policy aliases to use when authoring custom policy definitions.</p>
           <span class="tool-updated" data-file="azure-policy-aliases/policy-aliases.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-policies/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-policies/" data-families="azure-reference">
+          <a class="tool-link" href="/azure-policies/" aria-labelledby="tool-azure-policies">
           <span class="tool-icon" aria-hidden="true">📋</span>
-          <h2>Azure Policies</h2>
+          <h2 id="tool-azure-policies">Azure Policies</h2>
           <p>Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure.</p>
           <span class="tool-updated" data-file="azure-policies/policydefinitions.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-built-in-roles/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-built-in-roles/" data-families="azure-reference">
+          <a class="tool-link" href="/azure-built-in-roles/" aria-labelledby="tool-azure-built-in-roles">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Built-in Roles</h2>
+          <h2 id="tool-azure-built-in-roles">Azure Built-in Roles</h2>
           <p>Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions.</p>
           <span class="tool-updated" data-file="azure-built-in-roles/roles.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/entra-built-in-roles/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+      </div>
+      <aside class="catalog-ad" id="toolsAd" aria-label="Advertisement" hidden>
+        <span class="ad-label">Advertisement</span>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6636684537203477"
+             data-ad-slot="4494484671"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </aside>
+      <div class="tool-cards" id="moreToolCards">
+        <article class="tool-card" data-tool-id="/entra-built-in-roles/" data-families="azure-reference">
+          <a class="tool-link" href="/entra-built-in-roles/" aria-labelledby="tool-entra-built-in-roles">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="28" height="28"></span>
-          <h2>Entra ID Built-in Roles</h2>
+          <h2 id="tool-entra-built-in-roles">Entra ID Built-in Roles</h2>
           <p>Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions.</p>
           <span class="tool-updated" data-file="entra-built-in-roles/roles.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/graph-permissions/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/graph-permissions/" data-families="azure-reference">
+          <a class="tool-link" href="/graph-permissions/" aria-labelledby="tool-graph-permissions">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="28" height="28"></span>
-          <h2>Microsoft Graph Permissions</h2>
+          <h2 id="tool-graph-permissions">Microsoft Graph Permissions</h2>
           <p>Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description.</p>
           <span class="tool-updated" data-file="graph-permissions/permissions.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-ip-ranges/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-ip-ranges/" data-families="azure-reference">
+          <a class="tool-link" href="/azure-ip-ranges/" aria-labelledby="tool-azure-ip-ranges">
           <span class="tool-icon" aria-hidden="true">☁️</span>
-          <h2>Azure IP Ranges</h2>
+          <h2 id="tool-azure-ip-ranges">Azure IP Ranges</h2>
           <p>IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool.</p>
           <span class="tool-updated" data-file="azure-ip-ranges/ip-ranges.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/github-ip-ranges/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/github-ip-ranges/" data-families="utilities">
+          <a class="tool-link" href="/github-ip-ranges/" aria-labelledby="tool-github-ip-ranges">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="28" height="28"></span>
-          <h2>GitHub IP Ranges</h2>
+          <h2 id="tool-github-ip-ranges">GitHub IP Ranges</h2>
           <p>IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool.</p>
           <span class="tool-updated" data-file="github-ip-ranges/ip-ranges.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/azure-release-updates/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/azure-release-updates/" data-families="news">
+          <a class="tool-link" href="/azure-release-updates/" aria-labelledby="tool-azure-release-updates">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="28" height="28"></span>
-          <h2>Azure Updates</h2>
+          <h2 id="tool-azure-release-updates">Azure Updates</h2>
           <p>Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed.</p>
           <span class="tool-updated" data-file="azure-release-updates/updates.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/m365-release-updates/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/m365-release-updates/" data-families="news">
+          <a class="tool-link" href="/m365-release-updates/" aria-labelledby="tool-m365-release-updates">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="28" height="28"></span>
-          <h2>M365 Updates</h2>
+          <h2 id="tool-m365-release-updates">M365 Updates</h2>
           <p>Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed.</p>
           <span class="tool-updated" data-file="m365-release-updates/updates.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/aws-release-updates/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/aws-release-updates/" data-families="news">
+          <a class="tool-link" href="/aws-release-updates/" aria-labelledby="tool-aws-release-updates">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="28" height="28"></span>
-          <h2>AWS Updates</h2>
+          <h2 id="tool-aws-release-updates">AWS Updates</h2>
           <p>Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed.</p>
           <span class="tool-updated" data-file="aws-release-updates/updates.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/rss-watcher/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/rss-watcher/" data-families="news">
+          <a class="tool-link" href="/rss-watcher/" aria-labelledby="tool-rss-watcher">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="28" height="28"></span>
-          <h2>RSS Watcher</h2>
+          <h2 id="tool-rss-watcher">RSS Watcher</h2>
           <p>Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day.</p>
           <span class="tool-updated" data-file="rss-watcher/updates.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/microsoft-techcommunity-rss-feeds/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/microsoft-techcommunity-rss-feeds/" data-families="news">
+          <a class="tool-link" href="/microsoft-techcommunity-rss-feeds/" aria-labelledby="tool-microsoft-techcommunity-rss-feeds">
           <span class="tool-icon" aria-hidden="true">📢</span>
-          <h2>Microsoft Techcommunity RSS Feeds</h2>
+          <h2 id="tool-microsoft-techcommunity-rss-feeds">Microsoft Techcommunity RSS Feeds</h2>
           <p>Consolidate latest activities from Microsoft Tech Community blogs.</p>
           <span class="tool-updated" data-file="microsoft-techcommunity-rss-feeds/feeds-status.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/subnet-calculator/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/subnet-calculator/" data-families="calculators">
+          <a class="tool-link" href="/subnet-calculator/" aria-labelledby="tool-subnet-calculator">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="28" height="28"></span>
-          <h2>Subnet Calculator</h2>
+          <h2 id="tool-subnet-calculator">Subnet Calculator</h2>
           <p>Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/percentage-calculator/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/percentage-calculator/" data-families="calculators">
+          <a class="tool-link" href="/percentage-calculator/" aria-labelledby="tool-percentage-calculator">
           <span class="tool-icon" aria-hidden="true">💯</span>
-          <h2>Percentage Calculator</h2>
+          <h2 id="tool-percentage-calculator">Percentage Calculator</h2>
           <p>Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/sla-calculator/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/sla-calculator/" data-families="calculators">
+          <a class="tool-link" href="/sla-calculator/" aria-labelledby="tool-sla-calculator">
           <span class="tool-icon" aria-hidden="true">🛡️</span>
-          <h2>SLA Calculator</h2>
+          <h2 id="tool-sla-calculator">SLA Calculator</h2>
           <p>Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/units-converter/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/units-converter/" data-families="calculators">
+          <a class="tool-link" href="/units-converter/" aria-labelledby="tool-units-converter">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="28" height="28"></span>
-          <h2>Units Converter</h2>
+          <h2 id="tool-units-converter">Units Converter</h2>
           <p>Convert between common units of length, weight, temperature, volume, speed, area, data, and time.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/guid-generator/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/guid-generator/" data-families="utilities">
+          <a class="tool-link" href="/guid-generator/" aria-labelledby="tool-guid-generator">
           <span class="tool-icon" aria-hidden="true">🆔</span>
-          <h2>GUID Generator</h2>
+          <h2 id="tool-guid-generator">GUID Generator</h2>
           <p>Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/random-wheel/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/random-wheel/" data-families="utilities">
+          <a class="tool-link" href="/random-wheel/" aria-labelledby="tool-random-wheel">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="28" height="28"></span>
-          <h2>Random Wheel</h2>
+          <h2 id="tool-random-wheel">Random Wheel</h2>
           <p>Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/mini-games/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/mini-games/" data-families="utilities">
+          <a class="tool-link" href="/mini-games/" aria-labelledby="tool-mini-games">
           <span class="tool-icon" aria-hidden="true">🕹️</span>
-          <h2>Mini Games</h2>
+          <h2 id="tool-mini-games">Mini Games</h2>
           <p>Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/icons/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/icons/" data-families="assets">
+          <a class="tool-link" href="/icons/" aria-labelledby="tool-icons">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="28" height="28"></span>
-          <h2>Icons</h2>
+          <h2 id="tool-icons">Icons</h2>
           <p>Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation.</p>
           <span class="tool-updated" data-file="icons/icons.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/emoji-sheet/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/emoji-sheet/" data-families="assets">
+          <a class="tool-link" href="/emoji-sheet/" aria-labelledby="tool-emoji-sheet">
           <span class="tool-icon" aria-hidden="true">😀</span>
-          <h2>Emoji</h2>
+          <h2 id="tool-emoji-sheet">Emoji</h2>
           <p>A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation.</p>
           <span class="tool-updated" data-file="emoji-sheet/emojis.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/it-images/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/it-images/" data-families="assets">
+          <a class="tool-link" href="/it-images/" aria-labelledby="tool-it-images">
           <span class="tool-icon" aria-hidden="true">😂</span>
-          <h2>IT Images &amp; Memes</h2>
+          <h2 id="tool-it-images">IT Images &amp; Memes</h2>
           <p>A collection of funny IT memes, developer humor, and tech-related images.</p>
           <span class="tool-updated" data-file="it-images/images.json"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/favorite-links/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/favorite-links/" data-families="community">
+          <a class="tool-link" href="/favorite-links/" aria-labelledby="tool-favorite-links">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="28" height="28"></span>
-          <h2>My Favorite Links</h2>
+          <h2 id="tool-favorite-links">My Favorite Links</h2>
           <p>A curated collection of useful links and resources.</p>
           <span class="tool-updated" data-file="favorite-links/favorite-links.csv"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/friends-websites/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/friends-websites/" data-families="community">
+          <a class="tool-link" href="/friends-websites/" aria-labelledby="tool-friends-websites">
           <span class="tool-icon" aria-hidden="true">🤝</span>
-          <h2>My Friends' Websites</h2>
+          <h2 id="tool-friends-websites">My Friends' Websites</h2>
           <p>Discover amazing websites from my network of friends and colleagues.</p>
           <span class="tool-updated" data-file="friends-websites/friends-websites.csv"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/microsoft-portals/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/microsoft-portals/" data-families="azure-reference community">
+          <a class="tool-link" href="/microsoft-portals/" aria-labelledby="tool-microsoft-portals">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="28" height="28"></span>
-          <h2>Microsoft Portals</h2>
-          <p>A comprehensive directory of all Microsoft portals in one place.</p>
+          <h2 id="tool-microsoft-portals">Microsoft Portals</h2>
+          <p>Browse a selection of Microsoft administration portals with task-based search.</p>
           <span class="tool-updated" data-file="microsoft-portals/portals-urls.csv"></span>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/world-clock/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/world-clock/" data-families="utilities">
+          <a class="tool-link" href="/world-clock/" aria-labelledby="tool-world-clock">
           <span class="tool-icon" aria-hidden="true">🕐</span>
-          <h2>World Clock</h2>
+          <h2 id="tool-world-clock">World Clock</h2>
           <p>Current time and date in Paris, plus a quick glance at colleague timezones around the world.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
-        <a class="tool-card" href="/workflows/">
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
+        <article class="tool-card" data-tool-id="/workflows/" data-families="utilities">
+          <a class="tool-link" href="/workflows/" aria-labelledby="tool-workflows">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="28" height="28"></span>
-          <h2>Workflows</h2>
+          <h2 id="tool-workflows">Workflows</h2>
           <p>Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data.</p>
-          <span class="tool-arrow">Open <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-        </a>
+          <span class="tool-arrow">Open tool <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </a>
+        </article>
       </div>
     </section>
   </main>
@@ -993,7 +1542,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -1031,7 +1580,7 @@
           </a>
           <button class="share-btn" type="button" data-share="favorite">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            Add to favorites
+            Bookmark this site
           </button>
         </div>
         <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
@@ -1039,6 +1588,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -1049,329 +1599,410 @@
     </svg>
   </button>
 
-  <script>
+  <dialog class="site-ux-dialog reset-order-dialog" id="resetOrderDialog" aria-labelledby="resetOrderTitle" aria-describedby="resetOrderDescription">
+    <h2 id="resetOrderTitle">Reset tool order?</h2>
+    <p id="resetOrderDescription">This restores the default order for all tools and removes your custom order. Your favorites, filters and view stay unchanged.</p>
+    <div class="site-ux-actions">
+      <button class="site-ux-button" id="cancelResetOrder" type="button" autofocus>Cancel</button>
+      <button class="site-ux-button confirm-reset-order" id="confirmResetOrder" type="button">Reset order</button>
+    </div>
+  </dialog>
+
+  <script data-tools-script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
     const VIEW_STORAGE_KEY = "tools-view-mode";
-    const toolCards = document.getElementById("toolCards");
-    const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
-
-    function applyView(view) {
-      toolCards.classList.toggle("list-view", view === "list");
-      viewButtons.forEach((button) => {
-        const isActive = button.dataset.view === view;
-        button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-      });
-    }
-
-    function loadView() {
-      try {
-        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
-      } catch {
-        return "cards";
-      }
-    }
-
-    applyView(loadView());
-
-    viewButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const view = button.dataset.view;
-        applyView(view);
-        try {
-          localStorage.setItem(VIEW_STORAGE_KEY, view);
-        } catch {
-          // ignore storage errors (private browsing, quota, etc.)
-        }
-      });
-    });
-
-    const searchInput = document.getElementById("toolSearch");
-    let emptyState = null;
-
     const FAVORITES_STORAGE_KEY = "tools-my-favorites";
+    const ORDER_STORAGE_KEY = "tools-card-order";
+    const catalog = document.getElementById("catalog");
+    const grids = [document.getElementById("toolCards"), document.getElementById("moreToolCards")];
+    const defaultCards = [...catalog.querySelectorAll(".tool-card")];
+    const toolId = (card) => card.dataset.toolId;
+    const toolTitle = (card) => card.querySelector("h2").textContent.trim();
+    const byId = new Map(defaultCards.map((card) => [toolId(card), card]));
+    const searchInput = document.getElementById("toolSearch");
     const favoritesFilter = document.getElementById("favoritesFilter");
-    let favoritesOnly = false;
+    const familyNames = new Map([
+      ["azure-reference", "Azure reference"],
+      ["news", "News"],
+      ["calculators", "Calculators"],
+      ["assets", "Assets"],
+      ["community", "Community"],
+      ["utilities", "Utilities"],
+    ]);
+    const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
+    const resetOrderButton = document.getElementById("resetOrderButton");
+    const resetOrderDialog = document.getElementById("resetOrderDialog");
+    const reorderToggle = document.getElementById("reorderToggle");
+    const actionStatus = document.getElementById("actionStatus");
+    const notices = new Map();
 
-    function loadFavorites() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
-        return new Set(Array.isArray(saved) ? saved : []);
-      } catch {
-        return new Set();
-      }
+    function reportNotice(key, message, error) {
+      notices.set(key, message);
+      const notice = document.getElementById("catalogNotice");
+      notice.textContent = [...notices.values()].join(" ");
+      notice.hidden = false;
+      console.warn(message, error);
     }
 
-    const favorites = loadFavorites();
-
-    function saveFavorites() {
+    function readPreference(key) {
       try {
-        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...favorites]));
+        return localStorage.getItem(key);
       } catch (error) {
-        console.warn("Unable to save favorites", error);
+        reportNotice("storage", "Saved preferences are unavailable. Changes will apply to this tab only.", error);
+        return null;
       }
     }
+
+    function readSavedIds(key) {
+      try {
+        const saved = JSON.parse(readPreference(key) || "[]");
+        if (!Array.isArray(saved) || saved.some((id) => typeof id !== "string")) throw new Error("Invalid saved tool IDs");
+        return [...new Set(saved)].filter((id) => byId.has(id));
+      } catch (error) {
+        reportNotice(key, "Some saved tool preferences could not be read. You can select them again.", error);
+        return [];
+      }
+    }
+
+    function savePreference(key, value) {
+      try {
+        if (value === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, value);
+      } catch (error) {
+        reportNotice("storage", "Your changes work in this tab, but this browser could not save them for your next visit.", error);
+      }
+    }
+
+    const savedOrder = readSavedIds(ORDER_STORAGE_KEY);
+    const favorites = new Set(readSavedIds(FAVORITES_STORAGE_KEY));
+    let orderedCards = [...savedOrder.map((id) => byId.get(id)), ...defaultCards.filter((card) => !savedOrder.includes(toolId(card)))];
+    let defaultView = readPreference(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
+    let view = defaultView;
+    let families = new Set();
+    let favoritesOnly = false;
+    let visibleCards = [];
+    let reorderMode = false;
+    let cancelDrag = null;
+    let highlightedCard = null;
+    let moveHighlightTimer = null;
+    let adRequested = false;
 
     function normalize(value) {
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function filterCards() {
-      const query = normalize(searchInput.value.trim());
-      const cards = [...toolCards.querySelectorAll(".tool-card")];
-      let visibleCount = 0;
-      cards.forEach((card) => {
-        const haystack = normalize(`${card.querySelector("h2")?.textContent ?? ""} ${card.querySelector("p")?.textContent ?? ""}`);
-        const matches = (!query || haystack.includes(query)) && (!favoritesOnly || favorites.has(toolId(card)));
-        card.classList.toggle("is-hidden", !matches);
-        if (matches) visibleCount++;
-      });
-
-
-      if (!visibleCount && !emptyState) {
-        emptyState = document.createElement("div");
-        emptyState.className = "empty-state";
-        toolCards.append(emptyState);
-      } else if (visibleCount && emptyState) {
-        emptyState.remove();
-        emptyState = null;
-      }
-      if (emptyState) {
-        emptyState.textContent = favoritesOnly && !favorites.size
-          ? "No favorite tools yet. Add some with the star button."
-          : "No tools match your search.";
+    function readUrlState() {
+      const params = new URLSearchParams(location.search);
+      searchInput.value = params.get("q") ?? params.get("toolSearch") ?? "";
+      const requestedFamilies = params.getAll("family").flatMap((value) => value.split(","));
+      families = new Set(requestedFamilies.filter((value) => familyNames.has(value)));
+      favoritesOnly = params.get("favorites") === "1";
+      const requestedView = params.get("view");
+      view = requestedView === "list" || requestedView === "cards" ? requestedView : defaultView;
+      if (requestedFamilies.some((value) => !familyNames.has(value)) || (requestedView && !["list", "cards"].includes(requestedView))) {
+        reportNotice("url", "Unknown URL filters were ignored. Use search or clear all filters to adjust the results.", new Error("Unknown catalogue filter"));
       }
     }
-    // dates come from the same git-stamped manifest the data pages read, so the
-    // hub cannot advertise a freshness the tool itself would contradict
-    (async function showUpdatedDates() {
-      const slots = [...document.querySelectorAll(".tool-updated")];
-      if (!slots.length) return;
-      let stamps;
+
+    function catalogueUrl() {
+      const url = new URL(location.href);
+      ["q", "toolSearch", "family", "favorites", "view"].forEach((key) => url.searchParams.delete(key));
+      const query = searchInput.value.trim();
+      if (query) url.searchParams.set("q", query);
+      [...families].sort().forEach((family) => url.searchParams.append("family", family));
+      if (favoritesOnly) url.searchParams.set("favorites", "1");
+      url.searchParams.set("view", view);
+      return url;
+    }
+
+    function syncUrl() {
+      const url = catalogueUrl();
       try {
-        const res = await fetch("/freshness.json", { cache: "no-store" });
-        if (!res.ok) return;
-        stamps = await res.json();
-      } catch { return; }
-      for (const slot of slots) {
-        const iso = stamps[slot.dataset.file];
-        const date = iso ? new Date(iso) : null;
-        if (!date || isNaN(date)) continue;
-        slot.textContent = "Updated " + date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+        window.dispatchEvent(new Event("catalogstatechange"));
+      } catch (error) {
+        reportNotice("url", "The address bar could not be updated. Search and favorites still work, but the URL does not reflect the current view.", error);
       }
-    })();
-
-
-    searchInput.addEventListener("input", filterCards);
-    // with exactly one card left, Enter should open it rather than do nothing
-    searchInput.addEventListener("keydown", function (event) {
-      if (event.key !== "Enter") return;
-      const visible = [...toolCards.querySelectorAll(".tool-card")].filter((c) => !c.classList.contains("is-hidden"));
-      if (visible.length !== 1) return;
-      const link = visible[0].matches("a") ? visible[0] : visible[0].querySelector("a[href]");
-      if (!link) return;
-      event.preventDefault();
-      link.click();
-    });
-
-    const ORDER_STORAGE_KEY = "tools-card-order";
-    const resetOrderButton = document.getElementById("resetOrderButton");
-
-    function toolId(card) {
-      return card.getAttribute("href");
-    }
-
-    function loadOrder() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(ORDER_STORAGE_KEY) || "[]");
-        return Array.isArray(saved) ? saved : [];
-      } catch {
-        return [];
-      }
-    }
-
-    function saveOrder() {
-      const order = [...toolCards.querySelectorAll(".tool-card")].map(toolId);
-      try {
-        localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(order));
-      } catch {
-        // ignore storage errors (private browsing, quota, etc.)
-      }
-      resetOrderButton.hidden = false;
-    }
-
-    function applySavedOrder() {
-      const savedOrder = loadOrder();
-      if (!savedOrder.length) return;
-      const cards = [...toolCards.querySelectorAll(".tool-card")];
-      const byId = new Map(cards.map((card) => [toolId(card), card]));
-      const fragment = document.createDocumentFragment();
-      savedOrder.forEach((id) => {
-        const card = byId.get(id);
-        if (card) {
-          fragment.append(card);
-          byId.delete(id);
-        }
-      });
-      // Append any cards not present in the saved order (e.g. newly added tools) at the end, in their original order.
-      cards.forEach((card) => {
-        if (byId.has(toolId(card))) fragment.append(card);
-      });
-      toolCards.append(fragment);
-      resetOrderButton.hidden = false;
-    }
-
-    function addDragHandle(card) {
-      const handle = document.createElement("span");
-      handle.className = "drag-handle";
-      handle.setAttribute("aria-hidden", "true");
-      handle.title = "Drag to reorder";
-      handle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><circle cx="8" cy="6" r="1.6"/><circle cx="16" cy="6" r="1.6"/><circle cx="8" cy="12" r="1.6"/><circle cx="16" cy="12" r="1.6"/><circle cx="8" cy="18" r="1.6"/><circle cx="16" cy="18" r="1.6"/></svg>';
-      handle.addEventListener("click", (event) => event.preventDefault());
-      card.prepend(handle);
-      return handle;
-    }
-
-    function enableReordering() {
-      let dragCtx = null;
-
-      function onPointerMove(event) {
-        if (!dragCtx || event.pointerId !== dragCtx.pointerId) return;
-        event.preventDefault();
-        dragCtx.card.style.left = `${event.clientX - dragCtx.offsetX}px`;
-        dragCtx.card.style.top = `${event.clientY - dragCtx.offsetY}px`;
-
-        const overCard = document.elementFromPoint(event.clientX, event.clientY)?.closest(".tool-card, .tool-card-placeholder");
-        if (!overCard || overCard === dragCtx.placeholder || overCard.parentNode !== toolCards) return;
-        const rect = overCard.getBoundingClientRect();
-        const isListView = toolCards.classList.contains("list-view");
-        const before = isListView
-          ? (event.clientY - rect.top) < rect.height / 2
-          : (event.clientX - rect.left) < rect.width / 2;
-        toolCards.insertBefore(dragCtx.placeholder, before ? overCard : overCard.nextSibling);
-      }
-
-      function onPointerEnd(event) {
-        if (!dragCtx || event.pointerId !== dragCtx.pointerId) return;
-        const { card, placeholder } = dragCtx;
-        toolCards.insertBefore(card, placeholder);
-        placeholder.remove();
-        card.classList.remove("is-dragging");
-        card.style.position = "";
-        card.style.left = "";
-        card.style.top = "";
-        card.style.width = "";
-        card.style.height = "";
-        window.removeEventListener("pointermove", onPointerMove);
-        window.removeEventListener("pointerup", onPointerEnd);
-        window.removeEventListener("pointercancel", onPointerEnd);
-        dragCtx = null;
-        saveOrder();
-      }
-
-      toolCards.querySelectorAll(".tool-card").forEach((card) => {
-        const handle = addDragHandle(card);
-
-        handle.addEventListener("pointerdown", (event) => {
-          event.preventDefault();
-          const rect = card.getBoundingClientRect();
-
-          const placeholder = document.createElement("div");
-          placeholder.className = "tool-card-placeholder";
-          placeholder.style.width = `${rect.width}px`;
-          placeholder.style.height = `${rect.height}px`;
-          card.parentNode.insertBefore(placeholder, card.nextSibling);
-
-          card.classList.add("is-dragging");
-          card.style.left = `${rect.left}px`;
-          card.style.top = `${rect.top}px`;
-          card.style.width = `${rect.width}px`;
-          card.style.height = `${rect.height}px`;
-
-          dragCtx = {
-            card,
-            placeholder,
-            pointerId: event.pointerId,
-            offsetX: event.clientX - rect.left,
-            offsetY: event.clientY - rect.top,
-          };
-
-          window.addEventListener("pointermove", onPointerMove);
-          window.addEventListener("pointerup", onPointerEnd);
-          window.addEventListener("pointercancel", onPointerEnd);
-        });
-      });
     }
 
     function starIcon(filled) {
-      return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false" class="${filled ? "" : "is-empty"}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+      return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
     }
 
-    function updateFavoritesFilter() {
-      favoritesFilter.innerHTML = `${starIcon(favoritesOnly)} My favorites (${favorites.size.toLocaleString()})`;
+    function requestAd() {
+      if (adRequested || !visibleCards.length) return;
+      adRequested = true;
+      document.getElementById("toolsAd").hidden = false;
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (error) {
+        console.warn("The catalogue advertisement could not be initialized.", error);
+      }
+    }
+
+    function renderCards(focusFallback = searchInput, updateUrl = true) {
+      if (cancelDrag) cancelDrag();
+      clearMoveHighlight();
+      const query = normalize(searchInput.value.trim());
+      visibleCards = orderedCards.filter((card) => {
+        const text = normalize(`${toolTitle(card)} ${card.querySelector("p").textContent}`);
+        const matchesFamily = !families.size || card.dataset.families.split(" ").some((family) => families.has(family));
+        return (!query || text.includes(query)) && matchesFamily && (!favoritesOnly || favorites.has(toolId(card)));
+      });
+      const active = document.activeElement;
+      const activeCard = active.closest(".tool-card");
+      if (activeCard && !visibleCards.includes(activeCard)) focusFallback.focus({ preventScroll: true });
+      orderedCards.forEach((card) => {
+        card.hidden = !visibleCards.includes(card);
+        const favorite = card.querySelector(".favorite-button");
+        const isFavorite = favorites.has(toolId(card));
+        const name = `${isFavorite ? "Remove" : "Add"} ${toolTitle(card)} ${isFavorite ? "from" : "to"} favorite tools`;
+        favorite.setAttribute("aria-pressed", String(isFavorite));
+        favorite.setAttribute("aria-label", name);
+        favorite.title = name;
+        favorite.innerHTML = starIcon(isFavorite);
+        card.querySelector(".reorder-controls").hidden = !reorderMode;
+        const index = visibleCards.indexOf(card);
+        card.querySelector('[data-move="-1"]').setAttribute("aria-disabled", String(index <= 0));
+        card.querySelector('[data-move="1"]').setAttribute("aria-disabled", String(index < 0 || index === visibleCards.length - 1));
+      });
+      // Only cards move between the two groups; a requested ad stays in place.
+      grids[0].append(...visibleCards.slice(0, 6));
+      grids[1].append(...visibleCards.slice(6), ...orderedCards.filter((card) => card.hidden));
+      grids.forEach((grid) => grid.classList.toggle("list-view", view === "list"));
+      if (activeCard && visibleCards.includes(activeCard)) active.focus({ preventScroll: true });
+      viewButtons.forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.view === view);
+        button.setAttribute("aria-pressed", String(button.dataset.view === view));
+      });
+      favoritesFilter.innerHTML = `${starIcon(favoritesOnly)} My favorites (${favorites.size})`;
       favoritesFilter.setAttribute("aria-pressed", String(favoritesOnly));
+      const selected = [...families].map((family) => familyNames.get(family));
+      if (favoritesOnly) selected.push("My favorites");
+      document.getElementById("resultCount").textContent = `${visibleCards.length} of ${defaultCards.length} tools${selected.length ? " · " + selected.join(", ") : ""}`;
+      document.getElementById("clearFilters").hidden = !searchInput.value && !families.size && !favoritesOnly;
+      document.getElementById("emptyState").hidden = visibleCards.length !== 0;
+      document.getElementById("clearSearch").hidden = !searchInput.value;
+      document.getElementById("emptyMessage").textContent = favoritesOnly && !favorites.size
+        ? "No favorite tools yet. Show all tools and use a star to save one."
+        : "No tools match these filters. Clear your search or show all tools.";
+      resetOrderButton.hidden = orderedCards.every((card, index) => card === defaultCards[index]);
+      reorderToggle.setAttribute("aria-pressed", String(reorderMode));
+      document.getElementById("reorderHint").hidden = !reorderMode;
+      if (updateUrl) syncUrl();
+      requestAd();
     }
 
-    // Tool cards are anchors, so the star has to be a span-based control:
-    // a nested <button> would be invalid HTML inside a link.
-    function addFavoriteButton(card) {
-      const id = toolId(card);
-      const title = card.querySelector("h2")?.textContent?.trim() ?? "this tool";
-      const button = document.createElement("span");
-      button.className = "favorite-button";
-      button.setAttribute("role", "button");
-      button.setAttribute("tabindex", "0");
+    function clearMoveHighlight() {
+      clearTimeout(moveHighlightTimer);
+      moveHighlightTimer = null;
+      if (!highlightedCard) return;
+      highlightedCard.classList.remove("is-reordered");
+      highlightedCard.querySelector(".reorder-feedback").textContent = "";
+      highlightedCard = null;
+    }
 
-      const render = () => {
-        const isFavorite = favorites.has(id);
-        button.setAttribute("aria-pressed", String(isFavorite));
-        button.setAttribute("aria-label", `${isFavorite ? "Remove" : "Add"} ${title} ${isFavorite ? "from" : "to"} favorites`);
-        button.title = isFavorite ? "Remove from favorites" : "Add to favorites";
-        button.innerHTML = starIcon(isFavorite);
-      };
-      render();
+    function highlightMovedCard(card) {
+      clearMoveHighlight();
+      highlightedCard = card;
+      card.classList.add("is-reordered");
+      card.querySelector(".reorder-feedback").textContent = "Moved";
+      card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+      moveHighlightTimer = setTimeout(clearMoveHighlight, 2200);
+    }
 
-      const toggleFavorite = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+    function moveRelative(card, target, before) {
+      if (card === target) return;
+      orderedCards.splice(orderedCards.indexOf(card), 1);
+      orderedCards.splice(orderedCards.indexOf(target) + (before ? 0 : 1), 0, card);
+      savePreference(ORDER_STORAGE_KEY, JSON.stringify(orderedCards.map(toolId)));
+      renderCards();
+      highlightMovedCard(card);
+      actionStatus.textContent = `${toolTitle(card)} moved to position ${visibleCards.indexOf(card) + 1} of ${visibleCards.length} visible tools.`;
+    }
+
+    function startDrag(card, event) {
+      if (!reorderMode || event.button !== 0 || !event.isPrimary) return;
+      event.preventDefault();
+      if (cancelDrag) cancelDrag();
+      clearMoveHighlight();
+      const rect = card.getBoundingClientRect();
+      const placeholder = document.createElement("div");
+      placeholder.className = "tool-card-placeholder";
+      placeholder.setAttribute("aria-hidden", "true");
+      placeholder.textContent = "Drop here";
+      placeholder.style.height = `${rect.height}px`;
+      card.after(placeholder);
+      card.classList.add("is-dragging");
+      const feedback = card.querySelector(".reorder-feedback");
+      feedback.textContent = "Moving";
+      Object.assign(card.style, { left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` });
+      let destination = null;
+      function onMove(move) {
+        if (move.pointerId !== event.pointerId) return;
+        move.preventDefault();
+        card.style.left = `${move.clientX - event.clientX + rect.left}px`;
+        card.style.top = `${move.clientY - event.clientY + rect.top}px`;
+        const target = document.elementFromPoint(move.clientX, move.clientY)?.closest(".tool-card");
+        if (!target || target === card || !visibleCards.includes(target)) return;
+        const bounds = target.getBoundingClientRect();
+        const columns = getComputedStyle(target.parentElement).gridTemplateColumns.split(/\s+/).filter(size => parseFloat(size) > 0);
+        const before = columns.length === 1 ? move.clientY < bounds.top + bounds.height / 2 : move.clientX < bounds.left + bounds.width / 2;
+        target.parentNode.insertBefore(placeholder, before ? target : target.nextSibling);
+        destination = { target, before };
+      }
+      function cleanup() {
+        placeholder.remove();
+        card.classList.remove("is-dragging");
+        feedback.textContent = "";
+        ["left", "top", "width", "height"].forEach((property) => card.style.removeProperty(property));
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onEnd);
+        window.removeEventListener("pointercancel", onCancel);
+        window.removeEventListener("keydown", onKey);
+        window.removeEventListener("resize", onResize);
+        cancelDrag = null;
+      }
+      function onEnd(end) {
+        if (end.pointerId !== event.pointerId) return;
+        cleanup();
+        if (destination) moveRelative(card, destination.target, destination.before);
+      }
+      function onCancel(cancel) { if (cancel.pointerId === event.pointerId) cleanup(); }
+      function onKey(key) {
+        if (key.key === "Escape") { cleanup(); actionStatus.textContent = "Move cancelled."; }
+      }
+      function onResize() { cleanup(); }
+      cancelDrag = cleanup;
+      window.addEventListener("pointermove", onMove, { passive: false });
+      window.addEventListener("pointerup", onEnd);
+      window.addEventListener("pointercancel", onCancel);
+      window.addEventListener("keydown", onKey);
+      window.addEventListener("resize", onResize);
+    }
+
+    defaultCards.forEach((card) => {
+      const favorite = document.createElement("button");
+      favorite.type = "button";
+      favorite.className = "favorite-button";
+      favorite.addEventListener("click", () => {
+        const id = toolId(card);
         if (favorites.has(id)) favorites.delete(id);
         else favorites.add(id);
-        saveFavorites();
-        render();
-        updateFavoritesFilter();
-        if (favoritesOnly) filterCards();
-      };
-
-      button.addEventListener("click", toggleFavorite);
-      button.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") toggleFavorite(event);
+        savePreference(FAVORITES_STORAGE_KEY, JSON.stringify([...favorites]));
+        renderCards(favoritesFilter);
       });
-      card.prepend(button);
-    }
-
-    function enableFavorites() {
-      toolCards.querySelectorAll(".tool-card").forEach(addFavoriteButton);
-      updateFavoritesFilter();
-      favoritesFilter.addEventListener("click", () => {
-        favoritesOnly = !favoritesOnly;
-        updateFavoritesFilter();
-        filterCards();
+      const controls = document.createElement("div");
+      controls.className = "reorder-controls";
+      controls.setAttribute("role", "group");
+      controls.setAttribute("aria-label", `Reorder ${toolTitle(card)}`);
+      const handle = document.createElement("span");
+      handle.className = "drag-handle";
+      handle.setAttribute("aria-hidden", "true");
+      handle.title = `Drag ${toolTitle(card)} to reorder`;
+      handle.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="8" cy="6" r="1.6"/><circle cx="16" cy="6" r="1.6"/><circle cx="8" cy="12" r="1.6"/><circle cx="16" cy="12" r="1.6"/><circle cx="8" cy="18" r="1.6"/><circle cx="16" cy="18" r="1.6"/></svg>';
+      handle.addEventListener("pointerdown", (event) => startDrag(card, event));
+      const feedback = document.createElement("span");
+      feedback.className = "reorder-feedback";
+      feedback.setAttribute("aria-hidden", "true");
+      controls.append(handle, feedback);
+      [-1, 1].forEach((direction) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "catalog-button";
+        button.dataset.move = direction;
+        const label = direction < 0 ? "Move earlier" : "Move later";
+        button.title = label;
+        button.setAttribute("aria-label", `${label}: ${toolTitle(card)}`);
+        button.innerHTML = `<svg class="reorder-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="${direction < 0 ? "M19 12H5M12 5l-7 7 7 7" : "M5 12h14M12 5l7 7-7 7"}"/></svg>`;
+        button.addEventListener("click", () => {
+          const neighbor = visibleCards[visibleCards.indexOf(card) + direction];
+          if (neighbor) moveRelative(card, neighbor, direction < 0);
+          else actionStatus.textContent = `${toolTitle(card)} is already ${direction < 0 ? "first" : "last"} in these results.`;
+        });
+        controls.append(button);
       });
-    }
-
-    applySavedOrder();
-    enableReordering();
-    enableFavorites();
-
-    resetOrderButton.addEventListener("click", () => {
-      try {
-        localStorage.removeItem(ORDER_STORAGE_KEY);
-      } catch {
-        // ignore storage errors (private browsing, quota, etc.)
-      }
-      location.reload();
+      card.append(favorite, controls);
     });
+
+    searchInput.addEventListener("input", () => renderCards());
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.isComposing && visibleCards.length === 1) {
+        event.preventDefault();
+        visibleCards[0].querySelector(".tool-link").click();
+      }
+    });
+    viewButtons.forEach((button) => button.addEventListener("click", () => {
+      view = button.dataset.view;
+      defaultView = view;
+      savePreference(VIEW_STORAGE_KEY, view);
+      renderCards();
+    }));
+    favoritesFilter.addEventListener("click", () => {
+      favoritesOnly = !favoritesOnly;
+      renderCards();
+    });
+    reorderToggle.addEventListener("click", () => {
+      reorderMode = !reorderMode;
+      renderCards();
+    });
+    function clearFilters() {
+      searchInput.value = "";
+      families.clear();
+      favoritesOnly = false;
+      searchInput.focus();
+      renderCards();
+    }
+    document.getElementById("clearFilters").addEventListener("click", clearFilters);
+    document.getElementById("emptyClearFilters").addEventListener("click", clearFilters);
+    document.getElementById("clearSearch").addEventListener("click", () => {
+      searchInput.value = "";
+      searchInput.focus();
+      renderCards();
+    });
+    resetOrderButton.addEventListener("click", () => {
+      resetOrderDialog.showModal();
+    });
+    document.getElementById("cancelResetOrder").addEventListener("click", () => resetOrderDialog.close());
+    document.getElementById("confirmResetOrder").addEventListener("click", () => {
+      orderedCards = [...defaultCards];
+      savePreference(ORDER_STORAGE_KEY, null);
+      resetOrderDialog.close();
+      renderCards();
+      actionStatus.textContent = "Default tool order restored. Your filters are unchanged.";
+    });
+    resetOrderDialog.addEventListener("close", () => {
+      (resetOrderButton.hidden ? reorderToggle : resetOrderButton).focus({ preventScroll: true });
+    });
+    window.addEventListener("popstate", () => {
+      readUrlState();
+      renderCards(searchInput, false);
+      window.dispatchEvent(new Event("catalogstatechange"));
+    });
+    readUrlState();
+    document.getElementById("catalogControls").hidden = false;
+    renderCards(searchInput, false);
+
+    // Only data-backed catalogues have dates; local calculators and generators do not.
+    (async function showUpdatedDates() {
+      try {
+        const response = await fetch("/freshness.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Freshness request returned ${response.status}`);
+        const stamps = await response.json();
+        if (!stamps || typeof stamps !== "object" || Array.isArray(stamps)) throw new Error("Invalid freshness manifest");
+        let missing = false;
+        document.querySelectorAll(".tool-updated").forEach((slot) => {
+          const iso = stamps[slot.dataset.file];
+          const date = typeof iso === "string" ? new Date(iso) : null;
+          if (!date || Number.isNaN(date.getTime())) { missing = true; return; }
+          slot.textContent = "Updated " + date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        });
+        if (missing) throw new Error("Some catalogue dates are missing");
+      } catch (error) {
+        reportNotice("freshness", "Some update dates are unavailable. Tool links still work; check the source date on each tool.", error);
+      }
+    })();
 
     const backToTop = document.getElementById("backToTop");
     let scrollTicking = false;
@@ -1387,130 +2018,37 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function updateShareLinks() {
+        var url = encodeURIComponent(location.href.split('#')[0]);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        root.querySelectorAll('a[data-share]').forEach(function (el) {
+          el.setAttribute('href', targets[el.getAttribute('data-share')]);
+        });
+      }
+      updateShareLinks();
+      window.addEventListener('catalogstatechange', updateShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {
         favBtn.addEventListener('click', function () {
-          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-          hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+          var isMobile = /Android|iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+          var isMac = /Mac/.test(navigator.platform);
+          hint.textContent = isMobile
+            ? 'Use your browser menu or Share menu, then choose Add bookmark. This is separate from favorite tools.'
+            : 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to bookmark this site in your browser. This is separate from favorite tools.';
         });
       }
     })();

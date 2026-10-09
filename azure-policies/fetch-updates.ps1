@@ -100,10 +100,8 @@ $ChangeLogMaxEntries = 3000
 $TrackedPolicyFields = @("displayName", "category", "effect", "mode", "version", "policyType")
 $TrackedInitiativeFields = @("displayName", "category", "version", "policyType", "policyCount")
 
-# Descriptions are deliberately not tracked: Azure rewords them constantly
-# without changing what a definition does, and every reworded row would carry a
-# few hundred characters of before/after into the file. A real edit bumps
-# metadata.version, which is tracked.
+# Only the listed metadata and initiative member identities are compared.
+# Rule, parameter and description changes without those differences are not recorded.
 function Read-CatalogIndex {
   param([string]$Path, [string]$ListKey)
 
@@ -121,8 +119,83 @@ function Read-CatalogIndex {
   return $index
 }
 
+function Get-InitiativeMemberIndex {
+  param($Initiative)
+
+  $members = $Initiative.policies
+  if ($null -eq $members -or $members -isnot [array]) {
+    return @{ available = $false; reason = "A member list was not recorded in both snapshots." }
+  }
+  $index = [hashtable]::new([System.StringComparer]::Ordinal)
+  foreach ($member in $members) {
+    if (-not $member -or $member.id -isnot [string] -or [string]::IsNullOrWhiteSpace($member.id) -or
+        $member.referenceId -isnot [string] -or [string]::IsNullOrWhiteSpace($member.referenceId)) {
+      return @{ available = $false; reason = "A member identity or reference ID is missing." }
+    }
+    if ($index.ContainsKey($member.referenceId)) {
+      return @{ available = $false; reason = "Duplicate member reference IDs prevent a reliable comparison." }
+    }
+    $index[$member.referenceId] = $member
+  }
+  if ($null -ne $Initiative.policyCount) {
+    $count = 0
+    if (-not [int]::TryParse([string]$Initiative.policyCount, [ref]$count) -or $count -ne $index.get_Count()) {
+      return @{ available = $false; reason = "A member list does not match its recorded count." }
+    }
+  }
+  return @{ available = $true; members = $index }
+}
+
+function Get-InitiativeMemberEvidence {
+  param($Member, [hashtable]$PolicyIndex)
+
+  $policy = $PolicyIndex[$Member.id]
+  return [ordered]@{
+    id          = [string]$Member.id
+    referenceId = [string]$Member.referenceId
+    displayName = if ($policy -and $policy.displayName) { [string]$policy.displayName } else { $null }
+  }
+}
+
+function Get-InitiativeCompositionChanges {
+  param($Before, $After, [hashtable]$PreviousPolicies, [hashtable]$CurrentPolicies)
+
+  $old = Get-InitiativeMemberIndex $Before
+  $new = Get-InitiativeMemberIndex $After
+  if (-not $old.available -or -not $new.available) {
+    return [ordered]@{
+      status = "unavailable"
+      reason = if (-not $old.available) { $old.reason } else { $new.reason }
+    }
+  }
+  $added = [System.Collections.Generic.List[object]]::new()
+  $removed = [System.Collections.Generic.List[object]]::new()
+  foreach ($referenceId in ($new.members.get_Keys() | Sort-Object -CaseSensitive)) {
+    $member = $new.members[$referenceId]
+    if (-not $old.members.ContainsKey($referenceId) -or $old.members[$referenceId].id -ine $member.id) {
+      $added.Add((Get-InitiativeMemberEvidence $member $CurrentPolicies))
+    }
+  }
+  foreach ($referenceId in ($old.members.get_Keys() | Sort-Object -CaseSensitive)) {
+    $member = $old.members[$referenceId]
+    if (-not $new.members.ContainsKey($referenceId) -or $new.members[$referenceId].id -ine $member.id) {
+      $removed.Add((Get-InitiativeMemberEvidence $member $PreviousPolicies))
+    }
+  }
+  return [ordered]@{
+    status      = "compared"
+    beforeCount = $old.members.get_Count()
+    afterCount  = $new.members.get_Count()
+    added       = $added.ToArray()
+    removed     = $removed.ToArray()
+  }
+}
+
 function Get-CatalogChanges {
-  param([hashtable]$Previous, [object[]]$Current, [string]$Kind, [string[]]$Fields, [string]$DetectedAt)
+  param(
+    [hashtable]$Previous, [object[]]$Current, [string]$Kind, [string[]]$Fields, [string]$DetectedAt,
+    [hashtable]$PreviousPolicies = @{}, [hashtable]$CurrentPolicies = @{}
+  )
 
   $entries = [System.Collections.Generic.List[object]]::new()
   # Nothing to compare against on the very first run, and reporting 2,853
@@ -157,8 +230,18 @@ function Get-CatalogChanges {
       }
     }
 
-    if ($fieldChanges.Count -gt 0) {
-      $entries.Add([ordered]@{
+    $composition = $null
+    $membersChanged = $false
+    if ($Kind -eq "initiative") {
+      $composition = Get-InitiativeCompositionChanges $before $item $PreviousPolicies $CurrentPolicies
+      if ($composition.status -eq "unavailable") {
+        Write-Warning "Composition comparison unavailable for initiative $($item.name): $($composition.reason)"
+      } else {
+        $membersChanged = $composition.added.Count -gt 0 -or $composition.removed.Count -gt 0
+      }
+    }
+    if ($fieldChanges.Count -gt 0 -or $membersChanged) {
+      $entry = [ordered]@{
         detectedAt  = $DetectedAt
         kind        = $Kind
         change      = "modified"
@@ -166,7 +249,9 @@ function Get-CatalogChanges {
         displayName = $item.displayName
         category    = $item.category
         fields      = $fieldChanges.ToArray()
-      })
+      }
+      if ($Kind -eq "initiative") { $entry.composition = $composition }
+      $entries.Add($entry)
     }
   }
 
@@ -363,7 +448,9 @@ Write-Host "Fetched $($sortedInitiatives.Count) policy initiatives ($($initiativ
 # can now be turned into the change log the history page reads.
 $newEntries = [System.Collections.Generic.List[object]]::new()
 foreach ($entry in (Get-CatalogChanges $previousPolicies $sortedPolicies "policy" $TrackedPolicyFields $detectedAt)) { $newEntries.Add($entry) }
-foreach ($entry in (Get-CatalogChanges $previousInitiatives $sortedInitiatives "initiative" $TrackedInitiativeFields $detectedAt)) { $newEntries.Add($entry) }
+$currentPolicyIndex = @{}
+foreach ($policy in $sortedPolicies) { $currentPolicyIndex[$policy.name] = $policy }
+foreach ($entry in (Get-CatalogChanges $previousInitiatives $sortedInitiatives "initiative" $TrackedInitiativeFields $detectedAt $previousPolicies $currentPolicyIndex)) { $newEntries.Add($entry) }
 
 $existingEntries = @()
 if (Test-Path $changesOutputPath) {

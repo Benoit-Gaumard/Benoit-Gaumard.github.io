@@ -14,7 +14,9 @@
 //
 // Run: node build-seo.mjs
 import { readdirSync, statSync, readFileSync, writeFileSync } from "node:fs";
-import { join, relative, sep } from "node:path";
+import { join, relative, resolve, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+import { enhancePage } from "./site-ui.mjs";
 
 const ROOT = process.cwd();
 const SITE = "https://benoit-gaumard.io";
@@ -104,19 +106,20 @@ function titleOf(html) {
   return m[1].replace(/\s*\|\s*Benoit Gaumard\s*$/, "").replace(/\s+/g, " ").trim();
 }
 
-function injectAnalytics(html) {
+export function injectAnalytics(html) {
   const eol = html.includes("\r\n") ? "\r\n" : "\n";
 
   // A block written before Consent Mode was added carries the marker but no
   // consent defaults, so a plain marker check would leave it personalising by
   // default forever. Rewrite it in place instead of skipping it.
   if (html.includes(MARKER)) {
-    if (html.includes("gtag('consent', 'default'")) return html;
+    const loader = new RegExp(`<script\\b[^>]*\\bsrc=["']https://www\\.googletagmanager\\.com/gtag/js\\?id=${GA4_ID}["']`);
+    if (html.includes("gtag('consent', 'default'") && loader.test(html)) return html;
     const block = new RegExp(
       `([ \\t]*)${MARKER}[\\s\\S]*?gtag\\('config', '${GA4_ID}'\\);[\\s\\S]*?<\\/script>`
     );
     const m = html.match(block);
-    if (!m) return html;
+    if (!m) throw new Error("The existing analytics marker has an incomplete configuration block.");
     return html.replace(block, analyticsSnippet(m[1]).split("\n").join(eol));
   }
 
@@ -206,6 +209,7 @@ function fixBrandLink(html) {
   );
 }
 
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
 const results = { analytics: 0, adsense: 0, breadcrumb: 0, brand: 0, ico: 0, privacy: 0, skipped: [] };
 
 for (const file of walk(ROOT)) {
@@ -223,9 +227,8 @@ for (const file of walk(ROOT)) {
     html = withGa;
   }
 
-  // 404.html is the one shell page that is deliberately left out: it has no
-  // content of its own, and AdSense does not allow ads on error pages.
-  if (url !== "/404.html") {
+  // Recovery and privacy controls remain free of advertising.
+  if (url !== "/404.html" && url !== "/privacy/") {
     const withAds = injectAdsense(html);
     if (withAds !== html) {
       results.adsense++;
@@ -257,6 +260,7 @@ for (const file of walk(ROOT)) {
     html = withPrivacy;
   }
 
+  html = enhancePage(html, { path: url, errorPage: url === "/404.html" });
   if (html !== original) writeFileSync(file, html, "utf8");
 }
 
@@ -269,4 +273,5 @@ console.log(`privacy link added : ${results.privacy} page(s)`);
 if (results.skipped.length) {
   console.log(`\nno anchor found in ${results.skipped.length} file(s):`);
   results.skipped.forEach((f) => console.log(`  - ${f}`));
+}
 }

@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Understand the Policy objects, trace a storage rule and choose an effect before assigning it."
 title = "Azure Policy, Part 1: What Is an Azure Policy?"
 date = "2026-09-04"
 description = "Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production."
@@ -7,9 +8,20 @@ tags = ["Azure Policy", "Governance", "Compliance", "JSON"]
 categories = ["Featured", "Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-1.svg"
 featured = true
+related = ["azure-policy-part-2-initiatives", "search-azure-policy-aliases"]
 +++
 
-Everybody in a governance meeting says "we'll put a policy on it". Very few people in that meeting could tell you what the JSON looks like, why the policy did not block anything, or why the compliance dashboard says 94% when nothing has ever been enforced.
+## Essential reading or reference
+
+**Start here:** a definition describes a resource condition and an effect; an assignment applies it to a scope. RBAC answers who may act; Policy checks the resource's allowed configuration. Read [the definition](#the-one-sentence-definition), [Policy versus RBAC](#policy-is-not-rbac) and [one JSON example](#anatomy-of-a-definition) first.
+
+**Choose an effect:** start with Audit to observe, use Deny to reject non-compliant create/update requests after testing, and evaluate Modify/DeployIfNotExists only with explicit identity permissions and remediation controls. See [the effect reference](#the-effect-side) for details, not a universal effect recommendation.
+
+**Trace the example:** `type` selects storage accounts; the `allowBlobPublicAccess` alias addresses the tested property; `allOf` requires both predicates; `then.effect` reads the `effect` parameter. Change only one of those at a time when learning. [Modes](#modes) describe which resources/properties are evaluated, [evaluation](#when-does-evaluation-actually-happen) describes when, and [versioning](#versioning) describes how the definition evolves.
+
+Technical execution validation: **not recorded**. Test compliant, non-compliant and missing-property cases in an isolated scope and compare with [definition structure](https://learn.microsoft.com/azure/governance/policy/concepts/definition-structure-basics) before deployment.
+
+Everybody in a governance meeting says "we'll put a policy on it". The useful next question is which object, scope and effect that means.
 
 Azure Policy is not complicated, but it *is* made of five distinct objects that people constantly confuse: a **definition**, an **initiative**, an **assignment**, an **exclusion**, and an **exemption**. Mixing them up is how you end up with a governance estate nobody trusts.
 
@@ -146,6 +158,8 @@ I keep a searchable copy of every supported alias here: **[Azure Policy Aliases]
 
 ### Condition operators
 
+Start with one predicate from the storage example: `{ "field": "type", "equals": "Microsoft.Storage/storageAccounts" }`. It compares a field with one value. Combine predicates with `allOf` only after each one behaves as expected; the reference below adds alternative operators.
+
 The full current set:
 
 | Category | Operators |
@@ -163,6 +177,17 @@ Two traps worth memorising. `match` and `notMatch` are **case-sensitive** - ever
 ### Counting things
 
 `count` is how you express "at least one subnet without an NSG" or "more than three inbound rules allowing any source".
+
+Start with the smallest shape: count the elements of an array alias, then compare that count. This condition fragment asks whether any security rules are present; it does not judge whether they are safe.
+
+```json
+{
+  "count": { "field": "Microsoft.Network/networkSecurityGroups/securityRules[*]" },
+  "greater": 0
+}
+```
+
+Add a `where` clause when only matching members should count:
 
 ```json
 {

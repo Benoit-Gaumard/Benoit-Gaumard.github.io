@@ -1,17 +1,28 @@
 +++
 author = "Benoit G"
-title = "Azure Lighthouse: The Most Underrated Feature in Azure"
+title = "Azure Lighthouse: Choose a Cross-Tenant Management Pattern"
 date = "2026-09-03"
-description = "Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings."
+description = "Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation."
 tags = ["Azure Lighthouse", "Entra ID", "RBAC", "Multi-tenant", "Governance", "ARM", "Bicep"]
 categories = ["Featured", "Azure", "Governance"]
 featureImage = "/articles/images/azure-lighthouse.svg"
 featured = true
+related = ["clean-rbac-identity-not-found", "azure-policy-part-3-assignments"]
 +++
 
-Ask ten Azure architects what Azure Lighthouse is and you'll get three answers: "something for CSP partners", "isn't that Microsoft 365 Lighthouse?", and a blank stare. Yet it is free, generally available since 2019, works with every Azure API you already use, and it solves a problem almost every organisation eventually hits: **how do I operate resources that live in someone else's Entra tenant, without collecting a drawer full of guest accounts?**
+Lighthouse delegates supported Azure resource-management operations across tenants. Resources remain in the customer tenant; the managing tenant's named identities receive specific supported roles at an agreed scope. It does not grant general Entra directory or data-plane access.
 
-This post is about what Lighthouse actually does, and the three scenarios where it stops being a curiosity and starts being the thing you should have deployed two years ago.
+## Which scenario concerns you?
+
+| Need | Scope and benefit | Boundary | Read |
+|---|---|---|---|
+| Maintain one customer's application | Delegate its resource group; operators use their managing-tenant identities | Not permission to every subscription or application data store | [Application maintenance](#use-case-1-application-maintenance-provider-to-customer) |
+| Operate several enterprise tenants | Explicit subscriptions/resource groups; shared operational visibility | Tenant consolidation and directory administration remain separate | [Multi-tenant enterprise](#use-case-2-multi-tenant-enterprises) |
+| Support an ISV deployment | Agreed customer deployment scope and support role | Customer consent, lifecycle and removal must remain explicit | [ISV patterns](#use-case-3-isvs-independent-software-vendors) |
+
+Read [what Lighthouse does not do](#what-lighthouse-does-not-do) before writing the onboarding template. Throughout this article, **managing tenant = operator/provider**, and **managed tenant = customer/resource owner**. Use those labels, not diagram colours, to follow the one-way authorisation.
+
+Technical execution validation and current licensing/limit review: **not recorded**. Confirm [supported scenarios and limitations](https://learn.microsoft.com/azure/lighthouse/concepts/cross-tenant-management-experience) before rollout.
 
 [[toc]]
 
@@ -83,6 +94,8 @@ Access flows **one way only**: from the managing tenant to the managed tenant. D
 And the customer keeps the controls: they see every provider action in **their** activity log, they can review delegations in the **Service providers** blade, and they can remove the delegation unilaterally, at any moment, without asking you.
 
 ## Use case 1 - Application maintenance (provider to customer)
+
+**Need:** support one application. **Scope:** its resource group. **Benefit:** existing operator identities can perform approved management operations. **Limit:** guest OS, database/data-plane and directory permissions need their own design.
 
 This is the bread-and-butter scenario, and the one where the ROI is immediate.
 
@@ -245,6 +258,8 @@ Always pair an eligible authorization with a permanent one - typically Reader - 
 
 ## Use case 2 - Multi-tenant enterprises
 
+**Need:** operate estates across separate Entra tenants. **Scope:** each deliberately delegated subscription/resource group. **Benefit:** a consolidated management view. **Limit:** no directory merger or automatic access to every tenant resource.
+
 Lighthouse is documented as a service-provider feature, which is exactly why enterprises miss it. Yet the single best fit I see in the field is a group that ended up with several Entra tenants and no realistic path to consolidation.
 
 You know the story: an acquisition closed, the target has its own tenant, merging directories is an 18-month project nobody has budget for. Or a subsidiary is legally required to stay separate. Or a geography insists on its own tenant for data residency reasons. Meanwhile your platform team is expected to apply the same policies, the same backups, the same security baseline everywhere.
@@ -294,6 +309,8 @@ The honest recommendation stands: if you can live in a single tenant, do. Lighth
 Delegate the whole subscription for platform-owned subscriptions (connectivity, identity, management), and only specific resource groups for business-unit subscriptions. The platform team gets what it needs to enforce the baseline; the business units keep sovereignty over their own workloads.
 
 ## Use case 3 - ISVs (Independent Software Vendors)
+
+**Need:** support customer-owned deployments. **Scope:** the customer's agreed application resources. **Benefit:** explicit operational delegation. **Limit:** customer onboarding approval, supported roles and revocation remain required.
 
 For ISVs there are three distinct patterns, and confusing them is the usual source of pain.
 
@@ -358,6 +375,10 @@ Half of a good architecture decision is knowing the edges. This is where Lightho
 :::
 
 ## Rolling it out without regrets
+
+Preflight checklist: name both tenant IDs → confirm principal IDs in the managing tenant → review supported role IDs in [Built-in Roles](/azure-built-in-roles/) → agree on the exact delegated scope → identify the customer approver → document expiry/review and removal ownership.
+
+After onboarding: test an intended read operation, a deliberately ungranted operation and the customer's view of the delegation/activity log. In a test scope, verify removal actually prevents new delegated operations; do not assume an old portal session proves revocation. Record observed results rather than treating this article as test evidence.
 
 A checklist that has aged well:
 

@@ -1,15 +1,18 @@
 +++
 author = "Benoit G"
-title = "How to Create a New Article"
+title = "Contributing an Article to This Site"
 date = "2026-08-19"
 description = "Everything you can use when writing a new article for /articles: frontmatter fields, headings, lists, callouts, code blocks, tables, images, and links."
 tags = ["Guide", "Meta"]
 categories = ["Documentation"]
 featureImage = "/articles/images/how-to-create-a-new-article.svg"
 featured = false
+related = ["how-to-embed-a-github-script-in-an-article", "github-contribution-workflow"]
 +++
 
 Every article lives as a single Markdown file in `articles/content/` and is compiled into a static HTML page by `articles/build-articles.mjs` when the site is built. This page is itself a working example of every supported component.
+
+This is contributor documentation for **this site's custom generator**, not a generic Hugo tutorial. [View this article's Markdown source](https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/blob/main/articles/content/how-to-creat-a-new-article.md).
 
 [[toc]]
 
@@ -20,15 +23,16 @@ Every article file starts with a `+++`-fenced TOML frontmatter block:
 ```toml
 +++
 author = "Benoit G"
-title = "Set Up your first Terraform environment on Windows"
-date = "2024-09-11"
-description = "Learn how to optimize and reduce costs in Azure with practical tips and strategies."
-tags = ["Terraform"]
-categories = ["Azure", "Tools"]
-featureImage = "/images/azure-cost-optimization.png"
-featured = true
+title = "Your article title"
+date = "2026-10-07"
+description = "The specific problem this article helps the reader solve."
+tags = ["Guide"]
+categories = ["Documentation"]
+draft = true
 +++
 ```
+
+Replace the sample date with the real publication date and remove `draft = true` only when ready. Add the Markdown body after the closing `+++`; images are optional.
 
 | Field | Required | Notes |
 |---|---|---|
@@ -36,15 +40,28 @@ featured = true
 | `title` | Yes | Shown as the page `<h1>` and in the article list |
 | `date` | Yes | `YYYY-MM-DD`, used for sorting and the RSS `pubDate` |
 | `description` | Yes | Used in the article list, meta description, and RSS |
+| `summary` | No | A shorter reader-facing benefit in the article header; description remains in metadata/catalogue |
 | `tags` | No | Free-form list, shown as pills at the top of the article |
-| `categories` | Yes | Powers the **Categories** sidebar and its counts on `/articles/` |
-| `featureImage` | No | Shown above the article and as the card thumbnail |
-| `featured` | No | `true` adds the article to the **Featured Posts** sidebar |
+| `categories` | Yes | Powers category filters on `/articles/` |
+| `featureImage` | No | Catalogue thumbnail and secondary illustration after the article |
+| `featured` | No | Makes the article eligible for the limited featured selection |
 | `draft` | No | `true` excludes the article entirely from the build |
+| `related` | No | Array of article slugs for specific follow-up reading |
+| `leadSections` | No | Array of exact second-level heading titles to move to the decision entrypoint, without duplicating IDs |
+| `collapsible` | No | Array of exact heading titles to show as expandable reference sections; links still reveal them |
 
 ## 2. Headings and the table of contents
 
-Use `##`, `###`, and `#### ` for section headings - don't use a single `#`, since the page title already renders as the `<h1>`. Put `[[toc]]` anywhere in the body (it's used at the top of this very page) and it's replaced with a table of contents built from every `##`/`###`/`####` heading.
+Use `##`, `###`, and `#### ` for section headings - don't use a single `#`, since the page title already renders as the `<h1>`. The generator builds a desktop sidebar/mobile expandable table of contents automatically. Existing `[[toc]]` markers remain supported but do not duplicate it inside the prose.
+
+**Markdown source:**
+
+```markdown
+## A useful heading
+A short paragraph describing the result.
+```
+
+**Rendered result:** a linked second-level heading followed by a paragraph. Source examples and their explanations stack vertically on mobile.
 
 ## 3. Lists
 
@@ -95,6 +112,8 @@ node articles/build-articles.mjs
 
 ## 7. Tables
 
+Tables can use the available width on desktop. On a phone, each row becomes a labelled group of fields. Keep column labels meaningful; put multi-line commands in fenced code blocks, not table cells.
+
 | Component | Markdown syntax |
 |---|---|
 | Heading | `## Heading` |
@@ -105,6 +124,8 @@ node articles/build-articles.mjs
 | Link | `[text](url)` |
 
 ## 8. Images
+
+Use descriptive alt text and an optional caption: `![Flow description](path "Caption and source")`. Generated images have an original-file link and keyboard-accessible enlargement. A diagram still needs a text explanation of its important flow; zoom is not a substitute for that explanation.
 
 A local image, served from this same `/articles/images/` folder:
 
@@ -122,4 +143,12 @@ External link, which automatically opens in a new tab: [Hugo documentation](http
 
 ---
 
-That's the whole system - copy this file, replace the frontmatter and the body, and drop it into `articles/content/` as your next post.
+## Before publication
+
+- State the intended reader, outcome, prerequisites and execution context before commands.
+- Put destructive-operation warnings before copy controls; include a preview and expected result.
+- Use meaningful internal/external link text, not "click here"; check all local assets.
+- Keep titles unique within an article; check the generated table of contents and narrow-screen layout.
+- Label recorded technical validation separately from publication date; say **not recorded** when no test evidence exists.
+- Run `node articles/build-articles.mjs` and the article tests; review generated files alongside Markdown.
+- Inspect clipboard denial, image keyboard close and any embedded interaction without requesting live ads.

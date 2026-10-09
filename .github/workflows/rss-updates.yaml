@@ -20,17 +20,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test RSS source icon caching
+        run: node --test .github/scripts/rss-icons.test.mjs
+
       - name: Fetch latest RSS feeds
         run: node rss-watcher/fetch-updates.mjs
+
+      - name: Cache RSS source icons
+        run: node rss-watcher/cache-icons.mjs
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml rss-watcher/feeds-status.json rss-watcher/feeds-meta.json; then
+          git add rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml rss-watcher/feeds-status.json rss-watcher/feeds-meta.json rss-watcher/source-icons.json rss-watcher/source-icons
+          if git diff --cached --quiet; then
             echo "No changes to RSS Watcher data."
           else
-            git add rss-watcher/updates.json rss-watcher/feed.en.xml rss-watcher/feed.fr.xml rss-watcher/feeds-status.json rss-watcher/feeds-meta.json
             git commit -m "chore: refresh RSS Watcher data"
             git push
           fi

@@ -28,6 +28,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check initiative composition comparisons
+        shell: pwsh
+        run: ./.github/scripts/initiative-history.test.ps1
+
       - name: Fetch latest Azure Policies
         shell: pwsh
         env:

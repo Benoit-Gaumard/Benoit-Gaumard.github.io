@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -197,7 +198,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -474,13 +475,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -517,12 +518,423 @@
     ]
   }
   </script>
+<style data-feed-activity>
+ .feed-statistics{margin-bottom:1.5rem;}
+ .feed-statistics .stats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.9rem;margin:0;}
+ .feed-statistics .stat-card{padding:.75rem 1rem;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-surface);box-shadow:0 1px 2px var(--cp-border);}
+ .feed-statistics .stat-value{font-size:1.25rem;font-weight:700;line-height:1.2;overflow-wrap:anywhere;}
+ .feed-statistics .stat-label{margin-top:.4rem;color:var(--cp-text-muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.03em;}
+ .feed-stats-scope{margin:0 0 .75rem;color:var(--cp-text-muted);font-size:.8rem;line-height:1.5;}
+ .feed-stat-note{margin:.35rem 0 0;color:var(--cp-text-muted);font-size:.75rem;line-height:1.4;}
+ @media(max-width:60rem){.feed-statistics .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+ @media(max-width:48rem){.feed-statistics .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;}.feed-statistics .stat-card:last-child{grid-column:1/-1;}}
+ .feed-controls{border:0;padding:0;margin:0;min-width:0;}
+ .feed-filter-grid{display:grid;grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr));gap:.75rem;}
+ .feed-field{min-width:0;}.feed-field label{display:block;margin-bottom:.4rem;font-size:.85rem;font-weight:600;}
+ .feed-field input,.feed-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
+ .feed-action{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .65rem;max-width:100%;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer;text-decoration:none;overflow-wrap:anywhere;}
+ .feed-actions,.feed-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.75rem 0;}
+ .feed-toolbar select{max-width:100%;min-height:2.75rem;background:var(--cp-surface);color:var(--cp-text);border:1px solid var(--cp-border-strong);border-radius:6px;padding:.5rem;}
+ .feed-help,.feed-count{font-size:.85rem;line-height:1.5;color:var(--cp-text-muted);margin:.75rem 0;}
+ .feed-table-wrap{overflow-x:auto;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-surface);}
+ .feed-table{width:100%;border-collapse:collapse;font-size:.85rem;}.feed-table th,.feed-table td{padding:.75rem;vertical-align:top;border-bottom:1px solid var(--cp-border);text-align:left;}
+ .feed-table th{background:var(--cp-surface-soft);}.feed-table th:first-child{width:40%;}
+ .feed-table-techcommunity th{text-transform:none;vertical-align:middle;color:var(--cp-text);font:inherit;font-weight:700;}.feed-table-techcommunity th:first-child{width:32%;}
+ .feed-rss-cell{min-width:12rem;}
+ .feed-summary-fields .feed-actions{margin:.25rem 0;}
+ .feed-age{display:inline-flex;align-items:center;min-height:1.75rem;max-width:100%;padding:.2rem .55rem;border:1px solid var(--cp-border-strong);border-radius:999px;background:var(--cp-surface-soft);color:var(--cp-text-muted);font-size:.8rem;font-weight:650;line-height:1.4;}
+ .feed-age.is-recent{background:var(--cp-accent);color:var(--cp-accent-fg);border-color:var(--cp-accent);}
+ .feed-header-sort{background:none;border:0;padding:0;text-align:left;font-weight:700;}
+ .feed-name{margin:0 0 .35rem;font-size:1.05rem;line-height:1.4;overflow-wrap:anywhere;}
+ .latest-article{display:inline-flex;min-height:2.75rem;align-items:center;color:var(--cp-link);font-size:.9rem;line-height:1.5;overflow-wrap:anywhere;}
+ .collection-status,.publication-status{display:block;margin:.35rem 0;font-size:.8rem;line-height:1.5;}
+ .collection-status.is-error{color:var(--cp-danger);font-weight:650;}.collection-status.is-success{color:var(--cp-success);}
+ .feed-details>summary,.feed-added>summary{min-height:2.75rem;padding-block:.65rem;font-size:.85rem;color:var(--cp-link);cursor:pointer;}
+ .feed-metadata{display:grid;grid-template-columns:minmax(0,1fr);gap:.25rem;font-size:.85rem;line-height:1.5;}.feed-metadata dt{font-weight:600;}.feed-metadata dd{margin:0 0 .5rem;overflow-wrap:anywhere;}
+ .feed-url{display:block;max-width:100%;overflow-x:auto;white-space:nowrap;font-size:.8rem;padding:.5rem 0;}
+ .feed-selection{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;font-size:.85rem;}.feed-selection input{width:1.15rem;height:1.15rem;accent-color:var(--cp-accent);}
+ .feed-cards{display:grid;gap:.75rem;}.feed-card{padding:1rem;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-surface);min-width:0;}
+ .feed-empty,.feed-error{padding:1rem;border:1px dashed var(--cp-border-strong);border-radius:8px;}.feed-error{color:var(--cp-danger);}
+ #loadMore{display:block;margin:1rem auto;}
+ @media(max-width:60rem){.feed-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.feed-search{grid-column:1/-1;}}
+ @media(max-width:32rem){.feed-filter-grid{grid-template-columns:minmax(0,1fr);}}
+</style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/microsoft-techcommunity-rss-feeds/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/microsoft-techcommunity-rss-feeds/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -541,6 +953,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/" aria-current="page"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -558,32 +1011,37 @@
       <h1 id="page-title"><span class="page-icon" aria-hidden="true">📢</span>Microsoft Techcommunity RSS Feeds</h1>
       <p class="intro-text">Consolidate latest activities from Microsoft Tech Community blogs.</p>
       <p class="refresh-meta">
-        <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+        <span>Collection snapshot: <strong id="refreshedAt">Loading...</strong></span>
       </p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Feed statistics"></section>
+<!-- feed-activity-view:start -->
+  <section class="feed-statistics" aria-label="Whole-catalogue statistics">
+    <p class="feed-stats-scope" id="statsSummary" role="status" aria-live="polite" aria-atomic="true">Feed counts: loading&hellip;</p>
+    <div class="stats-grid" id="statsGrid" aria-busy="true">
+      <div class="stat-card"><div class="stat-value" data-stat="total">&mdash;</div><div class="stat-label">Total Feeds</div></div>
+      <div class="stat-card"><div class="stat-value" data-stat="categories">&mdash;</div><div class="stat-label">Categories</div></div>
+      <div class="stat-card"><div class="stat-value" data-stat="today">&mdash;</div><div class="stat-label">Active Today</div><p class="feed-stat-note">Published today (UTC)</p></div>
+      <div class="stat-card"><div class="stat-value" data-stat="week">&mdash;</div><div class="stat-label">This Week</div><p class="feed-stat-note">Since Monday (UTC)</p></div>
+      <div class="stat-card"><div class="stat-value" data-stat="dead">&mdash;</div><div class="stat-label">Dead Feeds</div><p class="feed-stat-note">Last collection failed, not proof of permanent failure</p></div>
+    </div>
+    <noscript><p class="feed-stats-scope">Enable JavaScript to display the totals, or <a href="./feeds-status.json">download the recorded snapshot</a>.</p></noscript>
+  </section>
+  <section aria-label="Recorded feed activity">
+    <fieldset class="feed-controls" id="feedControls" disabled><div class="feed-filter-grid">
+      <div class="feed-field feed-search"><label for="search">Search feeds and titles</label><input id="search" type="search" autocomplete="off"></div>
+      <div class="feed-field"><label for="statusFilter">Recorded status</label><select id="statusFilter"><option value="">All statuses</option><option value="collection-error">Collection error</option><option value="collection-success">Collection succeeded</option><option value="collection-unknown">Collection status unknown</option><option value="publication-quiet">No publication in preceding 30 days</option><option value="publication-recent">Published within preceding 30 days</option><option value="publication-unknown">Publication date unavailable</option><option value="publication-future">Future-dated publication</option></select></div>
+      <div class="feed-field"><label for="categoryFilter">Category</label><select id="categoryFilter"><option value="">All categories</option></select></div>
 
-    <section aria-label="All feeds">
-      <div class="table-toolbar">
-        <input id="search" type="search" placeholder="Filter by feed name or category..." autocomplete="off" spellcheck="false" aria-label="Filter by feed name or category">
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th data-key="name">Name <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-              <th>RSS Feed</th>
-              <th data-key="lastPublication">Last Published <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="activityRank">Last Activity <span class="sort-arrow">&#9650;</span></th>
-            </tr>
-          </thead>
-          <tbody id="feedsTableBody"></tbody>
-        </table>
-      </div>
-      <p id="resultCount" aria-live="polite"></p>
-    </section>
+    </div><div class="feed-toolbar"><label for="sortBy">Sort by</label><select id="sortBy"><option value="lastPublication">Last publication</option><option value="name">Name</option><option value="category">Category</option><option value="collection">Collection result</option></select><button class="feed-action" id="sortDirection" type="button">Descending</button><button class="feed-action" id="resetFilters" type="button">Reset filters</button></div>
+    <div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div></fieldset>
+
+    <p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken. Copy an RSS URL into your reader, or import the selected feeds as OPML.</p>
+    <div class="feed-error" id="feedError" role="alert" hidden><p>The feed-status snapshot could not be loaded.</p><button class="feed-action" id="retryFeeds" type="button">Retry</button></div>
+    <p class="feed-count" id="resultCount" role="status" aria-live="polite">Loading feeds…</p><div id="feedResults"></div><button class="feed-action" id="loadMore" type="button" hidden>More feeds</button>
+
+  </section>
+  <!-- feed-activity-view:end -->
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About the Microsoft Tech Community feeds</h2>
@@ -603,7 +1061,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -649,6 +1107,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -659,319 +1118,333 @@
     </svg>
   </button>
 
-  <script>
-    const DEAD_AFTER_DAYS = 30;
-    const state = { feeds: [], filtered: [], sortKey: "activityRank", sortDir: "asc", query: "" };
-    const elements = {
-      statsGrid: document.getElementById("statsGrid"),
-      tableBody: document.getElementById("feedsTableBody"),
-      resultCount: document.getElementById("resultCount"),
-      refreshedAt: document.getElementById("refreshedAt"),
-      currentYear: document.getElementById("currentYear"),
-      search: document.getElementById("search"),
-      backToTop: document.getElementById("backToTop"),
-      headers: [...document.querySelectorAll("thead th[data-key]")],
-    };
-
-    function normalize(value) {
-      return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  <script data-feed-activity>(()=>{
+function publicationState(feed, reference) {
+  const stamp = typeof feed.lastPublication === "string" ? Date.parse(feed.lastPublication) : NaN;
+  if (!Number.isFinite(stamp)) return { key: "unknown", label: "Publication date not recorded" };
+  if (!Number.isFinite(reference)) return { key: "unknown", label: "Publication recency unavailable" };
+  if (stamp > reference) return { key: "future", label: "Future-dated publication in snapshot" };
+  const days = Math.floor((reference - stamp) / 86400000);
+  return days >= 30 ? { key: "quiet", label: "No recorded publication in the 30 days before collection" }
+    : { key: "recent", label: "Publication within 30 days before collection" };
+}
+function collectionState(feed) {
+  return feed.ok === true ? { key: "success", label: "Collection succeeded" }
+    : feed.ok === false ? { key: "error", label: "Collection error" }
+    : { key: "unknown", label: "Collection status not recorded" };
+}
+function feedCounts(feeds, generatedAt, now = Date.now()) {
+  const collectedAt = typeof generatedAt === "string" ? Date.parse(generatedAt) : NaN;
+  const dated = Number.isFinite(collectedAt) && Number.isFinite(now);
+  const current = new Date(now);
+  const today = Date.UTC(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
+  const week = today - ((current.getUTCDay() + 6) % 7) * 86400000;
+  const observedUntil = Math.min(collectedAt, now);
+  const publishedSince = cutoff => feeds.filter(feed => {
+    const stamp = typeof feed.lastPublication === "string" ? Date.parse(feed.lastPublication) : NaN;
+    return stamp >= cutoff && stamp <= observedUntil;
+  }).length;
+  return {
+    total: feeds.length,
+    categories: new Set(feeds.flatMap(feed => feed.categories)).size,
+    today: dated ? publishedSince(today) : null,
+    week: dated ? publishedSince(week) : null,
+    dead: feeds.filter(feed => collectionState(feed).key === "error").length,
+  };
+}
+function publicationAge(iso, now = Date.now()) {
+  if (typeof iso !== "string" || !Number.isFinite(Date.parse(iso)) || !Number.isFinite(now)) return null;
+  const current = new Date(now), published = new Date(iso);
+  const days = Math.round((Date.UTC(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate())
+    - Date.UTC(published.getUTCFullYear(), published.getUTCMonth(), published.getUTCDate())) / 86400000);
+  if (days === 0) return "Today";
+  if (days === 1) return "Yesterday";
+  if (days === -1) return "Tomorrow";
+  if (days < -1) return `In ${-days} days`;
+  if (days < 7) return `${days} days ago`;
+  const [count, unit] = days < 30 ? [Math.round(days / 7), "week"] : days < 365 ? [Math.round(days / 30), "month"] : [Math.round(days / 365), "year"];
+  return `${count} ${unit}${count === 1 ? "" : "s"} ago`;
+}
+function opml(feeds, title = "Selected RSS feeds") {
+  const escape = value => String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }[character]));
+  const unique = [...new Map(feeds.map(feed => [feed.url, feed])).values()];
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<opml version="2.0"><head><title>${escape(title)}</title></head><body>\n${unique.map(feed => `  <outline type="rss" text="${escape(feed.name)}" title="${escape(feed.name)}" xmlUrl="${escape(feed.url)}"/>`).join("\n")}\n</body></opml>\n`;
+}
+(function activityRuntime(config, { publicationState, collectionState, feedCounts, publicationAge, opml }) {
+  const PAGE = 50;
+  const techCommunity = config.kind === "techcommunity";
+  const el = Object.fromEntries(["feedControls", "search", "statusFilter", "categoryFilter", "languageFilter", "sortBy", "sortDirection", "resetFilters", "statsSummary", "statsGrid", "refreshedAt", "resultCount", "feedResults", "loadMore", "feedError", "retryFeeds", "selectMatching", "clearSelection", "exportSelected", "selectionCount", "addedSection", "addedFeeds"].map(id => [id, document.getElementById(id)]));
+  const compact = matchMedia("(max-width: 60rem)");
+  const state = { status: "loading", feeds: [], filtered: [], selected: new Set(), visible: PAGE, sort: "lastPublication", direction: "desc", generatedAt: null };
+  function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
+  function button(text, callback) { const control = node("button", text, "feed-action"); control.type = "button"; control.addEventListener("click", callback); return control; }
+  function date(value) { const time = new Date(value); return typeof value !== "string" || Number.isNaN(time.getTime()) ? "Not recorded" : time.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC"; }
+  function normalize(value) { return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+  function safeUrl(value) { const url = new URL(value); if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) throw new Error("Invalid feed/article URL"); return value; }
+  function renderStats() {
+    if (config.kind === "activity") {
+      el.statsSummary.textContent = state.status === "ready"
+        ? `${state.feeds.length} configured feed entries · ${state.feeds.filter(feed => feed.collection.key === "success").length} collection successes · ${state.feeds.filter(feed => feed.collection.key === "error").length} collection errors. Publication recency is a separate measure, evaluated at this snapshot's collection time.`
+        : state.status === "error" ? "Feed counts unavailable." : "Feed counts: loading...";
+      return;
     }
-
-    function dayCount(iso) {
-      const now = new Date();
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const target = new Date(iso);
-      const startOfTarget = new Date(target.getFullYear(), target.getMonth(), target.getDate());
-      return Math.round((startOfToday - startOfTarget) / 86400000);
-    }
-
-    function isDead(feed) {
-      return !feed.ok || !feed.lastPublication || dayCount(feed.lastPublication) >= DEAD_AFTER_DAYS;
-    }
-
-    function activityLabel(feed) {
-      if (!feed.ok) return "Dead (error)";
-      if (!feed.lastPublication) return "Dead";
-      const days = dayCount(feed.lastPublication);
-      if (days >= DEAD_AFTER_DAYS) return "Dead";
-      if (days <= 0) return "Today";
-      if (days === 1) return "Yesterday";
-      return `${days} days ago`;
-    }
-
-    function activityRank(feed) {
-      if (!feed.ok || !feed.lastPublication) return Number.POSITIVE_INFINITY;
-      return dayCount(feed.lastPublication);
-    }
-
-    function formatDate(iso) {
-      if (!iso) return "-";
-      return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-    }
-
-    function computeStats(feeds) {
-      const categories = new Set(feeds.map((f) => f.category).filter(Boolean));
-      const activeToday = feeds.filter((f) => f.ok && f.lastPublication && dayCount(f.lastPublication) <= 0).length;
-      const thisWeek = feeds.filter((f) => f.ok && f.lastPublication && dayCount(f.lastPublication) <= 6).length;
-      const dead = feeds.filter(isDead).length;
-      return { total: feeds.length, categories: categories.size, activeToday, thisWeek, dead };
-    }
-
-    function renderStats(feeds) {
-      const stats = computeStats(feeds);
-      const cards = [
-        { label: "Total Feeds", value: stats.total },
-        { label: "Categories", value: stats.categories },
-        { label: "Active Today", value: stats.activeToday, tone: "success" },
-        { label: "This Week", value: stats.thisWeek },
-        { label: "Dead Feeds (30d+)", value: stats.dead, tone: "danger" },
-      ];
-      elements.statsGrid.replaceChildren();
-      cards.forEach((card) => {
-        const el = document.createElement("div");
-        el.className = `stat-card${card.tone ? ` is-${card.tone}` : ""}`;
-        el.innerHTML = `<div class="stat-value">${card.value.toLocaleString()}</div><div class="stat-label">${card.label}</div>`;
-        elements.statsGrid.append(el);
-      });
-    }
-
-    function renderTable() {
-      const rows = [...state.filtered].sort((a, b) => {
-        let av = a[state.sortKey];
-        let bv = b[state.sortKey];
-        if (state.sortKey === "activityRank") { av = activityRank(a); bv = activityRank(b); }
-        if (state.sortKey === "lastPublication") { av = av ? new Date(av).getTime() : -Infinity; bv = bv ? new Date(bv).getTime() : -Infinity; }
-        if (typeof av === "string") { av = normalize(av); bv = normalize(bv); }
-        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
-        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
-        return 0;
-      });
-
-      elements.tableBody.replaceChildren();
-      const fragment = document.createDocumentFragment();
-      rows.forEach((feed) => {
-        const tr = document.createElement("tr");
-        const dead = isDead(feed);
-        if (dead) tr.classList.add("is-dead");
-
-        const nameTd = document.createElement("td");
-        const nameEl = document.createElement("div");
-        nameEl.className = "feed-name";
-        nameEl.textContent = feed.name;
-        nameTd.append(nameEl);
-        if (feed.latestTitle) {
-          const latestEl = document.createElement(feed.latestLink ? "a" : "div");
-          latestEl.className = "feed-latest";
-          if (feed.latestLink) {
-            latestEl.href = feed.latestLink;
-            latestEl.target = "_blank";
-            latestEl.rel = "noopener noreferrer";
-          }
-          latestEl.title = feed.latestTitle;
-          latestEl.append(Object.assign(document.createElement("strong"), { textContent: "Latest: " }));
-          latestEl.append(document.createTextNode(feed.latestTitle));
-          nameTd.append(latestEl);
-        }
-
-        const categoryTd = document.createElement("td");
-        categoryTd.textContent = feed.category || "-";
-
-        const linkTd = document.createElement("td");
-        const link = document.createElement("a");
-        link.className = "feed-link";
-        link.href = feed.url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "Open \u2197";
-        linkTd.append(link);
-
-        const pubTd = document.createElement("td");
-        pubTd.textContent = formatDate(feed.lastPublication);
-
-        const activityTd = document.createElement("td");
-        const badge = document.createElement("span");
-        const label = activityLabel(feed);
-        badge.className = `activity-badge ${dead ? "is-dead" : (label === "Today" || label === "Yesterday") ? "is-fresh" : ""}`.trim();
-        badge.textContent = label;
-        activityTd.append(badge);
-
-        tr.append(nameTd, categoryTd, linkTd, pubTd, activityTd);
-        fragment.append(tr);
-      });
-      elements.tableBody.append(fragment);
-      elements.resultCount.textContent = `${rows.length.toLocaleString()} feed${rows.length === 1 ? "" : "s"} shown`;
-
-      elements.headers.forEach((th) => {
-        th.removeAttribute("aria-sort");
-        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
-      });
-    }
-
-    function applyFilter() {
-      const query = normalize(state.query.trim());
-      state.filtered = state.feeds.filter((feed) => {
-        if (!query) return true;
-        const haystack = normalize(`${feed.name} ${feed.category}`);
-        return haystack.includes(query);
-      });
-      renderTable();
-    }
-
-    async function initialize() {
-      elements.currentYear.textContent = new Date().getFullYear();
-      try {
-        const response = await fetch("./feeds-status.json", { cache: "no-store" });
-        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
-        const payload = await response.json();
-        state.feeds = payload.feeds;
-        state.filtered = payload.feeds;
-        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
-          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-        });
-        renderStats(state.feeds);
-        renderTable();
-      } catch (error) {
-        console.error(error);
-        elements.resultCount.textContent = "Unable to load feed status data.";
-      }
-    }
-
-    let searchTimer;
-    elements.search.addEventListener("input", () => {
-      state.query = elements.search.value;
-      clearTimeout(searchTimer);
-      searchTimer = setTimeout(applyFilter, 100);
+    const counts = state.status === "ready" ? feedCounts(state.feeds, state.generatedAt) : null;
+    el.statsGrid.querySelectorAll("[data-stat]").forEach(value => {
+      const count = counts?.[value.dataset.stat];
+      value.textContent = !counts ? "—" : count === null ? "Not recorded" : count.toLocaleString("en-US");
     });
-
-    elements.headers.forEach((th) => {
-      th.addEventListener("click", () => {
-        const key = th.dataset.key;
-        if (state.sortKey === key) {
-          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-        } else {
-          state.sortKey = key;
-          state.sortDir = "asc";
-        }
-        renderTable();
-      });
+    el.statsGrid.setAttribute("aria-busy", String(state.status === "loading" || state.status === "fetching"));
+    el.statsSummary.textContent = !counts
+      ? state.status === "error" ? "Feed counts unavailable." : "Feed counts: loading..."
+      : counts.today === null
+        ? "Complete catalogue totals, independent of filters. Publication activity is unavailable because the collection date is not recorded."
+        : "Complete catalogue totals, independent of filters. Activity counts use recorded publications for the current UTC day/week, not a live check.";
+  }
+  function selectedCount() {
+    el.selectionCount.textContent = `${state.selected.size} unique feed URLs selected across filters.`;
+    el.exportSelected.disabled = !state.selected.size;
+    el.clearSelection.disabled = !state.selected.size;
+  }
+  function selection(feed) {
+    const label = node("label", undefined, "feed-selection");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox"; checkbox.checked = state.selected.has(feed.url);
+    checkbox.setAttribute("aria-label", `Select ${feed.name} for OPML export`);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) state.selected.add(feed.url); else state.selected.delete(feed.url);
+      selectedCount();
     });
-
-    initialize();
-
-    let scrollTicking = false;
-    window.addEventListener("scroll", () => {
-      if (scrollTicking) return;
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
-        scrollTicking = false;
-      });
-    }, { passive: true });
-    elements.backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    label.append(checkbox, document.createTextNode("Select"));
+    return label;
+  }
+  function feedContent(feed) {
+    const content = node("div");
+    const heading = node("h3", feed.name, "feed-name");
+    content.append(heading);
+    if (feed.latestLink) {
+      const latest = node("a", `${techCommunity ? "Latest: " : ""}${feed.latestTitle || "Read the last recorded publication"}`, "latest-article");
+      latest.href = feed.latestLink; latest.target = "_blank"; latest.rel = "noopener noreferrer";
+      content.append(latest);
+    }
+    return content;
+  }
+  function actions(feed) {
+    const group = node("div", undefined, "feed-actions");
+    const open = node("a", "Open RSS feed", "feed-action");
+    open.href = feed.url; open.target = "_blank"; open.rel = "noopener noreferrer";
+    const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
+    group.append(open, copy, selection(feed));
+    return group;
+  }
+  function details(feed) {
+    const detail = node("details", undefined, "feed-details");
+    detail.append(node("summary", "Feed details"));
+    const fields = node("dl", undefined, "feed-metadata");
+    if (techCommunity) {
+      fields.append(node("dt", "Collection result"), node("dd", feed.collection.label),
+        node("dt", "Publication recency at collection"), node("dd", feed.publication.label));
+    }
+    [["Category", feed.category || "Not recorded"], ["Language", feed.country || "Not recorded"], ["Collection snapshot", date(state.generatedAt)], ["Last attempt", feed.lastAttemptAt ? date(feed.lastAttemptAt) : "Not recorded separately"], ["Last collection error", feed.ok === false ? feed.error || "No error detail supplied" : "No error reported in this snapshot"]].forEach(([label, value]) => fields.append(node("dt", label), node("dd", value)));
+    const url = node("code", feed.url, "feed-url");
+    url.tabIndex = 0; url.setAttribute("aria-label", "RSS feed URL");
+    detail.append(fields, url);
+    if (!feed.latestLink) detail.append(node("p", "The latest article URL is not recorded in this snapshot.", "feed-help"));
+    return detail;
+  }
+  function activityBadge(feed) {
+    const age = publicationAge(feed.lastPublication);
+    const badge = node("span", age || "Not recorded", "feed-age");
+    badge.classList.toggle("is-recent", age === "Today" || age === "Yesterday");
+    badge.title = "Age of the last recorded publication, relative to the current UTC date";
+    return badge;
+  }
+  function card(feed) {
+    const article = node("article", undefined, "feed-card");
+    article.dataset.feedIndex = feed.index;
+    if (techCommunity) {
+      const fields = node("dl", undefined, "feed-summary-fields feed-metadata");
+      const rss = node("dd"), activity = node("dd");
+      rss.append(actions(feed));
+      activity.append(activityBadge(feed));
+      fields.append(node("dt", "Category"), node("dd", feed.categories.join(", ") || "Not recorded"),
+        node("dt", "RSS feed"), rss, node("dt", "Last published"), node("dd", date(feed.lastPublication)),
+        node("dt", "Last activity"), activity);
+      article.append(feedContent(feed), fields, details(feed));
+    } else {
+      article.append(feedContent(feed), node("p", `Last recorded publication: ${date(feed.lastPublication)}`, "feed-help"),
+        node("span", feed.publication.label, "publication-status"), node("span", feed.collection.label, "collection-status is-" + feed.collection.key), actions(feed), details(feed));
+    }
+    return article;
+  }
+  function ordered() {
+    return [...state.filtered].sort((a, b) => {
+      let left = a[state.sort], right = b[state.sort];
+      if (state.sort === "lastPublication") { left = Date.parse(left) || -Infinity; right = Date.parse(right) || -Infinity; }
+      else if (state.sort === "collection") { left = a.collection.key; right = b.collection.key; }
+      else { left = normalize(left); right = normalize(right); }
+      const result = left === right ? 0 : left > right ? 1 : -1;
+      return (state.direction === "asc" ? 1 : -1) * (result || a.name.localeCompare(b.name));
     });
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
+  }
+  function table(feeds) {
+    const wrap = node("div", undefined, "feed-table-wrap"), table = node("table", undefined, "feed-table");
+    if (techCommunity) table.classList.add("feed-table-techcommunity");
+    const head = node("thead"), row = node("tr");
+    const columns = techCommunity
+      ? [["name", "Name"], ["category", "Category"], [null, "RSS feed"], ["lastPublication", "Last published"], [null, "Last activity"]]
+      : [["name", "Feed and latest recorded article"], ["lastPublication", "Publication history"], ["collection", "Collection result"], [null, "RSS actions"]];
+    columns.forEach(([key, label]) => {
+      const cell = node("th"); cell.scope = "col";
+      if (key) {
+        if (state.sort === key) cell.setAttribute("aria-sort", state.direction === "asc" ? "ascending" : "descending");
+        const sort = button(label, () => {
+          state.direction = state.sort === key ? (state.direction === "asc" ? "desc" : "asc") : key === "lastPublication" ? "desc" : "asc";
+          state.sort = key; render(); sync();
+          document.getElementById("feed-sort-" + key)?.focus({ preventScroll: true });
         });
-      if (!controls.length) return;
-
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
-
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
+        sort.classList.add("feed-header-sort"); sort.id = "feed-sort-" + key;
+        cell.append(sort);
+      } else cell.textContent = label;
+      row.append(cell);
+    });
+    head.append(row); const body = node("tbody");
+    feeds.forEach(feed => {
+      const row = node("tr"); row.dataset.feedIndex = feed.index;
+      const name = node("td"), publication = node("td"), links = node("td");
+      name.append(feedContent(feed), details(feed));
+      links.append(actions(feed));
+      if (techCommunity) {
+        const activity = node("td");
+        activity.append(activityBadge(feed));
+        links.className = "feed-rss-cell";
+        publication.textContent = date(feed.lastPublication);
+        row.append(name, node("td", feed.categories.join(", ") || "Not recorded"), links, publication, activity);
+      } else {
+        const collection = node("td");
+        publication.append(node("p", date(feed.lastPublication)), node("span", feed.publication.label, "publication-status"));
+        collection.append(node("span", feed.collection.label, "collection-status is-" + feed.collection.key));
+        row.append(name, publication, collection, links);
       }
-
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
+      body.append(row);
+    });
+    table.append(head, body); wrap.append(table); return wrap;
+  }
+  function render() {
+    if (state.status !== "ready") return;
+    const shown = ordered().slice(0, state.visible);
+    el.feedResults.replaceChildren();
+    if (!shown.length) {
+      const empty = node("div", undefined, "feed-empty");
+      empty.append(node("h2", "No feeds match these filters"), button("Reset filters", reset));
+      el.feedResults.append(empty);
+    } else if (compact.matches) {
+      const cards = node("div", undefined, "feed-cards"); cards.append(...shown.map(card)); el.feedResults.append(cards);
+    } else el.feedResults.append(table(shown));
+    el.resultCount.textContent = `${shown.length} displayed / ${state.filtered.length} matching feed entries · ${state.feeds.length} configured in this snapshot.`;
+    el.loadMore.hidden = shown.length >= state.filtered.length;
+    el.loadMore.textContent = `Show ${Math.min(PAGE, state.filtered.length - shown.length)} more feeds`;
+    el.sortBy.value = state.sort; el.sortDirection.textContent = state.direction === "asc" ? "Ascending" : "Descending";
+    selectedCount();
+  }
+  function apply(updateUrl = true) {
+    if (state.status !== "ready") return;
+    const query = normalize(el.search.value.trim());
+    const status = el.statusFilter.value;
+    state.filtered = state.feeds.filter(feed => (!query || normalize([feed.name, feed.category, feed.subcategory, feed.latestTitle].join(" ")).includes(query))
+      && (!el.categoryFilter.value || feed.categories.includes(el.categoryFilter.value))
+      && (!el.languageFilter?.value || feed.country === el.languageFilter.value)
+      && (!status || (status.startsWith("collection-") ? feed.collection.key === status.slice(11) : feed.publication.key === status.slice(12))));
+    state.visible = PAGE; render(); if (updateUrl) sync();
+  }
+  function reset() { [el.search, el.statusFilter, el.categoryFilter, el.languageFilter].filter(Boolean).forEach(control => { control.value = ""; }); apply(); el.search.focus({ preventScroll: true }); }
+  function sync() {
+    SiteUX.updateURL(params => {
+      [el.search, el.statusFilter, el.categoryFilter, el.languageFilter].filter(Boolean).forEach(control => { params.delete(control.id); if (control.value) params.set(control.id, control.value); });
+      params.set("sort", state.sort); params.set("dir", state.direction);
+    });
+  }
+  function restore() {
+    const params = new URLSearchParams(location.search);
+    [el.search, el.statusFilter, el.categoryFilter, el.languageFilter].filter(Boolean).forEach(control => {
+      const value = params.get(control.id) || "";
+      if (control.tagName === "SELECT" && value && ![...control.options].some(option => option.value === value)) control.add(new Option(`${value} (not in snapshot)`, value));
+      control.value = value;
+    });
+    state.sort = ["name", "category", "country", "lastPublication", "collection"].includes(params.get("sort")) ? params.get("sort") : "lastPublication";
+    state.direction = params.get("dir") === "asc" ? "asc" : "desc";
+    apply(false);
+  }
+  async function load() {
+    if (state.status === "fetching") return;
+    const fromRetry = document.activeElement === el.retryFeeds;
+    state.status = "fetching"; el.feedControls.disabled = true; el.retryFeeds.disabled = true; el.feedError.hidden = true;
+    el.refreshedAt.textContent = "Loading...";
+    renderStats();
+    try {
+      const payload = await SiteUX.fetchJSON(config.data);
+      if (!Array.isArray(payload.feeds)) throw new Error("Missing feed-status entries");
+      state.generatedAt = payload.generatedAt;
+      const reference = typeof payload.generatedAt === "string" ? Date.parse(payload.generatedAt) : NaN;
+      state.feeds = payload.feeds.map((feed, index) => {
+        if (!feed || typeof feed.name !== "string" || typeof feed.url !== "string" || (feed.ok != null && typeof feed.ok !== "boolean")) throw new Error("Invalid feed metadata");
+        safeUrl(feed.url);
+        if (feed.latestLink) safeUrl(feed.latestLink);
+        return { ...feed, index, categories: String(feed.category || "").split(",").map(value => value.trim()).filter(Boolean), publication: publicationState(feed, reference), collection: collectionState(feed) };
+      });
+      if (config.kind === "activity" && state.feeds.some(feed => !Object.hasOwn(feed, "latestLink"))) {
+        try {
+          const aggregate = await SiteUX.fetchJSON("../updates.json");
+          const names = new Map(); state.feeds.forEach(feed => names.set(feed.name, (names.get(feed.name) || 0) + 1));
+          state.feeds.forEach(feed => {
+            const item = names.get(feed.name) === 1 ? aggregate.items?.find(item => item.source === feed.name && item.pubDate === feed.lastPublication) : null;
+            if (!feed.latestLink && item?.link) { safeUrl(item.link); feed.latestLink = item.link; feed.latestTitle = item.title; }
           });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
+        } catch (error) { console.warn("Optional retained article links are unavailable.", error); }
       }
+      el.refreshedAt.textContent = date(payload.generatedAt);
+      el.categoryFilter.replaceChildren(new Option("All categories", ""));
+      [...new Set(state.feeds.flatMap(feed => feed.categories))].sort().forEach(value => el.categoryFilter.add(new Option(value, value)));
+      if (el.languageFilter) {
+        el.languageFilter.replaceChildren(new Option("All recorded languages", ""));
+        [...new Set(state.feeds.map(feed => feed.country).filter(Boolean))].sort().forEach(value => el.languageFilter.add(new Option(value, value)));
+      }
+      if (el.addedFeeds) {
+        el.addedFeeds.replaceChildren();
+        const added = state.feeds.filter(feed => Number.isFinite(Date.parse(feed.addedAt))).sort((a, b) => Date.parse(b.addedAt) - Date.parse(a.addedAt) || a.name.localeCompare(b.name)).slice(0, 5);
+        added.forEach(feed => el.addedFeeds.append(node("li", `${feed.name} — added ${date(feed.addedAt)}`)));
+        el.addedSection.hidden = !added.length;
+      }
+      state.status = "ready"; el.feedControls.disabled = false; restore();
+    } catch (error) {
+      console.error("Feed activity could not be loaded.", error); state.status = "error"; el.feedError.hidden = false;
+      el.refreshedAt.textContent = "Unavailable"; el.resultCount.textContent = "Unable to load feed activity.";
+      el.feedResults.replaceChildren(); el.loadMore.hidden = true;
+    } finally { renderStats(); el.retryFeeds.disabled = false; if (fromRetry) (state.status === "ready" ? el.search : el.retryFeeds).focus({ preventScroll: true }); }
+  }
+  let timer;
+  el.search.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => apply(), 120); });
+  [el.statusFilter, el.categoryFilter, el.languageFilter].filter(Boolean).forEach(control => control.addEventListener("change", () => apply()));
+  el.resetFilters.addEventListener("click", reset);
+  el.sortBy.addEventListener("change", () => { state.sort = el.sortBy.value; render(); sync(); });
+  el.sortDirection.addEventListener("click", () => { state.direction = state.direction === "asc" ? "desc" : "asc"; render(); sync(); });
+  el.loadMore.addEventListener("click", () => { const old = state.visible; state.visible += PAGE; render(); const row = el.feedResults.querySelectorAll("[data-feed-index]")[old]; const control = row?.querySelector("a,summary,button"); if (control) { control.focus({ preventScroll: true }); row.scrollIntoView({ block: "start", behavior: "instant" }); } });
+  el.selectMatching.addEventListener("click", () => { state.filtered.forEach(feed => state.selected.add(feed.url)); render(); });
+  el.clearSelection.addEventListener("click", () => { state.selected.clear(); render(); el.selectMatching.focus(); });
+  el.exportSelected.addEventListener("click", () => SiteUX.download(opml(state.feeds.filter(feed => state.selected.has(feed.url))), config.kind + "-feeds.opml", "text/x-opml;charset=utf-8", `${state.selected.size} selected RSS URLs`));
+  el.retryFeeds.addEventListener("click", load);
+  compact.addEventListener("change", render);
+  window.addEventListener("popstate", () => { if (state.status === "ready") restore(); });
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  const back = document.getElementById("backToTop");
+  window.addEventListener("scroll", () => back.classList.toggle("visible", scrollY > 600), { passive: true });
+  back.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  load();
+})({"kind":"techcommunity","data":"./feeds-status.json"},{publicationState,collectionState,feedCounts,publicationAge,opml});
+})();</script>
 
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
+
+
+
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');

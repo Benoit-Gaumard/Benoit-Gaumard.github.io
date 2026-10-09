@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Track every built-in Azure Policy initiative (policy set) added, removed, or edited by Microsoft, as recorded by the scheduled catalog refresh.">
+  <meta name="description" content="Browse recorded Azure initiative changes, compare member additions and removals when available, and filter the retained history.">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="benoit-gaumard.io" />
   <meta property="og:title" content="Initiatives History | Azure Policies | Benoit Gaumard" />
-  <meta property="og:description" content="Track every built-in Azure Policy initiative (policy set) added, removed, or edited by Microsoft, as recorded by the scheduled catalog refresh." />
+  <meta property="og:description" content="Browse recorded Azure initiative changes, compare member additions and removals when available, and filter the retained history." />
   <meta property="og:url" content="https://benoit-gaumard.io/azure-policies/initiatives-history/" />
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -23,7 +23,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Initiatives History | Azure Policies",
-    "description": "Track every built-in Azure Policy initiative (policy set) added, removed, or edited by Microsoft, as recorded by the scheduled catalog refresh.",
+    "description": "Browse recorded Azure initiative changes, compare member additions and removals when available, and filter the retained history.",
     "url": "https://benoit-gaumard.io/azure-policies/initiatives-history/",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -64,6 +64,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -119,7 +120,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -205,7 +206,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -225,7 +226,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: var(--cp-accent-fg); text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -242,7 +243,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -670,7 +671,7 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  
+
     /* Filled by script: hold the box only while empty, so the page below does
        not jump when the data lands, and no blank hole survives a render. */
     @supports (min-height: 1px) {
@@ -717,13 +718,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -735,29 +736,77 @@
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
 
     /* Change log ------------------------------------------------------------ */
+    [hidden] { display: none !important; }
+    .history-log { max-width: 76rem; }
+    .history-filters { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
+    .history-filter-grid { display: grid; grid-template-columns: minmax(12rem, 2fr) repeat(3, minmax(9rem, 1fr)); gap: .75rem; }
+    .history-extra { display: contents; }
+    .history-filter-toggle, .history-filter-done { display: none !important; }
+    .history-field { min-width: 0; }
+    .history-field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .4rem; }
+    .history-field input, .history-field select, .copy-fallback input { width: 100%; min-width: 0; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
+    .history-field input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .history-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .75rem; }
+    .history-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; }
+    .history-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
+    .history-action:disabled { cursor: not-allowed; color: var(--cp-text-muted); }
+    .history-help, .history-counts { max-width: 80ch; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.55; }
+    .history-counts { margin: 1rem 0 .5rem; }
+    .history-counts strong { color: var(--cp-text); }
+    .history-status { font-size: .85rem; color: var(--cp-text-muted); line-height: 1.5; }
+    .history-status:empty { margin: 0; }
+    .history-error { padding: 1rem; margin: 1rem 0; border: 1px solid var(--cp-danger); border-radius: 8px; color: var(--cp-danger); background: var(--cp-danger-bg); }
+    .copy-fallback label { display: block; margin-bottom: .5rem; font-size: .85rem; }
+    .copy-fallback { margin: 1rem 0; }
+    .catalogue-return { margin: 1.5rem 0 0; }
     .timeline-day { margin-bottom: 1.5rem; }
     .timeline-heading {
-      display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem .75rem;
+      display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .75rem;
       margin: 0 0 .6rem;
       padding-bottom: .4rem;
       border-bottom: 1px solid var(--cp-border);
     }
-    .timeline-date { font-size: 0.95rem; font-weight: 700; }
-    .timeline-tally { margin-left: auto; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .timeline-date { margin: 0; font-size: 1.05rem; font-weight: 700; }
+    .timeline-tally { margin-left: auto; color: var(--cp-text-muted); font-size: .8rem; }
     .change-list { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
     .change-item {
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
       align-items: start;
       gap: .55rem .75rem;
-      padding: .65rem .85rem;
+      padding: 1rem;
       border: 1px solid var(--cp-border);
       border-radius: 8px;
-      background: var(--cp-panel);
+      background: var(--cp-surface);
+      scroll-margin-top: 6rem;
     }
     .change-main { min-width: 0; display: flex; flex-direction: column; gap: .35rem; }
-    .change-name { font-weight: 600; overflow-wrap: anywhere; }
+    .change-name { margin: 0; font-size: 1.05rem; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
     .change-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .55rem; font-size: 0.78rem; color: var(--cp-text-muted); }
+    .change-meta .category-badge { white-space: normal; overflow-wrap: anywhere; }
+    .change-explanation { margin: .35rem 0; max-width: 80ch; color: var(--cp-text-muted); font-size: .9rem; line-height: 1.5; }
+    .event-details summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); cursor: pointer; font-size: .9rem; }
+    .event-details summary:focus-visible, .field-value:focus-visible, .event-id:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    .event-details[open] { border-top: 1px solid var(--cp-border); margin-top: .5rem; }
+    .event-meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: start; gap: .5rem 1rem; margin: .5rem 0; font-size: .85rem; }
+    .event-meta dt { font-weight: 600; }
+    .event-meta dd { margin: 0; min-width: 0; }
+    .event-id { display: block; max-width: 100%; overflow-x: auto; white-space: nowrap; padding-block: .35rem; }
+    .event-lookup { min-height: 2.75rem; display: inline-flex; align-items: center; width: fit-content; font-size: .85rem; }
+    .change-kind { font-size: .8rem; color: var(--cp-text-muted); }
+    .composition-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1rem; }
+    .composition-group { min-width: 0; }
+    .composition-heading { margin: 1rem 0 .5rem; font-size: 1.05rem; }
+    .composition-group h5 { margin: 0 0 .5rem; font-size: .95rem; }
+    .composition-list { max-height: 32rem; overflow: auto; display: grid; gap: .75rem; list-style: none; margin: 0; padding: .5rem; border: 1px solid var(--cp-border); border-radius: 8px; }
+    .members-added { background: var(--cp-success-bg); }
+    .members-removed { background: var(--cp-danger-bg); }
+    .composition-member { min-width: 0; padding: .5rem; border-bottom: 1px solid var(--cp-border); }
+    .composition-member:last-child { border-bottom: 0; }
+    .composition-member > a { display: inline-flex; align-items: center; min-height: 2.75rem; max-width: 100%; overflow-wrap: anywhere; font-size: .9rem; font-weight: 600; }
+    .member-identifiers summary { font-size: .85rem; }
+    .member-identifiers .event-meta { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+    .composition-list:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
     /* Added, removed and modified are the whole point of the page, so the three
        read apart at a glance rather than as three grey words. */
     .change-badge {
@@ -767,7 +816,7 @@
       border: 1px solid var(--cp-border);
       background: var(--cp-surface-soft);
       color: var(--cp-text-muted);
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .02em;
@@ -776,19 +825,14 @@
     .change-badge.is-added { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
     .change-badge.is-removed { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
     .change-badge.is-modified { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
-    .field-diff { display: grid; gap: .3rem; margin: .15rem 0 0; padding: 0; list-style: none; }
-    .field-diff li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem; font-size: 0.8rem; }
-    .field-name { font-weight: 600; color: var(--cp-text); }
-    .field-from, .field-to {
-      padding: .1rem .35rem; border-radius: 4px;
-      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.75rem; overflow-wrap: anywhere;
-    }
-    .field-from { background: var(--cp-danger-bg); color: var(--cp-danger); text-decoration: line-through; }
-    .field-to { background: var(--cp-success-bg); color: var(--cp-success); }
-    .field-arrow { color: var(--cp-text-muted); }
-    .change-id { display: flex; align-items: center; gap: .4rem; }
-    .change-id code { font-size: 0.72rem; color: var(--cp-text-muted); }
+    .field-diff { display: grid; gap: 1rem; margin: 1rem 0; padding: 0; list-style: none; }
+    .field-name { margin: 0 0 .5rem; font-size: .95rem; font-weight: 600; }
+    .field-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+    .field-side { min-width: 0; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 6px; }
+    .field-side strong { font-size: .8rem; }
+    .field-value { margin: .4rem 0 0; max-height: 20rem; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-family: "Cascadia Code", "Consolas", ui-monospace, monospace; font-size: .85rem; line-height: 1.5; }
+    .field-before { background: var(--cp-danger-bg); }
+    .field-after { background: var(--cp-success-bg); }
     .empty-state {
       padding: 3rem 1rem;
       border: 1px dashed var(--cp-border-strong);
@@ -798,8 +842,21 @@
     }
     .empty-state h2 { margin: 0; font-size: 1.05rem; }
     .empty-state p { margin: .5rem auto 0; max-width: 42rem; color: var(--cp-text-muted); font-size: 0.9rem; line-height: 1.6; }
-    @media (max-width: 32rem) {
+    @media (max-width: 48rem) {
+      .history-filter-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+      .history-extra { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); gap: .75rem; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
+      .history-filter-toggle, .history-filter-done { display: inline-flex !important; width: fit-content; grid-column: 1 / -1; }
+      .site-header { position: relative; }
+      .timeline-heading { position: sticky; top: 0; z-index: 10; padding: .65rem .5rem; background: var(--cp-panel-strong); }
       .timeline-tally { margin-left: 0; flex-basis: 100%; }
+      .field-pair { grid-template-columns: minmax(0, 1fr); }
+      .composition-grid { grid-template-columns: minmax(0, 1fr); }
+      .event-meta { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+      .event-meta dd { margin-bottom: .5rem; }
+    }
+    @media print {
+      .history-filters, .history-actions, .copy-fallback, .event-lookup { display: none !important; }
+      .timeline-heading { position: static; }
     }
   </style>
   <script type="application/ld+json">
@@ -834,12 +891,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/azure-policies/initiatives-history/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/azure-policies/initiatives-history/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -858,6 +1285,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/" aria-current="location"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -873,43 +1341,84 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/azure-policies/">&larr; Azure Policies</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true">🕓</span>Initiatives history</h1>
-      <p class="intro-text">What Microsoft changed in the built-in Azure Policy <strong>initiatives</strong> (policy sets). The <strong>Refresh Azure Policies</strong> workflow scans the tenant once a day and records the difference with the previous run.</p>
+      <p class="intro-text">Observed changes to Azure Policy initiatives: metadata, versions and member composition between catalogue scans.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
         <span>Retention: <strong id="retention">-</strong></span>
         <a href="../policies-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Policies history</a>
       </p>
+      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history. <a href="#notes-heading">Coverage and limitations</a>.</p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Change statistics"></section>
-
-    <section aria-label="Change log">
-      <div class="filter-bar">
-        <input id="search" type="search" placeholder="Search an initiative name, category, or ID..." autocomplete="off" spellcheck="false" aria-label="Search a name, category, or ID">
-        <select id="changeFilter" aria-label="Filter by change type">
-          <option value="">All changes</option>
-          <option value="added">Added</option>
-          <option value="removed">Removed</option>
-          <option value="modified">Modified</option>
-        </select>
-        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
-        <select id="periodFilter" aria-label="Filter by period">
-          <option value="">Full history</option>
+    <section class="history-log" aria-label="Initiative change log">
+      <noscript><p>JavaScript is needed to filter this log. <a href="../policy-changes.json">Download the source log</a> (includes policies and initiatives), or <a href="../">open Azure Policies</a>.</p></noscript>
+      <fieldset class="history-filters" id="historyControls" disabled aria-label="Filter retained initiative events">
+        <div class="history-filter-grid">
+        <div class="history-field">
+          <label for="search">Search initiative changes</label>
+          <input id="search" type="search" placeholder="Name, category or ID" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="history-field">
+        <label for="periodFilter">Period (UTC)</label>
+        <select id="periodFilter" aria-describedby="periodHelp">
+          <option value="">All retained</option>
           <option value="7">Last 7 days</option>
           <option value="30">Last 30 days</option>
           <option value="90">Last 90 days</option>
         </select>
-        <button class="clear-button" id="clearFilters" type="button" hidden>Clear</button>
+        </div>
+        <button class="history-action history-filter-toggle" id="historyFilterToggle" type="button" aria-expanded="false" aria-controls="historyExtra">More filters</button>
+        <div class="history-extra" id="historyExtra">
+        <div class="history-field">
+          <label for="changeFilter">Change</label>
+          <select id="changeFilter">
+            <option value="">All changes</option>
+            <option value="added">Added</option>
+            <option value="removed">Removed</option>
+            <option value="modified">Modified</option>
+          </select>
+        </div>
+        <div class="history-field">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter"><option value="">All categories</option></select>
+        </div>
+        <button class="history-action history-filter-done" id="historyFiltersDone" type="button">Done</button>
+        </div>
+        </div>
+        <p class="history-help" id="periodHelp">Recent periods end today (UTC), not on the last scan.</p>
+        <div class="history-actions">
+          <button class="history-action" id="clearFilters" type="button" hidden>Reset all filters</button>
+          <button class="history-action" id="exportChanges" type="button" disabled>Export filtered JSON</button>
+        </div>
+      </fieldset>
+      <p class="history-counts" id="changeCounts">Counts: loading&hellip;</p>
+      <p class="result-count" id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading initiative changes&hellip;</p>
+      <p class="history-help" id="eventRange">Detection dates: loading&hellip;</p>
+      <p class="history-help" id="undatedNotice" hidden></p>
+      <p class="history-status" id="actionStatus" role="status" aria-live="polite"></p>
+      <p class="history-help" id="exportFallback" hidden>Export could not start. You can <a href="../policy-changes.json" download>download the unfiltered source log</a>, which also includes initiatives.</p>
+      <div class="copy-fallback" id="copyFallback" hidden>
+        <label for="copyValue">Select and copy the definition ID</label>
+        <input id="copyValue" readonly>
       </div>
-      <div id="timeline"></div>
-      <p class="result-count" id="resultCount" aria-live="polite"></p>
+      <div class="history-error" id="historyError" role="alert" hidden><p>The change log could not be loaded. Check the connection and retry.</p><button class="history-action" id="retryHistory" type="button">Retry</button></div>
+      <div id="timeline" aria-busy="true"></div>
+      <button class="load-more" id="loadMore" type="button" hidden>Load more changes</button>
+      <p class="catalogue-return"><a class="history-action" href="../?tab=initiatives">Back to the initiatives catalogue</a></p>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">How this log is built</h2>
-      <p>Azure does not publish a changelog for its built-in initiatives, so this one is derived. Every time the scheduled workflow refreshes <a href="/azure-policies/">the catalog</a>, it compares the fresh scan with the copy it is about to replace and records what moved.</p>
-      <p>An initiative counts as <strong>modified</strong> when its name, category, version, type, or the number of policies it groups changes. Descriptions are not tracked: Microsoft rewords them constantly without changing what a initiative does, and a real edit bumps the version anyway.</p>
-      <p>The log only starts where the workflow started recording it, and entries are kept for <span id="retentionInline">180</span> days. A brand new initiative is one Microsoft published between two scans, not necessarily one released that day.</p>
+      <p>This derived log compares consecutive catalogue snapshots. The refresh is scheduled daily at 06:00 UTC; weekly snapshot and manual runs can also refresh it. A scheduled collection is not a guarantee that Azure changed that day, nor a real-time feed. Event dates are detection times, not publication dates.</p>
+      <p><strong>Added</strong> means present in the new scan but absent from the previous catalogue; <strong>Removed</strong> means the reverse. These observations do not establish Microsoft's exact publication or retirement date.</p>
+      <p><strong>Modified</strong> distinguishes metadata (name, category and definition type), version and member composition. New comparisons record added/removed member references even when the total count is unchanged. Expand an event for the recorded members and before/after metadata.</p>
+      <p>A member is identified by its policy ID and reference ID. The same policy can appear under multiple references, so member counts are not counts of unique policies. Changing the policy behind a reference, or renaming the reference, is recorded as a removal and an addition. Reordering members is ignored.</p>
+      <p>Names are captured from the policy catalogues available during comparison: the previous catalogue for removals and the new one for additions. If a name was unavailable, the exact ID remains accessible instead of an invented label. Catalogue links show the current definitions; removed definitions may no longer exist there.</p>
+      <p><strong>Older events may contain only a count change.</strong> A change from 20 to 29 is net +9 members, not proof that exactly nine were added: additions and removals could have happened together. Those missing identities are not reconstructed from today's catalogue. Missing or inconsistent member snapshots are explicitly marked unavailable.</p>
+      <p>The comparator does not detect parameter-value changes, group assignments, descriptions or rule-body edits unless tracked metadata or member identities also change. A version or composition change alone does not establish its impact on your Azure assignments.</p>
+      <p>Recording starts with the collector, without backfilling earlier Azure history. The first scan establishes a baseline. The retention limit is <span id="retentionInline">180</span> days at each refresh; a shared limit of 3,000 policy and initiative events can shorten that window. No retained event is not evidence of no historical change, and untracked rule-only changes may not appear.</p>
+      <p>Counts and the displayed detection-date range describe the <strong>active filters across all matching events</strong>, not only the displayed batch. The total retained count covers initiative events only. Recent-period filters use UTC calendar days ending today; all retained events remain available regardless of the age of the last refresh.</p>
+      <p>Export includes every matching event with its recorded fields, active filters and source timestamp, not just the visible batch. It does not reconstruct missing values. <a href="../policy-changes.json">Inspect the source log</a> (policies and initiatives).</p>
     </section>
   </main>
 
@@ -917,7 +1426,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -963,6 +1472,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -973,459 +1483,635 @@
     </svg>
   </button>
 
-  <script>
+  <script data-history-script>
     const PAGE_SIZE = 60;
-    // This page is one half of the change log; its sibling covers the other kind.
-    const KIND = "initiative";
+    const CHANGE_LABELS = { added: "Added", removed: "Removed", modified: "Modified" };
+    const FIELD_LABELS = { displayName: "Name", category: "Category", version: "Version", policyType: "Definition type", policyCount: "Member references" };
+    const state = { entries: [], filtered: [], visible: PAGE_SIZE, keys: new Map(), open: new Set(), status: "loading", generatedAt: null, retentionDays: null, filteredAt: null, filters: {} };
+    const elements = Object.fromEntries([
+      "search", "changeFilter", "categoryFilter", "periodFilter", "clearFilters", "historyControls", "timeline",
+      "resultCount", "changeCounts", "refreshedAt", "retention", "retentionInline", "loadMore", "exportChanges",
+      "actionStatus", "copyFallback", "copyValue", "exportFallback", "historyError", "retryHistory", "undatedNotice",
+      "historyExtra", "historyFilterToggle", "historyFiltersDone",
+      "eventRange",
+    ].map(id => [id, document.getElementById(id)]));
+    const mobileFilters = matchMedia("(max-width: 48rem)");
+    let moreFiltersOpen = false;
 
     function normalize(value) {
       return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    const CHANGE_LABELS = { added: "Added", removed: "Removed", modified: "Modified" };
-    const FIELD_LABELS = {
-      displayName: "Name",
-      category: "Category",
-      effect: "Effect",
-      mode: "Mode",
-      version: "Version",
-      policyType: "Type",
-      policyCount: "Policies",
-    };
-
-    const state = { entries: [], filtered: [], visible: PAGE_SIZE, query: "" };
-
-    const elements = {
-      search: document.getElementById("search"),
-      changeFilter: document.getElementById("changeFilter"),
-      categoryFilter: document.getElementById("categoryFilter"),
-      periodFilter: document.getElementById("periodFilter"),
-      clearFilters: document.getElementById("clearFilters"),
-      timeline: document.getElementById("timeline"),
-      resultCount: document.getElementById("resultCount"),
-      statsGrid: document.getElementById("statsGrid"),
-      refreshedAt: document.getElementById("refreshedAt"),
-      retention: document.getElementById("retention"),
-      retentionInline: document.getElementById("retentionInline"),
-      currentYear: document.getElementById("currentYear"),
-      backToTop: document.getElementById("backToTop"),
-    };
-
-    const COPY_ICON = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9.5V3.5a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-    const TICK_ICON = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M3.5 8.5l3 3 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-    async function copyId(text, button) {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.append(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        textarea.remove();
-      }
-      button.classList.add("is-copied");
-      button.innerHTML = TICK_ICON;
-      setTimeout(() => {
-        button.classList.remove("is-copied");
-        button.innerHTML = COPY_ICON;
-      }, 1500);
+    function entryTimestamp(entry) {
+      return typeof entry.detectedAt === "string" && /^\d{4}-\d{2}-\d{2}T/.test(entry.detectedAt) ? Date.parse(entry.detectedAt) : NaN;
     }
 
     function dayKey(entry) {
-      // Grouping on the UTC date the scan ran keeps a day from splitting in two
-      // for readers east or west of the workflow's clock.
-      return String(entry.detectedAt ?? "").slice(0, 10);
+      const stamp = entryTimestamp(entry);
+      return Number.isFinite(stamp) ? new Date(stamp).toISOString().slice(0, 10) : "undated";
     }
 
     function formatDay(key) {
-      const date = new Date(`${key}T00:00:00Z`);
-      if (Number.isNaN(date.getTime())) return key;
-      return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+      return key === "undated" ? "Date not recorded" : new Date(key + "T00:00:00Z").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
     }
 
-    function badge(text, className) {
-      const span = document.createElement("span");
-      span.className = className;
-      span.textContent = text;
-      return span;
+    function memberCount(value) {
+      if (typeof value !== "number" && (typeof value !== "string" || !/^\d+$/.test(value.trim()))) return null;
+      const count = Number(value);
+      return Number.isSafeInteger(count) && count >= 0 ? count : null;
+    }
+
+    function validateComposition(entry) {
+      const composition = entry.composition;
+      if (composition == null) return;
+      if (composition.status === "unavailable") {
+        if (composition.reason != null && typeof composition.reason !== "string") throw new Error("Invalid composition limitation");
+        return;
+      }
+      if (composition.status !== "compared" || !Number.isSafeInteger(composition.beforeCount) || composition.beforeCount < 0
+        || !Number.isSafeInteger(composition.afterCount) || composition.afterCount < 0
+        || !Array.isArray(composition.added) || !Array.isArray(composition.removed)) throw new Error("Invalid composition comparison");
+      const identities = { added: new Set(), removed: new Set() };
+      ["added", "removed"].forEach(side => composition[side].forEach(member => {
+        if (!member || typeof member.id !== "string" || !member.id || typeof member.referenceId !== "string" || !member.referenceId
+          || (member.displayName != null && typeof member.displayName !== "string")) throw new Error("Invalid member identity");
+        const key = JSON.stringify([member.id.toLowerCase(), member.referenceId]);
+        if (identities[side].has(key)) throw new Error("Duplicate member change");
+        identities[side].add(key);
+      }));
+      if (composition.added.length > composition.afterCount || composition.removed.length > composition.beforeCount
+        || composition.afterCount - composition.beforeCount !== composition.added.length - composition.removed.length
+        || [...identities.added].some(key => identities.removed.has(key))) throw new Error("Inconsistent member counts");
+      const countField = entry.fields?.find(field => field.field === "policyCount");
+      if (countField) {
+        const before = memberCount(countField.from), after = memberCount(countField.to);
+        if ((before !== null && before !== composition.beforeCount) || (after !== null && after !== composition.afterCount)) throw new Error("Metadata and composition counts disagree");
+      }
+    }
+
+    function validateHistory(payload) {
+      if (!payload || !Array.isArray(payload.entries)) throw new Error("Missing event list");
+      if (payload.retentionDays != null && (!Number.isInteger(payload.retentionDays) || payload.retentionDays <= 0)) throw new Error("Invalid retention period");
+      payload.entries.forEach(entry => {
+        if (!entry || typeof entry.kind !== "string") throw new Error("Invalid event kind");
+        if (entry.kind !== "initiative") return;
+        if (!Object.hasOwn(CHANGE_LABELS, entry.change) || typeof entry.name !== "string" || !entry.name
+          || ["displayName", "category", "detectedAt"].some(key => entry[key] != null && typeof entry[key] !== "string")
+          || (entry.fields != null && (!Array.isArray(entry.fields) || entry.fields.some(field => !field || typeof field.field !== "string" || !field.field)))) {
+          throw new Error("Invalid initiative event");
+        }
+        validateComposition(entry);
+      });
+      return payload.entries.filter(entry => entry.kind === "initiative").sort((a, b) => {
+        const left = Number.isFinite(entryTimestamp(a)) ? entryTimestamp(a) : -Infinity;
+        const right = Number.isFinite(entryTimestamp(b)) ? entryTimestamp(b) : -Infinity;
+        return left === right ? 0 : right - left;
+      });
+    }
+
+    function periodCutoff(days, now) {
+      if (days === null) return null;
+      const date = new Date(now);
+      return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()) - (days - 1) * 86400000;
+    }
+
+    function filterEntries(entries, filters, now) {
+      const query = normalize(filters.search.trim());
+      const cutoff = periodCutoff(filters.days, now);
+      return entries.filter(entry => {
+        if (filters.change && entry.change !== filters.change) return false;
+        if (filters.category && entry.category !== filters.category) return false;
+        if (cutoff !== null && (!Number.isFinite(entryTimestamp(entry)) || entryTimestamp(entry) < cutoff || entryTimestamp(entry) > now)) return false;
+        return !query || normalize(`${entry.displayName || ""} ${entry.category || ""} ${entry.name}`).includes(query);
+      });
+    }
+
+    function formatValue(field, side) {
+      if (!Object.hasOwn(field, side)) return "Not recorded";
+      const value = field[side];
+      if (value === "") return "(empty string)";
+      return typeof value === "string" ? value : JSON.stringify(value, null, 2);
+    }
+
+    function changeKinds(entry) {
+      if (entry.change !== "modified") return [];
+      const types = [];
+      const composition = entry.composition;
+      if (composition?.status === "compared" && (composition.added.length || composition.removed.length)) types.push("Composition");
+      else if (entry.fields?.some(field => field.field === "policyCount")) types.push(composition?.status === "compared" ? "Metadata" : "Count only");
+      if (entry.fields?.some(field => field.field === "version")) types.push("Version");
+      if (entry.fields?.some(field => !["version", "policyCount"].includes(field.field))) types.push("Metadata");
+      return types.length ? [...new Set(types)] : ["Detail unavailable"];
+    }
+
+    function summarizeChange(entry) {
+      if (entry.change === "added") return "First observed in this scan.";
+      if (entry.change === "removed") return "Not found in this scan.";
+      const composition = entry.composition;
+      if (composition?.status === "compared" && (composition.added.length || composition.removed.length)) {
+        const net = composition.afterCount - composition.beforeCount;
+        return `Members: ${composition.added.length} added / ${composition.removed.length} removed (net ${net > 0 ? "+" : ""}${net}).`;
+      }
+      const countField = entry.fields?.find(field => field.field === "policyCount");
+      if (countField) {
+        if (composition?.status === "compared") return "Count metadata changed; no member identities were added or removed.";
+        const before = memberCount(countField.from), after = memberCount(countField.to);
+        if (before !== null && after !== null) {
+          const net = after - before;
+          return `Net ${net > 0 ? "+" : ""}${net} members; exact additions and removals were not recorded.`;
+        }
+        return "Member count changed; exact additions and removals were not recorded.";
+      }
+      if (!entry.fields?.length) return "A modification was recorded, but its details are unavailable.";
+      if (entry.fields.length === 1 && entry.fields[0].field === "version") return composition?.status === "compared"
+        ? "Version changed; member identities are unchanged. Assignment impact is not established."
+        : "Version changed; member-level differences and assignment impact are not recorded.";
+      return "Changed fields: " + entry.fields.map(field => FIELD_LABELS[field.field] || field.field).join(", ") + ".";
+    }
+
+    function catalogueUrl(name, tab = "initiatives") {
+      const url = new URL("../", location.href);
+      url.searchParams.set("tab", tab);
+      url.searchParams.set("definition", name);
+      return url.href;
+    }
+
+    function buildExport(entries, filters, generatedAt, retentionDays, filteredAt, exportedAt) {
+      const cutoff = periodCutoff(filters.days, Date.parse(filteredAt));
+      return {
+        kind: "initiative", source: "azure-policies/policy-changes.json", generatedAt, retentionDays, filteredAt, exportedAt,
+        filters: { ...filters, fromInclusiveUtc: cutoff === null ? null : new Date(cutoff).toISOString() },
+        totalMatchingEvents: entries.length, entries,
+        coverage: "Recorded initiative metadata and member-reference deltas when available. Legacy counts do not reconstruct identities. All matching events are included, not just the displayed batch.",
+      };
+    }
+
+    function textNode(tag, text, className) {
+      const node = document.createElement(tag);
+      node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+
+    function action(label, callback) {
+      const button = textNode("button", label, "history-action");
+      button.type = "button";
+      button.addEventListener("click", callback);
+      return button;
+    }
+
+    async function copyId(id, button) {
+      try {
+        await navigator.clipboard.writeText(id);
+        elements.copyFallback.hidden = true;
+        elements.actionStatus.textContent = "Definition ID copied.";
+        button.textContent = "Copied";
+        setTimeout(() => { if (button.isConnected) button.textContent = "Copy ID"; }, 1500);
+      } catch (error) {
+        console.warn("Definition ID could not be copied.", error);
+        elements.copyFallback.hidden = false;
+        elements.copyValue.value = id;
+        elements.copyValue.focus();
+        elements.copyValue.select();
+        elements.actionStatus.textContent = "Clipboard access is unavailable. Select and copy the ID above.";
+      }
+    }
+
+    function renderComposition(entry) {
+      const section = document.createElement("section");
+      section.className = "composition-detail";
+      section.append(textNode("h4", "Member composition", "composition-heading"));
+      const composition = entry.composition;
+      if (!composition || composition.status !== "compared") {
+        const reason = composition?.reason || "Member identities were not recorded for this event.";
+        section.append(textNode("p", `${reason} A net count alone cannot identify additions or removals. No members have been inferred from the current catalogue.`, "history-help"));
+        return section;
+      }
+      section.append(textNode("p", `${composition.beforeCount} → ${composition.afterCount} member references. Names below were captured during the comparison, when available; links lead to current definitions.`, "history-help"));
+      if (!composition.added.length && !composition.removed.length) {
+        section.append(textNode("p", "The member lists were compared: no reference was added or removed.", "history-help"));
+        return section;
+      }
+      const grid = document.createElement("div");
+      grid.className = "composition-grid";
+      [["added", "Added"], ["removed", "Removed"]].forEach(([side, label]) => {
+        const group = document.createElement("section");
+        group.className = "composition-group";
+        group.append(textNode("h5", `${label} (${composition[side].length})`));
+        if (!composition[side].length) {
+          group.append(textNode("p", `No members ${side} in this comparison.`, "history-help"));
+        } else {
+          const list = document.createElement("ul");
+          list.className = `composition-list members-${side}`;
+          list.tabIndex = 0;
+          list.setAttribute("aria-label", `${label} member references`);
+          composition[side].forEach(member => {
+            const item = document.createElement("li");
+            item.className = "composition-member";
+            if (!member.displayName) item.append(textNode("p", "Policy name not recorded", "history-help"));
+            const link = textNode("a", member.displayName || "Look up policy definition");
+            link.href = catalogueUrl(member.id, "policies");
+            link.setAttribute("aria-label", `Look up policy: ${member.displayName || member.id}`);
+            const identifiers = document.createElement("details");
+            identifiers.className = "member-identifiers";
+            const summary = textNode("summary", "Identifiers");
+            summary.setAttribute("aria-label", `Identifiers for ${member.displayName || member.id}, reference ${member.referenceId}`);
+            const metadata = document.createElement("dl");
+            metadata.className = "event-meta";
+            [["Policy ID", member.id], ["Reference ID", member.referenceId]].forEach(([label, value]) => {
+              const description = document.createElement("dd");
+              const code = textNode("code", value, "event-id");
+              code.tabIndex = 0;
+              code.setAttribute("aria-label", label);
+              description.append(code);
+              metadata.append(textNode("dt", label), description);
+            });
+            const copy = action("Copy ID", () => copyId(member.id, copy));
+            identifiers.append(summary, metadata, copy);
+            item.append(link, identifiers);
+            list.append(item);
+          });
+          group.append(list);
+        }
+        grid.append(group);
+      });
+      section.append(grid);
+      return section;
     }
 
     function renderEntry(entry) {
+      const key = state.keys.get(entry);
       const item = document.createElement("li");
       item.className = "change-item";
-      item.append(badge(CHANGE_LABELS[entry.change] ?? entry.change, `change-badge is-${entry.change}`));
-
-      const mainCell = document.createElement("div");
-      mainCell.className = "change-main";
-
-      const name = document.createElement("span");
-      name.className = "change-name";
-      name.textContent = entry.displayName || entry.name;
-      mainCell.append(name);
-
+      item.dataset.eventKey = key;
+      const name = entry.displayName || "Initiative name not recorded";
+      item.append(textNode("h3", name, "change-name"));
       const meta = document.createElement("div");
       meta.className = "change-meta";
-      if (entry.category) meta.append(badge(entry.category, "category-badge"));
+      meta.append(textNode("span", CHANGE_LABELS[entry.change], `change-badge is-${entry.change}`));
+      changeKinds(entry).forEach(kind => meta.append(textNode("span", kind, "change-kind")));
+      const stamp = entryTimestamp(entry);
+      if (Number.isFinite(stamp)) {
+        const time = textNode("time", new Date(stamp).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC");
+        time.dateTime = new Date(stamp).toISOString();
+        meta.append(time);
+      }
+      const lookup = textNode("a", "Find in catalogue", "event-lookup");
+      lookup.href = catalogueUrl(entry.name);
+      lookup.setAttribute("aria-label", `Look up current definition: ${name}`);
+      meta.append(lookup);
+      item.append(meta, textNode("p", summarizeChange(entry), "change-explanation"));
 
-      const id = document.createElement("span");
-      id.className = "change-id";
-      const code = document.createElement("code");
-      code.textContent = entry.name;
-      const copy = document.createElement("button");
-      copy.type = "button";
-      copy.className = "copy-button";
-      copy.setAttribute("aria-label", "Copy ID");
-      copy.innerHTML = COPY_ICON;
-      copy.addEventListener("click", () => copyId(entry.name, copy));
-      id.append(code, copy);
-      meta.append(id);
-      mainCell.append(meta);
-
-      if (entry.change === "modified" && entry.fields && entry.fields.length) {
+      const details = document.createElement("details");
+      details.className = "event-details";
+      details.open = state.open.has(key);
+      const fields = entry.change === "modified" ? entry.fields || [] : [];
+      const summary = textNode("summary", "View change details");
+      summary.setAttribute("aria-label", `${summary.textContent}: ${name}`);
+      details.append(summary);
+      details.addEventListener("toggle", () => {
+        if (!details.isConnected) return;
+        if (details.open) state.open.add(key);
+        else state.open.delete(key);
+      });
+      const metadata = document.createElement("dl");
+      metadata.className = "event-meta";
+      const id = document.createElement("dd");
+      const code = textNode("code", entry.name, "event-id");
+      code.tabIndex = 0;
+      code.setAttribute("aria-label", "Definition ID");
+      id.append(code);
+      const observed = Number.isFinite(stamp) ? new Date(stamp).toISOString() : "Not recorded";
+      metadata.append(textNode("dt", "Definition ID"), id, textNode("dt", "Detected at (UTC)"), textNode("dd", observed));
+      if (entry.category) metadata.append(textNode("dt", "Category"), textNode("dd", entry.category));
+      const copy = action("Copy ID", () => copyId(entry.name, copy));
+      if (entry.change === "modified") {
+        details.append(renderComposition(entry));
+        details.append(textNode("p", "Metadata and member identities do not establish assignment impact. Historical rule JSON, parameters, descriptions and group-assignment changes are not compared here.", "history-help"));
+        if (!fields.length) details.append(textNode("p", entry.composition?.status === "compared"
+          ? "No tracked metadata field changed in this comparison."
+          : "Before/after metadata values are not available for this event.", "history-help"));
         const list = document.createElement("ul");
         list.className = "field-diff";
-        entry.fields.forEach((field) => {
+        fields.forEach(field => {
           const row = document.createElement("li");
-          const label = document.createElement("span");
-          label.className = "field-name";
-          label.textContent = `${FIELD_LABELS[field.field] ?? field.field}:`;
-          const from = document.createElement("span");
-          from.className = "field-from";
-          from.textContent = field.from || "(empty)";
-          const arrow = document.createElement("span");
-          arrow.className = "field-arrow";
-          arrow.textContent = "→";
-          const to = document.createElement("span");
-          to.className = "field-to";
-          to.textContent = field.to || "(empty)";
-          row.append(label, from, arrow, to);
+          const fieldName = FIELD_LABELS[field.field] || field.field;
+          row.append(textNode("h4", fieldName, "field-name"));
+          const pair = document.createElement("div");
+          pair.className = "field-pair";
+          [["from", "Before", "before"], ["to", "After", "after"]].forEach(([key, label, side]) => {
+            const cell = document.createElement("div");
+            cell.className = `field-side field-${side}`;
+            const value = textNode("pre", formatValue(field, key), "field-value");
+            value.tabIndex = 0;
+            value.setAttribute("aria-label", `${fieldName}: ${label.toLowerCase()}`);
+            cell.append(textNode("strong", label), value);
+            pair.append(cell);
+          });
+          row.append(pair);
           list.append(row);
         });
-        mainCell.append(list);
+        details.append(list);
+      } else {
+        details.append(textNode("p", entry.change === "added"
+          ? "Present in this scan, absent from the preceding catalogue. This detection time is not an official publication date."
+          : "Absent from this scan after appearing in the preceding catalogue. This does not establish a retirement date; the definition may no longer be in the current catalogue.", "history-help"));
       }
-
-      item.append(mainCell);
+      details.append(metadata, copy);
+      item.append(details);
       return item;
     }
 
-    function renderTimeline() {
-      elements.timeline.replaceChildren();
+    function syncMoreFilters() {
+      const visible = !mobileFilters.matches || moreFiltersOpen;
+      if (!visible && elements.historyExtra.contains(document.activeElement)) elements.historyFilterToggle.focus();
+      if (!mobileFilters.matches && document.activeElement === elements.historyFilterToggle) elements.search.focus();
+      elements.historyExtra.hidden = !visible;
+      elements.historyFilterToggle.setAttribute("aria-expanded", String(visible));
+      const active = [elements.changeFilter, elements.categoryFilter].filter(select => select.value).length;
+      elements.historyFilterToggle.textContent = `More filters · ${active} active`;
+    }
 
-      if (!state.filtered.length) {
+    function currentFilters() {
+      return { search: elements.search.value.trim(), change: elements.changeFilter.value, category: elements.categoryFilter.value, days: elements.periodFilter.value ? Number(elements.periodFilter.value) : null };
+    }
+
+    function renderTimeline() {
+      const shown = state.filtered.slice(0, state.visible);
+      const counts = { added: 0, removed: 0, modified: 0 };
+      state.filtered.forEach(entry => counts[entry.change]++);
+      const days = new Set(state.filtered.map(dayKey).filter(key => key !== "undated")).size;
+      elements.changeCounts.textContent = `Active filters · ${counts.added.toLocaleString("en-US")} Added · ${counts.removed.toLocaleString("en-US")} Removed · ${counts.modified.toLocaleString("en-US")} Modified · ${days.toLocaleString("en-US")} UTC days with events.`;
+      elements.resultCount.textContent = `${shown.length.toLocaleString("en-US")} displayed / ${state.filtered.length.toLocaleString("en-US")} matching events · ${state.entries.length.toLocaleString("en-US")} retained initiative events in the source log.`;
+      const dateKeys = [...new Set(state.filtered.map(dayKey).filter(key => key !== "undated"))].sort();
+      elements.eventRange.textContent = dateKeys.length ? `Matching detection dates (UTC): ${formatDay(dateKeys[0])}${dateKeys.length > 1 ? " to " + formatDay(dateKeys.at(-1)) : ""}.`
+        : "No dated matching events. This is not evidence of no changes outside the retained log.";
+      elements.timeline.replaceChildren();
+      if (!shown.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.innerHTML = state.entries.length
-          ? "<h2>No change matches these filters</h2><p>Widen the period or clear the filters to see the rest of the log.</p>"
-          : "<h2>No change recorded yet</h2><p>The scheduled refresh writes its first entries the next time Microsoft adds, removes, or edits a built-in initiative. Until then the catalog next door is already up to date.</p>";
+        const title = !state.entries.length ? "No initiative events in the retained log"
+          : state.filters.days !== null ? "No changes match this period and these filters" : "No changes match these filters";
+        empty.append(textNode("h2", title));
+        empty.append(textNode("p", state.entries.length
+          ? "Try all retained dates without changing your search, or reset every filter."
+          : "The source snapshot contains no retained initiative events. This does not prove that no changes occurred or that the current catalogue is up to date."));
+        const actions = document.createElement("div");
+        actions.className = "history-actions";
+        if (state.filters.days !== null) actions.append(action("Show all retained dates", () => {
+          elements.periodFilter.value = "";
+          applyFilter();
+          elements.periodFilter.focus({ preventScroll: true });
+        }));
+        if (hasFilters()) actions.append(action("Reset all filters", resetFilters));
+        empty.append(actions);
         elements.timeline.append(empty);
-        elements.resultCount.textContent = "";
-        const stale = document.querySelector(".load-more");
-        if (stale) stale.remove();
+      } else {
+        const allDays = new Map();
+        state.filtered.forEach(entry => allDays.set(dayKey(entry), (allDays.get(dayKey(entry)) || 0) + 1));
+        const groups = new Map();
+        shown.forEach(entry => {
+          const key = dayKey(entry);
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(entry);
+        });
+        groups.forEach((entries, key) => {
+          const section = document.createElement("section");
+          section.className = "timeline-day";
+          const heading = document.createElement("div");
+          heading.className = "timeline-heading";
+          const title = textNode("h2", formatDay(key) + (key === "undated" ? "" : " · UTC"), "timeline-date");
+          title.id = "day-" + key;
+          section.setAttribute("aria-labelledby", title.id);
+          heading.append(title, textNode("span", `${entries.length} of ${allDays.get(key)} matching events shown`, "timeline-tally"));
+          const list = document.createElement("ul");
+          list.className = "change-list";
+          entries.forEach(entry => list.append(renderEntry(entry)));
+          section.append(heading, list);
+          elements.timeline.append(section);
+        });
+      }
+      const remaining = state.filtered.length - shown.length;
+      elements.loadMore.hidden = remaining <= 0;
+      elements.loadMore.textContent = `Load ${Math.min(PAGE_SIZE, remaining)} more (${remaining.toLocaleString("en-US")} remaining)`;
+      elements.exportChanges.disabled = !state.filtered.length;
+      syncMoreFilters();
+    }
+
+    function hasFilters() {
+      return Boolean(elements.search.value || elements.changeFilter.value || elements.categoryFilter.value || elements.periodFilter.value);
+    }
+
+    function syncUrl() {
+      try {
+        const url = new URL(location.href);
+        [elements.search, elements.changeFilter, elements.categoryFilter, elements.periodFilter].forEach(control => {
+          url.searchParams.delete(control.id);
+          if (control.value) url.searchParams.set(control.id, control.value);
+        });
+        history.replaceState(history.state, "", url);
+        window.dispatchEvent(new Event("historyfilterschange"));
+      } catch (error) {
+        console.warn("History filter URL could not be updated.", error);
+        elements.actionStatus.textContent = "Filters are applied, but the address could not be updated.";
+      }
+    }
+
+    function restoreFilters() {
+      const params = new URLSearchParams(location.search);
+      elements.search.value = params.get("search") || "";
+      const category = params.get("categoryFilter") || "";
+      if (category && ![...elements.categoryFilter.options].some(option => option.value === category)) elements.categoryFilter.add(new Option(`${category} (not in retained log)`, category));
+      elements.categoryFilter.value = category;
+      [elements.changeFilter, elements.periodFilter].forEach(select => {
+        const value = params.get(select.id) || "";
+        if ([...select.options].some(option => option.value === value)) select.value = value;
+        else {
+          select.value = "";
+          elements.actionStatus.textContent = "The link contains an unsupported filter value. That filter was reset.";
+        }
+      });
+    }
+
+    function applyFilter(updateUrl = true) {
+      if (state.status !== "ready") return;
+      clearTimeout(searchTimer);
+      searchTimer = null;
+      state.filters = currentFilters();
+      const now = Date.now();
+      state.filteredAt = new Date(now).toISOString();
+      state.filtered = filterEntries(state.entries, state.filters, now);
+      state.visible = PAGE_SIZE;
+      elements.clearFilters.hidden = !hasFilters();
+      const undated = state.filters.days === null ? 0 : filterEntries(state.entries, { ...state.filters, days: null }, now).filter(entry => dayKey(entry) === "undated").length;
+      elements.undatedNotice.hidden = !undated;
+      elements.undatedNotice.textContent = `${undated} matching event(s) have no readable date and are excluded by the period filter. Choose All retained to include them.`;
+      renderTimeline();
+      if (updateUrl) syncUrl();
+    }
+
+    function resetFilters() {
+      [elements.search, elements.changeFilter, elements.categoryFilter, elements.periodFilter].forEach(control => { control.value = ""; });
+      applyFilter();
+      elements.search.focus({ preventScroll: true });
+    }
+
+    function exportFiltered() {
+      if (searchTimer) applyFilter();
+      if (!state.filtered.length) {
+        elements.actionStatus.textContent = "No matching events to export.";
         return;
       }
-
-      const shown = state.filtered.slice(0, state.visible);
-      const days = new Map();
-      shown.forEach((entry) => {
-        const key = dayKey(entry);
-        if (!days.has(key)) days.set(key, []);
-        days.get(key).push(entry);
-      });
-
-      const fragment = document.createDocumentFragment();
-      days.forEach((entries, key) => {
-        const section = document.createElement("section");
-        section.className = "timeline-day";
-
-        const heading = document.createElement("div");
-        heading.className = "timeline-heading";
-        heading.append(badge(formatDay(key), "timeline-date"));
-
-        const tally = document.createElement("div");
-        tally.className = "timeline-tally";
-        ["added", "removed", "modified"].forEach((change) => {
-          const count = entries.filter((entry) => entry.change === change).length;
-          if (count) tally.append(badge(`${count} ${CHANGE_LABELS[change].toLowerCase()}`, `change-badge is-${change}`));
-        });
-        heading.append(tally);
-        section.append(heading);
-
-        const list = document.createElement("ul");
-        list.className = "change-list";
-        entries.forEach((entry) => list.append(renderEntry(entry)));
-        section.append(list);
-        fragment.append(section);
-      });
-      elements.timeline.append(fragment);
-
-      elements.resultCount.textContent = shown.length < state.filtered.length
-        ? `Showing ${shown.length.toLocaleString()} of ${state.filtered.length.toLocaleString()} matching changes.`
-        : `${state.filtered.length.toLocaleString()} change${state.filtered.length === 1 ? "" : "s"} shown.`;
-      renderLoadMore();
+      elements.exportFallback.hidden = true;
+      let url;
+      const link = document.createElement("a");
+      try {
+        const data = buildExport(state.filtered, state.filters, state.generatedAt, state.retentionDays, state.filteredAt, new Date().toISOString());
+        url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2) + "\n"], { type: "application/json" }));
+        link.href = url;
+        link.download = `azure-initiative-changes-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.append(link);
+        link.click();
+        elements.actionStatus.textContent = `JSON export requested for all ${state.filtered.length.toLocaleString("en-US")} matching events.`;
+      } catch (error) {
+        console.error("Initiative history export failed.", error);
+        elements.exportFallback.hidden = false;
+        elements.actionStatus.textContent = "The JSON export could not be started. Retry or use the source-log download.";
+      } finally {
+        link.remove();
+        if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
     }
 
-    function renderLoadMore() {
-      const existing = document.querySelector(".load-more");
-      if (existing) existing.remove();
-      if (state.visible >= state.filtered.length) return;
-
-      const remaining = state.filtered.length - state.visible;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "load-more";
-      button.textContent = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
-      button.addEventListener("click", () => {
-        state.visible += PAGE_SIZE;
-        renderTimeline();
-        const next = document.querySelector(".load-more");
-        if (next) next.focus();
-      });
-      elements.timeline.insertAdjacentElement("afterend", button);
-    }
-
-    function applyFilter() {
-      const query = normalize(state.query.trim());
-      const change = elements.changeFilter.value;
-      const category = elements.categoryFilter.value;
-      const days = Number.parseInt(elements.periodFilter.value, 10);
-      const cutoff = Number.isNaN(days) ? null : Date.now() - days * 86400000;
-
-      state.filtered = state.entries.filter((entry) => {
-        if (change && entry.change !== change) return false;
-        if (category && entry.category !== category) return false;
-        if (cutoff !== null) {
-          const stamp = new Date(entry.detectedAt).getTime();
-          if (Number.isNaN(stamp) || stamp < cutoff) return false;
-        }
-        if (query && !normalize(`${entry.displayName} ${entry.category} ${entry.name}`).includes(query)) return false;
-        return true;
-      });
-
-      state.visible = PAGE_SIZE;
-      elements.clearFilters.hidden = !query && !change && !category && !elements.periodFilter.value;
-      renderStats();
-      renderTimeline();
-    }
-
-    function renderStats() {
-      const counts = { added: 0, removed: 0, modified: 0 };
-      state.filtered.forEach((entry) => {
-        if (counts[entry.change] !== undefined) counts[entry.change] += 1;
-      });
-      const stats = [
-        { label: "Added", value: counts.added },
-        { label: "Removed", value: counts.removed },
-        { label: "Modified", value: counts.modified },
-        { label: "Days with changes", value: new Set(state.filtered.map(dayKey)).size },
-      ];
-      elements.statsGrid.replaceChildren();
-      stats.forEach((stat) => {
-        const card = document.createElement("div");
-        card.className = "stat-card";
-        card.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
-        elements.statsGrid.append(card);
-      });
+    async function init() {
+      if (state.status === "fetching") return;
+      const fromRetry = document.activeElement === elements.retryHistory;
+      state.status = "fetching";
+      elements.historyControls.disabled = true;
+      elements.retryHistory.disabled = true;
+      elements.historyError.hidden = true;
+      elements.timeline.setAttribute("aria-busy", "true");
+      elements.refreshedAt.textContent = "Loading...";
+      elements.retention.textContent = "Loading...";
+      elements.changeCounts.textContent = "Counts: loading...";
+      elements.resultCount.textContent = "Loading initiative changes...";
+      elements.eventRange.textContent = "Detection dates: loading...";
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      try {
+        const response = await fetch("../policy-changes.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`History request returned ${response.status}`);
+        const payload = await response.json();
+        state.entries = validateHistory(payload);
+        state.keys = new Map(state.entries.map((entry, index) => [entry, String(index)]));
+        state.open.clear();
+        state.generatedAt = payload.generatedAt || null;
+        state.retentionDays = payload.retentionDays || null;
+        elements.categoryFilter.replaceChildren(new Option("All categories", ""));
+        [...new Set(state.entries.map(entry => entry.category).filter(Boolean))].sort().forEach(category => elements.categoryFilter.add(new Option(category, category)));
+        elements.retention.textContent = state.retentionDays ? `Up to ${state.retentionDays} days` : "Not reported";
+        elements.retentionInline.textContent = state.retentionDays ? String(state.retentionDays) : "an unreported number of";
+        const stamp = entryTimestamp({ detectedAt: state.generatedAt });
+        elements.refreshedAt.textContent = Number.isFinite(stamp)
+          ? new Date(stamp).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not recorded";
+        restoreFilters();
+        state.status = "ready";
+        elements.historyControls.disabled = false;
+        applyFilter(false);
+      } catch (error) {
+        console.error("Initiative history could not be loaded.", error);
+        state.status = "error";
+        elements.historyError.hidden = false;
+        elements.refreshedAt.textContent = elements.retention.textContent = "Unavailable";
+        elements.changeCounts.textContent = "Counts unavailable.";
+        elements.resultCount.textContent = "Results unavailable. Retry to load the retained log.";
+        elements.eventRange.textContent = "Detection dates unavailable.";
+        elements.timeline.replaceChildren();
+        elements.loadMore.hidden = true;
+        elements.exportChanges.disabled = true;
+      } finally {
+        clearTimeout(timeout);
+        elements.retryHistory.disabled = false;
+        elements.timeline.setAttribute("aria-busy", "false");
+        if (fromRetry) (state.status === "ready" ? elements.search : elements.retryHistory).focus({ preventScroll: true });
+      }
     }
 
     let searchTimer;
     elements.search.addEventListener("input", () => {
-      state.query = elements.search.value;
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(applyFilter, 150);
+      searchTimer = setTimeout(() => { searchTimer = null; applyFilter(); }, 150);
     });
-    [elements.changeFilter, elements.categoryFilter, elements.periodFilter]
-      .forEach((select) => select.addEventListener("change", applyFilter));
-    elements.clearFilters.addEventListener("click", () => {
-      elements.search.value = "";
-      elements.changeFilter.value = "";
-      elements.categoryFilter.value = "";
-      elements.periodFilter.value = "";
-      state.query = "";
-      applyFilter();
-      elements.search.focus();
-    });
-
-    async function init() {
-      elements.currentYear.textContent = new Date().getFullYear();
-      try {
-        const response = await fetch("../policy-changes.json", { cache: "no-store" });
-        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
-        const payload = await response.json();
-
-        // One file holds both kinds; this page owns one of them. Newest first is
-        // how the file is written, but a hand-edited order would silently
-        // scramble the timeline, so the order is asserted here rather than trusted.
-        state.entries = (payload.entries || [])
-          .filter((entry) => entry.kind === KIND)
-          .sort((a, b) => String(b.detectedAt ?? "").localeCompare(String(a.detectedAt ?? "")));
-
-        const categories = [...new Set(state.entries.map((entry) => entry.category).filter(Boolean))].sort();
-        categories.forEach((category) => elements.categoryFilter.append(new Option(category, category)));
-
-        const retention = payload.retentionDays;
-        if (retention) {
-          elements.retention.textContent = `${retention} days`;
-          elements.retentionInline.textContent = String(retention);
-        }
-
-        const generatedAt = payload.generatedAt ? new Date(payload.generatedAt) : null;
-        elements.refreshedAt.textContent = !generatedAt || Number.isNaN(generatedAt.getTime())
-          ? "Not recorded yet"
-          : generatedAt.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-
-        applyFilter();
-      } catch (error) {
-        console.error(error);
-        elements.timeline.innerHTML = '<div class="empty-state"><h2>The change log could not be loaded</h2><p>Please refresh the page or try again later.</p></div>';
-        elements.refreshedAt.textContent = "Unavailable";
+    [elements.changeFilter, elements.categoryFilter, elements.periodFilter].forEach(select => select.addEventListener("change", () => applyFilter()));
+    elements.clearFilters.addEventListener("click", resetFilters);
+    elements.exportChanges.addEventListener("click", exportFiltered);
+    elements.retryHistory.addEventListener("click", init);
+    elements.historyFilterToggle.addEventListener("click", () => { moreFiltersOpen = !moreFiltersOpen; syncMoreFilters(); });
+    elements.historyFiltersDone.addEventListener("click", () => { moreFiltersOpen = false; syncMoreFilters(); elements.historyFilterToggle.focus(); });
+    elements.historyExtra.addEventListener("keydown", event => {
+      if (event.key === "Escape" && mobileFilters.matches) {
+        moreFiltersOpen = false;
+        syncMoreFilters();
+        elements.historyFilterToggle.focus();
       }
-    }
+    });
+    mobileFilters.addEventListener("change", syncMoreFilters);
+    elements.loadMore.addEventListener("click", () => {
+      const next = state.filtered[state.visible];
+      state.visible += PAGE_SIZE;
+      renderTimeline();
+      const item = next && elements.timeline.querySelector(`[data-event-key="${state.keys.get(next)}"]`);
+      if (item) {
+        item.querySelector("summary").focus({ preventScroll: true });
+        item.scrollIntoView({ block: "start", behavior: "instant" });
+      }
+    });
+    window.addEventListener("popstate", () => {
+      if (state.status !== "ready") return;
+      restoreFilters();
+      applyFilter(false);
+      window.dispatchEvent(new Event("historyfilterschange"));
+    });
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    syncMoreFilters();
     init();
 
     let scrollTicking = false;
+    const backToTop = document.getElementById("backToTop");
     window.addEventListener("scroll", () => {
       if (scrollTicking) return;
       scrollTicking = true;
       requestAnimationFrame(() => {
-        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
+        backToTop.classList.toggle("visible", window.scrollY > 600);
         scrollTicking = false;
       });
     }, { passive: true });
-    elements.backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        // A checkbox is only worth a query parameter when it differs from its
-        // own default. Writing "1" for a checked box would have been enough
-        // while every toggle here started unchecked, but "Hide deprecated" and
-        // "Hide preview" start checked, and unchecking them has to survive a
-        // reload just as clearly.
-        if (el.type === "checkbox") {
-          if (el.checked === el.defaultChecked) return "";
-          return el.checked ? "1" : "0";
-        }
-        return el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function refreshShareLinks() {
+        var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+        var url = encodeURIComponent(pageUrl);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+          var href = targets[el.getAttribute('data-share')];
+          if (href) el.setAttribute('href', href);
+        });
+      }
+      refreshShareLinks();
+      window.addEventListener("historyfilterschange", refreshShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

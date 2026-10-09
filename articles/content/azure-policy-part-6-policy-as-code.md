@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Prepare a versioned repository, test scope and reviewed deployment pipeline for your Policy objects."
 title = "Azure Policy, Part 6: Azure Policy as Code"
 date = "2026-09-04"
 description = "Part 6 of the Azure Policy series: why the portal stops working at scale, Microsoft's create-test-deploy workflow, the deployment ordering problem, drift and desired state, the managed identity permission gap, and what to put in your repository."
@@ -7,9 +8,31 @@ tags = ["Azure Policy", "Governance", "DevOps", "CI/CD", "Bicep", "Terraform"]
 categories = ["Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-6.svg"
 featured = false
+leadSections = ["What goes in the repository", "Pipeline shape"]
+related = ["azure-policy-part-7-epac", "github-contribution-workflow"]
 +++
 
-Five posts in, the model is complete: definitions, initiatives, assignments, exclusions, exemptions. All five are JSON documents with dependencies on each other, and every one of them can break a production deployment.
+## Destination and readiness checklist
+
+Prerequisites: understand [assignments](/articles/azure-policy-part-3-assignments/) and [exemptions](/articles/azure-policy-part-5-exemptions/) before automating them. The common workflow is **Create → Test → Deploy**: export definitions/initiatives/assignments/exemptions into versioned files, review a diff, test in an isolated scope, then approve promotion. Repository and pipeline examples follow this checklist; choose the deployment technology separately.
+
+- Export existing objects and preserve their source scope/IDs before adopting ownership.
+- Store definitions before referencing them in initiatives and assignments.
+- Keep environment parameters and scope mappings separate from reusable definitions.
+- Separate the pipeline identity from assignment remediation identities and record both role scopes.
+- Produce an explicit deletion plan and approval gate; omission from a repository must not silently imply safe deletion.
+- Keep test results, approvals and recovery instructions with the change.
+
+| Implementation problem | Consequence | Concrete control |
+|---|---|---|
+| Ordering | Missing referenced objects | Validate definitions → initiatives → assignments → exemptions |
+| Scope spread | Unintended inherited effect | Preview the complete descendant scope and use rollout rings |
+| Identity gap | Remediation cannot act | Review/grant only the required managed-identity roles |
+| Desired-state deletion | Existing governance objects removed | Export, ownership boundaries, reviewed deletion plan and recovery |
+
+Technical execution validation: **not recorded**. Reference: [Microsoft's Policy as Code workflow](https://learn.microsoft.com/azure/governance/policy/concepts/policy-as-code).
+
+Five posts in, the model is complete: definitions, initiatives, assignments, exclusions, exemptions.
 
 Now scale it. Four management group layers, sixty subscriptions, three regulatory frameworks, two clouds, a security team that owns half the controls and a platform team that owns the other half, and an auditor who wants to know why control 4.2.1 was disabled between March and June.
 

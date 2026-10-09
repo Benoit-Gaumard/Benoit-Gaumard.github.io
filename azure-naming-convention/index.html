@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -98,6 +99,8 @@
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
       --cp-danger-bg: #fdf2f2;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -114,7 +117,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -171,7 +174,7 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
@@ -200,7 +203,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -220,7 +223,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: inherit; text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -237,7 +240,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -289,7 +292,7 @@
     :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
 
     main { padding-block: 2.5rem 4rem; }
-    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.5rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     #page-title { display: flex; align-items: center; gap: .3em; }
     .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
@@ -314,27 +317,55 @@
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
     .calculator-card {
-      padding: 2rem;
+      padding: 1.5rem;
       border: 1px solid var(--cp-border);
-      border-radius: 12px;
-      background: var(--cp-panel-strong);
-      box-shadow: var(--cp-shadow);
-      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      background: var(--cp-surface);
       margin-bottom: 1.5rem;
     }
     .card-heading { margin: 0 0 1.25rem; font-size: 1.2rem; }
+    [hidden] { display: none !important; }
+    main [id] { scroll-margin-top: 6rem; }
+    .generator-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "fields preview"; gap: 1.5rem; align-items: start; }
+    .generator-fields { grid-area: fields; min-width: 0; padding: 0; margin: 0; border: 0; }
+    .name-preview { grid-area: preview; min-width: 0; padding: 1.25rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
+    .name-preview h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+    .name-preview.is-error { border-color: var(--cp-danger); }
+    .name-preview.is-unverified { border-color: var(--cp-warning); }
+    .preview-type, .format-note, .availability-note, .field-hint { margin: .35rem 0; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
+    .preview-type { overflow-wrap: anywhere; }
+    .format-note { margin-top: .75rem; }
+    .availability-note { margin-top: .75rem; font-weight: 600; }
+    .validation-status { margin: .75rem 0 .4rem; color: var(--cp-success); font-size: .9rem; font-weight: 600; line-height: 1.5; }
+    .name-preview.is-error .validation-status { color: var(--cp-danger); }
+    .name-preview.is-unverified .validation-status { color: var(--cp-warning); }
+    .name-length { margin: .4rem 0; color: var(--cp-text); font-size: .85rem; }
+    .field-error { margin: 0; color: var(--cp-danger); font-size: .85rem; line-height: 1.5; }
+    [aria-invalid="true"] { border-color: var(--cp-danger) !important; }
+    .rule-details { margin-top: 1rem; font-size: .85rem; line-height: 1.5; }
+    .rule-details summary { min-height: 2.75rem; padding: .5rem 0; color: var(--cp-link); cursor: pointer; font-weight: 600; }
+    .rule-details dl { margin: .5rem 0; }
+    .rule-details dt { margin-top: .5rem; font-weight: 650; }
+    .rule-details dd { margin: .25rem 0 .75rem; color: var(--cp-text-muted); overflow-wrap: anywhere; }
+    .transformation-list { margin: .5rem 0; padding-left: 1.25rem; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; overflow-wrap: anywhere; }
+    .copy-fallback { min-height: 3rem; width: 100%; padding: .5rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; color: var(--cp-text); background: var(--cp-surface); }
+    .copy-feedback { margin: .5rem 0 0; font-size: .85rem; color: var(--cp-text-muted); line-height: 1.5; }
+    .copy-feedback:empty { margin: 0; }
+    .generator-note { margin: 1rem 0 0; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
+    .generator-note code { overflow-wrap: anywhere; }
+    .generator-fields > a { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: .5rem; font-size: .85rem; }
 
-    .field-row { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
-    .unit-field { display: flex; flex-direction: column; gap: .5rem; flex: 1 1 11rem; }
+    .field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 1rem; }
+    .unit-field { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
+    .unit-field.is-wide { grid-column: 1 / -1; }
     .unit-field label {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .03em;
       color: var(--cp-text-muted);
     }
     .unit-field input, .unit-field select {
-      min-height: 3.1rem;
+      min-height: 3rem;
+      min-width: 0;
       border: 1px solid var(--cp-border-strong);
       border-radius: 8px;
       background: var(--cp-surface);
@@ -343,40 +374,36 @@
       width: 100%;
     }
 
-    .result-display {
-      padding: 1.25rem 1.5rem;
-      border: 1px solid var(--cp-border);
-      border-radius: 10px;
-      background: var(--cp-accent-soft);
-      margin-bottom: .9rem;
-    }
-    .result-display.is-error { background: var(--cp-danger-bg); border-color: var(--cp-danger); }
-    .result-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .result-label { color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .result-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; margin-top: .75rem; }
     .result-name {
       font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--cp-accent);
+      font-weight: 700;
+      color: var(--cp-text);
       overflow-wrap: anywhere;
+      min-width: 0;
+      flex: 1 1 16rem;
     }
-    .result-display.is-error .result-name { color: var(--cp-danger); }
+    .name-preview.is-error .result-name { color: var(--cp-danger); }
     .copy-button {
       flex: 0 0 auto;
+      min-height: 2.75rem;
       padding: .45rem .9rem;
       border: 1px solid var(--cp-border-strong);
       border-radius: 8px;
       background: var(--cp-surface);
       color: var(--cp-accent);
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
     }
     .copy-button:hover { background: var(--cp-surface-soft); }
-    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); background: var(--cp-success-bg); }
-    .result-note { margin: 0; color: var(--cp-text-muted); font-size: 0.8rem; }
+    .copy-button:disabled { cursor: not-allowed; color: var(--cp-text-muted); background: var(--cp-surface-soft); }
+    .catalogue-button { min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-link); font-weight: 600; font-size: .85rem; cursor: pointer; }
+    .catalogue-button:hover { border-color: var(--cp-accent); }
 
     .table-toolbar { margin-bottom: 1rem; }
+    .table-toolbar label { display: block; margin-bottom: .4rem; color: var(--cp-text-muted); font-size: .85rem; font-weight: 600; }
     .table-toolbar input {
       width: 100%;
       max-width: 24rem;
@@ -407,14 +434,15 @@
       color: var(--cp-text-muted);
       border-bottom: 1px solid var(--cp-border);
       white-space: nowrap;
-      cursor: pointer;
       user-select: none;
     }
     thead th:hover { color: var(--cp-text); }
+    thead th button { display: flex; align-items: center; gap: .5rem; min-height: 2.75rem; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-transform: inherit; cursor: pointer; }
     thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
     thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
-    tbody td { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
-    tbody tr:last-child td { border-bottom: 0; }
+    tbody td, tbody th { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; text-align: left; }
+    tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+    tbody .use-type-cell { white-space: nowrap; }
     tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: var(--cp-accent); }
     tbody .provider-cell { color: var(--cp-text-muted); font-size: 0.8rem; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
     #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
@@ -482,17 +510,33 @@
       .header-links a:hover { background: var(--cp-surface-soft); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
+      .generator-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "preview" "fields"; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
       .calculator-card { padding: 1.25rem; }
-      .field-row { flex-direction: column; align-items: stretch; }
+      .field-row { grid-template-columns: minmax(0, 1fr); }
+      .unit-field { flex: none; }
+      .calculator-card, .name-preview { padding: 1rem; }
       .result-row { flex-direction: column; align-items: flex-start; }
+      .result-name { flex: none; width: 100%; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
       .footer-bottom { flex-direction: column; }
+    }
+    @media (max-width: 40rem) {
+      .table-wrap table, .table-wrap tbody { display: block; }
+      .table-wrap thead { display: block; }
+      .table-wrap thead tr { display: flex; flex-wrap: wrap; }
+      .table-wrap thead th { position: static; padding: .25rem .5rem; }
+      .table-wrap thead th:last-child { display: none; }
+      .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr); padding: .75rem; border-bottom: 1px solid var(--cp-border); }
+      .table-wrap tbody tr:last-child { border: 0; }
+      .table-wrap tbody td, .table-wrap tbody th { display: block; border: 0; padding: .25rem; overflow-wrap: anywhere; }
+      .table-wrap tbody td[data-label]::before { content: attr(data-label) ": "; color: var(--cp-text-muted); font-family: "Segoe UI", sans-serif; font-size: .8rem; font-weight: 400; }
+      .table-wrap tbody .use-type-cell { padding-top: .5rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -530,13 +574,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -573,12 +617,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/azure-naming-convention/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/azure-naming-convention/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -597,6 +1011,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/" aria-current="page"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -612,25 +1067,66 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="28" height="28"></span>Azure Naming Convention</h1>
-      <p class="intro-text">Generate Azure resource names following the <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank" rel="noopener">Cloud Adoption Framework naming convention</a>, and browse recommended resource type abbreviations.</p>
-      <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">&hellip;</strong></p>
+      <p class="intro-text">Propose a resource name using <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank" rel="noopener">Cloud Adoption Framework abbreviations</a>, then check the selected type's naming constraints.</p>
+      <p class="refresh-meta">Abbreviations: <strong id="refreshedAt">Loading&hellip;</strong> &middot; Rules checked: <strong id="rulesCheckedAt">Loading&hellip;</strong></p>
     </section>
 
-    <section aria-label="Name generator">
+    <section id="generator" aria-labelledby="generatorHeading">
+      <noscript><p>The generator needs JavaScript. Browse the <a href="./abbreviations.json">abbreviation and rule data</a> or the <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules">official naming rules</a>.</p></noscript>
+      <div class="data-error" id="loadError" role="alert" hidden>
+        <p>The naming catalogue could not be loaded. No name can be validated until it is available.</p>
+        <button class="catalogue-button" id="retryLoad" type="button">Retry loading catalogue</button>
+      </div>
       <div class="calculator-card">
-        <h2 class="card-heading">Generate a resource name</h2>
-        <div class="field-row">
-          <div class="unit-field" style="flex: 2 1 16rem;">
-            <label for="resourceSelect">Resource type</label>
-            <select id="resourceSelect"></select>
+        <h2 class="card-heading" id="generatorHeading" tabindex="-1">Generate a resource name</h2>
+        <div class="generator-layout">
+        <section class="name-preview" id="namePreview" aria-labelledby="previewHeading">
+          <h3 id="previewHeading">Proposed name</h3>
+          <p class="preview-type" id="selectedType">Loading resource types&hellip;</p>
+          <div class="result-row">
+            <output class="result-name" id="fullName" for="resourceSelect workloadInput envSelect regionSelect instanceInput"></output>
+            <button class="copy-button" id="copyNameButton" type="button" disabled>Copy name</button>
           </div>
-          <div class="unit-field">
+          <p class="name-length" id="nameLength"></p>
+          <p class="validation-status" id="nameValidation" role="status" aria-live="polite" aria-atomic="true">Waiting for naming rules.</p>
+          <p class="availability-note">Name availability is not checked.</p>
+          <p class="format-note" id="formatNote"></p>
+          <ul class="transformation-list" id="transformationList"></ul>
+          <details class="rule-details">
+            <summary>Constraints and validation limits</summary>
+            <dl>
+              <dt>Resource provider</dt><dd id="providerRule">Not available yet.</dd>
+              <dt>Characters and boundaries</dt><dd id="charactersRule">Not available yet.</dd>
+              <dt>Uniqueness scope</dt><dd id="scopeRule">Not available yet.</dd>
+            </dl>
+            <p class="generator-note" id="ruleCaveat" hidden></p>
+            <p>A format check is not a reservation or deployment guarantee. This generator uses lowercase ASCII components. It does not check reserved words, trademarks, subscription policies, service availability or whether a name is already in use.</p>
+            <a id="ruleSource" href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules" target="_blank" rel="noopener">Verify the official resource naming rules</a>
+          </details>
+          <div id="copyFallback" hidden>
+            <label class="field-hint" for="copyValue">Select and copy the proposed name</label>
+            <input class="copy-fallback" id="copyValue" type="text" readonly>
+          </div>
+          <p class="copy-feedback" id="copyFeedback" role="status" aria-live="polite"></p>
+        </section>
+        <fieldset class="generator-fields" id="generatorFields" disabled aria-label="Name components">
+        <div class="field-row">
+          <div class="unit-field is-wide">
+            <label for="resourceSelect">Resource type</label>
+            <input id="resourceSelect" type="text" list="resourceSuggestions" autocomplete="off" spellcheck="false" placeholder="Search a type or abbreviation, e.g. storage or st" aria-describedby="resourceHint resourceError">
+            <datalist id="resourceSuggestions"></datalist>
+            <p class="field-hint" id="resourceHint">Choose a suggestion, enter an exact abbreviation, or use a catalogue row below.</p>
+            <p class="field-error" id="resourceError" hidden></p>
+          </div>
+          <div class="unit-field is-wide">
             <label for="workloadInput">Workload / app</label>
-            <input id="workloadInput" type="text" value="myapp" autocomplete="off" spellcheck="false">
+            <input id="workloadInput" type="text" value="myapp" autocomplete="off" spellcheck="false" aria-describedby="workloadHint workloadError nameValidation">
+            <p class="field-hint" id="workloadHint">Use a short workload identifier. Normalization is shown beside the proposal.</p>
+            <p class="field-error" id="workloadError" hidden></p>
           </div>
           <div class="unit-field">
             <label for="envSelect">Environment</label>
-            <select id="envSelect">
+            <select id="envSelect" aria-describedby="environmentError">
               <option value="dev">dev</option>
               <option value="test">test</option>
               <option value="qa">qa</option>
@@ -638,10 +1134,11 @@
               <option value="prod" selected>prod</option>
               <option value="shared">shared</option>
             </select>
+            <p class="field-error" id="environmentError" hidden></p>
           </div>
           <div class="unit-field">
             <label for="regionSelect">Region</label>
-            <select id="regionSelect">
+            <select id="regionSelect" aria-describedby="regionHint regionError nameValidation">
               <option value="eastus">eastus</option>
               <option value="eastus2">eastus2</option>
               <option value="centralus">centralus</option>
@@ -656,69 +1153,60 @@
               <option value="japaneast">japaneast</option>
               <option value="australiaeast">australiaeast</option>
             </select>
+            <p class="field-hint" id="regionHint">A naming component only; this does not check service availability in that region.</p>
+            <p class="field-error" id="regionError" hidden></p>
           </div>
-          <div class="unit-field" style="flex: 0 1 6rem;">
+          <div class="unit-field">
             <label for="instanceInput">Instance</label>
-            <input id="instanceInput" type="text" value="001" autocomplete="off" spellcheck="false">
+            <input id="instanceInput" type="text" value="001" autocomplete="off" spellcheck="false" aria-describedby="instanceError nameValidation">
+            <p class="field-error" id="instanceError" hidden></p>
           </div>
         </div>
-
-        <div class="result-display" id="fullResult">
-          <div class="result-row">
-            <div>
-              <div class="result-label">Standard name (hyphenated)</div>
-              <div class="result-name" id="fullName"></div>
-            </div>
-            <button class="copy-button" id="copyFullButton" type="button">Copy</button>
-          </div>
+        <p class="generator-note">Suggested pattern: <code>&lt;type&gt;-&lt;workload&gt;-&lt;environment&gt;-&lt;region&gt;-&lt;instance&gt;</code>. Separators depend on the resource type. No component is silently shortened or replaced with a default.</p>
+        <a href="#abbreviations">Browse resource abbreviations</a>
+        </fieldset>
         </div>
-        <div class="result-display" id="compactResult">
-          <div class="result-row">
-            <div>
-              <div class="result-label">Compact name (no hyphens, for globally-unique resources)</div>
-              <div class="result-name" id="compactName"></div>
-            </div>
-            <button class="copy-button" id="copyCompactButton" type="button">Copy</button>
-          </div>
-        </div>
-        <p class="result-note">Pattern: <code>&lt;resource-type&gt;-&lt;workload&gt;-&lt;environment&gt;-&lt;region&gt;-&lt;instance&gt;</code>. Use the compact name for resources that don't allow hyphens or require a globally unique, lowercase, alphanumeric-only name (e.g. storage accounts, container registries, key vaults) - storage accounts are additionally limited to 24 characters.</p>
       </div>
     </section>
 
-    <section aria-label="Abbreviations reference">
+    <section id="abbreviations" aria-label="Abbreviations reference">
       <div class="calculator-card">
         <h2 class="card-heading">Resource type abbreviations</h2>
         <div class="table-toolbar">
-          <input id="search" type="search" placeholder="Filter by resource, category, or abbreviation..." autocomplete="off" spellcheck="false" aria-label="Filter by resource, category, or abbreviation">
+          <label for="search">Search the catalogue</label>
+          <input id="search" type="search" placeholder="Type, category, abbreviation or provider" autocomplete="off" spellcheck="false" disabled>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th data-key="resource">Resource <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="abbreviation">Abbreviation <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="provider">Provider namespace <span class="sort-arrow">&#9650;</span></th>
+                <th scope="col" data-key="resource"><button type="button">Resource <span class="sort-arrow" aria-hidden="true">&#9650;</span></button></th>
+                <th scope="col" data-key="category"><button type="button">Category <span class="sort-arrow" aria-hidden="true">&#9650;</span></button></th>
+                <th scope="col" data-key="abbreviation"><button type="button">Abbreviation <span class="sort-arrow" aria-hidden="true">&#9650;</span></button></th>
+                <th scope="col" data-key="provider"><button type="button">Provider namespace <span class="sort-arrow" aria-hidden="true">&#9650;</span></button></th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody id="tableBody"></tbody>
           </table>
         </div>
-        <p id="resultCount" aria-live="polite"></p>
+        <p id="resultCount" role="status" aria-live="polite"></p>
       </div>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About Azure naming conventions</h2>
-      <p>Generate resource names that follow the Microsoft Cloud Adoption Framework pattern, and browse the recommended abbreviation for each resource type.</p>
+      <p>Compose a naming proposal using Microsoft Cloud Adoption Framework abbreviations. The preview checks the rules recorded for the selected provider; it does not reserve the name or ask Azure to approve a deployment.</p>
       <h3>The usual pattern</h3>
       <p>The framework suggests composing a name from a resource type abbreviation, a workload or application name, an environment, a region, and an instance number — for example <code>vm-payments-prod-weu-01</code>. The order matters less than applying it consistently: names that sort predictably are far easier to filter, script against, and audit.</p>
       <h3>Constraints to respect</h3>
       <ul>
         <li>Length limits vary widely; storage accounts allow 24 characters, lowercase letters and digits only, with no hyphens.</li>
+        <li>Key vaults allow hyphens and have their own 3-24 character limit. Global uniqueness does not imply a compact format.</li>
         <li>Some names must be globally unique because they become part of a DNS name — storage accounts, key vaults, and web apps among them.</li>
         <li>Most resources cannot be renamed after creation, so the cost of getting it wrong is a redeployment.</li>
       </ul>
+      <p>If the complete name is too long, shorten the components yourself. This generator never truncates the output. When the reference provides only partial constraints, or no recorded rule for a type, the preview says so instead of claiming compatibility.</p>
       <p>Keep genuinely variable information — owner, cost centre, criticality — in tags rather than in the name. Tags can be changed, queried, and used in cost reports; names cannot.</p>
     </section>
   </main>
@@ -727,7 +1215,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -773,6 +1261,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -783,92 +1272,208 @@
     </svg>
   </button>
 
-  <script>
+  <script data-naming-script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-    const state = { resources: [], filtered: [], sortKey: "resource", sortDir: "asc", query: "" };
+    const RULES_SOURCE = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules";
+    const state = { resources: [], filtered: [], rules: {}, selected: null, proposal: null, loading: false, ready: false, sortKey: "resource", sortDir: "asc", query: "" };
     const elements = {
       resourceSelect: document.getElementById("resourceSelect"),
+      resourceSuggestions: document.getElementById("resourceSuggestions"),
       workloadInput: document.getElementById("workloadInput"),
       envSelect: document.getElementById("envSelect"),
       regionSelect: document.getElementById("regionSelect"),
       instanceInput: document.getElementById("instanceInput"),
-      fullResult: document.getElementById("fullResult"),
+      generatorFields: document.getElementById("generatorFields"),
+      namePreview: document.getElementById("namePreview"),
+      selectedType: document.getElementById("selectedType"),
       fullName: document.getElementById("fullName"),
-      compactResult: document.getElementById("compactResult"),
-      compactName: document.getElementById("compactName"),
-      copyFullButton: document.getElementById("copyFullButton"),
-      copyCompactButton: document.getElementById("copyCompactButton"),
+      nameLength: document.getElementById("nameLength"),
+      nameValidation: document.getElementById("nameValidation"),
+      copyNameButton: document.getElementById("copyNameButton"),
+      formatNote: document.getElementById("formatNote"),
+      transformationList: document.getElementById("transformationList"),
+      ruleCaveat: document.getElementById("ruleCaveat"),
+      ruleSource: document.getElementById("ruleSource"),
+      copyFeedback: document.getElementById("copyFeedback"),
+      copyFallback: document.getElementById("copyFallback"),
+      copyValue: document.getElementById("copyValue"),
+      loadError: document.getElementById("loadError"),
+      retryLoad: document.getElementById("retryLoad"),
       search: document.getElementById("search"),
       tableBody: document.getElementById("tableBody"),
       resultCount: document.getElementById("resultCount"),
       backToTop: document.getElementById("backToTop"),
       headers: [...document.querySelectorAll("thead th[data-key]")],
     };
+    const environmentValues = new Set([...elements.envSelect.options].map(option => option.value));
+    const regionValues = new Set([...elements.regionSelect.options].map(option => option.value));
 
-    function slugify(value) {
-      return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    }
-    function compactify(value) {
-      return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+    function normalizeComponent(value, format) {
+      const ascii = value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+      return format === "compact" ? ascii.replace(/[^a-z0-9]/g, "") : ascii.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
     }
 
-    async function copyText(text, buttonEl) {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.append(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        textarea.remove();
+    function evaluateName(name, rule) {
+      const errors = [];
+      if (!rule) return { status: "unverified", errors };
+      if (rule.minLength !== null && name.length < rule.minLength) errors.push(`Use at least ${rule.minLength} characters; this proposal has ${name.length}.`);
+      if (rule.maxLength !== null && name.length > rule.maxLength) {
+        const excess = name.length - rule.maxLength;
+        errors.push(`This proposal is ${excess} character${excess === 1 ? "" : "s"} too long (${name.length}/${rule.maxLength}). Shorten the workload, region component or instance; no characters were truncated.`);
       }
-      const originalText = buttonEl.textContent;
-      buttonEl.textContent = "Copied!";
-      buttonEl.classList.add("is-copied");
-      setTimeout(() => {
-        buttonEl.textContent = originalText;
-        buttonEl.classList.remove("is-copied");
-      }, 1500);
+      if (!new RegExp(rule.pattern).test(name)) errors.push("The generated name does not match the recorded character and boundary rules.");
+      for (const value of rule.forbiddenSubstrings || []) {
+        if (name.includes(value)) errors.push(`This resource type cannot contain "${value}". Change the relevant component.`);
+      }
+      return { status: errors.length ? "invalid" : rule.complete ? "compatible" : "partial", errors };
     }
 
-    function renderGenerator() {
-      const resource = state.resources.find((r) => r.abbreviation === elements.resourceSelect.value);
-      const workloadSlug = slugify(elements.workloadInput.value) || "app";
-      const env = elements.envSelect.value;
-      const region = elements.regionSelect.value;
-      const instance = slugify(elements.instanceInput.value) || "001";
-      const abbreviation = resource?.abbreviation || "res";
-
-      const fullName = [abbreviation, workloadSlug, env, region, instance].filter(Boolean).join("-");
-      const compact = compactify(fullName).slice(0, 24);
-
-      elements.fullName.textContent = fullName;
-      elements.compactName.textContent = compact;
-      elements.fullResult.classList.toggle("is-error", fullName.length > 63);
-      elements.compactResult.classList.toggle("is-error", compact.length === 0);
+    function buildProposal(resource, rule, values) {
+      const format = rule?.format || "hyphenated";
+      const fields = [
+        ["workload", "Workload", values.workload],
+        ["environment", "Environment", values.environment],
+        ["region", "Region", values.region],
+        ["instance", "Instance", values.instance],
+      ].map(([key, label, original]) => ({ key, label, original, normalized: normalizeComponent(original, format) }));
+      const fieldErrors = {};
+      for (const field of fields) {
+        if (!field.normalized) fieldErrors[field.key] = `${field.label} must contain at least one ASCII letter or digit after normalization. No default is substituted.`;
+      }
+      if (!resource) fieldErrors.resource = "Choose a resource suggestion or enter an exact catalogue abbreviation.";
+      const name = Object.keys(fieldErrors).length ? "" : [resource.abbreviation, ...fields.map(field => field.normalized)].join(format === "compact" ? "" : "-");
+      const validation = name ? evaluateName(name, rule) : { status: "invalid", errors: ["Complete the highlighted fields to generate a name."] };
+      return { name, format, fields, fieldErrors, ...validation };
     }
 
-    function renderResourceSelect() {
-      const categories = [...new Set(state.resources.map((r) => r.category))];
-      elements.resourceSelect.replaceChildren();
-      categories.forEach((category) => {
-        const group = document.createElement("optgroup");
-        group.label = category;
-        state.resources.filter((r) => r.category === category).forEach((resource) => {
-          group.append(new Option(`${resource.resource} (${resource.abbreviation})`, resource.abbreviation));
-        });
-        elements.resourceSelect.append(group);
-      });
-      const vm = state.resources.find((r) => r.abbreviation === "vm");
-      if (vm) elements.resourceSelect.value = "vm";
+    function resourceLabel(resource) {
+      return `${resource.resource} (${resource.abbreviation})`;
+    }
+
+    function selectedResource() {
+      const value = normalize(elements.resourceSelect.value.trim());
+      return state.resources.find(resource => [resourceLabel(resource), resource.abbreviation, resource.resource].some(label => normalize(label) === value)) || null;
     }
 
     function normalize(value) {
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function fieldError(control, messageId, message) {
+      control.setAttribute("aria-invalid", String(Boolean(message)));
+      const element = document.getElementById(messageId);
+      element.textContent = message || "";
+      element.hidden = !message;
+    }
+
+    function renderGenerator() {
+      if (!state.ready) return;
+      const resource = selectedResource();
+      const rule = resource ? state.rules[resource.provider.toLowerCase()] || null : null;
+      const proposal = buildProposal(resource, rule, {
+        workload: elements.workloadInput.value,
+        environment: elements.envSelect.value,
+        region: elements.regionSelect.value,
+        instance: elements.instanceInput.value,
+      });
+      if (!environmentValues.has(elements.envSelect.value)) proposal.fieldErrors.environment = "Select an environment from the available options.";
+      if (!regionValues.has(elements.regionSelect.value)) proposal.fieldErrors.region = "Select a region component from the available options.";
+      if (Object.keys(proposal.fieldErrors).length) {
+        proposal.status = "invalid";
+        proposal.name = "";
+        proposal.errors = ["Complete the highlighted fields to generate a name."];
+      }
+      state.selected = resource;
+      state.proposal = proposal;
+      elements.selectedType.textContent = resource ? resourceLabel(resource) : "Choose a resource type";
+      document.getElementById("providerRule").textContent = resource?.provider || "Select a resource type.";
+      elements.fullName.textContent = proposal.name || "Complete the name components";
+      elements.nameLength.textContent = proposal.name
+        ? `${proposal.name.length} characters${rule?.maxLength !== null && rule?.maxLength !== undefined ? ` · allowed ${rule.minLength ?? "?"}-${rule.maxLength}` : " · full length range not verified"}`
+        : "";
+      elements.namePreview.classList.toggle("is-error", proposal.status === "invalid");
+      elements.namePreview.classList.toggle("is-unverified", ["partial", "unverified"].includes(proposal.status));
+      const statuses = {
+        compatible: "Format compatible with the checked rules.",
+        partial: "Partial format checks passed. Some constraints still require manual verification.",
+        unverified: "Format not verified: no complete naming rule is recorded for this resource type.",
+        invalid: proposal.errors.join(" "),
+      };
+      elements.nameValidation.textContent = statuses[proposal.status];
+      elements.copyNameButton.disabled = !proposal.name || proposal.status === "invalid";
+      elements.copyNameButton.textContent = proposal.status === "compatible" ? "Copy name" : "Copy proposal";
+      elements.copyFallback.hidden = true;
+      elements.copyValue.value = proposal.name;
+      elements.copyFeedback.textContent = "";
+      fieldError(elements.resourceSelect, "resourceError", proposal.fieldErrors.resource);
+      fieldError(elements.workloadInput, "workloadError", proposal.fieldErrors.workload);
+      fieldError(elements.envSelect, "environmentError", proposal.fieldErrors.environment);
+      fieldError(elements.regionSelect, "regionError", proposal.fieldErrors.region);
+      fieldError(elements.instanceInput, "instanceError", proposal.fieldErrors.instance);
+      elements.formatNote.textContent = !resource ? "Select a type to determine the applicable naming format."
+        : rule ? `${proposal.format === "compact" ? "Recommended: compact, without separators." : "Recommended: hyphenated for readability."} No truncation is applied.`
+        : "Hyphenated proposal only; separator and length requirements are not verified.";
+      if (resource && ["vm", "vmss"].includes(resource.abbreviation)) {
+        elements.formatNote.textContent += " Resource name only; host names have separate limits.";
+      }
+      document.getElementById("charactersRule").textContent = rule
+        ? `${rule.requirements} The generator uses a lowercase ASCII subset, not every character Azure may allow.`
+        : "Not recorded for this type. Verify the provider reference before deployment.";
+      document.getElementById("scopeRule").textContent = rule?.scope || "Not verified for this type.";
+      elements.ruleSource.href = rule?.source || RULES_SOURCE;
+      elements.ruleCaveat.textContent = (rule?.notes || []).join(" ");
+      elements.ruleCaveat.hidden = !elements.ruleCaveat.textContent;
+      elements.transformationList.replaceChildren();
+      for (const field of proposal.fields.filter(field => field.original !== field.normalized && field.normalized)) {
+        const item = document.createElement("li");
+        item.textContent = `${field.label}: "${field.original}" → "${field.normalized}" (lowercase ASCII; accents and separators normalized).`;
+        elements.transformationList.append(item);
+      }
+      if (proposal.format === "compact" && resource) {
+        const item = document.createElement("li");
+        item.textContent = "Component separators are omitted for this resource type; the entire name is preserved.";
+        elements.transformationList.append(item);
+      }
+      elements.transformationList.hidden = !elements.transformationList.childElementCount;
+      elements.tableBody.querySelectorAll("[data-resource]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.resource === resource?.abbreviation)));
+    }
+
+    async function copyProposal() {
+      const proposal = state.proposal;
+      if (!proposal?.name || proposal.status === "invalid") return;
+      try {
+        await navigator.clipboard.writeText(proposal.name);
+        elements.copyFeedback.textContent = `${proposal.name} copied${proposal.status === "compatible" ? "." : " as a proposal; format verification is incomplete."}`;
+      } catch (error) {
+        console.warn("Automatic name copying is unavailable.", error);
+        if (state.proposal.name !== proposal.name) {
+          elements.copyFeedback.textContent = "The previous proposal could not be copied. Copy the current name again.";
+          return;
+        }
+        elements.copyFallback.hidden = false;
+        elements.copyValue.value = proposal.name;
+        elements.copyValue.focus();
+        elements.copyValue.select();
+        elements.copyFeedback.textContent = "Automatic copying is unavailable. Select and copy the name above.";
+      }
+    }
+
+    function renderResourceSuggestions() {
+      elements.resourceSuggestions.replaceChildren();
+      state.resources.forEach(resource => {
+        const option = new Option(resource.provider, resourceLabel(resource));
+        elements.resourceSuggestions.append(option);
+      });
+    }
+
+    function useResource(resource) {
+      elements.resourceSelect.value = resourceLabel(resource);
+      renderGenerator();
+      syncUrl();
+      const heading = document.getElementById("generatorHeading");
+      heading.focus({ preventScroll: true });
+      heading.scrollIntoView({ block: "start", behavior: "instant" });
     }
 
     function renderTable() {
@@ -884,19 +1489,56 @@
       const fragment = document.createDocumentFragment();
       rows.forEach((resource) => {
         const tr = document.createElement("tr");
-        const resourceTd = document.createElement("td");
+        const resourceTd = document.createElement("th");
+        resourceTd.scope = "row";
         resourceTd.textContent = resource.resource;
         const categoryTd = document.createElement("td");
+        categoryTd.dataset.label = "Category";
         categoryTd.textContent = resource.category;
         const abbrTd = document.createElement("td");
-        abbrTd.innerHTML = `<code>${resource.abbreviation}</code>`;
+        abbrTd.dataset.label = "Abbreviation";
+        const abbr = document.createElement("code");
+        abbr.textContent = resource.abbreviation;
+        abbrTd.append(abbr);
         const providerTd = document.createElement("td");
         providerTd.className = "provider-cell";
+        providerTd.dataset.label = "Provider";
         providerTd.textContent = resource.provider;
-        tr.append(resourceTd, categoryTd, abbrTd, providerTd);
+        const action = document.createElement("td");
+        action.className = "use-type-cell";
+        const use = document.createElement("button");
+        use.type = "button";
+        use.className = "catalogue-button";
+        use.dataset.resource = resource.abbreviation;
+        use.setAttribute("aria-label", `Use ${resource.resource} in the generator`);
+        use.setAttribute("aria-pressed", String(resource.abbreviation === state.selected?.abbreviation));
+        use.textContent = "Use this type";
+        use.addEventListener("click", () => useResource(resource));
+        action.append(use);
+        tr.append(resourceTd, categoryTd, abbrTd, providerTd, action);
         fragment.append(tr);
       });
       elements.tableBody.append(fragment);
+      if (!rows.length) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 5;
+        cell.textContent = "No resource types match your search. ";
+        const reset = document.createElement("button");
+        reset.type = "button";
+        reset.className = "catalogue-button";
+        reset.textContent = "Clear catalogue search";
+        reset.addEventListener("click", () => {
+          elements.search.value = "";
+          state.query = "";
+          applyFilter();
+          syncUrl();
+          elements.search.focus();
+        });
+        cell.append(reset);
+        row.append(cell);
+        elements.tableBody.append(row);
+      }
       elements.resultCount.textContent = `${rows.length.toLocaleString()} resource type${rows.length === 1 ? "" : "s"} shown`;
 
       elements.headers.forEach((th) => {
@@ -909,57 +1551,156 @@
       const query = normalize(state.query.trim());
       state.filtered = state.resources.filter((resource) => {
         if (!query) return true;
-        return normalize(`${resource.resource} ${resource.category} ${resource.abbreviation}`).includes(query);
+        return normalize(`${resource.resource} ${resource.category} ${resource.abbreviation} ${resource.provider}`).includes(query);
       });
       renderTable();
     }
-    // build-freshness.mjs stamps the real git date; the host's Last-Modified
-    // would report the deploy and overclaim freshness on curated lists
-    async function showRefreshedAt() {
-      var el = document.getElementById("refreshedAt");
-      if (!el) return;
+    function displayDate(iso) {
+      return iso && !Number.isNaN(new Date(iso).getTime())
+        ? new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+        : "Not available";
+    }
+
+    function validatePayload(payload) {
+      if (!payload || !Array.isArray(payload.resources) || !payload.resources.length) throw new Error("Invalid resource catalogue");
+      const abbreviations = new Set();
+      payload.resources.forEach(resource => {
+        if (!resource || ["resource", "provider", "category", "abbreviation"].some(key => typeof resource[key] !== "string" || !resource[key].trim())
+          || !/^[a-z][a-z0-9]*$/.test(resource.abbreviation) || abbreviations.has(resource.abbreviation)) throw new Error("Invalid or ambiguous resource abbreviation");
+        abbreviations.add(resource.abbreviation);
+      });
+      const rules = payload.namingRules || {};
+      if (typeof rules !== "object" || Array.isArray(rules)) throw new Error("Invalid naming rule catalogue");
+      Object.values(rules).forEach(rule => {
+        const lengthValid = value => value === null || (Number.isInteger(value) && value > 0);
+        if (!rule || !lengthValid(rule.minLength) || !lengthValid(rule.maxLength)
+          || (rule.minLength !== null && rule.maxLength !== null && rule.minLength > rule.maxLength)
+          || !["compact", "hyphenated"].includes(rule.format)
+          || typeof rule.pattern !== "string" || !rule.pattern.startsWith("^") || !rule.pattern.endsWith("$")
+          || typeof rule.complete !== "boolean" || (rule.complete && (rule.minLength === null || rule.maxLength === null))
+          || typeof rule.requirements !== "string" || typeof rule.scope !== "string"
+          || typeof rule.source !== "string" || !rule.source.startsWith("https://learn.microsoft.com/")
+          || (rule.notes && (!Array.isArray(rule.notes) || rule.notes.some(note => typeof note !== "string")))
+          || (rule.forbiddenSubstrings && (!Array.isArray(rule.forbiddenSubstrings) || rule.forbiddenSubstrings.some(value => typeof value !== "string")))) {
+          throw new Error("Incomplete or invalid naming rule");
+        }
+        new RegExp(rule.pattern);
+      });
+      return { ...payload, namingRules: rules };
+    }
+
+    function restoreSelect(select, value, values) {
+      select.querySelectorAll("[data-unavailable]").forEach(option => option.remove());
+      if (!values.has(value)) {
+        const option = new Option(value ? `${value} (not available)` : "Choose an option", value);
+        option.dataset.unavailable = "";
+        select.add(option);
+      }
+      select.value = value;
+    }
+
+    function restoreUrl() {
+      const params = new URLSearchParams(location.search);
+      const typeValue = params.has("resourceSelect") ? params.get("resourceSelect") : "vm";
+      const resource = state.resources.find(item => item.abbreviation === typeValue);
+      elements.resourceSelect.value = resource ? resourceLabel(resource) : typeValue;
+      elements.workloadInput.value = params.has("workloadInput") ? params.get("workloadInput") : "myapp";
+      elements.instanceInput.value = params.has("instanceInput") ? params.get("instanceInput") : "001";
+      restoreSelect(elements.envSelect, params.has("envSelect") ? params.get("envSelect") : "prod", environmentValues);
+      restoreSelect(elements.regionSelect, params.has("regionSelect") ? params.get("regionSelect") : "westus2", regionValues);
+      elements.search.value = params.get("search") || "";
+      state.query = elements.search.value;
+      state.sortKey = ["resource", "category", "abbreviation", "provider"].includes(params.get("sort")) ? params.get("sort") : "resource";
+      state.sortDir = params.get("direction") === "desc" ? "desc" : "asc";
+    }
+
+    function syncUrl() {
+      if (!state.ready) return;
+      const url = new URL(location.href);
+      const values = {
+        resourceSelect: state.selected?.abbreviation || elements.resourceSelect.value,
+        workloadInput: elements.workloadInput.value,
+        envSelect: elements.envSelect.value,
+        regionSelect: elements.regionSelect.value,
+        instanceInput: elements.instanceInput.value,
+      };
+      Object.entries(values).forEach(([key, value]) => url.searchParams.set(key, value));
+      if (elements.search.value) url.searchParams.set("search", elements.search.value);
+      else url.searchParams.delete("search");
+      if (state.sortKey !== "resource") url.searchParams.set("sort", state.sortKey);
+      else url.searchParams.delete("sort");
+      if (state.sortDir !== "asc") url.searchParams.set("direction", state.sortDir);
+      else url.searchParams.delete("direction");
       try {
-        var res = await fetch("/freshness.json", { cache: "no-store" });
-        if (!res.ok) throw new Error(res.status);
-        var iso = (await res.json())["azure-naming-convention/abbreviations.json"];
-        var date = iso ? new Date(iso) : null;
-        if (!date || isNaN(date)) throw new Error("no stamp");
-        el.textContent = date.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-        el.parentElement.title = date.toLocaleString();
-      } catch (err) {
-        el.parentElement.hidden = true;
+        history.replaceState(history.state, "", url);
+        window.dispatchEvent(new Event("namingstatechange"));
+      } catch (error) {
+        console.warn("The naming proposal URL could not be updated.", error);
+        elements.copyFeedback.textContent = "The proposal works, but the browser could not update the address for sharing.";
       }
     }
 
-
-
     async function init() {
-      const response = await fetch("./abbreviations.json", { cache: "no-store" });
-      showRefreshedAt();
-      const payload = await response.json();
-      state.resources = payload.resources;
-      state.filtered = payload.resources;
-      renderResourceSelect();
-      renderGenerator();
-      renderTable();
+      if (state.loading) return;
+      const fromRetry = document.activeElement === elements.retryLoad;
+      state.loading = true;
+      elements.generatorFields.disabled = true;
+      elements.search.disabled = true;
+      elements.retryLoad.disabled = true;
+      elements.headers.forEach(header => { header.querySelector("button").disabled = true; });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      try {
+        const response = await fetch("./abbreviations.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`Resource catalogue returned ${response.status}`);
+        const payload = validatePayload(await response.json());
+        state.resources = payload.resources;
+        state.rules = payload.namingRules;
+        state.ready = true;
+        elements.loadError.hidden = true;
+        document.getElementById("refreshedAt").textContent = displayDate(payload.generatedAt);
+        document.getElementById("rulesCheckedAt").textContent = displayDate(payload.namingRulesCheckedAt);
+        renderResourceSuggestions();
+        restoreUrl();
+        elements.generatorFields.disabled = false;
+        elements.search.disabled = false;
+        elements.headers.forEach(header => { header.querySelector("button").disabled = false; });
+        renderGenerator();
+        applyFilter();
+      } catch (error) {
+        console.error("Unable to load Azure naming data.", error);
+        state.ready = false;
+        elements.loadError.hidden = false;
+        elements.copyNameButton.disabled = true;
+        elements.namePreview.classList.add("is-error");
+        elements.selectedType.textContent = "Resource types unavailable";
+        elements.nameValidation.textContent = "Naming rules unavailable. Retry loading the catalogue.";
+        document.getElementById("refreshedAt").textContent = "Not available";
+        document.getElementById("rulesCheckedAt").textContent = "Not available";
+      } finally {
+        clearTimeout(timeout);
+        state.loading = false;
+        elements.retryLoad.disabled = false;
+        if (fromRetry) (state.ready ? elements.resourceSelect : elements.retryLoad).focus({ preventScroll: true });
+      }
     }
 
     [elements.resourceSelect, elements.workloadInput, elements.envSelect, elements.regionSelect, elements.instanceInput].forEach((el) => {
-      el.addEventListener("input", renderGenerator);
-      el.addEventListener("change", renderGenerator);
+      el.addEventListener("input", () => { renderGenerator(); syncUrl(); });
+      el.addEventListener("change", () => { renderGenerator(); syncUrl(); });
     });
-    elements.copyFullButton.addEventListener("click", () => copyText(elements.fullName.textContent, elements.copyFullButton));
-    elements.copyCompactButton.addEventListener("click", () => copyText(elements.compactName.textContent, elements.copyCompactButton));
+    elements.copyNameButton.addEventListener("click", copyProposal);
+    elements.retryLoad.addEventListener("click", init);
 
     let searchTimer;
     elements.search.addEventListener("input", () => {
       state.query = elements.search.value;
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(applyFilter, 100);
+      searchTimer = setTimeout(() => { applyFilter(); syncUrl(); }, 100);
     });
 
     elements.headers.forEach((th) => {
-      th.addEventListener("click", () => {
+      th.querySelector("button").addEventListener("click", () => {
         const key = th.dataset.key;
         if (state.sortKey === key) {
           state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
@@ -968,22 +1709,18 @@
           state.sortDir = "asc";
         }
         renderTable();
+        syncUrl();
       });
     });
 
-    init().catch(function (error) {
-      console.error(error);
-      if (document.querySelector(".data-error")) return;
-      var host = document.querySelector("main");
-      if (!host) return;
-      var msg = document.createElement("p");
-      msg.className = "data-error";
-      msg.setAttribute("role", "alert");
-      msg.textContent = "Could not load the data for this page. This is usually a temporary network problem - reload to try again.";
-      var intro = host.querySelector(".intro");
-      if (intro) intro.insertAdjacentElement("afterend", msg);
-      else host.prepend(msg);
+    window.addEventListener("popstate", () => {
+      if (!state.ready) return;
+      restoreUrl();
+      renderGenerator();
+      applyFilter();
+      window.dispatchEvent(new Event("namingstatechange"));
     });
+    init();
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
@@ -998,124 +1735,28 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function updateShareLinks() {
+        var url = encodeURIComponent(location.href.split('#')[0]);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        root.querySelectorAll('a[data-share]').forEach(function (link) {
+          link.setAttribute('href', targets[link.getAttribute('data-share')]);
+        });
+      }
+      updateShareLinks();
+      window.addEventListener('namingstatechange', updateShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

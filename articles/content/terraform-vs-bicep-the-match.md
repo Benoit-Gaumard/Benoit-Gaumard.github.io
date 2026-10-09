@@ -1,83 +1,55 @@
 +++
 author = "Benoit G"
-title = "Terraform vs Bicep, the Match"
+title = "Terraform vs Bicep: Choose by Team and Workload"
 date = "2024-12-06"
-description = "A side-by-side comparison of Terraform and Bicep across language, state management, learning curve, cost, and more, based on hands-on experience with both."
+description = "Compare Terraform and Bicep by scope, state, review workflow and operating cost, then choose a fit for your team instead of a universal winner."
 tags = ["Terraform", "Bicep"]
 categories = ["Azure"]
 featureImage = "/articles/images/bicep.svg"
+related = ["set-up-your-first-terraform-environment-on-windows", "what-is-an-azure-landing-zone"]
 +++
 
-What truly matters when working with Azure is deciding whether Terraform or Bicep is the right choice for your needs.
+## Three decision entrypoints
 
-For the past few years, my professional focus has been on developing Infrastructure-as-Code and CI/CD pipelines for various Azure customers. Through this, I've gained hands-on experience with both Terraform and Bicep. I'd like to share my perspective on the topic.
+- **Mostly Azure Resource Manager, no existing state platform:** evaluate Bicep and its what-if/deployment workflow.
+- **Several platforms already governed through Terraform:** evaluate Terraform providers, remote state and the team's existing module/review practice.
+- **Existing estate with a working ownership model:** prefer a bounded trial over a rewrite. Using both can be appropriate only when ownership boundaries prevent two tools managing the same resource.
 
-🟢 Green highlights positive points. 🔴 Red indicates negative points. 🟠 Orange represents neutral or mixed points.
+**Legend:** "Advantage in this context", "Limit" and "Depends on the need" are text labels, not colour scores. Product capabilities and licensing evolve. Technical review date and comparative test results: **not recorded**; the publication date is not proof of current validation.
 
-| Feature | Terraform | Bicep |
+## Compare one criterion at a time
+
+| Criterion | Terraform | Bicep |
 |---|---|---|
-| Language | 🟠 HCL | 🟢 JSON-like |
-| Multi provider | 🟢 Yes | 🔴 No |
-| Editor/owner | 🟢 HashiCorp | 🟢 Microsoft |
-| Age | 🟢 2014 | 🟠 2020 |
-| State management | 🔴 Required | 🟢 Stateless |
-| Native to Azure | 🔴 No | 🟢 Yes |
-| Learning curve | 🟠 Moderate | 🟢 Easy |
-| Modules | 🟢 Yes | 🟢 Yes |
-| Logging | 🟠 Moderate | 🟢 Portal |
-| Advanced features | 🟢 Yes | 🟠 Moderate |
-| Support outside changes | 🔴 No | 🟢 Yes |
-| VS Code integration | 🟢 Yes | 🟢 Yes |
-| CI/CD | 🟢 Yes | 🟢 Yes |
-| Adoption | 🟢 High | 🟠 Moderate |
-| Cost | 🟠 Free / licence | 🟢 Free |
+| Language | **Depends:** HCL and provider schemas; team familiarity matters | **Depends:** Bicep DSL compiled for Azure deployments; not JSON syntax |
+| Resource platforms | **Advantage for a multi-platform estate:** provider ecosystem; verify each provider's coverage | **Advantage for ARM-focused work:** native resource schemas; check current extensibility capabilities separately |
+| State | **Responsibility:** protect, lock, back up and recover the state backend | **Difference:** no separate Terraform-style state file; Azure deployment/resource state still exists |
+| Review | **Advantage when used well:** saved plans and state-aware diffs | **Advantage when used well:** ARM what-if and deployment history |
+| Outside changes | **Depends:** refresh/plan can detect drift in managed properties; reconcile deliberately | **Depends:** deployment/what-if behaviour and ownership still require review; not automatic acceptance of every external change |
+| Modules | **Available:** modules are provider/resource specific; reuse does not make resources portable | **Available:** Bicep modules and registries; design interfaces for your Azure estate |
+| Editors and pipelines | **Available:** editor tooling and CI runners; review permissions and versions | **Available:** editor tooling and CI runners; review permissions and versions |
+| Learning | **Team judgement:** HCL plus provider/state concepts | **Team judgement:** Bicep plus Azure scope/deployment concepts |
+| Maturity/adoption | **Contextual:** evaluate the required provider/module, not popularity alone | **Contextual:** evaluate the required resource API/module, not age alone |
+| Cost | **Depends:** tooling/service licence terms, state operations, runners and engineering effort | **Depends:** tooling, runners, Azure operations and engineering effort; cloud resources are not free |
 
-[[toc]]
+## Facts versus judgement
 
-## Language
+The separate Terraform state backend and Bicep's ARM deployment model are technical distinctions. "Easier", "more mature" and "cheaper overall" depend on skills, requirements and operating practice. Compare a representative module, change review and recovery exercise before treating a preference as evidence.
 
-- **Terraform**: uses its own declarative HashiCorp Configuration Language (HCL), which is cloud-agnostic.
-- **Bicep**: simplified syntax designed to work exclusively with Azure, serving as an abstraction over ARM JSON templates.
+No universal red/green verdict is appropriate. Terraform's current licence and hosted-service terms must be checked in the [official project](https://github.com/hashicorp/terraform) and [HashiCorp documentation](https://developer.hashicorp.com/terraform). Bicep's scope and capabilities are documented in the [Bicep overview](https://learn.microsoft.com/azure/azure-resource-manager/bicep/overview).
 
-## Multi provider
+## Make the decision reviewable
 
-- **Terraform**: a multi-cloud Infrastructure as Code (IaC) tool designed for provisioning resources across various cloud platforms - multi-cloud support (Azure, AWS, GCP, etc.), enabling hybrid cloud deployments.
-- **Bicep**: a domain-specific IaC tool for deploying Azure resources, designed as a simplified alternative to Azure Resource Manager (ARM) templates - Azure-only, deeply integrated with the Azure ecosystem.
+```text
+Resources/platforms to own:
+Team skills and existing modules:
+Plan/what-if review and approval:
+State or deployment recovery:
+Identity and permission scope:
+Tool/provider/API versions:
+Licence and total operating cost assumptions:
+Trial result and remaining gaps:
+Chosen tool and explicit ownership boundary:
+```
 
-## Editors
-
-- **Terraform**: created by HashiCorp in 2014.
-- **Bicep**: created by Microsoft in 2020.
-
-## State management
-
-- **Terraform**: requires a state file to track resource changes; supports remote state storage (e.g., Azure Blob Storage, S3).
-- **Bicep**: stateless - relies on Azure Resource Manager's existing state, eliminating the need for a separate state file.
-
-## Learning curve
-
-- **Terraform**: slightly steeper learning curve due to HCL and the need to manage state files.
-- **Bicep**: easier for those already familiar with Azure, thanks to simpler syntax and Azure-specific focus.
-
-## Modularity
-
-- **Terraform**: supports modules for reusable code, which can be shared across clouds. Highly extensible through custom providers and community plugins.
-- **Bicep**: supports modules, but limited to Azure-specific scenarios and extensions.
-
-## Maturity
-
-- **Terraform**: mature and widely adopted, with a large user base and community support.
-- **Bicep**: newer, rapidly evolving, but designed as the preferred way to manage Azure resources.
-
-## Cost
-
-- **Terraform**: open source, but also offers paid enterprise features such as Terraform Cloud for team collaboration and advanced capabilities. HashiCorp's licensing model changed to the Business Source License (BSL), leading to the community-driven fork OpenTofu, which adheres to a fully open-source model.
-- **Bicep**: completely free, part of the Azure tooling suite.
-
-## To conclude
-
-In conclusion, there is no "IaC war" - both tools have their strengths. For many use cases, I prefer Bicep over Terraform, particularly in scenarios where no one else will manage the IaC, or to sidestep chicken-and-egg challenges such as provisioning the storage account used for Terraform's own state.
-
-For other use cases, I'll stick with Terraform, as it keeps people aligned with a consistent, multi-cloud approach and provides robust state management, making it ideal for more complex or diverse infrastructure scenarios. The Terraform community is also currently more established and active than the Bicep community, largely due to the longer maturity of the product.
-
-Enjoy!
+Start a local Terraform learning path with [the Windows setup guide](/articles/set-up-your-first-terraform-environment-on-windows/) or a Bicep path with [Microsoft's Bicep quickstart](https://learn.microsoft.com/azure/azure-resource-manager/bicep/quickstart-create-bicep-use-visual-studio-code).

@@ -2,13 +2,27 @@
 author = "Benoit G"
 title = "How to Delegate a Domain to Azure DNS"
 date = "2025-12-16"
-description = "Step-by-step guide to delegating a domain purchased from a third-party registrar (OVH) to Azure DNS, and recreating the DNS records once delegation is complete."
+description = "Prepare an Azure public DNS zone and its records before changing registrar name servers, using OVH as the example, then verify delegation and plan rollback."
 tags = ["DNS"]
 categories = ["Azure"]
 featureImage = "/articles/images/azure-dns-zone.png"
+leadSections = ["Prepare before delegation", "Creating a new public DNS zone in Azure", "Create DNS records", "Delegate the domain", "Test the delegation"]
+related = ["dns-in-azure-part-1-fundamentals"]
 +++
 
 Azure DNS allows you to host a DNS domain and manage the DNS zone records. To host your domain in Azure, the zone must be created in Azure and delegated to Azure's authoritative DNS servers with a domain registrar.
+
+## Prepare before delegation
+
+The screenshots use **OVH**; the principle applies to other registrars with different menu names. Do not change the registrar's name servers until the new zone has been populated and checked.
+
+1. Export/inventory the old zone and record its current authoritative NS values.
+2. Recreate required A/AAAA, CNAME, MX, TXT (including SPF/DKIM/DMARC), CAA and any SRV/delegated-subdomain records in Azure.
+3. Review TTLs, DNSSEC/DS records with the registrar and the planned change window; incompatible DNSSEC delegation can cause validation failures.
+4. Query each new Azure authoritative server directly before switching and compare important record answers.
+5. Keep the old zone serving equivalent data during the transition. Record who can restore the old NS set if rollback is needed; resolver caches mean rollback is not instant.
+
+Technical execution validation and current portal-version review: **not recorded**. Use the official guidance below, not the screenshots alone.
 
 :::note
 Azure DNS isn't a domain registrar - you must buy your domain name first from a registrar like GoDaddy, OVH, Cloudflare, etc.
@@ -60,7 +74,7 @@ Steps:
    ![New DNS zone form](/articles/images/dns-delegation/new-dns-zone.png)
 
 :::note
-Azure allows you to create a DNS zone with any name (e.g., microsoft.com, google.fr, toto.local), even if you are not the owner. However, to actually manage the zone and add records, you must be the domain owner.
+Azure can create a zone resource for a name without proving domain ownership. That does not give authority over the public domain: you must control its registrar/parent delegation to make public resolvers use your zone.
 :::
 
 To manage the zone, Azure provides four name servers (NS) by default to ensure redundancy in case of failure.
@@ -73,7 +87,7 @@ Copy the NS server names and keep them handy - they will be required to configur
 
 ## Delegate the domain
 
-Now that the DNS zone is created and we have the name servers, we need to update the parent domain with the Azure DNS name servers. Each registrar has its own tools for managing DNS and modifying name server records.
+Only after the records in the preceding section have been created and directly queried should you update the registrar's authoritative NS set. Save the exact four Azure names and the previous registrar values. Each registrar has its own tools for this.
 
 Steps in OVH:
 
@@ -99,16 +113,16 @@ Steps in OVH:
    ![Custom DNS servers configured](/articles/images/dns-delegation/custom-dns-servers.png)
 
 :::warning
-Be careful - your websites and services associated with the domain (mail, FTP, etc.) will be temporarily unavailable during this operation.
+Missing or inconsistent records can interrupt websites, mail and other services. With matching old/new zones, downtime is not an intended step. During cache expiry, clients may query either provider; keep both correct and monitor important services.
 :::
 
 ## Create DNS records
 
 :::note
-Now that Azure DNS is responsible for managing the zone, all administrative tasks should be done in Azure. Do nothing on the OVH portal.
+Populate Azure records **before** changing delegation. After the transition, DNS record changes belong in Azure, while domain registration, renewal and registrar-side delegation/DNSSEC settings still belong at the registrar.
 :::
 
-First, you need to recreate the appropriate DNS records (A, CNAME, NS, MX, TXT, etc.) so that services return to normal and your website displays correctly.
+First, recreate the inventoried records so the new authoritative servers already supply the expected answers. Do not overwrite Azure's assigned apex NS/SOA records with the old provider's values.
 
 To display my website, the first record to create in Azure DNS is an **A** record pointing to the public IP address of my website provided by OVH.
 
@@ -128,7 +142,7 @@ To display my website, the first record to create in Azure DNS is an **A** recor
 
 ## Test the delegation
 
-Once the delegation is complete, you can verify it works using a tool such as `nslookup` or [zonemaster.net](https://www.zonemaster.net/). You may need to wait 10 minutes or more after delegation before verification - DNS propagation can take some time.
+Before the switch, query a new Azure name server directly, for example `nslookup -type=MX <your-domain> <one-azure-name-server>`, and repeat for the important records. After the switch, check through ordinary recursive resolvers and optionally [Zonemaster](https://www.zonemaster.net/). Cache timing depends on TTLs and registrar/registry behaviour; there is no guaranteed ten-minute propagation period.
 
 There is no need to explicitly specify the Azure DNS name servers. If the delegation is configured correctly, the standard DNS resolution process will automatically detect the Azure name servers.
 
@@ -156,7 +170,7 @@ nslookup -type=NS quickquotemaker.io
 
 ![nslookup NS output](/articles/images/dns-delegation/ns-command.png)
 
-Verify that the response matches the Azure DNS name servers. The site is now accessible via both URLs, and DNS record management is performed directly from the Azure portal.
+Expected: the NS set matches the assigned Azure servers, SOA identifies the intended authoritative zone, and web/mail/verification records match the inventory. Test both the apex and `www`, plus mail delivery if used. DNS success alone is not evidence that every service is healthy.
 
 :::note
 All DNS management actions (add / delete / modify records) should be done from Azure only. Add a **Delete lock** on your DNS resource group to prevent accidental deletion.
