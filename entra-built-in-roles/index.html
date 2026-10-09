@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -98,6 +99,8 @@
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
       --cp-danger-bg: #fdf2f2;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -114,7 +117,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -171,7 +174,7 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
     .skip-link {
       position: absolute;
       left: .5rem;
@@ -197,7 +200,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -217,7 +220,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: var(--cp-accent-fg); text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -234,7 +237,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -298,92 +301,79 @@
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
     .refresh-meta strong { color: var(--cp-text); }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
-    .stat-card {
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    [hidden] { display: none !important; }
+    main [id], [data-role-id] { scroll-margin-top: 6rem; }
+    .dataset-stats { margin-bottom: 1.5rem; }
+    .stats-scope { margin: 0 0 .75rem; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; }
+    .stat-card { padding: .75rem 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); box-shadow: 0 1px 2px var(--cp-border); }
+    .stat-value { color: var(--cp-text); font-size: 1.25rem; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+    .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .stat-note { margin: .35rem 0 0; color: var(--cp-text-muted); font-size: .75rem; line-height: 1.4; }
+    .directory-controls { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .directory-filters { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(12rem, 1fr); align-items: end; gap: .75rem; }
+    .directory-field { min-width: 0; }
+    .directory-field label, .role-action-search label { display: block; margin-bottom: .4rem; font-size: .85rem; font-weight: 600; }
+    .directory-field input, .directory-field select, .role-action-search input { width: 100%; min-width: 0; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
+    .directory-field input::placeholder, .role-action-search input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .privileged-filter { display: flex; align-items: center; min-height: 3rem; gap: .5rem; font-size: .85rem; font-weight: 600; cursor: pointer; }
+    .privileged-filter input { width: 1.15rem; height: 1.15rem; flex: none; accent-color: var(--cp-accent); }
+    .directory-options, .directory-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: .75rem 0; }
+    .sort-options > summary { min-height: 2.75rem; padding-block: .65rem; cursor: pointer; color: var(--cp-link); font-size: .85rem; }
+    .directory-options select { min-height: 2.75rem; max-width: 100%; padding: .5rem; background: var(--cp-surface); color: var(--cp-text); border: 1px solid var(--cp-border-strong); border-radius: 6px; }
+    .directory-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; max-width: 100%; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; overflow-wrap: anywhere; }
+    .directory-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
+    .directory-action:disabled { cursor: not-allowed; color: var(--cp-text-muted); }
+    .directory-help, .directory-status, .directory-count { max-width: 85ch; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; margin: .75rem 0; }
+    .directory-status:empty { margin: 0; }
+    .directory-error { padding: 1rem; margin: 1rem 0; border: 1px solid var(--cp-danger); border-radius: 8px; color: var(--cp-danger); background: var(--cp-danger-bg); }
+    .directory-copy { margin: 1rem 0; }
+    .directory-copy label { display: block; font-size: .85rem; margin-bottom: .5rem; }
+    .directory-copy textarea { width: 100%; padding: .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; color: var(--cp-text); background: var(--cp-surface); }
+    .directory-table-wrap { border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); overflow-x: auto; }
+    .directory-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .directory-table th { padding: .5rem .75rem; background: var(--cp-surface-soft); text-align: left; border-bottom: 1px solid var(--cp-border); }
+    .directory-table th:first-child { width: 65%; }
+    .directory-table td { padding: .75rem; vertical-align: top; border-bottom: 1px solid var(--cp-border); }
+    .header-sort { display: inline-flex; min-height: 2.75rem; align-items: center; gap: .4rem; border: 0; background: none; color: var(--cp-text); font: inherit; font-weight: 700; cursor: pointer; text-align: left; }
+    .directory-title { margin: 0; font-size: 1.05rem; line-height: 1.4; }
+    .directory-toggle { display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; width: 100%; min-height: 2.75rem; padding: 0; border: 0; background: none; color: var(--cp-text); font: inherit; font-weight: 650; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+    .directory-toggle:hover, .directory-toggle[aria-expanded="true"] { color: var(--cp-link); }
+    .directory-toggle .open-caption { color: var(--cp-link); font-size: .8rem; font-weight: 400; }
+    .directory-description { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 75ch; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; margin: .5rem 0 0; }
+    .directory-badges { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .5rem 0 0; font-size: .85rem; }
+    .privileged-badge { display: inline-flex; align-items: center; max-width: 100%; padding: .2rem .5rem; border-radius: 6px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: .75rem; line-height: 1.5; }
+    .privileged-badge.is-privileged { background: var(--cp-warning-bg); color: var(--cp-warning); }
+    .directory-cards { display: grid; gap: .75rem; }
+    .directory-card { border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); padding: 1rem; min-width: 0; }
+    .directory-detail { min-width: 0; padding: 1rem; }
+    .directory-card .directory-detail { padding: 0; margin-top: 1rem; border-top: 1px solid var(--cp-border); }
+    .directory-detail-row > td { padding: 0; background: var(--cp-surface-soft); }
+    .directory-detail > p { max-width: 85ch; font-size: .9rem; line-height: 1.55; }
+    .template-code, .permission-pattern { display: block; max-width: 100%; min-width: 0; margin: .25rem 0; padding-block: .35rem; white-space: pre; overflow: auto; font-family: "Cascadia Code", "Consolas", ui-monospace, monospace; font-size: .85rem; line-height: 1.5; }
+    .template-value { margin-block: .75rem; font-size: .85rem; }
+    .role-action-search { display: flex; flex-wrap: wrap; align-items: end; gap: .5rem; margin-top: 1rem; }
+    .role-action-search > div { flex: 1 1 16rem; min-width: 0; }
+    .permission-service { min-width: 0; border-top: 1px solid var(--cp-border); }
+    .permission-service > summary { min-height: 2.75rem; padding-block: .75rem; font-size: .9rem; line-height: 1.5; color: var(--cp-link); font-weight: 600; cursor: pointer; overflow-wrap: anywhere; }
+    .permission-list { list-style: none; margin: .5rem 0; padding: 0; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+    .permission-list li { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: .5rem 1rem; padding: .65rem .75rem; border-bottom: 1px solid var(--cp-border); }
+    .permission-list li:last-child { border-bottom: 0; }
+    .permission-description { color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; overflow-wrap: anywhere; }
+    .action-empty, .directory-empty { padding: 1rem; border: 1px dashed var(--cp-border-strong); border-radius: 8px; }
+    .directory-empty h2 { margin-top: 0; font-size: 1.2rem; }
+    .load-more { display: block; margin: 1rem auto; }
+    .directory-linked { margin: 1rem 0; }
+    .directory-linked > p { font-size: .85rem; color: var(--cp-text-muted); line-height: 1.5; }
+    @media (max-width: 60rem) {
+      .directory-filters { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+      .directory-search { grid-column: 1 / -1; }
+      .permission-list li { grid-template-columns: minmax(0, 1fr); }
     }
-    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
-    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
-    .stat-card.is-success .stat-value { color: var(--cp-success); }
-
-    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
-    .filter-bar input, .filter-bar select {
-      min-height: 2.9rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      padding: .5rem .85rem;
+    @media print {
+      .directory-controls, .directory-actions, .role-action-search, .directory-copy { display: none !important; }
+      .directory-entry { break-inside: avoid; }
     }
-    .filter-bar input { flex: 2 1 16rem; max-width: 28rem; }
-    .filter-bar select { flex: 1 1 12rem; width: 12rem; max-width: 100%; min-width: 0; }
-    .filter-toggle { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
-    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; max-width: none; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
-    .load-more {
-      display: block;
-      margin: 1rem auto 0;
-      padding: .7rem 1.4rem;
-      min-height: 2.75rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      font: inherit;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: border-color .2s, background .2s, color .2s;
-    }
-    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
-
-
-    .table-wrap {
-      overflow-x: auto;
-      min-height: 60vh;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    thead th {
-      position: sticky;
-      top: 0;
-      background: var(--cp-surface-soft);
-      text-align: left;
-      padding: .7rem .9rem;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: .02em;
-      color: var(--cp-text-muted);
-      border-bottom: 1px solid var(--cp-border);
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
-    }
-    thead th:hover { color: var(--cp-text); }
-    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
-    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
-    tbody td { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
-    .tag-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: .15rem .6rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      background: var(--cp-surface-soft);
-      color: var(--cp-text-muted);
-    }
-    .tag-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
-    .tag-badge.is-no { background: var(--cp-danger-bg); color: var(--cp-danger); }
-    #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
     .footer-inner { padding-block: 2rem 1.5rem; }
@@ -424,6 +414,7 @@
     .back-to-top:hover { background: var(--cp-accent-hover); }
 
     @media (max-width: 48rem) {
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
       .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
@@ -447,26 +438,7 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  
-    /* Filled by script: hold the box only while empty, so the page below does
-       not jump when the data lands, and no blank hole survives a render. */
-    @supports (min-height: 1px) {
-      #statsGrid:empty { min-height: 90px; }
-      @media (max-width: 48rem) {
-        #statsGrid:empty { min-height: 107px; }
-      }
-      @media (max-width: 32rem) {
-        #statsGrid:empty { min-height: 211px; }
-      }
-    }
 
-    /* The table is the last thing on the page and can settle anywhere between
-       5,000px and 89,000px, so a fixed reservation would be wrong at most
-       widths. Holding a viewport-relative box while the body is empty keeps the
-       footer below the fold at first paint, so its arrival moves nothing the
-       visitor can see. :has() releases it as soon as the first row renders. */
-    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
-       same before and after, and the rows below it do not move */
     #refreshedAt { display: inline-block; min-width: 9.5rem; }
     @media print {
       /* Printing a tool page should yield the data, not the furniture. */
@@ -497,13 +469,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -513,71 +485,6 @@
     .share-btn svg { flex: none; }
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
-    .role-badge { display: inline-flex; align-items: center; padding: .1rem .5rem; border-radius: 999px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; background: var(--cp-surface-soft); color: var(--cp-text-muted); }
-    .role-badge.is-privileged { background: var(--cp-warning-bg, #fdf3e2); color: var(--cp-warning, #8a5a00); }
-    .stat-card.is-warning .stat-value { color: var(--cp-warning, #8a5a00); }
-
-    tbody tr.role-row { cursor: pointer; }
-    tbody tr.role-row:hover { background: var(--cp-accent-soft); }
-    tbody tr.role-row:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: -3px; }
-    .role-head { display: flex; align-items: center; gap: .5rem; }
-    .role-caret { flex: 0 0 auto; transition: transform .15s ease; opacity: .6; }
-    tbody tr.role-row[aria-expanded="true"] .role-caret { transform: rotate(90deg); opacity: 1; }
-    .role-name { font-weight: 700; color: var(--cp-text); }
-    .role-desc { display: block; margin-top: .25rem; max-width: 70ch; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.45; }
-    .num-cell { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .id-cell { white-space: nowrap; }
-    .id-cell code { font-size: 0.78rem; }
-    /* The role name carries a full sentence of description, so hold a real
-       minimum for it: a percentage collapses once the extra count columns push
-       the table past the wrapper and it starts scrolling. */
-    thead th:first-child, tbody td:first-child { min-width: 22rem; }
-    /* Four count columns fit a 1280px viewport only if they stop paying the
-       full cell padding on both sides. */
-    thead th.num-col, tbody td.num-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
-    /* Same reason as the detail headings: these are property names, and
-       NOTDATAACTIONS is not one of them. */
-    thead th.num-col { text-transform: none; letter-spacing: 0; }
-
-    tbody tr.detail-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
-    .detail-panel { padding: 1.1rem 1.25rem 1.35rem; }
-    .detail-panel > p { margin: 0 0 .9rem; max-width: 80ch; color: var(--cp-text-muted); line-height: 1.6; }
-    .detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin-bottom: 1rem; font-size: 0.8rem; }
-    .detail-meta code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .copy-button { display: inline-flex; align-items: center; gap: .35rem; min-height: 1.9rem; padding: .25rem .6rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
-    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .detail-group { margin-top: 1.1rem; }
-    .detail-group:first-of-type { margin-top: 0; }
-    .detail-group h3 { margin: 0 0 .45rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
-    /* Actions / NotActions / DataActions / NotDataActions are literal role
-       definition property names, so they keep their casing rather than being
-       flattened to NOTDATAACTIONS by the label style. */
-    .detail-group h3.is-bucket { text-transform: none; letter-spacing: 0; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cp-text); }
-    .perm-list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); overflow: hidden; }
-    .perm-list li { display: grid; grid-template-columns: minmax(24rem, 1.6fr) 1.4fr; gap: .35rem 1.25rem; padding: .5rem .75rem; border-bottom: 1px solid var(--cp-border); font-size: 0.8rem; }
-    .perm-list li:last-child { border-bottom: 0; }
-    .perm-list code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; color: var(--cp-text); }
-    .perm-list .perm-desc { color: var(--cp-text-muted); line-height: 1.5; }
-    .scope-list { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .scope-list code { padding: .15rem .45rem; border-radius: 4px; background: var(--cp-surface); border: 1px solid var(--cp-border); font-size: 0.75rem; }
-    .detail-empty { color: var(--cp-text-muted); font-size: 0.8rem; }
-    .kv-list li { grid-template-columns: minmax(8rem, .45fr) 2fr; }
-    .kv-list .perm-key { font-weight: 700; color: var(--cp-text); }
-    .yn-badge { display: inline-flex; align-items: center; padding: .12rem .55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
-    .yn-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
-    .yn-badge.is-no { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
-    .badge-cell { text-align: center; white-space: nowrap; }
-    thead th.badge-col, tbody td.badge-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
-    @media (max-width: 48rem) {
-      .perm-list li { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 32rem) {
-      /* The shared shell keeps flex-basis 16rem on the filter controls when the
-         bar becomes a column, where the basis is read as a height - which grows
-         the search box to ~250px. Reset the basis, keep the min-height. */
-      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; }
-    }
-
   </style>
   <script type="application/ld+json">
   {
@@ -605,12 +512,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/entra-built-in-roles/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/entra-built-in-roles/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -629,6 +906,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/" aria-current="page"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -644,44 +962,59 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="28" height="28"></span>Entra ID Built-in Roles</h1>
-      <p class="intro-text">Every Microsoft Entra ID built-in directory role with its template ID, privileged classification and the description Microsoft gives each allowed resource action, from the official <a href="https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference" target="_blank" rel="noopener">built-in roles reference</a>.</p>
+      <p class="intro-text">Microsoft Entra ID <strong>directory roles</strong> and their recorded resource actions. Source: <a href="https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference" target="_blank" rel="noopener">Microsoft Learn</a>.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
       </p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Built-in role statistics"></section>
+    <section class="dataset-stats" aria-label="Whole-catalogue statistics">
+      <p class="stats-scope" id="datasetSummary" role="status" aria-live="polite" aria-atomic="true">Dataset totals: loading&hellip;</p>
+      <div class="stats-grid" id="statsGrid" aria-busy="true">
+        <div class="stat-card"><div class="stat-value" data-stat="roles">&mdash;</div><div class="stat-label">Built-in roles</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="permissions">&mdash;</div><div class="stat-label">Permissions</div><p class="stat-note" id="distinctPermissions">Distinct actions: loading&hellip;</p></div>
+        <div class="stat-card"><div class="stat-value" data-stat="services">&mdash;</div><div class="stat-label">Services</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="privileged">&mdash;</div><div class="stat-label">Privileged roles</div></div>
+      </div>
+      <noscript><p class="stats-scope">Enable JavaScript to display the catalogue totals.</p></noscript>
+    </section>
 
     <section aria-label="Entra ID built-in roles">
-      <div class="filter-bar">
-        <input id="search" type="search" placeholder="Filter by role, description or permission..." autocomplete="off" spellcheck="false" aria-label="Filter by role, description or permission">
-        <select id="serviceFilter" aria-label="Filter by service"><option value="">All services</option></select>
-        <label class="filter-toggle"><input type="checkbox" id="privilegedOnlyFilter"> Privileged only</label>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th data-key="displayName">Role <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="permissionCount">Permissions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="templateId">Template ID <span class="sort-arrow">&#9650;</span></th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-      <p id="resultCount" aria-live="polite"></p>
+      <noscript><p>This catalogue needs JavaScript. <a href="./roles.json">Download the role dataset</a> or use the Microsoft Learn reference above.</p></noscript>
+      <fieldset class="directory-controls" id="directoryControls" disabled aria-label="Filter directory roles">
+        <div class="directory-filters">
+          <div class="directory-field directory-search"><label for="search">Search directory roles</label><input id="search" type="search" placeholder="Name, template ID or action" autocomplete="off" spellcheck="false"></div>
+          <div class="directory-field"><label for="serviceFilter">Service</label><select id="serviceFilter"><option value="">All services</option></select></div>
+          <label class="privileged-filter"><input id="privilegedOnlyFilter" type="checkbox" aria-describedby="privilegedHelp"><span>Privileged only <span id="privilegedCount"></span></span></label>
+        </div>
+        <p class="directory-help" id="privilegedHelp">The badge follows Microsoft's published classification, not a calculated risk score. The count covers the whole dataset. <a href="#privileged-notes">About this classification</a>.</p>
+        <div class="directory-options">
+          <details class="sort-options"><summary>Sort roles</summary><div class="directory-actions"><label for="sortBy">Sort by</label><select id="sortBy"></select><button class="directory-action" id="sortDirection" type="button">Ascending</button></div></details>
+          <button class="directory-action" id="resetFilters" type="button" hidden>Reset filters</button>
+        </div>
+      </fieldset>
+      <p class="directory-status" id="actionStatus" role="status" aria-live="polite"></p>
+      <div class="directory-copy" id="copyFallback" hidden><label id="copyLabel" for="copyValue">Select and copy the value</label><textarea id="copyValue" rows="3" readonly></textarea></div>
+      <div class="directory-error" id="dataError" role="alert" hidden><p>Directory roles could not be loaded. Check the connection and retry.</p><button class="directory-action" id="retry" type="button">Retry</button></div>
+      <p class="directory-count" id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading directory roles&hellip;</p>
+      <div class="directory-linked" id="linkedRole" hidden></div>
+      <div id="roleResults" aria-busy="true"></div>
+      <button class="directory-action load-more" id="loadMore" type="button" hidden>Load more roles</button>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About Microsoft Entra ID built-in roles</h2>
-      <p>Entra ID roles govern the directory itself - users, groups, applications, devices, authentication methods and the Microsoft 365 services that trust it. They are a different system from Azure RBAC: an Entra role never grants access to a subscription or a resource group, and an Azure role never lets you reset a password or consent to an application. The one bridge between them is the Global Administrator's ability to elevate access to User Access Administrator at the root management group, which is a deliberate, auditable action.</p>
-      <h3>Template ID, not role ID</h3>
-      <p>Each built-in role has a template ID that is identical in every tenant, and a role definition ID that is only stable within one tenant. Automation should reference the template ID - that is the GUID listed here - so the same script works against any directory.</p>
-      <h3>Roles are not Graph API permissions</h3>
-      <p>The <code>microsoft.directory/...</code> strings listed against each role are Entra RBAC resource actions, not Microsoft Graph scopes such as <code>Directory.Read.All</code>. The two models are parallel and Microsoft publishes no mapping between them: a Graph permission decides what an application's <em>token</em> may attempt, while the role decides what the <em>identity</em> may do in the directory, and many operations need both. A call that fails with <code>Authorization_RequestDenied</code> despite the correct scope is almost always missing the role. The full scope catalog is on the <a href="/graph-permissions/">Microsoft Graph permissions</a> page.</p>
-      <h3>Privileged roles</h3>
-      <p>Microsoft flags a role as privileged when it can manage access to the directory or to Microsoft 365 services, directly or by proxy: creating credentials on an application, resetting an administrator's password, or assigning other roles. Those roles are the ones worth putting behind Privileged Identity Management with approval and time limits, and worth alerting on when assigned permanently.</p>
+      <p>Entra ID directory roles govern users, groups, applications, devices, authentication methods and Microsoft services that use Entra identities. They are distinct from <a href="/azure-built-in-roles/">Azure RBAC roles</a>, which govern Azure resource access. This catalogue is a reference snapshot, not a view of your tenant's assignments or effective access.</p>
+      <h3 id="template-id-notes">Template ID, not an activated directory role ID</h3>
+      <p>The built-in template ID copied here identifies the same role template across directories. Do not confuse it with the tenant-specific <code>directoryRole.id</code> of an activated directory-role object. A role definition is another resource type: use the identifier expected by the API, rather than substituting a template ID for every parameter named <code>id</code>.</p>
+      <p>See Microsoft's descriptions of <a href="https://learn.microsoft.com/en-us/graph/api/resources/directoryrole?view=graph-rest-1.0" target="_blank" rel="noopener">directoryRole and roleTemplateId</a> and <a href="https://learn.microsoft.com/en-us/graph/api/resources/unifiedroledefinition?view=graph-rest-1.0" target="_blank" rel="noopener">unifiedRoleDefinition and templateId</a>. This page does not retrieve tenant-specific object IDs.</p>
+      <h3 id="graph-permission-notes">Roles are not Graph API permissions</h3>
+      <p>The <code>microsoft.directory/...</code> strings are directory RBAC resource actions, not Microsoft Graph OAuth scopes or application permissions such as <code>Directory.Read.All</code>. Check each endpoint's documented permissions and role requirements. An authorization error can have several causes; this catalogue does not diagnose token or assignment issues. Browse the separate <a href="/graph-permissions/">Microsoft Graph permissions</a> catalogue for those permissions.</p>
+      <h3 id="privileged-notes">Privileged classification</h3>
+      <p>The Privileged badge and filter reproduce Microsoft's classification in the source snapshot. A role not flagged as privileged is not necessarily harmless. The filter count is the dataset total; the result count reflects your combined search and service filters.</p>
+      <h3>Progressive action details</h3>
+      <p>Actions are grouped by the service namespace before the first slash. Open a service to read a batch of actions and their recorded descriptions; show more actions or services when needed. A search inside a role covers all its recorded actions, including groups and batches not yet displayed, without changing the catalogue filters. Counts are recorded entries, not an expansion of inherited or effective permissions.</p>
+      <p>An empty action list means no actions were recorded in this snapshot, not that the role has no permissions. Refer to Microsoft Learn for its current definition.</p>
       <h3>Practical guidance</h3>
       <ul>
         <li>Prefer a narrow role over Global Administrator; most day-to-day tasks are covered by a specific administrator role listed here.</li>
@@ -690,7 +1023,7 @@
         <li>Read the permissions rather than the name: several reader-sounding roles can read sensitive data, and some administrator roles are narrower than they sound.</li>
       </ul>
       <h3>Where this data comes from</h3>
-      <p>The dataset is rebuilt several times a day from Microsoft's generated Entra ID roles reference, so a role or permission added upstream appears here without anyone editing this page.</p>
+      <p>The refresh workflow collects Microsoft's Entra ID roles reference and its action descriptions. Last refreshed is the dataset timestamp, not the last modification date of each role. Original template IDs and resource-action strings are preserved.</p>
     </section>
   </main>
 
@@ -698,7 +1031,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -744,6 +1077,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -754,437 +1088,645 @@
     </svg>
   </button>
 
-<script>
+<script data-entra-roles-script>
     const PAGE_SIZE = 100;
-    const state = { visible: PAGE_SIZE, roles: [], filtered: [], byKey: {}, sortKey: "displayName", sortDir: "asc", query: "" };
-    const elements = {
-      statsGrid: document.getElementById("statsGrid"),
-      refreshedAt: document.getElementById("refreshedAt"),
-      currentYear: document.getElementById("currentYear"),
-      search: document.getElementById("search"),
-      serviceFilter: document.getElementById("serviceFilter"),
-      privilegedOnlyFilter: document.getElementById("privilegedOnlyFilter"),
-      tableBody: document.getElementById("tableBody"),
-      resultCount: document.getElementById("resultCount"),
-      backToTop: document.getElementById("backToTop"),
-      headers: [...document.querySelectorAll("thead th[data-key]")],
-    };
+    const SERVICE_BATCH = 8;
+    const ACTION_BATCH = 20;
+    const SORTS = { displayName: "Role name", permissionCount: "Recorded actions", isPrivileged: "Privileged classification", templateId: "Template ID" };
+    const state = { status: "loading", roles: [], filtered: [], byId: new Map(), indices: new Map(), visible: PAGE_SIZE, sortKey: "displayName", sortDir: "asc", open: new Set(), details: new Map(), linkedId: "" };
+    const el = Object.fromEntries(["directoryControls", "search", "serviceFilter", "privilegedOnlyFilter", "privilegedCount", "sortBy", "sortDirection", "resetFilters", "actionStatus", "copyFallback", "copyValue", "copyLabel", "dataError", "retry", "refreshedAt", "resultCount", "linkedRole", "roleResults", "loadMore", "datasetSummary", "statsGrid", "distinctPermissions"].map(id => [id, document.getElementById(id)]));
+    const compact = matchMedia("(max-width: 60rem)");
+    const filters = [el.search, el.serviceFilter, el.privilegedOnlyFilter];
 
     function normalize(value) {
-      return String(value).toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return String(value ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>"']/g, function (c) {
-        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    function roleKey(value) {
+      return value.toLowerCase();
+    }
+
+    function actionService(action) {
+      const slash = action.indexOf("/");
+      return slash > 0 ? action.slice(0, slash) : "";
+    }
+
+    function groupActions(permissions, query = "") {
+      const groups = new Map();
+      const search = normalize(query.trim());
+      permissions.forEach((pair, index) => {
+        const service = actionService(pair[0]);
+        const key = service.toLowerCase();
+        if (!groups.has(key)) groups.set(key, { key, label: service || "Unclassified actions", total: 0, matches: [] });
+        const group = groups.get(key);
+        group.total++;
+        if (!search || normalize(pair[0] + " " + pair[1]).includes(search)) group.matches.push({ pair, index });
       });
+      return [...groups.values()].filter(group => group.matches.length).sort((a, b) => b.matches.length - a.matches.length || a.label.localeCompare(b.label, "en"));
     }
 
-    function renderStats(stats) {
-      elements.statsGrid.replaceChildren();
-      stats.forEach(function (stat) {
-        const el = document.createElement("div");
-        el.className = "stat-card" + (stat.tone ? " is-" + stat.tone : "");
-        el.innerHTML = '<div class="stat-value">' + stat.value.toLocaleString() + '</div><div class="stat-label">' + stat.label + '</div>';
-        elements.statsGrid.append(el);
-      });
-    }
-
-    function fillSelect(select, values) {
-      values.forEach(function (value) { select.append(new Option(value, value)); });
-    }
-
-    // Copying a GUID out of a table is the single most common reason to be on
-    // this page, so every id gets a button rather than asking for a selection.
-    function copyButton(label, value) {
-      return '<button type="button" class="copy-button" data-copy="' + escapeHtml(value) + '">' +
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-        escapeHtml(label) + '</button>';
-    }
-
-    function permissionList(pairs) {
-      if (!pairs || !pairs.length) return '<p class="detail-empty">None.</p>';
-      return '<ul class="perm-list">' + pairs.map(function (pair) {
-        return '<li><code>' + escapeHtml(pair[0]) + '</code><span class="perm-desc">' + (pair[1] ? escapeHtml(pair[1]) : "&mdash;") + '</span></li>';
-      }).join("") + '</ul>';
-    }
-
-    function closeDetail(row) {
-      const detail = row.nextElementSibling;
-      if (detail && detail.classList.contains("detail-row")) detail.remove();
-      row.setAttribute("aria-expanded", "false");
-    }
-
-    function toggleDetail(row) {
-      if (row.getAttribute("aria-expanded") === "true") { closeDetail(row); return; }
-      const item = state.byKey[row.dataset.key];
-      if (!item) return;
-      const detail = document.createElement("tr");
-      detail.className = "detail-row";
-      const cell = document.createElement("td");
-      cell.colSpan = elements.headers.length;
-      cell.innerHTML = '<div class="detail-panel">' + detailPanel(item) + "</div>";
-      detail.append(cell);
-      row.after(detail);
-      row.setAttribute("aria-expanded", "true");
-    }
-
-    function renderLoadMore(total, shownCount) {
-      const wrap = document.querySelector(".table-wrap");
-      if (!wrap) return;
-      let button = wrap.parentElement.querySelector(".load-more");
-      if (shownCount >= total) {
-        if (button) button.remove();
-        return;
-      }
-      const remaining = total - shownCount;
-      if (!button) {
-        button = document.createElement("button");
-        button.type = "button";
-        button.className = "load-more";
-        button.addEventListener("click", function () {
-          state.visible += PAGE_SIZE;
-          renderTable();
-          const next = document.querySelector(".load-more");
-          if (next) next.focus();
-        });
-        wrap.insertAdjacentElement("afterend", button);
-      }
-      button.textContent = "Load " + Math.min(PAGE_SIZE, remaining).toLocaleString() + " more (" + remaining.toLocaleString() + " remaining)";
-    }
-
-    function sortRows(rows) {
-      return rows.slice().sort(function (a, b) {
-        let av = a[state.sortKey];
-        let bv = b[state.sortKey];
-        if (typeof av === "number" || typeof bv === "number") {
-          av = Number(av) || 0;
-          bv = Number(bv) || 0;
-        } else {
-          av = normalize(av == null ? "" : av);
-          bv = normalize(bv == null ? "" : bv);
+    function prepareRoles(payload) {
+      if (!payload || !Array.isArray(payload.roles)) throw new Error("Missing directory-role list");
+      const ids = new Set();
+      return payload.roles.map(role => {
+        if (!role || typeof role.templateId !== "string" || !role.templateId || ids.has(roleKey(role.templateId))
+          || typeof role.displayName !== "string" || !role.displayName || typeof role.description !== "string"
+          || typeof role.isPrivileged !== "boolean" || !Array.isArray(role.services) || role.services.some(service => typeof service !== "string" || !service.trim())
+          || !Array.isArray(role.permissions) || role.permissions.some(pair => !Array.isArray(pair) || typeof pair[0] !== "string" || !pair[0] || typeof pair[1] !== "string")) {
+          throw new Error("Invalid or duplicate directory-role metadata");
         }
-        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
-        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
-        return 0;
+        const source = new URL(role.docUrl);
+        if (source.protocol !== "https:" || source.hostname !== "learn.microsoft.com" || source.username || source.password) throw new Error("Invalid Microsoft Learn reference");
+        ids.add(roleKey(role.templateId));
+        return { ...role, permissionCount: role.permissions.length, serviceKeys: new Set(role.services.map(service => service.toLowerCase())), haystack: normalize([role.displayName, role.templateId, role.description, ...role.services, ...role.permissions.flat()].join(" ")) };
       });
     }
 
-    function markSortedHeader() {
-      elements.headers.forEach(function (th) {
-        th.removeAttribute("aria-sort");
-        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+    function datasetTotals(roles) {
+      const actions = roles.flatMap(role => role.permissions.map(pair => pair[0].toLowerCase()));
+      return {
+        roles: roles.length,
+        permissions: actions.length,
+        distinctPermissions: new Set(actions).size,
+        services: new Set(roles.flatMap(role => [...role.serviceKeys])).size,
+        privileged: roles.filter(role => role.isPrivileged).length,
+      };
+    }
+
+    function renderStats() {
+      const totals = state.status === "ready" ? datasetTotals(state.roles) : null;
+      el.statsGrid.querySelectorAll(".stat-value").forEach(value => {
+        value.textContent = totals ? totals[value.dataset.stat].toLocaleString("en-US") : "—";
+      });
+      el.statsGrid.setAttribute("aria-busy", String(state.status === "loading" || state.status === "fetching"));
+      el.datasetSummary.textContent = totals
+        ? "Whole-catalogue totals, independent of filters. Permissions count recorded resource-action entries across roles."
+        : state.status === "error" ? "Dataset totals: unavailable." : "Dataset totals: loading...";
+      el.distinctPermissions.textContent = totals ? `${totals.distinctPermissions.toLocaleString("en-US")} distinct actions`
+        : state.status === "error" ? "Distinct actions: unavailable." : "Distinct actions: loading...";
+      el.privilegedCount.textContent = totals ? `(${totals.privileged.toLocaleString("en-US")} total)`
+        : state.status === "error" ? "(count unavailable)" : "(loading)";
+    }
+
+    function filterRoles(roles, criteria) {
+      const query = normalize(criteria.search.trim());
+      return roles.filter(role => (!criteria.service || role.serviceKeys.has(criteria.service.toLowerCase()))
+        && (!criteria.privilegedOnly || role.isPrivileged) && (!query || role.haystack.includes(query)));
+    }
+
+    function sortRoles(roles, key, direction) {
+      const sign = direction === "desc" ? -1 : 1;
+      return [...roles].sort((a, b) => {
+        const value = typeof a[key] === "number" || typeof a[key] === "boolean" ? Number(a[key]) - Number(b[key]) : normalize(a[key]).localeCompare(normalize(b[key]), "en");
+        return sign * (value || a.displayName.localeCompare(b.displayName, "en") || a.templateId.localeCompare(b.templateId));
       });
     }
 
-    function wireTableInteractions() {
-      elements.tableBody.addEventListener("click", function (event) {
-        const copy = event.target.closest("[data-copy]");
-        if (copy) {
-          event.stopPropagation();
-          const value = copy.dataset.copy;
-          const done = function () {
-            const original = copy.lastChild.textContent;
-            copy.lastChild.textContent = "Copied";
-            setTimeout(function () { copy.lastChild.textContent = original; }, 1200);
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(value).then(done, function () {});
-          }
-          return;
-        }
-        const row = event.target.closest("tr.role-row");
-        if (row) toggleDetail(row);
-      });
-
-      elements.tableBody.addEventListener("keydown", function (event) {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        const row = event.target.closest("tr.role-row");
-        if (!row || event.target.closest("[data-copy]")) return;
-        event.preventDefault();
-        toggleDetail(row);
-      });
-
-      elements.headers.forEach(function (th) {
-        th.addEventListener("click", function () {
-          const key = th.dataset.key;
-          if (state.sortKey === key) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-          else { state.sortKey = key; state.sortDir = key === "roleName" || key === "displayName" ? "asc" : "desc"; }
-          renderTable();
-        });
-      });
+    function node(tag, text, className) {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
     }
 
-    // The shared url-state script hydrates at parse time, before the JSON has
-    // arrived: its restored values are then overwritten by the first render,
-    // and a select value set before its options exist is dropped outright.
-    // Re-apply the query string once the data and the option lists are in place.
-    function hydrateFromUrl() {
-      if (!window.URLSearchParams) return;
-      const params = new URLSearchParams(location.search);
-      if (!params.toString()) return;
-      document.querySelectorAll("main input[id], main select[id]").forEach(function (el) {
-        const value = params.get(el.id);
-        if (value === null) return;
-        if (el.type === "checkbox") el.checked = value === "1";
-        else el.value = value;
-      });
-      state.query = elements.search.value;
+    function button(text, handler, action) {
+      const element = node("button", text, "directory-action");
+      element.type = "button";
+      if (action) element.dataset.action = action;
+      element.addEventListener("click", handler);
+      return element;
     }
 
-    function wireChrome() {
-      let scrollTicking = false;
-      window.addEventListener("scroll", function () {
-        if (scrollTicking) return;
-        scrollTicking = true;
-        requestAnimationFrame(function () {
-          elements.backToTop.classList.toggle("visible", window.scrollY > 600);
-          scrollTicking = false;
-        });
-      }, { passive: true });
-      elements.backToTop.addEventListener("click", function () {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
+    function detailState(id) {
+      const key = roleKey(id);
+      if (!state.details.has(key)) state.details.set(key, { query: "", openServices: new Set(), searchClosed: new Set(), limits: new Map(), visibleServices: SERVICE_BATCH });
+      return state.details.get(key);
     }
 
-    function detailPanel(role) {
-      // The description is already under the role name in the row above.
-      let html = '<div class="detail-meta">' +
-        copyButton("Copy template ID", role.templateId) +
-        copyButton("Copy name", role.displayName) +
-        '<a href="' + escapeHtml(role.docUrl) + '" target="_blank" rel="noopener">View on Microsoft Learn</a>' +
-        "</div>";
-
-      if (role.services && role.services.length) {
-        html += '<div class="detail-group"><h3>Services</h3><div class="scope-list">' +
-          role.services.map(function (service) { return "<code>" + escapeHtml(service) + "</code>"; }).join("") +
-          "</div></div>";
+    function currentUrl(id = state.linkedId) {
+      const url = new URL(location.href);
+      filters.forEach(control => {
+        url.searchParams.delete(control.id);
+        if (control.type === "checkbox") { if (control.checked) url.searchParams.set(control.id, "1"); }
+        else if (control.value) url.searchParams.set(control.id, control.value);
+      });
+      ["role", "actionSearch", "sort", "dir", "shown"].forEach(key => url.searchParams.delete(key));
+      if (id) {
+        url.searchParams.set("role", id);
+        const query = detailState(id).query;
+        if (query) url.searchParams.set("actionSearch", query);
+        url.hash = "";
       }
-
-      html += '<div class="detail-group"><h3>Allowed resource actions (' + (role.permissions || []).length.toLocaleString() + ")</h3>" +
-        permissionList(role.permissions) + "</div>";
-      return html;
+      if (state.sortKey !== "displayName") url.searchParams.set("sort", state.sortKey);
+      if (state.sortDir !== "asc") url.searchParams.set("dir", state.sortDir);
+      if (state.visible > PAGE_SIZE) url.searchParams.set("shown", state.visible);
+      return url;
     }
 
-    function renderTable() {
-      const rows = sortRows(state.filtered);
-      const shown = rows.slice(0, state.visible);
-
-      elements.tableBody.replaceChildren();
-      const fragment = document.createDocumentFragment();
-      shown.forEach(function (role) {
-        const tr = document.createElement("tr");
-        tr.className = "role-row";
-        tr.dataset.key = role.templateId;
-        tr.tabIndex = 0;
-        tr.setAttribute("role", "button");
-        tr.setAttribute("aria-expanded", "false");
-        tr.innerHTML =
-          '<td><span class="role-head"><svg class="role-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span class="role-name">' + escapeHtml(role.displayName) + "</span>" +
-            (role.isPrivileged ? '<span class="role-badge is-privileged">Privileged</span>' : "") +
-          "</span>" + (role.description ? '<span class="role-desc">' + escapeHtml(role.description) + "</span>" : "") + "</td>" +
-          '<td class="num-cell">' + role.permissionCount.toLocaleString() + "</td>" +
-          '<td class="id-cell"><code>' + escapeHtml(role.templateId) + "</code></td>";
-        fragment.append(tr);
-      });
-      elements.tableBody.append(fragment);
-
-      elements.resultCount.textContent = shown.length < rows.length
-        ? "Showing " + shown.length.toLocaleString() + " of " + rows.length.toLocaleString() + " matching roles."
-        : rows.length.toLocaleString() + " role" + (rows.length === 1 ? "" : "s") + " shown.";
-
-      renderLoadMore(rows.length, shown.length);
-      markSortedHeader();
-    }
-
-    function applyFilter() {
-      state.visible = PAGE_SIZE;
-      const query = normalize(state.query.trim());
-      const service = elements.serviceFilter.value;
-      const privilegedOnly = elements.privilegedOnlyFilter.checked;
-      state.filtered = state.roles.filter(function (role) {
-        if (service && role.services.indexOf(service) === -1) return false;
-        if (privilegedOnly && !role.isPrivileged) return false;
-        if (query && role.haystack.indexOf(query) === -1) return false;
-        return true;
-      });
-      renderTable();
-    }
-
-    async function init() {
-      elements.currentYear.textContent = new Date().getFullYear();
+    function syncUrl(push = false) {
       try {
-        const response = await fetch("./roles.json", { cache: "no-store" });
-        if (!response.ok) throw new Error("Data request failed: " + response.status);
-        const payload = await response.json();
-
-        state.roles = (payload.roles || []).map(function (role) {
-          const permissions = role.permissions || [];
-          const searchable = [role.displayName, role.description]
-            .concat(permissions.map(function (p) { return p[0]; }))
-            .join(" ");
-          return Object.assign({}, role, {
-            permissions: permissions,
-            services: role.services || [],
-            permissionCount: permissions.length,
-            haystack: normalize(searchable),
-          });
-        });
-        state.filtered = state.roles;
-        state.byKey = {};
-        state.roles.forEach(function (role) { state.byKey[role.templateId] = role; });
-
-        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
-          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-        });
-
-        renderStats([
-          { label: "Built-in roles", value: payload.totalRoles || state.roles.length },
-          { label: "Permissions", value: payload.totalPermissions || 0 },
-          { label: "Services", value: payload.totalServices || 0 },
-          { label: "Privileged roles", value: payload.privilegedCount || 0, tone: "warning" },
-        ]);
-
-        fillSelect(elements.serviceFilter, payload.services || []);
-        hydrateFromUrl();
-        applyFilter();
+        const url = currentUrl();
+        if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+        window.dispatchEvent(new Event("entrarolescataloguechange"));
       } catch (error) {
-        console.error(error);
-        elements.resultCount.textContent = "Unable to load the built-in roles data.";
+        console.warn("Directory-role URL could not be updated.", error);
+        el.actionStatus.textContent = "The view works, but the address could not be updated. Use Copy role link to share it.";
+      }
+    }
+
+    async function copy(text, control, label) {
+      try {
+        await navigator.clipboard.writeText(text);
+        el.copyFallback.hidden = true;
+        el.actionStatus.textContent = `${label} copied.`;
+        control.dataset.caption ||= control.textContent;
+        control.textContent = "Copied";
+        setTimeout(() => { if (control.isConnected) control.textContent = control.dataset.caption; }, 1500);
+      } catch (error) {
+        console.warn(`${label} could not be copied.`, error);
+        el.copyFallback.hidden = false;
+        el.copyLabel.textContent = `Select and copy: ${label}`;
+        el.copyValue.value = text;
+        el.copyValue.focus();
+        el.copyValue.select();
+        el.actionStatus.textContent = "Clipboard access is unavailable. Select and copy the value above.";
+      }
+    }
+
+    function privilegedBadge(role) {
+      const badge = node("span", role.isPrivileged ? "Privileged" : "Not flagged as privileged", "privileged-badge" + (role.isPrivileged ? " is-privileged" : ""));
+      badge.setAttribute("aria-describedby", "privilegedHelp");
+      return badge;
+    }
+
+    function technical(value, label, action, className = "permission-pattern") {
+      const code = node("code", value, className);
+      code.tabIndex = 0;
+      code.setAttribute("aria-label", label);
+      if (action) code.dataset.action = action;
+      return code;
+    }
+
+    function renderActionExplorer(role) {
+      const info = detailState(role.templateId);
+      const explorer = node("div", undefined, "action-explorer");
+      const field = node("div", undefined, "role-action-search");
+      const fieldBody = node("div");
+      const input = node("input");
+      input.type = "search";
+      input.id = "action-search-" + state.indices.get(roleKey(role.templateId));
+      input.dataset.action = "action-search";
+      input.placeholder = "Action, description or service";
+      input.autocomplete = "off";
+      input.spellcheck = false;
+      input.value = info.query;
+      input.disabled = !role.permissions.length;
+      const label = node("label", "Search actions in this role");
+      label.htmlFor = input.id;
+      fieldBody.append(label, input);
+      const clear = button("Clear action search", () => {
+        input.value = "";
+        updateQuery();
+        (input.disabled ? findControl(role.templateId, "toggle") : input)?.focus({ preventScroll: true });
+      }, "clear-action-search");
+      clear.hidden = !info.query;
+      field.append(fieldBody, clear);
+      const count = node("p", undefined, "directory-count action-count");
+      count.setAttribute("role", "status");
+      count.setAttribute("aria-live", "polite");
+      count.setAttribute("aria-atomic", "true");
+      const groups = node("div", undefined, "action-groups");
+      const moreServices = button("", () => {
+        const previous = info.visibleServices;
+        info.visibleServices += SERVICE_BATCH;
+        renderGroups();
+        const next = groups.querySelectorAll(".permission-service > summary")[previous];
+        if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ block: "start", behavior: "instant" }); }
+      }, "more-services");
+      moreServices.classList.add("more-services");
+      explorer.append(field, count, groups, moreServices);
+
+      function servicePanel(group) {
+        const details = node("details", undefined, "permission-service");
+        details.dataset.serviceKey = group.key;
+        details.open = info.query.trim() ? !info.searchClosed.has(group.key) : info.openServices.has(group.key);
+        const summary = node("summary", info.query.trim() ? `${group.label} · ${group.matches.length} ${group.matches.length === 1 ? "match" : "matches"} / ${group.total} recorded ${group.total === 1 ? "action" : "actions"}`
+          : `${group.label} · ${group.total} recorded ${group.total === 1 ? "action" : "actions"}`);
+        summary.dataset.action = "service-" + group.key;
+        const content = node("div", undefined, "service-content");
+        details.append(summary, content);
+        let built = false;
+
+        function fill() {
+          const limit = info.limits.get(group.key) || ACTION_BATCH;
+          const shown = group.matches.slice(0, limit);
+          content.replaceChildren(node("p", `${shown.length} of ${group.matches.length} ${info.query.trim() ? "matching" : "recorded"} ${group.matches.length === 1 ? "action" : "actions"} shown.`, "directory-help"));
+          const list = node("ul", undefined, "permission-list");
+          shown.forEach(entry => {
+            const item = node("li");
+            item.dataset.entryIndex = entry.index;
+            item.append(technical(entry.pair[0], "Recorded directory resource action", "permission-" + entry.index),
+              node("span", entry.pair[1] || "No description recorded.", "permission-description"));
+            list.append(item);
+          });
+          content.append(list);
+          if (shown.length < group.matches.length) {
+            const more = button(`Show ${Math.min(ACTION_BATCH, group.matches.length - shown.length)} more ${group.matches.length - shown.length === 1 ? "action" : "actions"} (${group.matches.length - shown.length} remaining)`, () => {
+              const next = group.matches[shown.length];
+              info.limits.set(group.key, limit + ACTION_BATCH);
+              fill();
+              const code = content.querySelector(`[data-entry-index="${next.index}"] .permission-pattern`);
+              code.focus({ preventScroll: true });
+              code.scrollIntoView({ block: "start", behavior: "instant" });
+            }, "more-actions-" + group.key);
+            more.classList.add("more-actions");
+            content.append(more);
+          }
+          built = true;
+        }
+        if (details.open) fill();
+        details.addEventListener("toggle", () => {
+          if (!details.isConnected) return;
+          if (info.query.trim()) {
+            if (details.open) info.searchClosed.delete(group.key); else info.searchClosed.add(group.key);
+          } else {
+            if (details.open) info.openServices.add(group.key); else info.openServices.delete(group.key);
+          }
+          if (details.open && !built) fill();
+          if (!details.open) { content.replaceChildren(); built = false; }
+        });
+        return details;
+      }
+
+      function renderGroups() {
+        groups.replaceChildren();
+        const all = groupActions(role.permissions, info.query);
+        const shown = all.slice(0, info.visibleServices);
+        const matching = all.reduce((total, group) => total + group.matches.length, 0);
+        count.textContent = `${matching.toLocaleString("en-US")} matching / ${role.permissions.length.toLocaleString("en-US")} recorded ${role.permissions.length === 1 ? "action" : "actions"} · ${shown.length} of ${all.length} matching ${all.length === 1 ? "service" : "services"} shown.`;
+        if (!role.permissions.length) {
+          const empty = node("p", "No resource actions are recorded in this snapshot. This does not mean the role has no permissions; consult Microsoft Learn.", "action-empty");
+          groups.append(empty);
+        } else if (!all.length) {
+          const empty = node("div", undefined, "action-empty");
+          empty.append(node("p", "No recorded action matches this search."), button("Clear action search", () => { input.value = ""; updateQuery(); input.focus(); }));
+          groups.append(empty);
+        } else groups.append(...shown.map(servicePanel));
+        const remaining = all.length - shown.length;
+        moreServices.hidden = remaining <= 0;
+        moreServices.textContent = `Show ${Math.min(SERVICE_BATCH, remaining)} more ${remaining === 1 ? "service" : "services"} (${remaining} remaining)`;
+        clear.hidden = !info.query;
+      }
+
+      function updateQuery() {
+        info.query = input.value;
+        info.visibleServices = SERVICE_BATCH;
+        info.limits.clear();
+        info.searchClosed.clear();
+        state.linkedId = role.templateId;
+        renderGroups();
+        syncUrl();
+      }
+      input.addEventListener("input", updateQuery);
+      renderGroups();
+      return explorer;
+    }
+
+    function roleDetail(role, id) {
+      const panel = node("div", undefined, "directory-detail");
+      panel.id = id;
+      panel.setAttribute("role", "region");
+      panel.setAttribute("aria-label", `Details for ${role.displayName}`);
+      const actions = node("div", undefined, "directory-actions");
+      const copyTemplate = button("Copy template ID", () => copy(role.templateId, copyTemplate, "Built-in template ID"), "copy-template");
+      const explanation = node("p", "Copies the built-in template ID, not an activated directoryRole.id in your tenant. Check which identifier your API accepts. ", "directory-help");
+      explanation.id = "template-note-" + state.indices.get(roleKey(role.templateId));
+      copyTemplate.setAttribute("aria-describedby", explanation.id);
+      const idHelp = node("a", "Identifier guidance");
+      idHelp.href = "#template-id-notes";
+      explanation.append(idHelp);
+      const learn = node("a", "Microsoft Learn", "directory-action");
+      learn.href = role.docUrl;
+      learn.target = "_blank";
+      learn.rel = "noopener noreferrer";
+      learn.dataset.action = "learn";
+      const copyName = button("Copy name", () => copy(role.displayName, copyName, "Role name"), "copy-name");
+      const copyLink = button("Copy role link", () => copy(currentUrl(role.templateId).href, copyLink, "Directory-role link"), "copy-link");
+      actions.append(copyTemplate, learn, copyName, copyLink);
+      const template = node("div", undefined, "template-value");
+      template.append(node("strong", "Template ID"), technical(role.templateId, "Built-in template ID", "template-id", "template-code"));
+      panel.append(actions, explanation, node("p", role.description), template, renderActionExplorer(role));
+      return panel;
+    }
+
+    function toggleRole(role) {
+      const key = roleKey(role.templateId);
+      if (state.open.has(key)) {
+        state.open.delete(key);
+        if (roleKey(state.linkedId) === key) state.linkedId = "";
+      } else { state.open.add(key); state.linkedId = role.templateId; }
+      render();
+      syncUrl(true);
+    }
+
+    function roleSummary(role, card) {
+      const summary = node("div");
+      const heading = node("h3", undefined, "directory-title");
+      const toggle = button("", () => toggleRole(role), "toggle");
+      toggle.className = "directory-toggle";
+      const open = state.open.has(roleKey(role.templateId));
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-controls", "directory-detail-" + state.indices.get(roleKey(role.templateId)));
+      toggle.setAttribute("aria-label", `${open ? "Close" : "Open"} directory role: ${role.displayName}`);
+      toggle.append(node("span", role.displayName), node("span", open ? "Close details" : "View grouped actions", "open-caption"));
+      heading.append(toggle);
+      summary.append(heading);
+      if (card) {
+        const badges = node("div", undefined, "directory-badges");
+        badges.append(privilegedBadge(role), node("span", `${role.permissionCount.toLocaleString("en-US")} recorded ${role.permissionCount === 1 ? "action" : "actions"}`));
+        summary.append(badges);
+      } else summary.append(node("p", role.description, "directory-description"));
+      return summary;
+    }
+
+    function roleCard(role) {
+      const article = node("article", undefined, "directory-entry directory-card");
+      article.dataset.roleId = roleKey(role.templateId);
+      article.append(roleSummary(role, true));
+      const open = state.open.has(roleKey(role.templateId));
+      const id = "directory-detail-" + state.indices.get(roleKey(role.templateId));
+      const panel = open ? roleDetail(role, id) : node("div");
+      panel.id = id;
+      panel.hidden = !open;
+      article.append(panel);
+      return article;
+    }
+
+    function changeSort(key) {
+      state.sortDir = state.sortKey === key ? (state.sortDir === "asc" ? "desc" : "asc") : key === "displayName" ? "asc" : "desc";
+      state.sortKey = key;
+      render();
+      syncUrl();
+    }
+
+    function roleTable(roles) {
+      const wrap = node("div", undefined, "directory-table-wrap");
+      const table = node("table", undefined, "directory-table");
+      table.setAttribute("aria-label", "Directory roles, privileged classification and recorded actions");
+      const header = node("thead");
+      const row = node("tr");
+      [["displayName", "Directory role"], ["isPrivileged", "Privileged classification"], ["permissionCount", "Recorded actions"]].forEach(([key, label]) => {
+        const cell = node("th");
+        cell.scope = "col";
+        if (state.sortKey === key) cell.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+        const control = button(label, () => changeSort(key));
+        control.className = "header-sort";
+        control.id = "sort-" + key;
+        control.setAttribute("aria-label", "Sort by " + label);
+        if (state.sortKey === key) { const arrow = node("span", state.sortDir === "asc" ? "↑" : "↓"); arrow.setAttribute("aria-hidden", "true"); control.append(arrow); }
+        cell.append(control);
+        row.append(cell);
+      });
+      header.append(row);
+      const body = node("tbody");
+      roles.forEach(role => {
+        const entry = node("tr", undefined, "directory-entry");
+        entry.dataset.roleId = roleKey(role.templateId);
+        const name = node("td"), privileged = node("td");
+        name.append(roleSummary(role, false));
+        privileged.append(privilegedBadge(role));
+        entry.append(name, privileged, node("td", role.permissionCount.toLocaleString("en-US")));
+        const expanded = node("tr", undefined, "directory-detail-row");
+        expanded.dataset.roleId = roleKey(role.templateId);
+        const open = state.open.has(roleKey(role.templateId));
+        expanded.hidden = !open;
+        const cell = node("td");
+        cell.colSpan = 3;
+        const id = "directory-detail-" + state.indices.get(roleKey(role.templateId));
+        const panel = open ? roleDetail(role, id) : node("div");
+        panel.id = id;
+        cell.append(panel);
+        expanded.append(cell);
+        body.append(entry, expanded);
+      });
+      table.append(header, body);
+      wrap.append(table);
+      return wrap;
+    }
+
+    function criteria() {
+      return { search: el.search.value, service: el.serviceFilter.value, privilegedOnly: el.privilegedOnlyFilter.checked };
+    }
+
+    function findControl(id, action) {
+      return [...document.querySelectorAll("[data-role-id]")].filter(element => element.dataset.roleId === roleKey(id))
+        .map(element => [...element.querySelectorAll("[data-action]")].find(control => control.dataset.action === action))
+        .find(control => control && control.checkVisibility());
+    }
+
+    function focusRole() {
+      const control = findControl(state.linkedId, "toggle");
+      if (control) { control.focus({ preventScroll: true }); control.closest("[data-role-id]").scrollIntoView({ block: "start", behavior: "instant" }); }
+      else el.linkedRole.querySelector("button")?.focus();
+    }
+
+    function render() {
+      if (state.status !== "ready") return;
+      const focused = document.activeElement;
+      const focusRoleId = focused.closest("[data-role-id]")?.dataset.roleId;
+      const action = focused.dataset.action;
+      const selection = focused instanceof HTMLInputElement && focused.type === "search" ? [focused.selectionStart, focused.selectionEnd] : null;
+      const shown = sortRoles(state.filtered, state.sortKey, state.sortDir).slice(0, state.visible);
+      el.roleResults.replaceChildren();
+      if (!shown.length) {
+        const empty = node("div", undefined, "directory-empty");
+        empty.append(node("h2", state.roles.length ? "No directory roles match these filters" : "No directory roles recorded"), button("Reset filters", resetFilters));
+        el.roleResults.append(empty);
+      } else if (compact.matches) {
+        const cards = node("div", undefined, "directory-cards");
+        cards.append(...shown.map(roleCard));
+        el.roleResults.append(cards);
+      } else el.roleResults.append(roleTable(shown));
+      const linked = state.linkedId && !shown.some(role => roleKey(role.templateId) === roleKey(state.linkedId));
+      el.linkedRole.hidden = !linked;
+      el.linkedRole.replaceChildren();
+      if (linked) {
+        const role = state.byId.get(roleKey(state.linkedId));
+        const message = node("p", role ? "This open directory role is outside the current filters or visible batch. It is shown separately and is not included in the displayed count."
+          : "The linked template ID was not found in this dataset. The catalogue remains available.");
+        message.setAttribute("role", "status");
+        el.linkedRole.append(message);
+        if (role) el.linkedRole.append(roleCard(role));
+        else el.linkedRole.append(button("Close missing role", () => { state.linkedId = ""; render(); syncUrl(true); el.search.focus(); }));
+      }
+      el.resultCount.textContent = `${shown.length.toLocaleString("en-US")} displayed / ${state.filtered.length.toLocaleString("en-US")} matching directory roles · ${state.roles.length.toLocaleString("en-US")} in the dataset.`;
+      el.resetFilters.hidden = !el.search.value && !el.serviceFilter.value && !el.privilegedOnlyFilter.checked;
+      el.sortBy.value = state.sortKey;
+      el.sortDirection.textContent = state.sortDir === "asc" ? "Ascending" : "Descending";
+      const remaining = state.filtered.length - shown.length;
+      el.loadMore.hidden = remaining <= 0;
+      el.loadMore.textContent = `Load ${Math.min(PAGE_SIZE, remaining)} more roles (${remaining} remaining)`;
+      if (!focused.isConnected) {
+        const control = (focusRoleId && action ? findControl(focusRoleId, action) : document.getElementById(focused.id)) || el.search;
+        control.focus({ preventScroll: true });
+        if (selection && control instanceof HTMLInputElement && control.type === "search") control.setSelectionRange(...selection);
       }
     }
 
     let searchTimer;
-    elements.search.addEventListener("input", function () {
-      state.query = elements.search.value;
+    function applyFilters(updateUrl = true) {
+      if (state.status !== "ready") return;
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(applyFilter, 120);
+      state.filtered = filterRoles(state.roles, criteria());
+      state.visible = PAGE_SIZE;
+      render();
+      if (updateUrl) syncUrl();
+    }
+
+    function resetFilters() {
+      filters.forEach(control => { if (control.type === "checkbox") control.checked = false; else control.value = ""; });
+      applyFilters();
+      el.search.focus({ preventScroll: true });
+    }
+
+    function restore() {
+      const params = new URLSearchParams(location.search);
+      el.search.value = params.get("search") || "";
+      const service = (params.get("serviceFilter") || "").toLowerCase();
+      if (service && ![...el.serviceFilter.options].some(option => option.value === service)) el.serviceFilter.add(new Option(`${service} (not in dataset)`, service));
+      el.serviceFilter.value = service;
+      el.privilegedOnlyFilter.checked = params.get("privilegedOnlyFilter") === "1";
+      state.sortKey = Object.hasOwn(SORTS, params.get("sort")) ? params.get("sort") : "displayName";
+      state.sortDir = params.get("dir") === "desc" ? "desc" : "asc";
+      const shown = Number(params.get("shown"));
+      state.visible = Number.isSafeInteger(shown) && shown >= PAGE_SIZE ? Math.min(shown, Math.max(PAGE_SIZE, state.roles.length)) : PAGE_SIZE;
+      const invalid = (params.has("sort") && !Object.hasOwn(SORTS, params.get("sort")))
+        || (params.has("dir") && !["asc", "desc"].includes(params.get("dir")))
+        || (params.has("shown") && (!Number.isSafeInteger(shown) || shown < PAGE_SIZE || shown > Math.max(PAGE_SIZE, state.roles.length)))
+        || (params.has("privilegedOnlyFilter") && !["0", "1"].includes(params.get("privilegedOnlyFilter")));
+      if (invalid) el.actionStatus.textContent = "An unsupported setting in the link was reset or limited to the available roles.";
+      const id = params.get("role") || "";
+      state.linkedId = state.byId.get(roleKey(id))?.templateId || id;
+      state.open = new Set(state.linkedId ? [roleKey(state.linkedId)] : []);
+      if (state.linkedId) {
+        const info = detailState(state.linkedId);
+        info.query = params.get("actionSearch") || "";
+        info.visibleServices = SERVICE_BATCH;
+        info.limits.clear();
+        info.searchClosed.clear();
+      } else if (params.get("actionSearch")) el.actionStatus.textContent = "The action search in the link needs a role and was not applied.";
+      state.filtered = filterRoles(state.roles, criteria());
+      render();
+    }
+
+    async function load() {
+      if (state.status === "fetching") return;
+      const fromRetry = document.activeElement === el.retry;
+      state.status = "fetching";
+      el.directoryControls.disabled = true;
+      el.retry.disabled = true;
+      el.dataError.hidden = true;
+      el.roleResults.setAttribute("aria-busy", "true");
+      el.refreshedAt.textContent = "Loading...";
+      el.resultCount.textContent = "Loading directory roles...";
+      renderStats();
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      try {
+        const response = await fetch("./roles.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`Directory-role request returned ${response.status}`);
+        const payload = await response.json();
+        state.roles = prepareRoles(payload);
+        state.byId = new Map(state.roles.map(role => [roleKey(role.templateId), role]));
+        state.indices = new Map(state.roles.map((role, index) => [roleKey(role.templateId), index]));
+        state.details.clear();
+        const services = new Map();
+        state.roles.forEach(role => role.services.forEach(service => { if (!services.has(service.toLowerCase())) services.set(service.toLowerCase(), service); }));
+        el.serviceFilter.replaceChildren(new Option("All services", ""));
+        [...services].sort((a, b) => a[1].localeCompare(b[1], "en")).forEach(([key, label]) => el.serviceFilter.add(new Option(label, key)));
+        const stamp = new Date(payload.generatedAt);
+        el.refreshedAt.textContent = typeof payload.generatedAt === "string" && !Number.isNaN(stamp.getTime()) ? stamp.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not reported";
+        state.status = "ready";
+        el.directoryControls.disabled = false;
+        restore();
+        if (state.linkedId) focusRole();
+      } catch (error) {
+        console.error("Directory roles could not be loaded.", error);
+        state.status = "error";
+        el.dataError.hidden = false;
+        el.refreshedAt.textContent = "Unavailable";
+        el.resultCount.textContent = "Unable to load directory roles. Retry to continue.";
+        el.roleResults.replaceChildren();
+        el.linkedRole.hidden = el.loadMore.hidden = true;
+      } finally {
+        clearTimeout(timeout);
+        renderStats();
+        el.retry.disabled = false;
+        el.roleResults.setAttribute("aria-busy", "false");
+        if (fromRetry) (state.status === "ready" ? el.search : el.retry).focus({ preventScroll: true });
+      }
+    }
+
+    Object.entries(SORTS).forEach(([key, label]) => el.sortBy.add(new Option(label, key)));
+    el.search.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => applyFilters(), 150); });
+    el.serviceFilter.addEventListener("change", () => applyFilters());
+    el.privilegedOnlyFilter.addEventListener("change", () => applyFilters());
+    el.resetFilters.addEventListener("click", resetFilters);
+    el.sortBy.addEventListener("change", () => { state.sortKey = el.sortBy.value; render(); syncUrl(); });
+    el.sortDirection.addEventListener("click", () => { state.sortDir = state.sortDir === "asc" ? "desc" : "asc"; render(); syncUrl(); });
+    el.retry.addEventListener("click", load);
+    compact.addEventListener("change", render);
+    el.loadMore.addEventListener("click", () => {
+      const next = sortRoles(state.filtered, state.sortKey, state.sortDir)[state.visible];
+      state.visible += PAGE_SIZE;
+      render();
+      syncUrl();
+      const control = next && findControl(next.templateId, "toggle");
+      if (control) { control.focus({ preventScroll: true }); control.closest("[data-role-id]").scrollIntoView({ block: "start", behavior: "instant" }); }
     });
-    elements.serviceFilter.addEventListener("change", applyFilter);
-    elements.privilegedOnlyFilter.addEventListener("change", applyFilter);
-
-    wireTableInteractions();
-    wireChrome();
-    init();
+    window.addEventListener("popstate", () => {
+      if (state.status !== "ready") return;
+      clearTimeout(searchTimer);
+      restore();
+      if (state.linkedId) focusRole();
+      else if (!document.activeElement.checkVisibility()) el.search.focus();
+      window.dispatchEvent(new Event("entrarolescataloguechange"));
+    });
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    const backToTop = document.getElementById("backToTop");
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => { backToTop.classList.toggle("visible", window.scrollY > 600); scrollTicking = false; });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    load();
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function refreshShareLinks() {
+        var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+        var url = encodeURIComponent(pageUrl);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+          var href = targets[el.getAttribute('data-share')];
+          if (href) el.setAttribute('href', href);
+        });
+      }
+      refreshShareLinks();
+      window.addEventListener("entrarolescataloguechange", refreshShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

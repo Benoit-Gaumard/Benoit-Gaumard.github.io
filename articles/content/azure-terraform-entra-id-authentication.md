@@ -6,9 +6,12 @@ description = "How to disable storage account key-based authentication and use E
 tags = ["Entra ID", "Terraform"]
 categories = ["Azure"]
 featureImage = "/articles/images/terraform.svg"
+related = ["set-up-your-first-terraform-environment-on-windows"]
 +++
 
-The `azurerm` provider and the remote backend require authentication. The best practice is to disable the storage account access key and enable Entra ID (Azure AD) authentication instead.
+## Error and cause
+
+The **remote backend** reads and writes Terraform state. The **provider** manages workload resources. They have separate configuration and permissions; a provider flag alone does not fix backend authentication. The error below is diagnostic output, not a command: a key-based request was rejected after shared-key access was disabled. Check all consumers before disabling keys on an existing account.
 
 ![Storage account configuration disabling key-based authentication](/articles/images/terraform-entra-id/image1.png)
 
@@ -18,7 +21,9 @@ This storage account configuration will cause the following error during the `te
 Status=403 Code="KeyBasedAuthenticationNotPermitted" Message="Key based authentication is not permitted on this storage account.
 ```
 
-To use Entra ID authentication, here is the configuration to apply to your Terraform configuration.
+## Remote backend configuration
+
+Replace all four backend placeholders with your existing state location. Changing `key` selects a different state file; it is not a harmless rename.
 
 On the `backend.tf` file, add the `use_azuread_auth = true` parameter:
 
@@ -34,7 +39,9 @@ terraform {
 }
 ```
 
-On the `provider.tf` file, add the `storage_use_azuread = true` parameter:
+## Provider configuration
+
+In `provider.tf`, `storage_use_azuread` concerns the provider's supported Storage data-plane operations, not the backend:
 
 ```bash
 terraform {
@@ -53,10 +60,22 @@ provider "azurerm" {
 }
 ```
 
-If you look at the storage account activity log, the "List Storage Account Keys" operations happened before `use_azuread_auth = true` was enabled, and Terraform listed the keys when accessing the state file. After switching to Entra ID authentication, the keys are no longer listed.
+## Verify without applying
+
+The provider pin `4.1.0` is the article's example, not a recommendation to downgrade an existing project. Terraform CLI/backend version and technical execution validation are **not recorded**. Check [the azurerm backend reference](https://developer.hashicorp.com/terraform/language/backend/azurerm) and [the provider reference](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) for your pinned versions.
+
+Back up state and confirm the tenant, identity, storage network path and container permissions before reconfiguration:
+
+```bash
+terraform init -reconfigure
+terraform validate
+terraform plan
+```
+
+Expected: backend initialization succeeds without the key-authentication error and the plan addresses the expected existing resources. Stop if the plan unexpectedly recreates infrastructure. No `apply` is needed to validate this change.
 
 ![Storage account activity log after enabling Entra ID authentication](/articles/images/terraform-entra-id/image2.png)
 
-If using this access method on the remote backend, your user or service principal needs the **Storage Blob Data Owner** role on the container scope.
+For ordinary state operations, check the backend documentation's **Storage Blob Data Contributor** requirement on the state container; do not grant Data Owner automatically. Other discovery options or provider operations can require separate permissions.
 
 Using Entra ID authentication for the remote backend is a best practice aligned with RBAC and least privilege.

@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -116,7 +117,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -202,7 +203,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -222,7 +223,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: var(--cp-accent-fg); text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -239,7 +240,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -303,17 +304,51 @@
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
     .refresh-meta strong { color: var(--cp-text); }
 
-    [role="tabpanel"] { min-height: 70vh; }
-    .stats-grid { min-height: 7rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
-    .stat-card {
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
-    }
-    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
-    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+    [hidden] { display: none !important; }
+    fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    main [id], .policy-entry { scroll-margin-top: 6rem; }
+    summary:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    .json-view:focus-visible, .member-list:focus-visible, textarea:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    .dataset-stats { margin-bottom: 1.5rem; }
+    .stats-scope { margin: 0 0 .75rem; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; }
+    .stat-card { padding: .75rem 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); box-shadow: 0 1px 2px var(--cp-border); }
+    .stat-value { color: var(--cp-text); font-size: 1.25rem; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+    .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .search-row { display: flex; align-items: flex-end; gap: .75rem; margin-bottom: .75rem; }
+    .search-field { flex: 1; min-width: 0; }
+    .search-field label, .filter-field label { display: block; margin-bottom: .4rem; font-size: .85rem; font-weight: 650; }
+    .search-row input, .filter-field select { width: 100%; min-width: 0; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
+    .search-row input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .filters-toggle { flex: 0 0 auto; }
+    .filter-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; margin-bottom: .75rem; }
+    .filter-grid { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+    .filter-field { min-width: 0; }
+    .filter-options { grid-column: 1 / -1; margin-top: .5rem; }
+    .filter-options:not([open]) { grid-column: 2; grid-row: 2; }
+    #effectsHelp { grid-column: 1; grid-row: 2; }
+    .filter-options summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); cursor: pointer; font-size: .85rem; }
+    .option-fields { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+    .filter-help { margin: .5rem 0; max-width: 65ch; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
+    .filter-help a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+    .sort-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; font-size: .85rem; }
+    .sort-controls select { min-height: 2.75rem; max-width: 100%; padding: .4rem .5rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); }
+    .policy-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; text-decoration: none; }
+    .policy-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
+    .policy-action:disabled { cursor: wait; }
+    .filters-toggle, .panel-close { display: none; }
+    .filter-summary { display: flex; grid-column: 1; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .5rem 0; }
+    .filter-chip { min-height: 2.75rem; max-width: 100%; padding: .35rem .65rem; border: 1px solid var(--cp-border); border-radius: 6px; color: var(--cp-text); background: var(--cp-surface-soft); font-size: .8rem; cursor: pointer; overflow-wrap: anywhere; }
+    .filter-chip:hover { border-color: var(--cp-accent); }
+    .browser-actions, .detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .75rem 0; }
+    .browser-actions { grid-column: 2; margin: .5rem 0; }
+    .data-error, .catalogue-notice { margin: 1rem 0; padding: .85rem 1rem; border: 1px solid var(--cp-warning); border-radius: 8px; background: var(--cp-warning-bg); color: var(--cp-warning); font-size: .9rem; line-height: 1.5; }
+    .data-error p, .catalogue-notice p { margin: 0 0 .75rem; }
+    .action-status { color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
+    .action-status:empty { margin: 0; }
+    .copy-fallback { margin: .75rem 0; }
+    .copy-fallback label { display: block; margin-bottom: .5rem; font-size: .85rem; }
+    .copy-fallback textarea { width: 100%; min-height: 5rem; padding: .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: ui-monospace, monospace; font-size: .85rem; }
 
     .view-toggle {
       display: inline-flex;
@@ -328,6 +363,7 @@
       display: inline-flex;
       align-items: center;
       gap: .4rem;
+      min-height: 2.75rem;
       padding: .45rem .9rem;
       border: 0;
       border-radius: 7px;
@@ -340,19 +376,7 @@
     .view-toggle-button:hover { color: var(--cp-text); }
     .view-toggle-button.is-active { background: var(--cp-accent-soft); color: var(--cp-accent); }
 
-    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
-    .filter-bar input, .filter-bar select {
-      min-height: 2.9rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      padding: .5rem .85rem;
-    }
-    .filter-bar input { flex: 2 1 16rem; max-width: 30rem; min-width: 0; }
-    .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
-    .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
-    .clear-button[hidden] { display: none; }    .load-more {
+    .load-more {
       display: block;
       margin: 1rem auto 0;
       padding: .7rem 1.4rem;
@@ -369,35 +393,6 @@
     }
     .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
 
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    thead th {
-      position: sticky;
-      top: 0;
-      background: var(--cp-surface-soft);
-      text-align: left;
-      padding: .7rem .9rem;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: .02em;
-      color: var(--cp-text-muted);
-      border-bottom: 1px solid var(--cp-border);
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
-    }
-    thead th:hover { color: var(--cp-text); }
-    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
-    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
-    tbody td { padding: .55rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
     .policy-name { font-weight: 600; }
     .policy-desc { display: block; margin-top: .2rem; color: var(--cp-text-muted); font-size: 0.8rem; font-weight: 400; overflow-wrap: anywhere; }
     .category-badge {
@@ -408,32 +403,8 @@
       color: var(--cp-accent);
       font-size: 0.8rem;
       font-weight: 600;
-      white-space: nowrap;
+      white-space: normal;
     }
-    .id-cell { display: flex; align-items: center; gap: .5rem; }
-    /* The star column costs width the ID column used to have; without this the
-       browser is free to break a GUID across eight lines. And once the ID is
-       incompressible it starts winning space from the name, so the name column
-       is given the share it needs to keep descriptions to a few lines. */
-    .id-cell code { white-space: nowrap; overflow-wrap: normal; }
-    /* Star, category, effect/mode/version (or the member count) and type shrink
-       to their content; the name column absorbs everything left over, so a
-       description stays a few lines tall instead of being squeezed into a ribbon.
-       The two tables no longer have the same column count, hence the scoping. */
-    thead th:nth-child(2) { width: 100%; }
-    #policiesPanel thead th:nth-child(n+3):nth-child(-n+7),
-    #initiativesPanel thead th:nth-child(n+3):nth-child(-n+6) { width: 1%; }
-    /* One mode value, Microsoft.MachineLearningServices.v2.Data, is a 41-char
-       token with no break opportunity: left alone it pins the column at its own
-       width and starves the name column of nearly 300px. */
-    #policiesPanel tbody td:nth-child(5) { overflow-wrap: anywhere; }
-    /* Only Type is safe to keep on one line: some policy modes are long
-       (Microsoft.KeyVault.Data), and pinning them would hand the column 280px. */
-    #policiesPanel tbody td:nth-child(7),
-    #initiativesPanel tbody td:nth-child(6) { white-space: nowrap; }
-    /* Version columns: policies column 6, initiatives column 5. */
-    #policiesPanel tbody td:nth-child(6),
-    #initiativesPanel tbody td:nth-child(5) { white-space: nowrap; }
     .effect-badge {
       display: inline-block;
       padding: .2rem .55rem;
@@ -443,39 +414,23 @@
       color: var(--cp-text-muted);
       font-size: 0.8rem;
       font-weight: 600;
-      white-space: nowrap;
+      white-space: normal;
     }
     /* Deny blocks a deployment, audit only reports it and disabled does
        nothing: the three outcomes are worth telling apart at a glance. */
     .effect-badge.is-deny { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
     .effect-badge.is-audit { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
     .effect-badge.is-remediate { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
-    .copy-button {
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-      width: 1.9rem;
-      height: 1.9rem;
-      padding: 0;
-      border: 1px solid var(--cp-border);
-      border-radius: 6px;
-      background: var(--cp-surface-soft);
-      color: var(--cp-text-muted);
-      cursor: pointer;
-    }
-    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
-    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); }
 
     /* The Policies/Initiatives tabs and the Cards/List switch share one row, so
        the layout choice reads as a property of the panel below it rather than
        as a third tab. */
     .panel-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
     .panel-toolbar .view-toggle { margin-bottom: 0; }
-    .filter-toggle { display: inline-flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .filter-toggle { display: inline-flex; align-items: center; min-height: 2.75rem; gap: .5rem; color: var(--cp-text); font-size: .85rem; font-weight: 600; cursor: pointer; }
     .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
     .filter-toggle .fav-count { color: var(--cp-text-muted); font-weight: 600; }
 
-    .fav-col { width: 1%; cursor: default; }
     .sr-only {
       position: absolute;
       width: 1px; height: 1px;
@@ -489,8 +444,8 @@
       display: grid;
       place-items: center;
       flex: 0 0 auto;
-      width: 1.9rem;
-      height: 1.9rem;
+      width: 2.75rem;
+      height: 2.75rem;
       padding: 0;
       border: 1px solid var(--cp-border);
       border-radius: 6px;
@@ -501,9 +456,9 @@
     .fav-button:hover { border-color: var(--cp-warning); color: var(--cp-warning); }
     .fav-button[aria-pressed="true"] { border-color: var(--cp-warning); background: var(--cp-warning-bg); color: var(--cp-warning); }
 
-    .policy-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .9rem; align-items: start; }
-    .policy-cards[hidden], .table-wrap[hidden] { display: none; }
-    .policy-card {
+    .policy-results { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; align-items: start; }
+    .policy-results.is-cards { grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr)); }
+    .policy-entry {
       display: flex;
       flex-direction: column;
       gap: .65rem;
@@ -512,41 +467,39 @@
       border-radius: 10px;
       background: var(--cp-surface);
       box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      min-width: 0;
     }
-    .policy-card-head { display: flex; align-items: flex-start; gap: .6rem; }
-    .policy-card-head .policy-name { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
+    .policy-entry-head { display: flex; align-items: flex-start; gap: .6rem; }
+    .policy-entry-head h3 { flex: 1; min-width: 0; margin: 0; font-size: 1rem; line-height: 1.4; }
+    .policy-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; color: var(--cp-text-muted); font-size: .85rem; }
+    .open-caption { display: block; color: var(--cp-link); font-size: .8rem; font-weight: 500; }
+    .definition-detail { padding-top: 1rem; border-top: 1px solid var(--cp-border); min-width: 0; }
+    .definition-description { margin: 0 0 1rem; line-height: 1.5; font-size: .9rem; color: var(--cp-text-muted); overflow-wrap: anywhere; }
+    .definition-meta { display: grid; grid-template-columns: minmax(6rem, auto) minmax(0, 1fr); gap: .5rem 1rem; margin: 0; font-size: .85rem; }
+    .definition-meta dt { font-weight: 650; }
+    .definition-meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+    .definition-meta code { font-family: ui-monospace, monospace; font-size: .8rem; }
+    .linked-definition { margin-bottom: 1rem; }
+    .linked-definition > p { margin: .5rem 0; padding: .75rem; border: 1px solid var(--cp-warning); border-radius: 6px; background: var(--cp-warning-bg); color: var(--cp-warning); line-height: 1.5; font-size: .85rem; }
+    .empty-state { margin: .5rem 0; padding: 1.5rem; border: 1px dashed var(--cp-border-strong); border-radius: 8px; color: var(--cp-text-muted); text-align: center; }
+    .catalogue-ad { margin: 2rem 0; padding: 1rem 0; text-align: center; border-block: 1px solid var(--cp-border); min-width: 0; }
+    .ad-label { display: block; margin-bottom: .75rem; color: var(--cp-text-muted); font-size: .75rem; }
+    .catalogue-ad .adsbygoogle { min-height: 280px; }
     /* Descriptions run to several hundred characters; clamping keeps a grid of
        cards from turning into columns of wildly different heights. */
-    .policy-card .policy-desc { margin: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-    .policy-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .6rem; font-size: 0.78rem; color: var(--cp-text-muted); }
-    .policy-card-foot { margin-top: auto; }
-    .policy-card .id-cell code { font-size: 0.75rem; }
+    .policy-entry > .policy-desc { margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
     /* The policy count doubles as the disclosure control: the number a reader
        wants to question is the thing they click to see behind. */
-    .member-toggle {
-      display: inline-flex; align-items: center; gap: .3rem;
-      padding: .15rem .45rem;
-      border: 1px solid var(--cp-border); border-radius: 6px;
-      background: var(--cp-surface-soft); color: var(--cp-text);
-      font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-    }
-    .member-toggle:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .member-toggle svg { flex: none; opacity: .6; transition: transform .15s ease; }
-    .member-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
-    .member-toggle[disabled] { opacity: .55; cursor: default; }
-    .member-toggle[disabled]:hover { border-color: var(--cp-border); color: var(--cp-text); }
-    tr.member-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
-    .member-panel { padding: .85rem 1rem 1rem; }
-    .policy-card .member-panel { padding: .25rem 0 0; }
-    .member-list { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+    .member-panel { min-width: 0; }
+    .member-list { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; max-height: 24rem; overflow: auto; }
     .member-list li {
       display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
       padding: .4rem .6rem;
       border: 1px solid var(--cp-border); border-radius: 6px;
       background: var(--cp-surface); font-size: 0.82rem;
     }
-    .member-name { flex: 1 1 18rem; font-weight: 600; }
+    .member-name { flex: 1 1 18rem; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
     .member-id { color: var(--cp-text-muted); font-size: 0.75rem; overflow-wrap: anywhere; }
     .member-empty { margin: 0; color: var(--cp-text-muted); font-size: 0.82rem; line-height: 1.55; }
 
@@ -565,27 +518,23 @@
       font-size: 0.78rem;
       line-height: 1.5;
       tab-size: 2;
-      /* pre, not pre-wrap, would hand the table a min-content width as wide as
-         the longest description string and stretch every column with it. */
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
     .json-button {
       display: inline-flex; align-items: center; gap: .3rem;
-      padding: .15rem .5rem;
+      min-height: 2.75rem; padding: .5rem .75rem;
       border: 1px solid var(--cp-border); border-radius: 6px;
       background: var(--cp-surface-soft); color: var(--cp-text);
       font: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer;
     }
     .json-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .json-button svg { flex: none; opacity: .6; transition: transform .15s ease; }
-    .json-button[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
-    /* The policy name is the row's disclosure control, so it has to read as a
-       name first and as a button second: no chrome, just a caret and a hover cue. */
     .name-toggle {
       display: flex;
+      flex-direction: column;
       align-items: flex-start;
       gap: .35rem;
+      min-height: 2.75rem;
       width: 100%;
       padding: 0;
       border: 0;
@@ -595,12 +544,10 @@
       font-weight: 600;
       text-align: left;
       cursor: pointer;
+      overflow-wrap: anywhere;
     }
     .name-toggle:hover, .name-toggle[aria-expanded="true"] { color: var(--cp-link); }
-    .name-toggle svg { flex: none; margin-top: .2rem; opacity: .5; transition: transform .15s ease; }
-    .name-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
-    .policy-card-head .name-toggle { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
-    .result-count { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .result-count { margin: 1rem 0; color: var(--cp-text-muted); font-size: .9rem; line-height: 1.5; }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
     .footer-inner { padding-block: 2rem 1.5rem; }
@@ -641,6 +588,7 @@
     .back-to-top:hover { background: var(--cp-accent-hover); }
 
     @media (max-width: 48rem) {
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
       .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
@@ -649,15 +597,19 @@
       .header-links a:hover { background: var(--cp-surface-soft); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
+      .filters-toggle, .panel-close { display: inline-flex; }
+      .filter-panel { display: block; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
+      .filter-grid { grid-template-columns: minmax(0, 1fr); }
+      .panel-toolbar { gap: .5rem; }
+      .panel-toolbar .view-toggle-button { padding-inline: .6rem; }
+      .panel-toolbar .view-toggle-button svg { display: none; }
+      .option-fields { flex-direction: column; align-items: flex-start; }
+      .definition-meta { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+      .definition-meta dd { margin-bottom: .5rem; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
-      .filter-bar { flex-direction: column; align-items: stretch; }
-      /* flex-basis becomes a height once the bar is a column, which grew the
-         search box and the category select to ~250px tall. The checkbox inside
-         .filter-toggle must be excluded or it stretches to the full width too. */
-      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; width: 100%; max-width: none; }
       .filter-toggle { align-self: flex-start; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
@@ -668,29 +620,15 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  
-    /* Filled by script: hold the box only while empty, so the page below does
-       not jump when the data lands, and no blank hole survives a render. */
-    @supports (min-height: 1px) {
-      #statsGrid:empty { min-height: 112px; }
-      @media (max-width: 32rem) {
-        #statsGrid:empty { min-height: 194px; }
-      }
-    }
 
-    /* The table is the last thing on the page and can settle anywhere between
-       5,000px and 89,000px, so a fixed reservation would be wrong at most
-       widths. Holding a viewport-relative box while the body is empty keeps the
-       footer below the fold at first paint, so its arrival moves nothing the
-       visitor can see. :has() releases it as soon as the first row renders. */
-    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
-       same before and after, and the rows below it do not move */
+    .policy-results:empty { min-height: 20rem; }
     #refreshedAt { display: inline-block; min-width: 9.5rem; }
     @media print {
       /* Printing a tool page should yield the data, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
-      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination, .filter-panel,
+      .browser-actions, .filter-summary, .catalogue-ad, .copy-fallback, .fav-button { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
       body { font-size: 11pt; }
@@ -715,13 +653,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -758,12 +696,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/azure-policies/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/azure-policies/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -782,6 +1090,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/" aria-current="page"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -797,25 +1146,36 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true">📋</span>Azure Policies</h1>
-      <p class="intro-text">Browse all built-in Azure Policy definitions and initiatives (policy sets), refreshed directly from Azure via <code>Get-AzPolicyDefinition</code> and <code>Get-AzPolicySetDefinition</code>.</p>
+      <p class="intro-text">Browse built-in Azure Policy definitions and initiatives (policy sets), collected directly from Azure.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
-        <span>Source: <a href="https://learn.microsoft.com/en-us/powershell/module/az.resources/get-azpolicydefinition" target="_blank" rel="noopener">Get-AzPolicyDefinition</a></span>
+        <span>Source: <a id="sourceLink" href="https://learn.microsoft.com/en-us/powershell/module/az.resources/get-azpolicydefinition" target="_blank" rel="noopener">Get-AzPolicyDefinition</a></span>
         <a href="policies-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Policies history</a>
         <a href="initiatives-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Initiatives history</a>
       </p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Policy statistics"></section>
+    <section class="dataset-stats" aria-label="Whole-catalogue statistics">
+      <p class="stats-scope" id="statsSummary" role="status" aria-live="polite" aria-atomic="true">Catalogue totals: loading&hellip;</p>
+      <div class="stats-grid" id="statsGrid" aria-busy="true">
+        <div class="stat-card"><div class="stat-value" data-stat="policies">&mdash;</div><div class="stat-label">Policies</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="initiatives">&mdash;</div><div class="stat-label">Initiatives</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="categories">&mdash;</div><div class="stat-label">Categories</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="effects">&mdash;</div><div class="stat-label">Policy effects</div></div>
+      </div>
+      <noscript><p class="stats-scope">Enable JavaScript to display the catalogue totals.</p></noscript>
+    </section>
 
-    <section aria-label="Policies and initiatives">
+    <section id="catalogue" aria-label="Policies and initiatives">
+      <noscript><p>This catalogue needs JavaScript. Download the <a href="./policydefinitions.json">policy definitions</a> or <a href="./policysetdefinitions.json">initiatives</a>, or use the history links above.</p></noscript>
+      <p class="catalogue-notice" id="preferencesNotice" role="status" hidden></p>
       <div class="panel-toolbar">
-        <div class="view-toggle" role="tablist">
-          <button class="view-toggle-button is-active" id="tabPolicies" type="button" role="tab" aria-selected="true">
+        <div class="view-toggle" role="tablist" aria-label="Definition catalogue">
+          <button class="view-toggle-button is-active" id="tabPolicies" type="button" role="tab" aria-selected="true" aria-controls="policiesPanel">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
             Policies
           </button>
-          <button class="view-toggle-button" id="tabInitiatives" type="button" role="tab" aria-selected="false">
+          <button class="view-toggle-button" id="tabInitiatives" type="button" role="tab" aria-selected="false" aria-controls="initiativesPanel" tabindex="-1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             Initiatives
           </button>
@@ -831,73 +1191,98 @@
           </button>
         </div>
       </div>
-
-      <div id="policiesPanel" role="tabpanel">
-        <div class="filter-bar">
-          <input id="policiesSearch" type="search" placeholder="Search policy name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search policy name, description, or category">
-          <select id="policiesCategoryFilter" aria-label="Filter policies by category"><option value="">All categories</option></select>
-          <select id="policiesEffectFilter" aria-label="Filter policies by effect"><option value="">All effects</option></select>
-          <select id="policiesModeFilter" aria-label="Filter policies by mode"><option value="">All modes</option></select>
-          <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
-          <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated" checked> Hide deprecated</label>
-          <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview" checked> Hide preview</label>
-          <button class="clear-button" id="policiesClear" type="button" hidden>Clear</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th class="fav-col"><span class="sr-only">Favorite</span></th>
-                <th data-key="displayName">Policy <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="effect">Effect <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="mode">Mode <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="version">Version <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="policyType">Type <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="name">ID <span class="sort-arrow">&#9650;</span></th>
-              </tr>
-            </thead>
-            <tbody id="policiesTableBody"></tbody>
-          </table>
-        </div>
-        <div class="policy-cards" id="policiesCards" hidden></div>
-        <p class="result-count" id="policiesResultCount" aria-live="polite"></p>
+      <p class="action-status" id="actionStatus" role="status" aria-live="polite"></p>
+      <div class="copy-fallback" id="copyFallback" hidden>
+        <label for="copyValue" id="copyLabel">Select and copy the value</label>
+        <textarea id="copyValue" rows="3" readonly></textarea>
       </div>
 
-      <div id="initiativesPanel" role="tabpanel" hidden>
-        <div class="filter-bar">
-          <input id="initiativesSearch" type="search" placeholder="Search initiative name, description, or category..." autocomplete="off" spellcheck="false" aria-label="Search initiative name, description, or category">
-          <select id="initiativesCategoryFilter" aria-label="Filter initiatives by category"><option value="">All categories</option></select>
-          <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
-          <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated" checked> Hide deprecated</label>
-          <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview" checked> Hide preview</label>
-          <button class="clear-button" id="initiativesClear" type="button" hidden>Clear</button>
+      <div id="policiesPanel" role="tabpanel" aria-labelledby="tabPolicies">
+        <fieldset id="policiesControls" disabled aria-label="Policy filters">
+        <div class="search-row">
+          <div class="search-field">
+            <label for="policiesSearch">Search policies</label>
+            <input id="policiesSearch" type="search" placeholder="Name, description, category or ID" autocomplete="off" spellcheck="false">
+          </div>
+          <button class="policy-action filters-toggle" id="policiesFilterToggle" type="button" aria-expanded="false" aria-controls="policiesFilters">Filters · 2 active</button>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th class="fav-col"><span class="sr-only">Favorite</span></th>
-                <th data-key="displayName">Initiative <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="policyCount">Policies <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="version">Version <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="policyType">Type <span class="sort-arrow">&#9650;</span></th>
-                <th data-key="name">ID <span class="sort-arrow">&#9650;</span></th>
-              </tr>
-            </thead>
-            <tbody id="initiativesTableBody"></tbody>
-          </table>
+        <div class="filter-panel" id="policiesFilters" hidden>
+          <div class="filter-grid">
+            <div class="filter-field"><label for="policiesCategoryFilter">Category</label><select id="policiesCategoryFilter"><option value="">All categories</option></select></div>
+            <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter" aria-describedby="effectsHelp"><option value="">All effects</option></select></div>
+            <div class="filter-field"><label for="policiesModeFilter">Mode</label><select id="policiesModeFilter"><option value="">All modes</option></select></div>
+          </div>
+          <p class="filter-help" id="effectsHelp"><a href="#effects-notes">Understand Audit, Deny, Modify and DeployIfNotExists</a>.</p>
+          <details class="filter-options" id="policiesOptions">
+            <summary>Options</summary>
+            <div class="option-fields">
+              <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
+              <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated" checked> Hide deprecated</label>
+              <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview" checked> Hide preview</label>
+            </div>
+            <p class="filter-help">Preview and deprecated definitions are hidden initially. Reset all filters shows the complete catalogue. Favorites stay in this browser.</p>
+            <div class="sort-controls"><label for="policiesSort">Sort by</label><select id="policiesSort"></select><button class="policy-action" id="policiesSortDirection" type="button">Ascending</button></div>
+          </details>
+          <div class="filter-summary" id="policiesActiveFilters" aria-label="Active policy filters"></div>
+          <div class="browser-actions">
+            <button class="policy-action" id="policiesClear" type="button">Reset all filters</button>
+          </div>
+          <button class="policy-action panel-close" id="policiesFiltersDone" type="button">Done</button>
         </div>
-        <div class="policy-cards" id="initiativesCards" hidden></div>
-        <p class="result-count" id="initiativesResultCount" aria-live="polite"></p>
+        </fieldset>
+        <div class="data-error" id="policiesError" role="alert" hidden><p>Policy data could not be loaded.</p><button class="policy-action" id="policiesRetry" type="button">Retry policies</button></div>
+        <p class="result-count" id="policiesResultCount" role="status" aria-live="polite" aria-atomic="true">Loading policies&hellip;</p>
+        <div class="linked-definition" id="policiesLinked" hidden></div>
+        <div class="policy-results" id="policiesResults" aria-busy="true"></div>
+        <button class="load-more" id="policiesLoadMore" type="button" hidden>Load more policies</button>
       </div>
+
+      <div id="initiativesPanel" role="tabpanel" aria-labelledby="tabInitiatives" hidden>
+        <fieldset id="initiativesControls" disabled aria-label="Initiative filters">
+        <div class="search-row">
+          <div class="search-field">
+            <label for="initiativesSearch">Search initiatives</label>
+            <input id="initiativesSearch" type="search" placeholder="Name, description, category or ID" autocomplete="off" spellcheck="false">
+          </div>
+          <button class="policy-action filters-toggle" id="initiativesFilterToggle" type="button" aria-expanded="false" aria-controls="initiativesFilters">Filters · 2 active</button>
+        </div>
+        <div class="filter-panel" id="initiativesFilters" hidden>
+          <div class="filter-grid">
+            <div class="filter-field"><label for="initiativesCategoryFilter">Category</label><select id="initiativesCategoryFilter"><option value="">All categories</option></select></div>
+          </div>
+          <details class="filter-options" id="initiativesOptions">
+            <summary>Options</summary>
+            <div class="option-fields">
+              <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
+              <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated" checked> Hide deprecated</label>
+              <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview" checked> Hide preview</label>
+            </div>
+            <p class="filter-help">Favorites stay in this browser. Reset all filters also clears the preview and deprecated exclusions.</p>
+            <div class="sort-controls"><label for="initiativesSort">Sort by</label><select id="initiativesSort"></select><button class="policy-action" id="initiativesSortDirection" type="button">Ascending</button></div>
+          </details>
+          <div class="filter-summary" id="initiativesActiveFilters" aria-label="Active initiative filters"></div>
+          <div class="browser-actions">
+            <button class="policy-action" id="initiativesClear" type="button">Reset all filters</button>
+          </div>
+          <button class="policy-action panel-close" id="initiativesFiltersDone" type="button">Done</button>
+        </div>
+        </fieldset>
+        <div class="data-error" id="initiativesError" role="alert" hidden><p>Initiative data could not be loaded.</p><button class="policy-action" id="initiativesRetry" type="button">Retry initiatives</button></div>
+        <p class="result-count" id="initiativesResultCount" role="status" aria-live="polite" aria-atomic="true">Loading initiatives&hellip;</p>
+        <div class="linked-definition" id="initiativesLinked" hidden></div>
+        <div class="policy-results" id="initiativesResults" aria-busy="true"></div>
+        <button class="load-more" id="initiativesLoadMore" type="button" hidden>Load more initiatives</button>
+      </div>
+      <aside class="catalogue-ad" id="policiesAd" aria-label="Advertisement" hidden>
+        <span class="ad-label">Advertisement</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6636684537203477" data-ad-slot="4494484671" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </aside>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About Azure Policy definitions</h2>
       <p>Every built-in Azure Policy definition and initiative, refreshed from Azure. Use it to find an existing policy before writing a custom one — the built-in library already covers most common governance requirements.</p>
-      <h3>Effects you will meet most often</h3>
+      <h3 id="effects-notes">Effects you will meet most often</h3>
       <ul>
         <li><strong>Audit</strong> — records non-compliance without blocking anything; the safe way to start.</li>
         <li><strong>Deny</strong> — rejects a deployment that breaks the rule.</li>
@@ -914,7 +1299,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -960,6 +1345,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -970,9 +1356,14 @@
     </svg>
   </button>
 
-  <script>
+  <script data-policies-script>
     const PAGE_SIZE = 100;
     const VIEW_MODE_KEY = "azurePoliciesViewMode";
+    const mobileFilters = window.matchMedia("(max-width: 48rem)");
+    let activeTab = "policies";
+    let currentView = "list";
+    let adRequested = false;
+    const browsers = {};
 
     function normalize(value) {
       return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -996,15 +1387,19 @@
       // deliberate choice rather than the one you land on.
       try {
         return localStorage.getItem(VIEW_MODE_KEY) === "cards" ? "cards" : "list";
-      } catch {
+      } catch (error) {
+        preferenceError(error);
         return "list";
       }
     }
 
     function loadFavorites(key) {
       try {
-        return new Set(JSON.parse(localStorage.getItem(key)) || []);
-      } catch {
+        const saved = JSON.parse(localStorage.getItem(key) || "[]");
+        if (!Array.isArray(saved) || saved.some(value => typeof value !== "string")) throw new Error("Invalid saved favorites");
+        return new Set(saved);
+      } catch (error) {
+        preferenceError(error);
         return new Set();
       }
     }
@@ -1012,10 +1407,18 @@
     function saveFavorites(key, favorites) {
       try {
         localStorage.setItem(key, JSON.stringify([...favorites]));
-      } catch {
-        /* private mode or a full quota: the session still works, it just will not persist */
+      } catch (error) {
+        preferenceError(error);
       }
     }
+    function preferenceError(error) {
+      console.warn("Policy catalogue preferences are unavailable.", error);
+      const notice = document.getElementById("preferencesNotice");
+      notice.hidden = false;
+      notice.textContent = "Some saved preferences could not be read or saved. Changes still work in this tab but may not persist.";
+    }
+    currentView = ["list", "cards"].includes(new URLSearchParams(location.search).get("view"))
+      ? new URLSearchParams(location.search).get("view") : loadViewMode();
 
     const STAR_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
 
@@ -1029,7 +1432,8 @@
     const LIFECYCLE_SUFFIX = /-(preview|deprecated)\b/i;
     function lifecycleTag(row) {
       const match = LIFECYCLE_PREFIX.exec(row.displayName || "");
-      if (match) return match[1].trim().toLowerCase();
+      const prefix = match?.[1].trim().toLowerCase();
+      if (prefix === "preview" || prefix === "deprecated") return prefix;
       const suffix = LIFECYCLE_SUFFIX.exec(row.version || "");
       return suffix ? suffix[1].toLowerCase() : "";
     }
@@ -1056,11 +1460,9 @@
       badge.textContent = effect;
       return badge;
     }
-    const CARET_ICON = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 
     // An initiative lists its members by policy definition GUID; the readable
-    // name for each lives in the policies dataset, so the two are joined here
-    // rather than duplicating 2,853 names into the initiatives file.
+    // name for each lives in the policies dataset, so the two are joined here.
     const policyIndex = new Map();
 
     function memberPanel(row) {
@@ -1071,22 +1473,34 @@
       if (!members.length) {
         const note = document.createElement("p");
         note.className = "member-empty";
-        note.textContent = "The member policies are not in this dataset yet. They are collected by the scheduled refresh and will appear here after the next run.";
+        note.textContent = Array.isArray(row.policies) ? "No member policies are recorded for this initiative." : "The member policy list is not included in this dataset.";
         panel.append(note);
         return panel;
       }
 
       const list = document.createElement("ul");
       list.className = "member-list";
+      list.tabIndex = 0;
+      list.setAttribute("aria-label", "Member policies");
       members.forEach((member) => {
         const policy = policyIndex.get(member.id);
         const item = document.createElement("li");
 
-        const name = document.createElement("span");
+        const name = document.createElement(policy ? "a" : "span");
         name.className = "member-name";
         // A member can point at a definition outside the built-in set, in which
         // case the GUID is all we can honestly show.
         name.textContent = policy ? policy.displayName : member.id;
+        if (policy) {
+          name.href = catalogueUrl("policies", member.id).href;
+          name.addEventListener("click", (event) => {
+            if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            browsers.policies.openDefinition(member.id);
+            selectTab("policies");
+            browsers.policies.focusDefinition();
+          });
+        }
         item.append(name);
 
         if (policy && policy.category) {
@@ -1100,6 +1514,12 @@
         id.className = "member-id";
         id.textContent = member.id;
         item.append(id);
+        if (member.referenceId) {
+          const reference = document.createElement("span");
+          reference.className = "member-id";
+          reference.textContent = `Reference: ${member.referenceId}`;
+          item.append(reference);
+        }
 
         list.append(item);
       });
@@ -1107,22 +1527,26 @@
       return panel;
     }
 
-    // ~10 MB of rule bodies: fetched once, on the first definition a visitor
-    // opens, so browsing and searching stay as cheap as they are today.
+    // Rule bodies are fetched once, only when a visitor opens a definition.
     let rulesPromise = null;
     function loadRules() {
       if (!rulesPromise) {
-        rulesPromise = fetch("./policyrules.json", { cache: "no-store" })
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        rulesPromise = fetch("./policyrules.json", { cache: "no-store", signal: controller.signal })
           .then((response) => {
             if (!response.ok) throw new Error(`Rule request failed: ${response.status}`);
             return response.json();
           })
-          .then((payload) => payload.rules || {})
+          .then((payload) => {
+            if (!payload || !payload.rules || typeof payload.rules !== "object" || Array.isArray(payload.rules)) throw new Error("Invalid rule dataset");
+            return payload.rules;
+          })
           .catch((error) => {
             console.error(error);
             rulesPromise = null; // let a later click retry rather than caching the failure
             throw error;
-          });
+          }).finally(() => clearTimeout(timeout));
       }
       return rulesPromise;
     }
@@ -1133,662 +1557,696 @@
 
       const status = document.createElement("p");
       status.className = "member-empty";
+      status.setAttribute("role", "status");
       status.textContent = "Loading the definition...";
       panel.append(status);
 
-      loadRules().then((rules) => {
-        const rule = rules[row.name];
-        if (!rule) {
-          status.textContent = "The rule body for this definition is not in the dataset yet. It is collected by the scheduled refresh and will appear here after the next run.";
-          return;
+      function renderRule(fromRetry = false) {
+        status.textContent = "Loading the definition...";
+        panel.replaceChildren(status);
+        if (fromRetry) {
+          status.tabIndex = -1;
+          status.focus({ preventScroll: true });
         }
+        loadRules().then((rules) => {
+          if (!panel.isConnected) return;
+          const rule = rules[row.name];
+          if (!rule) {
+            status.textContent = "The JSON definition is not included in the current rule dataset. The metadata above remains available.";
+            return;
+          }
 
-        const json = JSON.stringify(rule, null, 2);
-        const actions = document.createElement("div");
-        actions.className = "json-actions";
+          const json = JSON.stringify(rule, null, 2);
+          const actions = document.createElement("div");
+          actions.className = "json-actions";
+          const copy = document.createElement("button");
+          copy.type = "button";
+          copy.className = "json-button";
+          copy.textContent = "Copy JSON";
+          copy.addEventListener("click", () => copyText(json, copy, "Definition JSON"));
+          const block = document.createElement("pre");
+          block.className = "json-view";
+          block.tabIndex = 0;
+          block.setAttribute("aria-label", `JSON definition of ${row.displayName}`);
+          block.textContent = json;
+          const source = document.createElement("span");
+          source.className = "json-source";
+          source.textContent = "Source: Get-AzPolicyDefinition";
 
-        const copy = document.createElement("button");
-        copy.type = "button";
-        copy.className = "json-button";
-        copy.textContent = "Copy JSON";
-        copy.addEventListener("click", (event) => {
-          event.stopPropagation();
-          writeClipboard(json).then(() => {
-            copy.textContent = "Copied";
-            setTimeout(() => { copy.textContent = "Copy JSON"; }, 1500);
-          });
+          actions.append(copy, source);
+          const restoreFocus = document.activeElement === status;
+          panel.replaceChildren(actions, block);
+          if (restoreFocus) copy.focus({ preventScroll: true });
+        }).catch((error) => {
+          console.warn("Definition body could not be loaded.", error);
+          if (!panel.isConnected) return;
+          status.textContent = "Unable to load the definition bodies. Check the connection and try again.";
+          const retry = document.createElement("button");
+          retry.type = "button";
+          retry.className = "policy-action";
+          retry.textContent = "Retry definition";
+          retry.addEventListener("click", () => renderRule(true));
+          panel.append(retry);
+          if (document.activeElement === status) retry.focus({ preventScroll: true });
         });
-
-        const block = document.createElement("pre");
-        block.className = "json-view";
-        block.textContent = json;
-
-        // The reference is this body itself, read from Azure by
-        // Get-AzPolicyDefinition in the scheduled refresh.
-        const source = document.createElement("span");
-        source.className = "json-source";
-        source.textContent = "Source: Get-AzPolicyDefinition";
-
-        actions.append(copy, source);
-        panel.replaceChildren(actions, block);
-      }).catch(() => {
-        status.textContent = "Unable to load the definition bodies. Check the connection and try again.";
-      });
+      }
+      renderRule();
 
       return panel;
     }
 
-    function copyIconMarkup(copied) {
-      return copied
-        ? '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M3 8.5 6.5 12 13 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        : '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 9.5V3.5a1 1 0 0 1 1-1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-    }
-
-    async function writeClipboard(text) {
+    async function copyText(text, button, label) {
       try {
         await navigator.clipboard.writeText(text);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.append(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        textarea.remove();
+        document.getElementById("actionStatus").textContent = `${label} copied. Favorites remain local to this browser.`;
+        document.getElementById("copyFallback").hidden = true;
+        button.dataset.copyCaption ||= button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => { if (button.isConnected) button.textContent = button.dataset.copyCaption; }, 1500);
+      } catch (error) {
+        console.warn(`Unable to copy ${label}.`, error);
+        document.getElementById("copyFallback").hidden = false;
+        document.getElementById("copyLabel").textContent = `Select and copy: ${label}`;
+        const input = document.getElementById("copyValue");
+        input.value = text;
+        input.rows = label === "Definition JSON" ? 8 : 3;
+        input.focus();
+        input.select();
+        document.getElementById("actionStatus").textContent = "Automatic copying is unavailable. Select and copy the value above.";
       }
     }
 
-    // Icon buttons swap their glyph for a tick; text buttons swap their label,
-    // so the write itself is shared and the feedback is left to the caller.
-    async function copyToClipboard(text, button) {
-      await writeClipboard(text);
-      button.classList.add("is-copied");
-      button.innerHTML = copyIconMarkup(true);
-      button.setAttribute("aria-label", "Copied");
-      setTimeout(() => {
-        button.classList.remove("is-copied");
-        button.innerHTML = copyIconMarkup(false);
-        button.setAttribute("aria-label", "Copy ID");
-      }, 1500);
+    function validateDefinitions(payload, listKey) {
+      if (!payload || !Array.isArray(payload[listKey])) throw new Error("Invalid definition catalogue");
+      const ids = new Set();
+      payload[listKey].forEach(row => {
+        if (!row || typeof row.name !== "string" || !row.name || ids.has(row.name)
+          || typeof row.displayName !== "string" || !row.displayName
+          || ["description", "category", "effect", "mode", "version", "policyType", "policyDefinitionId"].some(key => row[key] != null && typeof row[key] !== "string")
+          || (row.policyCount != null && (!Number.isInteger(row.policyCount) || row.policyCount < 0))
+          || (row.policies != null && (!Array.isArray(row.policies) || row.policies.some(member => !member || typeof member.id !== "string" || !member.id)))) {
+          throw new Error("Invalid or duplicate definition metadata");
+        }
+        ids.add(row.name);
+      });
+      return payload[listKey];
     }
 
-    // Both tabs (policies/initiatives) share the same search+category+sortable-table behavior,
-    // just bound to different DOM ids, data files, and row shapes.
-    function createBrowser(config) {
-      const state = {
-        rows: [], filtered: [], sortKey: "displayName", sortDir: "asc",
-        query: "", visible: PAGE_SIZE,
-        favorites: loadFavorites(config.favoritesKey), favoritesOnly: false,
-        view: loadViewMode(),
+    function datasetTotals(policies, initiatives) {
+      const policiesReady = policies.status === "ready";
+      const initiativesReady = initiatives.status === "ready";
+      return {
+        policies: policiesReady ? policies.rows.length : null,
+        initiatives: initiativesReady ? initiatives.rows.length : null,
+        categories: policiesReady && initiativesReady ? new Set([...policies.rows, ...initiatives.rows].map(row => row.category).filter(Boolean)).size : null,
+        effects: policiesReady ? new Set(policies.rows.map(row => row.effect).filter(Boolean)).size : null,
       };
-      const elements = {
-        search: document.getElementById(config.searchId),
-        filters: config.filters.map((filter) => ({ key: filter.key, select: document.getElementById(filter.id) })),
-        favoritesOnly: document.getElementById(config.favoritesOnlyId),
-        hideDeprecated: document.getElementById(config.hideDeprecatedId),
-        hidePreview: document.getElementById(config.hidePreviewId),
-        favCount: document.getElementById(config.favCountId),
-        clearFilters: document.getElementById(config.clearId),
-        tableWrap: document.querySelector(`#${config.panelId} .table-wrap`),
-        tableBody: document.getElementById(config.tableBodyId),
-        cards: document.getElementById(config.cardsId),
-        resultCount: document.getElementById(config.resultCountId),
-        headers: [...document.querySelectorAll(`#${config.panelId} thead th[data-key]`)],
-      };
+    }
 
-      // Every dropdown offers exactly the values present in the dataset, so a
-      // filter can never produce an empty result on its own. A field the
-      // scheduled refresh has not published yet has no values at all, and a
-      // dropdown whose only entry is "All" is a dead control, so it stays out
-      // of the bar until the data arrives.
+    function filterDefinitions(rows, criteria) {
+      const query = normalize(criteria.query.trim());
+      return rows.filter(row => {
+        const lifecycle = lifecycleTag(row);
+        if (criteria.hidePreview && lifecycle === "preview") return false;
+        if (criteria.hideDeprecated && lifecycle === "deprecated") return false;
+        if (criteria.favoritesOnly && !criteria.favorites.has(row.name)) return false;
+        if (Object.entries(criteria.filters).some(([key, value]) => value && row[key] !== value)) return false;
+        return !query || normalize(`${row.displayName} ${row.description || ""} ${row.category || ""} ${row.name} ${row.policyDefinitionId || ""}`).includes(query);
+      });
+    }
+
+    function sortDefinitions(rows, key, sortDir) {
+      const direction = sortDir === "desc" ? -1 : 1;
+      return [...rows].sort((a, b) => {
+        let value;
+        if (key === "policyCount") value = (a.policyCount ?? a.policies?.length ?? 0) - (b.policyCount ?? b.policies?.length ?? 0);
+        else if (key === "version") value = compareVersions(a.version, b.version);
+        else value = normalize(a[key]).localeCompare(normalize(b[key]));
+        return direction * (value || normalize(a.displayName).localeCompare(normalize(b.displayName)) || a.name.localeCompare(b.name));
+      });
+    }
+
+    function createBrowser(config) {
+      const prefix = config.key;
+      const node = suffix => document.getElementById(prefix + suffix);
+      const initialParams = new URLSearchParams(location.search);
+      const state = {
+        rows: [], filtered: [], byId: new Map(), indices: new Map(), visible: PAGE_SIZE,
+        sortKey: "displayName", sortDir: "asc", favorites: loadFavorites(config.favoritesKey),
+        openId: (initialParams.get("tab") || "policies") === prefix ? initialParams.get("definition") || "" : "",
+        status: "loading", generatedAt: null, panelOpen: false,
+      };
+      const el = {
+        panel: node("Panel"), controls: node("Controls"), search: node("Search"),
+        filters: config.filters.map(([key, suffix, label]) => ({ key, label, select: node(suffix) })),
+        favoritesOnly: node("FavoritesOnly"), hidePreview: node("HidePreview"), hideDeprecated: node("HideDeprecated"),
+        favCount: node("FavCount"), filterToggle: node("FilterToggle"), filterPanel: node("Filters"),
+        options: node("Options"), summary: node("ActiveFilters"), clear: node("Clear"),
+        sort: node("Sort"), direction: node("SortDirection"), results: node("Results"), count: node("ResultCount"),
+        linked: node("Linked"), more: node("LoadMore"), error: node("Error"), retry: node("Retry"),
+      };
+      const sortLabels = {
+        displayName: "Name", category: "Category", effect: "Effect", mode: "Mode", version: "Version",
+        policyType: "Definition type", name: "ID", policyCount: "Member count",
+      };
+      config.sortKeys.forEach(key => el.sort.add(new Option(sortLabels[key], key)));
+
+      function criteria() {
+        return {
+          query: el.search.value, filters: Object.fromEntries(el.filters.map(filter => [filter.key, filter.select.value])),
+          hidePreview: el.hidePreview.checked, hideDeprecated: el.hideDeprecated.checked,
+          favoritesOnly: el.favoritesOnly.checked, favorites: state.favorites,
+        };
+      }
+
+      function activeFilters() {
+        const values = [];
+        if (el.search.value.trim()) values.push({ label: `Search: ${el.search.value.trim()}`, clear: () => { el.search.value = ""; } });
+        el.filters.forEach(filter => {
+          if (filter.select.value) values.push({ label: `${filter.label}: ${filter.select.value}`, clear: () => { filter.select.value = ""; } });
+        });
+        [
+          [el.favoritesOnly, "Favorites only"], [el.hideDeprecated, "Deprecated hidden"], [el.hidePreview, "Preview hidden"],
+        ].forEach(([control, label]) => {
+          if (control.checked) values.push({ label, clear: () => { control.checked = false; } });
+        });
+        return values;
+      }
+
+      function syncPanel() {
+        const visible = !mobileFilters.matches || state.panelOpen;
+        if (!visible && el.filterPanel.contains(document.activeElement)) el.filterToggle.focus();
+        if (!mobileFilters.matches && document.activeElement === el.filterToggle) el.search.focus();
+        el.filterPanel.hidden = !visible;
+        el.filterToggle.setAttribute("aria-expanded", String(visible));
+      }
+
+      function renderSummary() {
+        const filters = activeFilters();
+        el.summary.replaceChildren();
+        filters.forEach(filter => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "filter-chip";
+          button.textContent = `${filter.label} ×`;
+          button.setAttribute("aria-label", `Remove filter: ${filter.label}`);
+          button.addEventListener("click", () => {
+            filter.clear();
+            el.search.focus({ preventScroll: true });
+            applyFilter();
+            syncUrl();
+          });
+          el.summary.append(button);
+        });
+        el.filterToggle.textContent = `Filters · ${filters.length} active`;
+        const optionsCount = [el.favoritesOnly, el.hidePreview, el.hideDeprecated].filter(control => control.checked).length;
+        el.options.querySelector("summary").textContent = optionsCount ? `Options · ${optionsCount} active` : "Options";
+        el.favCount.textContent = `(${state.favorites.size})`;
+        el.clear.hidden = !filters.length;
+        syncPanel();
+      }
+
       function populateFilters() {
-        elements.filters.forEach(({ key, select }) => {
-          const values = [...new Set(state.rows.map((row) => row[key]).filter(Boolean))]
-            .sort((a, b) => String(a).localeCompare(String(b)));
-          values.forEach((value) => select.append(new Option(value, value)));
-          select.hidden = values.length === 0;
+        el.filters.forEach(({ key, select, label }) => {
+          const values = [...new Set(state.rows.map(row => row[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+          select.replaceChildren(new Option(values.length ? `All ${label.toLowerCase()} values` : `${label} not reported`, ""));
+          values.forEach(value => select.add(new Option(value, value)));
+          select.disabled = !values.length;
         });
       }
 
-      function updateFavCount() {
-        elements.favCount.textContent = `(${state.favorites.size})`;
+      function restore(params) {
+        el.search.value = params.get(el.search.id) || "";
+        el.filters.forEach(({ select }) => {
+          const value = params.get(select.id) || "";
+          if (value && ![...select.options].some(option => option.value === value)) select.add(new Option(`${value} (not in dataset)`, value));
+          select.value = value;
+        });
+        el.favoritesOnly.checked = params.get(el.favoritesOnly.id) === "1";
+        el.hideDeprecated.checked = params.has(el.hideDeprecated.id) ? params.get(el.hideDeprecated.id) === "1" : true;
+        el.hidePreview.checked = params.has(el.hidePreview.id) ? params.get(el.hidePreview.id) === "1" : true;
+        state.sortKey = config.sortKeys.includes(params.get(prefix + "Sort")) ? params.get(prefix + "Sort") : "displayName";
+        state.sortDir = params.get(prefix + "SortDir") === "desc" ? "desc" : "asc";
+        const shown = Number(params.get(prefix + "Shown"));
+        state.visible = Number.isSafeInteger(shown) && shown >= PAGE_SIZE ? Math.min(shown, Math.max(PAGE_SIZE, state.rows.length)) : PAGE_SIZE;
+        if ((params.get("tab") || "policies") === prefix) state.openId = params.get("definition") || "";
       }
 
-      // One button definition for both views, so a star behaves identically
-      // whether it sits in a table row or on a card.
-      function favButton(row) {
+      function writeParams(params) {
+        if (state.status !== "ready") return;
+        [el.search, ...el.filters.map(filter => filter.select)].forEach(control => {
+          params.delete(control.id);
+          if (control.value) params.set(control.id, control.value);
+        });
+        params.delete(el.favoritesOnly.id);
+        if (el.favoritesOnly.checked) params.set(el.favoritesOnly.id, "1");
+        [el.hideDeprecated, el.hidePreview].forEach(control => {
+          params.delete(control.id);
+          if (!control.checked) params.set(control.id, "0");
+        });
+        params.delete(prefix + "Sort");
+        params.delete(prefix + "SortDir");
+        params.delete(prefix + "Shown");
+        if (state.sortKey !== "displayName") params.set(prefix + "Sort", state.sortKey);
+        if (state.sortDir !== "asc") params.set(prefix + "SortDir", state.sortDir);
+        if (state.visible > PAGE_SIZE) params.set(prefix + "Shown", state.visible);
+      }
+
+      function favoriteButton(row) {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "fav-button";
         button.innerHTML = STAR_ICON;
-
-        const paint = (isFavorite) => {
-          button.setAttribute("aria-pressed", String(isFavorite));
-          button.setAttribute("aria-label", isFavorite ? "Remove from favorites" : "Add to favorites");
-          button.setAttribute("title", isFavorite ? "Remove from favorites" : "Add to favorites");
-          button.querySelector("svg").setAttribute("fill", isFavorite ? "currentColor" : "none");
-        };
-        paint(state.favorites.has(row.name));
-
+        function paint() {
+          const favorite = state.favorites.has(row.name);
+          button.setAttribute("aria-pressed", String(favorite));
+          button.setAttribute("aria-label", `${favorite ? "Remove" : "Add"} ${row.displayName} ${favorite ? "from" : "to"} favorites`);
+          button.querySelector("svg").setAttribute("fill", favorite ? "currentColor" : "none");
+        }
+        paint();
         button.addEventListener("click", () => {
-          const isFavorite = state.favorites.has(row.name);
-          if (isFavorite) state.favorites.delete(row.name);
+          if (state.favorites.has(row.name)) state.favorites.delete(row.name);
           else state.favorites.add(row.name);
           saveFavorites(config.favoritesKey, state.favorites);
-          paint(!isFavorite);
-          updateFavCount();
-          // Un-starring while the filter is on should make the entry leave.
-          if (state.favoritesOnly) applyFilter();
+          paint();
+          renderSummary();
+          if (el.favoritesOnly.checked) {
+            if (state.openId === row.name && !state.favorites.has(row.name)) state.openId = "";
+            el.search.focus({ preventScroll: true });
+            applyFilter(false);
+            syncUrl();
+          }
         });
         return button;
       }
 
-      // Toggles the member list, in a detail row under the table row or inline
-      // inside the card, depending on which view rendered the button.
-      function memberToggle(row) {
-        const count = row.policyCount ?? (row.policies || []).length;
-        const button = disclosureButton(row, count.toLocaleString(), memberPanel, "member-toggle");
-        button.setAttribute("aria-label", `${count} policies in this initiative`);
-        return button;
-      }
-
-      // Same disclosure mechanics as the initiative member list, pointed at a
-      // different panel builder.
-      function disclosureButton(row, label, buildPanel, className) {
+      function action(label, callback) {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = className || "json-button";
-        button.setAttribute("aria-expanded", "false");
-        // Policy names carry ampersands and angle brackets often enough that
-        // the label has to go in as text, not as markup.
-        const text = document.createElement("span");
-        text.textContent = label;
-        button.append(text);
-        button.insertAdjacentHTML("beforeend", CARET_ICON);
-
-        button.addEventListener("click", (event) => {
-          event.stopPropagation();
-          const expanded = button.getAttribute("aria-expanded") === "true";
-          const tableRow = button.closest("tr");
-          const card = button.closest(".policy-card");
-
-          if (expanded) {
-            const open = tableRow ? tableRow.nextElementSibling : card.querySelector(".member-panel");
-            if (open && (open.classList.contains("member-row") || open.classList.contains("member-panel"))) open.remove();
-            button.setAttribute("aria-expanded", "false");
-            return;
-          }
-
-          if (tableRow) {
-            const detail = document.createElement("tr");
-            detail.className = "member-row";
-            const cell = document.createElement("td");
-            cell.colSpan = tableRow.children.length;
-            cell.append(buildPanel(row));
-            detail.append(cell);
-            tableRow.after(detail);
-          } else if (card) {
-            card.append(buildPanel(row));
-          }
-          button.setAttribute("aria-expanded", "true");
-        });
+        button.className = "policy-action";
+        button.textContent = label;
+        button.addEventListener("click", () => callback(button));
         return button;
       }
 
-      function copyButtonFor(row) {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "copy-button";
-        button.setAttribute("aria-label", "Copy ID");
-        button.innerHTML = copyIconMarkup(false);
-        button.addEventListener("click", () => copyToClipboard(row.name, button));
-        return button;
-      }
-
-      // Effect, mode and version only exist on policies, the member count only
-      // on initiatives, so the columns between Category and Type are declared
-      // per browser instead of branching on the tab inside every renderer.
-      function columnCell(column, row) {
-        const td = document.createElement("td");
-        if (column.toggle) {
-          td.append(memberToggle(row));
-          return td;
-        }
-        const value = column.value(row);
-        if (!value) {
-          td.textContent = "-";
-        } else if (column.badge) {
-          td.append(effectBadge(value));
-        } else if (column.mono) {
+      function definitionDetail(row, host) {
+        const description = document.createElement("p");
+        description.className = "definition-description";
+        description.textContent = row.description || "No description is included in this dataset.";
+        const metadata = document.createElement("dl");
+        metadata.className = "definition-meta";
+        [
+          ["ID", row.name], ["Version", row.version], ["Definition type", row.policyType],
+          ["Mode", row.mode], ["Resource ID", row.policyDefinitionId],
+        ].forEach(([label, value]) => {
+          if (label === "Mode" && prefix !== "policies") return;
+          const term = document.createElement("dt");
+          term.textContent = label;
+          const definition = document.createElement("dd");
           const code = document.createElement("code");
-          code.textContent = value;
-          td.append(code);
-        } else {
-          td.textContent = value;
-        }
-        return td;
+          code.textContent = value || "Not reported";
+          definition.append(code);
+          metadata.append(term, definition);
+        });
+        const actions = document.createElement("div");
+        actions.className = "detail-actions";
+        actions.append(
+          action("Copy ID", button => copyText(row.name, button, "Definition ID")),
+          action("Copy definition link", button => copyText(catalogueUrl(prefix, row.name).href, button, "Definition link")),
+        );
+        host.append(description, metadata, actions, prefix === "policies" ? jsonPanel(row) : memberPanel(row));
       }
 
-      // The name is the disclosure control: clicking a policy opens the row and
-      // shows its definition, which is what the separate JSON button used to do.
-      function nameCell(row) {
-        const td = document.createElement("td");
-        const label = row.displayName ?? "";
-
-        if (config.showJson) {
-          const button = disclosureButton(row, label, jsonPanel, "name-toggle");
-          button.setAttribute("aria-label", `${label} - show the JSON definition`);
-          // The caret leads on a name: trailing after a title that wraps to
-          // three lines it reads as punctuation rather than as an expander.
-          button.prepend(button.querySelector("svg"));
-          td.append(button);
-        } else {
-          const name = document.createElement("span");
-          name.className = "policy-name";
-          name.textContent = label;
-          td.append(name);
-        }
-
-        if (row.description) {
-          const description = document.createElement("span");
-          description.className = "policy-desc";
-          description.textContent = row.description;
-          td.append(description);
-        }
-        return td;
-      }
-
-      function renderRow(row) {
-        const tr = document.createElement("tr");
-
-        const favTd = document.createElement("td");
-        favTd.append(favButton(row));
-
-        const nameTd = nameCell(row);
-
-        const categoryTd = document.createElement("td");
-        categoryTd.innerHTML = row.category ? `<span class="category-badge">${row.category}</span>` : "-";
-
-        const typeTd = document.createElement("td");
-        typeTd.textContent = row.policyType ?? "";
-
-        const idTd = document.createElement("td");
-        const cell = document.createElement("div");
-        cell.className = "id-cell";
-        cell.innerHTML = `<code>${row.name}</code>`;
-        cell.append(copyButtonFor(row));
-        idTd.append(cell);
-
-        tr.append(favTd, nameTd, categoryTd, ...config.columns.map((column) => columnCell(column, row)), typeTd, idTd);
-        return tr;
-      }
-
-      function renderCard(row) {
-        const card = document.createElement("article");
-        card.className = "policy-card";
-
+      function renderEntry(row) {
+        const article = document.createElement("article");
+        article.className = "policy-entry";
+        article.dataset.definitionId = row.name;
+        const index = state.indices.get(row.name);
         const head = document.createElement("div");
-        head.className = "policy-card-head";
-        // Cards follow the table: the name is the control that opens the JSON.
-        if (config.showJson) {
-          const button = disclosureButton(row, row.displayName ?? "", jsonPanel, "name-toggle");
-          button.setAttribute("aria-label", `${row.displayName ?? ""} - show the JSON definition`);
-          button.prepend(button.querySelector("svg"));
-          head.append(button, favButton(row));
-        } else {
-          const name = document.createElement("span");
-          name.className = "policy-name";
-          name.textContent = row.displayName ?? "";
-          head.append(name, favButton(row));
+        head.className = "policy-entry-head";
+        const heading = document.createElement("h3");
+        const toggle = document.createElement("button");
+        const open = state.openId === row.name;
+        toggle.type = "button";
+        toggle.className = "name-toggle";
+        toggle.setAttribute("aria-expanded", String(open));
+        toggle.setAttribute("aria-controls", `${prefix}-detail-${index}`);
+        toggle.setAttribute("aria-label", `${open ? "Close" : "Open"} definition: ${row.displayName}`);
+        const name = document.createElement("span");
+        name.textContent = row.displayName;
+        const caption = document.createElement("span");
+        caption.className = "open-caption";
+        caption.textContent = open ? "Close definition" : "Open definition";
+        toggle.append(name, caption);
+        toggle.addEventListener("click", () => {
+          state.openId = state.openId === row.name ? "" : row.name;
+          render();
+          syncUrl();
+          const target = findEntry(row.name)?.querySelector(".name-toggle");
+          (target || el.search).focus({ preventScroll: true });
+        });
+        heading.append(toggle);
+        head.append(heading, favoriteButton(row));
+        const meta = document.createElement("div");
+        meta.className = "policy-meta";
+        if (row.effect) meta.append(effectBadge(row.effect));
+        if (row.category) {
+          const category = document.createElement("span");
+          category.className = "category-badge";
+          category.textContent = row.category;
+          meta.append(category);
         }
-        card.append(head);
-
-        if (row.description) {
+        if (prefix === "initiatives") {
+          const count = row.policyCount ?? row.policies?.length;
+          if (count != null) {
+            const members = document.createElement("span");
+            members.textContent = `${count.toLocaleString("en-US")} member policies`;
+            meta.append(members);
+          }
+        }
+        const lifecycle = lifecycleTag(row);
+        if (lifecycle === "preview" || lifecycle === "deprecated") {
+          const badge = document.createElement("span");
+          badge.className = "category-badge";
+          badge.textContent = lifecycle === "preview" ? "Preview" : "Deprecated";
+          meta.append(badge);
+        }
+        article.append(head, meta);
+        if (row.description && !open) {
           const description = document.createElement("p");
           description.className = "policy-desc";
           description.textContent = row.description;
-          card.append(description);
+          article.append(description);
         }
-
-        const meta = document.createElement("div");
-        meta.className = "policy-card-meta";
-        if (row.category) {
-          const badge = document.createElement("span");
-          badge.className = "category-badge";
-          badge.textContent = row.category;
-          meta.append(badge);
-        }
-        // A "Policies: 0" line asserts something useful and says nothing, so
-        // the card stays quiet when there is no value to show.
-        config.columns.forEach((column) => {
-          if (column.toggle) {
-            const label = document.createElement("span");
-            label.textContent = `${column.label}:`;
-            meta.append(label, memberToggle(row));
-            return;
-          }
-          const value = column.value(row);
-          if (!value) return;
-          if (column.badge) {
-            meta.append(effectBadge(value));
-            return;
-          }
-          const span = document.createElement("span");
-          span.textContent = `${column.label}: ${value}`;
-          meta.append(span);
-        });
-        if (row.policyType) {
-          const span = document.createElement("span");
-          span.textContent = row.policyType;
-          meta.append(span);
-        }
-        card.append(meta);
-
-        const foot = document.createElement("div");
-        foot.className = "policy-card-foot id-cell";
-        foot.innerHTML = `<code>${row.name}</code>`;
-        foot.append(copyButtonFor(row));
-        card.append(foot);
-
-        return card;
+        const detail = document.createElement("div");
+        detail.className = "definition-detail";
+        detail.id = `${prefix}-detail-${index}`;
+        detail.hidden = !open;
+        if (open) definitionDetail(row, detail);
+        article.append(detail);
+        return article;
       }
 
-      function renderTable() {
-        const direction = state.sortDir === "asc" ? 1 : -1;
-        const rows = [...state.filtered].sort((a, b) => {
-          if (state.sortKey === "policyCount") return ((a.policyCount ?? 0) - (b.policyCount ?? 0)) * direction;
-          if (state.sortKey === "version") return compareVersions(a.version, b.version) * direction;
-          const av = normalize(a[state.sortKey]);
-          const bv = normalize(b[state.sortKey]);
-          if (av < bv) return -direction;
-          if (av > bv) return direction;
-          return 0;
-        });
-
-        const shown = rows.slice(0, state.visible);
-        const isCards = state.view === "cards";
-        elements.tableWrap.hidden = isCards;
-        elements.cards.hidden = !isCards;
-
-        const fragment = document.createDocumentFragment();
-        if (isCards) {
-          shown.forEach((row) => fragment.append(renderCard(row)));
-          elements.cards.replaceChildren(fragment);
-          elements.tableBody.replaceChildren();
-        } else {
-          shown.forEach((row) => fragment.append(renderRow(row)));
-          elements.tableBody.replaceChildren(fragment);
-          elements.cards.replaceChildren();
-        }
-
-        elements.resultCount.textContent = shown.length < rows.length
-          ? `Showing ${shown.length.toLocaleString()} of ${rows.length.toLocaleString()} matching ${config.countLabel}.`
-          : `${rows.length.toLocaleString()} ${rows.length === 1 ? config.countLabelSingular : config.countLabel} shown.`;
-        renderLoadMore(rows.length, shown.length);
-
-        elements.headers.forEach((th) => {
-          th.removeAttribute("aria-sort");
-          if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
-        });
+      function findEntry(id) {
+        return [...el.panel.querySelectorAll("[data-definition-id]")].find(entry => entry.dataset.definitionId === id);
       }
 
-      function renderLoadMore(total, shownCount) {
-        const panel = document.getElementById(config.panelId);
-        if (!panel) return;
-        let button = panel.querySelector(".load-more");
-        if (shownCount >= total) {
-          if (button) button.remove();
-          return;
-        }
-        const remaining = total - shownCount;
-        const label = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
-        if (!button) {
-          button = document.createElement("button");
-          button.type = "button";
-          button.className = "load-more";
-          button.addEventListener("click", () => {
-            state.visible += PAGE_SIZE;
-            renderTable();
-            // keep the keyboard user at the control they just pressed
-            const next = document.getElementById(config.panelId).querySelector(".load-more");
-            if (next) next.focus();
-          });
-          const anchor = panel.querySelector(state.view === "cards" ? ".policy-cards" : ".table-wrap");
-          if (anchor) anchor.insertAdjacentElement("afterend", button);
-          else panel.append(button);
-        }
-        button.textContent = label;
+      function focusDefinition() {
+        const entry = findEntry(state.openId);
+        if (!entry) return;
+        entry.querySelector(".name-toggle").focus({ preventScroll: true });
+        entry.scrollIntoView({ block: "start", behavior: "instant" });
       }
 
-      function applyFilter() {
-        const query = normalize(state.query.trim());
-        const active = elements.filters
-          .map(({ key, select }) => ({ key, value: select.value }))
-          .filter(({ value }) => value);
-        // Deprecated and preview definitions are hidden out of the box: they are
-        // the minority you look up on purpose, not the ones you browse for.
-        const hideDeprecated = elements.hideDeprecated.checked;
-        const hidePreview = elements.hidePreview.checked;
-        state.filtered = state.rows.filter((row) => {
-          if (state.favoritesOnly && !state.favorites.has(row.name)) return false;
-          if (hideDeprecated || hidePreview) {
-            const tag = lifecycleTag(row);
-            if (hideDeprecated && tag === "deprecated") return false;
-            if (hidePreview && tag === "preview") return false;
+      function render() {
+        if (state.status !== "ready") return;
+        const focusedEntry = document.activeElement.closest("[data-definition-id]");
+        const focusedId = focusedEntry?.dataset.definitionId;
+        const focusedClass = document.activeElement.classList.contains("fav-button") ? ".fav-button" : ".name-toggle";
+        const sorted = sortDefinitions(state.filtered, state.sortKey, state.sortDir);
+        const shown = sorted.slice(0, state.visible);
+        el.results.classList.toggle("is-cards", currentView === "cards");
+        el.results.replaceChildren(...shown.map(renderEntry));
+        if (!shown.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty-state";
+          const message = document.createElement("p");
+          message.textContent = !state.rows.length ? `No ${prefix} are recorded in this dataset.`
+            : el.favoritesOnly.checked && !state.favorites.size ? "No favorites are saved here. Reset the filters and use a star to save a definition."
+            : `No ${prefix} match these filters.`;
+          empty.append(message, action("Reset all filters", resetFilters));
+          el.results.append(empty);
+        }
+        el.linked.replaceChildren();
+        const linked = state.openId && !shown.some(row => row.name === state.openId);
+        el.linked.hidden = !linked;
+        if (linked) {
+          const row = state.byId.get(state.openId);
+          const message = document.createElement("p");
+          message.setAttribute("role", "status");
+          message.textContent = row
+            ? "This linked definition is outside the current filters or visible batch. It is shown separately and is not included in the displayed count below."
+            : "The linked definition was not found in this dataset. The catalogue and your filters remain available.";
+          el.linked.append(message);
+          if (row) el.linked.append(renderEntry(row));
+          else el.linked.append(action("Close missing definition", () => {
+            state.openId = "";
+            el.search.focus({ preventScroll: true });
+            render();
+            syncUrl();
+          }));
+        }
+        el.count.textContent = `${shown.length.toLocaleString("en-US")} displayed / ${state.rows.length.toLocaleString("en-US")} total ${prefix} · ${state.filtered.length.toLocaleString("en-US")} match the active filters.`;
+        const remaining = state.filtered.length - shown.length;
+        el.more.hidden = remaining <= 0;
+        el.more.textContent = `Load ${Math.min(PAGE_SIZE, remaining)} more (${remaining.toLocaleString("en-US")} remaining)`;
+        el.sort.value = state.sortKey;
+        el.direction.textContent = state.sortDir === "asc" ? "Ascending" : "Descending";
+        renderSummary();
+        if (focusedId) (findEntry(focusedId)?.querySelector(focusedClass) || el.search).focus({ preventScroll: true });
+        requestAd();
+      }
+
+      function applyFilter(resetPage = true) {
+        if (state.status !== "ready") return;
+        if (resetPage) state.visible = PAGE_SIZE;
+        state.filtered = filterDefinitions(state.rows, criteria());
+        render();
+      }
+
+      function resetFilters() {
+        clearTimeout(searchTimer);
+        el.search.value = "";
+        el.filters.forEach(({ select }) => { select.value = ""; });
+        el.favoritesOnly.checked = el.hidePreview.checked = el.hideDeprecated.checked = false;
+        el.search.focus({ preventScroll: true });
+        applyFilter();
+        syncUrl();
+      }
+
+      async function load() {
+        if (state.status === "fetching") return;
+        const fromRetry = document.activeElement === el.retry;
+        state.status = "fetching";
+        el.controls.disabled = true;
+        el.retry.disabled = true;
+        el.results.setAttribute("aria-busy", "true");
+        el.count.textContent = `Loading ${prefix}...`;
+        updateDatasetSummary();
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        try {
+          const response = await fetch(config.file, { cache: "no-store", signal: controller.signal });
+          if (!response.ok) throw new Error(`Catalogue request returned ${response.status}`);
+          const payload = await response.json();
+          state.rows = validateDefinitions(payload, prefix);
+          state.byId = new Map(state.rows.map(row => [row.name, row]));
+          state.indices = new Map(state.rows.map((row, index) => [row.name, index]));
+          state.favorites = new Set([...state.favorites].filter(id => state.byId.has(id)));
+          state.generatedAt = payload.generatedAt;
+          if (prefix === "policies") {
+            policyIndex.clear();
+            state.rows.forEach(row => policyIndex.set(row.name, row));
           }
-          if (active.some(({ key, value }) => row[key] !== value)) return false;
-          if (query && !normalize(`${row.displayName} ${row.description} ${row.category}`).includes(query)) return false;
-          return true;
-        });
-        state.visible = PAGE_SIZE;
-        elements.clearFilters.hidden = !query && !active.length && !state.favoritesOnly && hideDeprecated && hidePreview;
-        renderTable();
+          populateFilters();
+          restore(new URLSearchParams(location.search));
+          state.status = "ready";
+          el.controls.disabled = false;
+          el.error.hidden = true;
+          applyFilter(false);
+          if (prefix === "policies") browsers.initiatives.refreshMembers();
+          if (activeTab === prefix && state.openId) focusDefinition();
+        } catch (error) {
+          console.error(`Unable to load ${prefix}.`, error);
+          state.status = "error";
+          el.error.hidden = false;
+          el.results.replaceChildren();
+          el.linked.replaceChildren();
+          el.linked.hidden = true;
+          el.more.hidden = true;
+          el.count.textContent = `Unable to load ${prefix}. Retry to continue.`;
+        } finally {
+          clearTimeout(timeout);
+          el.retry.disabled = false;
+          el.results.setAttribute("aria-busy", "false");
+          updateDatasetSummary();
+          if (fromRetry) (state.status === "ready" ? el.search : el.retry).focus({ preventScroll: true });
+        }
       }
 
       let searchTimer;
-      elements.search.addEventListener("input", () => {
-        state.query = elements.search.value;
+      el.search.addEventListener("input", () => {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(applyFilter, 150);
+        searchTimer = setTimeout(() => { applyFilter(); syncUrl(false); }, 150);
       });
-      elements.filters.forEach(({ select }) => select.addEventListener("change", applyFilter));
-      elements.favoritesOnly.addEventListener("change", () => {
-        state.favoritesOnly = elements.favoritesOnly.checked;
-        applyFilter();
+      [...el.filters.map(filter => filter.select), el.favoritesOnly, el.hidePreview, el.hideDeprecated].forEach(control => {
+        control.addEventListener("change", () => { clearTimeout(searchTimer); applyFilter(); syncUrl(); });
       });
-      elements.hideDeprecated.addEventListener("change", applyFilter);
-      elements.hidePreview.addEventListener("change", applyFilter);
-      elements.clearFilters.addEventListener("click", () => {
-        elements.search.value = "";
-        elements.filters.forEach(({ select }) => { select.value = ""; });
-        elements.favoritesOnly.checked = false;
-        // Clear returns the bar to its defaults, and hiding both is the default.
-        elements.hideDeprecated.checked = true;
-        elements.hidePreview.checked = true;
-        state.query = "";
-        state.favoritesOnly = false;
-        applyFilter();
-        elements.search.focus();
+      el.filterToggle.addEventListener("click", () => { state.panelOpen = !state.panelOpen; syncPanel(); });
+      node("FiltersDone").addEventListener("click", () => { state.panelOpen = false; syncPanel(); el.filterToggle.focus(); });
+      el.filterPanel.addEventListener("keydown", event => {
+        if (event.key === "Escape" && mobileFilters.matches) { state.panelOpen = false; syncPanel(); el.filterToggle.focus(); }
       });
-      elements.headers.forEach((th) => {
-        th.addEventListener("click", () => {
-          const key = th.dataset.key;
-          if (state.sortKey === key) {
-            state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-          } else {
-            state.sortKey = key;
-            state.sortDir = "asc";
-          }
-          renderTable();
-        });
+      mobileFilters.addEventListener("change", syncPanel);
+      el.clear.addEventListener("click", resetFilters);
+      el.sort.addEventListener("change", () => { state.sortKey = el.sort.value; render(); syncUrl(); });
+      el.direction.addEventListener("click", () => { state.sortDir = state.sortDir === "asc" ? "desc" : "asc"; render(); syncUrl(); });
+      el.more.addEventListener("click", () => {
+        const old = new Set([...el.results.querySelectorAll("[data-definition-id]")].map(entry => entry.dataset.definitionId));
+        state.visible += PAGE_SIZE;
+        render();
+        syncUrl(false);
+        const firstNew = [...el.results.querySelectorAll("[data-definition-id]")].find(entry => !old.has(entry.dataset.definitionId));
+        if (firstNew) {
+          firstNew.querySelector(".name-toggle").focus({ preventScroll: true });
+          firstNew.scrollIntoView({ block: "start", behavior: "instant" });
+        }
       });
-
+      el.retry.addEventListener("click", load);
+      syncPanel();
       return {
-        setView(view) {
-          state.view = view;
-          // The Load more button is anchored to whichever container is showing,
-          // so drop it and let renderTable put it back in the right place.
-          const stale = document.getElementById(config.panelId).querySelector(".load-more");
-          if (stale) stale.remove();
-          renderTable();
-        },
-        async load() {
-          const response = await fetch(config.file, { cache: "no-store" });
-          if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
-          const payload = await response.json();
-          state.rows = payload[config.listKey];
-          populateFilters();
-          updateFavCount();
-          // The hide toggles start on, so the first paint has to go through the
-          // filter rather than straight to the full list.
-          applyFilter();
-          return payload;
+        state, load, render, writeParams, focusDefinition,
+        restore(params) { clearTimeout(searchTimer); restore(params); applyFilter(false); },
+        openDefinition(id) { state.openId = id; render(); },
+        refreshMembers() {
+          if (prefix !== "initiatives" || state.status !== "ready") return;
+          const current = findEntry(state.openId)?.querySelector(".member-panel");
+          const row = state.byId.get(state.openId);
+          if (!current || !row) return;
+          const restoreFocus = current.contains(document.activeElement);
+          const updated = memberPanel(row);
+          current.replaceWith(updated);
+          if (restoreFocus) updated.querySelector(".member-list")?.focus({ preventScroll: true });
         },
       };
     }
 
-    const policiesBrowser = createBrowser({
-      panelId: "policiesPanel",
-      searchId: "policiesSearch",
-      filters: [
-        { id: "policiesCategoryFilter", key: "category" },
-        { id: "policiesEffectFilter", key: "effect" },
-        { id: "policiesModeFilter", key: "mode" },
-      ],
-      favoritesOnlyId: "policiesFavoritesOnly",
-      hideDeprecatedId: "policiesHideDeprecated",
-      hidePreviewId: "policiesHidePreview",
-      favCountId: "policiesFavCount",
-      clearId: "policiesClear",
-      tableBodyId: "policiesTableBody",
-      cardsId: "policiesCards",
-      resultCountId: "policiesResultCount",
-      favoritesKey: "azurePoliciesFavorites",
-      file: "./policydefinitions.json",
-      listKey: "policies",
-      countLabel: "policies",
-      countLabelSingular: "policy",
-      showJson: true,
-      columns: [
-        { key: "effect", label: "Effect", badge: true, value: (row) => row.effect ?? "" },
-        { key: "mode", label: "Mode", value: (row) => row.mode ?? "" },
-        { key: "version", label: "Version", mono: true, value: (row) => row.version ?? "" },
-      ],
+    browsers.policies = createBrowser({
+      key: "policies", file: "./policydefinitions.json", favoritesKey: "azurePoliciesFavorites",
+      filters: [["category", "CategoryFilter", "Category"], ["effect", "EffectFilter", "Effect"], ["mode", "ModeFilter", "Mode"]],
+      sortKeys: ["displayName", "category", "effect", "mode", "version", "policyType", "name"],
     });
-
-    const initiativesBrowser = createBrowser({
-      panelId: "initiativesPanel",
-      searchId: "initiativesSearch",
-      filters: [
-        { id: "initiativesCategoryFilter", key: "category" },
-      ],
-      favoritesOnlyId: "initiativesFavoritesOnly",
-      hideDeprecatedId: "initiativesHideDeprecated",
-      hidePreviewId: "initiativesHidePreview",
-      favCountId: "initiativesFavCount",
-      clearId: "initiativesClear",
-      tableBodyId: "initiativesTableBody",
-      cardsId: "initiativesCards",
-      resultCountId: "initiativesResultCount",
-      favoritesKey: "azureInitiativesFavorites",
-      file: "./policysetdefinitions.json",
-      listKey: "initiatives",
-      countLabel: "initiatives",
-      countLabelSingular: "initiative",
-      expandable: true,
-      columns: [
-        { key: "policyCount", label: "Policies", toggle: true, value: (row) => row.policyCount ?? 0 },
-        { key: "version", label: "Version", mono: true, value: (row) => row.version ?? "" },
-      ],
+    browsers.initiatives = createBrowser({
+      key: "initiatives", file: "./policysetdefinitions.json", favoritesKey: "azureInitiativesFavorites",
+      filters: [["category", "CategoryFilter", "Category"]],
+      sortKeys: ["displayName", "category", "policyCount", "version", "policyType", "name"],
     });
 
     const elements = {
-      statsGrid: document.getElementById("statsGrid"),
       refreshedAt: document.getElementById("refreshedAt"),
-      currentYear: document.getElementById("currentYear"),
-      tabPolicies: document.getElementById("tabPolicies"),
-      tabInitiatives: document.getElementById("tabInitiatives"),
-      policiesPanel: document.getElementById("policiesPanel"),
-      initiativesPanel: document.getElementById("initiativesPanel"),
+      statsSummary: document.getElementById("statsSummary"),
+      statsGrid: document.getElementById("statsGrid"),
+      statsValues: [...document.querySelectorAll("#statsGrid .stat-value")],
+      sourceLink: document.getElementById("sourceLink"),
       backToTop: document.getElementById("backToTop"),
       viewButtons: [...document.querySelectorAll("[data-view]")],
     };
 
-    function renderStats(policiesPayload, initiativesPayload) {
-      const stats = [
-        { label: "Policies", value: policiesPayload.totalPolicies },
-        { label: "Initiatives", value: initiativesPayload.totalInitiatives },
-        { label: "Policy categories", value: policiesPayload.totalCategories },
-      ];
-      elements.statsGrid.replaceChildren();
-      stats.forEach((stat) => {
-        const el = document.createElement("div");
-        el.className = "stat-card";
-        el.innerHTML = `<div class="stat-value">${stat.value.toLocaleString()}</div><div class="stat-label">${stat.label}</div>`;
-        elements.statsGrid.append(el);
-      });
+    function catalogueUrl(tab = activeTab, definition = browsers[tab].state.openId) {
+      const url = new URL(location.href);
+      Object.values(browsers).forEach(browser => browser.writeParams(url.searchParams));
+      url.searchParams.set("tab", tab);
+      url.searchParams.set("view", currentView);
+      url.searchParams.delete("definition");
+      if (definition) { url.searchParams.set("definition", definition); url.hash = ""; }
+      return url;
     }
 
-    function selectTab(tab) {
-      const isPolicies = tab === "policies";
-      elements.tabPolicies.classList.toggle("is-active", isPolicies);
-      elements.tabPolicies.setAttribute("aria-selected", String(isPolicies));
-      elements.tabInitiatives.classList.toggle("is-active", !isPolicies);
-      elements.tabInitiatives.setAttribute("aria-selected", String(!isPolicies));
-      elements.policiesPanel.hidden = !isPolicies;
-      elements.initiativesPanel.hidden = isPolicies;
-    }
-    elements.tabPolicies.addEventListener("click", () => selectTab("policies"));
-    elements.tabInitiatives.addEventListener("click", () => selectTab("initiatives"));
-
-    // One switch drives both panels: the layout is a reading preference, not a
-    // property of whichever tab happens to be open.
-    function selectView(view) {
-      elements.viewButtons.forEach((button) => {
-        const isActive = button.dataset.view === view;
-        button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-      });
-      try { localStorage.setItem(VIEW_MODE_KEY, view); } catch { /* ignore */ }
-      policiesBrowser.setView(view);
-      initiativesBrowser.setView(view);
-    }
-    elements.viewButtons.forEach((button) => {
-      button.addEventListener("click", () => selectView(button.dataset.view));
-    });
-
-    async function init() {
-      elements.currentYear.textContent = new Date().getFullYear();
-      // The browsers already read the stored layout for their first render;
-      // this only brings the buttons in line with it.
-      const storedView = loadViewMode();
-      elements.viewButtons.forEach((button) => {
-        const isActive = button.dataset.view === storedView;
-        button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-      });
+    function syncUrl(push = true) {
       try {
-        const [policiesPayload, initiativesPayload] = await Promise.all([
-          policiesBrowser.load(),
-          initiativesBrowser.load(),
-        ]);
-        renderStats(policiesPayload, initiativesPayload);
-        // Feed the GUID -> readable name join used by the initiative member list.
-        (policiesPayload.policies || []).forEach((policy) => policyIndex.set(policy.name, policy));
-        const generatedAt = new Date(Math.max(
-          new Date(policiesPayload.generatedAt).getTime(),
-          new Date(initiativesPayload.generatedAt).getTime()
-        ));
-        elements.refreshedAt.textContent = generatedAt.toLocaleString("en-US", {
-          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-        });
+        const url = catalogueUrl();
+        if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+        window.dispatchEvent(new Event("policycataloguechange"));
       } catch (error) {
-        console.error(error);
-        document.getElementById("policiesResultCount").textContent = "Unable to load policy data.";
+        console.warn("Policy view URL could not be updated.", error);
+        document.getElementById("actionStatus").textContent = "This view works, but the address could not be updated.";
       }
     }
-    init();
+
+    function updateDatasetSummary() {
+      const totals = datasetTotals(browsers.policies.state, browsers.initiatives.state);
+      elements.statsValues.forEach(value => {
+        const count = totals[value.dataset.stat];
+        value.textContent = count === null ? "—" : count.toLocaleString("en-US");
+      });
+      const pending = Object.entries(browsers).filter(([, browser]) => browser.state.status !== "ready");
+      elements.statsGrid.setAttribute("aria-busy", String(pending.some(([, browser]) => browser.state.status !== "error")));
+      elements.statsSummary.textContent = pending.length
+        ? `Catalogue totals · ${pending.map(([key, browser]) => `${key}: ${browser.state.status === "error" ? "unavailable" : "loading"}`).join(" · ")}. Categories require both catalogues.`
+        : "Complete catalogue, including preview and deprecated entries; unaffected by filters. Categories span both catalogues.";
+      const current = browsers[activeTab].state;
+      const date = current.generatedAt ? new Date(current.generatedAt) : null;
+      elements.refreshedAt.textContent = current.status === "error" ? "Not available" : current.status !== "ready" ? "Loading..."
+        : date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "Not available";
+      const command = activeTab === "policies" ? "Get-AzPolicyDefinition" : "Get-AzPolicySetDefinition";
+      elements.sourceLink.textContent = command;
+      elements.sourceLink.href = `https://learn.microsoft.com/en-us/powershell/module/az.resources/${command.toLowerCase()}`;
+    }
+
+    function requestAd() {
+      if (adRequested || browsers[activeTab]?.state.status !== "ready" || !browsers[activeTab].state.filtered.length) return;
+      adRequested = true;
+      document.getElementById("policiesAd").hidden = false;
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); }
+      catch (error) { console.warn("The policy catalogue ad could not be initialized.", error); }
+    }
+
+    function selectTab(tab, updateUrl = true) {
+      activeTab = tab;
+      [["policies", "Policies"], ["initiatives", "Initiatives"]].forEach(([key, title]) => {
+        const selected = key === tab;
+        const button = document.getElementById("tab" + title);
+        button.classList.toggle("is-active", selected);
+        button.setAttribute("aria-selected", String(selected));
+        button.tabIndex = selected ? 0 : -1;
+        document.getElementById(key + "Panel").hidden = !selected;
+      });
+      updateDatasetSummary();
+      if (updateUrl) syncUrl();
+      requestAd();
+    }
+
+    function selectView(view, save = true) {
+      currentView = view;
+      elements.viewButtons.forEach(button => {
+        const selected = button.dataset.view === view;
+        button.classList.toggle("is-active", selected);
+        button.setAttribute("aria-pressed", String(selected));
+      });
+      if (save) {
+        try { localStorage.setItem(VIEW_MODE_KEY, view); }
+        catch (error) { preferenceError(error); }
+      }
+      Object.values(browsers).forEach(browser => browser.render());
+      if (save) syncUrl();
+    }
+
+    const tabButtons = [document.getElementById("tabPolicies"), document.getElementById("tabInitiatives")];
+    tabButtons.forEach((button, index) => {
+      button.addEventListener("click", () => selectTab(index ? "initiatives" : "policies"));
+      button.addEventListener("keydown", event => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const next = event.key === "Home" ? 0 : event.key === "End" ? 1 : 1 - index;
+        selectTab(next ? "initiatives" : "policies");
+        tabButtons[next].focus();
+      });
+    });
+    elements.viewButtons.forEach(button => button.addEventListener("click", () => selectView(button.dataset.view)));
+    window.addEventListener("popstate", () => {
+      const params = new URLSearchParams(location.search);
+      Object.values(browsers).forEach(browser => { if (browser.state.status === "ready") browser.restore(params); });
+      selectTab(params.get("tab") === "initiatives" ? "initiatives" : "policies", false);
+      selectView(["cards", "list"].includes(params.get("view")) ? params.get("view") : loadViewMode(), false);
+      if (browsers[activeTab].state.openId) browsers[activeTab].focusDefinition();
+      window.dispatchEvent(new Event("policycataloguechange"));
+    });
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    selectTab(new URLSearchParams(location.search).get("tab") === "initiatives" ? "initiatives" : "policies", false);
+    selectView(currentView, false);
+    browsers.policies.load();
+    browsers.initiatives.load();
+
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
@@ -1803,133 +2261,28 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        // A checkbox is only worth a query parameter when it differs from its
-        // own default. Writing "1" for a checked box would have been enough
-        // while every toggle here started unchecked, but "Hide deprecated" and
-        // "Hide preview" start checked, and unchecking them has to survive a
-        // reload just as clearly.
-        if (el.type === "checkbox") {
-          if (el.checked === el.defaultChecked) return "";
-          return el.checked ? "1" : "0";
-        }
-        return el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function updateShareLinks() {
+        var url = encodeURIComponent(location.href.split('#')[0]);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        root.querySelectorAll('a[data-share]').forEach(function (link) {
+          link.setAttribute('href', targets[link.getAttribute('data-share')]);
+        });
+      }
+      updateShareLinks();
+      window.addEventListener('policycataloguechange', updateShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

@@ -2,90 +2,73 @@
 author = "Benoit G"
 title = "Call Azure API with PowerShell"
 date = "2024-11-06"
-description = "How to call an Azure REST API directly from PowerShell: get an access token, build the request headers, and invoke the endpoint."
+description = "Make a read-only Azure Resource Manager GET for a storage account using Azure PowerShell, with explicit context, replaceable parameters and response checks."
 tags = ["API", "PowerShell"]
 categories = ["Azure"]
 featureImage = "/articles/images/rest-api.jpeg"
+related = ["azure-rest-apis-versions-and-lifecycle", "azure-subscription-switcher"]
 +++
 
-Using PowerShell or the command line to call an Azure REST API is a quick method to retrieve or update information about a specific resource in Azure. Although Postman can also be used for this purpose, here is an example of how to make these requests using PowerShell.
-
-[[toc]]
+This example reads a storage account's properties; it does not deploy or modify it. Use PowerShell with `Az.Accounts` installed and read permission on that resource. [Follow the steps](#sign-in) or [go to the full script](#full-script). Tested PowerShell/module versions and Azure execution validation: **not recorded**.
 
 ## Sign in
 
-First, log in to your Azure account:
+Login and context selection are separate. Confirm the tenant and subscription before sending the request.
 
 ```powershell
 Connect-AzAccount
+Set-AzContext -Subscription "<subscription-id>"
+Get-AzContext
 ```
 
-Set the subscription context if you have multiple subscriptions:
+## Let the module handle the token and headers
 
-```powershell
-Set-AzContext -Subscription "<SubscriptionId>"
-```
-
-## Get a token and build the headers
-
-```powershell
-# Get the current token
-$Token = (Get-AzAccessToken).Token
-```
-
-```powershell
-# Set the authorization header
-$Headers = @{
-    Authorization = "Bearer $Token"
-}
-```
+Use `Invoke-AzRestMethod` from Az.Accounts to authenticate with the selected context. It avoids printing or manually converting access tokens, whose representation varies between module versions. Do not put a token in console history or debug output.
 
 ## Build the request URL
 
-Define which resource you want to query. In this example, I want to get the properties of a storage account in a resource group in my subscription.
-
-To get the API URL and properties, use the [REST API reference documentation](https://learn.microsoft.com/en-us/rest/api/azure/).
-
-Construct the API URL by substituting the subscription ID, resource group, and storage account name with proper values:
+Replace the resource identifiers below. Choose `api-version` using [Azure REST APIs, Versions, and Lifecycle](/articles/azure-rest-apis-versions-and-lifecycle/); the version shown is an example contract, not a current-support guarantee.
 
 ```powershell
-$Uri = "https://management.azure.com/subscriptions/{SubscriptionId}/resourceGroups/{ResourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}?api-version=2023-01-01"
+$SubscriptionId = "<subscription-id>"
+$ResourceGroup = "<resource-group-name>"
+$AccountName = "<storage-account-name>"
+$ApiVersion = "2023-01-01"
+$Path = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroup/providers/Microsoft.Storage/storageAccounts/${AccountName}?api-version=$ApiVersion"
 ```
 
 ## Call the API
 
-Use `Invoke-WebRequest` to make the call:
-
 ```powershell
-Invoke-WebRequest -Method GET -UseBasicParsing -Uri $Uri -Headers $Headers
+$Result = Invoke-AzRestMethod -Method GET -Path $Path
+$Result.StatusCode
+$Result.Content | ConvertFrom-Json | Select-Object id, name, location
 ```
 
-The JSON content of the response can be accessed with:
+Expected shape: HTTP `200`, with the requested `id`, `name` and `location`. This is an expected schema, not a captured test result.
 
-```powershell
-(Invoke-WebRequest -Method GET -Uri $Uri -Headers $Headers).Content
-```
+| Symptom | Check |
+|---|---|
+| 401 or 403 | Login, tenant and resource read permissions; do not grant subscription-wide Owner to bypass the error |
+| 404 | Subscription, resource group, account name and the exact operation's API version |
 
 ## Full script
 
 ```powershell
 Connect-AzAccount
-
-Set-AzContext -Subscription "<SubscriptionId>"
-
-# Get the current token
-$Token = (Get-AzAccessToken).Token
-
-# Set the authorization header
-$Headers = @{
-    Authorization = "Bearer $Token"
-}
-
-$Uri = "https://management.azure.com/subscriptions/{SubscriptionId}/resourceGroups/{ResourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}?api-version=2023-01-01"
-
-$Result = Invoke-WebRequest -Method GET -Uri $Uri -Headers $Headers
-
-if ($Result.StatusCode -eq "200") {
-    $Result.Content
+$SubscriptionId = "<subscription-id>"
+$ResourceGroup = "<resource-group-name>"
+$AccountName = "<storage-account-name>"
+$ApiVersion = "2023-01-01"
+Set-AzContext -Subscription $SubscriptionId
+Get-AzContext
+$Path = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroup/providers/Microsoft.Storage/storageAccounts/${AccountName}?api-version=$ApiVersion"
+$Result = Invoke-AzRestMethod -Method GET -Path $Path
+if ($Result.StatusCode -eq 200) {
+    $Result.Content | ConvertFrom-Json | Select-Object id, name, location
+} else {
+    throw "Unexpected HTTP status: $($Result.StatusCode)"
 }
 ```
+
+References: [Invoke-AzRestMethod](https://learn.microsoft.com/powershell/module/az.accounts/invoke-azrestmethod) and the [Azure REST API browser](https://learn.microsoft.com/rest/api/azure/).

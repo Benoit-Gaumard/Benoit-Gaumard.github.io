@@ -8,6 +8,41 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const CATALOG = /(<script id="workflow-catalog" type="application\/json">)([\s\S]*?)(<\/script>)/g;
+const DATASETS = {
+  "azure-updates.yaml": ["azure-release-updates/updates.json"],
+  "m365-updates.yaml": ["m365-release-updates/updates.json"],
+  "aws-updates.yaml": ["aws-release-updates/updates.json"],
+  "rss-updates.yaml": ["rss-watcher/updates.json", "rss-watcher/feeds-status.json"],
+  "github-ip-ranges-updates.yaml": ["github-ip-ranges/ip-ranges.json"],
+  "azure-ip-ranges-updates.yaml": ["azure-ip-ranges/ip-ranges.json"],
+  "microsoft-techcommunity-rss-feeds-updates.yaml": ["microsoft-techcommunity-rss-feeds/feeds-status.json"],
+  "azure-taggable-resources-updates.yaml": ["azure-taggable-resources/tag-support.json"],
+  "azure-policy-aliases-updates.yaml": ["azure-policy-aliases/policy-aliases.json"],
+  "azure-regions-updates.yaml": ["azure-regions/regions.json"],
+  "azure-policies-updates.yaml": ["azure-policies/policydefinitions.json", "azure-policies/policysetdefinitions.json", "azure-policies/policyrules.json", "azure-policies/policy-changes.json"],
+  "azure-built-in-roles-updates.yaml": ["azure-built-in-roles/roles.json"],
+  "entra-built-in-roles-updates.yaml": ["entra-built-in-roles/roles.json"],
+  "graph-permissions-updates.yaml": ["graph-permissions/permissions.json"],
+};
+
+export function buildDatasetFreshness(root = ROOT) {
+  const workflows = {};
+  for (const [workflow, paths] of Object.entries(DATASETS)) {
+    workflows[workflow] = { kind: "datasets", datasets: paths.map(path => {
+      try {
+        const payload = JSON.parse(readFileSync(join(root, ...path.split("/")), "utf8"));
+        const generatedAt = typeof payload.generatedAt === "string" && Number.isFinite(Date.parse(payload.generatedAt)) ? payload.generatedAt : null;
+        if (!generatedAt) console.warn(`No collection timestamp recorded: ${path}`);
+        return { path, generatedAt, error: generatedAt ? null : "Collection timestamp not recorded" };
+      } catch (error) {
+        console.warn(`Dataset metadata unavailable: ${path}: ${error.message}`);
+        return { path, generatedAt: null, error: "Dataset metadata unavailable at build time" };
+      }
+    }) };
+  }
+  workflows["favicons-refresh.yaml"] = { kind: "assets", datasets: [], note: "Asset-maintenance workflow; no dataset collection timestamp." };
+  return { schemaVersion: 1, basis: "The generatedAt field in each published data snapshot, not the deployment or Git commit time.", workflows };
+}
 
 function withoutComment(line) {
   let quote = "";
@@ -152,5 +187,6 @@ export function buildWorkflowPage(root = ROOT) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const output = resolve(process.argv[2] || join(ROOT, "workflows", "index.html"));
   writeFileSync(output, buildWorkflowPage(), "utf8");
+  writeFileSync(join(dirname(output), "data-freshness.json"), JSON.stringify(buildDatasetFreshness(), null, 2) + "\n", "utf8");
   console.log(`Workflow schedules generated: ${output}`);
 }

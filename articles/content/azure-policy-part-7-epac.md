@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Evaluate EPAC against alternatives, understand desired-state deletion and plan a phased adoption."
 title = "Azure Policy, Part 7: EPAC and the Alternatives"
 date = "2026-09-04"
 description = "Part 7 of the Azure Policy series: Enterprise Azure Policy as Code (EPAC) explained end to end - folder structure, global-settings.jsonc, pacEnvironments, desired state strategies, the three-stage pipeline, ALZ integration - plus an honest comparison with ALZ, Terraform, AzOps and doing nothing."
@@ -7,11 +8,23 @@ tags = ["Azure Policy", "EPAC", "Governance", "DevOps", "CI/CD", "PowerShell"]
 categories = ["Featured", "Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-7.svg"
 featured = true
+leadSections = ["When EPAC is the wrong answer", "The alternatives, honestly"]
+related = ["azure-policy-part-1-what-is-a-policy", "azure-policy-part-6-policy-as-code"]
 +++
 
-Part 6 ended with a list of four problems any policy-as-code implementation has to solve: dependency ordering, multi-scope orchestration, the managed identity permission gap, and desired state with safe deletion.
+## Evaluate, configure, adopt
 
-You can solve those yourself. It takes a few months, and then you own a bespoke governance framework forever.
+**Evaluate:** use EPAC when policy-specific desired-state planning across scopes is a problem your team is ready to own. If your existing IaC already covers a small, bounded set well, adding another owner may increase complexity. Read the suitability and alternatives sections immediately below before configuration.
+
+**Configure:** follow `epac-dev` consistently through [global settings](#global-settings-jsonc), scope and owner identity; do not copy a production root scope into a trial. **Adopt:** use [the phased plan](#a-90-day-adoption-plan) as a sequence, not a guaranteed completion duration.
+
+Adoption gates: export and inventory → isolated scope/owner → inspect policy and role plans → test approved deployment/remediation → promote a limited ring → schedule drift and exemption review. Record rollback and evidence at each gate.
+
+Technical execution validation and tested EPAC release: **not recorded**. Confirm schemas, behaviour and licensing against the [EPAC repository](https://github.com/Azure/enterprise-azure-policy-as-code) and [documentation](https://azure.github.io/enterprise-azure-policy-as-code/), not a publication date.
+
+Part 6 covered dependency ordering, multi-scope orchestration, the managed identity permission gap, and desired state with safe deletion.
+
+You can implement these controls yourself, but your team then owns their ongoing maintenance.
 
 Or you can use **EPAC** - Enterprise Azure Policy as Code - which is a Microsoft-published, MIT-licensed PowerShell framework that solves all four, and has been hardened by a lot of large organisations doing exactly this.
 
@@ -72,6 +85,10 @@ Subfolders inside each are free-form: organise by category, by owner, by framewo
 ## global-settings.jsonc
 
 This is the file that makes EPAC multi-tenant and multi-environment.
+
+:::warning
+The example includes `desiredState.strategy: full` in the isolated `epac-dev` scope. A full desired-state plan may delete policy objects absent from the repository. Export first, verify `deploymentRootScope` and `pacOwnerId`, and review both policy and role plans before deployment. Do not run this against a tenant root as a trial.
+:::
 
 ```json
 {

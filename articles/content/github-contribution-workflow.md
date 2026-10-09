@@ -7,6 +7,7 @@ tags = ["GitHub", "Productivity"]
 categories = ["GitHub"]
 featureImage = "/articles/images/github-color.svg"
 featured = true
+related = ["github-branch-naming-convention", "github-commit-naming-convention"]
 +++
 
 If you want to create your own or contribute to an existing GitHub project, you are on the right page.
@@ -15,7 +16,14 @@ If you want to create your own or contribute to an existing GitHub project, you 
 
 ## Contribution scenarios
 
-You can contribute to a GitHub project in several ways: reporting bugs, submitting fixes, proposing new features, or becoming a maintainer.
+Choose before cloning:
+
+| Your scenario | Remotes | Path |
+|---|---|---|
+| Write access to the project | `origin` is the shared repository | Clone → topic branch → push branch to origin → PR into the project's base |
+| External contribution via fork | `origin` is your fork; `upstream` is the original | Fork → clone fork → add upstream → topic branch → push to fork → PR into upstream |
+
+Both paths keep the complete article accessible; use the contents to jump between steps. Check the project's contribution guide, actual base branch and test command first.
 
 ## Main principles
 
@@ -26,7 +34,9 @@ You can contribute to a GitHub project in several ways: reporting bugs, submitti
 - A release is then created.
 - The new code is deployed via a deployment pipeline.
 
-Here is the main contribution workflow:
+The author prepares changes and responds to review; maintainers decide acceptance and merge under the repository's policy. Release/deployment may be separate workflows and are not guaranteed by a merge.
+
+Text alternative to the diagram: **author branch → commits → pull request → checks and review → maintainer merge → optional release/deployment**.
 
 ![GitHub contribution workflow diagram](/articles/images/github-workflow.drawio.png)
 
@@ -42,22 +52,25 @@ Here is the main contribution workflow:
 To start working on your contribution, you first need to retrieve the project in your local repository:
 
 ```bash
-git clone https://github.com/Benoit-Gaumard/ProjectName
+git clone https://github.com/OWNER/PROJECT.git
+cd PROJECT
+git remote -v
 ```
 
 :::note
-Replace "ProjectName" with the actual project you want to contribute to.
+Replace OWNER/PROJECT with the writable project or your fork, according to the chosen scenario.
 :::
 
 Before you start making any changes to your local files, it's a good practice to first synchronize your local repository with the project repository:
 
 ```bash
 # If the default branch is "main"
-git pull upstream main
+git switch main
+git pull --ff-only origin main
 ```
 
 :::note
-If the project repository uses a different default branch name than "main", substitute it accordingly.
+For a fork, first add `git remote add upstream https://github.com/UPSTREAM_OWNER/PROJECT.git`, then use `git fetch upstream` and `git merge --ff-only upstream/main` on local `main`. Replace the base branch if needed. Stop on divergence and resolve it deliberately; do not force-push to make the example pass.
 :::
 
 ### 2. Create a new branch
@@ -82,14 +95,15 @@ You should see your new branch as well as "main", with an asterisk next to the b
 
 ### 3. Make changes in your local repository
 
-Open a text editor or IDE such as Visual Studio Code to implement the changes you have planned. Since you checked out a branch in the previous step, any modifications you make will be confined to that branch.
+Open your editor and implement the intended change. Uncommitted changes belong to the working tree and can follow a branch switch; they are not safely isolated merely by naming a branch. Check `git status`, review `git diff` and run the project's targeted tests.
 
 ### 4. Commit your changes
 
 After you make a set of changes, stage them:
 
 ```bash
-git add .
+git add <intended-file>
+git diff --cached
 ```
 
 The description of your commit must be clear, explicit, and understandable to anyone, for example:
@@ -114,6 +128,8 @@ git push origin my_new_feature
 
 This command pushes your changes to the `my_new_feature` branch of your fork on GitHub.
 
+If you chose the write-access scenario, it pushes to the shared repository instead. Checkpoint: the remote branch contains the intended commits and no unrelated changes.
+
 ### 6. Create a pull request
 
 A pull request is created when a developer asks for changes committed to a specific branch to be considered for inclusion in another branch of the repository.
@@ -132,7 +148,7 @@ Before merging, the code should be reviewed by peers - code review involves one 
 
 ### 8. Merge to the main branch
 
-Congratulations! Your code has been successfully reviewed and merged into the main branch. It is now available for others to build upon.
+The maintainer (or an authorised contributor) merges only when required checks, approvals and conflict resolution are complete. The author then verifies the merged PR and synchronises the local base. Nothing in this article is a record that your own PR has been accepted or deployed.
 
 ## Golden rules
 

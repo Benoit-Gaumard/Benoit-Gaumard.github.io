@@ -6,22 +6,37 @@ description = "How to restrict access to an Azure Web App to specific users or s
 tags = ["Entra ID", "Web App"]
 categories = ["Azure"]
 featureImage = "/articles/images/entra-id.svg"
+related = ["app-service-php-access-to-azure-sql-database-with-managed-identity", "connect-github-and-azure-for-deployment-using-oidc"]
 +++
 
-Do you want to restrict access to your web app to specific users or groups within your organization? By default, sign-in is enabled for every user in the tenant.
+Authentication establishes **who signed in**. Authorisation decides **whether that identity may use the app**. Requiring assignment on an Enterprise Application is an additional sign-in gate, not a replacement for configuring App Service authentication or application-level permissions.
 
 This post will guide you on how to use Microsoft Entra ID to secure your web app by managing authentication and authorization for users or security groups.
 
-You can restrict access completely so the application isn't granted to everyone in Entra ID by checking the **Assignment required** box in your Enterprise Application properties.
+## 1. Configure the two objects
+
+In **App Service → Authentication**, configure the Microsoft identity provider for the intended tenant and require authentication for requests. Record its application/client ID. Then open **Microsoft Entra ID → Enterprise applications → All applications**, find the service principal by that same application ID, and open **Properties → Assignment required? → Yes → Save**.
+
+Do not confuse the app registration with this tenant's Enterprise Application. Keep a permitted administrator/test account to avoid accidental lockout.
 
 ![Enable "Assignment required" on the enterprise application](/articles/images/restrict-web-app/restrict-web-app-1.png)
 
-From Entra ID, search **Enterprise Applications** and find your application by name or ID. Switch to **Users and groups** to assign specific users or groups to this app.
+## 2. Assign the allowed audience
+
+In that **Enterprise application → Users and groups → Add user/group**, select the intended user or a security group such as `WebApp-Readers`, select the applicable app role, then assign. Group assignment can have licensing and membership limitations; verify the current [assignment documentation](https://learn.microsoft.com/entra/identity/enterprise-apps/assign-user-or-group-access-portal).
 
 ![Assign users or groups to the enterprise application](/articles/images/restrict-web-app/restrict-web-app-2.png)
 
-Now only the assigned users or group members are allowed to access the application. Unauthorized users will see the following error message when trying to access the application:
+## 3. Test both outcomes
+
+Use separate private browser sessions: an explicitly assigned account should sign in and reach the intended page; an unassigned account in the same tenant should be rejected. Also test an anonymous request to ensure App Service is not bypassing authentication. Previously issued sessions/tokens can affect immediate retests.
 
 ![Access denied error for unauthorized users](/articles/images/restrict-web-app/restrict-web-app-3.png)
 
-Enjoy!
+| Unexpected result | Check |
+|---|---|
+| Everyone still reaches the page | App Service requires authentication, correct Enterprise Application ID, and fresh sessions |
+| Assigned user is denied | Direct/effective assignment, tenant, chosen app role and group-assignment support |
+| Sign-in works but an operation fails | Application permissions/roles and backend authorisation; sign-in alone does not grant data access |
+
+Technical execution validation and portal reference version: **not recorded**. Consult [Restrict your app to a set of users](https://learn.microsoft.com/entra/identity-platform/howto-restrict-your-app-to-a-set-of-users) and the [Entra built-in roles reference](/entra-built-in-roles/) when delegating administration.

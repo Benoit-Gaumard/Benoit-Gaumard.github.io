@@ -7,9 +7,24 @@ tags = ["GitHub Actions", "OIDC", "Security"]
 categories = ["Azure", "GitHub"]
 featureImage = "/articles/images/github-azure-oidc.svg"
 featured = true
+related = ["display-github-secrets-for-debug", "what-is-an-azure-landing-zone"]
 +++
 
-Storing a service principal's client secret (or worse, a certificate password) in GitHub secrets works, but it means you now have a long-lived credential that can authenticate to Azure sitting in your repository settings. OpenID Connect (OIDC) federation removes that risk entirely: GitHub issues a short-lived token for each workflow run, and Azure trusts it directly - no stored secret required.
+OIDC removes the need to store a long-lived Azure client secret in GitHub. It does not remove the need to protect workflow code, environments, roles and trust conditions.
+
+## Choose identity and trust context first
+
+The commands here use an **app registration and its service principal** named `gh-actions-deploy`. A user-assigned managed identity is a separate alternative with different creation commands; do not mix its object IDs with the app example.
+
+Textual trust path: **my-org/my-repo, main branch → GitHub OIDC issuer → gh-actions-deploy federated credential → service principal → role at my-rg**. The workflow's client ID must identify this app; its tenant and subscription must match the target.
+
+| GitHub context | Credential subject | Workflow requirement |
+|---|---|---|
+| Main branch (example below) | `repo:my-org/my-repo:ref:refs/heads/main` | A run on `main` without an environment claim |
+| Protected environment (alternative) | `repo:my-org/my-repo:environment:production` | Job uses `environment: production`; configure environment protections |
+| Pull request (separate trust decision) | `repo:my-org/my-repo:pull_request` | Never grant deployment access to untrusted PR code merely to fix login |
+
+Preflight: permission to create the app/federation, permission to assign the selected Azure role at the exact scope, and repository administration for variables/environment protections. Replace `my-org`, `my-repo`, subscription and resource group before use. Technical execution validation and CLI/action test versions: **not recorded**; action versions below are example pins, not a current recommendation.
 
 [[toc]]
 
@@ -87,8 +102,8 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy
-        run: az deployment group create --resource-group my-rg --template-file main.bicep
+      - name: Verify login without deployment
+        run: az account show --query "{subscription:id,tenant:tenantId}" -o json
 ```
 
 Note that `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` are **not secret values** - they're identifiers, not credentials. You can store them as repository variables instead of secrets if you prefer.
@@ -101,9 +116,11 @@ Note that `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` are 
 |---|---|
 | `AADSTS70021: No matching federated identity record found` | The `subject` claim doesn't match - check branch name, environment name, and organization/repo spelling exactly |
 | Login succeeds locally but fails in CI | The workflow is missing `permissions: id-token: write` |
-| Works on `main` but fails on pull requests | You federated `ref:refs/heads/main` only - add a `pull_request` subject too if PR workflows need Azure access |
+| Works on `main` but fails on pull requests | Branch-only trust is expected to reject other contexts; review the security model rather than adding PR trust automatically |
 
 ## Further reading
+
+The final workflow intentionally stops at a read-only context check. Expect the intended subscription and tenant IDs, with no client secret and no resource creation. Add deployment steps only after role/scope and protected workflow reviews.
 
 - [Configure a federated identity credential on an app](https://learn.microsoft.com/entra/workload-id/workload-identity-federation-create-trust) - Microsoft Learn
 - [`azure/login` GitHub Action](https://github.com/Azure/login) - official documentation and examples

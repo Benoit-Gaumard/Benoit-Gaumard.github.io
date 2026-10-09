@@ -59,7 +59,8 @@ function findDescription(html) {
   const byName = metaTags.find((attrs) => attrs.name?.toLowerCase() === "description" && attrs.content);
   const byProperty = metaTags.find((attrs) => attrs.property?.toLowerCase() === "og:description" && attrs.content);
   const description = (byName || byProperty)?.content?.trim();
-  return description ? decodeEntities(description).replace(/\s+/g, " ").slice(0, 220) : null;
+  const cleaned = description ? decodeEntities(description).replace(/\s+/g, " ").slice(0, 220) : "";
+  return cleaned && !/^(description|todo|tbd)[.!]?$/i.test(cleaned) ? cleaned : null;
 }
 
 async function fetchSiteMeta(url) {

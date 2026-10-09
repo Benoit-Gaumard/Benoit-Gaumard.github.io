@@ -1,56 +1,54 @@
 +++
 author = "Benoit G"
-title = "RBAC Delete Role Assignments with 'Identity Not Found'"
+title = "Review RBAC Assignments with 'Identity Not Found'"
 date = "2024-11-06"
-description = "Why Azure keeps RBAC role assignments for deleted users, groups, or service principals, and a PowerShell script to clean them up."
+description = "Inventory unresolved Azure RBAC principals at an explicit scope, verify deletion independently, and preview removal before approving a change."
 tags = ["RBAC", "PowerShell"]
 categories = ["Azure"]
 featureImage = "/articles/images/Users.svg"
+related = ["azure-lighthouse-cross-tenant-management"]
 +++
 
-If you see "Identity not found" in your RBAC assignments, it means that identity has been deleted from your Entra ID - whether it is a user, a group, or a service principal.
+:::warning
+An unresolved principal is a candidate for investigation, not proof it was deleted. Directory visibility, tenant context and replication can affect resolution. Removing a valid role assignment revokes access. Verify the principal with an authorised directory administrator and preserve the assignment details before any removal.
+:::
 
-However, Azure does not clean these up for you, and it's just ugly to look at in the portal. You must clean up any orphaned role assignments on a regular basis.
+## 1. Understand and scope
 
-Here is a PowerShell script to clean them up:
+Use Az.Accounts and Az.Resources with permission to read role assignments at the intended scope. Removal additionally requires the appropriate role-assignment delete permission. Check `Get-AzContext`, record the tenant/subscription, and choose one resource group or resource first. Technical execution validation and module versions: **not recorded**.
+
+## 2. Preview only
+
+This script contains **no delete operation**. Supply an explicit scope; only assignments at that exact scope are included, not inherited or descendant assignments.
 
 ```powershell
-[CmdletBinding()]
-param (
-    [switch] $CheckOnly,
-    [Parameter(Mandatory = $false)]
-    [string] $Scope = ""
-)
-
-[array]$Assignments = @()
-
-if ("" -eq $Scope) {
-    Write-Output "No scope defined, getting all assignments."
-    $Assignments = Get-AzRoleAssignment | Where-Object { $_.ObjectType -eq "Unknown" }
-} else {
-    Write-Output "Scope is: $Scope"
-    $Assignments = Get-AzRoleAssignment -Scope $Scope | Where-Object { $_.ObjectType -eq "Unknown" }
-}
-
-Write-Output "Total: $($Assignments.Count) Unknown Identity found"
-
-foreach ($Assignment in $Assignments) {
-    Write-Output "---------------------------"
-    Write-Output "Scope: $($Assignment.Scope)"
-    Write-Output "Object Type: $($Assignment.ObjectType)"
-    Write-Output "Display Name: $($Assignment.DisplayName)"
-    Write-Output "SignIn Name: $($Assignment.SignInName)"
-    Write-Output "Role Definition Name: $($Assignment.RoleDefinitionName)"
-    Write-Output "Role Definition Id: $($Assignment.RoleDefinitionId)"
-    Write-Output "Role Assignment Id: $($Assignment.RoleAssignmentId)"
-    Write-Output "---------------------------"
-    Write-Output ""
-
-    if (-not $CheckOnly) {
-        Write-Output "Removing assignment: $($Assignment.RoleAssignmentId)"
-        $Assignment | Remove-AzRoleAssignment -Verbose
-    }
-}
+$Scope = "/subscriptions/<subscription-id>/resourceGroups/<resource-group>"
+Get-AzContext
+$Candidates = @(Get-AzRoleAssignment -Scope $Scope |
+    Where-Object { $_.Scope -eq $Scope -and $_.ObjectType -eq "Unknown" })
+$Candidates | Select-Object RoleAssignmentId, Scope, ObjectId, RoleDefinitionId |
+    Format-Table -AutoSize
+$Candidates | Select-Object RoleAssignmentId, Scope, ObjectId, RoleDefinitionId |
+    Export-Csv -Path ".\rbac-review.csv" -NoTypeInformation
 ```
 
-Run it with `-CheckOnly` first to preview what would be removed, and optionally pass `-Scope` to limit the cleanup to a specific management group, subscription, or resource group.
+Expected inventory columns are assignment ID, exact scope, principal object ID and role definition ID. Zero rows means no unresolved assignments were returned at this scope, not a tenant-wide guarantee.
+
+## 3. Approve one removal
+
+Confirm the principal is actually deleted, not just invisible to your account. Save the role/scope/principal mapping and obtain change approval. The inventory file may reveal infrastructure details; keep it in an approved location.
+
+For **one reviewed assignment**, run the preview below. `-WhatIf` makes no removal. Only an operator who has reviewed the output should remove `-WhatIf` and explicitly confirm.
+
+```powershell
+$ReviewedAssignmentId = "<exact-role-assignment-resource-id>"
+$Reviewed = @($Candidates | Where-Object RoleAssignmentId -eq $ReviewedAssignmentId)
+if ($Reviewed.Count -ne 1) { throw "Exactly one inventoried assignment must match." }
+$Reviewed[0] | Remove-AzRoleAssignment -WhatIf -Confirm
+```
+
+## 4. Verify and retain evidence
+
+Re-run the scoped inventory and compare it with the approved report. Confirm intended users still have access and retain the change record. Recreating an assignment requires a valid principal; deletion of the identity itself cannot be undone by recreating its role assignment.
+
+Review [Azure Built-in Roles](/azure-built-in-roles/) and [Remove-AzRoleAssignment](https://learn.microsoft.com/powershell/module/az.resources/remove-azroleassignment).

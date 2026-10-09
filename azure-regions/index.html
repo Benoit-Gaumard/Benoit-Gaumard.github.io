@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -80,7 +81,6 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <title>Azure Regions | Benoit Gaumard</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
     :root {
       color-scheme: light;
@@ -99,6 +99,8 @@
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
       --cp-danger-bg: #fdf2f2;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -115,7 +117,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -172,7 +174,7 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
@@ -201,7 +203,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -221,7 +223,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: inherit; text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -238,7 +240,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -290,7 +292,7 @@
     :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
 
     main { padding-block: 2.5rem 4rem; }
-    .intro { max-width: 52rem; margin-bottom: 2rem; }
+    .intro { max-width: 65rem; margin-bottom: 1rem; }
     h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
     #page-title { display: flex; align-items: center; gap: .3em; }
     .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
@@ -310,15 +312,37 @@
     }
     .refresh-meta { margin: .6rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
     .refresh-meta strong { color: var(--cp-text); font-weight: 600; }
+    [hidden] { display: none !important; }
+    fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+    main [id] { scroll-margin-top: 6rem; }
+    .directory-scope, .source-note { color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
+    .quick-links { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: .75rem; }
+    .quick-links a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: .85rem; }
+    .region-button {
+      display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 2.75rem;
+      padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; cursor: pointer;
+      background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600;
+    }
+    .region-button:hover { border-color: var(--cp-accent); }
+    .region-button[aria-pressed="true"] { color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .region-button:disabled { cursor: wait; }
+    .notice { border: 1px solid var(--cp-warning); background: var(--cp-warning-bg); color: var(--cp-warning); padding: .75rem 1rem; border-radius: 8px; font-size: .9rem; line-height: 1.5; }
+    .statistics { margin-top: 2rem; padding-block: 1rem; border-block: 1px solid var(--cp-border); }
+    .statistics > summary, .map-section > summary, .data-sources > summary { min-height: 2.75rem; color: var(--cp-link); cursor: pointer; font-weight: 650; }
+    .statistics[open] > summary, .map-section[open] > summary, .data-sources[open] > summary { margin-bottom: 1rem; }
+    .source-list { display: grid; grid-template-columns: minmax(9rem, 1fr) minmax(0, 3fr); gap: .75rem 1rem; margin: 1rem 0; font-size: .9rem; line-height: 1.5; }
+    .source-list dt { font-weight: 650; }
+    .source-list dd { margin: 0; color: var(--cp-text-muted); }
+    .data-sources { margin-top: 1.5rem; }
 
 
     .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
 
     .stats-grid { min-height: 7rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: .75rem;
     }
     .stat-card {
       padding: 1.1rem 1.25rem;
@@ -334,7 +358,7 @@
 
     .charts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
       gap: 1rem;
       margin-bottom: 2.5rem;
     }
@@ -373,33 +397,29 @@
     .filter-bar {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
+      align-items: flex-end;
       gap: .75rem;
       margin-bottom: 1.5rem;
     }
+    .filter-field { flex: 1 1 12rem; min-width: 0; }
+    .filter-field:first-child { flex: 2 1 20rem; }
+    .filter-field label { display: block; margin-bottom: .4rem; font-size: .85rem; font-weight: 650; }
     .filter-bar input, .filter-bar select {
-      min-height: 2.9rem;
+      min-height: 3rem;
+      height: 3rem;
+      width: 100%;
+      min-width: 0;
       border: 1px solid var(--cp-border-strong);
       border-radius: 8px;
       background: var(--cp-surface);
       color: var(--cp-text);
       padding: .5rem .85rem;
     }
-    .filter-bar input { flex: 2 1 14rem; }
-    .filter-bar select { flex: 1 1 10rem; }
-    .filter-toggle {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      color: var(--cp-text);
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; max-width: none; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
+    .filter-bar input::placeholder { color: var(--cp-text-muted); opacity: 1; }
 
-    .regions-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .regions-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .75rem; }
     .results-count { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
+    #regionCards { margin-top: 1rem; }
     .view-toggle {
       display: inline-flex;
       gap: .25rem;
@@ -412,6 +432,7 @@
       display: inline-flex;
       align-items: center;
       gap: .4rem;
+      min-height: 2.75rem;
       padding: .45rem .9rem;
       border: 0;
       border-radius: 7px;
@@ -429,14 +450,18 @@
     .view-toggle-button svg { flex: 0 0 auto; }
 
     .map-section { margin-top: 2.5rem; }
+    .map-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: .75rem; }
     .region-map {
-      height: 34rem;
+      height: 28rem;
       max-height: 70vh;
       border: 1px solid var(--cp-border);
       border-radius: 10px;
       overflow: hidden;
       background: var(--cp-surface-soft);
+      z-index: 0;
     }
+    .region-map.is-locked { pointer-events: none; touch-action: pan-y; }
+    .map-section .section-intro { line-height: 1.5; }
     /* OpenStreetMap only ships one (light) tile style, so the dark theme inverts
        the tile pane. Markers and popups live in other panes and stay untouched. */
     :root[data-theme="dark"] .region-map .leaflet-tile-pane {
@@ -453,17 +478,21 @@
     .map-popup h3 { margin: 0 0 .35rem; font-size: 0.95rem; color: var(--cp-text); }
     .map-popup dl { margin: 0; font-size: 0.8rem; color: var(--cp-text-muted); }
     .map-popup dl div { display: flex; gap: .35rem; }
+    .map-popup dd { margin: 0; }
     .map-popup dt { flex: 0 0 auto; font-weight: 600; color: var(--cp-text); }
     .map-popup .map-popup-tag { display: inline-block; margin-top: .4rem; padding: .15rem .5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
     .map-popup .map-popup-tag.is-az { background: var(--cp-success-bg); color: var(--cp-success); }
     .map-popup .map-popup-tag.is-no-az { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .map-popup .map-popup-tag.is-unknown { background: var(--cp-warning-bg); color: var(--cp-warning); }
     .map-popup .map-popup-tag.is-restricted { margin-left: .35rem; background: var(--cp-danger-bg); color: var(--cp-danger); }
 
-    .region-cards { min-height: 70vh;
+    .region-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+      align-items: start;
+      grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
       gap: 1.25rem;
     }
+    .region-cards:empty { min-height: 20rem; }
     .region-card {
       display: flex;
       flex-direction: column;
@@ -472,19 +501,27 @@
       background: var(--cp-surface);
       border: 1px solid var(--cp-border);
       border-radius: 12px;
+      min-width: 0;
     }
-    .region-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
-    .region-card h2 { margin: 0; font-size: 1.05rem; }
+    .region-card-header { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+    .region-card h2 { margin: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
     .region-badge {
       flex: 0 0 auto;
       padding: .25rem .65rem;
       border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 700;
-      white-space: nowrap;
+      white-space: normal;
     }
     .region-badge.is-az { background: var(--cp-success-bg); color: var(--cp-success); }
     .region-badge.is-no-az { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+    .region-badge.is-unknown { background: var(--cp-warning-bg); color: var(--cp-warning); }
+    .region-evidence { margin: 0; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
+    .region-id { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+    .region-id code { overflow-wrap: anywhere; min-width: 0; flex: 1; color: var(--cp-text); }
+    .region-details { margin-top: .5rem; }
+    .region-details summary { cursor: pointer; color: var(--cp-link); min-height: 2.75rem; padding-block: .5rem; font-size: .85rem; }
+    .region-details .region-meta { padding-top: .5rem; }
     .region-restricted-tag {
       align-self: flex-start;
       padding: .2rem .6rem;
@@ -497,30 +534,27 @@
     .region-meta { display: flex; flex-direction: column; gap: .35rem; margin: 0; padding: 0; list-style: none; }
     .region-meta li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; }
     .region-meta .meta-label { color: var(--cp-text-muted); }
-    .region-meta .meta-value { font-weight: 600; text-align: right; }
+    .region-meta .meta-value { font-weight: 600; text-align: right; min-width: 0; overflow-wrap: anywhere; }
 
     .region-cards.list-view { grid-template-columns: 1fr; gap: .6rem; }
     .region-cards.list-view .region-card {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: center;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+      gap: .65rem 1rem;
       padding: .65rem 1.25rem;
       min-width: 0;
     }
-    .region-cards.list-view .region-card-header { flex: 1 1 auto; min-width: 0; justify-content: flex-start; }
+    .region-cards.list-view .region-card-header { min-width: 0; justify-content: flex-start; }
     .region-cards.list-view .region-card h2 {
       min-width: 0;
-      flex: 0 1 auto;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      white-space: normal;
       font-size: 1rem;
     }
     .region-cards.list-view .region-badge { flex: 0 0 auto; }
     .region-cards.list-view .region-restricted-tag { flex: 0 0 auto; margin: 0; }
-    .region-cards.list-view .region-meta { display: none; }
+    .region-cards.list-view .region-details { grid-column: 1 / -1; margin: 0; }
+    .region-cards.list-view .region-details .region-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1.5rem; }
 
     .empty-state {
       padding: 2.5rem;
@@ -595,11 +629,20 @@
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
     }
+    @media (max-width: 40rem) {
+      .filter-bar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: .5rem; margin-bottom: .75rem; }
+      .filter-field:first-child { grid-column: 1 / -1; }
+      .filter-field, .filter-field:first-child, .filter-bar input, .filter-bar select { flex: none; }
+      .region-cards.list-view .region-card { display: flex; flex-direction: column; align-items: stretch; }
+      .region-cards.list-view .region-details .region-meta { display: flex; }
+      .source-list { grid-template-columns: minmax(0, 1fr); }
+      .source-list dd { margin-bottom: .5rem; }
+      .region-card { padding: 1rem; }
+    }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
       .filter-bar { flex-direction: column; align-items: stretch; }
-      .region-cards.list-view .region-restricted-tag { display: none; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
@@ -619,7 +662,7 @@
       white-space: nowrap;
       border: 0;
     }
-  
+
     /* Filled by script: hold the box only while empty, so the page below does
        not jump when the data lands, and no blank hole survives a render. */
     @supports (min-height: 1px) {
@@ -634,7 +677,7 @@
     @media print {
       /* Printing a tool page should yield the data, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
-      .theme-toggle, .section-nav, .load-more, .copy-button,
+      .theme-toggle, .section-nav, .load-more,
       .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
@@ -666,7 +709,7 @@
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -703,12 +746,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/azure-regions/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/azure-regions/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -727,6 +1140,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/" aria-current="page"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -742,38 +1196,44 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="28" height="28"></span>Azure Regions</h1>
-      <p class="intro-text">Explore Azure datacenter locations and regional information worldwide.</p>
-      <p class="refresh-meta">Data updated: <strong id="refreshedAt">&hellip;</strong></p>
+      <p class="intro-text">Find physical Azure regions, availability-zone evidence and paired regions.</p>
+      <p class="directory-scope" id="scopeSummary">The directory and map show physical regions. Logical ARM locations are counted separately, not as datacenters.</p>
+      <p class="refresh-meta">ARM metadata collected: <strong id="refreshedAt">Loading&hellip;</strong></p>
+      <p class="refresh-meta">Microsoft Learn reference checked: <strong id="referenceAt">Loading&hellip;</strong></p>
+      <nav class="quick-links" aria-label="Page shortcuts">
+        <a href="#mapPanel" data-open-details="mapPanel">Open map</a>
+        <a href="#statsSection" data-open-details="statsSection">Statistics</a>
+        <a href="#dataSources" data-open-details="dataSources">Sources &amp; confidence</a>
+      </nav>
     </section>
 
-    <section aria-label="Summary">
-      <div class="stats-grid" id="statCards"></div>
-    </section>
-
-    <section aria-labelledby="charts-heading">
-      <h2 class="section-heading" id="charts-heading">Azure regions at a glance</h2>
-      <div class="charts-grid">
-        <div class="chart-card is-wide">
-          <h3 class="chart-title">Regions by geography group</h3>
-          <div class="chart-body" id="chartGeography"></div>
-        </div>
-        <div class="chart-card">
-          <h3 class="chart-title">Regions by type</h3>
-          <div class="chart-body" id="chartType"></div>
-        </div>
-        <div class="chart-card">
-          <h3 class="chart-title">Paired vs standalone regions</h3>
-          <div class="chart-body" id="chartPairing"></div>
-        </div>
+    <section id="directory" aria-label="Physical Azure regions directory">
+      <noscript><p>The directory needs JavaScript. <a href="./regions.json">Download the region data</a> or consult the <a href="https://learn.microsoft.com/en-us/azure/reliability/regions-list">Microsoft Learn region list</a>.</p></noscript>
+      <div class="data-error" id="dataError" role="alert" hidden>
+        <p>Region data could not be loaded. Check your connection and try again.</p>
+        <button class="region-button" id="retryData" type="button">Retry loading data</button>
       </div>
-    </section>
-
-    <section aria-label="Azure regions directory">
+      <fieldset id="directoryControls" disabled aria-label="Filter physical regions">
       <div class="filter-bar">
-        <input type="text" id="searchInput" placeholder="Search by region, location, or country..." aria-label="Search by region, location, or country">
-        <select id="continentFilter" aria-label="Filter by continent"><option value="">All continents</option></select>
-        <label class="filter-toggle"><input type="checkbox" id="azOnlyFilter"> Availability zones only</label>
+        <div class="filter-field">
+          <label for="searchInput">Search regions</label>
+          <input type="search" id="searchInput" placeholder="Name, location or programmatic name" autocomplete="off">
+        </div>
+        <div class="filter-field">
+          <label for="continentFilter">Continent group</label>
+          <select id="continentFilter"><option value="">All groups</option></select>
+        </div>
+        <div class="filter-field">
+          <label for="zoneFilter">Availability zones</label>
+          <select id="zoneFilter" aria-describedby="zoneFilterHelp">
+            <option value="">All statuses</option>
+            <option value="yes">Yes (confirmed)</option>
+            <option value="no">No (N/A)</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
       </div>
+      <p class="source-note" id="zoneFilterHelp">Missing evidence means unknown, not no. Zone support varies by service. <a href="#zones-notes">About zones and regional pairs</a>.</p>
       <div class="regions-toolbar">
         <div class="view-toggle" role="group" aria-label="Choose view">
           <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
@@ -785,25 +1245,69 @@
             List
           </button>
         </div>
-        <p class="results-count" id="resultsCount" aria-live="polite"></p>
+        <button class="region-button" id="clearFilters" type="button" hidden>Clear filters</button>
       </div>
-        <div class="region-cards" id="regionCards"></div>
+      </fieldset>
+      <p class="notice" id="sourceWarning" role="status" hidden></p>
+      <p class="results-count" id="resultsCount" role="status" aria-live="polite" aria-atomic="true">Loading physical regions&hellip;</p>
+      <div class="region-cards" id="regionCards"></div>
     </section>
 
-    <section class="map-section" aria-labelledby="map-heading">
-      <h2 class="section-heading" id="map-heading">Azure Regions World Map</h2>
-      <p class="section-intro">Every region with published coordinates, plotted on OpenStreetMap. The map follows the filters above.</p>
-      <div class="region-map" id="regionMap"></div>
-      <ul class="map-legend">
-        <li><span class="legend-dot" style="background: #16845b"></span> Availability zones</li>
-        <li><span class="legend-dot" style="background: #0b6fb8"></span> No availability zones</li>
-        <li><span class="legend-dot" style="background: #c93636"></span> Restricted access</li>
+    <details class="map-section" id="mapPanel">
+      <summary id="map-heading">Map of filtered physical regions</summary>
+      <p class="section-intro">Opening the map loads Leaflet and OpenStreetMap. Coordinates locate regions, not individual datacenters. The <a href="#directory">accessible directory above</a> contains the same filtered regions and any regions without coordinates.</p>
+      <div class="map-actions">
+        <button class="region-button" id="mapInteraction" type="button" aria-pressed="false" aria-controls="regionMap" disabled>Interact with the map</button>
+        <button class="region-button" id="retryMap" type="button" hidden>Retry map</button>
+      </div>
+      <p class="source-note" id="mapHelp">Map gestures are off so you can scroll the page. Enable interaction to pan or zoom; use Stop interacting or Escape to return to page scrolling.</p>
+      <p class="source-note" id="mapCount" role="status"></p>
+      <p class="notice" id="mapError" role="status" hidden></p>
+      <p class="notice" id="tileError" role="status" hidden>Map tiles could not be loaded. The directory and region markers remain available.</p>
+      <div class="region-map is-locked" id="regionMap" role="region" aria-label="Map of filtered physical Azure regions" aria-describedby="mapHelp mapCount" inert></div>
+      <ul class="map-legend" aria-label="Map legend">
+        <li><span class="legend-dot" style="background: #157f57"></span> Zone support confirmed</li>
+        <li><span class="legend-dot" style="background: #0b6fb8"></span> Reference lists no zones</li>
+        <li><span class="legend-dot" style="background: #96610a"></span> Zone information unavailable</li>
+        <li><span class="legend-dot" style="background: #c93636"></span> Red outline: restricted access listed</li>
       </ul>
-    </section>
+    </details>
+
+    <details class="statistics" id="statsSection">
+      <summary>Statistics and charts</summary>
+      <p class="source-note">These figures cover the full collected dataset, not the current filters. Logical locations are administrative ARM names, not additional physical regions.</p>
+      <div class="stats-grid" id="statCards"></div>
+      <div class="charts-grid">
+        <div class="chart-card is-wide">
+          <h3 class="chart-title">Physical regions by geography group</h3>
+          <div class="chart-body" id="chartGeography"></div>
+        </div>
+        <div class="chart-card">
+          <h3 class="chart-title">All ARM locations by type</h3>
+          <div class="chart-body" id="chartType"></div>
+        </div>
+        <div class="chart-card">
+          <h3 class="chart-title">Physical regions with a reported pair</h3>
+          <div class="chart-body" id="chartPairing"></div>
+        </div>
+      </div>
+    </details>
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About Azure regions</h2>
-      <p>Every Azure region, with its physical location, the geography it belongs to, its paired region, and whether it supports availability zones.</p>
+      <p>The physical regions returned for the scanning subscription, supplemented by Microsoft's public-region reference. A missing field is not a negative finding; the catalogue is not a guarantee that a service or SKU can be deployed by every subscription.</p>
+      <details class="data-sources" id="dataSources">
+        <summary>Sources and confidence by attribute</summary>
+        <dl class="source-list">
+          <dt>Name, ID and location type</dt><dd>Reported by the <a href="https://learn.microsoft.com/en-us/rest/api/resources/subscriptions/list-locations?view=rest-resources-2022-12-01">ARM locations API</a>. The directory includes Physical entries; Logical entries are counted separately.</dd>
+          <dt>Location, coordinates and geography</dt><dd>Reported by ARM metadata. Coordinates are regional approximations, not datacenter addresses. Continent groups are derived locally from the reported geography group.</dd>
+          <dt>Availability zones</dt><dd>A non-empty <code>location.availabilityZoneMappings</code> confirms support for the scanning subscription. Otherwise the <a href="https://learn.microsoft.com/en-us/azure/reliability/regions-list">Microsoft Learn public-region reference</a> supplies a positive zone count or explicit N/A. An absent, empty or unrecognized value remains unknown.</dd>
+          <dt>Preview status</dt><dd>Shown only when Microsoft Learn annotates the availability-zone column. One or more zones may be in preview; confirm service-specific availability before deployment.</dd>
+          <dt>Access restrictions</dt><dd>Based on the restriction marker in the region's own Microsoft Learn column, not its paired region and not ARM's Recommended/Other category. No marker means no restriction listed there, not guaranteed subscription access.</dd>
+          <dt>Paired region</dt><dd>Reported by ARM metadata. No reported pair does not establish a disaster-recovery recommendation. <a href="#zones-notes">Read the distinction between pairs and zones</a>.</dd>
+          <dt>Collection dates</dt><dd>ARM metadata and the public reference have separate check dates above. Neither date promises that an Azure service has completed its rollout.</dd>
+        </dl>
+      </details>
       <h3>Choosing a region</h3>
       <ul>
         <li><strong>Data residency</strong> — a geography is the boundary most compliance requirements are written against.</li>
@@ -812,7 +1316,7 @@
         <li><strong>Price</strong> — the same resource can differ noticeably in cost between regions.</li>
         <li><strong>Capacity</strong> — popular regions can refuse specific VM sizes at times, which is worth testing before committing.</li>
       </ul>
-      <h3>Pairs and zones are not the same thing</h3>
+      <h3 id="zones-notes">Pairs and zones are not the same thing</h3>
       <p>Availability zones protect against a datacenter failure inside one region; a regional pair supports recovery from the loss of an entire region, and governs how some platform-managed replication and sequenced updates behave. A resilient design usually needs both, and a pair is not automatically the region you would choose for disaster recovery — check latency and service parity first.</p>
     </section>
   </main>
@@ -821,7 +1325,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -867,6 +1371,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -877,18 +1382,27 @@
     </svg>
   </button>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script>
+  <script data-regions-script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 
     const elements = {
       statCards: document.getElementById("statCards"),
       searchInput: document.getElementById("searchInput"),
       continentFilter: document.getElementById("continentFilter"),
-      azOnlyFilter: document.getElementById("azOnlyFilter"),
+      zoneFilter: document.getElementById("zoneFilter"),
+      controls: document.getElementById("directoryControls"),
+      clearFilters: document.getElementById("clearFilters"),
+      dataError: document.getElementById("dataError"),
+      retryData: document.getElementById("retryData"),
+      sourceWarning: document.getElementById("sourceWarning"),
       resultsCount: document.getElementById("resultsCount"),
       regionCards: document.getElementById("regionCards"),
       regionMap: document.getElementById("regionMap"),
+      mapPanel: document.getElementById("mapPanel"),
+      mapInteraction: document.getElementById("mapInteraction"),
+      retryMap: document.getElementById("retryMap"),
+      mapError: document.getElementById("mapError"),
+      mapCount: document.getElementById("mapCount"),
       chartGeography: document.getElementById("chartGeography"),
       chartType: document.getElementById("chartType"),
       chartPairing: document.getElementById("chartPairing"),
@@ -897,20 +1411,152 @@
 
     const VIEW_STORAGE_KEY = "azure-regions-view-mode";
     const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
-    const mapState = { map: null, markers: [], tileLayer: null };
+    const state = { data: null, loading: false, view: "cards" };
+    const mapState = { map: null, markers: [], tileLayer: null, loading: false };
+    let leafletPromise = null;
+    const notices = new Map();
+
+    function warn(key, message, error) {
+      notices.set(key, message);
+      elements.sourceWarning.textContent = [...notices.values()].join(" ");
+      elements.sourceWarning.hidden = false;
+      if (error) console.warn(message, error);
+    }
+
+    function displayDate(value) {
+      if (!value || Number.isNaN(new Date(value).getTime())) return "Not available";
+      return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function zoneStatus(region) {
+      if (region.availabilityZones === true) return { key: "yes", label: "Availability zones: Yes", className: "is-az", color: "#157f57" };
+      if (region.availabilityZones === false) return { key: "no", label: "Availability zones: No", className: "is-no-az", color: "#0b6fb8" };
+      return { key: "unknown", label: "Zone information unavailable", className: "is-unknown", color: "#96610a" };
+    }
+
+    function evidenceText(region) {
+      if (region.availabilityZonesSource === "arm") return "Confirmed by ARM zone mappings for the scanning subscription.";
+      if (region.availabilityZonesSource === "microsoft-learn") return region.availabilityZones
+        ? "Support documented by Microsoft Learn." : "Microsoft Learn lists N/A for availability zones.";
+      return "Neither a valid ARM mapping nor an explicit public-reference value is available.";
+    }
+
+    function validateData(payload) {
+      if (!payload || !Array.isArray(payload.regions) || !Array.isArray(payload.logicalRegions)) throw new Error("Invalid region catalogue");
+      const ids = new Set();
+      const trusted = payload.schemaVersion >= 2;
+      const regions = payload.regions.map((region) => {
+        if (!region || typeof region.id !== "string" || !/^[a-z0-9]+$/.test(region.id)
+          || typeof region.name !== "string" || !region.name || region.regionType !== "Physical" || ids.has(region.id)) {
+          throw new Error("Invalid or duplicate physical region");
+        }
+        ids.add(region.id);
+        const source = region.availabilityZonesSource;
+        const supported = trusted && region.availabilityZones === true && ["arm", "microsoft-learn"].includes(source);
+        const unsupported = trusted && region.availabilityZones === false && source === "microsoft-learn";
+        const hasRestrictionEvidence = trusted && region.restrictedSource === "microsoft-learn" && typeof region.restricted === "boolean";
+        return {
+          ...region,
+          availabilityZones: supported ? true : unsupported ? false : null,
+          availabilityZonesSource: supported || unsupported ? source : null,
+          availabilityZonesPreview: supported && region.availabilityZonesPreview === true,
+          restricted: hasRestrictionEvidence ? region.restricted : null,
+          restrictedSource: hasRestrictionEvidence ? "microsoft-learn" : null,
+          physicalLocation: typeof region.physicalLocation === "string" && region.physicalLocation ? region.physicalLocation : "Not reported",
+          geography: typeof region.geography === "string" && region.geography ? region.geography : "Not reported",
+          continent: typeof region.continent === "string" && region.continent ? region.continent : "Not classified",
+          pairedRegion: typeof region.pairedRegion === "string" && region.pairedRegion ? region.pairedRegion : null,
+          latitude: Number.isFinite(region.latitude) && Math.abs(region.latitude) <= 90 ? region.latitude : null,
+          longitude: Number.isFinite(region.longitude) && Math.abs(region.longitude) <= 180 ? region.longitude : null,
+        };
+      });
+      payload.logicalRegions.forEach((region) => {
+        if (!region || typeof region.id !== "string" || region.regionType !== "Logical" || ids.has(region.id)) throw new Error("Invalid or duplicate logical location");
+        ids.add(region.id);
+      });
+      return { ...payload, regions: regions.sort((a, b) => a.name.localeCompare(b.name)) };
+    }
 
     const MAP_TILES = {
       url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     };
 
-    function initMap() {
-      if (mapState.map) return;
-      mapState.map = L.map(elements.regionMap, { worldCopyJump: true }).setView([20, 10], 2);
-      mapState.tileLayer = L.tileLayer(MAP_TILES.url, {
-        attribution: MAP_TILES.attribution,
-        maxZoom: 19,
-      }).addTo(mapState.map);
+    function loadMapAsset(tag, url, integrity) {
+      return new Promise((resolve, reject) => {
+        const asset = document.createElement(tag);
+        asset.dataset.regionsMapAsset = "";
+        asset.crossOrigin = "";
+        asset.integrity = integrity;
+        if (tag === "link") { asset.rel = "stylesheet"; asset.href = url; }
+        else { asset.src = url; asset.async = true; }
+        const timeout = setTimeout(() => {
+          asset.remove();
+          reject(new Error("Map asset request timed out"));
+        }, 15000);
+        asset.onload = () => { clearTimeout(timeout); resolve(); };
+        asset.onerror = () => { clearTimeout(timeout); asset.remove(); reject(new Error("Map asset could not be loaded")); };
+        document.head.append(asset);
+      });
+    }
+
+    function loadLeaflet() {
+      if (!leafletPromise) {
+        leafletPromise = Promise.all([
+          loadMapAsset("link", "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css", "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="),
+          loadMapAsset("script", "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js", "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="),
+        ]).catch((error) => {
+          document.querySelectorAll("[data-regions-map-asset]").forEach((asset) => asset.remove());
+          leafletPromise = null;
+          throw error;
+        });
+      }
+      return leafletPromise;
+    }
+
+    function setMapInteraction(enabled) {
+      if (!mapState.map) return;
+      ["dragging", "touchZoom", "scrollWheelZoom", "doubleClickZoom", "boxZoom", "keyboard", "tapHold"].forEach((name) => {
+        const handler = mapState.map[name];
+        if (handler) handler[enabled ? "enable" : "disable"]();
+      });
+      elements.regionMap.inert = !enabled;
+      elements.regionMap.classList.toggle("is-locked", !enabled);
+      elements.regionMap.tabIndex = enabled ? 0 : -1;
+      elements.mapInteraction.setAttribute("aria-pressed", String(enabled));
+      elements.mapInteraction.textContent = enabled ? "Stop interacting with the map" : "Interact with the map";
+    }
+
+    async function showMap() {
+      if (!state.data || !elements.mapPanel.open || mapState.loading) return;
+      if (mapState.map) { mapState.map.invalidateSize(); renderMap(getFilteredRegions()); return; }
+      mapState.loading = true;
+      elements.mapCount.textContent = "Loading map. The region directory remains available.";
+      elements.mapError.hidden = true;
+      elements.retryMap.hidden = true;
+      try {
+        await loadLeaflet();
+        if (!elements.mapPanel.open) return;
+        mapState.map = L.map(elements.regionMap, {
+          worldCopyJump: true, dragging: false, touchZoom: false, scrollWheelZoom: false,
+          doubleClickZoom: false, boxZoom: false, keyboard: false, tapHold: false,
+        }).setView([20, 10], 2);
+        mapState.tileLayer = L.tileLayer(MAP_TILES.url, {
+          attribution: MAP_TILES.attribution, maxZoom: 19,
+        }).addTo(mapState.map);
+        mapState.tileLayer.on("tileerror", () => { document.getElementById("tileError").hidden = false; });
+        elements.mapInteraction.disabled = false;
+        setMapInteraction(false);
+        renderMap(getFilteredRegions());
+      } catch (error) {
+        console.warn("Map unavailable; the region directory is unaffected.", error);
+        elements.mapError.hidden = false;
+        elements.mapError.textContent = "The map could not be loaded. Retry, or use the directory above.";
+        elements.mapCount.textContent = "";
+        elements.retryMap.hidden = false;
+      } finally {
+        mapState.loading = false;
+      }
     }
 
     function renderMap(regions) {
@@ -922,27 +1568,44 @@
           const marker = L.circleMarker([region.latitude, region.longitude], {
             radius: 7,
             weight: 2,
-            color: region.restricted ? "#c93636" : (region.availabilityZones ? "#16845b" : "#0b6fb8"),
-            fillColor: region.restricted ? "#c93636" : (region.availabilityZones ? "#16845b" : "#0b6fb8"),
+            color: region.restricted === true ? "#c93636" : zoneStatus(region).color,
+            fillColor: zoneStatus(region).color,
             fillOpacity: 0.55,
           }).addTo(mapState.map);
-          marker.bindPopup(`
-            <div class="map-popup">
-              <h3>${region.name}</h3>
-              <dl>
-                <div><dt>Location</dt><span>${region.physicalLocation}</span></div>
-                <div><dt>Geography</dt><span>${region.geography}</span></div>
-                <div><dt>Paired</dt><span>${region.pairedRegion || "-"}</span></div>
-              </dl>
-              <span class="map-popup-tag ${region.availabilityZones ? "is-az" : "is-no-az"}">${region.availabilityZones ? "Availability zones" : "No availability zones"}</span>
-              ${region.restricted ? '<span class="map-popup-tag is-restricted">Restricted</span>' : ""}
-            </div>
-          `);
+          const popup = document.createElement("div");
+          popup.className = "map-popup";
+          const title = document.createElement("h3");
+          title.textContent = region.name;
+          const info = document.createElement("dl");
+          [["Location", region.physicalLocation], ["Geography", region.geography], ["Paired region", region.pairedRegion || "Not reported"], ["Programmatic name", region.id]].forEach(([label, value]) => {
+            const row = document.createElement("div");
+            const term = document.createElement("dt");
+            term.textContent = label;
+            const definition = document.createElement("dd");
+            definition.textContent = value;
+            row.append(term, definition);
+            info.append(row);
+          });
+          const zone = document.createElement("p");
+          zone.className = `map-popup-tag ${zoneStatus(region).className}`;
+          zone.textContent = zoneStatus(region).label;
+          const source = document.createElement("p");
+          source.textContent = evidenceText(region);
+          popup.append(title, info, zone, source);
+          if (region.restricted === true) {
+            const restriction = document.createElement("p");
+            restriction.textContent = "Restricted access listed by Microsoft Learn.";
+            popup.append(restriction);
+          }
+          marker.bindPopup(popup);
           return marker;
         });
+      elements.mapCount.textContent = `${mapState.markers.length} of ${regions.length} filtered physical regions have published coordinates. All ${regions.length} remain in the directory above.`;
+      if (mapState.markers.length) mapState.map.fitBounds(L.featureGroup(mapState.markers).getBounds(), { padding: [30, 30], maxZoom: 6, animate: false });
     }
 
     function applyView(view) {
+      state.view = view;
       elements.regionCards.classList.toggle("list-view", view === "list");
       viewButtons.forEach((button) => {
         const isActive = button.dataset.view === view;
@@ -955,7 +1618,8 @@
       try {
         // "map" was a third view before the map moved to its own always-on section
         return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
-      } catch {
+      } catch (error) {
+        warn("storage", "The view preference could not be read. Cards remain available.", error);
         return "cards";
       }
     }
@@ -968,13 +1632,12 @@
         applyView(view);
         try {
           localStorage.setItem(VIEW_STORAGE_KEY, view);
-        } catch {
-          // ignore storage errors (private browsing, quota, etc.)
+        } catch (error) {
+          warn("storage", "This view works in the current tab, but could not be saved for your next visit.", error);
         }
+        syncUrl();
       });
     });
-
-    const state = { data: null };
 
     const CHART_PALETTE = ["#0b6fb8", "#16845b", "#a58cf5", "#e4a940", "#22a6c9", "#c93636", "#7b61ff", "#d97706", "#0f766e"];
     const SVG_NS = "http://www.w3.org/2000/svg";
@@ -986,17 +1649,16 @@
     function renderStats() {
       const regions = state.data.regions;
       const logical = logicalRegions();
-      const regionTypes = new Set([
-        ...regions.map((r) => r.regionType || "Physical"),
-        ...logical.map((r) => r.regionType || "Logical"),
-      ]);
+      const unknown = regions.filter((region) => region.availabilityZones === null).length;
       const stats = [
-        { value: regions.length, label: "Total regions" },
-        { value: new Set(regions.map((r) => r.geography)).size, label: "Geography groups" },
-        { value: regionTypes.size, label: "Region types" },
-        { value: regions.filter((r) => r.availabilityZones).length, label: "With availability zones" },
-        { value: regions.filter((r) => r.pairedRegion).length, label: "Paired regions" },
-        { value: regions.filter((r) => r.restricted).length, label: "Restricted access" },
+        { value: regions.length + logical.length, label: "All ARM locations" },
+        { value: regions.length, label: "Physical regions in the directory" },
+        { value: logical.length, label: "Logical locations (not datacenters)" },
+        { value: unknown === regions.length && unknown ? "Unknown" : regions.filter((r) => r.availabilityZones === true).length, label: "Physical regions: zone support confirmed" },
+        { value: unknown === regions.length && unknown ? "Unknown" : regions.filter((r) => r.availabilityZones === false).length, label: "Physical regions: reference lists no zones" },
+        { value: unknown, label: "Physical regions: zone information unavailable" },
+        { value: regions.filter((r) => r.pairedRegion).length, label: "Physical regions with a reported pair" },
+        { value: regions.filter((r) => r.restricted === true).length, label: "Physical regions with a documented restriction" },
       ];
       elements.statCards.replaceChildren();
       stats.forEach((stat) => {
@@ -1151,30 +1813,32 @@
       renderDonutChart(elements.chartType, [
         { label: "Physical", value: regions.length, color: CHART_PALETTE[0] },
         { label: "Logical", value: logical.length, color: CHART_PALETTE[2] },
-      ], "regions");
+      ], "locations");
 
       const paired = regions.filter((region) => region.pairedRegion).length;
       renderDonutChart(elements.chartPairing, [
-        { label: "Paired", value: paired, color: CHART_PALETTE[1] },
-        { label: "Standalone", value: regions.length - paired, color: CHART_PALETTE[3] },
+        { label: "Pair reported", value: paired, color: CHART_PALETTE[1] },
+        { label: "No pair reported", value: regions.length - paired, color: CHART_PALETTE[3] },
       ], "regions");
     }
 
     function populateFilters() {
       const continents = [...new Set(state.data.regions.map((r) => r.continent))].sort();
+      elements.continentFilter.replaceChildren(new Option("All groups", ""));
       continents.forEach((continent) => elements.continentFilter.append(new Option(continent, continent)));
     }
 
     function getFilteredRegions() {
+      if (!state.data) return [];
       const query = elements.searchInput.value.trim().toLowerCase();
       const continent = elements.continentFilter.value;
-      const azOnly = elements.azOnlyFilter.checked;
+      const zones = elements.zoneFilter.value;
 
       return state.data.regions.filter((region) => {
         if (continent && region.continent !== continent) return false;
-        if (azOnly && !region.availabilityZones) return false;
+        if (zones && zoneStatus(region).key !== zones) return false;
         if (query) {
-          const haystack = `${region.name} ${region.physicalLocation} ${region.geography}`.toLowerCase();
+          const haystack = `${region.name} ${region.id} ${region.physicalLocation} ${region.geography} ${region.continent}`.toLowerCase();
           if (!haystack.includes(query)) return false;
         }
         return true;
@@ -1182,15 +1846,27 @@
     }
 
     function renderCards() {
+      if (!state.data) return;
       const filtered = getFilteredRegions();
-      elements.resultsCount.textContent = `${filtered.length} region${filtered.length === 1 ? "" : "s"} found.`;
+      const unknown = filtered.filter((region) => region.availabilityZones === null).length;
+      elements.resultsCount.textContent = `${filtered.length} of ${state.data.regions.length} physical regions${unknown ? ` · zone information unavailable for ${unknown}` : ""}.`;
+      elements.clearFilters.hidden = !elements.searchInput.value && !elements.continentFilter.value && !elements.zoneFilter.value;
       elements.regionCards.replaceChildren();
       renderMap(filtered);
 
       if (!filtered.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.textContent = "No regions match your filters.";
+        const text = document.createElement("p");
+        text.textContent = elements.zoneFilter.value === "yes" && state.data.regions.some((region) => region.availabilityZones === null)
+          ? "No confirmed matches. Regions with unavailable zone information are excluded, not classified as unsupported."
+          : "No physical regions match your filters.";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "region-button";
+        button.textContent = "Clear filters";
+        button.addEventListener("click", clearFilters);
+        empty.append(text, button);
         elements.regionCards.append(empty);
         return;
       }
@@ -1198,32 +1874,50 @@
       filtered.forEach((region) => {
         const card = document.createElement("article");
         card.className = "region-card";
+        card.dataset.regionId = region.id;
 
         const header = document.createElement("div");
         header.className = "region-card-header";
         const heading = document.createElement("h2");
         heading.textContent = region.name;
         const badge = document.createElement("span");
-        badge.className = `region-badge ${region.availabilityZones ? "is-az" : "is-no-az"}`;
-        badge.textContent = region.availabilityZones ? "Availability zones" : "No availability zones";
+        badge.className = `region-badge ${zoneStatus(region).className}`;
+        badge.textContent = zoneStatus(region).label;
         header.append(heading, badge);
         card.append(header);
 
-        if (region.restricted) {
+        const idRow = document.createElement("div");
+        idRow.className = "region-id";
+        const code = document.createElement("code");
+        code.textContent = region.id;
+        idRow.append(code);
+        card.append(idRow);
+        const evidence = document.createElement("p");
+        evidence.className = "region-evidence";
+        evidence.textContent = evidenceText(region) + (region.availabilityZonesPreview ? " Preview annotation: one or more zones may be in preview." : "");
+        card.append(evidence);
+
+        if (region.restricted === true) {
           const restrictedTag = document.createElement("span");
           restrictedTag.className = "region-restricted-tag";
-          restrictedTag.textContent = "Restricted access";
+          restrictedTag.textContent = "Restricted access listed";
           card.append(restrictedTag);
         }
 
+        const details = document.createElement("details");
+        details.className = "region-details";
+        const summary = document.createElement("summary");
+        summary.textContent = "Location, pairing and sources";
+        details.append(summary);
         const meta = document.createElement("ul");
         meta.className = "region-meta";
         [
-          ["Physical location", region.physicalLocation],
-          ["Geography", region.geography],
-          ["Continent", region.continent],
-          ["Paired region", region.pairedRegion || "-"],
-          ["Programmatic name", region.id],
+          ["Physical location (ARM)", region.physicalLocation],
+          ["Geography group (ARM)", region.geography],
+          ["Continent group (derived)", region.continent],
+          ["Paired region (ARM)", region.pairedRegion || "Not reported"],
+          ["Zone evidence checked", displayDate(region.availabilityZonesSource === "arm" ? state.data.sources?.metadata?.checkedAt || state.data.generatedAt : region.availabilityZonesSource === "microsoft-learn" ? state.data.sources?.reference?.checkedAt : null)],
+          ["Access restriction (Microsoft Learn)", region.restricted === true ? "Listed" : region.restricted === false ? "Not listed; access is not guaranteed" : "Information unavailable"],
         ].forEach(([label, value]) => {
           const li = document.createElement("li");
           const labelSpan = document.createElement("span");
@@ -1235,59 +1929,129 @@
           li.append(labelSpan, valueSpan);
           meta.append(li);
         });
-        card.append(meta);
+        const sourceLink = document.createElement("a");
+        sourceLink.href = "#dataSources";
+        sourceLink.textContent = "How to interpret these sources";
+        sourceLink.addEventListener("click", () => { document.getElementById("dataSources").open = true; });
+        details.append(meta, sourceLink);
+        card.append(details);
 
         elements.regionCards.append(card);
       });
     }
-    // build-freshness.mjs stamps the real git date; the host's Last-Modified
-    // would report the deploy and overclaim freshness on curated lists
-    async function showRefreshedAt() {
-      var el = document.getElementById("refreshedAt");
-      if (!el) return;
+    function readUrlState() {
+      const params = new URLSearchParams(location.search);
+      elements.searchInput.value = params.get("q") ?? params.get("searchInput") ?? "";
+      let continent = params.get("continentFilter") || "";
+      continent = ({ US: "Americas", UK: "Europe", "South America": "Americas" })[continent] || continent;
+      if (continent && ![...elements.continentFilter.options].some((option) => option.value === continent)) {
+        elements.continentFilter.add(new Option(`${continent} (not in this dataset)`, continent));
+      }
+      elements.continentFilter.value = continent;
+      const zones = params.get("zoneFilter") ?? (params.get("azOnlyFilter") === "1" ? "yes" : "");
+      elements.zoneFilter.value = ["", "yes", "no", "unknown"].includes(zones) ? zones : "";
+      if (!["", "yes", "no", "unknown"].includes(zones)) warn("url", "An unknown availability-zone filter was ignored. Select a status below.");
+      const view = params.get("view");
+      if (view === "cards" || view === "list") applyView(view);
+    }
+
+    function syncUrl() {
+      const url = new URL(location.href);
+      ["q", "searchInput", "continentFilter", "azOnlyFilter", "zoneFilter", "view"].forEach((key) => url.searchParams.delete(key));
+      if (elements.searchInput.value.trim()) url.searchParams.set("q", elements.searchInput.value.trim());
+      if (elements.continentFilter.value) url.searchParams.set("continentFilter", elements.continentFilter.value);
+      if (elements.zoneFilter.value) url.searchParams.set("zoneFilter", elements.zoneFilter.value);
+      url.searchParams.set("view", state.view);
       try {
-        var res = await fetch("/freshness.json", { cache: "no-store" });
-        if (!res.ok) throw new Error(res.status);
-        var iso = (await res.json())["azure-regions/regions.json"];
-        var date = iso ? new Date(iso) : null;
-        if (!date || isNaN(date)) throw new Error("no stamp");
-        el.textContent = date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-        el.parentElement.title = date.toLocaleString();
-      } catch (err) {
-        el.parentElement.hidden = true;
+        history.replaceState(history.state, "", url);
+        window.dispatchEvent(new Event("regionsstatechange"));
+      }
+      catch (error) { warn("url", "Filters work, but the address bar could not be updated for sharing.", error); }
+    }
+
+    function clearFilters() {
+      elements.searchInput.value = "";
+      elements.continentFilter.value = "";
+      elements.zoneFilter.value = "";
+      elements.searchInput.focus({ preventScroll: true });
+      renderCards();
+      syncUrl();
+    }
+
+    async function init() {
+      if (state.loading) return;
+      const fromRetry = document.activeElement === elements.retryData;
+      state.loading = true;
+      elements.controls.disabled = true;
+      elements.retryData.disabled = true;
+      elements.resultsCount.textContent = "Loading physical regions...";
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      try {
+        const response = await fetch("./regions.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`Region data request returned ${response.status}`);
+        state.data = validateData(await response.json());
+        elements.dataError.hidden = true;
+        document.getElementById("refreshedAt").textContent = displayDate(state.data.sources?.metadata?.checkedAt || state.data.generatedAt);
+        document.getElementById("refreshedAt").title = state.data.sources?.metadata?.checkedAt || state.data.generatedAt || "Not available";
+        document.getElementById("referenceAt").textContent = displayDate(state.data.sources?.reference?.checkedAt);
+        document.getElementById("referenceAt").title = state.data.sources?.reference?.checkedAt || "Not available";
+        document.getElementById("scopeSummary").textContent = `${state.data.regions.length} physical regions + ${logicalRegions().length} logical ARM locations = ${state.data.regions.length + logicalRegions().length} total. Directory and map: physical regions only.`;
+        if (!state.data.sources?.reference?.checkedAt) warn("reference", "The public reference is unavailable for this dataset. Fields without confirmed ARM evidence remain unknown.");
+        if (!(state.data.schemaVersion >= 2)) warn("legacy", "This older dataset did not track zone evidence. Its unsupported-zone and restricted-access flags are treated as unknown.");
+        renderStats();
+        renderCharts();
+        populateFilters();
+        readUrlState();
+        elements.controls.disabled = false;
+        renderCards();
+        if (location.hash === "#mapPanel") elements.mapPanel.open = true;
+        if (location.hash === "#statsSection") document.getElementById("statsSection").open = true;
+        if (location.hash === "#dataSources") document.getElementById("dataSources").open = true;
+        if (elements.mapPanel.open) showMap();
+      } catch (error) {
+        console.error("Unable to load Azure region data.", error);
+        elements.dataError.hidden = false;
+        elements.resultsCount.textContent = "Region data unavailable. Retry loading data or consult Microsoft Learn.";
+        document.getElementById("refreshedAt").textContent = "Not available";
+        document.getElementById("referenceAt").textContent = "Not available";
+      } finally {
+        clearTimeout(timeout);
+        state.loading = false;
+        elements.retryData.disabled = false;
+        if (fromRetry) (state.data ? elements.searchInput : elements.retryData).focus({ preventScroll: true });
       }
     }
 
-
-
-    async function init() {
-      const response = await fetch("./regions.json", { cache: "no-store" });
-      showRefreshedAt();
-      state.data = await response.json();
-      initMap();
-      renderStats();
-      renderCharts();
-      populateFilters();
-      renderCards();
-    }
-
-    elements.searchInput.addEventListener("input", renderCards);
-    elements.continentFilter.addEventListener("change", renderCards);
-    elements.azOnlyFilter.addEventListener("change", renderCards);
-
-    init().catch(function (error) {
-      console.error(error);
-      if (document.querySelector(".data-error")) return;
-      var host = document.querySelector("main");
-      if (!host) return;
-      var msg = document.createElement("p");
-      msg.className = "data-error";
-      msg.setAttribute("role", "alert");
-      msg.textContent = "Could not load the data for this page. This is usually a temporary network problem - reload to try again.";
-      var intro = host.querySelector(".intro");
-      if (intro) intro.insertAdjacentElement("afterend", msg);
-      else host.prepend(msg);
+    [elements.searchInput, elements.continentFilter, elements.zoneFilter].forEach((control) => {
+      control.addEventListener(control === elements.searchInput ? "input" : "change", () => { renderCards(); syncUrl(); });
     });
+    elements.clearFilters.addEventListener("click", clearFilters);
+    elements.retryData.addEventListener("click", init);
+    elements.mapPanel.addEventListener("toggle", () => {
+      if (elements.mapPanel.open) showMap();
+      else setMapInteraction(false);
+    });
+    elements.mapInteraction.addEventListener("click", () => setMapInteraction(elements.mapInteraction.getAttribute("aria-pressed") !== "true"));
+    elements.regionMap.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setMapInteraction(false);
+        elements.mapInteraction.focus();
+      }
+    });
+    elements.retryMap.addEventListener("click", async () => {
+      await showMap();
+      if (mapState.map) elements.mapInteraction.focus({ preventScroll: true });
+    });
+    document.querySelectorAll("[data-open-details]").forEach((link) => link.addEventListener("click", () => {
+      document.getElementById(link.dataset.openDetails).open = true;
+    }));
+    window.addEventListener("popstate", () => {
+      if (!state.data) return;
+      readUrlState();
+      renderCards();
+    });
+    init();
 
     let scrollTicking = false;
     window.addEventListener("scroll", () => {
@@ -1302,124 +2066,29 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function updateShareLinks() {
+        var url = encodeURIComponent(location.href.split('#')[0]);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        root.querySelectorAll('a[data-share]').forEach(function (link) {
+          link.setAttribute('href', targets[link.getAttribute('data-share')]);
+        });
+      }
+      updateShareLinks();
+      window.addEventListener('regionsstatechange', updateShareLinks);
+      window.addEventListener('popstate', updateShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

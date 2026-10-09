@@ -6,11 +6,23 @@ description = "A PowerShell script to quickly switch between Azure subscriptions
 tags = ["Productivity", "Tools", "PowerShell"]
 categories = ["Azure"]
 featureImage = "/articles/images/githubtest.png"
+related = ["call-azure-api-with-powershell"]
 +++
 
 Managing subscriptions can be a challenge in any cloud journey. Here's a script to save you some time - quickly switch between your Azure subscriptions by entering a listed index.
 
 Forked and updated from [matthiasguentert/azure-subscription-switcher](https://github.com/matthiasguentert/azure-subscription-switcher).
+
+## Choose console or desktop
+
+| Variant | Use when | Prerequisites |
+|---|---|---|
+| [Index-based](#index-based-version) | Terminal, remote session or no graphical desktop | PowerShell, Az.Accounts, `Connect-AzAccount` and visible subscriptions |
+| [Out-GridView](#version-with-a-user-interface-out-gridview) | Selecting one subscription from a Windows desktop table | The above plus a working `Out-GridView` command and graphical session; not a browser/mobile action |
+
+Tested PowerShell/module versions and execution date: **not recorded**. Check [Out-GridView availability](https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/out-gridview) on your host; use the index variant if unavailable.
+
+After loading either function, call `Switch-AzContext`. Select one enabled subscription (or enter `0`/Cancel). Expected result is the new `Get-AzContext` output; verify **tenant and subscription ID** before executing other Azure commands. These examples filter out Lighthouse-delegated subscriptions whose home tenant differs, so they are not a complete cross-tenant inventory.
 
 ## Index-based version
 
@@ -85,6 +97,8 @@ Here is the script output:
 ![Subscription switcher script output](/articles/images/subscription-switcher/susbcription-switcher-1.png)
 
 ## Version with a user interface (Out-GridView)
+
+Select one row and press **OK**. Cancel leaves the context unchanged. Use `Get-Command Out-GridView` to check availability before loading this variant.
 
 ```powershell
 function Switch-AzContext {

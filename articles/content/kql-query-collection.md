@@ -1,15 +1,21 @@
 +++
 author = "Benoit G"
-title = "KQL Query Collection"
+summary = "Search Resource Graph queries by task or category, inspect execution context and copy the selected example."
+title = "KQL Query Library for Azure Resource Graph"
 date = "2024-11-06"
 description = "A growing collection of Kusto Query Language (KQL) queries for Azure Resource Graph, covering AKS, disks, networking, policies, RBAC, subscriptions, and tags."
 tags = ["KQL"]
 categories = ["Azure"]
 featureImage = "/articles/images/kql-query.jpeg"
 featured = true
+related = ["clean-rbac-identity-not-found", "optimize-and-reduce-costs-in-azure"]
 +++
 
-Kusto Query Language (KQL) is the language used across Azure Resource Graph, Azure Monitor, Azure Data Explorer, and Azure Log Analytics. Here is a collection of Azure Resource Graph queries I use regularly.
+Search by task or choose a category below. These are **Azure Resource Graph** queries, not interchangeable Log Analytics workspace queries even though both use KQL. Each query has a permanent heading link, execution context and output projection. The count below comes from the actual entries; this is a library, not a one-minute implementation.
+
+Choose the intended subscriptions in Resource Graph Explorer. Results are limited by your resource visibility, table support and data freshness. Replace example names, IDs, dates and tags in each query; an empty result does not prove the condition does not exist.
+
+Technical execution validation date: **not recorded**. Consult [Resource Graph query language support](https://learn.microsoft.com/azure/governance/resource-graph/concepts/query-language) and compare results against a known resource before operational use. [View the maintained source](https://github.com/Benoit-Gaumard/Benoit-Gaumard.github.io/blob/main/articles/content/kql-query-collection.md).
 
 [[toc]]
 

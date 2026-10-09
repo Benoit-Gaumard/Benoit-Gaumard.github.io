@@ -2,16 +2,18 @@
 // plus articles/articles.json (consumed by /articles/index.html) and articles/rss.xml.
 //
 // Usage: node articles/build-articles.mjs
+// Privacy only: node articles/build-articles.mjs --privacy-only
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { enhancePage } from "../site-ui.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const contentDir = join(HERE, "content");
 const SITE_URL = "https://benoit-gaumard.io";
 const DEFAULT_AUTHOR = "Benoit Gaumard";
 const WORDS_PER_MINUTE = 200;
-const PRIVACY_UPDATED = "2026-09-01";
+const PRIVACY_UPDATED = "2026-10-07";
 
 // ---------- Measurement and advertising ----------
 
@@ -66,8 +68,8 @@ function adUnit(slot) {
     </aside>`;
 }
 
-// Drops the unit after the second <h2> so it sits inside the reading flow
-// rather than below the fold. Short articles keep it at the end instead.
+// A complete first section precedes the manual unit. Never split a command,
+// its label, an interactive widget, or a reference-library entry with an ad.
 function injectMidArticleAd(bodyHtml, slot) {
   const unit = adUnit(slot);
   if (!unit) return { body: bodyHtml, trailing: "" };
@@ -96,7 +98,8 @@ function parseTomlValue(raw) {
   if (value.startsWith("[") && value.endsWith("]")) {
     const inner = value.slice(1, -1).trim();
     if (!inner) return [];
-    return inner.split(",").map((item) => parseTomlValue(item.trim())).filter((item) => item !== "");
+    const items = inner.match(/(?:[^,"']|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')+/g) || [];
+    return items.map((item) => parseTomlValue(item.trim())).filter((item) => item !== "");
   }
   if (value === "true") return true;
   if (value === "false") return false;
@@ -129,7 +132,7 @@ function slugify(text) {
 }
 
 function escapeHtml(text) {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 const EXTERNAL_ICON = '<svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
@@ -191,6 +194,7 @@ function markdownToHtml(markdown) {
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
   const htmlParts = [];
   const headings = [];
+  const usedIds = new Map();
   let i = 0;
 
   while (i < lines.length) {
@@ -214,7 +218,8 @@ function markdownToHtml(markdown) {
       }
       i++;
       const code = escapeHtml(codeLines.join("\n"));
-      htmlParts.push(`<div class="code-block"><div class="code-block-header"><span class="code-lang">${lang}</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-${lang}">${code}</code></pre></div>`);
+      const pre = `<pre tabindex="0" aria-label="${escapeHtml(lang)} code"><code class="language-${escapeHtml(lang)}">${code}</code></pre>`;
+      htmlParts.push(`<div class="code-block"><div class="code-block-header"><span class="code-lang">${escapeHtml(lang)}</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy ${escapeHtml(lang)} code">Copy</button></div>${codeLines.length > 35 ? `<details class="code-details"><summary>Show complete script (${codeLines.length} lines)</summary>${pre}</details>` : pre}</div>`);
       continue;
     }
 
@@ -251,7 +256,10 @@ function markdownToHtml(markdown) {
     if (headingMatch) {
       const level = headingMatch[1].length;
       const text = headingMatch[2].trim();
-      const id = slugify(text);
+      const baseId = slugify(text);
+      const occurrence = (usedIds.get(baseId) || 0) + 1;
+      usedIds.set(baseId, occurrence);
+      const id = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
       headings.push({ level, text, id });
       htmlParts.push(`<h${level} id="${id}">${renderInline(text)}</h${level}>`);
       i++;
@@ -265,16 +273,16 @@ function markdownToHtml(markdown) {
     }
 
     if (line.includes("|") && lines[i + 1] && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(lines[i + 1])) {
-      const headerCells = splitTableRow(line);
+      const headerCells = splitTableRow(line).map((cell, index) => cell || (index === 0 ? "Criterion" : "Value"));
       i += 2;
       const rows = [];
       while (i < lines.length && lines[i].trim() !== "" && lines[i].includes("|")) {
         rows.push(splitTableRow(lines[i]));
         i++;
       }
-      const thead = `<thead><tr>${headerCells.map((c) => `<th>${renderInline(c)}</th>`).join("")}</tr></thead>`;
-      const tbody = `<tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${renderInline(c)}</td>`).join("")}</tr>`).join("")}</tbody>`;
-      htmlParts.push(`<div class="table-wrap"><table>${thead}${tbody}</table></div>`);
+      const thead = `<thead><tr>${headerCells.map((c) => `<th scope="col">${renderInline(c)}</th>`).join("")}</tr></thead>`;
+      const tbody = `<tbody>${rows.map((r) => `<tr>${r.map((c, n) => `<td data-label="${escapeHtml(headerCells[n] || "")}">${renderInline(c)}</td>`).join("")}</tr>`).join("")}</tbody>`;
+      htmlParts.push(`<div class="table-wrap" tabindex="0" role="region" aria-label="${escapeHtml(headerCells.join(", "))} table"><table>${thead}${tbody}</table></div>`);
       continue;
     }
 
@@ -301,7 +309,7 @@ function markdownToHtml(markdown) {
     const imgOnly = line.trim().match(/^!\[([^\]]*)\]\(([^)"]+?)(?:\s+"([^"]*)")?\)$/);
     if (imgOnly) {
       const [, alt, src, caption] = imgOnly;
-      htmlParts.push(`<figure class="article-figure"><img src="${src}" alt="${escapeHtml(alt)}" loading="lazy">${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}</figure>`);
+      htmlParts.push(`<figure class="article-figure"><a href="${src}" data-image-zoom aria-label="Enlarge: ${escapeHtml(alt || caption || "article image")}"><img src="${src}" alt="${escapeHtml(alt)}" loading="lazy"></a><figcaption>${escapeHtml(caption || alt)} <a href="${src}" target="_blank" rel="noopener">Open original image</a></figcaption></figure>`);
       i++;
       continue;
     }
@@ -346,7 +354,7 @@ function formatRssDate(dateStr) {
 }
 
 function pageShell({ title, description, canonical, extraHead = "", bodyClass = "", headerActive = "articles", content, footerNote, ads = false, noindex = false }) {
-  return `<!doctype html>
+  return enhancePage(`<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -803,12 +811,7 @@ ${content}
     document.querySelectorAll('[data-code-copy]').forEach((button) => {
       button.addEventListener("click", () => {
         const code = button.closest(".code-block").querySelector("code").textContent;
-        navigator.clipboard.writeText(code).then(() => {
-          const original = button.textContent;
-          button.textContent = "Copied!";
-          button.classList.add("is-copied");
-          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
-        });
+        window.SiteUX.copy(code, "Code", button);
       });
     });
     let scrollTicking = false;
@@ -903,13 +906,9 @@ ${content}
           // The build-time URL is canonical; location.href would carry any
           // tracking query string the visitor arrived with.
           var value = copyBtn.getAttribute('data-share-url') || location.href;
-          function done() { say('Link copied to the clipboard.'); }
-          function failed() { say(value); }
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(value).then(done, failed);
-          } else {
-            failed();
-          }
+          window.SiteUX.copy(value, "Article link", copyBtn).then(function (copied) {
+            say(copied ? "Link copied to the clipboard." : "Copy unavailable. Use the manual copy dialog.");
+          });
         });
       }
 
@@ -920,9 +919,141 @@ ${content}
     })();
   </script>
 
-</body>
+  <script data-article-reading>
+  (${articleReadingRuntime.toString()})();
+  </script>
+  </body>
 </html>
-`;
+`, { path: new URL(canonical).pathname });
+}
+
+function articleReadingRuntime() {
+  const toc = document.querySelector(".reading-toc");
+  if (toc) {
+    toc.open = matchMedia("(min-width: 75rem)").matches;
+    toc.addEventListener("toggle", () => {
+      if (document.activeElement === toc.querySelector("summary")) {
+        toc.scrollIntoView({ block: "nearest", behavior: "instant" });
+      }
+    });
+    toc.addEventListener("click", event => {
+      const link = event.target.closest("a[href^='#']");
+      if (!link) return;
+      const target = document.getElementById(link.hash.slice(1));
+      if (target) {
+        for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+        target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
+      if (matchMedia("(max-width: 74.99rem)").matches) toc.open = false;
+    });
+  }
+  const share = document.querySelector(".article-share");
+  if (share) share.open = matchMedia("(min-width: 40rem)").matches;
+  const revealReference = () => {
+    let target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+    if (!target) return;
+    if (target.tagName === "SUMMARY") target.parentElement.open = true;
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+  };
+  window.addEventListener("hashchange", revealReference);
+  revealReference();
+  let printState = [];
+  window.addEventListener("beforeprint", () => {
+    printState = [...document.querySelectorAll(".article-body details")].map(detail => [detail, detail.open]);
+    printState.forEach(([detail]) => { detail.open = true; });
+  });
+  window.addEventListener("afterprint", () => printState.forEach(([detail, open]) => { detail.open = open; }));
+
+  let imageDialog, imageOpener;
+  document.querySelectorAll("[data-image-zoom]").forEach(link => link.addEventListener("click", event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (!imageDialog) {
+      imageDialog = document.createElement("dialog");
+      imageDialog.className = "image-dialog";
+      imageDialog.setAttribute("aria-label", "Image viewer");
+      imageDialog.innerHTML = '<button type="button" class="share-btn" data-image-close>Close image</button><figure><img alt=""><figcaption></figcaption></figure><a target="_blank" rel="noopener">Open original image</a>';
+      document.body.append(imageDialog);
+      imageDialog.querySelector("[data-image-close]").addEventListener("click", () => imageDialog.close());
+      imageDialog.addEventListener("close", () => imageOpener?.focus());
+      imageDialog.addEventListener("click", e => { if (e.target === imageDialog) imageDialog.close(); });
+    }
+    imageOpener = link;
+    const source = link.querySelector("img");
+    imageDialog.querySelector("img").src = link.href;
+    imageDialog.querySelector("img").alt = source?.alt || "";
+    imageDialog.querySelector("figcaption").textContent = link.closest("figure")?.querySelector("figcaption")?.firstChild?.textContent || source?.alt || "";
+    imageDialog.querySelector("a").href = link.href;
+    imageDialog.showModal();
+    imageDialog.querySelector("button").focus();
+  }));
+
+  document.querySelectorAll("[data-copy-section]").forEach(button => button.addEventListener("click", () => {
+    const section = document.getElementById(button.dataset.copySection);
+    if (section) window.SiteUX.copy(section.innerText, "Checklist", button);
+  }));
+
+  const zoneTable = document.querySelector("[data-zone-table]");
+  if (zoneTable) {
+    const rows = [...zoneTable.querySelectorAll("tbody tr")];
+    const search = document.getElementById("zone-search");
+    const status = document.getElementById("zone-count");
+    rows.forEach(row => row.querySelectorAll("code").forEach(code => {
+      if (!code.textContent.includes("privatelink.")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "share-btn";
+      button.textContent = "Copy zone";
+      button.setAttribute("aria-label", "Copy " + code.textContent);
+      button.addEventListener("click", () => window.SiteUX.copy(code.textContent, "Private DNS zone", button));
+      code.after(button);
+    }));
+    const filter = () => {
+      let count = 0;
+      rows.forEach(row => { row.hidden = !row.textContent.toLowerCase().includes(search.value.trim().toLowerCase()); if (!row.hidden) count++; });
+      status.textContent = count + " of " + rows.length + " services" + (count ? "" : ". Try another service or zone name.");
+    };
+    search.addEventListener("input", filter);
+    document.getElementById("zone-reset").addEventListener("click", () => { search.value = ""; filter(); search.focus(); });
+    filter();
+  }
+
+  const library = document.querySelector("[data-reference-library]");
+  if (library) {
+    const groups = [...library.querySelectorAll(".library-group")];
+    const input = document.getElementById("library-search");
+    const category = document.getElementById("library-category");
+    const count = document.getElementById("library-count");
+    const entries = [...library.querySelectorAll(".library-entry")];
+    if (matchMedia("(max-width: 40rem)").matches) groups.forEach(group => { group.open = false; });
+    const filter = () => {
+      let visible = 0;
+      groups.forEach(group => {
+        let groupVisible = 0;
+        group.querySelectorAll(".library-entry").forEach(entry => {
+          entry.hidden = !(category.value === "" || group.dataset.category === category.value) || !entry.textContent.toLowerCase().includes(input.value.trim().toLowerCase());
+          if (!entry.hidden) { visible++; groupVisible++; }
+        });
+        group.hidden = !groupVisible;
+        if (input.value.trim() || category.value) group.open = !!groupVisible;
+      });
+      count.textContent = visible + " of " + entries.length + " entries" + (visible ? "" : ". Clear the search or choose another category.");
+    };
+    input.addEventListener("input", filter);
+    category.addEventListener("change", filter);
+    document.getElementById("library-reset").addEventListener("click", () => { input.value = ""; category.value = ""; filter(); input.focus(); });
+    const revealHash = () => {
+      let target;
+      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+      const group = target?.closest(".library-group");
+      if (group) { input.value = ""; category.value = ""; filter(); group.open = true; target.scrollIntoView({ block: "start", behavior: "instant" }); }
+    };
+    window.addEventListener("hashchange", revealHash);
+    filter();
+    revealHash();
+  }
 }
 
 const ARTICLE_CSS = `
@@ -941,23 +1072,6 @@ const ARTICLE_CSS = `
     .article-meta .dot { opacity: .5; }
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
-    .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem;
-      border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
-      box-shadow: var(--cp-shadow); overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
-    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
-    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    /* Square service and product logos get one shared band instead: the height
-       is fixed so every logo hero matches, and the sources are vector, so the
-       small ones scale up to it without softening. */
-    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
-    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
-    @media (max-width: 32rem) {
-      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
-    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -982,12 +1096,13 @@ const ARTICLE_CSS = `
     .article-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
     .article-body th { background: var(--cp-surface-soft); }
-    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; color: #e3edf7; color-scheme: dark; }
     .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: 0.8rem; }
     .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
-    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button { border: 1px solid #b9d3ea; background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .copy-code-button:hover { background: rgba(255,255,255,.1); }
-    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .copy-code-button.is-copied { border-color: #9ee8c8; color: #9ee8c8; }
+    .copy-code-button:focus-visible, .code-details > summary:focus-visible { outline-color: #b9d3ea; }
     .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
     .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
     /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
@@ -1029,6 +1144,106 @@ const ARTICLE_CSS = `
       .article-meta { font-size: 0.8rem; }
       .article-share { flex-direction: column; align-items: flex-start; }
       .article-share-links { width: 100%; }
+    }
+    .article-header { max-width: 75ch; margin-inline: auto; margin-bottom: 1rem; }
+    .article-page .article-header { max-width: none; margin-inline: 0; }
+    .article-title { font-size: clamp(1.7rem, 3.3vw, 2.65rem); }
+    .article-breadcrumb, .article-categories { margin-bottom: .6rem; }
+    .article-description { margin-top: .7rem; }
+    .article-meta { margin-top: .7rem; }
+    .article-tags { margin-top: .5rem; }
+    .article-body { min-width: 0; padding: clamp(1rem, 2.2vw, 2rem); }
+    .article-page main { padding-top: 1.25rem; }
+    .article-body > :is(p, ul, ol, h2, h3, h4, .callout),
+    .article-body .library-entry > :is(p, ul, ol),
+    .article-body .reference-section > :is(p, ul, ol),
+    .callout-body { max-width: var(--reading-prose-width, min(42rem, 72ch)); margin-inline: auto; }
+    .article-body > :is(h2, h3, h4) { max-width: var(--reading-heading-width, 42rem); }
+    .article-body > h2:first-child { margin-top: .4rem; }
+    .callout-body { min-width: 0; }
+    .reading-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .reading-layout:has(> .reading-toc:not([open])) { grid-template-columns: minmax(0, 1fr); --reading-prose-width: none; --reading-heading-width: none; }
+    .reading-layout > .reading-toc { scroll-margin-top: 6rem; }
+    .reading-layout > .reading-toc:not([open]) { justify-self: start; max-width: 100%; position: static; }
+    .reading-toc { border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); padding: .7rem 1rem; }
+    .reading-toc summary, .article-share summary, .series-map summary, .library-group > summary { cursor: pointer; min-height: 2.75rem; align-content: center; font-weight: 600; }
+    .reading-toc[open] .toc-label-show, .reading-toc:not([open]) .toc-label-hide { display: none; }
+    .reading-toc nav { max-height: 55vh; overflow: auto; }
+    .reading-toc ul { list-style: none; padding: 0; margin: .5rem 0; }
+    .reading-toc a { display: block; padding: .35rem .2rem; font-size: .9rem; }
+    .reading-toc .toc-level-4 { display: none; }
+    .article-share { display: block; padding: .2rem .8rem; margin: .6rem 0 1rem; }
+    .article-share-links { padding-block: .5rem; }
+    .series-nav, .article-related { margin: 1rem 0; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); }
+    .series-nav > p { margin: 0 0 .5rem; }
+    .series-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
+    .series-map ol { line-height: 1.6; padding-left: 1.5rem; }
+    .series-map [aria-current="page"] { font-weight: 700; }
+    .article-related h2 { font-size: 1.15rem; margin-top: 0; }
+    .article-related li { margin-block: .55rem; }
+    .article-feature-image { max-width: 50rem; margin: 1rem auto 1.5rem; border: 1px solid var(--cp-border); border-radius: 14px; background: var(--cp-surface-soft); overflow: hidden; }
+    .article-feature-image > a:focus-visible { outline-offset: -3px; }
+    .article-feature-image img { display: block; border: 0; border-radius: 0; }
+    .article-feature-image.is-banner > a { display: block; aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; }
+    .article-feature-image.is-logo > a { display: flex; align-items: center; justify-content: center; height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+    .article-feature-image figcaption { margin: 0; padding: .5rem .75rem; }
+    .article-figure figcaption { max-width: 72ch; margin-inline: auto; }
+    .article-figure figcaption a { display: inline-block; padding: .3rem; }
+    .image-dialog { color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 10px; max-width: 96vw; max-height: 94vh; padding: 1rem; }
+    .image-dialog::backdrop { background: var(--cp-text-muted); opacity: .8; }
+    .image-dialog figure { margin: 1rem 0; }
+    .image-dialog img { max-width: 100%; max-height: 72vh; object-fit: contain; }
+    .image-dialog figcaption { max-width: 72ch; }
+    .copy-code-button { min-height: 2.75rem; padding: .4rem .7rem; }
+    .code-block pre { white-space: pre; overflow-wrap: normal; }
+    .code-block pre code { white-space: pre; overflow-wrap: normal; }
+    .code-details summary { padding: .7rem 1rem; cursor: pointer; }
+    .library-controls, .zone-controls { padding: 1rem; margin-bottom: 1rem; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 10px; display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+    .library-controls label, .zone-controls label { display: grid; gap: .3rem; }
+    .library-controls input, .library-controls select, .zone-controls input { max-width: 100%; min-height: 2.75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: .5rem; background: var(--cp-surface); color: var(--cp-text); }
+    .library-controls p, .zone-controls p { flex-basis: 100%; margin: 0; }
+    .library-group { border: 1px solid var(--cp-border); border-radius: 10px; padding: .6rem 1rem; margin-bottom: 1rem; }
+    .library-entry { min-width: 0; margin-block: 1rem 2rem; }
+    .library-entry h3 { scroll-margin-top: 6rem; }
+    .query-context { font-size: .9rem; color: var(--cp-text-muted); }
+    .query-output { overflow-wrap: anywhere; }
+    .reference-section { margin-bottom: 1.25rem; }
+    .reference-section > summary { cursor: pointer; font-size: 1.15rem; font-weight: 600; padding: .75rem; background: var(--cp-surface-soft); }
+    .table-wrap [hidden], .library-group[hidden], .library-entry[hidden] { display: none !important; }
+    @media (min-width: 75rem) {
+      .reading-layout { grid-template-columns: 16rem minmax(0, 1fr); }
+      .reading-toc { position: sticky; top: 5.5rem; }
+      .reading-toc nav { max-height: calc(100vh - 12rem); }
+      .reading-layout:not(:has(.reading-toc)) { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 40rem) {
+      .article-feature-image.is-logo > a { height: 10rem; padding: 1.25rem; }
+      .article-tags { display: none; }
+      .article-body { font-size: 1rem; line-height: 1.65; }
+      .article-body table, .article-body tbody, .article-body tr, .article-body td { display: block; }
+      .article-body thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+      .article-body tr { margin-bottom: .8rem; border: 1px solid var(--cp-border); border-radius: 8px; }
+      .article-body td { border: 0; padding: .55rem .7rem; overflow-wrap: anywhere; }
+      .article-body td::before { content: attr(data-label); display: block; font-weight: 700; color: var(--cp-text-muted); font-size: .8rem; }
+      .article-body td + td { border-top: 1px solid var(--cp-border); }
+      .table-wrap { overflow: visible; }
+      .library-controls > label, .zone-controls > label { width: 100%; }
+      .series-nav { font-size: .9rem; padding: .7rem; }
+      .series-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; }
+      .series-nav > p { flex-basis: 100%; margin: 0; }
+      .series-links { flex: 1; }
+      .series-map[open] { flex-basis: 100%; }
+      .series-map summary { min-height: 2.5rem; }
+      .reading-toc { padding: .2rem .75rem; }
+      .article-description { font-size: 1rem; line-height: 1.5; }
+    }
+    @media print {
+      .reading-toc, .article-share, .article-feature-image, .library-controls, .zone-controls, .copy-code-button { display: none !important; }
+      .reading-layout { display: block; }
+      .article-body { border: 0; box-shadow: none; padding: 0; }
+      .code-block pre { white-space: pre-wrap; }
     }`;
 
 // The footer's "Share this site" row shares the site; a reader looking at an
@@ -1048,8 +1263,8 @@ function articleShareBar(article) {
     print: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>',
   };
 
-  return `    <div class="article-share">
-      <span class="article-share-label" id="share-label">Share on</span>
+  return `    <details class="article-share">
+      <summary id="share-label">Share this article</summary>
       <div class="article-share-links" role="group" aria-labelledby="share-label">
         <a class="share-btn" href="https://twitter.com/intent/tweet?url=${url}&amp;text=${title}" target="_blank" rel="noopener">${icon.x}X</a>
         <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener">${icon.linkedin}LinkedIn</a>
@@ -1058,45 +1273,107 @@ function articleShareBar(article) {
         <button class="share-btn" type="button" data-article-share="print">${icon.print}Print</button>
       </div>
       <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
-    </div>`;
+    </details>`;
 }
 
-function renderArticlePage(article) {
+function articleToc(headings) {
+  if (headings.length < 2) return "";
+  return `<details class="reading-toc"><summary aria-controls="article-toc-navigation"><span class="toc-label-show">Show table of contents</span><span class="toc-label-hide">Hide table of contents</span></summary><nav id="article-toc-navigation" aria-label="Table of contents"><ul>${headings.map(h => `<li class="toc-level-${h.level}"><a href="#${h.id}">${renderInline(h.text)}</a></li>`).join("")}</ul></nav></details>`;
+}
+
+function seriesNavigation(article, articles) {
+  const match = article.slug.match(/^(azure-policy|dns-in-azure)-part-(\d+)-/);
+  if (!match) return "";
+  const parts = articles.filter(a => a.slug.startsWith(`${match[1]}-part-`)).sort((a, b) => Number(a.slug.match(/part-(\d+)/)[1]) - Number(b.slug.match(/part-(\d+)/)[1]));
+  const current = parts.findIndex(a => a.slug === article.slug);
+  const label = match[1] === "azure-policy" ? "Azure Policy" : "DNS in Azure";
+  const link = (a, text) => a ? `<a href="${a.url}">${text}</a>` : "";
+  return `<nav class="series-nav" aria-label="${label} series"><p><strong>${label} · Part ${current + 1} of ${parts.length}</strong></p><div class="series-links">${link(parts[current - 1], "← Previous part")}${link(parts[current + 1], "Next part →")}</div><details class="series-map"><summary>All ${parts.length} parts</summary><ol>${parts.map(a => `<li><a href="${a.url}"${a.slug === article.slug ? ' aria-current="page"' : ""}>${escapeHtml(a.title.split(": ").slice(1).join(": ") || a.title)}</a></li>`).join("")}</ol></details></nav>`;
+}
+
+function relatedReading(article, articles) {
+  const related = (article.related || []).map(slug => articles.find(a => a.slug === slug)).filter(Boolean);
+  if (!related.length) {
+    related.push(...articles.filter(a => a.slug !== article.slug && !a.noindex && a.tags.some(t => article.tags.includes(t))).slice(0, 3));
+  }
+  return related.length ? `<aside class="article-related" aria-label="Related reading"><h2>Continue with</h2><ul>${related.slice(0, 3).map(a => `<li><a href="${a.url}">${escapeHtml(a.title)}</a><br><span>${escapeHtml(a.description)}</span></li>`).join("")}</ul></aside>` : "";
+}
+
+function referenceLibrary(article) {
+  const kql = article.slug === "kql-query-collection";
+  const sections = article.bodyHtml.split(/(?=<h2\b)/);
+  const intro = sections.shift();
+  let count = 0;
+  const groups = sections.map(section => {
+    const heading = section.match(/^<h2 id="([^"]+)">([\s\S]*?)<\/h2>/);
+    if (!heading) return section;
+    const chunks = section.slice(heading[0].length).split(/(?=<h3\b)/);
+    const entries = chunks.filter(c => c.includes('class="code-block"')).map(chunk => {
+      count++;
+      const entryHeading = chunk.match(/^<h3 id="([^"]+)">([\s\S]*?)<\/h3>/);
+      const id = entryHeading?.[1] || `${heading[1]}-commands`;
+      const title = entryHeading?.[2] || heading[2];
+      const code = chunk.match(/<code class="language-[^"]+">([\s\S]*?)<\/code>/)?.[1] || "";
+      const projections = [...code.matchAll(/^\|\s*(?:project|summarize)\s+(.+)$/gm)];
+      const output = projections.length ? projections.at(-1)[1] : "Resource fields selected by this query; inspect the returned schema in Resource Graph Explorer.";
+      const context = kql ? `<p class="query-context">Run in <a href="https://portal.azure.com/#view/HubsExtension/ArgQueryBlade">Azure Resource Graph Explorer</a>, not Log Analytics. Requires read access to the queried resources; select the intended subscriptions. Replace sample names, IDs and tag values. Technical execution validation: not recorded.</p><p class="query-output"><strong>Output:</strong> ${output}</p>` : "";
+      return `<section class="library-entry"><h3 id="${id}">${title}</h3><p><a href="#${id}">Link to this ${kql ? "query" : "task"}</a></p>${context}${entryHeading ? chunk.slice(entryHeading[0].length) : chunk}</section>`;
+    });
+    return `<details class="library-group" data-category="${heading[1]}" open><summary id="${heading[1]}">${heading[2]}</summary>${chunks[0].includes('class="code-block"') ? "" : chunks[0]}${entries.join("\n")}</details>`;
+  });
+  const categories = article.headings.filter(h => h.level === 2);
+  return `<div class="library-controls"><label for="library-search">Search ${kql ? "queries" : "commands"}<input id="library-search" type="search" placeholder="${kql ? "subnets, RBAC, storage…" : "branch, status, commit…"}"></label><label for="library-category">Category<select id="library-category"><option value="">All categories</option>${categories.map(h => `<option value="${h.id}">${escapeHtml(h.text)}</option>`).join("")}</select></label><button class="share-btn" id="library-reset" type="button">Clear filters</button><p id="library-count" role="status" aria-live="polite">${count} entries</p></div><details class="reference-section"><summary>${kql ? "Execution context and limitations" : "How to use this reference"}</summary>${intro}</details><div data-reference-library>${groups.join("\n")}</div>`;
+}
+
+function renderArticlePage(article, articles) {
   const categoriesHtml = article.categories.map((c) => `<a class="article-category-tag" href="/articles/?category=${encodeURIComponent(c)}">${escapeHtml(c)}</a>`).join("");
   const tagsHtml = article.tags.length ? `<div class="article-tags">${article.tags.map((t) => `<span class="article-tag">#${escapeHtml(t)}</span>`).join("")}</div>` : "";
   const featureImageHtml = article.featureImage
-    ? `<div class="article-feature-image is-${article.featureImageShape || "banner"}"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}"></div>`
+    ? `<figure class="article-feature-image article-figure is-${article.featureImageShape || "banner"}"><a href="${article.featureImage}" data-image-zoom aria-label="Enlarge article illustration"><img src="${article.featureImage}" alt="${escapeHtml(article.title)}" loading="eager" fetchpriority="high" decoding="async"></a><figcaption>Article illustration · <a href="${article.featureImage}" target="_blank" rel="noopener">Open original image</a></figcaption></figure>`
     : "";
 
-  const { body, trailing } = injectMidArticleAd(article.bodyHtml, AD_SLOT_ARTICLE);
+  const library = ["kql-query-collection", "git-basics"].includes(article.slug);
+  let readable = library ? referenceLibrary(article) : article.bodyHtml;
+  if (article.slug === "dns-in-azure-part-5-private-endpoint-dns") {
+    const start = readable.indexOf('<h2 id="the-zone-name-has-to-be-exact">');
+    const at = readable.indexOf('<div class="table-wrap"', start);
+    if (at !== -1) readable = readable.slice(0, at) + '<div class="zone-controls"><label for="zone-search">Find a service or private DNS zone<input id="zone-search" type="search"></label><button class="share-btn" id="zone-reset" type="button">Clear search</button><p id="zone-count" role="status" aria-live="polite"></p></div>' + readable.slice(at).replace('<div class="table-wrap"', '<div class="table-wrap" data-zone-table');
+  }
+  const { body, trailing } = library ? { body: readable, trailing: adUnit(AD_SLOT_ARTICLE) } : injectMidArticleAd(readable, AD_SLOT_ARTICLE);
 
   const content = `    <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories">${categoriesHtml}</div>
       <h1 class="article-title">${escapeHtml(article.title)}</h1>
-      <p class="article-description">${escapeHtml(article.description)}</p>
+      <p class="article-description">${escapeHtml(article.summary || article.description)}</p>
       <div class="article-meta">
         <span>${escapeHtml(article.author)}</span>
         <span class="dot">&middot;</span>
-        <span>${formatDisplayDate(article.date)}</span>
+        <span>Published ${formatDisplayDate(article.date)}</span>
         <span class="dot">&middot;</span>
-        <span>${article.readingMinutes} min read</span>
+        <span>${library ? (article.slug === "kql-query-collection" ? `Query library · ${(article.bodyHtml.match(/class="code-block"/g) || []).length} queries` : "Command cheat sheet") : `About ${article.readingMinutes} min reading · not implementation time`}</span>
       </div>
       ${tagsHtml}
     </div>
 
-${articleShareBar(article)}
-
     ${featureImageHtml}
 
-    <article class="article-body">
+${articleShareBar(article)}
+
+    ${seriesNavigation(article, articles)}
+
+    <div class="reading-layout">
+    ${library ? "" : articleToc(article.headings)}
+    <article class="article-body" id="article-content">
       ${body}
     </article>
+    </div>
 
 ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(AD_SLOT_ARTICLE_SECONDARY) + "\n" : ""}
+    ${seriesNavigation(article, articles)}
+    ${relatedReading(article, articles)}
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
-      <a href="/articles/rss.xml">RSS feed</a>
     </div>`;
 
   return pageShell({
@@ -1104,6 +1381,7 @@ ${trailing ? trailing + "\n" : ""}${adUnit(AD_SLOT_ARTICLE_SECONDARY) ? adUnit(A
     description: article.description,
     canonical: `${SITE_URL}${article.url}`,
     content,
+    bodyClass: "article-page",
     ads: true,
     noindex: article.noindex,
   });
@@ -1117,29 +1395,27 @@ function renderPrivacyPage() {
   const description =
     "How benoit-gaumard.io handles cookies, advertising, and analytics: Google AdSense, Google Analytics, consent management, and how to change your choices.";
 
-  const content = `    <div class="article-header">
-      <p class="article-breadcrumb"><a href="/">&larr; Home</a></p>
-      <h1 class="article-title">Privacy Policy</h1>
-      <p class="article-description">${description}</p>
-      <div class="article-meta">
-        <span>Benoit Gaumard</span>
-        <span class="dot">&middot;</span>
-        <span>Last updated ${formatDisplayDate(PRIVACY_UPDATED)}</span>
-      </div>
-    </div>
-
-    <article class="article-body">
+  const body = `      <h2 id="privacy-summary">In brief</h2>
+      <p>There is no site account. Calculations run locally; favourites and interface preferences are stored in this browser. Suggestions are prepared locally and are sent to GitHub only when you choose to continue and submit them there. GitHub hosting, Google Analytics and advertising involve third-party processing described below.</p>
+      <p><button class="share-btn" type="button" data-privacy-choices>Change my privacy choices</button></p>
+      <p>This action asks the consent manager to reopen. If it is unavailable or blocked, the site reports that honestly; pressing the button does not accept cookies or change your choice by itself.</p>
       <h2 id="who-runs-this-site">Who runs this site</h2>
       <p>benoit-gaumard.io is a personal website published by Benoit Gaumard, an Azure infrastructure and DevOps consultant. It hosts free tools, reference data, and technical articles about Microsoft Azure, GitHub, and cloud operations. It is a personal project and is not operated by any employer.</p>
       <p>For any question about this policy, you can reach me through <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
 
       <h2 id="what-data-is-collected">What data is collected</h2>
-      <p>There is no account system, no newsletter, and no contact form on this site. I never ask you for your name, email address, or any other identifying detail, and I do not sell or rent data to anyone.</p>
-      <p>Three categories of data exist:</p>
+      <p>There is no account system or newsletter on this site. Some tools offer suggestion forms with a name, title, URL or description. These fields prepare a GitHub issue locally. Opening the GitHub draft transmits the prefilled information to GitHub; submitting it there can make it public, associated with your GitHub account. Do not include confidential information or personal details you do not want published.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Data purposes"><table><thead><tr><th scope="col">Purpose</th><th scope="col">Data and destination</th><th scope="col">Control</th></tr></thead><tbody>
+        <tr><td data-label="Purpose">Local tools and preferences</td><td data-label="Data and destination">Calculator inputs, favourites, theme, view and filter preferences in this browser. Some filters can also appear in a shareable URL.</td><td data-label="Control">Use the tool's reset/favourite controls, or manage local site storage in browser settings. Shared URLs disclose their query parameters to recipients and hosting services.</td></tr>
+        <tr><td data-label="Purpose">Suggestions</td><td data-label="Data and destination">Voluntarily forwarded draft fields and, on submission, your GitHub issue and profile.</td><td data-label="Control">Review before opening/submitting. Manage the resulting issue on GitHub.</td></tr>
+        <tr><td data-label="Purpose">Page delivery</td><td data-label="Data and destination">Connection information processed by GitHub Pages. Linked or embedded third-party images can also receive a request.</td><td data-label="Control">See the provider's privacy policy; external destinations have their own policies.</td></tr>
+        <tr><td data-label="Purpose">Audience measurement</td><td data-label="Data and destination">Page and technical measurement data sent to Google Analytics under the tag's consent settings.</td><td data-label="Control">Change privacy choices. Denied storage is not the same as no network requests.</td></tr>
+        <tr><td data-label="Purpose">Advertising</td><td data-label="Data and destination">Google and advertising partners may process ad requests and, where permitted by choices and configuration, cookies and personalisation data.</td><td data-label="Control">Consent manager and Google's advertising settings.</td></tr>
+      </tbody></table></div>
       <ul>
-        <li><strong>Data that never leaves your browser.</strong> Every calculator and generator here runs entirely client-side. Values you type into the subnet calculator, the GUID generator, the SLA calculator, the units converter, or any other tool are processed in your browser and are never sent to a server. Preferences such as your light or dark theme choice, and whether you dismissed the announcement banner, are stored in your browser's local storage and stay on your device.</li>
+        <li><strong>Local processing.</strong> Calculations run in your browser. Favourites and saved preferences are local to this browser, not synchronised to a site account. Exporting, copying or sharing results and sending suggestions are deliberate actions that can move that information elsewhere.</li>
         <li><strong>Technical data from hosting.</strong> The site is served by GitHub Pages. Like any web host, GitHub processes connection data such as your IP address in order to deliver pages and protect the service against abuse. See the <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</li>
-        <li><strong>Measurement and advertising data.</strong> Described below. This is the only category that depends on your consent.</li>
+        <li><strong>Measurement and advertising data.</strong> Described below, with controls in the consent manager when available.</li>
       </ul>
 
       <h2 id="advertising">Advertising: Google AdSense</h2>
@@ -1151,32 +1427,50 @@ function renderPrivacyPage() {
         <li>You can opt out of third-party vendor cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info</a> or <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer">Your Online Choices</a>.</li>
         <li>Google's own handling of this data is described in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">how Google uses information from sites that use its services</a>.</li>
       </ul>
-      <p>The complete, always-current list of advertising partners that may set cookies is shown inside the consent dialogue itself, under the vendor list.</p>
+      <p>Consult the vendor and purpose details in the consent dialogue for the choices offered by the active configuration. This privacy page does not load the advertising script or contain ad slots.</p>
 
       <h2 id="analytics">Analytics</h2>
       <p>This site uses Google Analytics 4 to understand, in aggregate, which pages and tools are useful. It reports things such as how many people visited a page and which country traffic came from. IP addresses are handled by Google under the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>, and analytics storage stays disabled until you consent.</p>
-      <p>I do not use analytics to build profiles of individual visitors, and I have no way to identify you personally from these reports.</p>
+      <p>The intended use is aggregate audience measurement, not an account-based visitor profile. Google may still process technical request information, including restricted-mode signals when storage is denied.</p>
 
       <h2 id="cookies-and-consent">Cookies and your consent</h2>
       <p>This site implements Google Consent Mode v2. Before you make a choice, advertising storage, advertising personalisation, ad user data, and analytics storage are all set to <em>denied</em>. Google tags run in a restricted mode and no advertising or analytics cookies are used for personalisation.</p>
-      <p>If you are in the European Economic Area, the United Kingdom, or Switzerland, a consent dialogue from a Google-certified consent management platform appears on your first visit. It lets you accept or refuse cookies used for personalised advertising and measurement.</p>
+      <p>Where Google's configured consent message is available, it offers the applicable purpose and vendor choices. Availability can depend on region, prior choices, provider configuration and content blockers. The site cannot guarantee that a dialogue will appear in every browser.</p>
       <ul>
-        <li><strong>If you accept</strong>, advertising and analytics cookies are enabled and ads may be personalised.</li>
-        <li><strong>If you refuse</strong>, you keep full access to every page and tool. Advertising, where present, is limited to non-personalised ads, which still require a basic ad request but do not build an advertising profile from your browsing.</li>
-        <li><strong>To change your mind later</strong>, clear this site's cookies in your browser settings and reload any page: the dialogue is shown again. You can also manage Google-wide advertising choices in <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
+        <li><strong>Your selected choices</strong> control the permitted purposes through the configured consent manager; accepting one purpose is not a blanket description of all others.</li>
+        <li><strong>If you refuse</strong>, you keep access to the tools and articles. Restricted advertising or measurement requests may still occur; denied storage does not mean no third-party processing.</li>
+        <li><strong>To change your mind later</strong>, use <button class="share-btn" type="button" data-privacy-choices>Change my privacy choices</button>. This requests the consent manager, not consent itself. If unavailable, consult <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a> for Google-wide choices; those are not a substitute for this site's consent dialogue.</li>
       </ul>
-      <p>Strictly necessary storage — remembering your theme preference and the dismissal of the announcement banner — is not covered by consent because it is required to deliver the interface you asked for, and it is never shared with anyone.</p>
+      <p>Local storage remembers requested interface features such as theme, favourites and view preferences. These controls are separate from advertising choices. Removing local storage clears those saved preferences; it is not the normal route for reopening the consent manager.</p>
 
       <h2 id="your-rights">Your rights</h2>
       <p>Under the GDPR you can request access to, correction of, or erasure of personal data relating to you, object to processing, and lodge a complaint with a supervisory authority — in France, the <a href="https://www.cnil.fr/" target="_blank" rel="noopener noreferrer">CNIL</a>.</p>
-      <p>Because this site holds no account, no mailing list, and no server-side visitor database, I hold no personal data that would let me identify you. Requests about advertising or analytics data collected by Google should be addressed to Google, which acts as controller for that processing; see the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.</p>
+      <p>There is no site account or mailing list. If you have sent a suggestion, include its GitHub issue link when contacting the publisher through <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>, without publishing sensitive details in an issue. Requests about provider-held data may also need to be addressed to GitHub or Google; see their linked privacy policies. This description of site behaviour is not a legal compliance certification.</p>
 
       <h2 id="children">Children</h2>
       <p>This site publishes professional technical documentation for cloud engineers. It is not directed at children under 16, and no content here is created for a child audience.</p>
 
       <h2 id="changes">Changes to this policy</h2>
-      <p>This policy is updated when the site's tooling changes — for example if an advertising or measurement provider is added or removed. The date at the top of this page always reflects the latest version.</p>
+      <p>This policy is updated when the site's tooling changes — for example if an advertising or measurement provider is added or removed. The date at the top of this page always reflects the latest version.</p>`;
+  const headings = [...body.matchAll(/<h2 id="([^"]+)">([^<]+)<\/h2>/g)]
+    .map(([, id, text]) => ({ level: 2, id, text }));
+  const content = `    <div class="article-header">
+      <p class="article-breadcrumb"><a href="/">&larr; Home</a></p>
+      <h1 class="article-title">Privacy Policy</h1>
+      <p class="article-description">${description}</p>
+      <div class="article-meta">
+        <span>Benoit Gaumard</span>
+        <span class="dot">&middot;</span>
+        <span>Last updated ${formatDisplayDate(PRIVACY_UPDATED)}</span>
+      </div>
+    </div>
+
+    <div class="reading-layout">
+    ${articleToc(headings)}
+    <article class="article-body" id="article-content">
+${body}
     </article>
+    </div>
 
     <div class="article-footer-nav">
       <a href="/">&larr; Back to home</a>
@@ -1189,6 +1483,8 @@ function renderPrivacyPage() {
     canonical: `${SITE_URL}/privacy/`,
     headerActive: "",
     content,
+    bodyClass: "article-page",
+    ads: false,
   });
 }
 
@@ -1247,7 +1543,7 @@ async function featureImageShape(src) {
     if (/\.svg$/i.test(src)) size = readSvgSize(await readFile(file, "utf8"));
     else {
       const buffer = await readFile(file);
-      size = /\.png$/i.test(src) ? readPngSize(buffer) : readJpegSize(buffer);
+      size = readPngSize(buffer) || readJpegSize(buffer);
     }
     if (!size || !size.width || !size.height) {
       console.warn(`  feature image size unreadable, treating as a banner: ${src}`);
@@ -1268,13 +1564,36 @@ async function loadArticle(filename) {
   if (!data.description) throw new Error(`${filename}: missing "description" in frontmatter`);
 
   const slug = filename.replace(/\.md$/i, "");
-  const { html: bodyHtml } = markdownToHtml(body.trim());
+  const rendered = markdownToHtml(body.trim());
+  let bodyHtml = rendered.html.replace(/<nav class="article-toc"[\s\S]*?<\/nav>/g, "");
+  if (/^(azure-policy|dns-in-azure)-part-/.test(slug)) {
+    bodyHtml = bodyHtml.replace(/<ul>[\s\S]*?<\/ul>/g, list => (list.match(/href="\/articles\/(?:azure-policy|dns-in-azure)-part-/g) || []).length >= 5 ? "" : list);
+  }
+  if (Array.isArray(data.leadSections)) {
+    const sections = bodyHtml.split(/(?=<h2 id=")/);
+    const intro = sections.shift();
+    const promoted = [];
+    for (const title of data.leadSections) {
+      const at = sections.findIndex(section => section.startsWith(`<h2 id="${slugify(title)}">`));
+      if (at < 0) throw new Error(`${filename}: lead section not found: ${title}`);
+      promoted.push(...sections.splice(at, 1));
+    }
+    bodyHtml = [intro, ...promoted, ...sections].join("");
+  }
+  for (const title of data.collapsible || []) {
+    const id = slugify(title);
+    const level = rendered.headings.find(heading => heading.id === id)?.level;
+    if (!level) throw new Error(`${filename}: collapsible section not found: ${title}`);
+    const expression = new RegExp(`(<h${level} id="${id}">[\\s\\S]*?<\\/h${level}>)([\\s\\S]*?)(?=<h[2-${level}]\\b|$)`);
+    bodyHtml = bodyHtml.replace(expression, (_, heading, section) => `<details class="reference-section"><summary id="${id}">${renderInline(title)}</summary>${section}</details>`);
+  }
   const wordCount = countWords(body);
 
   return {
     slug,
     title: data.title,
     description: data.description,
+    summary: data.summary || "",
     author: data.author || DEFAULT_AUTHOR,
     date: data.date,
     tags: Array.isArray(data.tags) ? data.tags : [],
@@ -1284,6 +1603,8 @@ async function loadArticle(filename) {
     featured: data.featured === true,
     draft: data.draft === true,
     noindex: data.noindex === true,
+    related: Array.isArray(data.related) ? data.related : [],
+    headings: rendered.headings.sort((a, b) => bodyHtml.indexOf(`id="${a.id}"`) - bodyHtml.indexOf(`id="${b.id}"`)),
     readingMinutes: Math.max(1, Math.round(wordCount / WORDS_PER_MINUTE)),
     url: `/articles/${slug}/`,
     bodyHtml,
@@ -1364,7 +1685,18 @@ ${items}
 `;
 }
 
+function htmlLineEndings(html) {
+  return html.replace(/\r+\n/g, "\n").replace(/^[ \t]+$/gm, "").replace(/\n/g, "\r\n");
+}
+
 async function main() {
+  if (process.argv.includes("--privacy-only")) {
+    const privacyDir = join(HERE, "..", "privacy");
+    await mkdir(privacyDir, { recursive: true });
+    await writeFile(join(privacyDir, "index.html"), htmlLineEndings(renderPrivacyPage()), "utf8");
+    console.log("Built /privacy/ (Privacy Policy).");
+    return;
+  }
   const files = (await readdir(contentDir)).filter((f) => f.endsWith(".md"));
   if (!files.length) {
     console.log(`No markdown files found in ${contentDir}`);
@@ -1377,16 +1709,16 @@ async function main() {
   for (const article of published) {
     const outDir = join(HERE, article.slug);
     await mkdir(outDir, { recursive: true });
-    await writeFile(join(outDir, "index.html"), renderArticlePage(article), "utf8");
+    await writeFile(join(outDir, "index.html"), htmlLineEndings(renderArticlePage(article, published)), "utf8");
   }
 
   const privacyDir = join(HERE, "..", "privacy");
   await mkdir(privacyDir, { recursive: true });
-  await writeFile(join(privacyDir, "index.html"), renderPrivacyPage(), "utf8");
+  await writeFile(join(privacyDir, "index.html"), htmlLineEndings(renderPrivacyPage()), "utf8");
 
   const articlesJson = {
     generatedAt: new Date().toISOString(),
-    articles: published.map(({ bodyHtml, draft, ...meta }) => meta),
+    articles: published.map(({ bodyHtml, headings, related, draft, ...meta }) => meta),
   };
   await writeFile(join(HERE, "articles.json"), `${JSON.stringify(articlesJson, null, 2)}\n`, "utf8");
   await writeFile(join(HERE, "rss.xml"), buildRss(published), "utf8");
@@ -1394,7 +1726,7 @@ async function main() {
   const indexPath = join(HERE, "index.html");
   const indexHtml = await readFile(indexPath, "utf8");
   const indexed = published.filter((a) => !a.noindex);
-  const nextIndexHtml = injectStaticList(indexHtml, indexed);
+  const nextIndexHtml = injectStaticList(indexHtml, indexed).replace(/\r+\n/g, "\n").replace(/\n/g, "\r\n");
   if (nextIndexHtml !== indexHtml) await writeFile(indexPath, nextIndexHtml, "utf8");
 
   console.log(`Built ${published.length} article(s):`);

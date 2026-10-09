@@ -28,6 +28,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate region evidence rules
+        shell: pwsh
+        run: ./.github/scripts/azure-regions.test.ps1
+
       - name: Fetch latest Azure regions
         shell: pwsh
         env:

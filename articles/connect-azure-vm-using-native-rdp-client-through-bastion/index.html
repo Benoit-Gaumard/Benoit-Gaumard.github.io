@@ -46,7 +46,7 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="benoit-gaumard.io">
-  <meta property="og:title" content="Connect to an Azure VM Using the Native RDP Client Through Bastion | Benoit Gaumard">
+  <meta property="og:title" content="Native RDP Through Azure Bastion | Benoit Gaumard">
   <meta property="og:description" content="Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.">
   <meta property="og:url" content="https://benoit-gaumard.io/articles/connect-azure-vm-using-native-rdp-client-through-bastion/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
@@ -61,7 +61,7 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Connect to an Azure VM Using the Native RDP Client Through Bastion",
+  "headline": "Native RDP Through Azure Bastion",
   "description": "Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.",
   "url": "https://benoit-gaumard.io/articles/connect-azure-vm-using-native-rdp-client-through-bastion/",
   "author": {
@@ -97,14 +97,14 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Connect to an Azure VM Using the Native RDP Client Through Bastion",
+      "name": "Native RDP Through Azure Bastion",
       "item": "https://benoit-gaumard.io/articles/connect-azure-vm-using-native-rdp-client-through-bastion/"
     }
   ]
 }
   </script>
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
-  <title>Connect to an Azure VM Using the Native RDP Client Through Bastion | Benoit Gaumard</title>
+  <title>Native RDP Through Azure Bastion | Benoit Gaumard</title>
 
   <style>
     :root {
@@ -214,7 +214,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -354,23 +354,6 @@
     .article-meta .dot { opacity: .5; }
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
-    .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem;
-      border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
-      box-shadow: var(--cp-shadow); overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
-    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
-    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    /* Square service and product logos get one shared band instead: the height
-       is fixed so every logo hero matches, and the sources are vector, so the
-       small ones scale up to it without softening. */
-    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
-    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
-    @media (max-width: 32rem) {
-      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
-    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -395,12 +378,13 @@
     .article-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
     .article-body th { background: var(--cp-surface-soft); }
-    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; color: #e3edf7; color-scheme: dark; }
     .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: 0.8rem; }
     .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
-    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button { border: 1px solid #b9d3ea; background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .copy-code-button:hover { background: rgba(255,255,255,.1); }
-    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .copy-code-button.is-copied { border-color: #9ee8c8; color: #9ee8c8; }
+    .copy-code-button:focus-visible, .code-details > summary:focus-visible { outline-color: #b9d3ea; }
     .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
     .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
     /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
@@ -443,6 +427,106 @@
       .article-share { flex-direction: column; align-items: flex-start; }
       .article-share-links { width: 100%; }
     }
+    .article-header { max-width: 75ch; margin-inline: auto; margin-bottom: 1rem; }
+    .article-page .article-header { max-width: none; margin-inline: 0; }
+    .article-title { font-size: clamp(1.7rem, 3.3vw, 2.65rem); }
+    .article-breadcrumb, .article-categories { margin-bottom: .6rem; }
+    .article-description { margin-top: .7rem; }
+    .article-meta { margin-top: .7rem; }
+    .article-tags { margin-top: .5rem; }
+    .article-body { min-width: 0; padding: clamp(1rem, 2.2vw, 2rem); }
+    .article-page main { padding-top: 1.25rem; }
+    .article-body > :is(p, ul, ol, h2, h3, h4, .callout),
+    .article-body .library-entry > :is(p, ul, ol),
+    .article-body .reference-section > :is(p, ul, ol),
+    .callout-body { max-width: var(--reading-prose-width, min(42rem, 72ch)); margin-inline: auto; }
+    .article-body > :is(h2, h3, h4) { max-width: var(--reading-heading-width, 42rem); }
+    .article-body > h2:first-child { margin-top: .4rem; }
+    .callout-body { min-width: 0; }
+    .reading-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .reading-layout:has(> .reading-toc:not([open])) { grid-template-columns: minmax(0, 1fr); --reading-prose-width: none; --reading-heading-width: none; }
+    .reading-layout > .reading-toc { scroll-margin-top: 6rem; }
+    .reading-layout > .reading-toc:not([open]) { justify-self: start; max-width: 100%; position: static; }
+    .reading-toc { border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); padding: .7rem 1rem; }
+    .reading-toc summary, .article-share summary, .series-map summary, .library-group > summary { cursor: pointer; min-height: 2.75rem; align-content: center; font-weight: 600; }
+    .reading-toc[open] .toc-label-show, .reading-toc:not([open]) .toc-label-hide { display: none; }
+    .reading-toc nav { max-height: 55vh; overflow: auto; }
+    .reading-toc ul { list-style: none; padding: 0; margin: .5rem 0; }
+    .reading-toc a { display: block; padding: .35rem .2rem; font-size: .9rem; }
+    .reading-toc .toc-level-4 { display: none; }
+    .article-share { display: block; padding: .2rem .8rem; margin: .6rem 0 1rem; }
+    .article-share-links { padding-block: .5rem; }
+    .series-nav, .article-related { margin: 1rem 0; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); }
+    .series-nav > p { margin: 0 0 .5rem; }
+    .series-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
+    .series-map ol { line-height: 1.6; padding-left: 1.5rem; }
+    .series-map [aria-current="page"] { font-weight: 700; }
+    .article-related h2 { font-size: 1.15rem; margin-top: 0; }
+    .article-related li { margin-block: .55rem; }
+    .article-feature-image { max-width: 50rem; margin: 1rem auto 1.5rem; border: 1px solid var(--cp-border); border-radius: 14px; background: var(--cp-surface-soft); overflow: hidden; }
+    .article-feature-image > a:focus-visible { outline-offset: -3px; }
+    .article-feature-image img { display: block; border: 0; border-radius: 0; }
+    .article-feature-image.is-banner > a { display: block; aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; }
+    .article-feature-image.is-logo > a { display: flex; align-items: center; justify-content: center; height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+    .article-feature-image figcaption { margin: 0; padding: .5rem .75rem; }
+    .article-figure figcaption { max-width: 72ch; margin-inline: auto; }
+    .article-figure figcaption a { display: inline-block; padding: .3rem; }
+    .image-dialog { color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 10px; max-width: 96vw; max-height: 94vh; padding: 1rem; }
+    .image-dialog::backdrop { background: var(--cp-text-muted); opacity: .8; }
+    .image-dialog figure { margin: 1rem 0; }
+    .image-dialog img { max-width: 100%; max-height: 72vh; object-fit: contain; }
+    .image-dialog figcaption { max-width: 72ch; }
+    .copy-code-button { min-height: 2.75rem; padding: .4rem .7rem; }
+    .code-block pre { white-space: pre; overflow-wrap: normal; }
+    .code-block pre code { white-space: pre; overflow-wrap: normal; }
+    .code-details summary { padding: .7rem 1rem; cursor: pointer; }
+    .library-controls, .zone-controls { padding: 1rem; margin-bottom: 1rem; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 10px; display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+    .library-controls label, .zone-controls label { display: grid; gap: .3rem; }
+    .library-controls input, .library-controls select, .zone-controls input { max-width: 100%; min-height: 2.75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: .5rem; background: var(--cp-surface); color: var(--cp-text); }
+    .library-controls p, .zone-controls p { flex-basis: 100%; margin: 0; }
+    .library-group { border: 1px solid var(--cp-border); border-radius: 10px; padding: .6rem 1rem; margin-bottom: 1rem; }
+    .library-entry { min-width: 0; margin-block: 1rem 2rem; }
+    .library-entry h3 { scroll-margin-top: 6rem; }
+    .query-context { font-size: .9rem; color: var(--cp-text-muted); }
+    .query-output { overflow-wrap: anywhere; }
+    .reference-section { margin-bottom: 1.25rem; }
+    .reference-section > summary { cursor: pointer; font-size: 1.15rem; font-weight: 600; padding: .75rem; background: var(--cp-surface-soft); }
+    .table-wrap [hidden], .library-group[hidden], .library-entry[hidden] { display: none !important; }
+    @media (min-width: 75rem) {
+      .reading-layout { grid-template-columns: 16rem minmax(0, 1fr); }
+      .reading-toc { position: sticky; top: 5.5rem; }
+      .reading-toc nav { max-height: calc(100vh - 12rem); }
+      .reading-layout:not(:has(.reading-toc)) { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 40rem) {
+      .article-feature-image.is-logo > a { height: 10rem; padding: 1.25rem; }
+      .article-tags { display: none; }
+      .article-body { font-size: 1rem; line-height: 1.65; }
+      .article-body table, .article-body tbody, .article-body tr, .article-body td { display: block; }
+      .article-body thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+      .article-body tr { margin-bottom: .8rem; border: 1px solid var(--cp-border); border-radius: 8px; }
+      .article-body td { border: 0; padding: .55rem .7rem; overflow-wrap: anywhere; }
+      .article-body td::before { content: attr(data-label); display: block; font-weight: 700; color: var(--cp-text-muted); font-size: .8rem; }
+      .article-body td + td { border-top: 1px solid var(--cp-border); }
+      .table-wrap { overflow: visible; }
+      .library-controls > label, .zone-controls > label { width: 100%; }
+      .series-nav { font-size: .9rem; padding: .7rem; }
+      .series-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; }
+      .series-nav > p { flex-basis: 100%; margin: 0; }
+      .series-links { flex: 1; }
+      .series-map[open] { flex-basis: 100%; }
+      .series-map summary { min-height: 2.5rem; }
+      .reading-toc { padding: .2rem .75rem; }
+      .article-description { font-size: 1rem; line-height: 1.5; }
+    }
+    @media print {
+      .reading-toc, .article-share, .article-feature-image, .library-controls, .zone-controls, .copy-code-button { display: none !important; }
+      .reading-layout { display: block; }
+      .article-body { border: 0; box-shadow: none; padding: 0; }
+      .code-block pre { white-space: pre-wrap; }
+    }
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
@@ -477,7 +561,7 @@
       }
     }
 
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -488,12 +572,382 @@
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
   </style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/articles/connect-azure-vm-using-native-rdp-client-through-bastion/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/articles/connect-azure-vm-using-native-rdp-client-through-bastion/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
-<body class="">
+<body class="article-page">
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -527,35 +981,39 @@
     <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=Bastion">Bastion</a></div>
-      <h1 class="article-title">Connect to an Azure VM Using the Native RDP Client Through Bastion</h1>
+      <h1 class="article-title">Native RDP Through Azure Bastion</h1>
       <p class="article-description">Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
-        <span>March 6, 2026</span>
+        <span>Published March 6, 2026</span>
         <span class="dot">&middot;</span>
-        <span>2 min read</span>
+        <span>About 3 min reading · not implementation time</span>
       </div>
       <div class="article-tags"><span class="article-tag">#Bastion</span><span class="article-tag">#RDP</span><span class="article-tag">#Networking</span></div>
     </div>
 
-    <div class="article-share">
-      <span class="article-share-label" id="share-label">Share on</span>
+    <figure class="article-feature-image article-figure is-logo"><a href="/articles/images/bastion/bastion.svg" data-image-zoom aria-label="Enlarge article illustration"><img src="/articles/images/bastion/bastion.svg" alt="Native RDP Through Azure Bastion" loading="eager" fetchpriority="high" decoding="async"></a><figcaption>Article illustration · <a href="/articles/images/bastion/bastion.svg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+
+    <details class="article-share">
+      <summary id="share-label">Share this article</summary>
       <div class="article-share-links" role="group" aria-labelledby="share-label">
-        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fconnect-azure-vm-using-native-rdp-client-through-bastion%2F&amp;text=Connect%20to%20an%20Azure%20VM%20Using%20the%20Native%20RDP%20Client%20Through%20Bastion" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fconnect-azure-vm-using-native-rdp-client-through-bastion%2F&amp;text=Native%20RDP%20Through%20Azure%20Bastion" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
         <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fconnect-azure-vm-using-native-rdp-client-through-bastion%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
         <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fconnect-azure-vm-using-native-rdp-client-through-bastion%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>Facebook</a>
         <button class="share-btn" type="button" data-article-share="copy" data-share-url="https://benoit-gaumard.io/articles/connect-azure-vm-using-native-rdp-client-through-bastion/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</button>
         <button class="share-btn" type="button" data-article-share="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
       </div>
       <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
-    </div>
+    </details>
 
-    <div class="article-feature-image is-logo"><img src="/articles/images/bastion/bastion.svg" alt="Connect to an Azure VM Using the Native RDP Client Through Bastion"></div>
 
-    <article class="article-body">
+
+    <div class="reading-layout">
+    <details class="reading-toc"><summary aria-controls="article-toc-navigation"><span class="toc-label-show">Show table of contents</span><span class="toc-label-hide">Hide table of contents</span></summary><nav id="article-toc-navigation" aria-label="Table of contents"><ul><li class="toc-level-2"><a href="#introduction">Introduction</a></li><li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li><li class="toc-level-2"><a href="#azure-bastion-native-client-support">Azure Bastion native client support</a></li><li class="toc-level-2"><a href="#create-the-rdp-tunnel">Create the RDP tunnel</a></li><li class="toc-level-3"><a href="#1-select-context-and-open-the-tunnel">1. Select context and open the tunnel</a></li><li class="toc-level-3"><a href="#2-open-the-client">2. Open the client</a></li><li class="toc-level-3"><a href="#3-close-and-troubleshoot">3. Close and troubleshoot</a></li></ul></nav></details>
+    <article class="article-body" id="article-content">
       <p>Azure Bastion is a fully managed PaaS service that provides secure and seamless RDP/SSH connectivity to your virtual machines directly over TLS from the Azure portal, or via the native SSH or RDP client already installed on your local computer.</p>
-<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#introduction">Introduction</a></li><li class="toc-level-2"><a href="#prerequisites">Prerequisites</a></li><li class="toc-level-2"><a href="#azure-bastion-native-client-support">Azure Bastion native client support</a></li><li class="toc-level-2"><a href="#create-the-rdp-tunnel">Create the RDP tunnel</a></li></ul></nav>
+
 <h2 id="introduction">Introduction</h2>
 <p>Official documentation is available here: <a href="https://learn.microsoft.com/en-us/azure/bastion/bastion-overview" target="_blank" rel="noopener noreferrer">Azure Bastion overview <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>.</p>
 <p>Native client support is a feature in Azure Bastion that lets you use native SSH and RDP programs to connect to Bastion instead of using the Azure Bastion web interface.</p>
@@ -570,46 +1028,55 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
 <h2 id="prerequisites">Prerequisites</h2>
-<ul><li>Azure Bastion deployed</li></ul>
+<ul><li>Confirm an existing Bastion SKU that supports native-client tunnelling (Standard or Premium; verify the current feature matrix).</li><li>Use a Windows desktop with <code>mstsc</code>, an authenticated Azure CLI session, and the intended tenant/subscription.</li><li>Confirm the documented Reader permissions on the Bastion, target VM and its NIC, plus valid guest login rights; network reachability is separate from guest authentication.</li><li>Confirm RDP is listening on the target VM and NSG/guest-firewall rules allow the Bastion path, not arbitrary Internet sources.</li></ul>
+<p>Reference versions and technical execution validation: <strong>not recorded</strong>. Check <a href="https://learn.microsoft.com/azure/bastion/connect-vm-native-client-windows" target="_blank" rel="noopener noreferrer">Connect using a native client <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> before changing a production deployment.</p>
 <div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>Native client support must be enabled on Bastion to create the tunnel.</p></div></div>
 <h2 id="azure-bastion-native-client-support">Azure Bastion native client support</h2>
 <p>Instead of logging in through the Azure portal, Azure Bastion now allows users to connect using their native RDP or SSH clients.</p>
 <p>Go to <strong>Bastion</strong> → <strong>Settings</strong> → <strong>Configuration</strong> → <strong>Native client support</strong>.</p>
-<figure class="article-figure"><img src="/articles/images/bastion/native-client-support.png" alt="Enabling native client support in the Bastion configuration settings" loading="lazy"></figure>
+<p>Enable and save. Reopen Configuration and confirm native client support remains enabled before creating a tunnel.</p>
+<figure class="article-figure"><a href="/articles/images/bastion/native-client-support.png" data-image-zoom aria-label="Enlarge: Enabling native client support in the Bastion configuration settings"><img src="/articles/images/bastion/native-client-support.png" alt="Enabling native client support in the Bastion configuration settings" loading="lazy"></a><figcaption>Enabling native client support in the Bastion configuration settings <a href="/articles/images/bastion/native-client-support.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <h2 id="create-the-rdp-tunnel">Create the RDP tunnel</h2>
-<p>Open a terminal:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az login --tenant &lt;your_tenant_id&gt; --use-device-code
+<h3 id="1-select-context-and-open-the-tunnel">1. Select context and open the tunnel</h3>
+<p>The commands below use <strong>PowerShell syntax</strong>, including backtick continuation, even though the executable is Azure CLI. Open a PowerShell terminal:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy powershell code">Copy</button></div><pre tabindex="0" aria-label="powershell code"><code class="language-powershell">az login --tenant &lt;your_tenant_id&gt; --use-device-code
 az account set --subscription &lt;your_subscription_id&gt;</code></pre></div>
 <p>Define your variables to target the VM to connect to:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">$BastionName = "bstbga01"
-$BastionRG = "rg-bst"
-$TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/providers/Microsoft.Compute/virtualMachines/vmapp001"</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy powershell code">Copy</button></div><pre tabindex="0" aria-label="powershell code"><code class="language-powershell">$BastionName = &quot;bstbga01&quot;
+$BastionRG = &quot;rg-bst&quot;
+$TargetVmResourceId = &quot;/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/providers/Microsoft.Compute/virtualMachines/vmapp001&quot;</code></pre></div>
 <div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>To get the VM resource ID, go to <strong>Virtual machines</strong> → select your VM → <strong>Overview</strong> → <strong>JSON View</strong> → copy the resource ID.</p></div></div>
-<figure class="article-figure"><img src="/articles/images/bastion/resource-json.png" alt="Copying the VM resource ID from the JSON view" loading="lazy"></figure>
+<figure class="article-figure"><a href="/articles/images/bastion/resource-json.png" data-image-zoom aria-label="Enlarge: Copying the VM resource ID from the JSON view"><img src="/articles/images/bastion/resource-json.png" alt="Copying the VM resource ID from the JSON view" loading="lazy"></a><figcaption>Copying the VM resource ID from the JSON view <a href="/articles/images/bastion/resource-json.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <p>Create the tunnel:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az network bastion tunnel --name $BastionName `
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy powershell code">Copy</button></div><pre tabindex="0" aria-label="powershell code"><code class="language-powershell">az network bastion tunnel --name $BastionName `
     --resource-group $BastionRG `
     --target-resource-id $TargetVmResourceId `
-    --resource-port "3389" `
-    --port "50022" `
+    --resource-port &quot;3389&quot; `
+    --port &quot;50022&quot; `
     --subscription xxx-xxx-xxx-xxx</code></pre></div>
-<figure class="article-figure"><img src="/articles/images/bastion/bastion-tunnel.png" alt="The Bastion tunnel command running and listening on the local port" loading="lazy"></figure>
-<p>Open an RDP connection to the VM:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">mstsc /v:127.0.0.1:50022</code></pre></div>
-<figure class="article-figure"><img src="/articles/images/bastion/mstsc.png" alt="Launching mstsc against the local tunnel endpoint" loading="lazy"></figure>
-<figure class="article-figure"><img src="/articles/images/bastion/rdp1.png" alt="RDP client connecting through the Bastion tunnel" loading="lazy"></figure>
-<figure class="article-figure"><img src="/articles/images/bastion/rdp2.png" alt="RDP certificate warning during the Bastion tunnel connection" loading="lazy"></figure>
-<figure class="article-figure"><img src="/articles/images/bastion/rdp3.png" alt="Successful RDP session on the target VM through Bastion" loading="lazy"></figure>
+<figure class="article-figure"><a href="/articles/images/bastion/bastion-tunnel.png" data-image-zoom aria-label="Enlarge: The Bastion tunnel command running and listening on the local port"><img src="/articles/images/bastion/bastion-tunnel.png" alt="The Bastion tunnel command running and listening on the local port" loading="lazy"></a><figcaption>The Bastion tunnel command running and listening on the local port <a href="/articles/images/bastion/bastion-tunnel.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+<h3 id="2-open-the-client">2. Open the client</h3>
+<p>Keep the tunnel terminal open and use a second terminal to launch the local client:</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy powershell code">Copy</button></div><pre tabindex="0" aria-label="powershell code"><code class="language-powershell">mstsc /v:127.0.0.1:50022</code></pre></div>
+<figure class="article-figure"><a href="/articles/images/bastion/mstsc.png" data-image-zoom aria-label="Enlarge: Launching mstsc against the local tunnel endpoint"><img src="/articles/images/bastion/mstsc.png" alt="Launching mstsc against the local tunnel endpoint" loading="lazy"></a><figcaption>Launching mstsc against the local tunnel endpoint <a href="/articles/images/bastion/mstsc.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+<figure class="article-figure"><a href="/articles/images/bastion/rdp1.png" data-image-zoom aria-label="Enlarge: RDP client connecting through the Bastion tunnel"><img src="/articles/images/bastion/rdp1.png" alt="RDP client connecting through the Bastion tunnel" loading="lazy"></a><figcaption>RDP client connecting through the Bastion tunnel <a href="/articles/images/bastion/rdp1.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+<figure class="article-figure"><a href="/articles/images/bastion/rdp2.png" data-image-zoom aria-label="Enlarge: RDP certificate warning during the Bastion tunnel connection"><img src="/articles/images/bastion/rdp2.png" alt="RDP certificate warning during the Bastion tunnel connection" loading="lazy"></a><figcaption>RDP certificate warning during the Bastion tunnel connection <a href="/articles/images/bastion/rdp2.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+<p>If the client presents a certificate warning, verify that the certificate/target is the expected VM through your organisation's trusted inventory. Do not treat every warning as safe to accept.</p>
+<figure class="article-figure"><a href="/articles/images/bastion/rdp3.png" data-image-zoom aria-label="Enlarge: Successful RDP session on the target VM through Bastion"><img src="/articles/images/bastion/rdp3.png" alt="Successful RDP session on the target VM through Bastion" loading="lazy"></a><figcaption>Successful RDP session on the target VM through Bastion <a href="/articles/images/bastion/rdp3.png" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <p>You should now be connected to the target VM through the Azure Bastion tunnel. You can use this connection to manage the VM as needed.</p>
 <hr>
 <div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Don't forget to close the tunnel when you're done by pressing <code>Ctrl+C</code> in the terminal where you started it - otherwise it keeps running and listening on the local port.</p></div></div>
-<p>Enjoy!</p>
+<h3 id="3-close-and-troubleshoot">3. Close and troubleshoot</h3>
+<p>Sign out of the RDP session, then press <code>Ctrl+C</code> in the tunnel terminal. Reopening the RDP connection on that local port should no longer work.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Symptom, Check table"><table><thead><tr><th scope="col">Symptom</th><th scope="col">Check</th></tr></thead><tbody><tr><td data-label="Symptom">Tunnel creation denied</td><td data-label="Check">Subscription, Bastion SKU/configuration and Reader permissions</td></tr><tr><td data-label="Symptom">Local port already used</td><td data-label="Check">Choose a free local port and use the same port in <code>mstsc</code></td></tr><tr><td data-label="Symptom">Tunnel opens, RDP times out</td><td data-label="Check">VM running state, target RDP listener, network and guest firewall</td></tr><tr><td data-label="Symptom">RDP login rejected</td><td data-label="Check">Guest credentials/login permissions; the tunnel does not grant them</td></tr></tbody></table></div>
     </article>
+    </div>
 
 
+
+    <aside class="article-related" aria-label="Related reading"><h2>Continue with</h2><ul><li><a href="/articles/allow-icmp-ping-on-an-azure-vm/">Allow ICMP (Ping) on an Azure VM</a><br><span>Allow an ICMPv4 echo request in a Windows VM's guest firewall, then separately verify the Azure network path and test the response.</span></li></ul></aside>
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
-      <a href="/articles/rss.xml">RSS feed</a>
     </div>
   </main>
 
@@ -617,7 +1084,7 @@ $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/provi
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -663,6 +1130,7 @@ $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/provi
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -678,12 +1146,7 @@ $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/provi
     document.querySelectorAll('[data-code-copy]').forEach((button) => {
       button.addEventListener("click", () => {
         const code = button.closest(".code-block").querySelector("code").textContent;
-        navigator.clipboard.writeText(code).then(() => {
-          const original = button.textContent;
-          button.textContent = "Copied!";
-          button.classList.add("is-copied");
-          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
-        });
+        window.SiteUX.copy(code, "Code", button);
       });
     });
     let scrollTicking = false;
@@ -697,43 +1160,9 @@ $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/provi
       });
     }, { passive: true });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    (function () {
-      const toggle = document.getElementById("menuToggle");
-      const nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      const closeMenu = () => { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); };
-      const openMenu = () => { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); };
-      toggle.addEventListener("click", (e) => {
-        e.stopPropagation();
-        nav.classList.contains("nav-open") ? closeMenu() : openMenu();
-      });
-      nav.addEventListener("click", (e) => { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", (e) => {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", () => { if (window.innerWidth > 760) closeMenu(); });
-    })();
-    (function () {
-      const toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", () => {
-        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        const next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-    (function () {
-      const banner = document.getElementById("newsBanner");
-      const closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
+
+
+
   </script>
 <script data-share-script>
     (function () {
@@ -778,13 +1207,9 @@ $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/provi
           // The build-time URL is canonical; location.href would carry any
           // tracking query string the visitor arrived with.
           var value = copyBtn.getAttribute('data-share-url') || location.href;
-          function done() { say('Link copied to the clipboard.'); }
-          function failed() { say(value); }
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(value).then(done, failed);
-          } else {
-            failed();
-          }
+          window.SiteUX.copy(value, "Article link", copyBtn).then(function (copied) {
+            say(copied ? "Link copied to the clipboard." : "Copy unavailable. Use the manual copy dialog.");
+          });
         });
       }
 
@@ -795,5 +1220,135 @@ $TargetVmResourceId = "/subscriptions/xxx-xxx-xxx-xxx/resourceGroups/rg-vm/provi
     })();
   </script>
 
-</body>
+  <script data-article-reading>
+  (function articleReadingRuntime() {
+  const toc = document.querySelector(".reading-toc");
+  if (toc) {
+    toc.open = matchMedia("(min-width: 75rem)").matches;
+    toc.addEventListener("toggle", () => {
+      if (document.activeElement === toc.querySelector("summary")) {
+        toc.scrollIntoView({ block: "nearest", behavior: "instant" });
+      }
+    });
+    toc.addEventListener("click", event => {
+      const link = event.target.closest("a[href^='#']");
+      if (!link) return;
+      const target = document.getElementById(link.hash.slice(1));
+      if (target) {
+        for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+        target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
+      if (matchMedia("(max-width: 74.99rem)").matches) toc.open = false;
+    });
+  }
+  const share = document.querySelector(".article-share");
+  if (share) share.open = matchMedia("(min-width: 40rem)").matches;
+  const revealReference = () => {
+    let target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+    if (!target) return;
+    if (target.tagName === "SUMMARY") target.parentElement.open = true;
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+  };
+  window.addEventListener("hashchange", revealReference);
+  revealReference();
+  let printState = [];
+  window.addEventListener("beforeprint", () => {
+    printState = [...document.querySelectorAll(".article-body details")].map(detail => [detail, detail.open]);
+    printState.forEach(([detail]) => { detail.open = true; });
+  });
+  window.addEventListener("afterprint", () => printState.forEach(([detail, open]) => { detail.open = open; }));
+
+  let imageDialog, imageOpener;
+  document.querySelectorAll("[data-image-zoom]").forEach(link => link.addEventListener("click", event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (!imageDialog) {
+      imageDialog = document.createElement("dialog");
+      imageDialog.className = "image-dialog";
+      imageDialog.setAttribute("aria-label", "Image viewer");
+      imageDialog.innerHTML = '<button type="button" class="share-btn" data-image-close>Close image</button><figure><img alt=""><figcaption></figcaption></figure><a target="_blank" rel="noopener">Open original image</a>';
+      document.body.append(imageDialog);
+      imageDialog.querySelector("[data-image-close]").addEventListener("click", () => imageDialog.close());
+      imageDialog.addEventListener("close", () => imageOpener?.focus());
+      imageDialog.addEventListener("click", e => { if (e.target === imageDialog) imageDialog.close(); });
+    }
+    imageOpener = link;
+    const source = link.querySelector("img");
+    imageDialog.querySelector("img").src = link.href;
+    imageDialog.querySelector("img").alt = source?.alt || "";
+    imageDialog.querySelector("figcaption").textContent = link.closest("figure")?.querySelector("figcaption")?.firstChild?.textContent || source?.alt || "";
+    imageDialog.querySelector("a").href = link.href;
+    imageDialog.showModal();
+    imageDialog.querySelector("button").focus();
+  }));
+
+  document.querySelectorAll("[data-copy-section]").forEach(button => button.addEventListener("click", () => {
+    const section = document.getElementById(button.dataset.copySection);
+    if (section) window.SiteUX.copy(section.innerText, "Checklist", button);
+  }));
+
+  const zoneTable = document.querySelector("[data-zone-table]");
+  if (zoneTable) {
+    const rows = [...zoneTable.querySelectorAll("tbody tr")];
+    const search = document.getElementById("zone-search");
+    const status = document.getElementById("zone-count");
+    rows.forEach(row => row.querySelectorAll("code").forEach(code => {
+      if (!code.textContent.includes("privatelink.")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "share-btn";
+      button.textContent = "Copy zone";
+      button.setAttribute("aria-label", "Copy " + code.textContent);
+      button.addEventListener("click", () => window.SiteUX.copy(code.textContent, "Private DNS zone", button));
+      code.after(button);
+    }));
+    const filter = () => {
+      let count = 0;
+      rows.forEach(row => { row.hidden = !row.textContent.toLowerCase().includes(search.value.trim().toLowerCase()); if (!row.hidden) count++; });
+      status.textContent = count + " of " + rows.length + " services" + (count ? "" : ". Try another service or zone name.");
+    };
+    search.addEventListener("input", filter);
+    document.getElementById("zone-reset").addEventListener("click", () => { search.value = ""; filter(); search.focus(); });
+    filter();
+  }
+
+  const library = document.querySelector("[data-reference-library]");
+  if (library) {
+    const groups = [...library.querySelectorAll(".library-group")];
+    const input = document.getElementById("library-search");
+    const category = document.getElementById("library-category");
+    const count = document.getElementById("library-count");
+    const entries = [...library.querySelectorAll(".library-entry")];
+    if (matchMedia("(max-width: 40rem)").matches) groups.forEach(group => { group.open = false; });
+    const filter = () => {
+      let visible = 0;
+      groups.forEach(group => {
+        let groupVisible = 0;
+        group.querySelectorAll(".library-entry").forEach(entry => {
+          entry.hidden = !(category.value === "" || group.dataset.category === category.value) || !entry.textContent.toLowerCase().includes(input.value.trim().toLowerCase());
+          if (!entry.hidden) { visible++; groupVisible++; }
+        });
+        group.hidden = !groupVisible;
+        if (input.value.trim() || category.value) group.open = !!groupVisible;
+      });
+      count.textContent = visible + " of " + entries.length + " entries" + (visible ? "" : ". Clear the search or choose another category.");
+    };
+    input.addEventListener("input", filter);
+    category.addEventListener("change", filter);
+    document.getElementById("library-reset").addEventListener("click", () => { input.value = ""; category.value = ""; filter(); input.focus(); });
+    const revealHash = () => {
+      let target;
+      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+      const group = target?.closest(".library-group");
+      if (group) { input.value = ""; category.value = ""; filter(); group.open = true; target.scrollIntoView({ block: "start", behavior: "instant" }); }
+    };
+    window.addEventListener("hashchange", revealHash);
+    filter();
+    revealHash();
+  }
+})();
+  </script>
+  </body>
 </html>

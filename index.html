@@ -75,6 +75,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -109,6 +110,11 @@
       --cp-accent-hover: #075b98;
       --cp-accent-soft: rgba(11, 111, 184, 0.09);
       --cp-accent-fg: #ffffff;
+      --cp-action-bg: #0b6fb8;
+      --cp-action-hover: #075b98;
+      --cp-action-fg: #ffffff;
+      --cp-mail-bg: #157f57;
+      --cp-mail-fg: #ffffff;
       --cp-success: #157f57;
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
@@ -123,6 +129,7 @@
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
       --radius: 8px;
       --header-h: 4.0625rem;
+      --section-nav-h: 3.5rem;
     }
     :root[data-theme="dark"] {
       color-scheme: dark;
@@ -137,6 +144,11 @@
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
       --cp-accent-fg: #ffffff;
+      --cp-action-bg: #4fa8ea;
+      --cp-action-hover: #6fbdf3;
+      --cp-action-fg: #0c1420;
+      --cp-mail-bg: #35c98d;
+      --cp-mail-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -158,7 +170,6 @@
       color: var(--cp-text);
       line-height: 1.7;
       background: var(--cp-bg);
-      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       font-size: 15px;
     }
@@ -203,14 +214,14 @@
     /* Terminal window chrome */
     .term { overflow: hidden; }
     .term-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
-    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot { width: 12px; height: 12px; flex: 0 0 auto; border-radius: 50%; }
     .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
     .term-title { margin-left: 10px; font-size: 0.8rem; color: var(--cp-text-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     .term-body { padding: 26px 28px; }
 
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
-    button:focus-visible, a:focus-visible {
+    button:focus-visible, a:focus-visible, summary:focus-visible {
       outline: 3px solid var(--cp-accent);
       outline-offset: 2px;
     }
@@ -222,8 +233,8 @@
       transform: translateY(-250%);
       padding: .6rem 1rem;
       border-radius: 6px;
-      background: var(--cp-accent);
-      color: var(--cp-accent-fg);
+      background: var(--cp-action-bg);
+      color: var(--cp-action-fg);
       font-size: 0.9rem;
       font-weight: 600;
       text-decoration: none;
@@ -238,8 +249,8 @@
       align-items: center;
       gap: .75rem;
       padding: .5rem 1rem;
-      background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      background: linear-gradient(90deg, var(--cp-action-bg), var(--cp-action-hover));
+      color: var(--cp-action-fg);
       overflow: hidden;
       position: relative;
     }
@@ -259,7 +270,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: inherit; text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -270,13 +281,13 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 2.75rem;
+      height: 2.75rem;
       padding: 0;
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-action-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -304,7 +315,7 @@
       justify-content: space-between;
       gap: 1rem;
     }
-    .brand { min-height: 1.5rem;
+    .brand { min-height: 2.75rem; min-width: 2.75rem;
       display: flex;
       align-items: center;
       gap: .5rem;
@@ -316,34 +327,37 @@
     .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
     .brand-mark { color: var(--cp-accent); }
     .header-links { display: flex; align-items: center; gap: 1rem; }
-    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .header-links a { min-height: 2.75rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
     .nav-icon { flex: 0 0 auto; opacity: .7; }
     .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
     .header-links a:hover { color: var(--cp-text); }
     .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
-    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
     .menu-toggle:hover { border-color: var(--cp-border-strong); }
     .menu-toggle .menu-icon-close { display: none; }
     .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
     .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
     .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
-    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
     .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
-    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
     .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
     .theme-toggle .theme-icon-sun { display: none; }
     :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
     :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
-    .lang-switch { display: flex; gap: .375rem; align-items: center; }
-    .lang-switch a { min-height: 1.5rem; box-sizing: border-box; justify-content: center; display: inline-flex; padding: 3px; border-radius: 6px; border: 1px solid var(--cp-border); line-height: 0; opacity: 0.55; transition: opacity 0.2s, border-color 0.2s, transform 0.15s; }
-    .lang-switch a svg { width: 22px; height: 15px; border-radius: 3px; display: block; }
-    .lang-switch a.active { opacity: 1; border-color: var(--cp-accent); box-shadow: 0 0 0 1px var(--cp-accent); }
-    .lang-switch a:not(.active):hover { opacity: 1; transform: translateY(-1px); border-color: var(--cp-accent); }
+    .lang-switch { display: flex; align-items: center; flex: 0 0 auto; gap: .125rem; }
+    .lang-switch a[hreflang] { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; padding: .4rem; border: 0; background: transparent; }
+    .lang-flag { display: block; width: 24px; height: 18px; object-fit: contain; }
+    .lang-switch a[aria-current="page"]::after { content: ""; position: absolute; left: 50%; bottom: .25rem; width: 24px; height: 2px; transform: translateX(-50%); background: var(--cp-accent); }
+    .lang-switch a:hover .lang-flag { opacity: .75; }
+    .link-language { color: var(--cp-text-muted); font-size: 0.75rem; font-weight: 400; }
+    .section-note { margin-bottom: 1rem; max-width: 65ch; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .t-language { margin-top: .25rem; color: var(--cp-text-muted); font-size: 0.75rem; }
 
-    .btn { display: inline-flex; align-items: center; gap: 9px; padding: .625rem 1.25rem; border-radius: 6px; font-family: inherit; font-weight: 700; font-size: 0.85rem; border: 1px solid var(--cp-border-strong); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
-    .btn-primary { background: var(--cp-accent); color: var(--cp-accent-fg); border: 0; }
-    .btn-primary:hover { background: var(--cp-accent-hover); transform: translateY(-2px); }
-    .btn-green { background: var(--cp-success); color: #fff; border: 0; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; gap: 9px; padding: .625rem 1.25rem; border-radius: 6px; font-family: inherit; font-weight: 700; font-size: 0.85rem; border: 1px solid var(--cp-border-strong); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
+    .btn-primary { background: var(--cp-action-bg); color: var(--cp-action-fg); border: 0; }
+    .btn-primary:hover { background: var(--cp-action-hover); transform: translateY(-2px); }
+    .btn-green { background: var(--cp-mail-bg); color: var(--cp-mail-fg); border: 0; }
     .btn-green:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,132,91,0.28); }
     .btn-ghost { background: var(--cp-surface); color: var(--cp-text); }
     .btn-ghost:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); transform: translateY(-2px); }
@@ -367,15 +381,15 @@
       backdrop-filter: blur(12px);
       box-shadow: 0 1px 2px var(--cp-border);
     }
-    .section-nav a { padding: .45rem .85rem; border-radius: 7px; color: var(--cp-text-muted); font-size: 0.85rem; white-space: nowrap; }
+    .section-nav a { display: inline-flex; align-items: center; min-height: 2.75rem; flex: 0 0 auto; padding: .45rem .85rem; border-radius: 7px; color: var(--cp-text-muted); font-size: 0.85rem; white-space: nowrap; }
     .section-nav a:hover { color: var(--cp-text); background: var(--cp-surface-soft); }
     .section-nav a[aria-current="location"] { color: var(--cp-accent); background: var(--cp-accent-soft); font-weight: 600; }
-    main [id] { scroll-margin-top: calc(var(--header-h) + 4rem); }
+    main [id] { scroll-margin-top: calc(var(--header-h) + var(--section-nav-h) + 1rem); }
 
 
     /* Hero */
-    .hero { margin-bottom: 2rem; }
-    .loc-badge {
+    .hero { margin-bottom: 0; }
+    .loc-badge, .hero-status {
       display: inline-flex; align-items: center; gap: 8px;
       margin: 4px 0 6px;
       padding: 7px 14px; border-radius: 999px;
@@ -394,17 +408,12 @@
       border: 2px solid var(--cp-border);
       box-shadow: 0 0 0 4px var(--cp-accent-soft), var(--cp-shadow);
     }
-    .cursor { display: inline-block; width: 9px; height: 1.05em; background: var(--cp-success); vertical-align: text-bottom; animation: blink 1.1s step-end infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
     .cmd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     .cmd::before { content: "PS> "; color: var(--cp-success); }
     .hero h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 8px 0 6px; }
-    .hero .role { color: var(--cp-accent); font-size: 1.05rem; margin-bottom: 18px; }
+    .hero .role { color: var(--cp-accent); font-size: 1.05rem; margin-bottom: 12px; }
     .hero p { color: var(--cp-text-muted); max-width: 62ch; }
-    .badges-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
-    .tagpill { border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: 5px 12px; font-size: 0.8rem; color: var(--cp-text-muted); background: var(--cp-surface-soft); }
-    .tagpill .k { color: var(--cp-success); }
-    .btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+    .hero .hero-status { margin-top: .75rem; color: var(--cp-success); font-size: 0.85rem; }
 
     section { padding: 2.5rem 0; }
     .sec-label { color: var(--cp-text-muted); font-size: 0.85rem; font-weight: 400; margin-bottom: 14px; }
@@ -412,7 +421,7 @@
     .sec-label .cm { color: var(--cp-text-muted); }
 
     /* Stats */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
     .stat { padding: 24px 18px; text-align: center; }
     .stat .n { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; }
     .stat .l { color: var(--cp-text-muted); font-size: 0.8rem; margin-top: 2px; }
@@ -430,8 +439,10 @@
       background: var(--cp-surface); border: 3px solid var(--cp-accent); box-shadow: 0 0 10px var(--cp-accent-soft); z-index: 1; }
     .tl-item:first-child .tl-dot { border-color: var(--cp-success); box-shadow: 0 0 14px rgba(22,132,91,0.35); }
     /* Experience - framed cards */
-    .exp-card { padding: 22px 26px; transition: transform 0.2s, border-color 0.2s; }
-    .exp-card:hover { transform: translateY(-4px); border-color: var(--cp-accent); }
+    .exp-card { padding: 22px 26px; }
+    .exp-card--current { border-color: var(--cp-accent); }
+    .exp-card--previous { padding: 16px 22px; background: var(--cp-surface-soft); box-shadow: none; }
+    .exp-card.exp-card--previous h3 { font-size: 1rem; }
     .exp-card .hash { color: var(--cp-warning); font-size: 0.8rem; }
     .exp-card .meta { color: var(--cp-text-muted); font-size: 0.8rem; margin: 2px 0 8px; }
     .exp-card h3 { font-size: 1.2rem; }
@@ -444,26 +455,25 @@
     .exp-head .co { margin: 2px 0 0; }
     .clients-label { color: var(--cp-text-muted); font-size: 0.8rem; margin: 14px 0 10px; }
     .clients { display: flex; flex-wrap: wrap; gap: 8px; }
-    .client { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 5px; border-radius: 999px; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); font-size: 0.75rem; color: var(--cp-text); transition: transform 0.15s, border-color 0.15s; }
-    .client:hover { transform: translateY(-2px); border-color: var(--cp-accent); }
-    .cl-logo { width: 20px; height: 20px; flex: 0 0 20px; border-radius: 5px; background: #fff; padding: 2px; object-fit: contain; box-shadow: 0 0 0 1px var(--cp-border); }
+    .client { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 5px; border-radius: 999px; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); font-size: 0.75rem; color: var(--cp-text); }
     .client--more { padding: 4px 11px; border-style: dashed; color: var(--cp-text-muted); font-style: italic; }
+    .cl-logo { width: 20px; height: 20px; flex: 0 0 20px; border-radius: 5px; background: #fff; padding: 2px; object-fit: contain; box-shadow: 0 0 0 1px var(--cp-border); }
 
     /* Certifications */
-    .certs { display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr)); gap: 14px; }
+    .certs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(228px, 100%), 1fr)); gap: 14px; }
     .cert { padding: 18px; display: flex; gap: 14px; align-items: center; transition: transform 0.2s, border-color 0.2s; }
     .cert:hover { transform: translateY(-4px); border-color: var(--cp-accent); }
     .cert img { width: 46px; height: 46px; }
     .cert .name { font-weight: 650; font-size: 0.9rem; line-height: 1.3; }
     .cert .code { color: var(--cp-text-muted); font-size: 0.8rem; }
     .cert .code::before { content: "// "; }
-    .transcript { display: inline-flex; align-items: center; min-height: 1.5rem; margin-top: 22px; color: var(--cp-accent); font-size: 0.85rem; }
+    .transcript { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: 22px; color: var(--cp-accent); font-size: 0.85rem; text-decoration: underline; text-underline-offset: .2em; }
     .transcript:hover { text-decoration: underline; }
 
     /* Skills - JSON-ish */
-    .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+    .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 14px; }
     .skill { padding: 22px; }
-    .skill h3 { font-size: 0.95rem; color: var(--cp-warning); margin-bottom: 10px; }
+    .skill h3 { font-size: 1.05rem; color: var(--cp-text); margin-bottom: 10px; }
     .skill h3::before { content: "▸ "; color: var(--cp-success); }
     .skill h3 .ic { margin-right: 6px; font-size: 1.05rem; }
     .skill h3 .ic img { width: 18px; height: 18px; display: inline-block; vertical-align: -3px; object-fit: contain; }
@@ -472,7 +482,7 @@
     .skill li::before { content: "- "; color: var(--cp-border-strong); }
 
     /* Tools */
-    .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 14px; }
     .tool { padding: 20px 22px; display: flex; align-items: center; gap: 14px; transition: transform 0.2s, border-color 0.2s; }
     .tool:hover { transform: translateY(-4px); border-color: var(--cp-accent); }
     .tool .t-ic { width: 42px; height: 42px; flex: 0 0 42px; display: grid; place-items: center; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px var(--cp-border); overflow: hidden; }
@@ -486,8 +496,9 @@
     /* Contact */
     .contact { padding: 40px; text-align: center; }
     .contact h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; margin-bottom: 10px; }
-    .contact h2 .g { color: var(--cp-success); }
+    .contact-command .g { color: var(--cp-success); }
     .contact p { color: var(--cp-text-muted); margin-bottom: 26px; }
+    .contact .contact-command { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; overflow-wrap: anywhere; margin-bottom: 1rem; }
     .contact-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
     footer.site-footer {
@@ -498,7 +509,7 @@
     .footer-inner { padding-block: 2rem 1.5rem; }
     .footer-main {
       display: grid;
-      grid-template-columns: minmax(16rem, 1fr) repeat(3, minmax(10rem, auto));
+      grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
       gap: 3rem;
       padding-bottom: 1.5rem;
     }
@@ -550,46 +561,61 @@
       padding: 0;
       border: 1px solid var(--cp-border);
       border-radius: 50%;
-      background: var(--cp-accent);
-      color: var(--cp-accent-fg);
+      background: var(--cp-action-bg);
+      color: var(--cp-action-fg);
       cursor: pointer;
       box-shadow: var(--cp-shadow);
       opacity: 0;
+      visibility: hidden;
       transform: translateY(.75rem);
       pointer-events: none;
       transition: opacity .2s ease, transform .2s ease;
     }
-    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
-    .back-to-top:hover { background: var(--cp-accent-hover); }
+    .back-to-top.visible { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-action-hover); }
 
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.in { opacity: 1; transform: none; }
 
-    @media (max-width: 760px) {
+    @media (max-width: 60rem) {
+      .footer-main { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 48rem) {
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
+      .header-actions .social-link { display: none; }
       .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
       .header-links.nav-open { display: flex; }
       .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
       .header-links a:hover { background: var(--cp-surface-soft); }
-      .section-nav { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
-      .section-nav::-webkit-scrollbar { display: none; }
-      .section-nav a { padding: .7rem .85rem; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
+      .section-nav { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: thin; margin-top: .75rem; scroll-padding-inline: .5rem; }
+      .section-nav a { padding: .5rem .7rem; }
+      .hero-cols { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .hero-main { flex-basis: 100%; }
-      .hero-photo { order: -1; }
-      .hero-photo img { width: 130px; height: 130px; }
-      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      .footer-about { grid-column: 1 / -1; }
+      .hero-photo img { width: 80px; height: 80px; }
+      .term-body { padding: 20px; }
+      .term-title { overflow-wrap: anywhere; min-width: 0; }
+      .timeline { margin-left: 0; padding-left: 26px; }
+      .tl-dot { left: -21px; }
+      .exp-card, .exp-card--previous { padding: 16px; }
     }
     @media (max-width: 32rem) {
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      main { padding-top: 1.25rem; }
+      .hero h1 { font-size: 2rem; }
+      .term-body { padding: 16px; }
+      .hero .loc-badge { font-size: 0.8rem; padding: 4px 8px; }
+      .contact { padding: 24px 16px; }
+      .contact-links { flex-direction: column; }
+      .stats { grid-template-columns: minmax(0, 1fr); }
+      .stat { padding: 18px 12px; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
       .footer-about { grid-column: auto; }
       .footer-bottom { flex-direction: column; }
     }
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } body::before { animation: none; } .cursor { animation: none; } .reveal { opacity: 1 !important; transform: none !important; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } body::before { animation: none; } .reveal { opacity: 1 !important; transform: none !important; } }
 
     @media print {
       body { background: #fff; color: #000; font-size: 11pt; }
@@ -626,12 +652,382 @@
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
   </style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -651,6 +1047,10 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+        <nav class="lang-switch" aria-label="Language">
+          <a href="/index_fr.html" hreflang="fr" lang="fr" aria-label="Français" title="Français"><img class="lang-flag" src="/flags/fr.png" alt="" width="24" height="18"></a>
+          <a href="/" hreflang="en" lang="en" aria-label="English" title="English" aria-current="page"><img class="lang-flag" src="/flags/en.png" alt="" width="24" height="18"></a>
+        </nav>
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -665,7 +1065,7 @@
   <main id="top" tabindex="-1">
     <!-- HERO glass terminal -->
     <div class="glass term hero" id="about">
-      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Windows PowerShell - benoit@azure:\portfolio</span></div>
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell - benoit@azure:\portfolio</span></div>
       <div class="term-body">
         <div class="hero-cols">
           <div class="hero-main">
@@ -673,12 +1073,8 @@
         <h1><span class="grad-text">Benoit Gaumard</span> </h1>
         <p class="role">Azure Infra &amp; DevOps Consultant </p>
         <p class="loc-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> Paris and Île-de-France, France</p>
-        <p>Hi, I'm a Cloud Consultant and Architect focused on Microsoft Azure and related services. As part of Microsoft, I’m passionate about cloud architecture, automation, infrastructure as code (IaC), DevOps and cloud-native solutions.
-        </p>
-        <div class="badges-row">
-          <span class="tagpill"><span class="k">Status</span>: Open to discuss</span>
-        </div>
-        <p style="margin-top:16px"><span class="cmd"></span><span class="cursor"></span></p>
+        <p>Hi, I'm a Cloud Consultant and Architect focused on Microsoft Azure and related services. As part of Microsoft, I’m passionate about cloud architecture, automation, infrastructure as code (IaC), DevOps and cloud-native solutions.</p>
+        <p class="hero-status">Status: Open to discuss</p>
           </div>
           <figure class="hero-photo">
             <img src="/linkedin-photo.jpg" alt="Photo of Benoit Gaumard" width="190" height="190" loading="eager" />
@@ -698,9 +1094,9 @@
     <!-- STATS -->
     <section class="reveal" aria-label="Key figures">
       <div class="stats">
-        <div class="stat glass"><div class="n grad-text" data-n="8" data-suffix="x">8x</div><div class="l">// certifications</div></div>
-        <div class="stat glass"><div class="n grad-text" data-n="20" data-suffix="+">20+</div><div class="l">// years_exp</div></div>
-        <div class="stat glass"><div class="n grad-text" data-n="80" data-suffix="+">80+</div><div class="l">// projects</div></div>
+        <div class="stat glass"><div class="n">8x</div><div class="l">Microsoft certifications</div></div>
+        <div class="stat glass"><div class="n">20+</div><div class="l">Years of experience</div></div>
+        <div class="stat glass"><div class="n">80+</div><div class="l">Projects</div></div>
       </div>
     </section>
 
@@ -709,7 +1105,7 @@
       <h2 class="sec-label" id="experience-title"><span class="g">PS&gt;</span> Professional Experience <span class="cm"># To present</span></h2>
       <div class="timeline">
         <div class="tl-item"><span class="tl-dot"></span>
-          <article class="glass exp-card">
+          <article class="glass exp-card exp-card--current">
             <span class="hash">2016 - Present</span>
             <div class="meta">(10 years)</div>
             <div class="exp-head">
@@ -723,7 +1119,7 @@
               <li>CI/CD pipelines setup (GitHub Actions, Azure DevOps).</li>
               <li>Governance, security and cloud cost optimization.</li>
           </ul>
-          <div class="clients-label">CAC40 key accounts supported:</div>
+          <div class="clients-label">Supported clients references (non-exhaustive):</div>
           <div class="clients">
             <span class="client"><img class="cl-logo" src="/favicons/thalesgroup.com.png" alt="Logo Thales" loading="lazy" width="20" height="20" />Thales</span>
             <span class="client"><img class="cl-logo" src="/favicons/cea.fr.jpg" alt="Logo CEA" loading="lazy" width="20" height="20" />CEA</span>
@@ -747,13 +1143,13 @@
             <span class="client"><img class="cl-logo" src="/favicons/vinci.com.png" alt="Logo Vinci" loading="lazy" width="20" height="20" />Vinci</span>
             <span class="client"><img class="cl-logo" src="/favicons/amadeus.com.png" alt="Logo Amadeus" loading="lazy" width="20" height="20" />Amadeus</span>
             <span class="client"><img class="cl-logo" src="/favicons/hbantwerp.com.png" alt="Logo HB Antwerp" loading="lazy" width="20" height="20" />HB Antwerp</span>
-                        <span class="client client--more" title="Non-exhaustive list">And more…</span>
-                      </div>
+            <span class="client client--more" title="Non-exhaustive list">And more…</span>
+          </div>
         </article>
         </div>
         <div class="tl-item">
           <span class="tl-dot"></span>
-          <article class="glass exp-card">
+          <article class="glass exp-card exp-card--previous">
             <span class="hash">Feb 2016 - May 2016</span>
             <div class="meta">4 months</div>
             <div class="exp-head">
@@ -770,7 +1166,7 @@
         </div>
         <div class="tl-item">
           <span class="tl-dot"></span>
-          <article class="glass exp-card">
+          <article class="glass exp-card exp-card--previous">
             <span class="hash">2012 - 2016</span>
             <div class="meta">4 years</div>
             <div class="exp-head">
@@ -786,7 +1182,7 @@
         </div>
         <div class="tl-item">
           <span class="tl-dot"></span>
-          <article class="glass exp-card">
+          <article class="glass exp-card exp-card--previous">
             <span class="hash">2009 - 2012</span>
             <div class="meta">3 years</div>
             <div class="exp-head">
@@ -802,7 +1198,7 @@
         </div>
         <div class="tl-item">
           <span class="tl-dot"></span>
-          <article class="glass exp-card">
+          <article class="glass exp-card exp-card--previous">
             <span class="hash">2005 - 2009</span>
             <div class="meta">4 years</div>
             <div class="exp-head">
@@ -825,31 +1221,103 @@
     <section id="certifications" class="reveal" aria-labelledby="certifications-title">
       <h2 class="sec-label" id="certifications-title"><span class="g">PS&gt;</span> Certifications <span class="cm"># 8x Microsoft certified</span></h2>
       <div class="certs">
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="Badge Fundamentals" width="46" height="46" /><div><div class="name">Azure Fundamentals</div><div class="code">AZ-900</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="Badge Fundamentals" width="46" height="46" /><div><div class="name">Azure AI Fundamentals</div><div class="code">AI-900</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="Badge Fundamentals" width="46" height="46" /><div><div class="name">Security, Compliance &amp; Identity</div><div class="code">SC-900</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Badge Associate" width="46" height="46" /><div><div class="name">Azure Security Engineer</div><div class="code">AZ-500 · associate</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Badge Associate" width="46" height="46" /><div><div class="name">Azure Network Engineer</div><div class="code">AZ-700 · associate</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Badge Associate" width="46" height="46" /><div><div class="name">Azure Administrator</div><div class="code">AZ-104 · associate</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-expert-badge.svg" alt="Badge Expert" width="46" height="46" /><div><div class="name">Azure Solutions Architect</div><div class="code">AZ-305 · expert</div></div></div>
-        <div class="cert glass"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/ai-transformation-leader.svg" alt="Badge AI Transformation Leader" width="46" height="46" /><div><div class="name">AI Transformation Leader</div><div class="code">AB-731</div></div></div>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-fundamentals/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="" width="46" height="46" /><div><div class="name">Azure Fundamentals</div><div class="code">AZ-900</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="" width="46" height="46" /><div><div class="name">Azure AI Fundamentals</div><div class="code">AI-900</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/security-compliance-and-identity-fundamentals/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="" width="46" height="46" /><div><div class="name">Security, Compliance &amp; Identity</div><div class="code">SC-900</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-security-engineer/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="" width="46" height="46" /><div><div class="name">Azure Security Engineer</div><div class="code">AZ-500 · associate</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-network-engineer-associate/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="" width="46" height="46" /><div><div class="name">Azure Network Engineer</div><div class="code">AZ-700 · associate</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="" width="46" height="46" /><div><div class="name">Azure Administrator</div><div class="code">AZ-104 · associate</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-solutions-architect/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/microsoft-certified-expert-badge.svg" alt="" width="46" height="46" /><div><div class="name">Azure Solutions Architect</div><div class="code">AZ-305 · expert</div></div></a>
+        <a class="cert glass" href="https://learn.microsoft.com/en-us/credentials/certifications/ai-transformation-leader/" target="_blank" rel="noopener"><img loading="lazy" src="https://learn.microsoft.com/media/learn/certification/badges/ai-transformation-leader.svg" alt="" width="46" height="46" /><div><div class="name">AI Transformation Leader</div><div class="code">AB-731</div></div></a>
       </div>
-      <a class="transcript" href="https://learn.microsoft.com/en-us/users/benoitgaumard-0811/transcript/73neeiew5w18rq4" target="_blank" rel="noopener">learn.microsoft.com/users/BenoitGaumard-0811</a>
+      <a class="transcript" href="https://learn.microsoft.com/en-us/users/benoitgaumard-0811/transcript/73neeiew5w18rq4" target="_blank" rel="noopener">View my verified Microsoft Learn transcript</a>
     </section>
 
     <!-- SKILLS -->
     <section id="skills" class="reveal" aria-labelledby="skills-title">
       <h2 class="sec-label" id="skills-title"><span class="g">PS&gt;</span> Skills <span class="cm"># My expertise</span></h2>
       <div class="skills">
-        <div class="skill glass"><h3><span class="ic"><img src="https://raw.githubusercontent.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/master/Azure/SVG/Azure-new-logo.svg" alt="" loading="lazy" width="18" height="18" /></span>Azure Cloud</h3><ul><li>Azure (Landing Zones, Compute, Networking, Storage, Security, Databases)</li><li>Infrastructure as Code (Terraform, Bicep)</li><li>Landing Zone Design &amp; Optimization</li><li>Azure API Management</li><li>FinOps</li></ul></div>
-        <div class="skill glass"><h3><span class="ic"><img src="https://raw.githubusercontent.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/master/Azure/SVG/Azure-new-logo.svg" alt="" loading="lazy" width="18" height="18" /></span>FinOps</h3><ul><li>Reserved instances and Saving plans</li><li>Cost Management &amp; Optimization</li><li>EA/MCA</li><li>Cost management and Billing API's</li></ul></div>
-        <div class="skill glass"><h3><span class="ic">🔐</span>Identity &amp; Security</h3><ul><li>Azure AD / Entra ID</li><li>Active Directory Design &amp; Administration</li><li>Privileged Identity Management (PIM)</li><li>Azure AD Connect &amp; SSO</li><li>Conditional Access Policies</li></ul></div>
-        <div class="skill glass"><h3><span class="ic">🖥️</span>Infrastructure</h3><ul><li>Hyper-V &amp; vCenter VMware</li><li>Windows Server (2012-2025)</li><li>SCVMM &amp; Veeam</li><li>Cisco, Meraki, Fortinet, Sophos, Aruba, HPE</li><li>SQL Server (2012-2019)</li></ul></div>
-        <div class="skill glass"><h3><span class="ic">🤖</span>Automation &amp; Scripting</h3><ul><li>PowerShell (Advanced)</li><li>Bash &amp; Python</li><li>Azure CLI</li><li>Azure Automation Runbooks</li><li>Logic Apps</li></ul></div>
-        <div class="skill glass"><h3><span class="ic"><img src="https://raw.githubusercontent.com/benc-uk/icon-collection/master/azure-cds/security-241-Security-Center.svg" alt="" loading="lazy" width="18" height="18" /></span>Security &amp; Compliance</h3><ul><li>Microsoft Defender for Cloud</li><li>Intune MDM/MAM</li><li>Endpoint Protection</li><li>Security Audits</li><li>Regulatory Compliance</li></ul></div>
-        <div class="skill glass"><h3><span class="ic"><img src="https://raw.githubusercontent.com/benc-uk/icon-collection/master/other/devops-pipelines.svg" alt="" loading="lazy" width="18" height="18" /></span>DevOps</h3><ul><li>Azure DevOps &amp; GitHub Actions (CI/CD)</li><li>Git &amp; versioning</li></ul></div>
-        <div class="skill glass"><h3><span class="ic"><img src="https://raw.githubusercontent.com/benc-uk/icon-collection/master/other/devops-pipelines.svg" alt="" loading="lazy" width="18" height="18" /></span>Sovereign Cloud</h3><ul><li>Azure Stack Hub</li><li>BLEU</li></ul></div>
-        <div class="skill glass"><h3><span class="ic"><img src="https://raw.githubusercontent.com/benc-uk/icon-collection/master/other/devops-pipelines.svg" alt="" loading="lazy" width="18" height="18" /></span>Development</h3><ul><li>PHP</li><li>TypeScript, React, Node.js</li><li>C# &amp; .NET</li></ul></div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true"><img src="/icons/export/Sandro/Azure/Azure-new-logo.svg" alt="" loading="lazy" width="18" height="18" /></span>Azure Cloud</h3>
+          <ul>
+            <li>Azure (Landing Zones, Compute, Networking, Storage, Security, Databases)</li>
+            <li>Infrastructure as Code (Terraform, Bicep)</li>
+            <li>Landing Zone Design &amp; Optimization</li>
+            <li>Azure API Management</li>
+            <li>FinOps</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true"><img src="/icons/export/Sandro/Azure/Azure-new-logo.svg" alt="" loading="lazy" width="18" height="18" /></span>FinOps</h3>
+          <ul>
+            <li>Reserved instances and savings plans</li>
+            <li>Cost Management &amp; Optimization</li>
+            <li>EA/MCA</li>
+            <li>Cost Management and Billing APIs</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true">🔐</span>Identity &amp; Security</h3>
+          <ul>
+            <li>Azure AD / Entra ID</li>
+            <li>Active Directory Design &amp; Administration</li>
+            <li>Privileged Identity Management (PIM)</li>
+            <li>Azure AD Connect &amp; SSO</li>
+            <li>Conditional Access Policies</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true">🖥️</span>Infrastructure</h3>
+          <ul>
+            <li>Hyper-V &amp; vCenter VMware</li>
+            <li>Windows Server (2012-2025)</li>
+            <li>SCVMM &amp; Veeam</li>
+            <li>Cisco, Meraki, Fortinet, Sophos, Aruba, HPE</li>
+            <li>SQL Server (2012-2019)</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true">🤖</span>Automation &amp; Scripting</h3>
+          <ul>
+            <li>PowerShell (Advanced)</li>
+            <li>Bash &amp; Python</li>
+            <li>Azure CLI</li>
+            <li>Azure Automation Runbooks</li>
+            <li>Logic Apps</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true"><img src="/icons/export/Ben%20Coleman/azure-cds/security-241-Security-Center.svg" alt="" loading="lazy" width="18" height="18" /></span>Security &amp; Compliance</h3>
+          <ul>
+            <li>Microsoft Defender for Cloud</li>
+            <li>Intune MDM/MAM</li>
+            <li>Endpoint Protection</li>
+            <li>Security Audits</li>
+            <li>Regulatory Compliance</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true"><img src="/icons/export/Ben%20Coleman/others/devops-pipelines.svg" alt="" loading="lazy" width="18" height="18" /></span>DevOps</h3>
+          <ul>
+            <li>Azure DevOps &amp; GitHub Actions (CI/CD)</li>
+            <li>Git &amp; version control</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true"><img src="/icons/export/Ben%20Coleman/others/devops-pipelines.svg" alt="" loading="lazy" width="18" height="18" /></span>Sovereign Cloud</h3>
+          <ul>
+            <li>Azure Stack Hub</li>
+            <li>BLEU</li>
+          </ul>
+        </div>
+        <div class="skill glass">
+          <h3><span class="ic" aria-hidden="true"><img src="/icons/export/Ben%20Coleman/others/devops-pipelines.svg" alt="" loading="lazy" width="18" height="18" /></span>Development</h3>
+          <ul>
+            <li>PHP</li>
+            <li>TypeScript, React, Node.js</li>
+            <li>C# &amp; .NET</li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -857,22 +1325,22 @@
     <section id="tools" class="reveal" aria-labelledby="tools-title">
       <h2 class="sec-label" id="tools-title"><span class="g">PS&gt;</span> Tools <span class="cm"># My sites &amp; resources</span></h2>
       <div class="tools">
-        <a class="tool glass" href="https://benoit-gaumard.io/articles/">
+        <a class="tool glass" href="https://benoit-gaumard.io/articles/" target="_blank" rel="noopener">
           <span class="t-ic"><img src="/favicon.svg" alt="" width="26" height="26" loading="lazy" /></span>
           <span class="t-body"><span class="t-name">Articles</span><span class="t-url">benoit-gaumard.io/articles</span></span>
           <svg class="t-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </a>
-        <a class="tool glass" href="/tools/">
+        <a class="tool glass" href="/tools/" target="_blank" rel="noopener">
           <span class="t-ic"><img src="/favicon.svg" alt="" width="26" height="26" loading="lazy" /></span>
           <span class="t-body"><span class="t-name">Tools</span><span class="t-url">benoit-gaumard.io/tools</span></span>
           <svg class="t-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </a>
-        <a class="tool glass" href="/icons/">
+        <a class="tool glass" href="/icons/" target="_blank" rel="noopener">
           <span class="t-ic"><img src="/favicon.svg" alt="" width="26" height="26" loading="lazy" /></span>
           <span class="t-body"><span class="t-name">Azure Icons</span><span class="t-url">benoit-gaumard.io/icons</span></span>
           <svg class="t-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </a>
-        <a class="tool glass" href="/favorite-links/">
+        <a class="tool glass" href="/favorite-links/" target="_blank" rel="noopener">
           <span class="t-ic"><img src="/favicon.svg" alt="" width="26" height="26" loading="lazy" /></span>
           <span class="t-body"><span class="t-name">My favorite links</span><span class="t-url">benoit-gaumard.io/favorite-links</span></span>
           <svg class="t-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
@@ -883,7 +1351,7 @@
           <svg class="t-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </a>
         <a class="tool glass" href="https://www.travelstorymaker.com/" target="_blank" rel="noopener">
-          <span class="t-ic"><img src="/favicons/travelstorymaker.com.png" alt="" loading="lazy" /></span>
+          <span class="t-ic"><img src="/favicons/travelstorymaker.com.png?v=7c677a661fb4" alt="" loading="lazy" width="26" height="26" /></span>
           <span class="t-body"><span class="t-name">TravelStoryMaker</span><span class="t-url">www.travelstorymaker.com</span></span>
           <svg class="t-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </a>
@@ -893,14 +1361,15 @@
     <!-- CONTACT -->
     <section id="contact" class="reveal" aria-labelledby="contact-title">
       <div class="glass contact">
-        <h2 id="contact-title"><span class="g">PS&gt;</span> .\Start-Collaboration.ps1</h2>
+        <h2 id="contact-title">Discuss your project</h2>
+        <p class="contact-command"><span class="g">PS&gt;</span> .\Start-Collaboration.ps1</p>
         <p>An opportunity, a project, or just want to chat?</p>
         <div class="contact-links">
           <a class="btn btn-green" href="mailto:contact@benoit-gaumard.io">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            Mail
+            Email me
           </a>
-          <a class="btn btn-primary" href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank" rel="noopener">
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/benoit-gaumard/" target="_blank" rel="noopener">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
             LinkedIn
           </a>
@@ -917,7 +1386,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -932,13 +1401,6 @@
           <a href="/emoji-sheet/">Emoji</a>
           <a href="/azure-release-updates/">Azure Updates</a>
           <a href="/m365-release-updates/">M365 Updates</a>
-        </div>
-        <div class="footer-group">
-          <strong>Language</strong>
-          <div class="lang-switch">
-            <a href="index.html" class="active" hreflang="en" lang="en" aria-label="English" title="English"><svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#B22234"/><g fill="#fff"><rect y="2.31" width="60" height="2.31"/><rect y="6.92" width="60" height="2.31"/><rect y="11.54" width="60" height="2.31"/><rect y="16.15" width="60" height="2.31"/><rect y="20.77" width="60" height="2.31"/><rect y="25.38" width="60" height="2.31"/></g><rect width="24" height="16.15" fill="#3C3B6E"/><g fill="#fff"><circle cx="3" cy="2.4" r="0.9"/><circle cx="7.8" cy="2.4" r="0.9"/><circle cx="12.6" cy="2.4" r="0.9"/><circle cx="17.4" cy="2.4" r="0.9"/><circle cx="21" cy="2.4" r="0.9"/><circle cx="5.4" cy="5.4" r="0.9"/><circle cx="10.2" cy="5.4" r="0.9"/><circle cx="15" cy="5.4" r="0.9"/><circle cx="19.8" cy="5.4" r="0.9"/><circle cx="3" cy="8.4" r="0.9"/><circle cx="7.8" cy="8.4" r="0.9"/><circle cx="12.6" cy="8.4" r="0.9"/><circle cx="17.4" cy="8.4" r="0.9"/><circle cx="21" cy="8.4" r="0.9"/><circle cx="5.4" cy="11.4" r="0.9"/><circle cx="10.2" cy="11.4" r="0.9"/><circle cx="15" cy="11.4" r="0.9"/><circle cx="19.8" cy="11.4" r="0.9"/><circle cx="3" cy="14.2" r="0.9"/><circle cx="7.8" cy="14.2" r="0.9"/><circle cx="12.6" cy="14.2" r="0.9"/><circle cx="17.4" cy="14.2" r="0.9"/><circle cx="21" cy="14.2" r="0.9"/></g></svg></a>
-            <a href="index_fr.html" hreflang="fr" lang="fr" aria-label="Français" title="Français"><svg viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg></a>
-          </div>
         </div>
       </div>
       <div class="footer-share">
@@ -970,6 +1432,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -982,93 +1445,79 @@
 
   <script>
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-    const io = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    function animateNums(){ document.querySelectorAll('[data-n]').forEach(el => { const t=+el.dataset.n, s=el.dataset.suffix||'', st=performance.now(); (function tk(n){ const p=Math.min((n-st)/1300,1); el.textContent=Math.round((1-Math.pow(1-p,3))*t)+s; if(p<1)requestAnimationFrame(tk); else el.textContent=t+s; })(st); }); }
-    const stg=document.querySelector('.stats'); if(stg){ const so=new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ animateNums(); o.disconnect(); } }),{threshold:0.4}); so.observe(stg); }
+    if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const io = new IntersectionObserver((entries) => entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+      }));
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    }
 
     const backToTop = document.getElementById('backToTop');
+    const syncBackToTop = () => backToTop.classList.toggle('visible', window.scrollY > 600);
+    syncBackToTop();
     let scrollTicking = false;
     window.addEventListener('scroll', () => {
       if (scrollTicking) return;
       scrollTicking = true;
       requestAnimationFrame(() => {
-        backToTop.classList.toggle('visible', window.scrollY > 600);
+        syncBackToTop();
         scrollTicking = false;
       });
     }, { passive: true });
     backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('top').focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 'instant' : 'smooth' });
     });
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
+
+
+
   <script>
     (function () {
       var header = document.querySelector(".site-header");
       var nav = document.querySelector(".section-nav");
-      if (header) {
-        var syncHeaderHeight = function () {
-          document.documentElement.style.setProperty("--header-h", header.getBoundingClientRect().height + "px");
-        };
-        syncHeaderHeight();
-        if (window.ResizeObserver) new ResizeObserver(syncHeaderHeight).observe(header);
-        else window.addEventListener("resize", syncHeaderHeight);
-      }
-      if (!nav || !("IntersectionObserver" in window)) return;
+      if (!header || !nav) return;
       var links = [].slice.call(nav.querySelectorAll("a"));
       var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
-      var spy = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          links.forEach(function (a, i) {
-            if (targets[i] === entry.target) a.setAttribute("aria-current", "location");
-            else a.removeAttribute("aria-current");
-          });
+      var current = -1;
+      var ticking = false;
+      function updateNavigation() {
+        ticking = false;
+        var headerHeight = header.getBoundingClientRect().height;
+        var navHeight = nav.getBoundingClientRect().height;
+        document.documentElement.style.setProperty("--header-h", headerHeight + "px");
+        document.documentElement.style.setProperty("--section-nav-h", navHeight + "px");
+        var next = -1;
+        targets.forEach(function (target, i) {
+          if (target && target.getBoundingClientRect().top <= headerHeight + navHeight + 20) next = i;
         });
-      }, { rootMargin: "-25% 0px -65% 0px" });
-      targets.forEach(function (t) { if (t) spy.observe(t); });
+        if (next === current) return;
+        current = next;
+        links.forEach(function (link, i) {
+          if (i === next) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+        if (next < 0) return;
+        var linkBox = links[next].getBoundingClientRect();
+        var navBox = nav.getBoundingClientRect();
+        if (linkBox.left < navBox.left || linkBox.right > navBox.right) {
+          nav.scrollLeft += linkBox.left - navBox.left - (nav.clientWidth - linkBox.width) / 2;
+        }
+      }
+      function scheduleUpdate() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(updateNavigation);
+      }
+      window.addEventListener("scroll", scheduleUpdate, { passive: true });
+      window.addEventListener("resize", scheduleUpdate);
+      if (window.ResizeObserver) {
+        var observer = new ResizeObserver(scheduleUpdate);
+        [header, nav, document.querySelector("main")].forEach(function (el) { observer.observe(el); });
+      }
+      updateNavigation();
     })();
   </script>
 <script data-share-script>

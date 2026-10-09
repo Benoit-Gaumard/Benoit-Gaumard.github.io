@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Trace the public-to-private CNAME chain, find the exact service zone and verify the answer from your client."
 title = "DNS in Azure, Part 5: Private Endpoints and Private DNS"
 date = "2026-09-03"
 description = "Part 5 of the DNS in Azure series: the privatelink CNAME chain, the exact zone name for every service, private DNS zone groups, running zones at scale with Azure Policy, and making Private Endpoints resolve from on-premises."
@@ -7,6 +8,7 @@ tags = ["DNS", "Networking", "Private Endpoint", "Private Link"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-5.svg"
 featured = true
+related = ["dns-in-azure-part-6-private-dns-fallback", "azure-policy-part-3-assignments"]
 +++
 
 [Part 4](/articles/dns-in-azure-part-4-private-endpoints/) ended with a working private endpoint and an application that still connects to a public IP address. Nothing is broken. The network interface exists, the connection is approved, the public endpoint is disabled - and the client cannot connect, because it never asked for the private address.
@@ -25,6 +27,10 @@ This post is the missing half: how a public name like `sa1.blob.core.windows.net
 [[toc]]
 
 ## The CNAME chain
+
+One example throughout this path: `sa1.blob.core.windows.net` (application name) → `sa1.privatelink.blob.core.windows.net` (public CNAME target) → `10.0.1.4` (private zone A record in this illustrative environment). Keep the application hostname; do not replace connection strings with the `privatelink` name.
+
+Need a zone name? [Search the service-to-zone table](#the-zone-name-has-to-be-exact). Copy returns the displayed value only; placeholders such as `<region>` and `<dns-zone>` still need service-specific substitution. Zone groups manage records, while zone placement and VNet links govern who can resolve them.
 
 Everything here rests on one design decision Microsoft made, and once you have seen it the whole model becomes obvious.
 
@@ -87,7 +93,7 @@ There is no fuzzy matching here. The zone name must be character-for-character t
 | Azure App Service / Functions | `sites` | `privatelink.azurewebsites.net` |
 | Azure Kubernetes Service | `management` | `privatelink.<region>.azmk8s.io` |
 | Event Hubs / Service Bus | `namespace` | `privatelink.servicebus.windows.net` |
-| Azure Monitor (AMPLS) | `azuremonitor` | `privatelink.monitor.azure.com` *(plus five more)* |
+| Azure Monitor (AMPLS) | `azuremonitor` | `privatelink.monitor.azure.com` *(additional zones required; see current service documentation)* |
 | Azure Automation | `Webhook`, `DSCAndHybridWorker` | `privatelink.azure-automation.net` |
 | Azure Database for PostgreSQL | `postgresqlServer` | `privatelink.postgres.database.azure.com` |
 | Azure Database for MySQL | `mysqlServer` | `privatelink.mysql.database.azure.com` |
@@ -101,10 +107,12 @@ There is no fuzzy matching here. The zone name must be character-for-character t
 
 Two more that catch people out:
 
-- **Azure Monitor** needs six zones, not one: `privatelink.monitor.azure.com`, `privatelink.oms.opinsights.azure.com`, `privatelink.ods.opinsights.azure.com`, `privatelink.agentsvc.azure-automation.net`, and `privatelink.blob.core.windows.net`. Miss one and part of your telemetry silently leaves via the internet.
+- **Azure Monitor** requires multiple service-specific zones, not just the one shown in the table. Consult the current [Azure Monitor private-link DNS configuration](https://learn.microsoft.com/azure/azure-monitor/logs/private-link-configure#configure-your-dns-setup) rather than using a fixed count from this article.
 - **App Service** creates two records per site: `mysite` and `mysite.scm`. The Kudu/SCM endpoint is how your deployment pipeline connects, so if deployments break after you go private, that record is why.
 
 The authoritative, always-current list is [Azure Private Endpoint private DNS zone values](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns). Bookmark it; it changes as services are added.
+
+Zone-list technical validation date: **not recorded**. This is a local reference for Azure public-cloud examples, not an exhaustive current service/sovereign-cloud inventory.
 
 ## Private DNS zone groups: use them
 
@@ -160,6 +168,8 @@ Duplicate zones with the same name are the most expensive mistake in this area b
 You have a generous budget to work with - a private DNS zone supports **1,000 virtual network links** for resolution, and a virtual network can be linked to many zones. If you are pushing that ceiling, the answer is the Private Resolver pattern from [Part 3](/articles/dns-in-azure-part-3-private-resolver/): link the zones to the hub only and point spokes at the inbound endpoint.
 
 ## Doing this at scale with Azure Policy
+
+Use the [Policies catalogue](/azure-policies/) to locate candidate definitions and the [assignment guide](/articles/azure-policy-part-3-assignments/) to review identity, scope and remediation before rollout. A matching policy name is not evidence that it fits your zone ownership model.
 
 At ten endpoints you do this in Bicep. At four hundred, created by teams who do not know what a `privatelink` zone is, you need the platform to do it for them.
 

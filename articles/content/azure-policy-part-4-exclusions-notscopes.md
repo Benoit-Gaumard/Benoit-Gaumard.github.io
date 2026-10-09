@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Decide between an exclusion and a tracked exemption, then record the scope and controls affected."
 title = "Azure Policy, Part 4: What Is an Exclusion (notScopes)?"
 date = "2026-09-04"
 description = "Part 4 of the Azure Policy series: exclusions explained. How notScopes carves a hole in an assignment scope, why excluded resources vanish from compliance entirely, the governance debt it creates, and when an exclusion is genuinely the right answer."
@@ -7,9 +8,33 @@ tags = ["Azure Policy", "Governance", "Compliance", "notScopes"]
 categories = ["Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-4.svg"
 featured = false
+leadSections = ["Exclusion versus exemption, in one table", "The decision rule"]
+related = ["azure-policy-part-5-exemptions"]
 +++
 
-Every governance estate reaches the same moment. The baseline is assigned, enforcement is on, and then a team explains why their subscription cannot comply. A legacy application. A vendor appliance nobody can reconfigure. A sandbox that exists specifically so people can break things.
+## Decide before editing notScopes
+
+Excluded resources disappear from this assignment's compliance denominator. Use an exclusion for a deliberate structural boundary; use an exemption for a tracked exception with a reason, owner and review/expiry. The comparison and decision rule follow this summary.
+
+Three risks to review: **no expiry**, **no recorded reason**, and **no member-level granularity**. Check each against your inventory, change record and initiative membership before saving.
+
+Copy this decision record into your team's register (or print the article); replace every placeholder with actual evidence:
+
+```text
+Assignment ID:
+Exact excluded scope and descendants:
+Decision: exclusion / exemption
+Reason structural exclusion is required:
+Controls lost from evaluation:
+Owner and approving authority:
+Ticket and supporting evidence:
+Next review date:
+How to remove the exclusion:
+```
+
+After a change, compare the compliance denominator and excluded scopes to this record. Check for overlapping assignments rather than assuming one exclusion relaxes them all. Technical execution validation: **not recorded**; see [exemption structure](https://learn.microsoft.com/azure/governance/policy/concepts/exemption-structure) for the tracked alternative.
+
+Every governance estate eventually needs to distinguish a structural boundary from an accepted exception.
 
 Azure Policy gives you two ways to say "not this one": an **exclusion** and an **exemption**. They sound like synonyms. They are not remotely the same thing, and reaching for the wrong one is the single most common way a policy estate loses credibility.
 

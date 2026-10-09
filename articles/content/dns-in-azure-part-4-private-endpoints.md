@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Separate endpoint approval, DNS and network checks, and treat public-access restrictions as a distinct action."
 title = "DNS in Azure, Part 4: Private Link and Private Endpoints"
 date = "2026-09-03"
 description = "Part 4 of the DNS in Azure series: what a Private Endpoint really is, sub-resources, the approval workflow, routing and NSG behaviour, Private Link Service, and why turning off public network access is a separate job."
@@ -7,6 +8,9 @@ tags = ["DNS", "Networking", "Private Endpoint", "Private Link"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-4.svg"
 featured = true
+leadSections = ["Service endpoints versus private endpoints"]
+collapsible = ["Private Link Service: your own service behind an endpoint"]
+related = ["dns-in-azure-part-5-private-endpoint-dns", "network-security-perimeter"]
 +++
 
 The first three parts of this series were about resolving names. This one is about the thing everybody wants to resolve: a **Private Endpoint**.
@@ -23,6 +27,26 @@ I have split it deliberately. Private Link is a *networking* construct, and it w
 - **[Part 8](/articles/dns-in-azure-part-8-decision-tree/)** - the resolution decision tree
 
 [[toc]]
+
+## Decide before creating the endpoint
+
+Textual flow: **client → ordinary service hostname → DNS answer for the private endpoint NIC → approved connection → selected service sub-resource**. DNS, connection approval, routing and service authorisation are separate checks.
+
+Before creation, select the right sub-resource (`blob` is not `file`), the target VNet/subnet, who approves the connection and who owns DNS. Compare service/private endpoints below. **Disabling the public endpoint is a separate action**: first validate the private path and required dependencies, then test an unauthorised public client is rejected.
+
+Copy this final check record:
+
+```text
+Service and sub-resource:
+Endpoint approval state: Approved
+Client FQDN returns: expected private endpoint IP
+Effective route/NSG path: intended destination and allowed port
+Application login: authorised identity succeeds
+Public-network test: unauthorised public access rejected
+Owner, change record and rollback:
+```
+
+These are expected checks, not recorded results. Technical execution validation: **not recorded**; consult [Private Endpoint overview](https://learn.microsoft.com/azure/private-link/private-endpoint-overview). Private Link Service is an advanced branch below, not required to consume a supported PaaS Private Endpoint.
 
 ## The problem Private Link solves
 

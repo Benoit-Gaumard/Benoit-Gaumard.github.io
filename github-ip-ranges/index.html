@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -200,7 +201,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -541,7 +542,7 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  
+
 
     /* Filled by script: hold the box only while empty, so the page below does
        not jump when the data lands, and no blank hole survives a render. */
@@ -628,7 +629,7 @@
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -665,12 +666,422 @@
     ]
   }
   </script>
+<style data-ip-range-ui>
+  .ip-dataset-stats{margin-bottom:1.5rem;}
+  .ip-dataset-stats .stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin:0;}
+  .ip-dataset-stats .stat-card{padding:.75rem 1rem;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-surface);box-shadow:0 1px 2px var(--cp-border);}
+  .ip-dataset-stats .stat-value{font-size:1.25rem;font-weight:700;line-height:1.2;overflow-wrap:anywhere;}
+  .ip-dataset-stats .stat-label{margin-top:.4rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.03em;}
+  .ip-stats-scope{margin:0 0 .75rem;color:var(--cp-text-muted);font-size:.8rem;line-height:1.5;}
+  .ip-stat-note{margin:.35rem 0 0;color:var(--cp-text-muted);font-size:.75rem;line-height:1.4;}
+  @media(min-width:75rem){.ip-dataset-stats .stats-grid{grid-template-columns:repeat(6,minmax(0,1fr));}}
+  @media(max-width:48rem){.ip-dataset-stats .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;}}
+  .ip-tasks,.ip-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.75rem 0;}
+  .ip-action,.ip-tasks a{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;max-width:100%;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;text-decoration:none;cursor:pointer;overflow-wrap:anywhere;}
+  .ip-action:hover,.ip-tasks a:hover{border-color:var(--cp-accent);color:var(--cp-link);}
+  .ip-action[aria-pressed="true"]{background:var(--cp-accent-soft);border-color:var(--cp-accent);font-weight:700;}
+  .ip-action:disabled{cursor:not-allowed;color:var(--cp-text-muted);}
+  .ip-controls{border:0;padding:0;margin:0;min-width:0;}
+  .ip-section{margin:1.5rem 0;padding:1rem;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-surface);}
+  .ip-section h2{margin:0 0 1rem;font-size:1.35rem;}
+  .ip-fields{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:.75rem;max-width:50rem;}
+  .ip-field{min-width:0;margin:.75rem 0;}
+  .ip-field label{display:block;margin-bottom:.4rem;font-size:.85rem;font-weight:600;}
+  .ip-field input,.ip-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
+  .ip-fields .ip-field{margin:0;}
+  .ip-help,.ip-count{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;margin:.75rem 0;}
+  #lookupHeading{font-size:.95rem;line-height:1.5;}
+  #lookupInput[aria-invalid="true"]{border-color:var(--cp-danger);}
+  #lookupHeading[data-state="invalid"]{color:var(--cp-danger);}
+  #groupResults,#matchList,#prefixList{list-style:none;display:grid;gap:.5rem;margin:.75rem 0;padding:0;}
+  #groupResults{grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));}
+  #groupResults .ip-action,#matchList .ip-action{justify-content:flex-start;width:100%;text-align:left;}
+  #prefixList{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));}
+  .prefix-copy{width:100%;font-family:ui-monospace,monospace;white-space:nowrap;overflow-x:auto;justify-content:flex-start;}
+  #selectionTitle{font-size:1.05rem;margin:1.25rem 0 .5rem;overflow-wrap:anywhere;}
+  .ip-meta{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:.4rem 1rem;font-size:.85rem;}
+  .ip-meta dd{margin:0;min-width:0;overflow-wrap:anywhere;}
+  .ip-section summary,.snapshot-statistics>summary{min-height:2.75rem;padding-block:.65rem;cursor:pointer;color:var(--cp-link);font-size:.9rem;}
+  .ip-error{padding:1rem;border:1px solid var(--cp-danger);border-radius:8px;color:var(--cp-danger);background:var(--cp-danger-bg);}
+  #ip-lookup,#ip-browse,#selectionTitle{scroll-margin-top:6rem;}
+  @media(max-width:32rem){#groupResults,#prefixList{grid-template-columns:minmax(0,1fr);}.ip-meta{grid-template-columns:minmax(0,1fr);}}
+</style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/github-ip-ranges/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/github-ip-ranges/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -689,6 +1100,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/" aria-current="page"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -705,41 +1157,47 @@
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="28" height="28"></span>GitHub IP Ranges</h1>
       <p class="intro-text">IP address ranges used by GitHub services (web, API, git, Actions, Pages, Copilot, and more), fetched directly from the <a href="https://api.github.com/meta" target="_blank" rel="noopener">GitHub Meta API</a>.</p>
-      <p class="refresh-meta">Last refreshed: <strong id="refreshedAt">Loading...</strong></p>
+      <p class="refresh-meta">Snapshot collected: <strong id="refreshedAt">Loading...</strong></p>
     </section>
 
-    <section aria-label="Summary">
-      <div class="stats-grid" id="statCards"></div>
-    </section>
-
-    <section aria-label="IP lookup">
-      <div class="calculator-card">
-        <h2 class="card-heading">Check an IP address</h2>
-        <div class="field-row">
-          <div class="unit-field">
-            <label for="lookupInput">IP address (IPv4 or IPv6)</label>
-            <input id="lookupInput" type="text" placeholder="e.g. 140.82.112.3" autocomplete="off" spellcheck="false">
-          </div>
-          <button class="primary-button" id="lookupButton" type="button">Check</button>
-        </div>
-        <div class="lookup-result">
-          <p class="lookup-heading" id="lookupHeading"></p>
-          <ul class="match-list" id="matchList"></ul>
-        </div>
+<!-- ip-range-view:start -->
+    <section class="ip-dataset-stats" aria-label="Whole-snapshot statistics">
+      <p class="ip-stats-scope" id="statsSummary" role="status" aria-live="polite" aria-atomic="true">Snapshot totals: loading&hellip;</p>
+      <div class="stats-grid" id="statsGrid" aria-busy="true">
+        <div class="stat-card"><span class="stat-value" data-stat="groups">&mdash;</span><span class="stat-label">Categories</span></div>
+        <div class="stat-card"><span class="stat-value" data-stat="entries">&mdash;</span><span class="stat-label">Prefix entries across categories</span></div>
+        <div class="stat-card"><span class="stat-value" data-stat="ipv4">&mdash;</span><span class="stat-label">IPv4 entries</span></div>
+        <div class="stat-card"><span class="stat-value" data-stat="ipv6">&mdash;</span><span class="stat-label">IPv6 entries</span></div>
+        <div class="stat-card"><span class="stat-value" data-stat="uniquePrefixes">&mdash;</span><span class="stat-label">Unique prefix strings</span></div>
+        <div class="stat-card"><span class="stat-value" data-stat="collectedAt">&mdash;</span><span class="stat-label">Snapshot collected</span><p class="ip-stat-note">UTC date of collection</p></div>
       </div>
+      <noscript><p class="ip-stats-scope">Enable JavaScript to display these statistics, or <a href="./ip-ranges.json">download the snapshot</a>.</p></noscript>
     </section>
-
-    <section aria-label="Browse ranges by category">
-      <div class="calculator-card">
-        <h2 class="card-heading">Browse ranges by category</h2>
-        <div class="category-tabs" id="categoryTabs"></div>
-        <input class="cidr-search" id="cidrSearch" type="text" placeholder="Filter this category's CIDR ranges..." aria-label="Filter this category's CIDR ranges">
-        <p class="cidr-note" id="cidrNote"></p>
-        <ul class="cidr-list" id="cidrList"></ul>
-        <span id="copyStatus" role="status" aria-live="polite" class="visually-hidden"></span>
-
-      </div>
+    <nav class="ip-tasks" aria-label="IP range tasks"><a href="#ip-lookup">Check an IP address</a><a href="#ip-browse">Browse categories</a></nav>
+    <div class="ip-error" id="dataError" role="alert" hidden><p>The IP-range snapshot could not be loaded or validated. Please retry.</p><button class="ip-action" id="retry" type="button">Retry</button></div>
+    <section class="ip-section" id="ip-lookup" aria-labelledby="lookupTitle">
+      <h2 id="lookupTitle">Check an IP address</h2>
+      <fieldset class="ip-controls" id="lookupFields" disabled>
+        <div class="ip-fields"><div class="ip-field"><label for="lookupInput">IPv4 or IPv6 address</label><input id="lookupInput" type="text" autocomplete="off" spellcheck="false" aria-describedby="lookupHint lookupHeading"></div><button class="ip-action" id="lookupButton" type="button">Check</button></div>
+        <p class="ip-help" id="lookupHint">Checks published ranges in the downloaded snapshot, not reachability or ownership of an individual resource.</p>
+        <div class="ip-actions"><button class="ip-action" id="exampleV4" type="button">Use an IPv4 example</button><button class="ip-action" id="exampleV6" type="button">Use an IPv6 example</button></div>
+      </fieldset>
+      <p id="lookupHeading" role="status" aria-live="polite" aria-atomic="true">Enter an address or choose an example.</p><ul id="matchList"></ul><button class="ip-action" id="moreMatches" type="button" hidden>More matches</button>
     </section>
+    <section class="ip-section" id="ip-browse" aria-labelledby="browseTitle">
+      <h2 id="browseTitle">Choose a GitHub category</h2>
+      <fieldset class="ip-controls" id="browseFields" disabled>
+        <div class="ip-field"><label for="categorySelect">Category and recorded range count</label><select id="categorySelect"><option value="">Choose a category</option></select></div>
+        <h3 id="selectionTitle" tabindex="-1">Choose a selection to browse its ranges</h3>
+        <dl class="ip-meta" id="selectionMeta"></dl>
+        <div class="ip-field"><label for="prefixFilter">Filter prefixes in this selection</label><input id="prefixFilter" type="search" disabled></div>
+        <p class="ip-count" id="prefixCount" role="status" aria-live="polite"></p>
+        <div class="ip-actions"><button class="ip-action" id="copyPrefixes" type="button" disabled>Copy filtered prefixes</button><button class="ip-action" id="exportPrefixes" type="button" disabled>Export filtered prefixes</button></div>
+        <ul id="prefixList"></ul><button class="ip-action" id="morePrefixes" type="button" hidden>More prefixes</button>
+      </fieldset>
+    </section>
+    <details class="snapshot-statistics"><summary>Technical metadata</summary><dl class="ip-meta" id="snapshotDetails"></dl><p class="ip-help">Additional metadata from the same GitHub Meta API snapshot.</p></details>
+    <!-- ip-range-view:end -->
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About GitHub IP ranges</h2>
@@ -759,7 +1217,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -805,6 +1263,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -815,403 +1274,321 @@
     </svg>
   </button>
 
-  <script>
-    document.getElementById("currentYear").textContent = new Date().getFullYear();
-
-    const PAGE_SIZE = 200;
-    let cidrVisible = PAGE_SIZE;
-
-    const elements = {
-      statCards: document.getElementById("statCards"),
-      refreshedAt: document.getElementById("refreshedAt"),
-      lookupInput: document.getElementById("lookupInput"),
-      lookupButton: document.getElementById("lookupButton"),
-      lookupHeading: document.getElementById("lookupHeading"),
-      matchList: document.getElementById("matchList"),
-      categoryTabs: document.getElementById("categoryTabs"),
-      cidrSearch: document.getElementById("cidrSearch"),
-      cidrNote: document.getElementById("cidrNote"),
-      cidrList: document.getElementById("cidrList"),
-      backToTop: document.getElementById("backToTop"),
-    };
-
-    const state = { data: null, activeCategoryKey: null };
-
-    function parseIpv4(str) {
-      const match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(String(str).trim());
-      if (!match) return null;
-      const octets = match.slice(1, 5).map(Number);
-      if (octets.some((o) => o < 0 || o > 255)) return null;
-      return octets;
+<script data-ip-range-ui>(() => {
+function parseIPv4(value) {
+  if (!/^(?:0|[1-9]\d{0,2})(?:\.(?:0|[1-9]\d{0,2})){3}$/.test(value)) return null;
+  const parts = value.split(".").map(Number);
+  if (parts.some(part => part > 255)) return null;
+  return parts.reduce((number, part) => (number << 8n) | BigInt(part), 0n);
+}
+function parseAddress(input) {
+  let value = String(input).trim();
+  if (!value.includes(":")) {
+    const number = parseIPv4(value);
+    return number === null ? null : { version: 4, number, bits: 32 };
+  }
+  if (/[/%\[\]\s]/.test(value)) return null;
+  if (value.includes(".")) {
+    const last = value.lastIndexOf(":");
+    const ipv4 = parseIPv4(value.slice(last + 1));
+    if (ipv4 === null) return null;
+    value = value.slice(0, last + 1) + (ipv4 >> 16n).toString(16) + ":" + (ipv4 & 65535n).toString(16);
+  }
+  const halves = value.split("::");
+  if (halves.length > 2) return null;
+  const left = halves[0] ? halves[0].split(":") : [];
+  const right = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  if ([...left, ...right].some(part => !/^[0-9a-f]{1,4}$/i.test(part))) return null;
+  const missing = 8 - left.length - right.length;
+  if (halves.length === 1 ? missing !== 0 : missing < 1) return null;
+  const groups = halves.length === 1 ? left : [...left, ...Array(missing).fill("0"), ...right];
+  return { version: 6, bits: 128, number: groups.reduce((number, part) => (number << 16n) | BigInt(parseInt(part, 16)), 0n) };
+}
+function parseRange(value) {
+  const parts = value.split("/");
+  if (parts.length !== 2 || !/^\d+$/.test(parts[1])) return null;
+  const address = parseAddress(parts[0]), length = Number(parts[1]);
+  if (!address || length < 0 || length > address.bits) return null;
+  const full = (1n << BigInt(address.bits)) - 1n;
+  const mask = length === 0 ? 0n : full ^ ((1n << BigInt(address.bits - length)) - 1n);
+  return { version: address.version, length, mask, network: address.number & mask };
+}
+function contains(address, range) {
+  return address.version === range.version && (address.number & range.mask) === range.network;
+}
+function sourceFilenameDate(filename) {
+  if (typeof filename !== "string") return null;
+  const match = /_(\d{4})(\d{2})(\d{2})\.json$/.exec(filename);
+  if (!match) return null;
+  const value = `${match[1]}-${match[2]}-${match[3]}`;
+  const parsed = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+  return parsed.toISOString().slice(0, 10) === value ? value : null;
+}
+function snapshotCollectionDate(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T/.test(value)) return null;
+  const stamp = Date.parse(value);
+  return Number.isFinite(stamp) ? new Date(stamp).toISOString().slice(0, 10) : null;
+}
+function snapshotCounts(groups, cache) {
+  let ipv4 = 0, ipv6 = 0;
+  for (const group of groups) {
+    for (const prefix of group.prefixes) {
+      const version = cache.get(prefix)?.version;
+      if (version === 4) ipv4++;
+      else if (version === 6) ipv6++;
+      else throw new Error(`Missing parsed prefix: ${prefix}`);
     }
-    function ipv4ToInt(octets) {
-      return ((octets[0] << 24) | (octets[1] << 16) | (octets[2] << 8) | octets[3]) >>> 0;
+  }
+  return { groups: groups.length, entries: ipv4 + ipv6, ipv4, ipv6, uniquePrefixes: cache.size };
+}
+(function ipBrowser(config, { parseAddress, parseRange, contains, sourceFilenameDate, snapshotCollectionDate, snapshotCounts }) {
+  const PAGE = 100, GROUP_PAGE = 12, MATCH_PAGE = 20;
+  const azure = config.kind === "azure";
+  const el = Object.fromEntries(["refreshedAt", "lookupFields", "browseFields", "lookupInput", "lookupButton", "lookupHeading", "lookupHint", "matchList", "moreMatches", "groupQuery", "groupResults", "groupCount", "moreGroups", "categorySelect", "selectionTitle", "selectionMeta", "prefixFilter", "prefixCount", "prefixList", "morePrefixes", "copyPrefixes", "exportPrefixes", "snapshotDetails", "dataError", "retry", "exampleV4", "exampleV6", "statsGrid", "statsSummary", "uniquePrefixes"].map(id => [id, document.getElementById(id)]));
+  const state = { status: "loading", groups: [], selected: "", groupLimit: GROUP_PAGE, prefixLimit: PAGE, matchLimit: MATCH_PAGE, matches: [], cache: new Map(), filteredPrefixes: [], lookupVersion: 0, summary: null };
+  function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
+  function button(text, handler) { const element = node("button", text, "ip-action"); element.type = "button"; element.addEventListener("click", handler); return element; }
+  function date(value) { const parsed = new Date(value); return typeof value === "string" && !Number.isNaN(parsed.getTime()) ? parsed.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not recorded"; }
+  function renderStats() {
+    const summary = state.status === "ready" ? state.summary : null;
+    el.statsGrid.querySelectorAll("[data-stat]").forEach(value => {
+      const count = summary?.[value.dataset.stat];
+      value.textContent = !summary ? "—" : typeof count === "number" ? count.toLocaleString("en-US") : count;
+    });
+    el.statsGrid.setAttribute("aria-busy", String(state.status === "loading" || state.status === "loading-request"));
+    el.statsSummary.textContent = summary
+      ? `Complete snapshot, independent of filters. Entries may repeat across ${azure ? "groups" : "categories"} and overlap; they are not unique IP addresses.`
+      : state.status === "error" ? "Snapshot totals: unavailable." : "Snapshot totals: loading...";
+    if (azure) {
+      el.uniquePrefixes.textContent = summary ? `${summary.uniquePrefixes.toLocaleString("en-US")} unique prefix strings`
+        : state.status === "error" ? "Distinct prefixes: unavailable." : "Distinct prefixes: loading...";
+    } else {
+      const flag = summary ? summary.passwordAuthFlag : state.status === "error" ? "Unavailable" : "Loading...";
+      el.snapshotDetails.replaceChildren(node("dt", "Meta API password-auth verification flag"), node("dd", flag));
     }
-    function ipv6ToBigInt(str) {
-      const value = str.trim();
-      let head = value;
-      let tail = null;
-      if (value.includes("::")) {
-        const parts = value.split("::");
-        if (parts.length !== 2) return null;
-        [head, tail] = parts;
-      }
-      const headParts = head ? head.split(":").filter(Boolean) : [];
-      const tailParts = tail ? tail.split(":").filter(Boolean) : [];
-      let groups;
-      if (value.includes("::")) {
-        const missing = 8 - headParts.length - tailParts.length;
-        if (missing < 0) return null;
-        groups = [...headParts, ...Array(missing).fill("0"), ...tailParts];
-      } else {
-        groups = headParts;
-      }
-      if (groups.length !== 8) return null;
-      let result = 0n;
-      for (const group of groups) {
-        if (!/^[0-9a-fA-F]{1,4}$/.test(group)) return null;
-        result = (result << 16n) | BigInt(parseInt(group, 16));
-      }
-      return result;
+  }
+  function url() {
+    SiteUX.updateURL(params => {
+      ["ip", "tag", "category", "q", "prefix", "lookupInput", "tagSearch", "cidrSearch"].forEach(key => params.delete(key));
+      if (el.lookupInput.value.trim()) params.set("ip", el.lookupInput.value.trim());
+      if (state.selected) params.set(azure ? "tag" : "category", state.selected);
+      if (el.groupQuery?.value) params.set("q", el.groupQuery.value);
+      if (el.prefixFilter.value) params.set("prefix", el.prefixFilter.value);
+    });
+  }
+  function selectGroup(id, focus = true) {
+    state.selected = id;
+    state.prefixLimit = PAGE;
+    el.prefixFilter.value = "";
+    renderGroups();
+    renderPrefixes();
+    url();
+    if (focus) { el.selectionTitle.focus({ preventScroll: true }); el.selectionTitle.scrollIntoView({ block: "start", behavior: "instant" }); }
+  }
+  function renderGroups() {
+    if (!azure) {
+      el.categorySelect.value = state.selected;
+      return;
     }
-    function ipInCidr(ip, cidr) {
-      const separatorIndex = cidr.lastIndexOf("/");
-      const rangeIp = cidr.slice(0, separatorIndex);
-      const prefix = parseInt(cidr.slice(separatorIndex + 1), 10);
-      const isRangeV6 = rangeIp.includes(":");
-      const isIpV6 = ip.includes(":");
-      if (isRangeV6 !== isIpV6) return false;
-      if (isRangeV6) {
-        const ipBig = ipv6ToBigInt(ip);
-        const rangeBig = ipv6ToBigInt(rangeIp);
-        if (ipBig === null || rangeBig === null) return false;
-        const fullMask = (1n << 128n) - 1n;
-        const maskBig = prefix === 0 ? 0n : (fullMask << BigInt(128 - prefix)) & fullMask;
-        return (ipBig & maskBig) === (rangeBig & maskBig);
-      }
-      const ipOctets = parseIpv4(ip);
-      const rangeOctets = parseIpv4(rangeIp);
-      if (!ipOctets || !rangeOctets) return false;
-      const ipInt = ipv4ToInt(ipOctets);
-      const rangeInt = ipv4ToInt(rangeOctets);
-      const maskInt = prefix === 0 ? 0 : (0xFFFFFFFF << (32 - prefix)) >>> 0;
-      return ((ipInt & maskInt) >>> 0) === ((rangeInt & maskInt) >>> 0);
+    const query = el.groupQuery.value.trim().toLowerCase();
+    const matching = state.groups.filter(group => !query || group.id.toLowerCase().includes(query));
+    const shown = matching.slice(0, state.groupLimit);
+    el.groupResults.replaceChildren();
+    shown.forEach(group => {
+      const item = node("li");
+      const choose = button(`${group.label} · ${group.prefixes.length.toLocaleString("en-US")} prefixes`, () => selectGroup(group.id));
+      choose.dataset.groupId = group.id;
+      choose.setAttribute("aria-pressed", String(group.id === state.selected));
+      item.append(choose);
+      el.groupResults.append(item);
+    });
+    el.groupCount.textContent = `${shown.length} of ${matching.length.toLocaleString("en-US")} matching service tags shown.`;
+    el.moreGroups.hidden = shown.length >= matching.length;
+    el.moreGroups.textContent = `Show ${Math.min(GROUP_PAGE, matching.length - shown.length)} more tags`;
+    if (!shown.length) el.groupResults.append(node("li", "No service tag matches this search. Clear the tag search to browse all tags."));
+  }
+  function renderPrefixes() {
+    const group = state.groups.find(group => group.id === state.selected);
+    el.prefixList.replaceChildren();
+    el.selectionMeta.replaceChildren();
+    el.prefixFilter.disabled = !group;
+    if (!group) {
+      el.selectionTitle.textContent = `Choose ${azure ? "a service tag" : "a category"} to browse its ranges`;
+      el.prefixCount.textContent = "";
+      state.filteredPrefixes = [];
+      el.copyPrefixes.disabled = el.exportPrefixes.disabled = true;
+      el.morePrefixes.hidden = true;
+      return;
     }
-
-    function formatDateTime(iso) {
-      return new Date(iso).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+    el.selectionTitle.textContent = `${group.label} · ${group.prefixes.length.toLocaleString("en-US")} recorded ${azure ? "prefixes" : "ranges"}`;
+    if (azure) {
+      [["Region", group.region || "Global / not specified"], ["Platform", group.platform || "Not recorded"], ["System service", group.systemService || "Not recorded"]].forEach(([label, value]) => el.selectionMeta.append(node("dt", label), node("dd", value)));
     }
-
-    function renderStats() {
-      const { data } = state;
-      const totalV4 = data.categories.reduce((sum, c) => sum + c.ipv4Count, 0);
-      const totalV6 = data.categories.reduce((sum, c) => sum + c.ipv6Count, 0);
-      const stats = [
-        { value: data.categories.length, label: "Categories" },
-        { value: data.totalCidrs.toLocaleString(), label: "Total ranges" },
-        { value: totalV4.toLocaleString(), label: "IPv4 ranges" },
-        { value: totalV6.toLocaleString(), label: "IPv6 ranges" },
-        { value: data.verifiablePasswordAuthentication ? "Yes" : "No", label: "Password auth verifiable" },
-      ];
-      elements.statCards.replaceChildren();
-      stats.forEach((stat) => {
-        const card = document.createElement("div");
-        card.className = "stat-card";
-        const value = document.createElement("span");
-        value.className = "stat-value";
-        value.textContent = stat.value;
-        const label = document.createElement("span");
-        label.className = "stat-label";
-        label.textContent = stat.label;
-        card.append(value, label);
-        elements.statCards.append(card);
-      });
+    const query = el.prefixFilter.value.trim().toLowerCase();
+    state.filteredPrefixes = group.prefixes.filter(prefix => !query || prefix.toLowerCase().includes(query));
+    const shown = state.filteredPrefixes.slice(0, state.prefixLimit);
+    shown.forEach(prefix => {
+      const item = node("li");
+      const copy = button(prefix, () => SiteUX.copy(prefix, `${group.label} prefix`, copy));
+      copy.classList.add("prefix-copy");
+      copy.setAttribute("aria-label", `Copy ${group.label} prefix ${prefix}`);
+      item.append(copy);
+      el.prefixList.append(item);
+    });
+    el.prefixCount.textContent = `${shown.length.toLocaleString("en-US")} displayed / ${state.filteredPrefixes.length.toLocaleString("en-US")} matching prefixes in ${group.label}.`;
+    el.morePrefixes.hidden = shown.length >= state.filteredPrefixes.length;
+    el.morePrefixes.textContent = `Show ${Math.min(PAGE, state.filteredPrefixes.length - shown.length)} more prefixes`;
+    el.copyPrefixes.disabled = el.exportPrefixes.disabled = !state.filteredPrefixes.length;
+    if (!shown.length) el.prefixList.append(node("li", "No prefixes match this filter. Clear the prefix filter to show this selection."));
+  }
+  function renderMatches() {
+    el.matchList.replaceChildren();
+    state.matches.slice(0, state.matchLimit).forEach(match => {
+      const item = node("li");
+      const action = button(`${match.group.label} — ${match.prefix}`, () => selectGroup(match.group.id));
+      action.setAttribute("aria-label", `Explore ${match.group.label}, matching prefix ${match.prefix}`);
+      item.append(action);
+      el.matchList.append(item);
+    });
+    el.moreMatches.hidden = state.matchLimit >= state.matches.length;
+    el.moreMatches.textContent = `Show ${Math.min(MATCH_PAGE, state.matches.length - state.matchLimit)} more matches`;
+  }
+  async function lookup() {
+    if (state.status !== "ready") return;
+    const version = ++state.lookupVersion;
+    const value = el.lookupInput.value.trim();
+    const address = parseAddress(value);
+    el.matchList.replaceChildren();
+    el.moreMatches.hidden = true;
+    if (!address) {
+      el.lookupInput.setAttribute("aria-invalid", "true");
+      el.lookupHeading.dataset.state = "invalid";
+      el.lookupHeading.textContent = "Enter one valid IPv4 or IPv6 address, without a port, CIDR suffix or zone identifier.";
+      el.lookupInput.focus({ preventScroll: true });
+      url();
+      return;
     }
-
-    function renderCategoryTabs() {
-      elements.categoryTabs.replaceChildren();
-      state.data.categories.forEach((category) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "category-tab";
-        button.textContent = `${category.label} (${category.count})`;
-        button.setAttribute("aria-pressed", String(category.key === state.activeCategoryKey));
-        button.addEventListener("click", () => {
-          state.activeCategoryKey = category.key;
-          elements.cidrSearch.value = "";
-          renderCategoryTabs();
-          renderCidrList();
-        });
-        elements.categoryTabs.append(button);
-      });
+    el.lookupInput.setAttribute("aria-invalid", "false");
+    el.lookupButton.disabled = true;
+    el.lookupHeading.textContent = "Checking the loaded snapshot…";
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    if (version !== state.lookupVersion) { el.lookupButton.disabled = false; return; }
+    state.matches = [];
+    for (const group of state.groups) {
+      const prefix = group.prefixes.find(prefix => contains(address, state.cache.get(prefix)));
+      if (prefix) state.matches.push({ group, prefix });
     }
-
-    // the row is the button: one element per value rather than a value plus an
-    // icon button, which matters on lists that run to hundreds of rows
-    async function copyValue(text, el) {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.append(textarea);
-        textarea.select();
-        try { document.execCommand("copy"); } catch { return; }
-        textarea.remove();
-      }
-      el.classList.add("is-copied");
-      const status = document.getElementById("copyStatus");
-      if (status) status.textContent = text + " copied";
-      window.clearTimeout(el._copyTimer);
-      el._copyTimer = window.setTimeout(() => {
-        el.classList.remove("is-copied");
-        if (status) status.textContent = "";
-      }, 1400);
-    }
-
-
-    function renderCidrLoadMore(total, shownCount) {
-      const list = document.getElementById("cidrList") || document.querySelector(".cidr-list");
-      if (!list) return;
-      let button = list.parentElement.querySelector(".load-more");
-      if (shownCount >= total) { if (button) button.remove(); return; }
-      const remaining = total - shownCount;
-      if (!button) {
-        button = document.createElement("button");
-        button.type = "button";
-        button.className = "load-more";
-        button.addEventListener("click", () => {
-          cidrVisible += PAGE_SIZE;
-          renderCidrList();
-          const next = list.parentElement.querySelector(".load-more");
-          if (next) next.focus();
-        });
-        list.insertAdjacentElement("afterend", button);
-      }
-      button.textContent = `Load ${Math.min(PAGE_SIZE, remaining).toLocaleString()} more (${remaining.toLocaleString()} remaining)`;
-    }
-    function renderCidrList() {
-      const category = state.data.categories.find((c) => c.key === state.activeCategoryKey);
-      elements.cidrList.replaceChildren();
-      if (!category) return;
-      const query = elements.cidrSearch.value.trim().toLowerCase();
-      const filtered = query ? category.cidrs.filter((c) => c.toLowerCase().includes(query)) : category.cidrs;
-      const shown = filtered.slice(0, cidrVisible);
-      shown.forEach((cidr) => {
-        const li = document.createElement("li");
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "cidr-item copyable";
-        button.textContent = cidr;
-        button.setAttribute("aria-label", "Copy " + cidr);
-        button.addEventListener("click", () => copyValue(cidr, button));
-        li.append(button);
-        elements.cidrList.append(li);
-      });
-      renderCidrLoadMore(filtered.length, shown.length);
-      elements.cidrNote.textContent = shown.length < filtered.length
-        ? `Showing ${shown.length.toLocaleString()} of ${filtered.length.toLocaleString()} matching ranges.`
-        : `Showing ${filtered.length.toLocaleString()} of ${category.count.toLocaleString()} ranges.`;
-    }
-
-    function performLookup() {
-      const ip = elements.lookupInput.value.trim();
-      elements.matchList.replaceChildren();
-      if (!ip) {
-        elements.lookupHeading.textContent = "Enter an IP address to check.";
-        return;
-      }
-      const isV4 = Boolean(parseIpv4(ip));
-      const isV6 = !isV4 && ipv6ToBigInt(ip) !== null;
-      if (!isV4 && !isV6) {
-        elements.lookupHeading.textContent = `"${ip}" doesn't look like a valid IPv4 or IPv6 address.`;
-        return;
-      }
-
-      const matches = [];
-      state.data.categories.forEach((category) => {
-        for (const cidr of category.cidrs) {
-          if (ipInCidr(ip, cidr)) {
-            matches.push({ category: category.label, cidr });
-            break;
+    state.matchLimit = MATCH_PAGE;
+    el.lookupHeading.dataset.state = state.matches.length ? "match" : "no-match";
+    el.lookupHeading.textContent = state.matches.length ? `${value} matches ${state.matches.length} ${azure ? "service tags" : "categories"} in this snapshot. Select a match to explore its ranges.`
+      : `${value} does not match the published ranges in this loaded snapshot. This is not a live ownership or connectivity check.`;
+    renderMatches();
+    el.lookupButton.disabled = false;
+    url();
+  }
+  function restore() {
+    const params = new URLSearchParams(location.search);
+    el.lookupInput.value = params.get("ip") || params.get("lookupInput") || "";
+    if (azure) el.groupQuery.value = params.get("q") || params.get("tagSearch") || "";
+    el.prefixFilter.value = params.get("prefix") || params.get("cidrSearch") || "";
+    const requested = params.get(azure ? "tag" : "category") || "";
+    state.selected = state.groups.find(group => group.id.toLowerCase() === requested.toLowerCase())?.id || "";
+    if (requested && !state.selected) SiteUX.notice(`The linked ${azure ? "service tag" : "category"} is not in this snapshot. Choose another; no selection was substituted.`);
+    state.groupLimit = GROUP_PAGE;
+    state.prefixLimit = PAGE;
+    renderGroups();
+    renderPrefixes();
+    if (el.lookupInput.value) lookup();
+  }
+  async function load() {
+    if (state.status === "loading-request") return;
+    const fromRetry = document.activeElement === el.retry;
+    state.status = "loading-request";
+    el.lookupFields.disabled = el.browseFields.disabled = true;
+    el.retry.disabled = true;
+    el.dataError.hidden = true;
+    el.refreshedAt.textContent = "Loading…";
+    renderStats();
+    try {
+      const data = await SiteUX.fetchJSON("./ip-ranges.json");
+      const source = azure ? data.tags : data.categories;
+      if (!Array.isArray(source) || !source.length) throw new Error("No IP-range groups in the snapshot");
+      const ids = new Set();
+      state.cache.clear();
+      state.groups = source.map(record => {
+        const id = azure ? record.name : record.key;
+        const prefixes = azure ? record.prefixes : record.cidrs;
+        if (typeof id !== "string" || !id || ids.has(id) || !Array.isArray(prefixes)) throw new Error("Invalid IP-range group");
+        ids.add(id);
+        prefixes.forEach(prefix => {
+          if (typeof prefix !== "string") throw new Error("Invalid prefix value");
+          if (!state.cache.has(prefix)) {
+            const parsed = parseRange(prefix);
+            if (!parsed) throw new Error(`Invalid recorded prefix: ${prefix}`);
+            state.cache.set(prefix, parsed);
           }
-        }
+        });
+        return { ...record, id, label: azure ? id : record.label || id, prefixes };
       });
-
-      elements.lookupHeading.innerHTML = "";
-      const strong = document.createElement("strong");
-      strong.textContent = ip;
-      elements.lookupHeading.append(
-        strong,
-        document.createTextNode(matches.length ? ` matches ${matches.length} GitHub service categor${matches.length > 1 ? "ies" : "y"}:` : " does not match any known GitHub IP range."),
-      );
-
-      matches.forEach((match) => {
-        const li = document.createElement("li");
-        li.className = "match-row";
-        const category = document.createElement("span");
-        category.className = "match-category";
-        category.textContent = match.category;
-        const cidr = document.createElement("span");
-        cidr.className = "match-cidr";
-        cidr.textContent = match.cidr;
-        li.append(category, cidr);
-        elements.matchList.append(li);
-      });
-      if (!matches.length) {
-        const li = document.createElement("li");
-        li.className = "no-match-row";
-        li.textContent = "No match found. This IP is not published in GitHub's current Meta API IP ranges.";
-        elements.matchList.append(li);
+      el.refreshedAt.textContent = date(data.generatedAt);
+      const counts = snapshotCounts(state.groups, state.cache);
+      if (azure) {
+        if (data.version != null && typeof data.version !== "string" && !(typeof data.version === "number" && Number.isFinite(data.version))) throw new Error("Invalid service-tags version");
+        state.summary = { ...counts, version: data.version == null || data.version === "" ? "Not recorded" : String(data.version), sourceDate: sourceFilenameDate(data.sourceFileName) || "Not recorded" };
+      } else {
+        state.summary = { ...counts, collectedAt: snapshotCollectionDate(data.generatedAt) || "Not recorded",
+          passwordAuthFlag: typeof data.verifiablePasswordAuthentication === "boolean" ? String(data.verifiablePasswordAuthentication) : "Not recorded" };
       }
-    }
-
-    async function init() {
-      const response = await fetch("./ip-ranges.json", { cache: "no-store" });
-      state.data = await response.json();
-      elements.refreshedAt.textContent = formatDateTime(state.data.generatedAt);
-      state.activeCategoryKey = state.data.categories[0]?.key ?? null;
+      if (!azure) {
+        el.categorySelect.replaceChildren(new Option("Choose a category", ""));
+        state.groups.forEach(group => el.categorySelect.add(new Option(`${group.label} (${group.prefixes.length.toLocaleString("en-US")} ranges)`, group.id)));
+      }
+      for (const [version, control] of [[4, el.exampleV4], [6, el.exampleV6]]) {
+        const example = [...state.cache].find(([, range]) => range.version === version)?.[0].split("/")[0];
+        control.disabled = !example;
+        if (example) { control.dataset.ip = example; control.title = example; }
+      }
+      state.status = "ready";
+      el.lookupFields.disabled = el.browseFields.disabled = false;
+      restore();
+    } catch (error) {
+      console.error("IP-range snapshot could not be loaded.", error);
+      state.status = "error";
+      el.dataError.hidden = false;
+      el.refreshedAt.textContent = "Unavailable";
+      el.lookupHeading.textContent = "Lookup unavailable until the snapshot loads.";
+    } finally {
       renderStats();
-      renderCategoryTabs();
-      renderCidrList();
+      el.retry.disabled = false;
+      if (fromRetry) (state.status === "ready" ? el.lookupInput : el.retry).focus({ preventScroll: true });
     }
+  }
+  el.lookupButton.addEventListener("click", lookup);
+  el.lookupInput.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); lookup(); } });
+  el.lookupInput.addEventListener("input", () => { state.lookupVersion++; el.lookupInput.removeAttribute("aria-invalid"); el.lookupHeading.textContent = "Press Check to look up this address."; el.matchList.replaceChildren(); el.moreMatches.hidden = true; });
+  [el.exampleV4, el.exampleV6].forEach(control => control.addEventListener("click", () => { el.lookupInput.value = control.dataset.ip; lookup(); }));
+  if (azure) {
+    el.groupQuery.addEventListener("input", () => { state.groupLimit = GROUP_PAGE; renderGroups(); url(); });
+    el.moreGroups.addEventListener("click", () => { const old = state.groupLimit; state.groupLimit += GROUP_PAGE; renderGroups(); el.groupResults.querySelectorAll("button")[old]?.focus(); });
+  } else el.categorySelect.addEventListener("change", () => selectGroup(el.categorySelect.value, false));
+  el.prefixFilter.addEventListener("input", () => { state.prefixLimit = PAGE; renderPrefixes(); url(); });
+  el.morePrefixes.addEventListener("click", () => { const old = state.prefixLimit; state.prefixLimit += PAGE; renderPrefixes(); el.prefixList.querySelectorAll("button")[old]?.focus(); });
+  el.moreMatches.addEventListener("click", () => { const old = state.matchLimit; state.matchLimit += MATCH_PAGE; renderMatches(); el.matchList.querySelectorAll("button")[old]?.focus(); });
+  el.copyPrefixes.addEventListener("click", () => SiteUX.copy(state.filteredPrefixes.join("\n"), `${state.selected} filtered prefixes`, el.copyPrefixes));
+  el.exportPrefixes.addEventListener("click", () => SiteUX.download(state.filteredPrefixes.join("\n") + "\n", `${config.kind}-${state.selected.replace(/[^\w.-]+/g, "-")}-prefixes.txt`, "text/plain;charset=utf-8", `${state.selected}: ${state.filteredPrefixes.length} filtered prefixes`));
+  el.retry.addEventListener("click", load);
+  window.addEventListener("popstate", () => { if (state.status === "ready") restore(); });
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  const back = document.getElementById("backToTop");
+  window.addEventListener("scroll", () => back.classList.toggle("visible", scrollY > 600), { passive: true });
+  back.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  load();
+})({"kind":"github"}, {parseAddress,parseRange,contains,sourceFilenameDate,snapshotCollectionDate,snapshotCounts});
+})();</script>
 
-    elements.lookupButton.addEventListener("click", performLookup);
-    elements.lookupInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") performLookup();
-    });
-    elements.cidrSearch.addEventListener("input", () => { cidrVisible = PAGE_SIZE; renderCidrList(); });
 
-    init().catch(function (error) {
-      console.error(error);
-      if (document.querySelector(".data-error")) return;
-      var host = document.querySelector("main");
-      if (!host) return;
-      var msg = document.createElement("p");
-      msg.className = "data-error";
-      msg.setAttribute("role", "alert");
-      msg.textContent = "Could not load the data for this page. This is usually a temporary network problem - reload to try again.";
-      var intro = host.querySelector(".intro");
-      if (intro) intro.insertAdjacentElement("afterend", msg);
-      else host.prepend(msg);
-    });
 
-    let scrollTicking = false;
-    window.addEventListener("scroll", () => {
-      if (scrollTicking) return;
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        elements.backToTop.classList.toggle("visible", window.scrollY > 600);
-        scrollTicking = false;
-      });
-    }, { passive: true });
-    elements.backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
-
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
-
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');

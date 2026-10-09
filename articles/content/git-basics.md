@@ -1,131 +1,171 @@
 +++
 author = "Benoit G"
-title = "Git Basics"
+title = "Git Basics: A Task-Based Command Cheat Sheet"
 date = "2024-02-28"
-description = "The fundamental Git commands every beginner should know: configuration, cloning, branching, committing, and logs."
+description = "Find Git commands by task: setup, cloning, the daily change cycle, synchronisation, branches and diagnosis. Each example explains its effect."
 tags = ["Git", "Productivity"]
 categories = ["Git"]
 featureImage = "/articles/images/git.svg"
 featured = true
+related = ["github-contribution-workflow", "display-latest-commits-with-git-graph"]
 +++
 
-Git is an essential tool for version control and collaboration in software development. This guide covers the fundamental Git commands that every beginner should know. From configuring your user information to managing branches and viewing logs, you'll learn the basics to get started with Git effectively.
+Use this as a reference, not a script to run from top to bottom. Replace example names and paths. Commands operate in the current repository unless `--global` is shown. Review `git status` before commands that change files.
 
-[[toc]]
+## Configure
 
-## Current config
+### Inspect effective configuration
+
+Shows values and where they came from. Avoid sharing output that includes private URLs or credentials.
 
 ```bash
-git config --list
+git config --list --show-origin
 ```
 
-## Configure user and email
+### Set author identity
+
+These global settings affect future commits in all repositories unless overridden locally. Use your intended public or GitHub no-reply email.
 
 ```bash
 git config --global user.name "Your Name"
-git config --global user.email "email@email.com"
+git config --global user.email "you@example.com"
 ```
 
-## Clone a repo
+## Retrieve a repository
+
+### Clone and enter
+
+Creates a new local directory and an `origin` remote; replace the URL with your project.
 
 ```bash
-git clone https://github.com/Benoit-Gaumard/ProjectName
+git clone https://github.com/OWNER/REPOSITORY.git
+cd REPOSITORY
+git remote -v
 ```
 
-## Get the current branch status
+## Daily change cycle
+
+### 1. Inspect the working tree
+
+Shows the current branch, staged files and unstaged changes. It changes nothing.
 
 ```bash
-git status
+git status --short --branch
+git diff
 ```
 
-## Stage a folder
+### 2. Stage only intended files
+
+Review the staged diff before committing. Avoid `git add .` when unrelated changes or secrets may be present.
 
 ```bash
-git add .
+git add README.md
+git diff --cached
 ```
 
-## Create a commit (local)
+### 3. Commit locally
+
+Creates a commit from the index, not every modified file. This does not publish anything.
 
 ```bash
-git commit -m "feat: bga first commit"
+git commit -m "docs: clarify setup instructions"
 ```
 
-## Push modifications to the remote branch
+### 4. Publish your branch
+
+Uploads local commits and sets the tracking branch. Confirm `origin` is your intended writable repository.
 
 ```bash
-git push
+git push -u origin my-feature
 ```
 
-## Get the last version of the repo from the remote branch
+## Synchronise
+
+### Inspect before integrating
+
+Fetch updates remote-tracking references without merging into your working branch.
 
 ```bash
-git pull
+git fetch origin
+git log --oneline HEAD..origin/main
 ```
 
-## Change branch
+### Fast-forward your local branch
+
+Use on the intended branch with a clean working tree. This refuses divergent history rather than creating an unexpected merge. Replace `main` if the project uses another base.
 
 ```bash
-git checkout mybranch
+git switch main
+git pull --ff-only origin main
 ```
 
-## List local branches
+## Branches
+
+### List branches
+
+The asterisk identifies the current branch; `-a` includes remote-tracking references.
 
 ```bash
 git branch
-```
-
-## List remote branches
-
-```bash
 git branch -r
-```
-
-## List local and remote branches
-
-```bash
 git branch -a
 ```
 
-## Delete a branch (local)
+### Create and switch
+
+Starts from the current commit. `git switch -c` requires a Git version supporting `switch`; older Git can use `git checkout -b`.
 
 ```bash
-git branch -d my-branch-name
-git branch -D my-branch-name
+git switch -c my-feature
 ```
 
-## Display repo config
+### Switch to an existing branch
+
+Save or commit intended work first; Git may refuse a switch that would overwrite changes.
 
 ```bash
-git config --global --list
+git switch my-feature
 ```
 
-## Logs
+### Delete a merged local branch
+
+Run from a different branch after confirming the work is merged. `-d` refuses some unmerged deletions; do not replace it with `-D` merely to silence that safeguard.
 
 ```bash
-git log -v
-git log -p
+git branch -d my-feature
 ```
 
-## Create a branch (local)
+### Preview remote branch deletion
+
+Remote deletion affects collaborators. This is a dry run; agree on deletion and verify the remote before deliberately removing `--dry-run`.
 
 ```bash
-git branch my-new-branch
-git checkout -b feat-azure-functions
+git push --dry-run origin --delete my-feature
 ```
 
-## Delete branch (remote)
+## Diagnose
+
+### Read history and patches
+
+Both commands are read-only. The first gives a graph, the second the latest commit's patch.
 
 ```bash
-git push origin -d my-branch
+git --no-pager log --graph --oneline --decorate -n 20
+git --no-pager log -p -n 1
 ```
 
-## List modified files
+### List changed files
+
+The first lists unstaged changes; the second lists staged changes.
 
 ```bash
-git diff -r --no-commit-id --name-only
+git diff --name-only
+git diff --cached --name-only
 ```
 
-## Misc
+### Open the graphical history viewer
+
+Optional desktop tool; it requires a working `gitk` installation and GUI session.
 
 ```bash
 gitk --all

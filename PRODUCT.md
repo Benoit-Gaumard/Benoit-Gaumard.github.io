@@ -18,7 +18,7 @@ Both audiences matter, but the tools reference is the core of the product; the p
 
 A personal site and Azure tooling hub at `benoit-gaumard.io`. It exists to (a) give cloud practitioners fast, trustworthy Azure reference data and small utilities, and (b) present Benoit Gaumard's professional profile.
 
-It currently ships 29 tool and reference pages, 32 how-to articles, a Hugo blog, and a bilingual homepage. Success looks like a practitioner finding the answer on the page they landed on, without needing the rest of the site.
+The standalone site contains 89 pages: 30 primary tool/reference pages, 48 how-to articles, the bilingual homepage, catalogues, histories and service pages. The legacy Hugo blog is excluded from this scope. Success looks like a practitioner finding the answer on the page they landed on, without needing the rest of the site.
 
 **The owner uses this site himself, daily, as a working tool.** That is a first-class purpose, not a side effect - it is why the tool pages are dense and utilitarian rather than presentational.
 
@@ -28,7 +28,7 @@ A 2026-08-29 design critique flagged that "the homepage of a tools hub previews 
 
 ## Positioning
 
-**The Azure data is authoritative and refreshes itself.** `azure-regions`, `azure-policies` and `azure-policy-aliases` query Azure directly through `Get-Az*` cmdlets under a service principal, rather than scraping Microsoft Learn or a third-party doc site. Fifteen GitHub Actions workflows refresh the datasets once a day, and the three Azure-authoritative pipelines also write weekly dated snapshots so catalogs can be diffed over time.
+**The Azure data has traceable sources and scheduled collection.** `azure-regions`, `azure-policies` and `azure-policy-aliases` query Azure directly under a service principal. Regions use raw ARM locations metadata and root-level availability-zone mappings, supplemented by the official Microsoft Learn public-region reference for explicit zone support and access restrictions. Missing evidence stays unknown. Metadata collection and reference checks have separate dates. The workflow catalogue derives its 15 daily/weekly schedules from YAML; run success and published dataset freshness are separate indicators. The three Azure-authoritative pipelines also write weekly dated snapshots so catalogues can be diffed over time.
 
 That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy: these pages are not hand-maintained lists that quietly rot.
 
@@ -41,13 +41,13 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 
 ## Capabilities and Constraints
 
-- **No build step for tool pages.** Every `/<slug>/index.html` is a single self-contained file: inline `<style>`, inline `<script>`, vanilla JS, zero npm dependencies. The only exception is Leaflet.js from a CDN on `/azure-regions/`.
+- **No runtime bundler or framework for tool pages.** Every `/<slug>/index.html` is a standalone checked-in file: inline styles/scripts, vanilla JS and zero npm dependencies. Optional authoring modules embed shared helpers rather than introducing a browser dependency. Leaflet and map tiles load on demand on `/azure-regions/`.
 - **`/blog/` is Hugo** (theme `hugo-clarity`) and is deliberately excluded from sitewide codemods.
-- **`/articles/` is hybrid:** the 32 article pages are generated from `articles/build-articles.mjs`'s `pageShell()` template and must be regenerated after template edits; `articles/index.html` is hand-authored.
-- **One shared page shell across 66 pages** (34 hand-authored + 32 generated). Sitewide changes are done as a throwaway codemod over the 34, plus an edit to `pageShell()` and a rebuild.
-- **Canonical domain is `benoit-gaumard.io`** (`CNAME`). `tools.benoit-gaumard.io` and `blog.benoit-gaumard.io` are **legacy domains**; all links must target `/tools/` and `/blog/` on the canonical domain. *Open item: the homepage Tools section and several skill-card icon `src`s still point at the legacy host.*
+- **`/articles/` is hybrid:** the 48 article pages and privacy page are generated from `articles/build-articles.mjs` and must be regenerated after source/template edits; the article catalogue retains its hand-authored controller and generated static-link markers.
+- **One shared page shell across 89 pages.** `site-ui.mjs` embeds the common CSS/JS inline and is idempotent. The article generator and `build-seo.mjs` use it; `node site-ui.mjs` updates existing standalone pages. Preserve external script loaders, page-specific handlers, local preferences and CRLF; never apply it to the legacy blog.
+- **Canonical domain is `benoit-gaumard.io`** (`CNAME`). Legacy subdomains must not replace canonical links in the standalone navigation.
 - Repo files are CRLF.
-- No `gh` CLI or token in the local dev environment: deploys are verified by polling the production URL with cache-busting, not the Actions API.
+- Local browser checks block third-party advertising and use mocked workflow APIs. Passing them is not evidence of a deployment, cloud configuration change or live consent-manager availability.
 - **Bilingual EN/FR is homepage-only today** (`index.html` / `index_fr.html`). Whether French parity should extend to tool pages and articles is **undecided**.
 
 ## Brand Commitments
@@ -62,24 +62,26 @@ That is the claim a neighbouring "Azure cheat sheet" site cannot truthfully copy
 - **22 named large-account clients** supported at Microsoft (Thales, CEA, Orano, ENGIE, EDF, Schneider Electric, Orange Business, Sopra Steria, Stellantis, Forvia, Naval Group, Coopérative U, Colas, BNP Paribas, Société Générale, BRED, Groupe BPCE, AXA, CNP, Vinci, Amadeus, HB Antwerp).
 - **Career timeline from 2005**: Bouygues Construction/Structis, BNP Paribas Arval, AXA, Crédit Agricole CIB, Microsoft since 2016.
 - **Live refreshed datasets** under each tool slug, plus weekly dated snapshots in `<slug>/history/`.
-- 29 working tools, 32 articles, a Hugo blog.
+- 30 working tools and 48 articles, plus histories, catalogues and service pages.
 
-**Absences future work must not fill by invention:** the homepage "20+ years" and "80+ projects" figures are self-reported with no public artifact behind the 80+ number. There are **no** testimonials, case studies, named project outcomes, or quantified client results anywhere in the repo - do not fabricate them. There is no `og:image` asset.
+**Owner-approved homepage figures:** the owner explicitly requested `8x` Microsoft certifications, `20+` years of experience and `80+` projects, replacing the 2005 career-start summary card. Keep those static figures, including the `+` on experience and projects, without a counting animation. The detailed career timeline retains its dates.
+
+**Absences future work must not fill by invention:** there are **no** testimonials, case studies, named project outcomes, or quantified client results beyond the owner-provided aggregate project count - do not fabricate them. New case studies require publishable facts from the owner.
 
 ## Product Principles
 
 1. **Freshness is the product.** A tool showing stale Azure data is worse than no tool. Automated refresh from an authoritative source is the core promise; anything that weakens it weakens the whole site.
 2. **Every page stands alone.** Visitors land deep, not on the homepage. A tool page must be complete, self-explanatory and independently usable, with no assumed prior navigation.
-3. **Zero build, zero dependencies.** Portability and a decade-long maintenance horizon outrank authoring convenience. New capability should not introduce a toolchain.
+3. **Standalone delivery, zero runtime framework dependencies.** Portability and a decade-long maintenance horizon outrank authoring convenience. Reusable authoring helpers must produce complete inline HTML, not introduce a required toolchain for visitors.
 4. **Credibility is shown, not claimed.** Prefer verifiable artifacts - the transcript link, live data, a working tool - over adjectives and round numbers.
-5. **The shared shell is a feature.** One consistent header, footer, theme and banner across 66 pages is what makes 29 unrelated utilities read as a single product. Divergence is a defect, not personalisation.
+5. **The shared shell is a feature.** One consistent header, footer, theme and banner across 89 pages makes the unrelated utilities read as a single product. Divergence is a defect, not personalisation.
 
 ## Accessibility & Inclusion
 
 No formal standard has been declared by the owner. In practice, **WCAG 2.1 AA is the working floor**: the 2026-08-29 audit brought light-mode text contrast up to AA (`--cp-warning`, `--cp-success`, `--cp-cyan`), and dark mode already met AA across every sampled pair. Both themes must continue to meet AA.
 
-Known open accessibility gaps recorded at that audit: heading hierarchy (`h1` → fifteen `h3`, sole `h2` last), unnamed `<section>` landmarks, no `<noscript>` fallback for `.reveal`, no print stylesheet, and interactive targets below 44 px.
+The remediation uses native controls/disclosures, associated field errors, explicit loading/error states, meaningful status announcements, 44px primary touch targets, progressive technical details and local rather than document-wide overflow. The completed checks are regression evidence, not a formal accessibility certification.
 
 ## Out of scope
 
-The Hugo blog under `blog/` is an external blog the owner intends to delete. It is **out of scope permanently** (decided 2026-08-29): not audited, not critiqued, not counted in page totals, and not to be raised as a gap. The product is the 66 standalone pages at the repo root.
+The Hugo blog under `blog/` is an external blog the owner intends to delete. It is **out of scope permanently** (decided 2026-08-29): not audited, not critiqued, not counted in page totals, and not to be raised as a gap. The product scope is the 89 standalone pages.

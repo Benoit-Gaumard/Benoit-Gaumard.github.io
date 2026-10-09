@@ -6,9 +6,10 @@ description = "A practical commit message convention for GitHub projects, based 
 tags = ["GitHub", "Productivity"]
 categories = ["GitHub"]
 featureImage = "/articles/images/github-color.svg"
+related = ["github-contribution-workflow", "github-branch-naming-convention"]
 +++
 
-If you are looking to create your own GitHub project or contribute to an existing one, understanding commit naming conventions is essential.
+Use the repository's contribution rules first. A useful Conventional Commits example is `fix(auth): reject expired tokens`: `fix` is the change type, optional `(auth)` is the scope, and the text describes the behaviour changed. These are commit messages, not shell commands.
 
 [[toc]]
 
@@ -44,7 +45,7 @@ fix(ui): resolve button alignment issue
 | `chore` | Maintenance tasks (e.g., package updates, build process changes) |
 | `ci` | CI/CD-related changes |
 
-## Writing clear commit messages
+## Write a clear and meaningful message
 
 Use the imperative mood:
 
@@ -61,15 +62,13 @@ Keep it concise:
 - Keep commits small and focused - avoid committing thousands of lines at once.
 - Avoid committing large changes (e.g., 10,000 lines or 100 files), as they are difficult to review.
 
-## Writing meaningful commit messages
-
-Good example:
+Add the reason in a body when the subject cannot explain it. For example:
 
 ```bash
 feat(api): add rate limiting to prevent abuse
 ```
 
-> Added an IP-based rate-limiting mechanism using Redis to throttle requests and prevent abuse. This will help improve API reliability under high traffic conditions.
+The body can explain the behaviour and trade-off, rather than repeat a list of modified files.
 
 Avoid generic commit messages:
 
@@ -88,10 +87,12 @@ chore(deps): update React to v18
 
 ## Use Conventional Commits
 
-If your project follows Semantic Versioning, [Conventional Commits](https://www.conventionalcommits.org/) helps automate versioning and changelogs:
+Release tools can use [Conventional Commits](https://www.conventionalcommits.org/) to derive changelog sections and version changes when the project configures that automation. Messages alone do not publish a release. For a breaking API change, describe the migration:
 
 ```bash
-feat!: introduce breaking change to API
+feat(api)!: require an explicit region
+
+BREAKING CHANGE: requests must include region; implicit default selection was removed.
 ```
 
 The `!` indicates a breaking change.
@@ -108,4 +109,14 @@ Some teams use emojis to make commit logs visually appealing, for example:
 
 ## Summary
 
-By following these commit message conventions, you ensure a clear history, easier collaboration, and better automation (changelog generation, release management). Adopting a structured commit naming convention makes your codebase more maintainable and improves teamwork efficiency.
+Copy this message template and fill only the parts your change needs:
+
+```text
+type(scope): describe the behaviour changed
+
+Explain why the change is needed and any important trade-off.
+
+Refs: #123
+```
+
+The next step is the [contribution and review workflow](/articles/github-contribution-workflow/).

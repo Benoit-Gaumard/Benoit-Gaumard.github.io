@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -98,6 +99,8 @@
       --cp-success-bg: #eefaf5;
       --cp-danger: #c93636;
       --cp-danger-bg: #fdf2f2;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
       --cp-link: #0969b5;
       --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
       --cp-panel-strong: rgba(255, 255, 255, 0.97);
@@ -114,7 +117,7 @@
       --cp-accent: #4fa8ea;
       --cp-accent-hover: #6fbdf3;
       --cp-accent-soft: rgba(79, 168, 234, 0.16);
-      --cp-accent-fg: #ffffff;
+      --cp-accent-fg: #0c1420;
       --cp-success: #35c98d;
       --cp-success-bg: #113325;
       --cp-danger: #f3696a;
@@ -171,7 +174,7 @@
     button, input, select { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: var(--cp-link); }
-    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
     .skip-link {
       position: absolute;
       left: .5rem;
@@ -197,7 +200,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -217,7 +220,7 @@
       font-weight: 600;
       animation: news-banner-scroll 28s linear infinite;
     }
-    .news-banner-text a { color: #fff; text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner-text a { color: var(--cp-accent-fg); text-decoration: underline; text-underline-offset: .15rem; }
     .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
     @keyframes news-banner-scroll {
       0% { transform: translateX(0); }
@@ -234,7 +237,7 @@
       border: 0;
       border-radius: 6px;
       background: rgba(255, 255, 255, .16);
-      color: #fff;
+      color: var(--cp-accent-fg);
       cursor: pointer;
     }
     .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
@@ -298,92 +301,103 @@
     .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
     .refresh-meta strong { color: var(--cp-text); }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
-    .stat-card {
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    [hidden] { display: none !important; }
+    main [id], [data-role-id] { scroll-margin-top: 6rem; }
+    .dataset-stats { margin-bottom: 1.5rem; }
+    .stats-scope { margin: 0 0 .75rem; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; }
+    .stat-card { padding: .75rem 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); box-shadow: 0 1px 2px var(--cp-border); }
+    .stat-value { color: var(--cp-text); font-size: 1.25rem; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+    .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; }
+    .roles-controls { margin: 0; padding: 0; border: 0; min-width: 0; }
+    .roles-search-row { display: flex; gap: .75rem; align-items: flex-end; margin-bottom: .75rem; }
+    .roles-search-row .roles-field { flex: 1; }
+    .roles-field { min-width: 0; }
+    .roles-field label { display: block; margin-bottom: .4rem; font-size: .85rem; font-weight: 600; }
+    .roles-field input, .roles-field select { width: 100%; height: 3rem; min-width: 0; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
+    .roles-field input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .roles-filter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+    .roles-options { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: .5rem 0; font-size: .85rem; }
+    .roles-options select { min-height: 2.75rem; max-width: 100%; padding: .5rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); }
+    .role-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; max-width: 100%; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; overflow-wrap: anywhere; }
+    .role-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
+    .role-action:disabled { cursor: not-allowed; color: var(--cp-text-muted); }
+    .filters-toggle, .filters-done { display: none; }
+    .roles-help, .role-status { margin: .75rem 0; max-width: 85ch; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
+    .role-status:empty { margin: 0; }
+    .roles-error { padding: 1rem; margin: 1rem 0; border: 1px solid var(--cp-danger); border-radius: 8px; color: var(--cp-danger); background: var(--cp-danger-bg); }
+    .copy-fallback { margin-block: 1rem; }
+    .copy-fallback label { display: block; margin-bottom: .5rem; font-size: .85rem; }
+    .copy-fallback textarea { width: 100%; padding: .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
+    #resultCount { margin: 1rem 0; color: var(--cp-text-muted); font-size: .9rem; }
+    .roles-table-wrap { overflow-x: auto; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+    .roles-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .roles-table th { vertical-align: top; text-align: left; padding: .5rem; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
+    .roles-table td { vertical-align: top; padding: .75rem .5rem; border-bottom: 1px solid var(--cp-border); }
+    .roles-table th:first-child { width: 30%; min-width: 18rem; }
+    .roles-table th:last-child { min-width: 6rem; }
+    .header-sort { display: inline-flex; align-items: center; gap: .25rem; min-height: 2.75rem; border: 0; padding: .35rem 0; background: none; color: var(--cp-text); font-size: .8rem; font-weight: 700; cursor: pointer; }
+    .header-help { display: block; font-size: .75rem; font-weight: 400; line-height: 1.4; max-width: 18ch; color: var(--cp-text-muted); }
+    .role-toggle { display: flex; align-items: flex-start; flex-direction: column; gap: .35rem; width: 100%; min-height: 2.75rem; padding: 0; border: 0; background: none; color: var(--cp-text); text-align: left; font: inherit; font-weight: 650; cursor: pointer; overflow-wrap: anywhere; }
+    .role-toggle:hover, .role-toggle[aria-expanded="true"] { color: var(--cp-link); }
+    .role-toggle .open-caption { color: var(--cp-link); font-size: .8rem; font-weight: 400; }
+    .role-title { margin: 0; font-size: 1.05rem; line-height: 1.4; }
+    .role-description { margin: .5rem 0; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+    .role-badges { display: flex; flex-wrap: wrap; gap: .4rem; margin-block: .5rem; }
+    .role-badges:empty { display: none; }
+    .role-badge { display: inline-flex; align-items: center; max-width: 100%; padding: .2rem .5rem; border-radius: 6px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: .75rem; overflow-wrap: anywhere; }
+    .role-badge.is-privileged { color: var(--cp-warning); background: var(--cp-warning-bg); }
+    .role-selection { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; font-size: .85rem; cursor: pointer; }
+    .role-selection input { width: 1.15rem; height: 1.15rem; flex: none; accent-color: var(--cp-accent); }
+    .selection-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+    .role-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .75rem 0; }
+    .role-actions > a:not(.role-action) { display: inline-flex; min-height: 2.75rem; align-items: center; font-size: .85rem; }
+    .role-cards { display: grid; gap: .75rem; }
+    .role-card { padding: 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); min-width: 0; }
+    .role-identifier { margin: .5rem 0; font-size: .85rem; }
+    .role-identifier dt { color: var(--cp-text-muted); font-weight: 600; }
+    .role-identifier dd { min-width: 0; margin: 0; }
+    .detail-row > td { padding: 0; background: var(--cp-surface-soft); }
+    .role-detail { padding: 1rem; min-width: 0; }
+    .role-card .role-detail { padding: 0; margin-top: 1rem; border-top: 1px solid var(--cp-border); }
+    .role-detail > p { max-width: 80ch; font-size: .9rem; line-height: 1.6; }
+    .role-meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .5rem 1rem; font-size: .85rem; }
+    .role-meta dt { font-weight: 600; }
+    .role-meta dd { min-width: 0; margin: 0; }
+    .technical-code { display: block; margin: 0; padding-block: .35rem; max-width: 100%; white-space: pre; overflow: auto; font-family: "Cascadia Code", "Consolas", ui-monospace, monospace; font-size: .85rem; line-height: 1.5; }
+    .permission-group { margin-block: .75rem; min-width: 0; }
+    .permission-group > summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); font-size: .9rem; font-weight: 600; cursor: pointer; }
+    .permission-list { padding: 0; margin: .5rem 0; list-style: none; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+    .permission-list > li { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: .5rem 1rem; padding: .65rem .75rem; border-bottom: 1px solid var(--cp-border); }
+    .permission-list > li:last-child { border-bottom: 0; }
+    .permission-list .permission-description { color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; overflow-wrap: anywhere; }
+    .permission-list .permission-description p { margin: .25rem 0; }
+    .permission-list .pattern-spellings { min-width: 0; }
+    .comparison-selection, .comparison-panel { border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface-soft); padding: 1rem; margin: 1rem 0; }
+    .comparison-selection h2, .comparison-panel h2 { margin: 0 0 .5rem; font-size: 1.35rem; }
+    #selectedRoles { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .comparison-role-summaries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .comparison-role-summary { min-width: 0; }
+    .comparison-role-summary h3 { margin: 1rem 0 .5rem; font-size: 1.05rem; overflow-wrap: anywhere; }
+    .comparison-subgroup { margin: .5rem 0; }
+    .comparison-subgroup > summary { min-height: 2.75rem; padding-block: .65rem; cursor: pointer; font-size: .85rem; overflow-wrap: anywhere; }
+    .linked-role { margin: 1rem 0; }
+    .linked-role > p { color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
+    .empty-roles { padding: 1.5rem; border: 1px dashed var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); }
+    .empty-roles h2 { font-size: 1.2rem; margin-top: 0; }
+    .load-more { display: block; min-height: 2.75rem; margin: 1rem auto; padding: .65rem 1rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); font: inherit; cursor: pointer; }
+    @media (max-width: 64rem) {
+      .filters-toggle, .filters-done { display: inline-flex; }
+      .roles-filters { padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
+      .roles-filter-grid, .comparison-role-summaries, .permission-list > li { grid-template-columns: minmax(0, 1fr); }
+      .role-meta { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+      .role-meta dd { margin-bottom: .5rem; }
+      .role-actions .role-action { flex: 0 1 auto; }
     }
-    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
-    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
-    .stat-card.is-success .stat-value { color: var(--cp-success); }
-
-    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
-    .filter-bar input, .filter-bar select {
-      min-height: 2.9rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      padding: .5rem .85rem;
+    @media print {
+      .roles-controls, .role-selection, .comparison-selection, .role-actions { display: none !important; }
+      .role-card, .role-row { break-inside: avoid; }
     }
-    .filter-bar input { flex: 2 1 16rem; max-width: 28rem; }
-    .filter-bar select { flex: 1 1 12rem; width: 12rem; max-width: 100%; min-width: 0; }
-    .filter-toggle { display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
-    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; max-width: none; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
-    .load-more {
-      display: block;
-      margin: 1rem auto 0;
-      padding: .7rem 1.4rem;
-      min-height: 2.75rem;
-      border: 1px solid var(--cp-border-strong);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      font: inherit;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: border-color .2s, background .2s, color .2s;
-    }
-    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
-
-
-    .table-wrap {
-      overflow-x: auto;
-      min-height: 60vh;
-      border: 1px solid var(--cp-border);
-      border-radius: 8px;
-      background: var(--cp-surface);
-      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    thead th {
-      position: sticky;
-      top: 0;
-      background: var(--cp-surface-soft);
-      text-align: left;
-      padding: .7rem .9rem;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: .02em;
-      color: var(--cp-text-muted);
-      border-bottom: 1px solid var(--cp-border);
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
-    }
-    thead th:hover { color: var(--cp-text); }
-    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
-    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
-    tbody td { padding: .6rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
-    .tag-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: .15rem .6rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      background: var(--cp-surface-soft);
-      color: var(--cp-text-muted);
-    }
-    .tag-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
-    .tag-badge.is-no { background: var(--cp-danger-bg); color: var(--cp-danger); }
-    #resultCount { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
 
     footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
     .footer-inner { padding-block: 2rem 1.5rem; }
@@ -424,6 +438,7 @@
     .back-to-top:hover { background: var(--cp-accent-hover); }
 
     @media (max-width: 48rem) {
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
       .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
       .menu-toggle { display: inline-flex; }
       .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
@@ -447,26 +462,7 @@
       html { scroll-behavior: auto; }
       body::before { animation: none; }
     }
-  
-    /* Filled by script: hold the box only while empty, so the page below does
-       not jump when the data lands, and no blank hole survives a render. */
-    @supports (min-height: 1px) {
-      #statsGrid:empty { min-height: 90px; }
-      @media (max-width: 48rem) {
-        #statsGrid:empty { min-height: 107px; }
-      }
-      @media (max-width: 32rem) {
-        #statsGrid:empty { min-height: 211px; }
-      }
-    }
 
-    /* The table is the last thing on the page and can settle anywhere between
-       5,000px and 89,000px, so a fixed reservation would be wrong at most
-       widths. Holding a viewport-relative box while the body is empty keeps the
-       footer below the fold at first paint, so its arrival moves nothing the
-       visitor can see. :has() releases it as soon as the first row renders. */
-    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
-       same before and after, and the rows below it do not move */
     #refreshedAt { display: inline-block; min-width: 9.5rem; }
     @media print {
       /* Printing a tool page should yield the data, not the furniture. */
@@ -497,13 +493,13 @@
       }
     }
     .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
     .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
     .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -513,71 +509,6 @@
     .share-btn svg { flex: none; }
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
-    .role-badge { display: inline-flex; align-items: center; padding: .1rem .5rem; border-radius: 999px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; background: var(--cp-surface-soft); color: var(--cp-text-muted); }
-    .role-badge.is-privileged { background: var(--cp-warning-bg, #fdf3e2); color: var(--cp-warning, #8a5a00); }
-    .stat-card.is-warning .stat-value { color: var(--cp-warning, #8a5a00); }
-
-    tbody tr.role-row { cursor: pointer; }
-    tbody tr.role-row:hover { background: var(--cp-accent-soft); }
-    tbody tr.role-row:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: -3px; }
-    .role-head { display: flex; align-items: center; gap: .5rem; }
-    .role-caret { flex: 0 0 auto; transition: transform .15s ease; opacity: .6; }
-    tbody tr.role-row[aria-expanded="true"] .role-caret { transform: rotate(90deg); opacity: 1; }
-    .role-name { font-weight: 700; color: var(--cp-text); }
-    .role-desc { display: block; margin-top: .25rem; max-width: 70ch; color: var(--cp-text-muted); font-size: 0.8rem; line-height: 1.45; }
-    .num-cell { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .id-cell { white-space: nowrap; }
-    .id-cell code { font-size: 0.78rem; }
-    /* The role name carries a full sentence of description, so hold a real
-       minimum for it: a percentage collapses once the extra count columns push
-       the table past the wrapper and it starts scrolling. */
-    thead th:first-child, tbody td:first-child { min-width: 22rem; }
-    /* Four count columns fit a 1280px viewport only if they stop paying the
-       full cell padding on both sides. */
-    thead th.num-col, tbody td.num-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
-    /* Same reason as the detail headings: these are property names, and
-       NOTDATAACTIONS is not one of them. */
-    thead th.num-col { text-transform: none; letter-spacing: 0; }
-
-    tbody tr.detail-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
-    .detail-panel { padding: 1.1rem 1.25rem 1.35rem; }
-    .detail-panel > p { margin: 0 0 .9rem; max-width: 80ch; color: var(--cp-text-muted); line-height: 1.6; }
-    .detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin-bottom: 1rem; font-size: 0.8rem; }
-    .detail-meta code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .copy-button { display: inline-flex; align-items: center; gap: .35rem; min-height: 1.9rem; padding: .25rem .6rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
-    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .detail-group { margin-top: 1.1rem; }
-    .detail-group:first-of-type { margin-top: 0; }
-    .detail-group h3 { margin: 0 0 .45rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .03em; color: var(--cp-text-muted); }
-    /* Actions / NotActions / DataActions / NotDataActions are literal role
-       definition property names, so they keep their casing rather than being
-       flattened to NOTDATAACTIONS by the label style. */
-    .detail-group h3.is-bucket { text-transform: none; letter-spacing: 0; font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--cp-text); }
-    .perm-list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); overflow: hidden; }
-    .perm-list li { display: grid; grid-template-columns: minmax(24rem, 1.6fr) 1.4fr; gap: .35rem 1.25rem; padding: .5rem .75rem; border-bottom: 1px solid var(--cp-border); font-size: 0.8rem; }
-    .perm-list li:last-child { border-bottom: 0; }
-    .perm-list code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; color: var(--cp-text); }
-    .perm-list .perm-desc { color: var(--cp-text-muted); line-height: 1.5; }
-    .scope-list { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .scope-list code { padding: .15rem .45rem; border-radius: 4px; background: var(--cp-surface); border: 1px solid var(--cp-border); font-size: 0.75rem; }
-    .detail-empty { color: var(--cp-text-muted); font-size: 0.8rem; }
-    .kv-list li { grid-template-columns: minmax(8rem, .45fr) 2fr; }
-    .kv-list .perm-key { font-weight: 700; color: var(--cp-text); }
-    .yn-badge { display: inline-flex; align-items: center; padding: .12rem .55rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
-    .yn-badge.is-yes { background: var(--cp-success-bg); color: var(--cp-success); }
-    .yn-badge.is-no { background: var(--cp-surface-soft); color: var(--cp-text-muted); }
-    .badge-cell { text-align: center; white-space: nowrap; }
-    thead th.badge-col, tbody td.badge-cell { width: 1%; padding-left: .5rem; padding-right: .5rem; }
-    @media (max-width: 48rem) {
-      .perm-list li { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 32rem) {
-      /* The shared shell keeps flex-basis 16rem on the filter controls when the
-         bar becomes a column, where the basis is read as a height - which grows
-         the search box to ~250px. Reset the basis, keep the min-height. */
-      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; }
-    }
-
   </style>
   <script type="application/ld+json">
   {
@@ -605,12 +536,382 @@
     ]
   }
   </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/azure-built-in-roles/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/azure-built-in-roles/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -629,6 +930,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/" aria-current="page"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -644,61 +986,92 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="28" height="28"></span>Azure Built-in Roles</h1>
-      <p class="intro-text">Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and the description Microsoft gives each individual action, from the official <a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles" target="_blank" rel="noopener">built-in roles reference</a>.</p>
+      <p class="intro-text">Find an Azure RBAC role, inspect its declared permissions or compare two roles. Categories and action descriptions come from the official <a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles" target="_blank" rel="noopener">Microsoft Learn reference</a>.</p>
       <p class="refresh-meta">
         <span>Last refreshed: <strong id="refreshedAt">Loading...</strong></span>
+        <a href="roles-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Roles history</a>
       </p>
     </section>
 
-    <section class="stats-grid" id="statsGrid" aria-label="Built-in role statistics"></section>
+    <section class="dataset-stats" aria-label="Whole-catalogue statistics">
+      <p class="stats-scope" id="datasetSummary" role="status" aria-live="polite" aria-atomic="true">Dataset totals: loading&hellip;</p>
+      <div class="stats-grid" id="statsGrid" aria-busy="true">
+        <div class="stat-card"><div class="stat-value" data-stat="roles">&mdash;</div><div class="stat-label">Built-in roles</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="categories">&mdash;</div><div class="stat-label">Categories</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="privileged">&mdash;</div><div class="stat-label">Privileged roles</div></div>
+        <div class="stat-card"><div class="stat-value" data-stat="providers">&mdash;</div><div class="stat-label">Providers</div></div>
+      </div>
+      <noscript><p class="stats-scope">Enable JavaScript to display the catalogue totals.</p></noscript>
+    </section>
 
     <section aria-label="Azure built-in roles">
-      <div class="filter-bar">
-        <input id="search" type="search" placeholder="Filter by role, description or action..." autocomplete="off" spellcheck="false" aria-label="Filter by role, description or action">
-        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
-        <select id="providerFilter" aria-label="Filter by resource provider"><option value="">All providers</option></select>
-        <select id="actionTypeFilter" aria-label="Filter by action type">
-          <option value="">All action types</option>
-          <option value="actions">Has Actions</option>
-          <option value="notActions">Has NotActions</option>
-          <option value="dataActions">Has DataActions</option>
-          <option value="notDataActions">Has NotDataActions</option>
-        </select>
-        <label class="filter-toggle"><input type="checkbox" id="privilegedOnlyFilter"> Privileged only</label>
+      <noscript><p>This catalogue needs JavaScript. <a href="./roles.json">Download the role dataset</a> or use the Microsoft Learn reference above.</p></noscript>
+      <fieldset class="roles-controls" id="rolesControls" disabled aria-label="Filter and sort roles">
+        <div class="roles-search-row">
+          <div class="roles-field"><label for="search">Search roles and permissions</label><input id="search" type="search" placeholder="Role, ID, description or action" autocomplete="off" spellcheck="false"></div>
+          <button class="role-action filters-toggle" id="filterToggle" type="button" aria-controls="roleFilters" aria-expanded="false">Filters · 0 active</button>
+        </div>
+        <div class="roles-filters" id="roleFilters">
+          <div class="roles-filter-grid">
+            <div class="roles-field"><label for="categoryFilter">Category</label><select id="categoryFilter"><option value="">All categories</option></select></div>
+            <div class="roles-field"><label for="providerFilter">Provider (explicit)</label><select id="providerFilter" aria-describedby="providerHelp"><option value="">All providers</option></select></div>
+            <div class="roles-field"><label for="actionTypeFilter">Permission entries</label><select id="actionTypeFilter"><option value="">All action types</option><option value="actions">Has Actions</option><option value="notActions">Has NotActions</option><option value="dataActions">Has DataActions</option><option value="notDataActions">Has NotDataActions</option></select></div>
+          </div>
+          <p class="roles-help" id="providerHelp">Provider names are grouped without case differences. This filter matches explicit provider names; broad <code>*</code> roles may not appear.</p>
+          <div class="roles-options">
+            <label class="role-selection"><input type="checkbox" id="privilegedOnlyFilter"> Privileged only</label>
+            <label for="sortBy">Sort by</label><select id="sortBy"></select>
+            <button class="role-action" id="sortDirection" type="button">Ascending</button>
+            <button class="role-action" id="resetFilters" type="button">Reset filters</button>
+            <button class="role-action filters-done" id="filtersDone" type="button">Done</button>
+          </div>
+        </div>
+      </fieldset>
+      <p class="roles-help" id="compareHint">Select up to two roles to compare their listed permission patterns, not effective access.</p>
+      <p class="role-status" id="actionStatus" role="status" aria-live="polite"></p>
+      <div class="copy-fallback" id="copyFallback" hidden><label for="copyValue" id="copyLabel">Select and copy the value</label><textarea id="copyValue" rows="3" readonly></textarea></div>
+      <div class="roles-error" id="rolesError" role="alert" hidden><p>Role data could not be loaded. Check the connection and retry.</p><button class="role-action" id="retryRoles" type="button">Retry</button></div>
+      <div class="comparison-selection" id="comparisonSelection" hidden>
+        <h2>Selected for comparison</h2><div id="selectedRoles"></div>
+        <div class="role-actions"><button class="role-action" id="compareButton" type="button" disabled>Compare two roles</button><button class="role-action" id="clearComparison" type="button">Clear selection</button></div>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th data-key="roleName">Role <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="category">Category <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="nActions" class="num-col">Actions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="nNotActions" class="num-col">NotActions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="nDataActions" class="num-col">DataActions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="nNotDataActions" class="num-col">NotDataActions <span class="sort-arrow">&#9650;</span></th>
-              <th data-key="id">Role definition ID <span class="sort-arrow">&#9650;</span></th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-      <p id="resultCount" aria-live="polite"></p>
+      <section class="comparison-panel" id="comparisonPanel" aria-labelledby="comparisonHeading" hidden>
+        <h2 id="comparisonHeading" tabindex="-1">Compare two roles</h2>
+        <p class="roles-help" id="comparisonCaveat">This compares distinct listed patterns, ignoring case. It does not expand wildcards, subtract exclusions or calculate effective access. Conditions and permission-block boundaries are not present in this snapshot. Identical strings do not establish equivalent access; different strings may overlap.</p>
+        <div class="role-actions"><button class="role-action" id="closeComparison" type="button">Close comparison</button><button class="role-action" id="copyComparison" type="button">Copy comparison link</button><a href="#comparison-notes">How to read this comparison</a></div>
+        <div id="comparisonContent"></div>
+      </section>
+      <p id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading roles&hellip;</p>
+      <div class="linked-role" id="linkedRole" hidden></div>
+      <div id="rolesResults" aria-busy="true"></div>
+      <button class="load-more" id="loadMore" type="button" hidden>Load more roles</button>
     </section>
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About Azure built-in roles</h2>
       <p>Azure role-based access control grants permissions through role definitions. A role definition is a list of allowed control-plane operations (<code>Actions</code>), operations carved back out of them (<code>NotActions</code>), and the equivalent pair for operations on the data inside a resource (<code>DataActions</code> and <code>NotDataActions</code>). Built-in roles are the ones Microsoft ships and maintains; their definition IDs are the same GUID in every tenant, which is why they can be referenced safely from templates and pipelines.</p>
-      <h3>Reading a role definition</h3>
+      <h3 id="actions-help">Actions: management operations</h3>
+      <p>Actions list allowed control-plane operation patterns. Counts on this page are recorded entries, not the number of operations a wildcard can match.</p>
+      <h3 id="dataActions-help">DataActions: data-plane operations</h3>
+      <p>DataActions list data-plane operation patterns, such as reading blobs. An empty list does not prove that all routes to data access are blocked: some management permissions can retrieve access keys or grant additional roles.</p>
+      <h3 id="notActions-help">NotActions: control-plane exclusions</h3>
+      <p>NotActions subtracts from the role's allowed Actions; it is not a deny assignment. Another role assignment can still grant an excluded operation.</p>
+      <h3 id="notDataActions-help">NotDataActions: data-plane exclusions</h3>
+      <p>NotDataActions excludes patterns from DataActions. It is not a deny rule across other assignments. Empty groups stay collapsed with an explicit zero count.</p>
+      <h3 id="comparison-notes">Comparing two roles</h3>
+      <p>The comparison shows distinct listed patterns shared by both roles or listed in only one, matching text without case differences. Original spellings and descriptions remain available. It does not expand wildcards or rank roles by privilege: <code>*</code> and <code>*/read</code> differ as strings even though their coverage overlaps.</p>
+      <p>The collector combines permission blocks into four lists and does not retain conditions. Assignment scopes, other roles, deny assignments and service authentication can change effective access. Assignable scopes describe where a role may be assigned, not where you currently hold it. Use the official <a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions" target="_blank" rel="noopener">role-definition guidance</a> and the linked role references before making an access decision.</p>
+      <h3>Reading the source</h3>
       <ul>
         <li><code>Actions</code> are management operations - creating, reading, updating or deleting the resource itself.</li>
-        <li><code>DataActions</code> reach the data a resource holds: the blobs in a storage account, the secrets in a key vault, the messages in a queue. A role with no <code>DataActions</code> cannot read your data, however broad its management rights look.</li>
+        <li><code>DataActions</code> describe direct data-plane permissions. Management rights and service-specific authentication need separate consideration.</li>
         <li><code>NotActions</code> is a subtraction, not a deny. It removes an operation from this role only; another assignment can still grant it.</li>
         <li>A wildcard such as <code>Microsoft.Compute/*</code> covers every current and future operation in that namespace, so the effective reach of a role grows as Azure does.</li>
       </ul>
       <h3>Choosing the right role</h3>
-      <p>Start from the narrowest role whose actions cover the task, and assign it at the narrowest scope that works - a resource before a resource group, a resource group before a subscription. Owner, Contributor and User Access Administrator are flagged as privileged here because they can grant access to others or bypass the guardrails placed on a scope, so they deserve a Privileged Identity Management workflow rather than a standing assignment.</p>
+      <p>Start from the narrowest role and assignment scope that meet the task. The Privileged badge reflects Microsoft's reference classification, not a risk score calculated by this page. A role without this badge is not necessarily harmless.</p>
       <h3>Where this data comes from</h3>
-      <p>The dataset is rebuilt several times a day from Microsoft's generated Azure RBAC reference, so a role added or reworded upstream shows up here without anyone editing this page. The per-action descriptions come from the same source, which is why they read the way they do in the portal.</p>
+      <p>The refresh workflow collects Microsoft's generated Azure RBAC reference and its per-action descriptions. Last refreshed is the timestamp of this dataset, not the last modification date of each role. Original role IDs and permission strings are preserved when displayed or copied.</p>
     </section>
   </main>
 
@@ -706,7 +1079,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -752,6 +1125,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -762,475 +1136,727 @@
     </svg>
   </button>
 
-<script>
+<script data-roles-script>
     const PAGE_SIZE = 100;
-    const state = { visible: PAGE_SIZE, roles: [], filtered: [], byKey: {}, sortKey: "roleName", sortDir: "asc", query: "" };
-    const elements = {
-      statsGrid: document.getElementById("statsGrid"),
-      refreshedAt: document.getElementById("refreshedAt"),
-      currentYear: document.getElementById("currentYear"),
-      search: document.getElementById("search"),
-      categoryFilter: document.getElementById("categoryFilter"),
-      providerFilter: document.getElementById("providerFilter"),
-      actionTypeFilter: document.getElementById("actionTypeFilter"),
-      privilegedOnlyFilter: document.getElementById("privilegedOnlyFilter"),
-      tableBody: document.getElementById("tableBody"),
-      resultCount: document.getElementById("resultCount"),
-      backToTop: document.getElementById("backToTop"),
-      headers: [...document.querySelectorAll("thead th[data-key]")],
-    };
+    const BUCKETS = [
+      { key: "actions", title: "Actions", count: "nActions", help: "Allowed management-operation patterns." },
+      { key: "notActions", title: "NotActions", count: "nNotActions", help: "Management exclusions, not deny rules." },
+      { key: "dataActions", title: "DataActions", count: "nDataActions", help: "Allowed data-plane operation patterns." },
+      { key: "notDataActions", title: "NotDataActions", count: "nNotDataActions", help: "Data-plane exclusions, not deny rules." },
+    ];
+    const SORTS = { roleName: "Role name", category: "Category", nActions: "Actions count", nNotActions: "NotActions count", nDataActions: "DataActions count", nNotDataActions: "NotDataActions count", id: "Role Definition Id" };
+    const state = { status: "loading", roles: [], filtered: [], byId: new Map(), indices: new Map(), visible: PAGE_SIZE, sortKey: "roleName", sortDir: "asc", open: new Set(), groups: new Map(), linkedId: "", selected: [], comparisonOpen: false, comparisonKey: "", filtersOpen: false };
+    const el = Object.fromEntries([
+      "rolesControls", "search", "categoryFilter", "providerFilter", "actionTypeFilter", "privilegedOnlyFilter",
+      "sortBy", "sortDirection", "resetFilters", "filterToggle", "roleFilters", "filtersDone", "datasetSummary", "statsGrid",
+      "actionStatus", "copyFallback", "copyValue", "copyLabel", "rolesError", "retryRoles", "refreshedAt",
+      "comparisonSelection", "selectedRoles", "compareButton", "clearComparison", "comparisonPanel", "comparisonHeading",
+      "comparisonContent", "closeComparison", "copyComparison", "resultCount", "linkedRole", "rolesResults", "loadMore", "compareHint",
+    ].map(id => [id, document.getElementById(id)]));
+    const compact = matchMedia("(max-width: 64rem)");
+    const filterControls = [el.search, el.categoryFilter, el.providerFilter, el.actionTypeFilter, el.privilegedOnlyFilter];
 
     function normalize(value) {
-      return String(value).toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return String(value ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>"']/g, function (c) {
-        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    function providerKey(value) {
+      return value.trim().toLowerCase();
+    }
+
+    function roleKey(value) {
+      return value.toLowerCase();
+    }
+
+    function providerOptions(roles) {
+      const groups = new Map();
+      roles.forEach(role => role.providers.forEach(provider => {
+        const key = providerKey(provider);
+        if (!groups.has(key)) groups.set(key, new Map());
+        const spellings = groups.get(key);
+        spellings.set(provider, (spellings.get(provider) || 0) + 1);
+      }));
+      return [...groups].map(([key, spellings]) => {
+        const sorted = [...spellings].sort((a, b) => b[1] - a[1] || Number(b[0].startsWith("Microsoft.")) - Number(a[0].startsWith("Microsoft.")) || a[0].localeCompare(b[0], "en"));
+        return { key, label: sorted[0][0] };
+      }).sort((a, b) => a.label.localeCompare(b.label, "en"));
+    }
+
+    function prepareRoles(payload) {
+      if (!payload || !Array.isArray(payload.roles)) throw new Error("Missing role catalogue");
+      const ids = new Set();
+      return payload.roles.map(role => {
+        if (!role || typeof role.id !== "string" || !role.id || ids.has(roleKey(role.id))
+          || typeof role.roleName !== "string" || !role.roleName || typeof role.description !== "string"
+          || typeof role.category !== "string" || typeof role.isPrivileged !== "boolean"
+          || ["categories", "providers", "assignableScopes"].some(key => !Array.isArray(role[key]) || role[key].some(value => typeof value !== "string" || !value.trim()))
+          || BUCKETS.some(({ key }) => !Array.isArray(role[key]) || role[key].some(pair => !Array.isArray(pair) || typeof pair[0] !== "string" || !pair[0] || typeof pair[1] !== "string"))) {
+          throw new Error("Invalid or duplicate role metadata");
+        }
+        const source = new URL(role.docUrl);
+        if (source.protocol !== "https:" || source.hostname !== "learn.microsoft.com" || source.username || source.password) throw new Error("Invalid Microsoft Learn reference");
+        ids.add(roleKey(role.id));
+        const counts = Object.fromEntries(BUCKETS.map(bucket => [bucket.count, role[bucket.key].length]));
+        const searchable = [role.roleName, role.id, role.description, ...role.categories, ...role.providers, ...BUCKETS.flatMap(bucket => role[bucket.key].flat())].join(" ");
+        return { ...role, ...counts, providerKeys: new Set(role.providers.map(providerKey)), haystack: normalize(searchable) };
       });
     }
 
-    function renderStats(stats) {
-      elements.statsGrid.replaceChildren();
-      stats.forEach(function (stat) {
-        const el = document.createElement("div");
-        el.className = "stat-card" + (stat.tone ? " is-" + stat.tone : "");
-        el.innerHTML = '<div class="stat-value">' + stat.value.toLocaleString() + '</div><div class="stat-label">' + stat.label + '</div>';
-        elements.statsGrid.append(el);
+    function datasetTotals(roles) {
+      return {
+        roles: roles.length,
+        categories: new Set(roles.flatMap(role => role.categories)).size,
+        privileged: roles.filter(role => role.isPrivileged).length,
+        providers: providerOptions(roles).length,
+      };
+    }
+
+    function renderStats() {
+      const totals = state.status === "ready" ? datasetTotals(state.roles) : null;
+      el.statsGrid.querySelectorAll(".stat-value").forEach(value => {
+        value.textContent = totals ? totals[value.dataset.stat].toLocaleString("en-US") : "—";
+      });
+      el.statsGrid.setAttribute("aria-busy", String(state.status === "loading" || state.status === "fetching"));
+      el.datasetSummary.textContent = state.status === "ready"
+        ? "Whole-catalogue totals, independent of filters. Privileged roles follow Microsoft's classification; providers are case-insensitive."
+        : state.status === "error" ? "Dataset totals: unavailable." : "Dataset totals: loading...";
+    }
+
+    function filterRoles(roles, criteria) {
+      const query = normalize(criteria.search.trim());
+      const provider = providerKey(criteria.provider);
+      return roles.filter(role => (!criteria.category || role.categories.includes(criteria.category))
+        && (!provider || role.providerKeys.has(provider))
+        && (!criteria.actionType || role[criteria.actionType].length > 0)
+        && (!criteria.privilegedOnly || role.isPrivileged)
+        && (!query || role.haystack.includes(query)));
+    }
+
+    function sortRoles(roles, key, direction) {
+      const sign = direction === "desc" ? -1 : 1;
+      return [...roles].sort((a, b) => {
+        const value = typeof a[key] === "number" ? a[key] - b[key] : normalize(a[key]).localeCompare(normalize(b[key]), "en");
+        return sign * (value || a.roleName.localeCompare(b.roleName, "en") || a.id.localeCompare(b.id));
       });
     }
 
-    function fillSelect(select, values) {
-      values.forEach(function (value) { select.append(new Option(value, value)); });
+    function comparePatterns(left, right) {
+      function index(pairs) {
+        const map = new Map();
+        pairs.forEach(pair => {
+          const key = pair[0].toLowerCase();
+          if (!map.has(key)) map.set(key, []);
+          map.get(key).push(pair);
+        });
+        return map;
+      }
+      const a = index(left), b = index(right);
+      const result = { leftOnly: [], shared: [], rightOnly: [] };
+      [...new Set([...a.keys(), ...b.keys()])].sort().forEach(key => {
+        const record = { left: a.get(key) || [], right: b.get(key) || [] };
+        result[a.has(key) && b.has(key) ? "shared" : a.has(key) ? "leftOnly" : "rightOnly"].push(record);
+      });
+      return result;
     }
 
-    // Copying a GUID out of a table is the single most common reason to be on
-    // this page, so every id gets a button rather than asking for a selection.
-    function copyButton(label, value) {
-      return '<button type="button" class="copy-button" data-copy="' + escapeHtml(value) + '">' +
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-        escapeHtml(label) + '</button>';
+    function node(tag, text, className) {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
     }
 
-    function permissionList(pairs) {
-      if (!pairs || !pairs.length) return '<p class="detail-empty">None.</p>';
-      return '<ul class="perm-list">' + pairs.map(function (pair) {
-        return '<li><code>' + escapeHtml(pair[0]) + '</code><span class="perm-desc">' + (pair[1] ? escapeHtml(pair[1]) : "&mdash;") + '</span></li>';
-      }).join("") + '</ul>';
+    function button(text, handler, action) {
+      const element = node("button", text, "role-action");
+      element.type = "button";
+      if (action) element.dataset.action = action;
+      element.addEventListener("click", handler);
+      return element;
     }
 
-    function closeDetail(row) {
-      const detail = row.nextElementSibling;
-      if (detail && detail.classList.contains("detail-row")) detail.remove();
-      row.setAttribute("aria-expanded", "false");
+    function notice(text) {
+      el.actionStatus.textContent = text;
     }
 
-    function toggleDetail(row) {
-      if (row.getAttribute("aria-expanded") === "true") { closeDetail(row); return; }
-      const item = state.byKey[row.dataset.key];
-      if (!item) return;
-      const detail = document.createElement("tr");
-      detail.className = "detail-row";
-      const cell = document.createElement("td");
-      cell.colSpan = elements.headers.length;
-      cell.innerHTML = '<div class="detail-panel">' + detailPanel(item) + "</div>";
-      detail.append(cell);
-      row.after(detail);
-      row.setAttribute("aria-expanded", "true");
+    function criteria() {
+      return { search: el.search.value, category: el.categoryFilter.value, provider: el.providerFilter.value, actionType: el.actionTypeFilter.value, privilegedOnly: el.privilegedOnlyFilter.checked };
     }
 
-    function renderLoadMore(total, shownCount) {
-      const wrap = document.querySelector(".table-wrap");
-      if (!wrap) return;
-      let button = wrap.parentElement.querySelector(".load-more");
-      if (shownCount >= total) {
-        if (button) button.remove();
+    function currentUrl(roleId = state.linkedId, comparisonOpen = state.comparisonOpen) {
+      const url = new URL(location.href);
+      filterControls.forEach(control => {
+        url.searchParams.delete(control.id);
+        if (control.type === "checkbox") { if (control.checked) url.searchParams.set(control.id, "1"); }
+        else if (control.value) url.searchParams.set(control.id, control.value);
+      });
+      ["role", "compare", "comparison", "sort", "dir", "shown"].forEach(key => url.searchParams.delete(key));
+      if (roleId) { url.searchParams.set("role", roleId); url.hash = ""; }
+      if (state.selected.length) url.searchParams.set("compare", state.selected.join(","));
+      if (comparisonOpen) { url.searchParams.set("comparison", "1"); url.hash = ""; }
+      if (state.sortKey !== "roleName") url.searchParams.set("sort", state.sortKey);
+      if (state.sortDir !== "asc") url.searchParams.set("dir", state.sortDir);
+      if (state.visible > PAGE_SIZE) url.searchParams.set("shown", state.visible);
+      return url;
+    }
+
+    function syncUrl(push = false) {
+      try {
+        const url = currentUrl();
+        if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+        window.dispatchEvent(new Event("rolescataloguechange"));
+      } catch (error) {
+        console.warn("Role catalogue URL could not be updated.", error);
+        notice("The view works, but the address could not be updated. Use the copy-link actions to share it.");
+      }
+    }
+
+    async function copy(text, control, label) {
+      try {
+        await navigator.clipboard.writeText(text);
+        el.copyFallback.hidden = true;
+        notice(`${label} copied.`);
+        control.dataset.caption ||= control.textContent;
+        control.textContent = "Copied";
+        setTimeout(() => { if (control.isConnected) control.textContent = control.dataset.caption; }, 1500);
+      } catch (error) {
+        console.warn(`${label} could not be copied.`, error);
+        el.copyFallback.hidden = false;
+        el.copyLabel.textContent = `Select and copy: ${label}`;
+        el.copyValue.value = text;
+        el.copyValue.focus();
+        el.copyValue.select();
+        notice("Clipboard access is unavailable. Select and copy the value above.");
+      }
+    }
+
+    function quickActions(role) {
+      const actions = node("div", undefined, "role-actions");
+      const copyId = button("Copy ID", () => copy(role.id, copyId, "Role ID"), "copy-id");
+      const learn = node("a", "Microsoft Learn", "role-action");
+      learn.href = role.docUrl;
+      learn.target = "_blank";
+      learn.rel = "noopener noreferrer";
+      learn.dataset.action = "learn";
+      const copyName = button("Copy name", () => copy(role.roleName, copyName, "Role name"), "copy-name");
+      const link = button("Copy role link", () => copy(currentUrl(role.id, false).href, link, "Role link"), "copy-link");
+      actions.append(copyId, learn, copyName, link);
+      return actions;
+    }
+
+    function technical(value, label, action) {
+      const code = node("code", value, "technical-code");
+      code.tabIndex = 0;
+      code.setAttribute("aria-label", label);
+      if (action) code.dataset.action = action;
+      return code;
+    }
+
+    function metadata(role) {
+      const list = node("dl", undefined, "role-meta");
+      [["Role ID", role.id], ["Categories", role.categories.join(", ")], ["Assignable scopes", role.assignableScopes.join("\n") || "Not recorded"]].forEach(([label, value], index) => {
+        const description = node("dd");
+        description.append(technical(value, label, "metadata-" + index));
+        list.append(node("dt", label), description);
+      });
+      return list;
+    }
+
+    function permissionList(records, labels = null, actionPrefix = "") {
+      const list = node("ul", undefined, "permission-list");
+      records.forEach((record, index) => {
+        const item = node("li");
+        const spellings = node("div", undefined, "pattern-spellings");
+        const originals = [...new Set([...record.left, ...record.right].map(pair => pair[0]))];
+        originals.forEach((pattern, variant) => spellings.append(technical(pattern, "Recorded permission pattern", `${actionPrefix}pattern-${index}-${variant}`)));
+        const descriptions = node("div", undefined, "permission-description");
+        ["left", "right"].forEach((side, sideIndex) => {
+          if (!record[side].length) return;
+          const text = [...new Set(record[side].map(pair => pair[1] || "No description recorded."))].join(" ");
+          descriptions.append(node("p", (labels ? labels[sideIndex] + ": " : "") + text));
+        });
+        item.append(spellings, descriptions);
+        list.append(item);
+      });
+      return list;
+    }
+
+    function detail(role, id) {
+      const panel = node("div", undefined, "role-detail");
+      panel.id = id;
+      panel.append(quickActions(role), node("p", role.description), metadata(role));
+      BUCKETS.forEach(bucket => {
+        const group = node("details", undefined, "permission-group");
+        const key = roleKey(role.id) + ":" + bucket.key;
+        group.open = state.groups.has(key) ? state.groups.get(key) : role[bucket.key].length > 0;
+        const summary = node("summary", `${bucket.title} · ${role[bucket.key].length.toLocaleString("en-US")} recorded ${role[bucket.key].length === 1 ? "entry" : "entries"}`);
+        summary.dataset.action = "group-" + bucket.key;
+        const help = node("p", bucket.help + " ", "roles-help");
+        const link = node("a", "Explanation");
+        link.href = "#" + bucket.key + "-help";
+        help.append(link);
+        group.append(summary, help);
+        if (role[bucket.key].length) group.append(permissionList(role[bucket.key].map(pair => ({ left: [pair], right: [] })), null, bucket.key + "-"));
+        else group.append(node("p", `No ${bucket.title} entries are recorded for this role.`, "roles-help"));
+        group.addEventListener("toggle", () => { if (group.isConnected) state.groups.set(key, group.open); });
+        panel.append(group);
+      });
+      return panel;
+    }
+
+    function toggleRole(role) {
+      const key = roleKey(role.id);
+      if (state.open.has(key)) {
+        state.open.delete(key);
+        if (roleKey(state.linkedId) === key) state.linkedId = "";
+      } else {
+        state.open.add(key);
+        state.linkedId = role.id;
+      }
+      render();
+      syncUrl(true);
+    }
+
+    function roleSummary(role, compactView) {
+      const wrapper = node("div");
+      const title = node("h3", undefined, "role-title");
+      const toggle = button("", () => toggleRole(role), "toggle");
+      toggle.className = "role-toggle";
+      const open = state.open.has(roleKey(role.id));
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-controls", "role-detail-" + state.indices.get(roleKey(role.id)));
+      toggle.setAttribute("aria-label", `${open ? "Close" : "Open"} role: ${role.roleName}`);
+      toggle.append(node("span", role.roleName), node("span", open ? "Close permissions" : "View permissions", "open-caption"));
+      title.append(toggle);
+      wrapper.append(title, node("p", role.description, "role-description"));
+      const badges = node("div", undefined, "role-badges");
+      if (compactView) role.categories.forEach(category => badges.append(node("span", category, "role-badge")));
+      if (role.isPrivileged) badges.append(node("span", "Privileged", "role-badge is-privileged"));
+      wrapper.append(badges);
+      return wrapper;
+    }
+
+    function selectRole(role, selected) {
+      if (selected && state.selected.length >= 2) {
+        notice("Two roles are already selected. Remove one to choose another.");
+        render();
         return;
       }
-      const remaining = total - shownCount;
-      if (!button) {
-        button = document.createElement("button");
-        button.type = "button";
-        button.className = "load-more";
-        button.addEventListener("click", function () {
-          state.visible += PAGE_SIZE;
-          renderTable();
-          const next = document.querySelector(".load-more");
-          if (next) next.focus();
-        });
-        wrap.insertAdjacentElement("afterend", button);
-      }
-      button.textContent = "Load " + Math.min(PAGE_SIZE, remaining).toLocaleString() + " more (" + remaining.toLocaleString() + " remaining)";
+      state.selected = selected ? [...state.selected, role.id] : state.selected.filter(id => roleKey(id) !== roleKey(role.id));
+      if (state.selected.length !== 2) state.comparisonOpen = false;
+      notice(`${role.roleName} ${selected ? "selected for" : "removed from"} comparison (${state.selected.length}/2).`);
+      render();
+      syncUrl();
     }
 
-    function sortRows(rows) {
-      return rows.slice().sort(function (a, b) {
-        let av = a[state.sortKey];
-        let bv = b[state.sortKey];
-        if (typeof av === "number" || typeof bv === "number") {
-          av = Number(av) || 0;
-          bv = Number(bv) || 0;
-        } else {
-          av = normalize(av == null ? "" : av);
-          bv = normalize(bv == null ? "" : bv);
+    function selection(role) {
+      const wrapper = node("div", undefined, "selection-tools");
+      const label = node("label", undefined, "role-selection");
+      const checkbox = node("input");
+      checkbox.type = "checkbox";
+      checkbox.dataset.action = "select";
+      checkbox.checked = state.selected.some(id => roleKey(id) === roleKey(role.id));
+      checkbox.disabled = state.selected.length >= 2 && !checkbox.checked;
+      checkbox.setAttribute("aria-label", `Compare ${role.roleName}`);
+      checkbox.setAttribute("aria-describedby", "compareHint");
+      checkbox.addEventListener("change", () => selectRole(role, checkbox.checked));
+      label.append(checkbox, document.createTextNode("Compare"));
+      wrapper.append(label);
+      if (checkbox.checked && canCompare()) wrapper.append(button("Compare selected", openComparison, "compare"));
+      return wrapper;
+    }
+
+    function roleCard(role) {
+      const card = node("article", undefined, "role-entry role-card");
+      card.dataset.roleId = roleKey(role.id);
+      const identifier = node("dl", undefined, "role-identifier");
+      const value = node("dd");
+      value.append(technical(role.id, "Role Definition Id", "definition-id"));
+      identifier.append(node("dt", "Role Definition Id"), value);
+      card.append(roleSummary(role, true), identifier, selection(role));
+      const id = "role-detail-" + state.indices.get(roleKey(role.id));
+      const open = state.open.has(roleKey(role.id));
+      const panel = open ? detail(role, id) : node("div");
+      panel.id = id;
+      panel.hidden = !open;
+      card.append(panel);
+      return card;
+    }
+
+    function setSort(key) {
+      state.sortDir = state.sortKey === key ? (state.sortDir === "asc" ? "desc" : "asc") : key === "roleName" ? "asc" : "desc";
+      state.sortKey = key;
+      render();
+      syncUrl();
+    }
+
+    function roleTable(roles) {
+      const wrapper = node("div", undefined, "roles-table-wrap");
+      const table = node("table", undefined, "roles-table");
+      table.setAttribute("aria-label", "Roles and recorded permission-entry counts");
+      const header = node("thead");
+      const headerRow = node("tr");
+      [["roleName", "Role"], ["id", "Role Definition Id"], ["category", "Category"], ...BUCKETS.map(bucket => [bucket.count, bucket.title])].forEach(([key, label]) => {
+        const cell = node("th");
+        cell.scope = "col";
+        if (state.sortKey === key) cell.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
+        const sort = button(label, () => setSort(key));
+        sort.className = "header-sort";
+        sort.id = "sort-" + key;
+        sort.setAttribute("aria-label", `Sort by ${label}`);
+        if (state.sortKey === key) {
+          const arrow = node("span", state.sortDir === "asc" ? "↑" : "↓");
+          arrow.setAttribute("aria-hidden", "true");
+          sort.append(arrow);
         }
-        if (av < bv) return state.sortDir === "asc" ? -1 : 1;
-        if (av > bv) return state.sortDir === "asc" ? 1 : -1;
-        return 0;
+        cell.append(sort);
+        headerRow.append(cell);
       });
+      const comparisonHeader = node("th", "Compare");
+      comparisonHeader.scope = "col";
+      comparisonHeader.append(node("span", "Select up to two roles.", "header-help"));
+      headerRow.append(comparisonHeader);
+      header.append(headerRow);
+      const body = node("tbody");
+      roles.forEach(role => {
+        const row = node("tr", undefined, "role-entry role-row");
+        row.dataset.roleId = roleKey(role.id);
+        const name = node("td");
+        name.append(roleSummary(role, false));
+        const identifier = node("td");
+        identifier.append(technical(role.id, "Role Definition Id", "definition-id"));
+        row.append(name, identifier, node("td", role.categories.join(", ")));
+        BUCKETS.forEach(bucket => row.append(node("td", role[bucket.key].length.toLocaleString("en-US"))));
+        const compare = node("td");
+        compare.append(selection(role));
+        row.append(compare);
+        const detailRow = node("tr", undefined, "detail-row");
+        detailRow.dataset.roleId = roleKey(role.id);
+        const open = state.open.has(roleKey(role.id));
+        detailRow.hidden = !open;
+        const cell = node("td");
+        cell.colSpan = headerRow.children.length;
+        const id = "role-detail-" + state.indices.get(roleKey(role.id));
+        const panel = open ? detail(role, id) : node("div");
+        panel.id = id;
+        cell.append(panel);
+        detailRow.append(cell);
+        body.append(row, detailRow);
+      });
+      table.append(header, body);
+      wrapper.append(table);
+      return wrapper;
     }
 
-    function markSortedHeader() {
-      elements.headers.forEach(function (th) {
-        th.removeAttribute("aria-sort");
-        if (th.dataset.key === state.sortKey) th.setAttribute("aria-sort", state.sortDir === "asc" ? "ascending" : "descending");
-      });
+    function canCompare() {
+      return state.selected.length === 2 && state.selected.every(id => state.byId.has(roleKey(id)));
     }
 
-    function wireTableInteractions() {
-      elements.tableBody.addEventListener("click", function (event) {
-        const copy = event.target.closest("[data-copy]");
-        if (copy) {
-          event.stopPropagation();
-          const value = copy.dataset.copy;
-          const done = function () {
-            const original = copy.lastChild.textContent;
-            copy.lastChild.textContent = "Copied";
-            setTimeout(function () { copy.lastChild.textContent = original; }, 1200);
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(value).then(done, function () {});
-          }
-          return;
-        }
-        const row = event.target.closest("tr.role-row");
-        if (row) toggleDetail(row);
-      });
-
-      elements.tableBody.addEventListener("keydown", function (event) {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        const row = event.target.closest("tr.role-row");
-        if (!row || event.target.closest("[data-copy]")) return;
-        event.preventDefault();
-        toggleDetail(row);
-      });
-
-      elements.headers.forEach(function (th) {
-        th.addEventListener("click", function () {
-          const key = th.dataset.key;
-          if (state.sortKey === key) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-          else { state.sortKey = key; state.sortDir = key === "roleName" || key === "displayName" ? "asc" : "desc"; }
-          renderTable();
+    function renderSelection() {
+      el.comparisonSelection.hidden = !state.selected.length;
+      el.selectedRoles.replaceChildren();
+      state.selected.forEach(id => {
+        const role = state.byId.get(roleKey(id));
+        const remove = button(`Remove ${role?.roleName || "unavailable role: " + id}`, () => {
+          state.selected = state.selected.filter(value => roleKey(value) !== roleKey(id));
+          state.comparisonOpen = false;
+          render();
+          syncUrl();
+          (el.selectedRoles.querySelector("button") || el.search).focus({ preventScroll: true });
         });
+        el.selectedRoles.append(remove);
       });
+      el.compareButton.disabled = !canCompare();
+      el.compareHint.textContent = state.selected.length === 2 ? "Two roles selected. Remove one to choose another. Comparison uses listed patterns, not effective access."
+        : "Select up to two roles to compare their listed permission patterns, not effective access.";
     }
 
-    // The shared url-state script hydrates at parse time, before the JSON has
-    // arrived: its restored values are then overwritten by the first render,
-    // and a select value set before its options exist is dropped outright.
-    // Re-apply the query string once the data and the option lists are in place.
-    function hydrateFromUrl() {
-      if (!window.URLSearchParams) return;
-      const params = new URLSearchParams(location.search);
-      if (!params.toString()) return;
-      document.querySelectorAll("main input[id], main select[id]").forEach(function (el) {
-        const value = params.get(el.id);
-        if (value === null) return;
-        if (el.type === "checkbox") el.checked = value === "1";
-        else el.value = value;
+    function renderComparison() {
+      el.comparisonPanel.hidden = !state.comparisonOpen || !canCompare();
+      if (el.comparisonPanel.hidden) return;
+      const key = state.selected.join("|");
+      if (state.comparisonKey === key) return;
+      state.comparisonKey = key;
+      const roles = state.selected.map(id => state.byId.get(roleKey(id)));
+      el.comparisonContent.replaceChildren();
+      const summaries = node("div", undefined, "comparison-role-summaries");
+      roles.forEach((role, index) => {
+        const summary = node("section", undefined, "comparison-role-summary");
+        summary.append(node("h3", `${index ? "B" : "A"}: ${role.roleName}`), node("p", role.description, "roles-help"));
+        if (role.isPrivileged) summary.append(node("span", "Privileged", "role-badge is-privileged"));
+        const properties = node("details", undefined, "permission-group comparison-properties");
+        properties.append(node("summary", "Role ID, categories and scopes"), metadata(role));
+        summary.append(quickActions(role), properties);
+        summaries.append(summary);
       });
-      state.query = elements.search.value;
-    }
-
-    function wireChrome() {
-      let scrollTicking = false;
-      window.addEventListener("scroll", function () {
-        if (scrollTicking) return;
-        scrollTicking = true;
-        requestAnimationFrame(function () {
-          elements.backToTop.classList.toggle("visible", window.scrollY > 600);
-          scrollTicking = false;
+      el.comparisonContent.append(summaries);
+      const comparisons = BUCKETS.map(bucket => ({ bucket, difference: comparePatterns(roles[0][bucket.key], roles[1][bucket.key]) }));
+      const firstOpen = comparisons.find(item => item.difference.leftOnly.length || item.difference.rightOnly.length) || comparisons.find(item => item.difference.shared.length);
+      comparisons.forEach(item => {
+        const { bucket, difference } = item;
+        const group = node("details", undefined, "permission-group comparison-bucket");
+        group.dataset.bucket = bucket.key;
+        group.open = item === firstOpen;
+        group.append(node("summary", `${bucket.title}: ${difference.leftOnly.length} listed only in A · ${difference.shared.length} shared · ${difference.rightOnly.length} listed only in B`),
+          node("p", `${bucket.help} Counts here are distinct text patterns, ignoring case; duplicate source entries remain available in individual role details.`, "roles-help"));
+        [["leftOnly", `Listed only in A: ${roles[0].roleName}`], ["shared", "Shared pattern text"], ["rightOnly", `Listed only in B: ${roles[1].roleName}`]].forEach(([key, title]) => {
+          const subgroup = node("details", undefined, "comparison-subgroup");
+          subgroup.open = key !== "shared" && difference[key].length > 0;
+          subgroup.append(node("summary", `${title} (${difference[key].length})`));
+          if (difference[key].length) subgroup.append(permissionList(difference[key], ["A", "B"]));
+          else subgroup.append(node("p", "No listed patterns in this part of the comparison.", "roles-help"));
+          group.append(subgroup);
         });
-      }, { passive: true });
-      elements.backToTop.addEventListener("click", function () {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        el.comparisonContent.append(group);
       });
     }
 
-    function detailPanel(role) {
-      // The description is already under the role name in the row above.
-      let html = '<div class="detail-meta">' +
-        copyButton("Copy ID", role.id) +
-        copyButton("Copy name", role.roleName) +
-        '<a href="' + escapeHtml(role.docUrl) + '" target="_blank" rel="noopener">View on Microsoft Learn</a>' +
-        "</div>";
+    function openComparison() {
+      if (!canCompare()) { notice("Select two roles that are available in this dataset."); return; }
+      state.comparisonOpen = true;
+      renderComparison();
+      syncUrl(true);
+      el.comparisonHeading.focus({ preventScroll: true });
+      el.comparisonPanel.scrollIntoView({ block: "start", behavior: "instant" });
+    }
 
-      if (role.assignableScopes && role.assignableScopes.length) {
-        html += '<div class="detail-group"><h3>Assignable scopes</h3><div class="scope-list">' +
-          role.assignableScopes.map(function (scope) { return "<code>" + escapeHtml(scope) + "</code>"; }).join("") +
-          "</div></div>";
+    function syncFilters() {
+      const visible = !compact.matches || state.filtersOpen;
+      if (!visible && el.roleFilters.contains(document.activeElement)) el.filterToggle.focus();
+      if (!compact.matches && document.activeElement === el.filterToggle) el.search.focus();
+      el.roleFilters.hidden = !visible;
+      el.filterToggle.setAttribute("aria-expanded", String(visible));
+      const count = filterControls.filter(control => control.type === "checkbox" ? control.checked : control.value.trim()).length;
+      el.filterToggle.textContent = `Filters · ${count} active`;
+      el.sortBy.value = state.sortKey;
+      el.sortDirection.textContent = state.sortDir === "asc" ? "Ascending" : "Descending";
+    }
+
+    function findRoleControl(id, action) {
+      return [...document.querySelectorAll("[data-role-id]")].filter(element => element.dataset.roleId === roleKey(id))
+        .map(element => [...element.querySelectorAll("[data-action]")].find(control => control.dataset.action === action))
+        .find(control => control && control.checkVisibility());
+    }
+
+    function focusRole() {
+      const control = findRoleControl(state.linkedId, "toggle");
+      if (!control) { el.linkedRole.querySelector("button")?.focus(); return; }
+      control.focus({ preventScroll: true });
+      control.closest("[data-role-id]").scrollIntoView({ block: "start", behavior: "instant" });
+    }
+
+    function render() {
+      if (state.status !== "ready") return;
+      const focused = document.activeElement;
+      const roleId = focused.closest("[data-role-id]")?.dataset.roleId;
+      const focusedAction = focused.dataset.action;
+      const focusedId = focused.id;
+      const sorted = sortRoles(state.filtered, state.sortKey, state.sortDir);
+      const shown = sorted.slice(0, state.visible);
+      renderSelection();
+      renderComparison();
+      el.rolesResults.replaceChildren();
+      if (!shown.length) {
+        const empty = node("div", undefined, "empty-roles");
+        empty.append(node("h2", state.roles.length ? "No roles match these filters" : "No roles recorded in this dataset"),
+          node("p", "Reset the filters to browse the available roles.", "roles-help"), button("Reset filters", resetFilters));
+        el.rolesResults.append(empty);
+      } else if (compact.matches) {
+        const cards = node("div", undefined, "role-cards");
+        cards.append(...shown.map(roleCard));
+        el.rolesResults.append(cards);
+      } else el.rolesResults.append(roleTable(shown));
+      const pinned = state.linkedId && !shown.some(role => roleKey(role.id) === roleKey(state.linkedId));
+      el.linkedRole.replaceChildren();
+      el.linkedRole.hidden = !pinned;
+      if (pinned) {
+        const role = state.byId.get(roleKey(state.linkedId));
+        const message = node("p", role ? "This open role is outside the filters or visible batch. It is shown separately and is not included in the displayed count."
+          : "The linked role was not found in this dataset. Your filters and comparison selection remain available.");
+        message.setAttribute("role", "status");
+        el.linkedRole.append(message);
+        if (role) el.linkedRole.append(roleCard(role));
+        else el.linkedRole.append(button("Close missing role", () => { state.linkedId = ""; render(); syncUrl(true); el.search.focus(); }));
       }
-
-      const groups = [
-        ["Actions", role.actions],
-        ["NotActions", role.notActions],
-        ["DataActions", role.dataActions],
-        ["NotDataActions", role.notDataActions],
-      ];
-      // Every bucket is rendered, empty ones included: "NotDataActions: None"
-      // is an answer, whereas a missing heading leaves the reader wondering
-      // whether the role has none or the page failed to show them.
-      groups.forEach(function (group) {
-        html += '<div class="detail-group"><h3 class="is-bucket">' + group[0] + " (" + group[1].length.toLocaleString() + ")</h3>" + permissionList(group[1]) + "</div>";
-      });
-      return html;
-    }
-
-    function renderTable() {
-      const rows = sortRows(state.filtered);
-      const shown = rows.slice(0, state.visible);
-
-      elements.tableBody.replaceChildren();
-      const fragment = document.createDocumentFragment();
-      shown.forEach(function (role) {
-        const tr = document.createElement("tr");
-        tr.className = "role-row";
-        tr.dataset.key = role.id;
-        tr.tabIndex = 0;
-        tr.setAttribute("role", "button");
-        tr.setAttribute("aria-expanded", "false");
-        tr.innerHTML =
-          '<td><span class="role-head"><svg class="role-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span class="role-name">' + escapeHtml(role.roleName) + "</span>" +
-            (role.isPrivileged ? '<span class="role-badge is-privileged">Privileged</span>' : "") +
-          "</span>" + (role.description ? '<span class="role-desc">' + escapeHtml(role.description) + "</span>" : "") + "</td>" +
-          "<td>" + escapeHtml(role.category || "") + "</td>" +
-          '<td class="num-cell">' + role.nActions.toLocaleString() + "</td>" +
-          '<td class="num-cell">' + role.nNotActions.toLocaleString() + "</td>" +
-          '<td class="num-cell">' + role.nDataActions.toLocaleString() + "</td>" +
-          '<td class="num-cell">' + role.nNotDataActions.toLocaleString() + "</td>" +
-          '<td class="id-cell"><code>' + escapeHtml(role.id) + "</code></td>";
-        fragment.append(tr);
-      });
-      elements.tableBody.append(fragment);
-
-      elements.resultCount.textContent = shown.length < rows.length
-        ? "Showing " + shown.length.toLocaleString() + " of " + rows.length.toLocaleString() + " matching roles."
-        : rows.length.toLocaleString() + " role" + (rows.length === 1 ? "" : "s") + " shown.";
-
-      renderLoadMore(rows.length, shown.length);
-      markSortedHeader();
-    }
-
-    function applyFilter() {
-      state.visible = PAGE_SIZE;
-      const query = normalize(state.query.trim());
-      const category = elements.categoryFilter.value;
-      const provider = elements.providerFilter.value;
-      const actionType = elements.actionTypeFilter.value;
-      const privilegedOnly = elements.privilegedOnlyFilter.checked;
-      state.filtered = state.roles.filter(function (role) {
-        if (category && role.categories.indexOf(category) === -1) return false;
-        if (provider && role.providers.indexOf(provider) === -1) return false;
-        if (actionType && !role[actionType].length) return false;
-        if (privilegedOnly && !role.isPrivileged) return false;
-        if (query && role.haystack.indexOf(query) === -1) return false;
-        return true;
-      });
-      renderTable();
-    }
-
-    async function init() {
-      elements.currentYear.textContent = new Date().getFullYear();
-      try {
-        const response = await fetch("./roles.json", { cache: "no-store" });
-        if (!response.ok) throw new Error("Data request failed: " + response.status);
-        const payload = await response.json();
-
-        state.roles = (payload.roles || []).map(function (role) {
-          const actions = role.actions || [];
-          const notActions = role.notActions || [];
-          const dataActions = role.dataActions || [];
-          const notDataActions = role.notDataActions || [];
-          // One prebuilt haystack per role: the alternative is normalising
-          // 6,000 action strings on every keystroke.
-          const searchable = [role.roleName, role.description, role.category]
-            .concat(actions.map(function (p) { return p[0]; }))
-            .concat(dataActions.map(function (p) { return p[0]; }))
-            .join(" ");
-          return Object.assign({}, role, {
-            actions: actions,
-            notActions: notActions,
-            dataActions: dataActions,
-            notDataActions: notDataActions,
-            categories: role.categories || [],
-            providers: role.providers || [],
-            nActions: actions.length,
-            nNotActions: notActions.length,
-            nDataActions: dataActions.length,
-            nNotDataActions: notDataActions.length,
-            haystack: normalize(searchable),
-          });
-        });
-        state.filtered = state.roles;
-        state.byKey = {};
-        state.roles.forEach(function (role) { state.byKey[role.id] = role; });
-
-        elements.refreshedAt.textContent = new Date(payload.generatedAt).toLocaleString("en-US", {
-          year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
-        });
-
-        renderStats([
-          { label: "Built-in roles", value: payload.totalRoles || state.roles.length },
-          { label: "Categories", value: payload.totalCategories || 0 },
-          { label: "Action entries", value: payload.totalActions || 0 },
-          { label: "Privileged roles", value: payload.privilegedCount || 0, tone: "warning" },
-        ]);
-
-        fillSelect(elements.categoryFilter, payload.categories || []);
-        const providers = [...new Set(state.roles.flatMap(function (role) { return role.providers; }))].sort(function (a, b) { return a.localeCompare(b); });
-        fillSelect(elements.providerFilter, providers);
-
-        hydrateFromUrl();
-        applyFilter();
-      } catch (error) {
-        console.error(error);
-        elements.resultCount.textContent = "Unable to load the built-in roles data.";
-      }
+      el.resultCount.textContent = `${shown.length.toLocaleString("en-US")} displayed / ${state.filtered.length.toLocaleString("en-US")} matching roles · ${state.roles.length.toLocaleString("en-US")} roles in the dataset.`;
+      const remaining = state.filtered.length - shown.length;
+      el.loadMore.hidden = remaining <= 0;
+      el.loadMore.textContent = `Load ${Math.min(PAGE_SIZE, remaining)} more (${remaining.toLocaleString("en-US")} remaining)`;
+      syncFilters();
+      if (!focused.isConnected) (roleId && focusedAction ? findRoleControl(roleId, focusedAction) || el.search : document.getElementById(focusedId) || el.search).focus({ preventScroll: true });
     }
 
     let searchTimer;
-    elements.search.addEventListener("input", function () {
-      state.query = elements.search.value;
+    function applyFilters(updateUrl = true) {
+      if (state.status !== "ready") return;
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(applyFilter, 120);
+      searchTimer = null;
+      state.filtered = filterRoles(state.roles, criteria());
+      state.visible = PAGE_SIZE;
+      render();
+      if (updateUrl) syncUrl();
+    }
+
+    function resetFilters() {
+      filterControls.forEach(control => { if (control.type === "checkbox") control.checked = false; else control.value = ""; });
+      applyFilters();
+      el.search.focus({ preventScroll: true });
+    }
+
+    function restore() {
+      const params = new URLSearchParams(location.search);
+      el.search.value = params.get("search") || "";
+      [el.categoryFilter, el.providerFilter].forEach(select => {
+        const value = select === el.providerFilter ? providerKey(params.get(select.id) || "") : params.get(select.id) || "";
+        if (value && ![...select.options].some(option => option.value === value)) select.add(new Option(`${value} (not in dataset)`, value));
+        select.value = value;
+      });
+      const type = params.get("actionTypeFilter") || "";
+      el.actionTypeFilter.value = BUCKETS.some(bucket => bucket.key === type) ? type : "";
+      if (type && !el.actionTypeFilter.value) notice("The link contains an unsupported permission filter; that filter was reset.");
+      el.privilegedOnlyFilter.checked = params.get("privilegedOnlyFilter") === "1";
+      state.sortKey = Object.hasOwn(SORTS, params.get("sort")) ? params.get("sort") : "roleName";
+      state.sortDir = params.get("dir") === "desc" ? "desc" : "asc";
+      const shown = Number(params.get("shown"));
+      state.visible = Number.isSafeInteger(shown) && shown >= PAGE_SIZE ? Math.min(shown, Math.max(PAGE_SIZE, state.roles.length)) : PAGE_SIZE;
+      const invalidSort = params.has("sort") && !Object.hasOwn(SORTS, params.get("sort"));
+      const invalidDirection = params.has("dir") && !["asc", "desc"].includes(params.get("dir"));
+      const invalidFlag = ["privilegedOnlyFilter", "comparison"].some(key => params.has(key) && !["0", "1"].includes(params.get(key)));
+      const invalidShown = params.has("shown") && (!Number.isSafeInteger(shown) || shown < PAGE_SIZE || shown > Math.max(PAGE_SIZE, state.roles.length));
+      if (invalidSort || invalidDirection || invalidFlag || invalidShown) notice("An unsupported view setting in the link was reset or limited to the available roles.");
+      const linked = params.get("role") || "";
+      state.linkedId = state.byId.get(roleKey(linked))?.id || linked;
+      state.open = new Set(state.linkedId ? [roleKey(state.linkedId)] : []);
+      const selected = [...new Set((params.get("compare") || "").split(",").map(value => value.trim()).filter(Boolean).map(roleKey))];
+      state.selected = selected.slice(0, 2).map(id => state.byId.get(id)?.id || id);
+      if (selected.length > 2) notice("The link selected more than two roles. Only the first two were retained; remove one to change the selection.");
+      if (state.selected.some(id => !state.byId.has(roleKey(id)))) notice("A selected role is unavailable in this dataset. Remove it to choose another.");
+      state.comparisonOpen = params.get("comparison") === "1" && canCompare();
+      state.filtered = filterRoles(state.roles, criteria());
+      render();
+    }
+
+    async function load() {
+      if (state.status === "fetching") return;
+      const fromRetry = document.activeElement === el.retryRoles;
+      state.status = "fetching";
+      el.rolesControls.disabled = true;
+      el.retryRoles.disabled = true;
+      el.rolesError.hidden = true;
+      el.rolesResults.setAttribute("aria-busy", "true");
+      el.refreshedAt.textContent = "Loading...";
+      renderStats();
+      el.resultCount.textContent = "Loading roles...";
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      try {
+        const response = await fetch("./roles.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`Role request returned ${response.status}`);
+        const payload = await response.json();
+        state.roles = prepareRoles(payload);
+        state.byId = new Map(state.roles.map(role => [roleKey(role.id), role]));
+        state.indices = new Map(state.roles.map((role, index) => [roleKey(role.id), index]));
+        state.comparisonKey = "";
+        el.categoryFilter.replaceChildren(new Option("All categories", ""));
+        [...new Set(state.roles.flatMap(role => role.categories))].sort().forEach(value => el.categoryFilter.add(new Option(value, value)));
+        el.providerFilter.replaceChildren(new Option("All providers", ""));
+        const providers = providerOptions(state.roles);
+        providers.forEach(option => el.providerFilter.add(new Option(option.label, option.key)));
+        const stamp = new Date(payload.generatedAt);
+        el.refreshedAt.textContent = payload.generatedAt && !Number.isNaN(stamp.getTime()) ? stamp.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not reported";
+        state.status = "ready";
+        el.rolesControls.disabled = false;
+        restore();
+        if (state.comparisonOpen) {
+          el.comparisonHeading.focus({ preventScroll: true });
+          el.comparisonPanel.scrollIntoView({ block: "start", behavior: "instant" });
+        } else if (state.linkedId) focusRole();
+      } catch (error) {
+        console.error("Role catalogue could not be loaded.", error);
+        state.status = "error";
+        el.rolesError.hidden = false;
+        el.refreshedAt.textContent = "Unavailable";
+        el.resultCount.textContent = "Unable to load roles. Retry to continue.";
+        el.rolesResults.replaceChildren();
+        el.linkedRole.hidden = el.loadMore.hidden = el.comparisonSelection.hidden = el.comparisonPanel.hidden = true;
+      } finally {
+        clearTimeout(timeout);
+        renderStats();
+        el.retryRoles.disabled = false;
+        el.rolesResults.setAttribute("aria-busy", "false");
+        if (fromRetry) (state.status === "ready" ? el.search : el.retryRoles).focus({ preventScroll: true });
+      }
+    }
+
+    Object.entries(SORTS).forEach(([key, label]) => el.sortBy.add(new Option(label, key)));
+    el.search.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => applyFilters(), 150); });
+    filterControls.slice(1).forEach(control => control.addEventListener("change", () => applyFilters()));
+    el.filterToggle.addEventListener("click", () => { state.filtersOpen = !state.filtersOpen; syncFilters(); });
+    el.filtersDone.addEventListener("click", () => { state.filtersOpen = false; syncFilters(); el.filterToggle.focus(); });
+    el.roleFilters.addEventListener("keydown", event => {
+      if (event.key === "Escape" && compact.matches) { state.filtersOpen = false; syncFilters(); el.filterToggle.focus(); }
     });
-    elements.categoryFilter.addEventListener("change", applyFilter);
-    elements.providerFilter.addEventListener("change", applyFilter);
-    elements.actionTypeFilter.addEventListener("change", applyFilter);
-    elements.privilegedOnlyFilter.addEventListener("change", applyFilter);
-
-    wireTableInteractions();
-    wireChrome();
-    init();
+    compact.addEventListener("change", () => { syncFilters(); render(); });
+    el.resetFilters.addEventListener("click", resetFilters);
+    el.sortBy.addEventListener("change", () => { state.sortKey = el.sortBy.value; render(); syncUrl(); });
+    el.sortDirection.addEventListener("click", () => { state.sortDir = state.sortDir === "asc" ? "desc" : "asc"; render(); syncUrl(); });
+    el.retryRoles.addEventListener("click", load);
+    el.compareButton.addEventListener("click", openComparison);
+    el.clearComparison.addEventListener("click", () => { state.selected = []; state.comparisonOpen = false; render(); syncUrl(); el.search.focus(); });
+    el.closeComparison.addEventListener("click", () => { state.comparisonOpen = false; renderComparison(); syncUrl(true); el.compareButton.focus(); });
+    el.copyComparison.addEventListener("click", () => copy(currentUrl("", true).href, el.copyComparison, "Comparison link"));
+    el.loadMore.addEventListener("click", () => {
+      const next = sortRoles(state.filtered, state.sortKey, state.sortDir)[state.visible];
+      state.visible += PAGE_SIZE;
+      render();
+      syncUrl();
+      const control = next && findRoleControl(next.id, "toggle");
+      if (control) { control.focus({ preventScroll: true }); control.closest("[data-role-id]").scrollIntoView({ block: "start", behavior: "instant" }); }
+    });
+    window.addEventListener("popstate", () => {
+      if (state.status !== "ready") return;
+      clearTimeout(searchTimer);
+      restore();
+      if (state.comparisonOpen) el.comparisonHeading.focus();
+      else if (state.linkedId) focusRole();
+      else if (!document.activeElement.checkVisibility()) (canCompare() ? el.compareButton : el.search).focus();
+      window.dispatchEvent(new Event("rolescataloguechange"));
+    });
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    const backToTop = document.getElementById("backToTop");
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => { backToTop.classList.toggle("visible", window.scrollY > 600); scrollTicking = false; });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    syncFilters();
+    load();
   </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
-  <script data-url-state>
-    (function () {
-      var scope = document.querySelector("main");
-      if (!scope || !window.URLSearchParams || !window.history || !history.replaceState) return;
-      var controls = [].slice
-        .call(scope.querySelectorAll("input[id], select[id]"))
-        .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
-          return !el.closest("[data-no-url-state]");
-        });
-      if (!controls.length) return;
 
-      var params = new URLSearchParams(location.search);
-      var hydrating = false;
 
-      function readValue(el) {
-        return el.type === "checkbox" ? (el.checked ? "1" : "") : el.value;
-      }
 
-      if (params.toString()) {
-        hydrating = true;
-        var applied = [];
-        controls.forEach(function (el) {
-          var v = params.get(el.id);
-          if (v === null) return;
-          if (el.type === "checkbox") el.checked = v === "1";
-          else el.value = v;
-          applied.push(el);
-        });
-        // let each page's own listeners recompute from the restored values
-        applied.forEach(function (el) {
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        hydrating = false;
-      }
-
-      var pending = null;
-      function sync() {
-        if (hydrating) return;
-        clearTimeout(pending);
-        pending = setTimeout(function () {
-          var p = new URLSearchParams();
-          controls.forEach(function (el) {
-            var v = readValue(el);
-            if (v !== "" && v != null) p.set(el.id, v);
-          });
-          var qs = p.toString();
-          history.replaceState(null, "", qs ? location.pathname + "?" + qs : location.pathname);
-        }, 250);
-      }
-
-      controls.forEach(function (el) {
-        el.addEventListener("input", sync);
-        el.addEventListener("change", sync);
-      });
-    })();
-  </script>
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
       if (!root) return;
-      var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
-      var url = encodeURIComponent(pageUrl);
-      var title = encodeURIComponent(document.title);
-      var targets = {
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
-        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
-        reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
-        mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
-      };
-      Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
-        var href = targets[el.getAttribute('data-share')];
-        if (href) el.setAttribute('href', href);
-      });
+      function refreshShareLinks() {
+        var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+        var url = encodeURIComponent(pageUrl);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+          var href = targets[el.getAttribute('data-share')];
+          if (href) el.setAttribute('href', href);
+        });
+      }
+      refreshShareLinks();
+      window.addEventListener("rolescataloguechange", refreshShareLinks);
       var favBtn = root.querySelector('[data-share="favorite"]');
       var hint = root.querySelector('[data-share-hint]');
       if (favBtn && hint) {

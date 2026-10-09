@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-09-08T08:16:10.122Z",
+  "generatedAt": "2026-10-08T08:33:45.688Z",
   "articles": [
     {
       "slug": "azure-policy-part-1-what-is-a-policy",
       "title": "Azure Policy, Part 1: What Is an Azure Policy?",
       "description": "Part 1 of a seven-part series on Azure Policy: what a policy definition actually is, how the if/then rule works, aliases, the full list of effects and the order they run in, modes, versioning, and the limits that bite in production.",
+      "summary": "Understand the Policy objects, trace a storage rule and choose an effect before assigning it.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -23,13 +24,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 13,
+      "readingMinutes": 14,
       "url": "/articles/azure-policy-part-1-what-is-a-policy/"
     },
     {
       "slug": "azure-policy-part-2-initiatives",
       "title": "Azure Policy, Part 2: What Is an Initiative (Policy Set)?",
       "description": "Part 2 of the Azure Policy series: policy set definitions explained - grouping definitions, policyDefinitionReferenceId, passing parameters down, definition groups and regulatory compliance, version pinning, and the initiative parameter you can never change.",
+      "summary": "Group definitions into an initiative, distinguish member IDs and trace how parameter values reach each policy.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -54,6 +56,7 @@
       "slug": "azure-policy-part-3-assignments",
       "title": "Azure Policy, Part 3: What Is a Policy Assignment?",
       "description": "Part 3 of the Azure Policy series: assignments are where governance becomes real. Scope and inheritance, enforcementMode, managed identities and remediation permissions, resourceSelectors and overrides for safe rollout, and non-compliance messages.",
+      "summary": "Choose scope, enforcement and identity permissions before applying a policy or starting remediation.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -78,6 +81,7 @@
       "slug": "azure-policy-part-4-exclusions-notscopes",
       "title": "Azure Policy, Part 4: What Is an Exclusion (notScopes)?",
       "description": "Part 4 of the Azure Policy series: exclusions explained. How notScopes carves a hole in an assignment scope, why excluded resources vanish from compliance entirely, the governance debt it creates, and when an exclusion is genuinely the right answer.",
+      "summary": "Decide between an exclusion and a tracked exemption, then record the scope and controls affected.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -95,13 +99,14 @@
       "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 8,
+      "readingMinutes": 9,
       "url": "/articles/azure-policy-part-4-exclusions-notscopes/"
     },
     {
       "slug": "azure-policy-part-5-exemptions",
       "title": "Azure Policy, Part 5: What Is a Policy Exemption?",
       "description": "Part 5 of the Azure Policy series: exemptions explained. Waiver versus Mitigated, expiresOn, exempting a single initiative member, identity-based exemptions, compliance substate, the RBAC you need, and how to stop exemptions becoming permanent.",
+      "summary": "Configure a justified exception with a reason, owner and expiry, then review it through its lifecycle.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -120,13 +125,14 @@
       "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 9,
+      "readingMinutes": 10,
       "url": "/articles/azure-policy-part-5-exemptions/"
     },
     {
       "slug": "azure-policy-part-6-policy-as-code",
       "title": "Azure Policy, Part 6: Azure Policy as Code",
       "description": "Part 6 of the Azure Policy series: why the portal stops working at scale, Microsoft's create-test-deploy workflow, the deployment ordering problem, drift and desired state, the managed identity permission gap, and what to put in your repository.",
+      "summary": "Prepare a versioned repository, test scope and reviewed deployment pipeline for your Policy objects.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -146,13 +152,14 @@
       "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 11,
+      "readingMinutes": 12,
       "url": "/articles/azure-policy-part-6-policy-as-code/"
     },
     {
       "slug": "azure-policy-part-7-epac",
       "title": "Azure Policy, Part 7: EPAC and the Alternatives",
       "description": "Part 7 of the Azure Policy series: Enterprise Azure Policy as Code (EPAC) explained end to end - folder structure, global-settings.jsonc, pacEnvironments, desired state strategies, the three-stage pipeline, ALZ integration - plus an honest comparison with ALZ, Terraform, AzOps and doing nothing.",
+      "summary": "Evaluate EPAC against alternatives, understand desired-state deletion and plan a phased adoption.",
       "author": "Benoit G",
       "date": "2026-09-04",
       "tags": [
@@ -173,13 +180,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 15,
+      "readingMinutes": 16,
       "url": "/articles/azure-policy-part-7-epac/"
     },
     {
       "slug": "azure-lighthouse-cross-tenant-management",
-      "title": "Azure Lighthouse: The Most Underrated Feature in Azure",
-      "description": "Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.",
+      "title": "Azure Lighthouse: Choose a Cross-Tenant Management Pattern",
+      "description": "Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -200,13 +208,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 13,
+      "readingMinutes": 14,
       "url": "/articles/azure-lighthouse-cross-tenant-management/"
     },
     {
       "slug": "dns-in-azure-part-3-private-resolver",
       "title": "DNS in Azure, Part 3: Azure DNS Private Resolver",
       "description": "Part 3 of the DNS in Azure series: inbound and outbound endpoints, forwarding rulesets, the query evaluation order, the centralized and distributed architectures, and how to log DNS queries without running your own servers.",
+      "summary": "Choose a hybrid DNS pattern from the client and destination, then trace its inbound or outbound query path.",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -223,13 +232,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 14,
+      "readingMinutes": 15,
       "url": "/articles/dns-in-azure-part-3-private-resolver/"
     },
     {
       "slug": "dns-in-azure-part-4-private-endpoints",
       "title": "DNS in Azure, Part 4: Private Link and Private Endpoints",
       "description": "Part 4 of the DNS in Azure series: what a Private Endpoint really is, sub-resources, the approval workflow, routing and NSG behaviour, Private Link Service, and why turning off public network access is a separate job.",
+      "summary": "Separate endpoint approval, DNS and network checks, and treat public-access restrictions as a distinct action.",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -247,13 +257,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 12,
+      "readingMinutes": 13,
       "url": "/articles/dns-in-azure-part-4-private-endpoints/"
     },
     {
       "slug": "dns-in-azure-part-5-private-endpoint-dns",
       "title": "DNS in Azure, Part 5: Private Endpoints and Private DNS",
       "description": "Part 5 of the DNS in Azure series: the privatelink CNAME chain, the exact zone name for every service, private DNS zone groups, running zones at scale with Azure Policy, and making Private Endpoints resolve from on-premises.",
+      "summary": "Trace the public-to-private CNAME chain, find the exact service zone and verify the answer from your client.",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -271,13 +282,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 9,
+      "readingMinutes": 10,
       "url": "/articles/dns-in-azure-part-5-private-endpoint-dns/"
     },
     {
       "slug": "dns-in-azure-part-6-private-dns-fallback",
       "title": "DNS in Azure, Part 6: Private DNS Fallback to Internet",
       "description": "Part 6 of the DNS in Azure series: why a privatelink zone returns NXDOMAIN for names you do not own, how the NxDomainRedirect resolution policy fixes cross-tenant Private Link, and when you should deliberately leave it off.",
+      "summary": "Decide whether a public fallback is acceptable, inventory the link policy and compare lookup results.",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -295,13 +307,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 7,
+      "readingMinutes": 8,
       "url": "/articles/dns-in-azure-part-6-private-dns-fallback/"
     },
     {
       "slug": "dns-in-azure-part-7-dns-security-policies",
       "title": "DNS in Azure, Part 7: DNS Security Policies",
       "description": "Part 7 of the DNS in Azure series: DNS resolver policies, traffic rules and domain lists, the Microsoft threat intelligence feed, full query logging in Log Analytics, and a rollout plan that will not take your platform down.",
+      "summary": "Understand rule priority and domain matching, observe DNS queries and plan a controlled filtering rollout.",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -320,13 +333,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 8,
+      "readingMinutes": 10,
       "url": "/articles/dns-in-azure-part-7-dns-security-policies/"
     },
     {
       "slug": "dns-in-azure-part-8-decision-tree",
       "title": "DNS in Azure, Part 8: The Resolution Decision Tree",
       "description": "Part 8 of the DNS in Azure series: an interactive decision tree that takes you from a client asking for a name to the exact Azure architecture that answers it - Azure DNS, private zones, privatelink, forwarding rulesets, or on-premises.",
+      "summary": "Answer a few questions to choose a DNS resolution path, then copy or share the diagnostic.",
       "author": "Benoit G",
       "date": "2026-09-03",
       "tags": [
@@ -351,6 +365,7 @@
       "slug": "dns-in-azure-part-2-private-dns-zones",
       "title": "DNS in Azure, Part 2: Private DNS Zones",
       "description": "Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret.",
+      "summary": "Create and link a private zone, distinguish registration from resolution and verify a full-name lookup.",
       "author": "Benoit G",
       "date": "2026-09-02",
       "tags": [
@@ -367,13 +382,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 12,
+      "readingMinutes": 13,
       "url": "/articles/dns-in-azure-part-2-private-dns-zones/"
     },
     {
       "slug": "dns-in-azure-part-1-fundamentals",
       "title": "DNS in Azure, Part 1: Fundamentals and Azure-Provided Name Resolution",
       "description": "Part 1 of an eight-part series on private DNS in Azure: the vocabulary, the 168.63.129.16 platform IP, where a VM actually gets its resolver from, and why the default internal.cloudapp.net namespace runs out of road.",
+      "summary": "Identify which resolver a client uses and distinguish Azure-provided DNS from private and hybrid resolution.",
       "author": "Benoit G",
       "date": "2026-09-01",
       "tags": [
@@ -389,13 +405,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 11,
+      "readingMinutes": 12,
       "url": "/articles/dns-in-azure-part-1-fundamentals/"
     },
     {
       "slug": "how-to-creat-a-new-article",
-      "title": "How to Create a New Article",
+      "title": "Contributing an Article to This Site",
       "description": "Everything you can use when writing a new article for /articles: frontmatter fields, headings, lists, callouts, code blocks, tables, images, and links.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2026-08-19",
       "tags": [
@@ -409,13 +426,14 @@
       "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 2,
+      "readingMinutes": 4,
       "url": "/articles/how-to-creat-a-new-article/"
     },
     {
       "slug": "connect-github-and-azure-for-deployment-using-oidc",
       "title": "Connect GitHub and Azure for Deployment Using OIDC",
       "description": "Stop storing long-lived Azure credentials in GitHub secrets. Set up OpenID Connect federation so GitHub Actions can authenticate to Azure with short-lived tokens.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2026-08-14",
       "tags": [
@@ -431,13 +449,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 2,
+      "readingMinutes": 3,
       "url": "/articles/connect-github-and-azure-for-deployment-using-oidc/"
     },
     {
       "slug": "what-is-an-azure-landing-zone",
       "title": "What Is an Azure Landing Zone?",
       "description": "A practical introduction to Azure landing zones: what they are, why they matter, and the building blocks every platform team should know.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2026-08-10",
       "tags": [
@@ -453,13 +472,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 3,
+      "readingMinutes": 4,
       "url": "/articles/what-is-an-azure-landing-zone/"
     },
     {
       "slug": "connect-azure-vm-using-native-rdp-client-through-bastion",
-      "title": "Connect to an Azure VM Using the Native RDP Client Through Bastion",
+      "title": "Native RDP Through Azure Bastion",
       "description": "Step-by-step guide to connecting to an Azure VM with your native RDP client through Azure Bastion's native client support, including how to open the tunnel with the Azure CLI.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2026-03-06",
       "tags": [
@@ -475,13 +495,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 2,
+      "readingMinutes": 3,
       "url": "/articles/connect-azure-vm-using-native-rdp-client-through-bastion/"
     },
     {
       "slug": "how-to-delegate-a-domain-to-azure-dns",
       "title": "How to Delegate a Domain to Azure DNS",
-      "description": "Step-by-step guide to delegating a domain purchased from a third-party registrar (OVH) to Azure DNS, and recreating the DNS records once delegation is complete.",
+      "description": "Prepare an Azure public DNS zone and its records before changing registrar name servers, using OVH as the example, then verify delegation and plan rollback.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2025-12-16",
       "tags": [
@@ -494,13 +515,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 5,
+      "readingMinutes": 6,
       "url": "/articles/how-to-delegate-a-domain-to-azure-dns/"
     },
     {
       "slug": "display-latest-commits-with-git-graph",
       "title": "Display Latest Commits with Git Graph",
       "description": "A stylish one-liner to showcase the latest commits from a repository directly in the terminal.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2025-02-26",
       "tags": [
@@ -521,6 +543,7 @@
       "slug": "github-contribution-workflow",
       "title": "GitHub Contribution Workflow",
       "description": "The end-to-end workflow for contributing to a GitHub project: fork, branch, commit, push, pull request, code review, and merge.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2025-02-26",
       "tags": [
@@ -534,13 +557,14 @@
       "featureImageShape": "logo",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 4,
+      "readingMinutes": 5,
       "url": "/articles/github-contribution-workflow/"
     },
     {
       "slug": "app-service-php-access-to-azure-sql-database-with-managed-identity",
-      "title": "App Service (PHP) Access to Azure SQL Database with Managed Identity",
+      "title": "Connect PHP App Service to Azure SQL Without a Password",
       "description": "Connect a PHP app running on Azure App Service to Azure SQL Database using a system-assigned managed identity, with no stored username or password.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2025-02-12",
       "tags": [
@@ -555,13 +579,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/app-service-php-access-to-azure-sql-database-with-managed-identity/"
     },
     {
       "slug": "allow-icmp-ping-on-an-azure-vm",
       "title": "Allow ICMP (Ping) on an Azure VM",
-      "description": "Azure VMs block ICMP (ping) by default via the Windows Firewall. Here's the firewall rule to allow it, applied through the Azure portal's run command.",
+      "description": "Allow an ICMPv4 echo request in a Windows VM's guest firewall, then separately verify the Azure network path and test the response.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2025-01-31",
       "tags": [
@@ -581,7 +606,8 @@
     {
       "slug": "network-security-perimeter",
       "title": "Network Security Perimeter (NSP)",
-      "description": "An overview of Azure Network Security Perimeter: the pain points it solves for PaaS resource access control, how it compares to existing patterns, and its current limitations.",
+      "description": "Compare controls for PaaS public access and private connectivity, understand Network Security Perimeter objects, and prepare a scoped validation plan.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2025-01-31",
       "tags": [
@@ -595,13 +621,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 2,
+      "readingMinutes": 3,
       "url": "/articles/network-security-perimeter/"
     },
     {
       "slug": "restrict-web-app-access-with-entra-id-authentication",
       "title": "Restrict Web App Access with Entra ID Authentication",
       "description": "How to restrict access to an Azure Web App to specific users or security groups using Microsoft Entra ID, instead of allowing every user in the tenant.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-12-17",
       "tags": [
@@ -615,13 +642,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/restrict-web-app-access-with-entra-id-authentication/"
     },
     {
       "slug": "terraform-vs-bicep-the-match",
-      "title": "Terraform vs Bicep, the Match",
-      "description": "A side-by-side comparison of Terraform and Bicep across language, state management, learning curve, cost, and more, based on hands-on experience with both.",
+      "title": "Terraform vs Bicep: Choose by Team and Workload",
+      "description": "Compare Terraform and Bicep by scope, state, review workflow and operating cost, then choose a fit for your team instead of a universal winner.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-12-06",
       "tags": [
@@ -635,13 +663,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 3,
+      "readingMinutes": 2,
       "url": "/articles/terraform-vs-bicep-the-match/"
     },
     {
       "slug": "display-github-secrets-for-debug",
-      "title": "Display GitHub Secrets for Debug",
-      "description": "A quick method to print a GitHub Actions secret for debugging purposes, spaced out so it can't be read directly from the log.",
+      "title": "Debug GitHub Actions Secret Configuration Without Revealing Values",
+      "description": "Check whether a GitHub Actions secret is available without printing it, review repository and environment scope, and use OIDC for Azure instead of long-lived credentials.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-12-02",
       "tags": [
@@ -659,8 +688,9 @@
     },
     {
       "slug": "remove-old-azure-resources-based-on-tags",
-      "title": "Remove Old Azure Resources Based on Tags",
-      "description": "Automate the cleanup of temporary Azure resources using a Time-To-Live tag, plus a script to auto-tag untagged resources with their creator.",
+      "title": "Review Expired Azure Resources by TTL Tags Before Cleanup",
+      "description": "Build a scoped, read-only TTL inventory before approving resource deletion, and separately investigate creator attribution without treating the last writer as the creator.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-13",
       "tags": [
@@ -680,6 +710,7 @@
       "slug": "search-azure-policy-aliases",
       "title": "Search Azure Policy Aliases and Send Output to an Interactive Table",
       "description": "A PowerShell script that lets you interactively search Azure Policy aliases by namespace using Out-GridView.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-13",
       "tags": [
@@ -699,6 +730,7 @@
       "slug": "azure-rest-apis-versions-and-lifecycle",
       "title": "Azure REST APIs, Versions, and Lifecycle",
       "description": "How Azure REST API versions work, how to find them with PowerShell, and why the api-version parameter matters.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-06",
       "tags": [
@@ -717,7 +749,8 @@
     {
       "slug": "call-azure-api-with-powershell",
       "title": "Call Azure API with PowerShell",
-      "description": "How to call an Azure REST API directly from PowerShell: get an access token, build the request headers, and invoke the endpoint.",
+      "description": "Make a read-only Azure Resource Manager GET for a storage account using Azure PowerShell, with explicit context, replaceable parameters and response checks.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-06",
       "tags": [
@@ -736,8 +769,9 @@
     },
     {
       "slug": "clean-rbac-identity-not-found",
-      "title": "RBAC Delete Role Assignments with 'Identity Not Found'",
-      "description": "Why Azure keeps RBAC role assignments for deleted users, groups, or service principals, and a PowerShell script to clean them up.",
+      "title": "Review RBAC Assignments with 'Identity Not Found'",
+      "description": "Inventory unresolved Azure RBAC principals at an explicit scope, verify deletion independently, and preview removal before approving a change.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-06",
       "tags": [
@@ -757,7 +791,8 @@
     {
       "slug": "dont-build-your-cloud-home-on-shaky-foundations",
       "title": "Don't Build Your Cloud Home on Shaky Foundations",
-      "description": "Why cloud governance and security foundations - landing zones, management groups, policies, RBAC, naming, tagging, and networking - must come before any real workload.",
+      "description": "A grouped Azure foundations checklist: decide ownership first, then governance, platform connectivity and ongoing operations before onboarding workloads.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-06",
       "tags": [
@@ -775,8 +810,9 @@
     },
     {
       "slug": "kql-query-collection",
-      "title": "KQL Query Collection",
+      "title": "KQL Query Library for Azure Resource Graph",
       "description": "A growing collection of Kusto Query Language (KQL) queries for Azure Resource Graph, covering AKS, disks, networking, policies, RBAC, subscriptions, and tags.",
+      "summary": "Search Resource Graph queries by task or category, inspect execution context and copy the selected example.",
       "author": "Benoit G",
       "date": "2024-11-06",
       "tags": [
@@ -789,13 +825,14 @@
       "featureImageShape": "banner",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/kql-query-collection/"
     },
     {
       "slug": "azure-subscription-switcher",
       "title": "Azure Subscription Switcher",
       "description": "A PowerShell script to quickly switch between Azure subscriptions by index, with an optional Out-GridView interface.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-05",
       "tags": [
@@ -815,8 +852,9 @@
     },
     {
       "slug": "draw-io-vscode-extension-a-must-have-for-your-diagrams",
-      "title": "Draw.io VS Code Extension: A Must-Have for Your Diagrams",
-      "description": "Discover the benefits of integrating Draw.io with VS Code for seamless diagram creation.",
+      "title": "Edit and Version Draw.io Diagrams in VS Code",
+      "description": "Install the unofficial Draw.io integration, choose an editable file format and create your first diagram alongside source code in desktop VS Code.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-05",
       "tags": [
@@ -831,13 +869,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/draw-io-vscode-extension-a-must-have-for-your-diagrams/"
     },
     {
       "slug": "cyber-attacks-live-maps",
       "title": "Cyber Attacks Live Maps",
-      "description": "A curated list of free live dashboards that visualize cyber attacks happening around the world in real time.",
+      "description": "A directory of vendor threat visualisations, with their different scopes and limits: useful for exploration, not an exhaustive map of attacks or attribution.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-03",
       "tags": [
@@ -855,8 +894,9 @@
     },
     {
       "slug": "how-to-host-your-hugo-website-on-github-pages",
-      "title": "How to Host Your Hugo Website on GitHub Pages",
-      "description": "Step-by-step guide to publishing a local Hugo website to GitHub Pages, including the deployment pipeline and how to sync content updates.",
+      "title": "Host a Hugo Site on GitHub Pages with Actions",
+      "description": "Prepare a Hugo source repository, select GitHub Actions as the Pages source, build a pinned Hugo version and verify the deployed site.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-11-03",
       "tags": [
@@ -870,13 +910,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 3,
       "url": "/articles/how-to-host-your-hugo-website-on-github-pages/"
     },
     {
       "slug": "from-wordpress-to-hugo",
-      "title": "From WordPress to Hugo Website",
-      "description": "Why I migrated this site from WordPress to Hugo, and the trade-offs between the two platforms.",
+      "title": "From WordPress to Hugo: Choosing a Publishing Workflow",
+      "description": "A decision-focused comparison of WordPress and Hugo: editing workflow, dynamic features, hosting and maintenance trade-offs, without unrecorded migration claims.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-10-16",
       "tags": [
@@ -890,13 +931,14 @@
       "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 4,
+      "readingMinutes": 2,
       "url": "/articles/from-wordpress-to-hugo/"
     },
     {
       "slug": "how-to-embed-a-github-script-in-an-article",
-      "title": "How to Embed a GitHub Script in an Article",
-      "description": "How I keep long PowerShell scripts in a dedicated GitHub repository and embed them directly as code blocks instead of duplicating the code across posts.",
+      "title": "Publish a Versioned GitHub Script Snapshot in an Article",
+      "description": "Distinguish a source link from build-time inclusion and browser fetching, and publish a readable static script snapshot with honest provenance.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-10-16",
       "tags": [
@@ -910,13 +952,14 @@
       "featureImageShape": "banner",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/how-to-embed-a-github-script-in-an-article/"
     },
     {
       "slug": "azure-terraform-entra-id-authentication",
       "title": "Terraform and Entra ID Authentication",
       "description": "How to disable storage account key-based authentication and use Entra ID authentication for the Terraform azurerm remote backend.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-09-11",
       "tags": [
@@ -936,7 +979,8 @@
     {
       "slug": "optimize-and-reduce-costs-in-azure",
       "title": "Optimize and Reduce Costs in Azure",
-      "description": "Practical tips to control and reduce your Azure spending: VM sizing, autoshutdown, reservations, hybrid benefit, storage tiers, tagging, and more.",
+      "description": "Prioritise Azure cost work by effort, reversibility and commitment: establish a baseline, review usage, improve governance, then evaluate financial commitments.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-09-11",
       "tags": [
@@ -949,13 +993,14 @@
       "featureImageShape": "logo",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 7,
+      "readingMinutes": 3,
       "url": "/articles/optimize-and-reduce-costs-in-azure/"
     },
     {
       "slug": "set-up-your-first-terraform-environment-on-windows",
       "title": "Set Up Your First Terraform Environment on Windows",
       "description": "Step-by-step guide to setting up your first Terraform environment on Windows: install the CLI, configure a remote state backend in Azure Storage, and run your first plan and apply.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-09-11",
       "tags": [
@@ -969,13 +1014,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/set-up-your-first-terraform-environment-on-windows/"
     },
     {
       "slug": "git-basics",
-      "title": "Git Basics",
-      "description": "The fundamental Git commands every beginner should know: configuration, cloning, branching, committing, and logs.",
+      "title": "Git Basics: A Task-Based Command Cheat Sheet",
+      "description": "Find Git commands by task: setup, cloning, the daily change cycle, synchronisation, branches and diagnosis. Each example explains its effect.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-02-28",
       "tags": [
@@ -989,13 +1035,14 @@
       "featureImageShape": "logo",
       "featured": true,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/git-basics/"
     },
     {
       "slug": "github-branch-naming-convention",
       "title": "GitHub Branch Naming Convention",
-      "description": "A practical branch naming convention for GitHub projects: standard format, common prefixes, best practices, and special branches.",
+      "description": "A suggested team convention, not a GitHub requirement: readable branch names with a purpose, ticket identifier and short description.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-02-26",
       "tags": [
@@ -1009,13 +1056,14 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/github-branch-naming-convention/"
     },
     {
       "slug": "github-commit-naming-convention",
       "title": "GitHub Commit Naming Convention",
       "description": "A practical commit message convention for GitHub projects, based on Conventional Commits: format, common types, and writing clear messages.",
+      "summary": "",
       "author": "Benoit G",
       "date": "2024-02-26",
       "tags": [
@@ -1029,7 +1077,7 @@
       "featureImageShape": "logo",
       "featured": false,
       "noindex": false,
-      "readingMinutes": 1,
+      "readingMinutes": 2,
       "url": "/articles/github-commit-naming-convention/"
     }
   ]

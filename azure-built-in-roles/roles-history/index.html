@@ -1,0 +1,1974 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browse recorded changes to Azure built-in role definitions, compare stored before-and-after values, and filter the retained history.">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="benoit-gaumard.io" />
+  <meta property="og:title" content="Roles History | Azure Built-in Roles | Benoit Gaumard" />
+  <meta property="og:description" content="Browse recorded changes to Azure built-in role definitions, compare stored before-and-after values, and filter the retained history." />
+  <meta property="og:url" content="https://benoit-gaumard.io/azure-built-in-roles/roles-history/" />
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="benoit-gaumard.io - Azure tools, reference data and how-to guides" />
+  <meta name="twitter:card" content="summary_large_image" />
+    <!-- A derived change log of the catalog next door: useful to a reader, not a
+       page worth competing with /azure-built-in-roles/ in the index. -->
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://benoit-gaumard.io/azure-built-in-roles/roles-history/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Roles History | Azure Built-in Roles",
+    "description": "Browse recorded changes to Azure built-in role definitions, compare stored before-and-after values, and filter the retained history.",
+    "url": "https://benoit-gaumard.io/azure-built-in-roles/roles-history/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Benoit Gaumard",
+      "url": "https://benoit-gaumard.io/"
+    }
+  }
+  </script>
+  <meta name="theme-color" content="#f5faff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c1420" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light">
+  <!-- seo:analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-75X1Q2PPLE"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-75X1Q2PPLE');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("site-theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+      try {
+        if (localStorage.getItem("news-banner-dismissed") === "2026-08-21") {
+          document.documentElement.setAttribute("data-news-banner", "hidden");
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Roles History | Azure Built-in Roles | Benoit Gaumard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f5faff;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #eef7ff;
+      --cp-border: #d8e8f5;
+      --cp-border-strong: #89afd0;
+      --cp-text: #17324d;
+      --cp-text-muted: #536f88;
+      --cp-accent: #0b6fb8;
+      --cp-accent-hover: #075b98;
+      --cp-accent-soft: rgba(11, 111, 184, 0.09);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #157f57;
+      --cp-success-bg: #eefaf5;
+      --cp-danger: #c93636;
+      --cp-danger-bg: #fdf2f2;
+      --cp-warning: #96610a;
+      --cp-warning-bg: #fdf3e1;
+      --cp-link: #0969b5;
+      --cp-shadow: 0 18px 48px rgba(36, 92, 136, 0.14);
+      --cp-panel-strong: rgba(255, 255, 255, 0.97);
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #0c1420;
+      --cp-surface: #16233a;
+      --cp-surface-soft: #1c2c42;
+      --cp-border: #253b52;
+      --cp-border-strong: #3f6280;
+      --cp-text: #e8f1fa;
+      --cp-text-muted: #9db3c7;
+      --cp-accent: #4fa8ea;
+      --cp-accent-hover: #6fbdf3;
+      --cp-accent-soft: rgba(79, 168, 234, 0.16);
+      --cp-accent-fg: #0c1420;
+      --cp-success: #35c98d;
+      --cp-success-bg: #113325;
+      --cp-danger: #f3696a;
+      --cp-danger-bg: #3c1919;
+      --cp-warning: #e4a940;
+      --cp-warning-bg: #3b2c10;
+      --cp-violet: #a58cf5;
+      --cp-violet-bg: #251d47;
+      --cp-cyan: #4bd7f4;
+      --cp-link: #6fbdf3;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --cp-overlay: rgba(10, 17, 28, 0.84);
+      --cp-panel-strong: rgba(16, 26, 41, 0.97);
+      --cp-highlight-bg: #3c3410;
+      --cp-highlight-border: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 18rem;
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before {
+      z-index: -2;
+      background:
+        radial-gradient(44rem 34rem at 6% -12%, rgba(15, 176, 212, .22), transparent 60%),
+        radial-gradient(40rem 36rem at 106% 6%, rgba(123, 97, 255, .16), transparent 58%),
+        radial-gradient(48rem 42rem at 48% 118%, rgba(47, 127, 245, .16), transparent 62%);
+      filter: blur(6px);
+      animation: aurora-drift 30s ease-in-out infinite alternate;
+    }
+    body::after {
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 111, 184, .18) 1px, transparent 1px);
+      background-size: 1.5rem 1.5rem;
+      -webkit-mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+      mask-image: radial-gradient(70% 55% at 50% 0%, #000 35%, transparent 92%);
+    }
+    @keyframes aurora-drift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-2%, 2%, 0) scale(1.05); }
+    }
+
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      left: .5rem;
+      top: .5rem;
+      z-index: 100;
+      transform: translateY(-250%);
+      padding: .6rem 1rem;
+      border-radius: 6px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s ease;
+    }
+    .skip-link:focus { transform: none; }
+    #top:focus { outline: none; }
+
+
+        .news-banner {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .5rem 1rem;
+      background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
+      color: var(--cp-accent-fg);
+      overflow: hidden;
+      position: relative;
+    }
+    :root[data-news-banner="hidden"] .news-banner { display: none; }
+    .news-banner[hidden] { display: none; }
+    .news-banner-track {
+      flex: 1 1 auto;
+      overflow: hidden;
+      white-space: nowrap;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 3rem, #000 calc(100% - 3rem), transparent 100%);
+    }
+    .news-banner-text {
+      display: inline-block;
+      padding-left: 100%;
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: news-banner-scroll 28s linear infinite;
+    }
+    .news-banner-text a { color: var(--cp-accent-fg); text-decoration: underline; text-underline-offset: .15rem; }
+    .news-banner:hover .news-banner-text, .news-banner:focus-within .news-banner-text { animation-play-state: paused; }
+    @keyframes news-banner-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .news-banner-close {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .16);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+    }
+    .news-banner-close:hover { background: rgba(255, 255, 255, .3); }
+    @media (prefers-reduced-motion: reduce) {
+      .news-banner-text { animation: none; padding-left: 0; }
+      .news-banner-track { white-space: normal; -webkit-mask-image: none; mask-image: none; }
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner, main, .footer-inner {
+      width: min(90rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+    .header-inner {
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand { min-height: 1.5rem; display: flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .brand-mark { color: var(--cp-accent); }
+    .brand .mark { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border-radius: 6px; }
+    .header-links { display: flex; align-items: center; gap: 1rem; }
+    .header-links a { min-height: 1.5rem; display: inline-flex; align-items: center; gap: .45rem; color: var(--cp-text-muted); text-decoration: none; }
+    .nav-icon { flex: 0 0 auto; opacity: .7; }
+    .header-links a:hover .nav-icon, .header-links a[aria-current="page"] .nav-icon { opacity: 1; }
+    .header-links a:hover { color: var(--cp-text); }
+    .header-links a[aria-current="page"] { color: var(--cp-text); font-weight: 600; }
+    .menu-toggle { display: none; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cp-border); border-radius: 6px; background: transparent; color: var(--cp-text); cursor: pointer; flex: 0 0 auto; }
+    .menu-toggle:hover { border-color: var(--cp-border-strong); }
+    .menu-toggle .menu-icon-close { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-open { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon-close { display: block; }
+    .header-actions { display: flex; align-items: center; gap: .25rem; flex: 0 0 auto; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 6px; color: var(--cp-text-muted); flex: 0 0 auto; }
+    .social-link:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: none; border-radius: 6px; background: transparent; color: var(--cp-text-muted); cursor: pointer; flex: 0 0 auto; }
+    .theme-toggle:hover { color: var(--cp-accent); background: var(--cp-surface); }
+    .theme-toggle .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-sun { display: inline-flex; }
+    :root[data-theme="dark"] .theme-toggle .theme-icon-moon { display: none; }
+
+    main { padding-block: 2.5rem 4rem; }
+    .intro { max-width: 52rem; margin-bottom: 1.75rem; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; }
+    #page-title { display: flex; align-items: center; gap: .3em; }
+    .page-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1em; height: 1em; font-size: .8em; line-height: 1; }
+    .page-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .tool-breadcrumb { margin: 0 0 .75rem; font-size: 0.85rem; }
+    .tool-breadcrumb a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); text-decoration: none; }
+    .tool-breadcrumb a:hover { color: var(--cp-accent); text-decoration: underline; }
+    .intro-text { max-width: 44rem; margin: 1rem 0 0; color: var(--cp-text-muted); font-size: 1.05rem; }
+    .refresh-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+    .refresh-meta strong { color: var(--cp-text); }
+
+    [role="tabpanel"] { min-height: 70vh; }
+    .stats-grid { min-height: 7rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--cp-text); }
+    .stat-card .stat-label { margin-top: .4rem; color: var(--cp-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em; }
+
+    .view-toggle {
+      display: inline-flex;
+      gap: .25rem;
+      padding: .25rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      margin-bottom: 1.25rem;
+    }
+    .view-toggle-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .9rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .view-toggle-button:hover { color: var(--cp-text); }
+    .view-toggle-button.is-active { background: var(--cp-accent-soft); color: var(--cp-accent); }
+
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .filter-bar input, .filter-bar select {
+      min-height: 2.9rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: .5rem .85rem;
+    }
+    .filter-bar input { flex: 2 1 16rem; max-width: 30rem; min-width: 0; }
+    .filter-bar select { flex: 1 1 14rem; width: 14rem; max-width: 100%; min-width: 0; }
+    .clear-button { border: 0; background: transparent; color: var(--cp-link); cursor: pointer; padding: .25rem; font-weight: 600; }
+    .clear-button[hidden] { display: none; }    .load-more {
+      display: block;
+      margin: 1rem auto 0;
+      padding: .7rem 1.4rem;
+      min-height: 2.75rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .load-more:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--cp-surface-soft);
+      text-align: left;
+      padding: .7rem .9rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      color: var(--cp-text-muted);
+      border-bottom: 1px solid var(--cp-border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover { color: var(--cp-text); }
+    thead th .sort-arrow { margin-left: .25rem; opacity: .5; }
+    thead th[aria-sort="ascending"] .sort-arrow, thead th[aria-sort="descending"] .sort-arrow { opacity: 1; }
+    tbody td { padding: .55rem .9rem; border-bottom: 1px solid var(--cp-border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody code { font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
+    .role-name { font-weight: 600; }
+    .role-desc { display: block; margin-top: .2rem; color: var(--cp-text-muted); font-size: 0.8rem; font-weight: 400; overflow-wrap: anywhere; }
+    .category-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .id-cell { display: flex; align-items: center; gap: .5rem; }
+    /* The star column costs width the ID column used to have; without this the
+       browser is free to break a GUID across eight lines. And once the ID is
+       incompressible it starts winning space from the name, so the name column
+       is given the share it needs to keep descriptions to a few lines. */
+    .id-cell code { white-space: nowrap; overflow-wrap: normal; }
+    /* Star, category, effect/mode/version (or the member count) and type shrink
+       to their content; the name column absorbs everything left over, so a
+       description stays a few lines tall instead of being squeezed into a ribbon.
+       The two tables no longer have the same column count, hence the scoping. */
+    thead th:nth-child(2) { width: 100%; }
+    #policiesPanel thead th:nth-child(n+3):nth-child(-n+7),
+    #initiativesPanel thead th:nth-child(n+3):nth-child(-n+6) { width: 1%; }
+    /* One mode value, Microsoft.MachineLearningServices.v2.Data, is a 41-char
+       token with no break opportunity: left alone it pins the column at its own
+       width and starves the name column of nearly 300px. */
+    #policiesPanel tbody td:nth-child(5) { overflow-wrap: anywhere; }
+    /* Only Type is safe to keep on one line: some role modes are long
+       (Microsoft.KeyVault.Data), and pinning them would hand the column 280px. */
+    #policiesPanel tbody td:nth-child(7),
+    #initiativesPanel tbody td:nth-child(6) { white-space: nowrap; }
+    /* Version columns: roles column 6, initiatives column 5. */
+    #policiesPanel tbody td:nth-child(6),
+    #initiativesPanel tbody td:nth-child(5) { white-space: nowrap; }
+    .effect-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    /* Deny blocks a deployment, audit only reports it and disabled does
+       nothing: the three outcomes are worth telling apart at a glance. */
+    .effect-badge.is-deny { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
+    .effect-badge.is-audit { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
+    .effect-badge.is-remediate { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
+    .copy-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .copy-button:hover { border-color: var(--cp-accent); color: var(--cp-accent-hover); }
+    .copy-button.is-copied { border-color: var(--cp-success); color: var(--cp-success); }
+
+    /* The Policies/Initiatives tabs and the Cards/List switch share one row, so
+       the layout choice reads as a property of the panel below it rather than
+       as a third tab. */
+    .panel-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.25rem; }
+    .panel-toolbar .view-toggle { margin-bottom: 0; }
+    .filter-toggle { display: inline-flex; align-items: center; gap: .5rem; color: var(--cp-text); font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .filter-toggle input { flex: none; width: 1.15rem; height: 1.15rem; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; accent-color: var(--cp-accent); cursor: pointer; }
+    .filter-toggle .fav-count { color: var(--cp-text-muted); font-weight: 600; }
+
+    .fav-col { width: 1%; cursor: default; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .fav-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .fav-button:hover { border-color: var(--cp-warning); color: var(--cp-warning); }
+    .fav-button[aria-pressed="true"] { border-color: var(--cp-warning); background: var(--cp-warning-bg); color: var(--cp-warning); }
+
+    .role-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: .9rem; align-items: start; }
+    .role-cards[hidden], .table-wrap[hidden] { display: none; }
+    .role-card {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .role-card-head { display: flex; align-items: flex-start; gap: .6rem; }
+    .role-card-head .role-name { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
+    /* Descriptions run to several hundred characters; clamping keeps a grid of
+       cards from turning into columns of wildly different heights. */
+    .role-card .role-desc { margin: 0; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .role-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .6rem; font-size: 0.78rem; color: var(--cp-text-muted); }
+    .role-card-foot { margin-top: auto; }
+    .role-card .id-cell code { font-size: 0.75rem; }
+
+    /* The role count doubles as the disclosure control: the number a reader
+       wants to question is the thing they click to see behind. */
+    .member-toggle {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .15rem .45rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface-soft); color: var(--cp-text);
+      font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .member-toggle:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .member-toggle svg { flex: none; opacity: .6; transition: transform .15s ease; }
+    .member-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    .member-toggle[disabled] { opacity: .55; cursor: default; }
+    .member-toggle[disabled]:hover { border-color: var(--cp-border); color: var(--cp-text); }
+    tr.member-row > td { padding: 0; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border); }
+    .member-panel { padding: .85rem 1rem 1rem; }
+    .role-card .member-panel { padding: .25rem 0 0; }
+    .member-list { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+    .member-list li {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
+      padding: .4rem .6rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface); font-size: 0.82rem;
+    }
+    .member-name { flex: 1 1 18rem; font-weight: 600; }
+    .member-id { color: var(--cp-text-muted); font-size: 0.75rem; overflow-wrap: anywhere; }
+    .member-empty { margin: 0; color: var(--cp-text-muted); font-size: 0.82rem; line-height: 1.55; }
+
+    .json-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+    .json-view {
+      margin: 0;
+      max-height: 32rem;
+      overflow: auto;
+      padding: .85rem 1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-family: "Cascadia Code", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      tab-size: 2;
+      /* pre, not pre-wrap, would hand the table a min-content width as wide as
+         the longest description string and stretch every column with it. */
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .json-button {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .15rem .5rem;
+      border: 1px solid var(--cp-border); border-radius: 6px;
+      background: var(--cp-surface-soft); color: var(--cp-text);
+      font: inherit; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    }
+    .json-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .json-button svg { flex: none; opacity: .6; transition: transform .15s ease; }
+    .json-button[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    /* The role name is the row's disclosure control, so it has to read as a
+       name first and as a button second: no chrome, just a caret and a hover cue. */
+    .name-toggle {
+      display: flex;
+      align-items: flex-start;
+      gap: .35rem;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+    }
+    .name-toggle:hover, .name-toggle[aria-expanded="true"] { color: var(--cp-link); }
+    .name-toggle svg { flex: none; margin-top: .2rem; opacity: .5; transition: transform .15s ease; }
+    .name-toggle[aria-expanded="true"] svg { transform: rotate(90deg); opacity: 1; }
+    .role-card-head .name-toggle { flex: 1 1 auto; font-size: 0.95rem; line-height: 1.35; }
+    .result-count { margin: .75rem 0 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+
+    footer.site-footer { border-top: 1px solid var(--cp-border); background: var(--cp-panel-strong); color: var(--cp-text-muted); }
+    .footer-inner { padding-block: 2rem 1.5rem; }
+    .footer-main { display: grid; grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto)); gap: 3rem; padding-bottom: 1.5rem; }
+    .footer-about { max-width: 30rem; }
+    .footer-about p { margin: .75rem 0 0; font-size: 0.85rem; line-height: 1.6; }
+    .footer-group { display: flex; align-items: flex-start; flex-direction: column; gap: .5rem; }
+    .footer-group strong { margin-bottom: .125rem; color: var(--cp-text); font-size: 0.75rem; text-transform: uppercase; }
+    .footer-group a { display: inline-flex; align-items: center; min-height: 1.5rem; color: var(--cp-text-muted); font-size: 0.85rem; text-decoration: none; }
+    .footer-group a:hover { color: var(--cp-link); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--cp-border); font-size: 0.8rem; }
+
+    .footer-bottom a { color: var(--cp-text-muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--cp-link); }
+
+    .back-to-top {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      width: 3rem;
+      height: 3rem;
+      padding: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      cursor: pointer;
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(.75rem);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .back-to-top:hover { background: var(--cp-accent-hover); }
+
+    @media (max-width: 48rem) {
+      .header-inner { flex-wrap: nowrap; min-height: auto; padding-block: .75rem; position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .header-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--cp-panel-strong); border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem; box-shadow: var(--cp-shadow); margin-top: .5rem; z-index: 30; }
+      .header-links.nav-open { display: flex; }
+      .header-links a { min-height: 1.5rem; padding: .65rem .75rem; border-radius: 6px; }
+      .header-links a:hover { background: var(--cp-surface-soft); }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-about { grid-column: 1 / -1; }
+    }
+    @media (max-width: 32rem) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
+      main { padding-top: 1.75rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      /* flex-basis becomes a height once the bar is a column, which grew the
+         search box and the category select to ~250px tall. The checkbox inside
+         .filter-toggle must be excluded or it stretches to the full width too. */
+      .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: 0 0 auto; width: 100%; max-width: none; }
+      .filter-toggle { align-self: flex-start; }
+      .back-to-top { right: 1rem; bottom: 1rem; }
+      .footer-main { grid-template-columns: 1fr; }
+      .footer-about { grid-column: auto; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body::before { animation: none; }
+    }
+
+    /* Filled by script: hold the box only while empty, so the page below does
+       not jump when the data lands, and no blank hole survives a render. */
+    @supports (min-height: 1px) {
+      #statsGrid:empty { min-height: 112px; }
+      @media (max-width: 32rem) {
+        #statsGrid:empty { min-height: 194px; }
+      }
+    }
+
+    /* The table is the last thing on the page and can settle anywhere between
+       5,000px and 89,000px, so a fixed reservation would be wrong at most
+       widths. Holding a viewport-relative box while the body is empty keeps the
+       footer below the fold at first paint, so its arrival moves nothing the
+       visitor can see. :has() releases it as soon as the first row renders. */
+    .table-wrap:has(tbody:empty) { min-height: 65vh; }    /* the date arrives after load; hold its box so .refresh-meta wraps the
+       same before and after, and the rows below it do not move */
+    #refreshedAt { display: inline-block; min-width: 9.5rem; }
+    @media print {
+      /* Printing a tool page should yield the data, not the furniture. */
+      .news-banner, .site-header, .site-footer, .skip-link,
+      .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
+      .breadcrumb, .filters, .search-row, .toolbar, .pagination { display: none !important; }
+      :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
+      * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
+      body { font-size: 11pt; }
+      main { max-width: none; padding: 0; }
+      a { text-decoration: underline; }
+      /* a printed link is useless without its target */
+      .article-body a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid #bbb; padding: 4pt 6pt; }
+      thead { display: table-header-group; }
+      tr, .card, .stat-card, figure, pre { break-inside: avoid; page-break-inside: avoid; }
+      h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* Catch-all: naming individual selectors let every newly added element
+         escape. 0.01ms rather than 0 so transitionend/animationend still fire. */
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
+    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
+    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
+    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
+    .page-notes li { margin-bottom: .35rem; }
+    .page-notes a { color: var(--cp-link); }
+
+    /* Share links */
+    .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
+    .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
+    .footer-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0.42rem 0.75rem; border: 1px solid var(--cp-border-strong, var(--cp-border)); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.1; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+    .share-btn:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft, var(--cp-surface)); transform: translateY(-1px); }
+    .share-btn svg { flex: none; }
+    .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
+    @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
+
+    /* Change log ------------------------------------------------------------ */
+    [hidden] { display: none !important; }
+    .history-log { max-width: 76rem; }
+    .history-filters { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
+    .history-filter-grid { display: grid; grid-template-columns: minmax(12rem, 2fr) repeat(3, minmax(9rem, 1fr)); gap: .75rem; }
+    .history-extra { display: contents; }
+    .history-filter-toggle, .history-filter-done { display: none !important; }
+    .history-field { min-width: 0; }
+    .history-field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .4rem; }
+    .history-field input, .history-field select, .copy-fallback input { width: 100%; min-width: 0; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
+    .history-field input::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .history-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .75rem; }
+    .history-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; }
+    .history-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
+    .history-action:disabled { cursor: not-allowed; color: var(--cp-text-muted); }
+    .history-help, .history-counts { max-width: 80ch; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.55; }
+    .history-counts { margin: 1rem 0 .5rem; }
+    .history-counts strong { color: var(--cp-text); }
+    .history-status { font-size: .85rem; color: var(--cp-text-muted); line-height: 1.5; }
+    .history-status:empty { margin: 0; }
+    .history-error { padding: 1rem; margin: 1rem 0; border: 1px solid var(--cp-danger); border-radius: 8px; color: var(--cp-danger); background: var(--cp-danger-bg); }
+    .copy-fallback label { display: block; margin-bottom: .5rem; font-size: .85rem; }
+    .copy-fallback { margin: 1rem 0; }
+    .catalogue-return { margin: 1.5rem 0 0; }
+    .timeline-day { margin-bottom: 1.5rem; }
+    .timeline-heading {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .75rem;
+      margin: 0 0 .6rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .timeline-date { margin: 0; font-size: 1.05rem; font-weight: 700; }
+    .timeline-tally { margin-left: auto; color: var(--cp-text-muted); font-size: .8rem; }
+    .change-list { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+    .change-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      gap: .55rem .75rem;
+      padding: 1rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      scroll-margin-top: 6rem;
+    }
+    .change-main { min-width: 0; display: flex; flex-direction: column; gap: .35rem; }
+    .change-name { margin: 0; font-size: 1.05rem; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+    .change-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .55rem; font-size: 0.78rem; color: var(--cp-text-muted); }
+    .change-meta .category-badge { white-space: normal; overflow-wrap: anywhere; }
+    .change-explanation { margin: .35rem 0; max-width: 80ch; color: var(--cp-text-muted); font-size: .9rem; line-height: 1.5; }
+    .event-details summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); cursor: pointer; font-size: .9rem; }
+    .event-details summary:focus-visible, .field-value:focus-visible, .event-id:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    .event-details[open] { border-top: 1px solid var(--cp-border); margin-top: .5rem; }
+    .event-meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: start; gap: .5rem 1rem; margin: .5rem 0; font-size: .85rem; }
+    .event-meta dt { font-weight: 600; }
+    .event-meta dd { margin: 0; min-width: 0; }
+    .event-id { display: block; max-width: 100%; overflow-x: auto; white-space: nowrap; padding-block: .35rem; }
+    .event-lookup { min-height: 2.75rem; display: inline-flex; align-items: center; width: fit-content; font-size: .85rem; }
+    /* Added, removed and modified are the whole point of the page, so the three
+       read apart at a glance rather than as three grey words. */
+    .change-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+    .change-badge.is-added { background: var(--cp-success-bg); border-color: var(--cp-success); color: var(--cp-success); }
+    .change-badge.is-removed { background: var(--cp-danger-bg); border-color: var(--cp-danger); color: var(--cp-danger); }
+    .change-badge.is-modified { background: var(--cp-warning-bg); border-color: var(--cp-warning); color: var(--cp-warning); }
+    .field-diff { display: grid; gap: 1rem; margin: 1rem 0; padding: 0; list-style: none; }
+    .field-name { margin: 0 0 .5rem; font-size: .95rem; font-weight: 600; }
+    .field-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+    .field-side { min-width: 0; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 6px; }
+    .field-side strong { font-size: .8rem; }
+    .field-value { margin: .4rem 0 0; max-height: 20rem; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-family: "Cascadia Code", "Consolas", ui-monospace, monospace; font-size: .85rem; line-height: 1.5; }
+    .field-before { background: var(--cp-danger-bg); }
+    .field-after { background: var(--cp-success-bg); }
+    .empty-state {
+      padding: 3rem 1rem;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      text-align: center;
+    }
+    .empty-state h2 { margin: 0; font-size: 1.05rem; }
+    .empty-state p { margin: .5rem auto 0; max-width: 42rem; color: var(--cp-text-muted); font-size: 0.9rem; line-height: 1.6; }
+    @media (max-width: 48rem) {
+      .history-filter-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+      .history-extra { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); gap: .75rem; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
+      .history-filter-toggle, .history-filter-done { display: inline-flex !important; width: fit-content; grid-column: 1 / -1; }
+      .site-header { position: relative; }
+      .timeline-heading { position: sticky; top: 0; z-index: 10; padding: .65rem .5rem; background: var(--cp-panel-strong); }
+      .timeline-tally { margin-left: 0; flex-basis: 100%; }
+      .field-pair { grid-template-columns: minmax(0, 1fr); }
+      .event-meta { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+      .event-meta dd { margin-bottom: .5rem; }
+    }
+    @media print {
+      .history-filters, .history-actions, .copy-fallback, .event-lookup { display: none !important; }
+      .timeline-heading { position: static; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://benoit-gaumard.io/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tools",
+        "item": "https://benoit-gaumard.io/tools/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Azure Built-in Roles",
+        "item": "https://benoit-gaumard.io/azure-built-in-roles/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "Roles History",
+        "item": "https://benoit-gaumard.io/azure-built-in-roles/roles-history/"
+      }
+    ]
+  }
+  </script>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/azure-built-in-roles/roles-history/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/azure-built-in-roles/roles-history/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to content</a>
+  <div class="news-banner" id="newsBanner">
+    <div class="news-banner-track">
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+    </div>
+    <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primaryNav">
+        <svg class="menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <nav class="header-links" id="primaryNav" aria-label="Primary navigation">
+        <a href="/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</a>
+        <a href="/articles/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Articles</a>
+        <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+      </nav>
+      <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/" aria-current="location"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
+        <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
+        </a>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" tabindex="-1">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="tool-breadcrumb"><a href="/azure-built-in-roles/">&larr; Azure Built-in Roles</a></p>
+      <h1 id="page-title"><span class="page-icon" aria-hidden="true">🕓</span>Roles history</h1>
+      <p class="intro-text">Observed changes to Azure built-in role definitions between catalogue scans.</p>
+      <p class="refresh-meta">
+        <span>Last compared snapshot: <strong id="refreshedAt">Loading...</strong></span>
+        <span>Baseline: <strong id="baselineAt">Loading...</strong></span>
+        <span>Retention: <strong id="retention">-</strong></span>
+      </p>
+      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history. <a href="#notes-heading">Coverage and limitations</a>.</p>
+    </section>
+
+    <section class="history-log" aria-label="Role change log">
+      <noscript><p>JavaScript is needed to filter this log. <a href="../role-changes.json">Download the source log</a>, or <a href="../">open Azure Built-in Roles</a>.</p></noscript>
+      <fieldset class="history-filters" id="historyControls" disabled aria-label="Filter retained role events">
+        <div class="history-filter-grid">
+        <div class="history-field">
+          <label for="search">Search role changes</label>
+          <input id="search" type="search" placeholder="Name, category or ID" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="history-field">
+        <label for="periodFilter">Period (UTC)</label>
+        <select id="periodFilter" aria-describedby="periodHelp">
+          <option value="">All retained</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+        </div>
+        <button class="history-action history-filter-toggle" id="historyFilterToggle" type="button" aria-expanded="false" aria-controls="historyExtra">More filters</button>
+        <div class="history-extra" id="historyExtra">
+        <div class="history-field">
+          <label for="changeFilter">Change</label>
+          <select id="changeFilter">
+            <option value="">All changes</option>
+            <option value="added">Added</option>
+            <option value="removed">Removed</option>
+            <option value="modified">Modified</option>
+          </select>
+        </div>
+        <div class="history-field">
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter"><option value="">All categories</option></select>
+        </div>
+        <button class="history-action history-filter-done" id="historyFiltersDone" type="button">Done</button>
+        </div>
+        </div>
+        <p class="history-help" id="periodHelp">Recent periods end today (UTC), not on the last scan.</p>
+        <div class="history-actions">
+          <button class="history-action" id="clearFilters" type="button" hidden>Reset all filters</button>
+          <button class="history-action" id="exportChanges" type="button" disabled>Export filtered JSON</button>
+        </div>
+      </fieldset>
+      <p class="history-counts" id="changeCounts">Counts: loading&hellip;</p>
+      <p class="result-count" id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading role changes&hellip;</p>
+      <p class="history-help" id="undatedNotice" hidden></p>
+      <p class="history-status" id="actionStatus" role="status" aria-live="polite"></p>
+      <p class="history-help" id="exportFallback" hidden>Export could not start. You can <a href="../role-changes.json" download>download the unfiltered source log</a>.</p>
+      <div class="copy-fallback" id="copyFallback" hidden>
+        <label for="copyValue">Select and copy the definition ID</label>
+        <input id="copyValue" readonly>
+      </div>
+      <div class="history-error" id="historyError" role="alert" hidden><p>The change log could not be loaded. Check the connection and retry.</p><button class="history-action" id="retryHistory" type="button">Retry</button></div>
+      <div id="timeline" aria-busy="true"></div>
+      <button class="load-more" id="loadMore" type="button" hidden>Load more changes</button>
+      <p class="catalogue-return"><a class="history-action" href="../">Back to the current role catalogue</a></p>
+    </section>
+
+    <section class="page-notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">How this log is built</h2>
+      <p>This log compares consecutive complete snapshots of Microsoft's Azure RBAC reference. Collection is scheduled daily at 06:15 UTC; weekly and manual runs can also refresh it. A collection failure does not create removal events. Dates are observation times in the reference, not official Azure publication dates.</p>
+      <p><strong>Added</strong> means a role ID appeared in the new snapshot; <strong>Removed</strong> means it was no longer present. Neither observation establishes the exact date a role became available or was retired in Azure. Removed IDs remain visible and can be looked up in the current catalogue.</p>
+      <p><strong>Modified</strong> covers role name, description, category memberships, Microsoft's privileged classification, assignable scopes and all four permission buckets: Actions, NotActions, DataActions and NotDataActions. Before/after values preserve the recorded permission strings and their descriptions. Array order alone is ignored; changed strings, descriptions and duplicate counts are retained.</p>
+      <p>The first snapshot establishes a baseline, not hundreds of additions. The retained baseline is shown above. Earlier Azure history is not reconstructed. Up to <span id="retentionInline">180</span> days and 3,000 events are kept at each refresh. An empty log does not prove there were no changes before the baseline or between scans.</p>
+      <p>This is a reference diff, not an effective-access calculation. The collector flattens permission blocks and omits conditions; assignments, deny assignments, wildcard coverage and service authentication are not evaluated. A description or classification change may be a documentation correction, not a change to runtime permissions.</p>
+      <p>Counts and JSON export include <strong>all matching events</strong>, not just the visible batch. Recent periods use UTC calendar days ending today. <a href="../role-changes.json">Inspect the source log</a> or <a href="../roles.json">download the current role snapshot</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
+          <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
+        </div>
+        <nav class="footer-group" aria-label="Footer navigation">
+          <strong>Explore</strong>
+          <a href="/">Home</a>
+          <a href="/articles/">Articles</a>
+          <a href="/tools/">Tools</a>
+        </nav>
+        <div class="footer-group">
+          <strong>Tools</strong>
+          <a href="/icons/">Icons</a>
+          <a href="/emoji-sheet/">Emoji</a>
+          <a href="/azure-release-updates/">Azure Updates</a>
+          <a href="/m365-release-updates/">M365 Updates</a>
+        </div>
+      </div>
+      <div class="footer-share">
+        <span class="footer-share-label">Share this site</span>
+        <div class="footer-share-links">
+          <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="share-btn" data-share="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>
+            Twitter
+          </a>
+          <a class="share-btn" data-share="reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fbenoit-gaumard.io%2F" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-6.993 4.87-3.86 0-6.99-2.176-6.99-4.87 0-.183.01-.366.037-.545A1.745 1.745 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.56-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+            Reddit
+          </a>
+          <a class="share-btn" data-share="mail" href="mailto:?body=https%3A%2F%2Fbenoit-gaumard.io%2F">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Mail
+          </a>
+          <button class="share-btn" type="button" data-share="favorite">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Add to favorites
+          </button>
+        </div>
+        <p class="footer-share-hint" data-share-hint role="status" aria-live="polite"></p>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
+        <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M8 13V3M3 8l5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script data-history-script>
+    const PAGE_SIZE = 60;
+    const CHANGE_LABELS = { added: "Added", removed: "Removed", modified: "Modified" };
+    const FIELD_LABELS = { roleName: "Role name", description: "Description", categories: "Categories", isPrivileged: "Privileged classification", assignableScopes: "Assignable scopes", actions: "Actions", notActions: "NotActions", dataActions: "DataActions", notDataActions: "NotDataActions" };
+    const state = { entries: [], filtered: [], visible: PAGE_SIZE, keys: new Map(), open: new Set(), status: "loading", generatedAt: null, baselineAt: null, retentionDays: null, filteredAt: null, filters: {} };
+    const elements = Object.fromEntries([
+      "search", "changeFilter", "categoryFilter", "periodFilter", "clearFilters", "historyControls", "timeline",
+      "resultCount", "changeCounts", "refreshedAt", "baselineAt", "retention", "retentionInline", "loadMore", "exportChanges",
+      "actionStatus", "copyFallback", "copyValue", "exportFallback", "historyError", "retryHistory", "undatedNotice",
+      "historyExtra", "historyFilterToggle", "historyFiltersDone",
+    ].map(id => [id, document.getElementById(id)]));
+    const mobileFilters = matchMedia("(max-width: 48rem)");
+    let moreFiltersOpen = false;
+
+    function normalize(value) {
+      return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function entryTimestamp(entry) {
+      return typeof entry.detectedAt === "string" && /^\d{4}-\d{2}-\d{2}T/.test(entry.detectedAt) ? Date.parse(entry.detectedAt) : NaN;
+    }
+
+    function dayKey(entry) {
+      const stamp = entryTimestamp(entry);
+      return Number.isFinite(stamp) ? new Date(stamp).toISOString().slice(0, 10) : "undated";
+    }
+
+    function formatDay(key) {
+      return key === "undated" ? "Date not recorded" : new Date(key + "T00:00:00Z").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+    }
+
+    function validateHistory(payload) {
+      if (!payload || !Array.isArray(payload.entries)) throw new Error("Missing event list");
+      if (payload.retentionDays != null && (!Number.isInteger(payload.retentionDays) || payload.retentionDays <= 0)) throw new Error("Invalid retention period");
+      payload.entries.forEach(entry => {
+        if (!entry || typeof entry.kind !== "string") throw new Error("Invalid event kind");
+        if (entry.kind !== "role") throw new Error("Unexpected role history event kind");
+        if (!Object.hasOwn(CHANGE_LABELS, entry.change) || typeof entry.name !== "string" || !entry.name
+          || ["displayName", "category", "detectedAt"].some(key => entry[key] != null && typeof entry[key] !== "string")
+          || (entry.fields != null && (!Array.isArray(entry.fields) || entry.fields.some(field => !field || typeof field.field !== "string" || !field.field)))) {
+          throw new Error("Invalid role event");
+        }
+      });
+      return payload.entries.filter(entry => entry.kind === "role").sort((a, b) => {
+        const left = Number.isFinite(entryTimestamp(a)) ? entryTimestamp(a) : -Infinity;
+        const right = Number.isFinite(entryTimestamp(b)) ? entryTimestamp(b) : -Infinity;
+        return left === right ? 0 : right - left;
+      });
+    }
+
+    function periodCutoff(days, now) {
+      if (days === null) return null;
+      const date = new Date(now);
+      return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()) - (days - 1) * 86400000;
+    }
+
+    function filterEntries(entries, filters, now) {
+      const query = normalize(filters.search.trim());
+      const cutoff = periodCutoff(filters.days, now);
+      return entries.filter(entry => {
+        if (filters.change && entry.change !== filters.change) return false;
+        if (filters.category && entry.category !== filters.category) return false;
+        if (cutoff !== null && (!Number.isFinite(entryTimestamp(entry)) || entryTimestamp(entry) < cutoff || entryTimestamp(entry) > now)) return false;
+        return !query || normalize(`${entry.displayName || ""} ${entry.category || ""} ${entry.name}`).includes(query);
+      });
+    }
+
+    function formatValue(field, side) {
+      if (!Object.hasOwn(field, side)) return "Not recorded";
+      const value = field[side];
+      if (value === "") return "(empty string)";
+      return typeof value === "string" ? value : JSON.stringify(value, null, 2);
+    }
+
+    function summarizeChange(entry) {
+      if (entry.change === "added") return "First observed in this scan.";
+      if (entry.change === "removed") return "Not found in this scan.";
+      if (!entry.fields?.length) return "A modification was recorded, but the changed fields and before/after values are unavailable.";
+      return "Changed fields: " + entry.fields.map(field => FIELD_LABELS[field.field] || field.field).join(", ") + ".";
+    }
+
+    function catalogueUrl(name) {
+      const url = new URL("../", location.href);
+      url.searchParams.set("role", name);
+      return url.href;
+    }
+
+    function buildExport(entries, filters, generatedAt, retentionDays, filteredAt, exportedAt, baselineAt) {
+      const cutoff = periodCutoff(filters.days, Date.parse(filteredAt));
+      return {
+        kind: "role", source: "azure-built-in-roles/role-changes.json", generatedAt, baselineAt, retentionDays, filteredAt, exportedAt,
+        filters: { ...filters, fromInclusiveUtc: cutoff === null ? null : new Date(cutoff).toISOString() },
+        totalMatchingEvents: entries.length, entries,
+        coverage: "Recorded role metadata and permission pairs, including descriptions. Array order is ignored. This is not an effective-access calculation. All matching events are included.",
+      };
+    }
+
+    function textNode(tag, text, className) {
+      const node = document.createElement(tag);
+      node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+
+    function action(label, callback) {
+      const button = textNode("button", label, "history-action");
+      button.type = "button";
+      button.addEventListener("click", callback);
+      return button;
+    }
+
+    async function copyId(id, button) {
+      try {
+        await navigator.clipboard.writeText(id);
+        elements.copyFallback.hidden = true;
+        elements.actionStatus.textContent = "Definition ID copied.";
+        button.textContent = "Copied";
+        setTimeout(() => { if (button.isConnected) button.textContent = "Copy ID"; }, 1500);
+      } catch (error) {
+        console.warn("Definition ID could not be copied.", error);
+        elements.copyFallback.hidden = false;
+        elements.copyValue.value = id;
+        elements.copyValue.focus();
+        elements.copyValue.select();
+        elements.actionStatus.textContent = "Clipboard access is unavailable. Select and copy the ID above.";
+      }
+    }
+
+    function renderEntry(entry) {
+      const key = state.keys.get(entry);
+      const item = document.createElement("li");
+      item.className = "change-item";
+      item.dataset.eventKey = key;
+      const name = entry.displayName || "Role name not recorded";
+      item.append(textNode("h3", name, "change-name"));
+      const meta = document.createElement("div");
+      meta.className = "change-meta";
+      meta.append(textNode("span", CHANGE_LABELS[entry.change], `change-badge is-${entry.change}`));
+      const stamp = entryTimestamp(entry);
+      if (Number.isFinite(stamp)) {
+        const time = textNode("time", new Date(stamp).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC");
+        time.dateTime = new Date(stamp).toISOString();
+        meta.append(time);
+      }
+      const lookup = textNode("a", "Find in catalogue", "event-lookup");
+      lookup.href = catalogueUrl(entry.name);
+      lookup.setAttribute("aria-label", `Look up current definition: ${name}`);
+      meta.append(lookup);
+      item.append(meta, textNode("p", summarizeChange(entry), "change-explanation"));
+
+      const details = document.createElement("details");
+      details.className = "event-details";
+      details.open = state.open.has(key);
+      const fields = entry.change === "modified" ? entry.fields || [] : [];
+      const summary = textNode("summary", fields.length ? `Compare ${fields.length} field${fields.length === 1 ? "" : "s"}` : "View event details");
+      summary.setAttribute("aria-label", `${summary.textContent}: ${name}`);
+      details.append(summary);
+      details.addEventListener("toggle", () => {
+        if (!details.isConnected) return;
+        if (details.open) state.open.add(key);
+        else state.open.delete(key);
+      });
+      const metadata = document.createElement("dl");
+      metadata.className = "event-meta";
+      const id = document.createElement("dd");
+      const code = textNode("code", entry.name, "event-id");
+      code.tabIndex = 0;
+      code.setAttribute("aria-label", "Definition ID");
+      id.append(code);
+      const observed = Number.isFinite(stamp) ? new Date(stamp).toISOString() : "Not recorded";
+      metadata.append(textNode("dt", "Definition ID"), id, textNode("dt", "Detected at (UTC)"), textNode("dd", observed));
+      if (entry.category) metadata.append(textNode("dt", "Category"), textNode("dd", entry.category));
+      const copy = action("Copy ID", () => copyId(entry.name, copy));
+      details.append(metadata, copy);
+      if (entry.change === "modified") {
+        details.append(textNode("p", "Recorded reference fields only. Permissions include their source descriptions; this does not calculate effective access or the impact on your assignments.", "history-help"));
+        if (!fields.length) details.append(textNode("p", "Before/after values are not available for this event.", "history-help"));
+        const list = document.createElement("ul");
+        list.className = "field-diff";
+        fields.forEach(field => {
+          const row = document.createElement("li");
+          const fieldName = FIELD_LABELS[field.field] || field.field;
+          row.append(textNode("h4", fieldName, "field-name"));
+          const pair = document.createElement("div");
+          pair.className = "field-pair";
+          [["from", "Before", "before"], ["to", "After", "after"]].forEach(([key, label, side]) => {
+            const cell = document.createElement("div");
+            cell.className = `field-side field-${side}`;
+            const value = textNode("pre", formatValue(field, key), "field-value");
+            value.tabIndex = 0;
+            value.setAttribute("aria-label", `${fieldName}: ${label.toLowerCase()}`);
+            cell.append(textNode("strong", label), value);
+            pair.append(cell);
+          });
+          row.append(pair);
+          list.append(row);
+        });
+        details.append(list);
+      } else {
+        details.append(textNode("p", entry.change === "added"
+          ? "Present in this scan, absent from the preceding catalogue. This detection time is not an official publication date."
+          : "Absent from this scan after appearing in the preceding catalogue. This does not establish a retirement date; the definition may no longer be in the current catalogue.", "history-help"));
+      }
+      item.append(details);
+      return item;
+    }
+
+    function syncMoreFilters() {
+      const visible = !mobileFilters.matches || moreFiltersOpen;
+      if (!visible && elements.historyExtra.contains(document.activeElement)) elements.historyFilterToggle.focus();
+      if (!mobileFilters.matches && document.activeElement === elements.historyFilterToggle) elements.search.focus();
+      elements.historyExtra.hidden = !visible;
+      elements.historyFilterToggle.setAttribute("aria-expanded", String(visible));
+      const active = [elements.changeFilter, elements.categoryFilter].filter(select => select.value).length;
+      elements.historyFilterToggle.textContent = `More filters · ${active} active`;
+    }
+
+    function currentFilters() {
+      return { search: elements.search.value.trim(), change: elements.changeFilter.value, category: elements.categoryFilter.value, days: elements.periodFilter.value ? Number(elements.periodFilter.value) : null };
+    }
+
+    function renderTimeline() {
+      const shown = state.filtered.slice(0, state.visible);
+      const counts = { added: 0, removed: 0, modified: 0 };
+      state.filtered.forEach(entry => counts[entry.change]++);
+      const days = new Set(state.filtered.map(dayKey).filter(key => key !== "undated")).size;
+      elements.changeCounts.textContent = `Active filters · ${counts.added.toLocaleString("en-US")} Added · ${counts.removed.toLocaleString("en-US")} Removed · ${counts.modified.toLocaleString("en-US")} Modified · ${days.toLocaleString("en-US")} UTC days with events.`;
+      elements.resultCount.textContent = `${shown.length.toLocaleString("en-US")} displayed / ${state.filtered.length.toLocaleString("en-US")} matching events · ${state.entries.length.toLocaleString("en-US")} retained role events in the source log.`;
+      elements.timeline.replaceChildren();
+      if (!shown.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        const title = !state.entries.length ? "No role events in the retained log"
+          : state.filters.days !== null ? "No changes match this period and these filters" : "No changes match these filters";
+        empty.append(textNode("h2", title));
+        empty.append(textNode("p", state.entries.length
+          ? "Try all retained dates without changing your search, or reset every filter."
+          : "The source snapshot contains no retained role events. This does not prove that no changes occurred or that the current catalogue is up to date."));
+        const actions = document.createElement("div");
+        actions.className = "history-actions";
+        if (state.filters.days !== null) actions.append(action("Show all retained dates", () => {
+          elements.periodFilter.value = "";
+          applyFilter();
+          elements.periodFilter.focus({ preventScroll: true });
+        }));
+        if (hasFilters()) actions.append(action("Reset all filters", resetFilters));
+        empty.append(actions);
+        elements.timeline.append(empty);
+      } else {
+        const allDays = new Map();
+        state.filtered.forEach(entry => allDays.set(dayKey(entry), (allDays.get(dayKey(entry)) || 0) + 1));
+        const groups = new Map();
+        shown.forEach(entry => {
+          const key = dayKey(entry);
+          if (!groups.has(key)) groups.set(key, []);
+          groups.get(key).push(entry);
+        });
+        groups.forEach((entries, key) => {
+          const section = document.createElement("section");
+          section.className = "timeline-day";
+          const heading = document.createElement("div");
+          heading.className = "timeline-heading";
+          const title = textNode("h2", formatDay(key) + (key === "undated" ? "" : " · UTC"), "timeline-date");
+          title.id = "day-" + key;
+          section.setAttribute("aria-labelledby", title.id);
+          heading.append(title, textNode("span", `${entries.length} of ${allDays.get(key)} matching events shown`, "timeline-tally"));
+          const list = document.createElement("ul");
+          list.className = "change-list";
+          entries.forEach(entry => list.append(renderEntry(entry)));
+          section.append(heading, list);
+          elements.timeline.append(section);
+        });
+      }
+      const remaining = state.filtered.length - shown.length;
+      elements.loadMore.hidden = remaining <= 0;
+      elements.loadMore.textContent = `Load ${Math.min(PAGE_SIZE, remaining)} more (${remaining.toLocaleString("en-US")} remaining)`;
+      elements.exportChanges.disabled = !state.filtered.length;
+      syncMoreFilters();
+    }
+
+    function hasFilters() {
+      return Boolean(elements.search.value || elements.changeFilter.value || elements.categoryFilter.value || elements.periodFilter.value);
+    }
+
+    function syncUrl() {
+      try {
+        const url = new URL(location.href);
+        [elements.search, elements.changeFilter, elements.categoryFilter, elements.periodFilter].forEach(control => {
+          url.searchParams.delete(control.id);
+          if (control.value) url.searchParams.set(control.id, control.value);
+        });
+        history.replaceState(history.state, "", url);
+        window.dispatchEvent(new Event("historyfilterschange"));
+      } catch (error) {
+        console.warn("History filter URL could not be updated.", error);
+        elements.actionStatus.textContent = "Filters are applied, but the address could not be updated.";
+      }
+    }
+
+    function restoreFilters() {
+      const params = new URLSearchParams(location.search);
+      elements.search.value = params.get("search") || "";
+      const category = params.get("categoryFilter") || "";
+      if (category && ![...elements.categoryFilter.options].some(option => option.value === category)) elements.categoryFilter.add(new Option(`${category} (not in retained log)`, category));
+      elements.categoryFilter.value = category;
+      [elements.changeFilter, elements.periodFilter].forEach(select => {
+        const value = params.get(select.id) || "";
+        if ([...select.options].some(option => option.value === value)) select.value = value;
+        else {
+          select.value = "";
+          elements.actionStatus.textContent = "The link contains an unsupported filter value. That filter was reset.";
+        }
+      });
+    }
+
+    function applyFilter(updateUrl = true) {
+      if (state.status !== "ready") return;
+      clearTimeout(searchTimer);
+      searchTimer = null;
+      state.filters = currentFilters();
+      const now = Date.now();
+      state.filteredAt = new Date(now).toISOString();
+      state.filtered = filterEntries(state.entries, state.filters, now);
+      state.visible = PAGE_SIZE;
+      elements.clearFilters.hidden = !hasFilters();
+      const undated = state.filters.days === null ? 0 : filterEntries(state.entries, { ...state.filters, days: null }, now).filter(entry => dayKey(entry) === "undated").length;
+      elements.undatedNotice.hidden = !undated;
+      elements.undatedNotice.textContent = `${undated} matching event(s) have no readable date and are excluded by the period filter. Choose All retained to include them.`;
+      renderTimeline();
+      if (updateUrl) syncUrl();
+    }
+
+    function resetFilters() {
+      [elements.search, elements.changeFilter, elements.categoryFilter, elements.periodFilter].forEach(control => { control.value = ""; });
+      applyFilter();
+      elements.search.focus({ preventScroll: true });
+    }
+
+    function exportFiltered() {
+      if (searchTimer) applyFilter();
+      if (!state.filtered.length) {
+        elements.actionStatus.textContent = "No matching events to export.";
+        return;
+      }
+      elements.exportFallback.hidden = true;
+      let url;
+      const link = document.createElement("a");
+      try {
+        const data = buildExport(state.filtered, state.filters, state.generatedAt, state.retentionDays, state.filteredAt, new Date().toISOString(), state.baselineAt);
+        url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2) + "\n"], { type: "application/json" }));
+        link.href = url;
+        link.download = `azure-role-changes-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.append(link);
+        link.click();
+        elements.actionStatus.textContent = `JSON export requested for all ${state.filtered.length.toLocaleString("en-US")} matching events.`;
+      } catch (error) {
+        console.error("Role history export failed.", error);
+        elements.exportFallback.hidden = false;
+        elements.actionStatus.textContent = "The JSON export could not be started. Retry or use the source-log download.";
+      } finally {
+        link.remove();
+        if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    }
+
+    async function init() {
+      if (state.status === "fetching") return;
+      const fromRetry = document.activeElement === elements.retryHistory;
+      state.status = "fetching";
+      elements.historyControls.disabled = true;
+      elements.retryHistory.disabled = true;
+      elements.historyError.hidden = true;
+      elements.timeline.setAttribute("aria-busy", "true");
+      elements.refreshedAt.textContent = "Loading...";
+      elements.retention.textContent = elements.baselineAt.textContent = "Loading...";
+      elements.changeCounts.textContent = "Counts: loading...";
+      elements.resultCount.textContent = "Loading role changes...";
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      try {
+        const response = await fetch("../role-changes.json", { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`History request returned ${response.status}`);
+        const payload = await response.json();
+        state.entries = validateHistory(payload);
+        state.keys = new Map(state.entries.map((entry, index) => [entry, String(index)]));
+        state.open.clear();
+        state.generatedAt = payload.generatedAt || null;
+        state.baselineAt = payload.baselineAt || null;
+        const baseline = entryTimestamp({ detectedAt: state.baselineAt });
+        elements.baselineAt.textContent = Number.isFinite(baseline)
+          ? new Date(baseline).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }) : "Not recorded";
+        state.retentionDays = payload.retentionDays || null;
+        elements.categoryFilter.replaceChildren(new Option("All categories", ""));
+        [...new Set(state.entries.map(entry => entry.category).filter(Boolean))].sort().forEach(category => elements.categoryFilter.add(new Option(category, category)));
+        elements.retention.textContent = state.retentionDays ? `Up to ${state.retentionDays} days` : "Not reported";
+        elements.retentionInline.textContent = state.retentionDays ? String(state.retentionDays) : "an unreported number of";
+        const stamp = entryTimestamp({ detectedAt: state.generatedAt });
+        elements.refreshedAt.textContent = Number.isFinite(stamp)
+          ? new Date(stamp).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not recorded";
+        restoreFilters();
+        state.status = "ready";
+        elements.historyControls.disabled = false;
+        applyFilter(false);
+      } catch (error) {
+        console.error("Role history could not be loaded.", error);
+        state.status = "error";
+        elements.historyError.hidden = false;
+        elements.refreshedAt.textContent = elements.retention.textContent = elements.baselineAt.textContent = "Unavailable";
+        elements.changeCounts.textContent = "Counts unavailable.";
+        elements.resultCount.textContent = "Results unavailable. Retry to load the retained log.";
+        elements.timeline.replaceChildren();
+        elements.loadMore.hidden = true;
+        elements.exportChanges.disabled = true;
+      } finally {
+        clearTimeout(timeout);
+        elements.retryHistory.disabled = false;
+        elements.timeline.setAttribute("aria-busy", "false");
+        if (fromRetry) (state.status === "ready" ? elements.search : elements.retryHistory).focus({ preventScroll: true });
+      }
+    }
+
+    let searchTimer;
+    elements.search.addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { searchTimer = null; applyFilter(); }, 150);
+    });
+    [elements.changeFilter, elements.categoryFilter, elements.periodFilter].forEach(select => select.addEventListener("change", () => applyFilter()));
+    elements.clearFilters.addEventListener("click", resetFilters);
+    elements.exportChanges.addEventListener("click", exportFiltered);
+    elements.retryHistory.addEventListener("click", init);
+    elements.historyFilterToggle.addEventListener("click", () => { moreFiltersOpen = !moreFiltersOpen; syncMoreFilters(); });
+    elements.historyFiltersDone.addEventListener("click", () => { moreFiltersOpen = false; syncMoreFilters(); elements.historyFilterToggle.focus(); });
+    elements.historyExtra.addEventListener("keydown", event => {
+      if (event.key === "Escape" && mobileFilters.matches) {
+        moreFiltersOpen = false;
+        syncMoreFilters();
+        elements.historyFilterToggle.focus();
+      }
+    });
+    mobileFilters.addEventListener("change", syncMoreFilters);
+    elements.loadMore.addEventListener("click", () => {
+      const next = state.filtered[state.visible];
+      state.visible += PAGE_SIZE;
+      renderTimeline();
+      const item = next && elements.timeline.querySelector(`[data-event-key="${state.keys.get(next)}"]`);
+      if (item) {
+        item.querySelector("summary").focus({ preventScroll: true });
+        item.scrollIntoView({ block: "start", behavior: "instant" });
+      }
+    });
+    window.addEventListener("popstate", () => {
+      if (state.status !== "ready") return;
+      restoreFilters();
+      applyFilter(false);
+      window.dispatchEvent(new Event("historyfilterschange"));
+    });
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    syncMoreFilters();
+    init();
+
+    let scrollTicking = false;
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
+        scrollTicking = false;
+      });
+    }, { passive: true });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  </script>
+
+
+
+<script data-share-script>
+    (function () {
+      var root = document.querySelector('.footer-share');
+      if (!root) return;
+      function refreshShareLinks() {
+        var pageUrl = location.protocol.indexOf('http') === 0 ? location.href.split('#')[0] : 'https://benoit-gaumard.io/';
+        var url = encodeURIComponent(pageUrl);
+        var title = encodeURIComponent(document.title);
+        var targets = {
+          linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + url,
+          twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+          reddit: 'https://www.reddit.com/submit?url=' + url + '&title=' + title,
+          mail: 'mailto:?subject=' + title + '&body=' + title + '%20-%20' + url
+        };
+        Array.prototype.forEach.call(root.querySelectorAll('a[data-share]'), function (el) {
+          var href = targets[el.getAttribute('data-share')];
+          if (href) el.setAttribute('href', href);
+        });
+      }
+      refreshShareLinks();
+      window.addEventListener("historyfilterschange", refreshShareLinks);
+      var favBtn = root.querySelector('[data-share="favorite"]');
+      var hint = root.querySelector('[data-share-hint]');
+      if (favBtn && hint) {
+        favBtn.addEventListener('click', function () {
+          var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+          hint.textContent = 'Press ' + (isMac ? '\u2318' : 'Ctrl') + ' + D to add this site to your favorites.';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

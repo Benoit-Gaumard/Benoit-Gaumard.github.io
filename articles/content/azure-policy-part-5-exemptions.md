@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Configure a justified exception with a reason, owner and expiry, then review it through its lifecycle."
 title = "Azure Policy, Part 5: What Is a Policy Exemption?"
 date = "2026-09-04"
 description = "Part 5 of the Azure Policy series: exemptions explained. Waiver versus Mitigated, expiresOn, exempting a single initiative member, identity-based exemptions, compliance substate, the RBAC you need, and how to stop exemptions becoming permanent."
@@ -7,9 +8,34 @@ tags = ["Azure Policy", "Governance", "Compliance", "Exemption", "RBAC"]
 categories = ["Azure", "Governance", "Azure Policy"]
 featureImage = "/articles/images/azure-policy-part-5.svg"
 featured = false
+related = ["azure-policy-part-6-policy-as-code", "azure-policy-part-4-exclusions-notscopes"]
+collapsible = ["assignmentScopeValidation", "resourceSelectors, including identity-based exemptions"]
 +++
 
-An exemption is the grown-up version of "this one does not apply".
+## Configure it, then govern its lifetime
+
+**Configure:** identify the exact assignment and resource scope; select the initiative member only if needed; record **reason, category and expiry**. In the example below, `policyAssignmentId` is the assignment resource ID, while `storageMinimumTlsVersion` is the initiative's internal member reference, not a definition ID. The ticket, approval names and dates are illustrative, not evidence of a real approval.
+
+**Govern:** request → authorised approval → create → verify the `Exempt` compliance state after evaluation → review before expiry → remove or renew only with a new decision. Expiry ends the exemption's effect; it is not a substitute for fixing the underlying resource.
+
+Copyable review record:
+
+```text
+Assignment ID and exact scope:
+Initiative member reference(s), or entire assignment:
+Category: Waiver / Mitigated
+Reason and evidence:
+Requester / approver / accountable owner:
+ExpiresOn (UTC):
+Review due before expiry:
+Expected correction or compensating control:
+Observed compliance after evaluation:
+Decision at review:
+```
+
+Check [permissions](#permissions) before creation. Treat [scope validation](#assignmentscopevalidation) and [resource selectors](#resourceselectors-including-identity-based-exemptions) as advanced options, not required steps. Technical execution validation: **not recorded**; use [the official exemption structure](https://learn.microsoft.com/azure/governance/policy/concepts/exemption-structure) for current supported properties.
+
+An exemption is a tracked exception, not an unrecorded scope omission.
 
 Where an exclusion ([Part 4](/articles/azure-policy-part-4-exclusions-notscopes/)) silently removes a scope from evaluation, an exemption keeps the resource in scope, keeps evaluating it, and records - as a first-class Azure object with its own lifecycle, permissions, and expiry date - that the failure is accepted, by whom, for what reason, and until when.
 

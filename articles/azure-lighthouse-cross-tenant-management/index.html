@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.">
+  <meta name="description" content="Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation.">
   <meta name="color-scheme" content="light">
   <!-- seo:analytics -->
   <script>
@@ -46,8 +46,8 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="benoit-gaumard.io">
-  <meta property="og:title" content="Azure Lighthouse: The Most Underrated Feature in Azure | Benoit Gaumard">
-  <meta property="og:description" content="Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.">
+  <meta property="og:title" content="Azure Lighthouse: Choose a Cross-Tenant Management Pattern | Benoit Gaumard">
+  <meta property="og:description" content="Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation.">
   <meta property="og:url" content="https://benoit-gaumard.io/articles/azure-lighthouse-cross-tenant-management/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -61,8 +61,8 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Azure Lighthouse: The Most Underrated Feature in Azure",
-  "description": "Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.",
+  "headline": "Azure Lighthouse: Choose a Cross-Tenant Management Pattern",
+  "description": "Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation.",
   "url": "https://benoit-gaumard.io/articles/azure-lighthouse-cross-tenant-management/",
   "author": {
     "@type": "Person",
@@ -97,14 +97,14 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Azure Lighthouse: The Most Underrated Feature in Azure",
+      "name": "Azure Lighthouse: Choose a Cross-Tenant Management Pattern",
       "item": "https://benoit-gaumard.io/articles/azure-lighthouse-cross-tenant-management/"
     }
   ]
 }
   </script>
   <link rel="alternate" type="application/rss+xml" title="Benoit Gaumard - Articles" href="/articles/rss.xml">
-  <title>Azure Lighthouse: The Most Underrated Feature in Azure | Benoit Gaumard</title>
+  <title>Azure Lighthouse: Choose a Cross-Tenant Management Pattern | Benoit Gaumard</title>
 
   <style>
     :root {
@@ -214,7 +214,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -354,23 +354,6 @@
     .article-meta .dot { opacity: .5; }
     .article-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
     .article-tag { padding: .15rem .55rem; border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.75rem; border: 1px solid var(--cp-border); }
-    .article-feature-image {
-      max-width: 50rem; margin: 0 auto 2.5rem;
-      border-radius: 14px; border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
-      box-shadow: var(--cp-shadow); overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Purpose-drawn banners (1200x630, 1792x1024) fill the card edge to edge. */
-    .article-feature-image.is-banner { aspect-ratio: 16 / 9; }
-    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    /* Square service and product logos get one shared band instead: the height
-       is fixed so every logo hero matches, and the sources are vector, so the
-       small ones scale up to it without softening. */
-    .article-feature-image.is-logo { height: 13rem; padding: 1.5rem; }
-    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; display: block; }
-    @media (max-width: 32rem) {
-      .article-feature-image.is-logo { height: 10rem; padding: 1.25rem; }
-    }
     .article-body {
       margin: 0; font-size: 1.05rem; line-height: 1.75;
       background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
@@ -395,12 +378,13 @@
     .article-body table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .article-body th, .article-body td { padding: .55rem .75rem; border: 1px solid var(--cp-border); text-align: left; }
     .article-body th { background: var(--cp-surface-soft); }
-    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; }
+    .code-block { margin: 0 0 1.3rem; border: 1px solid var(--cp-border); border-radius: 10px; overflow: hidden; background: #0f1b2b; color: #e3edf7; color-scheme: dark; }
     .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: .5rem .9rem; background: #16273d; color: #b9d3ea; font-size: 0.8rem; }
     .code-lang { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
-    .copy-code-button { border: 1px solid rgba(255,255,255,.25); background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .copy-code-button { border: 1px solid #b9d3ea; background: transparent; color: #d7e8f7; padding: .2rem .6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
     .copy-code-button:hover { background: rgba(255,255,255,.1); }
-    .copy-code-button.is-copied { border-color: var(--cp-success); color: #9ee8c8; }
+    .copy-code-button.is-copied { border-color: #9ee8c8; color: #9ee8c8; }
+    .copy-code-button:focus-visible, .code-details > summary:focus-visible { outline-color: #b9d3ea; }
     .code-block pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; }
     .code-block code { background: none; border: 0; padding: 0; color: #e3edf7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; }
     /* ASCII diagrams need a tight line-height so box-drawing connectors join up */
@@ -443,6 +427,106 @@
       .article-share { flex-direction: column; align-items: flex-start; }
       .article-share-links { width: 100%; }
     }
+    .article-header { max-width: 75ch; margin-inline: auto; margin-bottom: 1rem; }
+    .article-page .article-header { max-width: none; margin-inline: 0; }
+    .article-title { font-size: clamp(1.7rem, 3.3vw, 2.65rem); }
+    .article-breadcrumb, .article-categories { margin-bottom: .6rem; }
+    .article-description { margin-top: .7rem; }
+    .article-meta { margin-top: .7rem; }
+    .article-tags { margin-top: .5rem; }
+    .article-body { min-width: 0; padding: clamp(1rem, 2.2vw, 2rem); }
+    .article-page main { padding-top: 1.25rem; }
+    .article-body > :is(p, ul, ol, h2, h3, h4, .callout),
+    .article-body .library-entry > :is(p, ul, ol),
+    .article-body .reference-section > :is(p, ul, ol),
+    .callout-body { max-width: var(--reading-prose-width, min(42rem, 72ch)); margin-inline: auto; }
+    .article-body > :is(h2, h3, h4) { max-width: var(--reading-heading-width, 42rem); }
+    .article-body > h2:first-child { margin-top: .4rem; }
+    .callout-body { min-width: 0; }
+    .reading-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .reading-layout:has(> .reading-toc:not([open])) { grid-template-columns: minmax(0, 1fr); --reading-prose-width: none; --reading-heading-width: none; }
+    .reading-layout > .reading-toc { scroll-margin-top: 6rem; }
+    .reading-layout > .reading-toc:not([open]) { justify-self: start; max-width: 100%; position: static; }
+    .reading-toc { border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); padding: .7rem 1rem; }
+    .reading-toc summary, .article-share summary, .series-map summary, .library-group > summary { cursor: pointer; min-height: 2.75rem; align-content: center; font-weight: 600; }
+    .reading-toc[open] .toc-label-show, .reading-toc:not([open]) .toc-label-hide { display: none; }
+    .reading-toc nav { max-height: 55vh; overflow: auto; }
+    .reading-toc ul { list-style: none; padding: 0; margin: .5rem 0; }
+    .reading-toc a { display: block; padding: .35rem .2rem; font-size: .9rem; }
+    .reading-toc .toc-level-4 { display: none; }
+    .article-share { display: block; padding: .2rem .8rem; margin: .6rem 0 1rem; }
+    .article-share-links { padding-block: .5rem; }
+    .series-nav, .article-related { margin: 1rem 0; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); }
+    .series-nav > p { margin: 0 0 .5rem; }
+    .series-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
+    .series-map ol { line-height: 1.6; padding-left: 1.5rem; }
+    .series-map [aria-current="page"] { font-weight: 700; }
+    .article-related h2 { font-size: 1.15rem; margin-top: 0; }
+    .article-related li { margin-block: .55rem; }
+    .article-feature-image { max-width: 50rem; margin: 1rem auto 1.5rem; border: 1px solid var(--cp-border); border-radius: 14px; background: var(--cp-surface-soft); overflow: hidden; }
+    .article-feature-image > a:focus-visible { outline-offset: -3px; }
+    .article-feature-image img { display: block; border: 0; border-radius: 0; }
+    .article-feature-image.is-banner > a { display: block; aspect-ratio: 16 / 9; }
+    .article-feature-image.is-banner img { width: 100%; height: 100%; object-fit: contain; }
+    .article-feature-image.is-logo > a { display: flex; align-items: center; justify-content: center; height: 13rem; padding: 1.5rem; }
+    .article-feature-image.is-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+    .article-feature-image figcaption { margin: 0; padding: .5rem .75rem; }
+    .article-figure figcaption { max-width: 72ch; margin-inline: auto; }
+    .article-figure figcaption a { display: inline-block; padding: .3rem; }
+    .image-dialog { color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 10px; max-width: 96vw; max-height: 94vh; padding: 1rem; }
+    .image-dialog::backdrop { background: var(--cp-text-muted); opacity: .8; }
+    .image-dialog figure { margin: 1rem 0; }
+    .image-dialog img { max-width: 100%; max-height: 72vh; object-fit: contain; }
+    .image-dialog figcaption { max-width: 72ch; }
+    .copy-code-button { min-height: 2.75rem; padding: .4rem .7rem; }
+    .code-block pre { white-space: pre; overflow-wrap: normal; }
+    .code-block pre code { white-space: pre; overflow-wrap: normal; }
+    .code-details summary { padding: .7rem 1rem; cursor: pointer; }
+    .library-controls, .zone-controls { padding: 1rem; margin-bottom: 1rem; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 10px; display: flex; flex-wrap: wrap; gap: .7rem; align-items: end; }
+    .library-controls label, .zone-controls label { display: grid; gap: .3rem; }
+    .library-controls input, .library-controls select, .zone-controls input { max-width: 100%; min-height: 2.75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; padding: .5rem; background: var(--cp-surface); color: var(--cp-text); }
+    .library-controls p, .zone-controls p { flex-basis: 100%; margin: 0; }
+    .library-group { border: 1px solid var(--cp-border); border-radius: 10px; padding: .6rem 1rem; margin-bottom: 1rem; }
+    .library-entry { min-width: 0; margin-block: 1rem 2rem; }
+    .library-entry h3 { scroll-margin-top: 6rem; }
+    .query-context { font-size: .9rem; color: var(--cp-text-muted); }
+    .query-output { overflow-wrap: anywhere; }
+    .reference-section { margin-bottom: 1.25rem; }
+    .reference-section > summary { cursor: pointer; font-size: 1.15rem; font-weight: 600; padding: .75rem; background: var(--cp-surface-soft); }
+    .table-wrap [hidden], .library-group[hidden], .library-entry[hidden] { display: none !important; }
+    @media (min-width: 75rem) {
+      .reading-layout { grid-template-columns: 16rem minmax(0, 1fr); }
+      .reading-toc { position: sticky; top: 5.5rem; }
+      .reading-toc nav { max-height: calc(100vh - 12rem); }
+      .reading-layout:not(:has(.reading-toc)) { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 40rem) {
+      .article-feature-image.is-logo > a { height: 10rem; padding: 1.25rem; }
+      .article-tags { display: none; }
+      .article-body { font-size: 1rem; line-height: 1.65; }
+      .article-body table, .article-body tbody, .article-body tr, .article-body td { display: block; }
+      .article-body thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+      .article-body tr { margin-bottom: .8rem; border: 1px solid var(--cp-border); border-radius: 8px; }
+      .article-body td { border: 0; padding: .55rem .7rem; overflow-wrap: anywhere; }
+      .article-body td::before { content: attr(data-label); display: block; font-weight: 700; color: var(--cp-text-muted); font-size: .8rem; }
+      .article-body td + td { border-top: 1px solid var(--cp-border); }
+      .table-wrap { overflow: visible; }
+      .library-controls > label, .zone-controls > label { width: 100%; }
+      .series-nav { font-size: .9rem; padding: .7rem; }
+      .series-nav { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; }
+      .series-nav > p { flex-basis: 100%; margin: 0; }
+      .series-links { flex: 1; }
+      .series-map[open] { flex-basis: 100%; }
+      .series-map summary { min-height: 2.5rem; }
+      .reading-toc { padding: .2rem .75rem; }
+      .article-description { font-size: 1rem; line-height: 1.5; }
+    }
+    @media print {
+      .reading-toc, .article-share, .article-feature-image, .library-controls, .zone-controls, .copy-code-button { display: none !important; }
+      .reading-layout { display: block; }
+      .article-body { border: 0; box-shadow: none; padding: 0; }
+      .code-block pre { white-space: pre-wrap; }
+    }
     @media print {
       /* Printing an article should yield the writing, not the furniture. */
       .news-banner, .site-header, .site-footer, .skip-link,
@@ -477,7 +561,7 @@
       }
     }
 
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -488,12 +572,382 @@
     .footer-share-hint { flex-basis: 100%; margin: 0; text-align: center; font-size: 0.75rem; color: var(--cp-text-muted); }
     @media (prefers-reduced-motion: reduce) { .share-btn:hover { transform: none; } }
   </style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/articles/azure-lighthouse-cross-tenant-management/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/articles/azure-lighthouse-cross-tenant-management/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
-<body class="">
+<body class="article-page">
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -527,41 +981,43 @@
     <div class="article-header">
       <p class="article-breadcrumb"><a href="/articles/">&larr; All articles</a></p>
       <div class="article-categories"><a class="article-category-tag" href="/articles/?category=Featured">Featured</a><a class="article-category-tag" href="/articles/?category=Azure">Azure</a><a class="article-category-tag" href="/articles/?category=Governance">Governance</a></div>
-      <h1 class="article-title">Azure Lighthouse: The Most Underrated Feature in Azure</h1>
-      <p class="article-description">Azure Lighthouse lets you manage resources across Microsoft Entra tenants from your own tenant, with no guest accounts and no context switching. How it works, and three use cases that pay for themselves: application maintenance, multi-tenant enterprises, and ISV SaaS offerings.</p>
+      <h1 class="article-title">Azure Lighthouse: Choose a Cross-Tenant Management Pattern</h1>
+      <p class="article-description">Choose between application maintenance, multi-tenant operations and ISV delegation, then review Lighthouse scope, role limitations, rollout and revocation.</p>
       <div class="article-meta">
         <span>Benoit G</span>
         <span class="dot">&middot;</span>
-        <span>September 3, 2026</span>
+        <span>Published September 3, 2026</span>
         <span class="dot">&middot;</span>
-        <span>13 min read</span>
+        <span>About 14 min reading · not implementation time</span>
       </div>
       <div class="article-tags"><span class="article-tag">#Azure Lighthouse</span><span class="article-tag">#Entra ID</span><span class="article-tag">#RBAC</span><span class="article-tag">#Multi-tenant</span><span class="article-tag">#Governance</span><span class="article-tag">#ARM</span><span class="article-tag">#Bicep</span></div>
     </div>
 
-    <div class="article-share">
-      <span class="article-share-label" id="share-label">Share on</span>
+    <figure class="article-feature-image article-figure is-banner"><a href="/articles/images/azure-lighthouse.svg" data-image-zoom aria-label="Enlarge article illustration"><img src="/articles/images/azure-lighthouse.svg" alt="Azure Lighthouse: Choose a Cross-Tenant Management Pattern" loading="eager" fetchpriority="high" decoding="async"></a><figcaption>Article illustration · <a href="/articles/images/azure-lighthouse.svg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+
+    <details class="article-share">
+      <summary id="share-label">Share this article</summary>
       <div class="article-share-links" role="group" aria-labelledby="share-label">
-        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-lighthouse-cross-tenant-management%2F&amp;text=Azure%20Lighthouse%3A%20The%20Most%20Underrated%20Feature%20in%20Azure" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
+        <a class="share-btn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-lighthouse-cross-tenant-management%2F&amp;text=Azure%20Lighthouse%3A%20Choose%20a%20Cross-Tenant%20Management%20Pattern" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644Z"/></svg>X</a>
         <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-lighthouse-cross-tenant-management%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
         <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbenoit-gaumard.io%2Farticles%2Fazure-lighthouse-cross-tenant-management%2F" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/></svg>Facebook</a>
         <button class="share-btn" type="button" data-article-share="copy" data-share-url="https://benoit-gaumard.io/articles/azure-lighthouse-cross-tenant-management/"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy link</button>
         <button class="share-btn" type="button" data-article-share="print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Print</button>
       </div>
       <p class="article-share-hint" data-article-share-hint role="status" aria-live="polite"></p>
-    </div>
+    </details>
 
-    <div class="article-feature-image is-banner"><img src="/articles/images/azure-lighthouse.svg" alt="Azure Lighthouse: The Most Underrated Feature in Azure"></div>
 
-    <article class="article-body">
-      <p>Ask ten Azure architects what Azure Lighthouse is and you'll get three answers: "something for CSP partners", "isn't that Microsoft 365 Lighthouse?", and a blank stare. Yet it is free, generally available since 2019, works with every Azure API you already use, and it solves a problem almost every organisation eventually hits: <strong>how do I operate resources that live in someone else's Entra tenant, without collecting a drawer full of guest accounts?</strong></p>
-<p>This post is about what Lighthouse actually does, and the three scenarios where it stops being a curiosity and starts being the thing you should have deployed two years ago.</p>
-<nav class="article-toc" aria-label="Table of contents"><strong>Contents</strong><ul><li class="toc-level-2"><a href="#the-problem-nobody-wants-to-admit-they-have">The problem nobody wants to admit they have</a></li><li class="toc-level-2"><a href="#what-azure-lighthouse-actually-is">What Azure Lighthouse actually is</a></li><li class="toc-level-3"><a href="#logical-projection-not-data-movement">Logical projection, not data movement</a></li><li class="toc-level-3"><a href="#the-direction-of-trust-matters">The direction of trust matters</a></li><li class="toc-level-2"><a href="#use-case-1-application-maintenance-provider-to-customer">Use case 1 - Application maintenance (provider to customer)</a></li><li class="toc-level-3"><a href="#scope-it-to-a-resource-group-not-the-subscription">Scope it to a resource group, not the subscription</a></li><li class="toc-level-3"><a href="#the-onboarding-template">The onboarding template</a></li><li class="toc-level-3"><a href="#just-in-time-instead-of-standing-contributor">Just-in-time instead of standing Contributor</a></li><li class="toc-level-2"><a href="#use-case-2-multi-tenant-enterprises">Use case 2 - Multi-tenant enterprises</a></li><li class="toc-level-3"><a href="#a-pattern-that-consistently-pays-off">A pattern that consistently pays off</a></li><li class="toc-level-2"><a href="#use-case-3-isvs-independent-software-vendors">Use case 3 - ISVs (Independent Software Vendors)</a></li><li class="toc-level-3"><a href="#pattern-a-managed-service-offer-in-microsoft-marketplace">Pattern A - Managed Service offer in Microsoft Marketplace</a></li><li class="toc-level-3"><a href="#pattern-b-lighthouse-plus-azure-managed-applications">Pattern B - Lighthouse plus Azure managed applications</a></li><li class="toc-level-3"><a href="#pattern-c-the-one-nobody-expects-reverse-delegation">Pattern C - The one nobody expects: reverse delegation</a></li><li class="toc-level-2"><a href="#what-lighthouse-does-not-do">What Lighthouse does not do</a></li><li class="toc-level-2"><a href="#rolling-it-out-without-regrets">Rolling it out without regrets</a></li><li class="toc-level-3"><a href="#verifying-and-removing-a-delegation">Verifying and removing a delegation</a></li><li class="toc-level-2"><a href="#why-this-is-the-feature-to-know">Why this is the feature to know</a></li></ul></nav>
-<h2 id="the-problem-nobody-wants-to-admit-they-have">The problem nobody wants to admit they have</h2>
-<p>You manage Azure for someone else. Maybe you're a managed service provider, maybe you're the platform team of a group that swallowed three companies last year, maybe you're an ISV who ships software into customer subscriptions. The mechanics are always the same:</p>
-<ul><li>The customer creates a guest account (B2B) or, worse, a cloud-only account in <em>their</em> tenant for each of your engineers.</li><li>Your engineers collect one identity per customer. Each has its own MFA registration, its own password, its own lifecycle.</li><li>Every task starts with a tenant switch in the portal, or an <code>az login --tenant</code>, or a fresh browser profile.</li><li>When an engineer leaves, someone has to remember to ask 27 customers to disable an account.</li><li>Automation is worse: a service principal per tenant, a secret per tenant, a rotation schedule per tenant.</li></ul>
-<p>It works. It doesn't scale. And from a security standpoint it's a slow-motion accident: dormant privileged accounts spread across tenants you don't control and can't audit.</p>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>The failure mode is not "someone hacks you". It's "an engineer left 14 months ago and still has Contributor on a customer subscription, because offboarding lives in a tenant your HR system has never heard of".</p></div></div>
+
+    <div class="reading-layout">
+    <details class="reading-toc"><summary aria-controls="article-toc-navigation"><span class="toc-label-show">Show table of contents</span><span class="toc-label-hide">Hide table of contents</span></summary><nav id="article-toc-navigation" aria-label="Table of contents"><ul><li class="toc-level-2"><a href="#which-scenario-concerns-you">Which scenario concerns you?</a></li><li class="toc-level-2"><a href="#the-problem-nobody-wants-to-admit-they-have">The problem nobody wants to admit they have</a></li><li class="toc-level-2"><a href="#what-azure-lighthouse-actually-is">What Azure Lighthouse actually is</a></li><li class="toc-level-3"><a href="#logical-projection-not-data-movement">Logical projection, not data movement</a></li><li class="toc-level-3"><a href="#the-direction-of-trust-matters">The direction of trust matters</a></li><li class="toc-level-2"><a href="#use-case-1-application-maintenance-provider-to-customer">Use case 1 - Application maintenance (provider to customer)</a></li><li class="toc-level-3"><a href="#scope-it-to-a-resource-group-not-the-subscription">Scope it to a resource group, not the subscription</a></li><li class="toc-level-3"><a href="#the-onboarding-template">The onboarding template</a></li><li class="toc-level-3"><a href="#just-in-time-instead-of-standing-contributor">Just-in-time instead of standing Contributor</a></li><li class="toc-level-2"><a href="#use-case-2-multi-tenant-enterprises">Use case 2 - Multi-tenant enterprises</a></li><li class="toc-level-3"><a href="#a-pattern-that-consistently-pays-off">A pattern that consistently pays off</a></li><li class="toc-level-2"><a href="#use-case-3-isvs-independent-software-vendors">Use case 3 - ISVs (Independent Software Vendors)</a></li><li class="toc-level-3"><a href="#pattern-a-managed-service-offer-in-microsoft-marketplace">Pattern A - Managed Service offer in Microsoft Marketplace</a></li><li class="toc-level-3"><a href="#pattern-b-lighthouse-plus-azure-managed-applications">Pattern B - Lighthouse plus Azure managed applications</a></li><li class="toc-level-3"><a href="#pattern-c-the-one-nobody-expects-reverse-delegation">Pattern C - The one nobody expects: reverse delegation</a></li><li class="toc-level-2"><a href="#what-lighthouse-does-not-do">What Lighthouse does not do</a></li><li class="toc-level-2"><a href="#rolling-it-out-without-regrets">Rolling it out without regrets</a></li><li class="toc-level-3"><a href="#verifying-and-removing-a-delegation">Verifying and removing a delegation</a></li><li class="toc-level-2"><a href="#why-this-is-the-feature-to-know">Why this is the feature to know</a></li></ul></nav></details>
+    <article class="article-body" id="article-content">
+      <p>Lighthouse delegates supported Azure resource-management operations across tenants. Resources remain in the customer tenant; the managing tenant's named identities receive specific supported roles at an agreed scope. It does not grant general Entra directory or data-plane access.</p>
+<h2 id="which-scenario-concerns-you">Which scenario concerns you?</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Need, Scope and benefit, Boundary, Read table"><table><thead><tr><th scope="col">Need</th><th scope="col">Scope and benefit</th><th scope="col">Boundary</th><th scope="col">Read</th></tr></thead><tbody><tr><td data-label="Need">Maintain one customer's application</td><td data-label="Scope and benefit">Delegate its resource group; operators use their managing-tenant identities</td><td data-label="Boundary">Not permission to every subscription or application data store</td><td data-label="Read"><a href="#use-case-1-application-maintenance-provider-to-customer">Application maintenance</a></td></tr><tr><td data-label="Need">Operate several enterprise tenants</td><td data-label="Scope and benefit">Explicit subscriptions/resource groups; shared operational visibility</td><td data-label="Boundary">Tenant consolidation and directory administration remain separate</td><td data-label="Read"><a href="#use-case-2-multi-tenant-enterprises">Multi-tenant enterprise</a></td></tr><tr><td data-label="Need">Support an ISV deployment</td><td data-label="Scope and benefit">Agreed customer deployment scope and support role</td><td data-label="Boundary">Customer consent, lifecycle and removal must remain explicit</td><td data-label="Read"><a href="#use-case-3-isvs-independent-software-vendors">ISV patterns</a></td></tr></tbody></table></div>
+<p>Read <a href="#what-lighthouse-does-not-do">what Lighthouse does not do</a> before writing the onboarding template. Throughout this article, <strong>managing tenant = operator/provider</strong>, and <strong>managed tenant = customer/resource owner</strong>. Use those labels, not diagram colours, to follow the one-way authorisation.</p>
+<p>Technical execution validation and current licensing/limit review: <strong>not recorded</strong>. Confirm <a href="https://learn.microsoft.com/azure/lighthouse/concepts/cross-tenant-management-experience" target="_blank" rel="noopener noreferrer">supported scenarios and limitations <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a> before rollout.</p>
+
     <aside class="article-ad" aria-label="Advertisement">
       <span class="article-ad-label">Advertisement</span>
       <ins class="adsbygoogle"
@@ -572,20 +1028,25 @@
            data-ad-slot="4494484671"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </aside>
+<h2 id="the-problem-nobody-wants-to-admit-they-have">The problem nobody wants to admit they have</h2>
+<p>You manage Azure for someone else. Maybe you're a managed service provider, maybe you're the platform team of a group that swallowed three companies last year, maybe you're an ISV who ships software into customer subscriptions. The mechanics are always the same:</p>
+<ul><li>The customer creates a guest account (B2B) or, worse, a cloud-only account in <em>their</em> tenant for each of your engineers.</li><li>Your engineers collect one identity per customer. Each has its own MFA registration, its own password, its own lifecycle.</li><li>Every task starts with a tenant switch in the portal, or an <code>az login --tenant</code>, or a fresh browser profile.</li><li>When an engineer leaves, someone has to remember to ask 27 customers to disable an account.</li><li>Automation is worse: a service principal per tenant, a secret per tenant, a rotation schedule per tenant.</li></ul>
+<p>It works. It doesn't scale. And from a security standpoint it's a slow-motion accident: dormant privileged accounts spread across tenants you don't control and can't audit.</p>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>The failure mode is not &quot;someone hacks you&quot;. It's &quot;an engineer left 14 months ago and still has Contributor on a customer subscription, because offboarding lives in a tenant your HR system has never heard of&quot;.</p></div></div>
 <h2 id="what-azure-lighthouse-actually-is">What Azure Lighthouse actually is</h2>
 <p>Azure Lighthouse is <strong>Azure delegated resource management</strong>. A customer delegates a subscription (or specific resource groups) to <em>your</em> tenant. From that moment, named users, groups and service principals in your tenant hold Azure RBAC roles on those resources - while still signing in with their own identity, in their own tenant, with your own Conditional Access and MFA policies.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/azure-lighthouse-overview.jpg" alt="Diagram showing an overview of how Azure Lighthouse works" loading="lazy"><figcaption>Azure Lighthouse overview: one managing tenant, many managed tenants, one set of tools</figcaption></figure>
+<figure class="article-figure"><a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/azure-lighthouse-overview.jpg" data-image-zoom aria-label="Enlarge: Diagram showing an overview of how Azure Lighthouse works"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/azure-lighthouse-overview.jpg" alt="Diagram showing an overview of how Azure Lighthouse works" loading="lazy"></a><figcaption>Azure Lighthouse overview: one managing tenant, many managed tenants, one set of tools <a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/azure-lighthouse-overview.jpg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <p>No guest accounts. No tenant switching. No extra cost - Lighthouse itself is free, for any Azure customer or partner.</p>
 <h3 id="logical-projection-not-data-movement">Logical projection, not data movement</h3>
 <p>The key concept is <em>logical projection</em>. Nothing moves. No resource is copied, no data crosses a boundary. Azure Resource Manager simply learns that identities from tenant A are authorised on scopes in tenant B.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/logical-projection.svg" alt="Diagram illustrating the logical projection in Azure Lighthouse" loading="lazy"><figcaption>Resource Manager authorises cross-tenant requests by validating the registration definition and registration assignment in the customer tenant</figcaption></figure>
+<figure class="article-figure"><a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/logical-projection.svg" data-image-zoom aria-label="Enlarge: Diagram illustrating the logical projection in Azure Lighthouse"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/logical-projection.svg" alt="Diagram illustrating the logical projection in Azure Lighthouse" loading="lazy"></a><figcaption>Resource Manager authorises cross-tenant requests by validating the registration definition and registration assignment in the customer tenant <a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/logical-projection.svg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <p>When a user in your tenant touches a delegated resource, Resource Manager authenticates the request exactly as it would for a native user, then checks that two objects exist in the customer's tenant:</p>
-<div class="table-wrap"><table><thead><tr><th>Object</th><th>Resource type</th><th>What it holds</th></tr></thead><tbody><tr><td><strong>Registration definition</strong></td><td><code>Microsoft.ManagedServices/registrationDefinitions</code></td><td>The managing tenant ID and the list of authorizations (principal + built-in role)</td></tr><tr><td><strong>Registration assignment</strong></td><td><code>Microsoft.ManagedServices/registrationAssignments</code></td><td>The scope the definition applies to - a subscription or a resource group</td></tr></tbody></table></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Object, Resource type, What it holds table"><table><thead><tr><th scope="col">Object</th><th scope="col">Resource type</th><th scope="col">What it holds</th></tr></thead><tbody><tr><td data-label="Object"><strong>Registration definition</strong></td><td data-label="Resource type"><code>Microsoft.ManagedServices/registrationDefinitions</code></td><td data-label="What it holds">The managing tenant ID and the list of authorizations (principal + built-in role)</td></tr><tr><td data-label="Object"><strong>Registration assignment</strong></td><td data-label="Resource type"><code>Microsoft.ManagedServices/registrationAssignments</code></td><td data-label="What it holds">The scope the definition applies to - a subscription or a resource group</td></tr></tbody></table></div>
 <p>The registration definition always lives at subscription level. The registration assignment lives at the delegated scope.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/delegation.jpg" alt="Diagram illustrating Azure delegated resource management" loading="lazy"><figcaption>Azure delegated resource management: authorized users in the managing tenant work directly on delegated customer scopes</figcaption></figure>
+<figure class="article-figure"><a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/delegation.jpg" data-image-zoom aria-label="Enlarge: Diagram illustrating Azure delegated resource management"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/delegation.jpg" alt="Diagram illustrating Azure delegated resource management" loading="lazy"></a><figcaption>Azure delegated resource management: authorized users in the managing tenant work directly on delegated customer scopes <a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/delegation.jpg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
 <h3 id="the-direction-of-trust-matters">The direction of trust matters</h3>
 <p>Access flows <strong>one way only</strong>: from the managing tenant to the managed tenant. Delegating your subscription to a provider gives them nothing in your Entra directory - no directory read, no user management, no Microsoft 365, no ability to create identities. It is Azure control-plane RBAC on a defined scope, and that's all.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">  ┌─────────────── MANAGING TENANT (you) ────────────────┐
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy diagram code">Copy</button></div><pre tabindex="0" aria-label="diagram code"><code class="language-diagram">  ┌─────────────── MANAGING TENANT (you) ────────────────┐
   │  Users / Groups / Service principals                 │
   │  Your Conditional Access, your MFA, your PIM         │
   └───────────────────────┬──────────────────────────────┘
@@ -604,9 +1065,10 @@
               gains nothing in the managing tenant</code></pre></div>
 <p>And the customer keeps the controls: they see every provider action in <strong>their</strong> activity log, they can review delegations in the <strong>Service providers</strong> blade, and they can remove the delegation unilaterally, at any moment, without asking you.</p>
 <h2 id="use-case-1-application-maintenance-provider-to-customer">Use case 1 - Application maintenance (provider to customer)</h2>
+<p><strong>Need:</strong> support one application. <strong>Scope:</strong> its resource group. <strong>Benefit:</strong> existing operator identities can perform approved management operations. <strong>Limit:</strong> guest OS, database/data-plane and directory permissions need their own design.</p>
 <p>This is the bread-and-butter scenario, and the one where the ROI is immediate.</p>
 <p>You built and now maintain an application running in the customer's subscription. Day-2 work looks like: patch the VMs, watch the alerts, tune the App Service, restore a database, deploy the next release. Today that means an account in their tenant. With Lighthouse it means nothing at all - your existing engineers, on your existing identities.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">   Provider tenant                        Customer tenant
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy diagram code">Copy</button></div><pre tabindex="0" aria-label="diagram code"><code class="language-diagram">   Provider tenant                        Customer tenant
    ───────────────                        ───────────────
    grp-app-operators   ──► Contributor ──►  rg-app-prod
    grp-app-support     ──► Reader      ──►  rg-app-prod
@@ -618,79 +1080,79 @@
 <p>You maintain <em>one application</em>. You do not need the whole subscription. Delegating <code>rg-app-prod</code> and nothing else is both easier to sell to the customer's security team and much easier to defend in an audit.</p>
 <h3 id="the-onboarding-template">The onboarding template</h3>
 <p>Onboarding is an ARM (or Bicep) deployment run by someone in the <strong>customer's</strong> tenant with <code>Microsoft.Authorization/roleAssignments/write</code> on the scope - typically an Owner. Here's the subscription-level template, matching the <a href="https://github.com/Azure/Azure-Lighthouse-samples" target="_blank" rel="noopener noreferrer">official sample <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{
-  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "mspOfferName":        { "type": "string" },
-    "mspOfferDescription": { "type": "string" },
-    "managedByTenantId":   { "type": "string" },
-    "authorizations":      { "type": "array"  }
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy json code">Copy</button></div><details class="code-details"><summary>Show complete script (38 lines)</summary><pre tabindex="0" aria-label="json code"><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#&quot;,
+  &quot;contentVersion&quot;: &quot;1.0.0.0&quot;,
+  &quot;parameters&quot;: {
+    &quot;mspOfferName&quot;:        { &quot;type&quot;: &quot;string&quot; },
+    &quot;mspOfferDescription&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;managedByTenantId&quot;:   { &quot;type&quot;: &quot;string&quot; },
+    &quot;authorizations&quot;:      { &quot;type&quot;: &quot;array&quot;  }
   },
-  "variables": {
-    "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
-    "mspAssignmentName":   "[guid(parameters('mspOfferName'))]"
+  &quot;variables&quot;: {
+    &quot;mspRegistrationName&quot;: &quot;[guid(parameters('mspOfferName'))]&quot;,
+    &quot;mspAssignmentName&quot;:   &quot;[guid(parameters('mspOfferName'))]&quot;
   },
-  "resources": [
+  &quot;resources&quot;: [
     {
-      "type": "Microsoft.ManagedServices/registrationDefinitions",
-      "apiVersion": "2019-09-01",
-      "name": "[variables('mspRegistrationName')]",
-      "properties": {
-        "registrationDefinitionName": "[parameters('mspOfferName')]",
-        "description": "[parameters('mspOfferDescription')]",
-        "managedByTenantId": "[parameters('managedByTenantId')]",
-        "authorizations": "[parameters('authorizations')]"
+      &quot;type&quot;: &quot;Microsoft.ManagedServices/registrationDefinitions&quot;,
+      &quot;apiVersion&quot;: &quot;2019-09-01&quot;,
+      &quot;name&quot;: &quot;[variables('mspRegistrationName')]&quot;,
+      &quot;properties&quot;: {
+        &quot;registrationDefinitionName&quot;: &quot;[parameters('mspOfferName')]&quot;,
+        &quot;description&quot;: &quot;[parameters('mspOfferDescription')]&quot;,
+        &quot;managedByTenantId&quot;: &quot;[parameters('managedByTenantId')]&quot;,
+        &quot;authorizations&quot;: &quot;[parameters('authorizations')]&quot;
       }
     },
     {
-      "type": "Microsoft.ManagedServices/registrationAssignments",
-      "apiVersion": "2019-09-01",
-      "name": "[variables('mspAssignmentName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+      &quot;type&quot;: &quot;Microsoft.ManagedServices/registrationAssignments&quot;,
+      &quot;apiVersion&quot;: &quot;2019-09-01&quot;,
+      &quot;name&quot;: &quot;[variables('mspAssignmentName')]&quot;,
+      &quot;dependsOn&quot;: [
+        &quot;[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]&quot;
       ],
-      "properties": {
-        "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+      &quot;properties&quot;: {
+        &quot;registrationDefinitionId&quot;: &quot;[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]&quot;
       }
     }
   ]
-}</code></pre></div>
+}</code></pre></details></div>
 <p>The interesting part is the parameter file - this is your access model, written down and reviewable:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">{
-  "mspOfferName":        { "value": "Contoso Managed Services - App Maintenance" },
-  "mspOfferDescription": { "value": "Day-2 operations for the ordering platform" },
-  "managedByTenantId":   { "value": "00000000-1111-2222-3333-444444444444" },
-  "authorizations": {
-    "value": [
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy json code">Copy</button></div><pre tabindex="0" aria-label="json code"><code class="language-json">{
+  &quot;mspOfferName&quot;:        { &quot;value&quot;: &quot;Contoso Managed Services - App Maintenance&quot; },
+  &quot;mspOfferDescription&quot;: { &quot;value&quot;: &quot;Day-2 operations for the ordering platform&quot; },
+  &quot;managedByTenantId&quot;:   { &quot;value&quot;: &quot;00000000-1111-2222-3333-444444444444&quot; },
+  &quot;authorizations&quot;: {
+    &quot;value&quot;: [
       {
-        "principalId": "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb",
-        "principalIdDisplayName": "App Operators",
-        "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+        &quot;principalId&quot;: &quot;aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb&quot;,
+        &quot;principalIdDisplayName&quot;: &quot;App Operators&quot;,
+        &quot;roleDefinitionId&quot;: &quot;b24988ac-6180-42a0-ab88-20f7382dd24c&quot;
       },
       {
-        "principalId": "cccccccc-0000-1111-2222-dddddddddddd",
-        "principalIdDisplayName": "App Support (read-only)",
-        "roleDefinitionId": "acdd72a7-3385-48ef-bd42-f606fba81ae7"
+        &quot;principalId&quot;: &quot;cccccccc-0000-1111-2222-dddddddddddd&quot;,
+        &quot;principalIdDisplayName&quot;: &quot;App Support (read-only)&quot;,
+        &quot;roleDefinitionId&quot;: &quot;acdd72a7-3385-48ef-bd42-f606fba81ae7&quot;
       },
       {
-        "principalId": "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb",
-        "principalIdDisplayName": "App Operators - delegation removal",
-        "roleDefinitionId": "91c1777a-f3dc-4fae-b103-61d183457e46"
+        &quot;principalId&quot;: &quot;aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb&quot;,
+        &quot;principalIdDisplayName&quot;: &quot;App Operators - delegation removal&quot;,
+        &quot;roleDefinitionId&quot;: &quot;91c1777a-f3dc-4fae-b103-61d183457e46&quot;
       }
     ]
   }
 }</code></pre></div>
-<p>Those three GUIDs are, in order, <strong>Contributor</strong>, <strong>Reader</strong>, and the <strong>Managed Services Registration Assignment Delete Role</strong>. Always include that last one: without it, only the customer can remove the delegation, and "please detach us, we finished the contract" becomes a support ticket.</p>
+<p>Those three GUIDs are, in order, <strong>Contributor</strong>, <strong>Reader</strong>, and the <strong>Managed Services Registration Assignment Delete Role</strong>. Always include that last one: without it, only the customer can remove the delegation, and &quot;please detach us, we finished the contract&quot; becomes a support ticket.</p>
 <p>Deploy it from the customer tenant, at subscription scope:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az deployment sub create \
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy bash code">Copy</button></div><pre tabindex="0" aria-label="bash code"><code class="language-bash">az deployment sub create \
   --name lighthouse-onboarding \
   --location westeurope \
   --template-file subscription.json \
   --parameters subscription.parameters.json \
-  --subscription "&lt;customer-subscription-id&gt;"</code></pre></div>
+  --subscription &quot;&lt;customer-subscription-id&gt;&quot;</code></pre></div>
 <p>Or scoped to a single resource group - note this is still a <em>subscription-level</em> deployment, with the resource group named as a parameter:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">New-AzDeployment `
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy powershell code">Copy</button></div><pre tabindex="0" aria-label="powershell code"><code class="language-powershell">New-AzDeployment `
   -Name 'lighthouse-onboarding' `
   -Location 'westeurope' `
   -TemplateFile .\rgDelegatedResourceManagement.json `
@@ -698,49 +1160,51 @@
 <div class="callout callout-note"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Note</span><p>No portal wizard is required, but there is one: <strong>My customers → Create ARM Template</strong> in the managing tenant generates the template and parameter file for you, with your tenant ID and principal IDs prefilled. Hand the two files to the customer and let them deploy.</p></div></div>
 <h3 id="just-in-time-instead-of-standing-contributor">Just-in-time instead of standing Contributor</h3>
 <p>The best part, and the least known: an authorization can be <strong>eligible</strong> rather than active. It's Entra Privileged Identity Management, projected across the tenant boundary.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-json">"eligibleAuthorizations": [
+<div class="code-block"><div class="code-block-header"><span class="code-lang">json</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy json code">Copy</button></div><pre tabindex="0" aria-label="json code"><code class="language-json">&quot;eligibleAuthorizations&quot;: [
   {
-    "principalId": "eeeeeeee-0000-1111-2222-ffffffffffff",
-    "principalIdDisplayName": "Lead Engineers - JIT Contributor",
-    "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
-    "justInTimeAccessPolicy": {
-      "multiFactorAuthProvider": "Azure",
-      "maximumActivationDuration": "PT2H",
-      "managedByTenantApprovers": [
+    &quot;principalId&quot;: &quot;eeeeeeee-0000-1111-2222-ffffffffffff&quot;,
+    &quot;principalIdDisplayName&quot;: &quot;Lead Engineers - JIT Contributor&quot;,
+    &quot;roleDefinitionId&quot;: &quot;b24988ac-6180-42a0-ab88-20f7382dd24c&quot;,
+    &quot;justInTimeAccessPolicy&quot;: {
+      &quot;multiFactorAuthProvider&quot;: &quot;Azure&quot;,
+      &quot;maximumActivationDuration&quot;: &quot;PT2H&quot;,
+      &quot;managedByTenantApprovers&quot;: [
         {
-          "principalId": "11111111-2222-3333-4444-555555555555",
-          "principalIdDisplayName": "Service Delivery Managers"
+          &quot;principalId&quot;: &quot;11111111-2222-3333-4444-555555555555&quot;,
+          &quot;principalIdDisplayName&quot;: &quot;Service Delivery Managers&quot;
         }
       ]
     }
   }
 ]</code></pre></div>
 <p>Read that again: your engineer holds <strong>Reader</strong> permanently on the customer's production, and elevates to Contributor for two hours, with MFA, after approval by a manager in your tenant. The customer sees the whole thing in their activity log.</p>
-<div class="table-wrap"><table><thead><tr><th>Constraint</th><th>Value</th></tr></thead><tbody><tr><td>Activation duration</td><td>30 minutes to 8 hours</td></tr><tr><td>Approvers</td><td>Up to 10 users or groups, optional</td></tr><tr><td>MFA</td><td>Optional, but say yes</td></tr><tr><td>Service principals</td><td>Not supported for eligible authorizations</td></tr><tr><td>Licensing</td><td>The <strong>managing</strong> tenant needs an Entra ID Governance / PIM licence</td></tr><tr><td>National clouds</td><td>Not supported</td></tr></tbody></table></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Constraint, Value table"><table><thead><tr><th scope="col">Constraint</th><th scope="col">Value</th></tr></thead><tbody><tr><td data-label="Constraint">Activation duration</td><td data-label="Value">30 minutes to 8 hours</td></tr><tr><td data-label="Constraint">Approvers</td><td data-label="Value">Up to 10 users or groups, optional</td></tr><tr><td data-label="Constraint">MFA</td><td data-label="Value">Optional, but say yes</td></tr><tr><td data-label="Constraint">Service principals</td><td data-label="Value">Not supported for eligible authorizations</td></tr><tr><td data-label="Constraint">Licensing</td><td data-label="Value">The <strong>managing</strong> tenant needs an Entra ID Governance / PIM licence</td></tr><tr><td data-label="Constraint">National clouds</td><td data-label="Value">Not supported</td></tr></tbody></table></div>
 <div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>Always pair an eligible authorization with a permanent one - typically Reader - for the <em>same</em> principal. Without a standing role that includes Reader, the user can't even see the scope in the portal, and therefore can't elevate into it.</p></div></div>
 <h2 id="use-case-2-multi-tenant-enterprises">Use case 2 - Multi-tenant enterprises</h2>
+<p><strong>Need:</strong> operate estates across separate Entra tenants. <strong>Scope:</strong> each deliberately delegated subscription/resource group. <strong>Benefit:</strong> a consolidated management view. <strong>Limit:</strong> no directory merger or automatic access to every tenant resource.</p>
 <p>Lighthouse is documented as a service-provider feature, which is exactly why enterprises miss it. Yet the single best fit I see in the field is a group that ended up with several Entra tenants and no realistic path to consolidation.</p>
 <p>You know the story: an acquisition closed, the target has its own tenant, merging directories is an 18-month project nobody has budget for. Or a subsidiary is legally required to stay separate. Or a geography insists on its own tenant for data residency reasons. Meanwhile your platform team is expected to apply the same policies, the same backups, the same security baseline everywhere.</p>
-<figure class="article-figure"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/enterprise-azure-lighthouse.jpg" alt="Diagram showing users in Tenant A managing resources in Tenant B and Tenant C" loading="lazy"><figcaption>Tenant A designated as the managing tenant for Tenant B and Tenant C</figcaption></figure>
-<p>Pick one tenant as the <strong>managing tenant</strong> - usually the one where the platform team already lives - and delegate subscriptions from the others to it. Terminology maps cleanly: managing tenant = "service provider", managed tenants = "customers".</p>
+<figure class="article-figure"><a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/enterprise-azure-lighthouse.jpg" data-image-zoom aria-label="Enlarge: Diagram showing users in Tenant A managing resources in Tenant B and Tenant C"><img src="https://learn.microsoft.com/en-us/azure/lighthouse/media/enterprise-azure-lighthouse.jpg" alt="Diagram showing users in Tenant A managing resources in Tenant B and Tenant C" loading="lazy"></a><figcaption>Tenant A designated as the managing tenant for Tenant B and Tenant C <a href="https://learn.microsoft.com/en-us/azure/lighthouse/media/enterprise-azure-lighthouse.jpg" target="_blank" rel="noopener">Open original image</a></figcaption></figure>
+<p>Pick one tenant as the <strong>managing tenant</strong> - usually the one where the platform team already lives - and delegate subscriptions from the others to it. Terminology maps cleanly: managing tenant = &quot;service provider&quot;, managed tenants = &quot;customers&quot;.</p>
 <p>What you unlock, from one sign-in:</p>
 <ul><li><strong>Azure Policy</strong> - author and assign definitions across every tenant, and remediate <code>deployIfNotExists</code> assignments in the managed tenants.</li><li><strong>Microsoft Sentinel</strong> - query and manage workspaces across tenants; a single SOC, several directories.</li><li><strong>Azure Monitor / Log Analytics</strong> - cross-workspace, cross-tenant KQL, and diagnostic settings in the managed tenant shipping logs into your central workspace.</li><li><strong>Azure Arc</strong> - the same baseline for on-premises servers and Kubernetes clusters attached to any of the tenants.</li><li><strong>Azure Resource Graph</strong> - one query, the entire estate, with the tenant ID in the results.</li><li><strong>Defender for Cloud, Backup, Update Manager, Migrate</strong> - all cross-tenant aware.</li></ul>
 <p>Once delegations are in place, this returns the whole group:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-kusto">resources
+<div class="code-block"><div class="code-block-header"><span class="code-lang">kusto</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy kusto code">Copy</button></div><pre tabindex="0" aria-label="kusto code"><code class="language-kusto">resources
 | join kind=leftouter (
     resourcecontainers
-    | where type == "microsoft.resources/subscriptions"
+    | where type == &quot;microsoft.resources/subscriptions&quot;
     | project subscriptionId, subscriptionName = name, tenantId
   ) on subscriptionId
 | summarize resources = count() by tenantId, subscriptionName, type
 | order by resources desc</code></pre></div>
 <p>And in the CLI, delegated subscriptions are simply <em>there</em>, tagged with the tenant they really belong to:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az account list --query "[].{name:name, home:homeTenantId, managedBy:managedByTenants[0].tenantId}" -o table</code></pre></div>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-powershell">Get-AzSubscription | Select-Object Name, SubscriptionId, TenantId, HomeTenantId, ManagedByTenantIds</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy bash code">Copy</button></div><pre tabindex="0" aria-label="bash code"><code class="language-bash">az account list --query &quot;[].{name:name, home:homeTenantId, managedBy:managedByTenants[0].tenantId}&quot; -o table</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">powershell</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy powershell code">Copy</button></div><pre tabindex="0" aria-label="powershell code"><code class="language-powershell">Get-AzSubscription | Select-Object Name, SubscriptionId, TenantId, HomeTenantId, ManagedByTenantIds</code></pre></div>
 <div class="callout callout-info"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z"/></svg><div class="callout-body"><span class="callout-label">Info</span><p>The honest recommendation stands: if you can live in a single tenant, do. Lighthouse doesn't make multi-tenant <em>good</em>, it makes multi-tenant <em>operable</em>. Use it as the bridge while consolidation happens - or as the permanent answer when consolidation genuinely isn't possible.</p></div></div>
 <h3 id="a-pattern-that-consistently-pays-off">A pattern that consistently pays off</h3>
 <p>Delegate the whole subscription for platform-owned subscriptions (connectivity, identity, management), and only specific resource groups for business-unit subscriptions. The platform team gets what it needs to enforce the baseline; the business units keep sovereignty over their own workloads.</p>
 <h2 id="use-case-3-isvs-independent-software-vendors">Use case 3 - ISVs (Independent Software Vendors)</h2>
+<p><strong>Need:</strong> support customer-owned deployments. <strong>Scope:</strong> the customer's agreed application resources. <strong>Benefit:</strong> explicit operational delegation. <strong>Limit:</strong> customer onboarding approval, supported roles and revocation remain required.</p>
 <p>For ISVs there are three distinct patterns, and confusing them is the usual source of pain.</p>
 <h3 id="pattern-a-managed-service-offer-in-microsoft-marketplace">Pattern A - Managed Service offer in Microsoft Marketplace</h3>
 <p>Instead of emailing an ARM template to every prospect, publish a <strong>Managed Service offer</strong> in Partner Center. Purchasing the offer <em>is</em> the onboarding: the customer accepts it and the delegation is created. Offers can be public, or <strong>private</strong>, restricted to a list of subscription IDs - which is also how enterprises quietly use the Marketplace to onboard their own subsidiaries.</p>
@@ -748,7 +1212,7 @@
 <p>You ship a managed application into the customer's subscription. The infrastructure lands in a managed resource group the customer can't touch, and Lighthouse gives your support team the cross-tenant access to operate it. Your IP stays yours, the running costs stay on the customer's bill.</p>
 <h3 id="pattern-c-the-one-nobody-expects-reverse-delegation">Pattern C - The one nobody expects: reverse delegation</h3>
 <p>This is the pattern worth the price of admission. Here the ISV <strong>hosts the resources in its own tenant</strong>, then delegates a narrow scope to the <em>customer's</em> tenant. The arrow flips.</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-diagram">   Classic direction                     ISV SaaS direction
+<div class="code-block"><div class="code-block-header"><span class="code-lang">diagram</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy diagram code">Copy</button></div><pre tabindex="0" aria-label="diagram code"><code class="language-diagram">   Classic direction                     ISV SaaS direction
    ─────────────────                     ──────────────────
    Provider tenant                       ISV tenant
         │ manages                             │ hosts the solution
@@ -763,20 +1227,22 @@
 <p>Why it's clever:</p>
 <ul><li>The ISV never leaves its own tenant to sign into a VM, install a component, or run a maintenance window.</li><li>Customers never receive a guest account in the ISV tenant, and never appear in the ISV's directory.</li><li>The ISV's own support agreement covers the resources, because the resources are in the ISV's subscription.</li><li>One subscription can carry many customers, each delegated to a different scope.</li></ul>
 <p>Mechanically: get the <strong>object ID of a security group</strong> in the customer's Entra tenant plus their <strong>tenant ID</strong>, then deploy the onboarding template <strong>on your own subscription</strong>, naming the customer tenant as <code>managedByTenantId</code>.</p>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>In this pattern the customer is technically the "managing tenant" over a slice of your estate. Grant the absolute minimum - Reader, or a narrow built-in role, on a single resource group. Anything broader and a customer can see or change parts of your platform that belong to other customers.</p></div></div>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>In this pattern the customer is technically the &quot;managing tenant&quot; over a slice of your estate. Grant the absolute minimum - Reader, or a narrow built-in role, on a single resource group. Anything broader and a customer can see or change parts of your platform that belong to other customers.</p></div></div>
 <h2 id="what-lighthouse-does-not-do">What Lighthouse does not do</h2>
 <p>Half of a good architecture decision is knowing the edges. This is where Lighthouse stops:</p>
-<div class="table-wrap"><table><thead><tr><th>Limitation</th><th>Detail</th></tr></thead><tbody><tr><td><strong>Owner role</strong></td><td>Not supported. Ever.</td></tr><tr><td><strong>Custom roles</strong></td><td>Not supported - built-in roles only.</td></tr><tr><td><strong><code>DataActions</code></strong></td><td>Roles carrying data-plane permissions aren't supported.</td></tr><tr><td><strong><code>Microsoft.Authorization/*</code></strong></td><td>Roles that write role assignments, role definitions, locks or deny assignments are excluded.</td></tr><tr><td><strong>User Access Administrator</strong></td><td>Supported only for the narrow purpose of assigning roles to managed identities, and you must list which roles.</td></tr><tr><td><strong>Cross-cloud</strong></td><td>No delegation between a national cloud and Azure public, or between two national clouds.</td></tr><tr><td><strong>Management groups</strong></td><td>Delegation targets subscriptions and resource groups. Management group scope isn't a delegation target.</td></tr><tr><td><strong>Entra ID objects</strong></td><td>Lighthouse is Azure RBAC, not directory access. No users, groups, licences or Microsoft 365.</td></tr><tr><td><strong>Classic administrators</strong></td><td>Not supported.</td></tr></tbody></table></div>
-<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>"No <code>DataActions</code>" does not mean "no data access". Some control-plane actions return keys - <strong>Virtual Machine Contributor</strong> includes <code>Microsoft.Storage/storageAccounts/listKeys/action</code>, which hands over storage account keys. Read the <code>actions</code> list of every role you delegate rather than trusting the role name.</p></div></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Limitation, Detail table"><table><thead><tr><th scope="col">Limitation</th><th scope="col">Detail</th></tr></thead><tbody><tr><td data-label="Limitation"><strong>Owner role</strong></td><td data-label="Detail">Not supported. Ever.</td></tr><tr><td data-label="Limitation"><strong>Custom roles</strong></td><td data-label="Detail">Not supported - built-in roles only.</td></tr><tr><td data-label="Limitation"><strong><code>DataActions</code></strong></td><td data-label="Detail">Roles carrying data-plane permissions aren't supported.</td></tr><tr><td data-label="Limitation"><strong><code>Microsoft.Authorization/*</code></strong></td><td data-label="Detail">Roles that write role assignments, role definitions, locks or deny assignments are excluded.</td></tr><tr><td data-label="Limitation"><strong>User Access Administrator</strong></td><td data-label="Detail">Supported only for the narrow purpose of assigning roles to managed identities, and you must list which roles.</td></tr><tr><td data-label="Limitation"><strong>Cross-cloud</strong></td><td data-label="Detail">No delegation between a national cloud and Azure public, or between two national clouds.</td></tr><tr><td data-label="Limitation"><strong>Management groups</strong></td><td data-label="Detail">Delegation targets subscriptions and resource groups. Management group scope isn't a delegation target.</td></tr><tr><td data-label="Limitation"><strong>Entra ID objects</strong></td><td data-label="Detail">Lighthouse is Azure RBAC, not directory access. No users, groups, licences or Microsoft 365.</td></tr><tr><td data-label="Limitation"><strong>Classic administrators</strong></td><td data-label="Detail">Not supported.</td></tr></tbody></table></div>
+<div class="callout callout-warning"><svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0ZM12 9v4M12 17h.01"/></svg><div class="callout-body"><span class="callout-label">Warning</span><p>&quot;No <code>DataActions</code>&quot; does not mean &quot;no data access&quot;. Some control-plane actions return keys - <strong>Virtual Machine Contributor</strong> includes <code>Microsoft.Storage/storageAccounts/listKeys/action</code>, which hands over storage account keys. Read the <code>actions</code> list of every role you delegate rather than trusting the role name.</p></div></div>
 <h2 id="rolling-it-out-without-regrets">Rolling it out without regrets</h2>
+<p>Preflight checklist: name both tenant IDs → confirm principal IDs in the managing tenant → review supported role IDs in <a href="/azure-built-in-roles/">Built-in Roles</a> → agree on the exact delegated scope → identify the customer approver → document expiry/review and removal ownership.</p>
+<p>After onboarding: test an intended read operation, a deliberately ungranted operation and the customer's view of the delegation/activity log. In a test scope, verify removal actually prevents new delegated operations; do not assume an old portal session proves revocation. Record observed results rather than treating this article as test evidence.</p>
 <p>A checklist that has aged well:</p>
-<ol><li><strong>Groups, never individuals.</strong> Assign every authorization to an Entra security group. Membership changes then happen in your tenant, instantly, with no redeployment and no customer involvement. Individual <code>principalId</code> values mean re-onboarding for every joiner and leaver.</li><li><strong>Security groups only.</strong> A Microsoft 365 group won't work - the group type must be <strong>Security</strong>.</li><li><strong>Least privilege, per scope.</strong> Different job, different authorization. Support gets Reader, operations get Contributor on one resource group, nobody gets Contributor on the subscription "just in case".</li><li><strong>Include the delete role.</strong> <code>Managed Services Registration Assignment Delete Role</code> (<code>91c1777a-f3dc-4fae-b103-61d183457e46</code>), so you can detach yourself cleanly.</li><li><strong>Make privileged roles eligible.</strong> Standing Contributor across 30 customers is the single largest blast radius you own. PIM it.</li><li><strong>Harden the managing tenant.</strong> Every customer's security now depends on <em>your</em> Conditional Access, <em>your</em> MFA, <em>your</em> joiner-mover-leaver process. That is the trade, and it is a good one only if your tenant is actually hardened.</li><li><strong>Version the templates in Git.</strong> The parameter file is your access model. Review it like code, because it is.</li><li><strong>Link your partner ID.</strong> If you're a partner, associate your MCPP ID with a service principal included in every onboarding, so the engagement is recognised.</li></ol>
+<ol><li><strong>Groups, never individuals.</strong> Assign every authorization to an Entra security group. Membership changes then happen in your tenant, instantly, with no redeployment and no customer involvement. Individual <code>principalId</code> values mean re-onboarding for every joiner and leaver.</li><li><strong>Security groups only.</strong> A Microsoft 365 group won't work - the group type must be <strong>Security</strong>.</li><li><strong>Least privilege, per scope.</strong> Different job, different authorization. Support gets Reader, operations get Contributor on one resource group, nobody gets Contributor on the subscription &quot;just in case&quot;.</li><li><strong>Include the delete role.</strong> <code>Managed Services Registration Assignment Delete Role</code> (<code>91c1777a-f3dc-4fae-b103-61d183457e46</code>), so you can detach yourself cleanly.</li><li><strong>Make privileged roles eligible.</strong> Standing Contributor across 30 customers is the single largest blast radius you own. PIM it.</li><li><strong>Harden the managing tenant.</strong> Every customer's security now depends on <em>your</em> Conditional Access, <em>your</em> MFA, <em>your</em> joiner-mover-leaver process. That is the trade, and it is a good one only if your tenant is actually hardened.</li><li><strong>Version the templates in Git.</strong> The parameter file is your access model. Review it like code, because it is.</li><li><strong>Link your partner ID.</strong> If you're a partner, associate your MCPP ID with a service principal included in every onboarding, so the engagement is recognised.</li></ol>
 <h3 id="verifying-and-removing-a-delegation">Verifying and removing a delegation</h3>
 <p>From the managing tenant, list what you have been given:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az managedservices assignment list --output table
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy bash code">Copy</button></div><pre tabindex="0" aria-label="bash code"><code class="language-bash">az managedservices assignment list --output table
 az managedservices definition list --output table</code></pre></div>
 <p>And to walk away:</p>
-<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy>Copy</button></div><pre><code class="language-bash">az managedservices assignment delete --assignment &lt;assignment-id&gt;</code></pre></div>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button type="button" class="copy-code-button" data-code-copy aria-label="Copy bash code">Copy</button></div><pre tabindex="0" aria-label="bash code"><code class="language-bash">az managedservices assignment delete --assignment &lt;assignment-id&gt;</code></pre></div>
 <p>The customer's equivalent is the <strong>Service providers</strong> blade in their portal: every delegation, every role, every principal display name, with a <strong>Delete</strong> button that needs no approval from you. That asymmetry is deliberate, and it's exactly what makes Lighthouse acceptable to a customer's security team.</p>
 <h2 id="why-this-is-the-feature-to-know">Why this is the feature to know</h2>
 <p>Azure Lighthouse costs nothing, adds no runtime component, breaks no existing tool, and removes an entire category of standing privileged accounts from tenants you don't control. It is one of the rare Azure features where the security posture improves <em>and</em> the operational cost goes down at the same time.</p>
@@ -787,11 +1253,13 @@ az managedservices definition list --output table</code></pre></div>
 <p><strong>Further reading</strong></p>
 <ul><li><a href="https://learn.microsoft.com/en-us/azure/lighthouse/overview" target="_blank" rel="noopener noreferrer">What is Azure Lighthouse? <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://learn.microsoft.com/en-us/azure/lighthouse/concepts/architecture" target="_blank" rel="noopener noreferrer">Azure Lighthouse architecture <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://learn.microsoft.com/en-us/azure/lighthouse/concepts/enterprise" target="_blank" rel="noopener noreferrer">Azure Lighthouse in enterprise scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://learn.microsoft.com/en-us/azure/lighthouse/concepts/isv-scenarios" target="_blank" rel="noopener noreferrer">Azure Lighthouse in ISV scenarios <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://learn.microsoft.com/en-us/azure/lighthouse/concepts/tenants-users-roles" target="_blank" rel="noopener noreferrer">Tenants, users, and roles <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://learn.microsoft.com/en-us/azure/lighthouse/how-to/create-eligible-authorizations" target="_blank" rel="noopener noreferrer">Create eligible authorizations <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li><li><a href="https://github.com/Azure/Azure-Lighthouse-samples" target="_blank" rel="noopener noreferrer">Azure Lighthouse samples on GitHub <svg class="external-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li></ul>
     </article>
+    </div>
 
 
+
+    <aside class="article-related" aria-label="Related reading"><h2>Continue with</h2><ul><li><a href="/articles/clean-rbac-identity-not-found/">Review RBAC Assignments with 'Identity Not Found'</a><br><span>Inventory unresolved Azure RBAC principals at an explicit scope, verify deletion independently, and preview removal before approving a change.</span></li><li><a href="/articles/azure-policy-part-3-assignments/">Azure Policy, Part 3: What Is a Policy Assignment?</a><br><span>Part 3 of the Azure Policy series: assignments are where governance becomes real. Scope and inheritance, enforcementMode, managed identities and remediation permissions, resourceSelectors and overrides for safe rollout, and non-compliance messages.</span></li></ul></aside>
     <div class="article-footer-nav">
       <a href="/articles/">&larr; Back to all articles</a>
-      <a href="/articles/rss.xml">RSS feed</a>
     </div>
   </main>
 
@@ -799,7 +1267,7 @@ az managedservices definition list --output table</code></pre></div>
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -845,6 +1313,7 @@ az managedservices definition list --output table</code></pre></div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -860,12 +1329,7 @@ az managedservices definition list --output table</code></pre></div>
     document.querySelectorAll('[data-code-copy]').forEach((button) => {
       button.addEventListener("click", () => {
         const code = button.closest(".code-block").querySelector("code").textContent;
-        navigator.clipboard.writeText(code).then(() => {
-          const original = button.textContent;
-          button.textContent = "Copied!";
-          button.classList.add("is-copied");
-          setTimeout(() => { button.textContent = original; button.classList.remove("is-copied"); }, 1600);
-        });
+        window.SiteUX.copy(code, "Code", button);
       });
     });
     let scrollTicking = false;
@@ -879,43 +1343,9 @@ az managedservices definition list --output table</code></pre></div>
       });
     }, { passive: true });
     backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    (function () {
-      const toggle = document.getElementById("menuToggle");
-      const nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      const closeMenu = () => { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); };
-      const openMenu = () => { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); };
-      toggle.addEventListener("click", (e) => {
-        e.stopPropagation();
-        nav.classList.contains("nav-open") ? closeMenu() : openMenu();
-      });
-      nav.addEventListener("click", (e) => { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", (e) => {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", () => { if (window.innerWidth > 760) closeMenu(); });
-    })();
-    (function () {
-      const toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", () => {
-        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        const next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-    (function () {
-      const banner = document.getElementById("newsBanner");
-      const closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
+
+
+
   </script>
 <script data-share-script>
     (function () {
@@ -960,13 +1390,9 @@ az managedservices definition list --output table</code></pre></div>
           // The build-time URL is canonical; location.href would carry any
           // tracking query string the visitor arrived with.
           var value = copyBtn.getAttribute('data-share-url') || location.href;
-          function done() { say('Link copied to the clipboard.'); }
-          function failed() { say(value); }
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(value).then(done, failed);
-          } else {
-            failed();
-          }
+          window.SiteUX.copy(value, "Article link", copyBtn).then(function (copied) {
+            say(copied ? "Link copied to the clipboard." : "Copy unavailable. Use the manual copy dialog.");
+          });
         });
       }
 
@@ -977,5 +1403,135 @@ az managedservices definition list --output table</code></pre></div>
     })();
   </script>
 
-</body>
+  <script data-article-reading>
+  (function articleReadingRuntime() {
+  const toc = document.querySelector(".reading-toc");
+  if (toc) {
+    toc.open = matchMedia("(min-width: 75rem)").matches;
+    toc.addEventListener("toggle", () => {
+      if (document.activeElement === toc.querySelector("summary")) {
+        toc.scrollIntoView({ block: "nearest", behavior: "instant" });
+      }
+    });
+    toc.addEventListener("click", event => {
+      const link = event.target.closest("a[href^='#']");
+      if (!link) return;
+      const target = document.getElementById(link.hash.slice(1));
+      if (target) {
+        for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+        target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
+      if (matchMedia("(max-width: 74.99rem)").matches) toc.open = false;
+    });
+  }
+  const share = document.querySelector(".article-share");
+  if (share) share.open = matchMedia("(min-width: 40rem)").matches;
+  const revealReference = () => {
+    let target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+    if (!target) return;
+    if (target.tagName === "SUMMARY") target.parentElement.open = true;
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) if (parent.tagName === "DETAILS") parent.open = true;
+  };
+  window.addEventListener("hashchange", revealReference);
+  revealReference();
+  let printState = [];
+  window.addEventListener("beforeprint", () => {
+    printState = [...document.querySelectorAll(".article-body details")].map(detail => [detail, detail.open]);
+    printState.forEach(([detail]) => { detail.open = true; });
+  });
+  window.addEventListener("afterprint", () => printState.forEach(([detail, open]) => { detail.open = open; }));
+
+  let imageDialog, imageOpener;
+  document.querySelectorAll("[data-image-zoom]").forEach(link => link.addEventListener("click", event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (!imageDialog) {
+      imageDialog = document.createElement("dialog");
+      imageDialog.className = "image-dialog";
+      imageDialog.setAttribute("aria-label", "Image viewer");
+      imageDialog.innerHTML = '<button type="button" class="share-btn" data-image-close>Close image</button><figure><img alt=""><figcaption></figcaption></figure><a target="_blank" rel="noopener">Open original image</a>';
+      document.body.append(imageDialog);
+      imageDialog.querySelector("[data-image-close]").addEventListener("click", () => imageDialog.close());
+      imageDialog.addEventListener("close", () => imageOpener?.focus());
+      imageDialog.addEventListener("click", e => { if (e.target === imageDialog) imageDialog.close(); });
+    }
+    imageOpener = link;
+    const source = link.querySelector("img");
+    imageDialog.querySelector("img").src = link.href;
+    imageDialog.querySelector("img").alt = source?.alt || "";
+    imageDialog.querySelector("figcaption").textContent = link.closest("figure")?.querySelector("figcaption")?.firstChild?.textContent || source?.alt || "";
+    imageDialog.querySelector("a").href = link.href;
+    imageDialog.showModal();
+    imageDialog.querySelector("button").focus();
+  }));
+
+  document.querySelectorAll("[data-copy-section]").forEach(button => button.addEventListener("click", () => {
+    const section = document.getElementById(button.dataset.copySection);
+    if (section) window.SiteUX.copy(section.innerText, "Checklist", button);
+  }));
+
+  const zoneTable = document.querySelector("[data-zone-table]");
+  if (zoneTable) {
+    const rows = [...zoneTable.querySelectorAll("tbody tr")];
+    const search = document.getElementById("zone-search");
+    const status = document.getElementById("zone-count");
+    rows.forEach(row => row.querySelectorAll("code").forEach(code => {
+      if (!code.textContent.includes("privatelink.")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "share-btn";
+      button.textContent = "Copy zone";
+      button.setAttribute("aria-label", "Copy " + code.textContent);
+      button.addEventListener("click", () => window.SiteUX.copy(code.textContent, "Private DNS zone", button));
+      code.after(button);
+    }));
+    const filter = () => {
+      let count = 0;
+      rows.forEach(row => { row.hidden = !row.textContent.toLowerCase().includes(search.value.trim().toLowerCase()); if (!row.hidden) count++; });
+      status.textContent = count + " of " + rows.length + " services" + (count ? "" : ". Try another service or zone name.");
+    };
+    search.addEventListener("input", filter);
+    document.getElementById("zone-reset").addEventListener("click", () => { search.value = ""; filter(); search.focus(); });
+    filter();
+  }
+
+  const library = document.querySelector("[data-reference-library]");
+  if (library) {
+    const groups = [...library.querySelectorAll(".library-group")];
+    const input = document.getElementById("library-search");
+    const category = document.getElementById("library-category");
+    const count = document.getElementById("library-count");
+    const entries = [...library.querySelectorAll(".library-entry")];
+    if (matchMedia("(max-width: 40rem)").matches) groups.forEach(group => { group.open = false; });
+    const filter = () => {
+      let visible = 0;
+      groups.forEach(group => {
+        let groupVisible = 0;
+        group.querySelectorAll(".library-entry").forEach(entry => {
+          entry.hidden = !(category.value === "" || group.dataset.category === category.value) || !entry.textContent.toLowerCase().includes(input.value.trim().toLowerCase());
+          if (!entry.hidden) { visible++; groupVisible++; }
+        });
+        group.hidden = !groupVisible;
+        if (input.value.trim() || category.value) group.open = !!groupVisible;
+      });
+      count.textContent = visible + " of " + entries.length + " entries" + (visible ? "" : ". Clear the search or choose another category.");
+    };
+    input.addEventListener("input", filter);
+    category.addEventListener("change", filter);
+    document.getElementById("library-reset").addEventListener("click", () => { input.value = ""; category.value = ""; filter(); input.focus(); });
+    const revealHash = () => {
+      let target;
+      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch { return; }
+      const group = target?.closest(".library-group");
+      if (group) { input.value = ""; category.value = ""; filter(); group.open = true; target.scrollIntoView({ block: "start", behavior: "instant" }); }
+    };
+    window.addEventListener("hashchange", revealHash);
+    filter();
+    revealHash();
+  }
+})();
+  </script>
+  </body>
 </html>

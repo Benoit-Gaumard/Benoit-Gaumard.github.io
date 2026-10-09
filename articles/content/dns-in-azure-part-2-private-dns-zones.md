@@ -1,5 +1,6 @@
 +++
 author = "Benoit G"
+summary = "Create and link a private zone, distinguish registration from resolution and verify a full-name lookup."
 title = "DNS in Azure, Part 2: Private DNS Zones"
 date = "2026-09-02"
 description = "Part 2 of the DNS in Azure series: how private DNS zones and virtual network links really work, what autoregistration does to your records, the privatelink zones behind Private Endpoints, and how to design zones you will not regret."
@@ -7,6 +8,7 @@ tags = ["DNS", "Networking", "Private Endpoint"]
 categories = ["Featured", "Azure", "DNS"]
 featureImage = "/articles/images/dns-in-azure-part-2.svg"
 featured = true
+related = ["dns-in-azure-part-3-private-resolver", "dns-in-azure-part-5-private-endpoint-dns"]
 +++
 
 In [Part 1](/articles/dns-in-azure-part-1-fundamentals/) I finished on a fairly blunt conclusion: Azure-provided name resolution stops being useful the moment you own more than one virtual network. You get a namespace you did not choose, records you cannot create by hand, and no way to share any of it across VNets.
@@ -14,6 +16,18 @@ In [Part 1](/articles/dns-in-azure-part-1-fundamentals/) I finished on a fairly 
 **Azure Private DNS zones** are the answer to all three. This post covers how the service is built, the behaviours that surprise people on day one, the role it plays in Private Endpoints, and how to lay out zones so you are not re-architecting them in eighteen months.
 
 [[toc]]
+
+## Create, link, register, verify
+
+**Resolution** means a client can look up an existing record, such as `vm1.corp.internal`. A link with `registrationEnabled = false` permits zone resolution through the Azure DNS path; it does not create VM records.
+
+**Registration** means Azure maintains supported VM records for the linked VNet. A link with `registrationEnabled = true` includes resolution and adds that record-management behaviour. It does not automatically make `vm1` a valid short name or register Private Endpoints.
+
+Follow one example: zone `corp.internal`, resource group `rg-dns-hub`, client VNet `vnet-spoke-a`. [Create/link](#the-resource-model) → [choose registration](#registration-versus-resolution) → [check the full name/suffix](#the-suffix-trap) → [verify](#verifying-a-zone-works).
+
+Checklist: correct zone spelling; intended VNet resource ID; link provisioning complete; registration set deliberately; expected A record exists; client uses Azure DNS or a forwarding path into it; full-name query returns the expected IP. Test network connectivity separately.
+
+Technical execution validation: **not recorded**. Compare limits and linking behaviour with [Private DNS documentation](https://learn.microsoft.com/azure/dns/private-dns-overview).
 
 ## What private DNS zones actually give you
 

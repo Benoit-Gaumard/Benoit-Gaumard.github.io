@@ -61,6 +61,7 @@
     gtag('config', 'G-75X1Q2PPLE');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
+
   <script>
     (function () {
       try {
@@ -198,7 +199,7 @@
       gap: .75rem;
       padding: .5rem 1rem;
       background: linear-gradient(90deg, var(--cp-accent), var(--cp-accent-hover));
-      color: #fff;
+      color: var(--cp-accent-fg);
       overflow: hidden;
       position: relative;
     }
@@ -633,7 +634,7 @@
     .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
     .page-notes li { margin-bottom: .35rem; }
     .page-notes a { color: var(--cp-link); }
-  
+
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
     .footer-share-label { font-size: 0.8rem; font-weight: 700; color: var(--cp-text-muted); }
@@ -670,12 +671,420 @@
     ]
   }
   </script>
+<style data-world-clock>
+ .world-overview{display:grid;grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0;}
+ .world-primary,.clock-calendar-card{min-width:0;padding:1.25rem;border:1px solid var(--cp-border);border-radius:10px;background:var(--cp-surface);}
+ .world-primary h2{font-size:1.35rem;margin:0;}
+ .clock-calendar-card{display:flex;flex-direction:column;justify-content:center;gap:.5rem;}
+ .clock-calendar-card h2{font-size:.9rem;line-height:1.4;color:var(--cp-text-muted);margin:0;}
+ .clock-calendar-value{font-size:2.5rem;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums;margin:0;}
+ .clock-calendar-note{font-size:.85rem;line-height:1.5;color:var(--cp-text-muted);font-variant-numeric:tabular-nums;margin:0;}
+ .world-primary-time{font-size:clamp(2.25rem,9vw,4.5rem);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2;margin:.25rem 0;}
+ .clock-help,.world-zone-date,.world-zone-shift{color:var(--cp-text-muted);font-size:.9rem;line-height:1.5;}
+ .clock-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.75rem 0;}
+ .clock-action{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer;}
+ .clock-action[aria-pressed="true"]{border-color:var(--cp-accent);background:var(--cp-accent-soft);}
+ .clock-planner>summary,.world-zone-details>summary{min-height:2.75rem;padding-block:.65rem;color:var(--cp-link);cursor:pointer;font-size:.9rem;}
+ .clock-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;max-width:55rem;}
+ .clock-field{min-width:0;}.clock-field label{display:block;margin:.5rem 0 .4rem;font-size:.85rem;font-weight:600;}
+ .clock-field input:not([type="range"]),.clock-field select{width:100%;height:3rem;min-width:0;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
+ .clock-field input[type="range"]{width:100%;min-height:2.75rem;accent-color:var(--cp-accent);}
+ .clock-range{grid-column:1/-1;}
+ .world-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));gap:1rem;}
+ .world-zone{padding:1rem;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-surface);min-width:0;}
+ .world-zone-head{display:flex;gap:.5rem;align-items:center;justify-content:space-between;}.world-zone h3{margin:0;font-size:1.05rem;overflow-wrap:anywhere;}
+ .world-place-heading{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;min-width:0;}
+ .world-city-title{display:flex;align-items:center;gap:.5rem;min-width:0;max-width:100%;}
+ .world-city-title span{min-width:0;overflow-wrap:anywhere;}
+ .country-flag,.clock-flag-neutral{display:inline-flex;align-items:center;justify-content:center;flex:none;width:24px;height:18px;object-fit:contain;}
+ .clock-flag-neutral{font-size:.75rem;color:var(--cp-text-muted);}
+ .timezone-offset{display:inline-flex;align-items:center;padding:.2rem .5rem;border:1px solid var(--cp-border-strong);border-radius:999px;background:var(--cp-accent-soft);color:var(--cp-link);font-size:.8rem;font-weight:650;white-space:nowrap;font-variant-numeric:tabular-nums;}
+ .world-zone-head>.clock-action{flex:none;}
+ .world-zone-time{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;margin:.5rem 0;}
+ .world-zone-details p{font-size:.85rem;overflow-wrap:anywhere;}
+ .world-zones.list-view{grid-template-columns:minmax(0,1fr);}
+ .world-zones.list-view .world-zone{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,2fr);gap:.5rem 1rem;align-items:center;}
+ #zoneError{color:var(--cp-danger);}#meetingTime[aria-invalid="true"],#zoneInput[aria-invalid="true"]{border-color:var(--cp-danger);}
+ @media(max-width:64rem){.world-overview{grid-template-columns:repeat(2,minmax(0,1fr));}.world-primary{grid-column:1/-1;}}
+ @media(max-width:32rem){.clock-calendar-card{padding:1rem;}}
+ @media(max-width:48rem){.clock-fields,.world-zones,.world-zones.list-view .world-zone{grid-template-columns:minmax(0,1fr);}}
+</style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/world-clock/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-privacy-choices { min-height:2.75rem;padding:.4rem .6rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;cursor:pointer; }
+  .site-privacy-choices:focus-visible,.site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-privacy-choices,.site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":true,"theme":true,"banner":true,"path":"/world-clock/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="news-banner" id="newsBanner">
     <div class="news-banner-track">
-      <span class="news-banner-text">👋 Welcome! I hope these tools, guides, and Azure resources save you time and help you learn something new - feedback is always welcome on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
+      <span class="news-banner-text">Azure tools and practical guides. Feedback on <a href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</span>
     </div>
     <button type="button" class="news-banner-close" id="newsBannerClose" aria-label="Dismiss announcement">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -694,6 +1103,47 @@
         <a href="/tools/"><svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
       </nav>
       <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">30 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Updates</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/" aria-current="page"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span><span class="site-tool-current">Current</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
         <a class="social-link" href="https://linkedin.com/in/benoit-gaumard" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0z"/></svg>
         </a>
@@ -712,44 +1162,22 @@
       <p class="intro-text">Current time and date in Paris, plus a quick glance at the timezones of colleagues around the world.</p>
     </section>
 
-    <section aria-label="Paris time">
-      <div class="clock-hero">
-        <div class="clock-hero-main">
-          <p class="clock-hero-city"><svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg> Paris, France</p>
-          <p class="clock-hero-time" id="parisTime">--:--:--</p>
-          <p class="clock-hero-date" id="parisDate">Loading...</p>
-        </div>
-        <div class="clock-hero-stats">
-          <div class="stat-pill">
-            <span class="label">Day of the Year</span>
-            <span class="value" id="dayOfYear">-</span>
-            <span class="sub" id="dayOfYearSub"></span>
-          </div>
-          <div class="stat-pill">
-            <span class="label">Week of the Year</span>
-            <span class="value" id="weekOfYear">-</span>
-            <span class="sub" id="weekOfYearSub"></span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section aria-label="Other timezones">
-      <div class="timezones-toolbar">
-        <div class="view-toggle" role="group" aria-label="Choose view">
-          <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-            Cards
-          </button>
-          <button type="button" class="view-toggle-button" data-view="list" aria-pressed="false">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-            List
-          </button>
-        </div>
-        <h2 class="sec-label">Other Timezones</h2>
-      </div>
-      <div class="timezone-grid" id="timezoneGrid"></div>
-    </section>
+<!-- world-clock-view:start -->
+ <div class="world-overview">
+ <section class="world-primary" aria-labelledby="parisHeading"><div class="world-place-heading"><h2 id="parisHeading" class="world-city-title"><img class="country-flag" src="/flags/fr.png" alt="" width="24" height="18"><span>Paris, France</span></h2><span id="parisOffset" class="timezone-offset" title="GMT offset at the displayed instant">--</span></div><p id="clockMode" class="clock-help">Live clocks</p><p class="world-primary-time" id="parisTime" aria-live="off">--:--:--</p><p id="parisDate" class="clock-help" aria-live="off"></p><p class="clock-help">Europe/Paris</p></section>
+ <section class="clock-calendar-card" aria-labelledby="dayOfYearHeading"><h2 id="dayOfYearHeading">Day of the Year</h2><p id="dayOfYear" class="clock-calendar-value" aria-live="off">--</p><p id="yearProgress" class="clock-calendar-note"></p></section>
+ <section class="clock-calendar-card" aria-labelledby="weekOfYearHeading"><h2 id="weekOfYearHeading">Week of the Year</h2><p id="weekOfYear" class="clock-calendar-value" aria-live="off">--</p><p id="weekContext" class="clock-calendar-note"></p></section>
+ </div>
+ <details class="clock-planner" id="meetingPlanner"><summary>Plan a meeting across timezones</summary><p class="clock-help">Choose a local date and time in the base timezone. Each city uses its offset for that instant, including seasonal changes. Ambiguous or nonexistent local times require an explicit choice.</p>
+ <div class="clock-fields"><div class="clock-field"><label for="meetingBase">Base timezone</label><select id="meetingBase"></select></div><div class="clock-field"><label for="meetingTime">Meeting date and local time</label><input id="meetingTime" type="datetime-local" step="60" aria-describedby="meetingStatus"></div>
+ <div class="clock-field clock-range"><label for="meetingMinutes">Meeting time slider</label><input id="meetingMinutes" type="range" min="0" max="1439" step="1"><output id="meetingMinuteLabel" for="meetingMinutes"></output></div>
+ <div class="clock-field clock-range" id="occurrenceField" hidden><label for="meetingOccurrence">This time occurs twice: choose an offset</label><select id="meetingOccurrence"><option value="">Choose an occurrence</option></select></div></div>
+ <div class="clock-actions"><button class="clock-action" id="previewMeeting" type="button">Preview selected time</button><button class="clock-action" id="liveClock" type="button" disabled>Return to live time</button></div><p class="clock-help" id="meetingStatus" role="status" aria-live="polite"></p></details>
+ <section aria-labelledby="comparisonHeading"><h2 id="comparisonHeading">Compare cities</h2><p class="clock-help">Dates are local to each city. Day differences are relative to Paris. GMT badges use the displayed instant, including seasonal changes; IANA names remain available in each detail.</p>
+ <div class="clock-fields"><div class="clock-field"><label for="zoneInput">Add a city or IANA timezone</label><input id="zoneInput" list="zoneOptions" placeholder="Tokyo or Asia/Tokyo" aria-describedby="zoneError" autocomplete="off"><datalist id="zoneOptions"></datalist></div><div class="clock-actions"><button class="clock-action" id="addZone" type="button">Add city</button></div></div><p class="clock-help" id="zoneError" role="status"></p>
+ <div class="clock-actions" role="group" aria-label="Clock view"><button class="clock-action" data-clock-view="cards" type="button" aria-pressed="true">Cards</button><button class="clock-action" data-clock-view="list" type="button" aria-pressed="false">List</button><button class="clock-action" id="copyTimes" type="button">Copy time comparison</button></div>
+ <div class="world-zones" id="timezoneGrid" aria-live="off"></div></section>
+ <!-- world-clock-view:end -->
 
     <section class="page-notes" aria-labelledby="notes-heading">
       <h2 id="notes-heading">About the world clock</h2>
@@ -769,7 +1197,7 @@
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-about">
-          <a class="brand" href="/"><span class="brand-mark">B.</span>G</a>
+          <a class="brand" href="/" aria-label="Benoit Gaumard - home"><img class="mark" src="/favicon.svg" alt="" width="56" height="56"></a>
           <p>Azure Infra &amp; DevOps Consultant, helping teams design, automate, and secure cloud-native platforms on Microsoft Azure.</p>
         </div>
         <nav class="footer-group" aria-label="Footer navigation">
@@ -815,6 +1243,7 @@
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear"></span> Benoit Gaumard</span>
         <a href="/privacy/">Privacy &amp; cookies</a>
+        <button class="site-privacy-choices" data-privacy-choices type="button">Change privacy choices</button>
       </div>
     </div>
   </footer>
@@ -825,219 +1254,252 @@
     </svg>
   </button>
 
-  <script>
-    document.getElementById("currentYear").textContent = new Date().getFullYear();
-
-    const VIEW_STORAGE_KEY = "world-clock-view-mode";
-    const timezoneGridEl = document.getElementById("timezoneGrid");
-    const viewButtons = [...document.querySelectorAll(".view-toggle-button")];
-
-    function applyView(view) {
-      timezoneGridEl.classList.toggle("list-view", view === "list");
-      viewButtons.forEach((button) => {
-        const isActive = button.dataset.view === view;
-        button.classList.toggle("is-active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-      });
+  <script data-world-clock>(()=>{
+function zonedParts(instant, timeZone) {
+  const values = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(instant)).map(part => [part.type, part.value]));
+  return { year: Number(values.year), month: Number(values.month), day: Number(values.day), hour: Number(values.hour), minute: Number(values.minute) };
+}
+function wallClockUTC(parts) {
+  const date = new Date(0);
+  date.setUTCFullYear(parts.year, parts.month - 1, parts.day);
+  date.setUTCHours(parts.hour || 0, parts.minute || 0, 0, 0);
+  return date.getTime();
+}
+function localTimeCandidates(value, timeZone) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
+  if (!match) return [];
+  const [year, month, day, hour, minute] = match.slice(1).map(Number);
+  const parts = { year, month, day, hour, minute }, guess = wallClockUTC(parts), check = new Date(guess);
+  if (check.getUTCFullYear() !== year || check.getUTCMonth() + 1 !== month || check.getUTCDate() !== day || hour > 23 || minute > 59) return [];
+  const offsets = new Set();
+  for (let shift = -48; shift <= 48; shift += 6) {
+    const instant = guess + shift * 3600000;
+    offsets.add(wallClockUTC(zonedParts(instant, timeZone)) - instant);
+  }
+  return [...offsets].map(offset => guess - offset).filter(instant => {
+    const actual = zonedParts(instant, timeZone);
+    return Object.keys(parts).every(key => parts[key] === actual[key]);
+  }).sort((a, b) => a - b);
+}
+function dayDifference(instant, zone, reference = "Europe/Paris") {
+  const a = zonedParts(instant, zone), b = zonedParts(instant, reference);
+  return Math.round((wallClockUTC({ ...a, hour: 0, minute: 0 }) - wallClockUTC({ ...b, hour: 0, minute: 0 })) / 86400000);
+}
+function calendarFacts(instant, timeZone = "Europe/Paris") {
+  const parts = zonedParts(instant, timeZone);
+  const today = wallClockUTC({ ...parts, hour: 0, minute: 0 });
+  const start = wallClockUTC({ year: parts.year, month: 1, day: 1 });
+  const daysInYear = Math.round((wallClockUTC({ year: parts.year + 1, month: 1, day: 1 }) - start) / 86400000);
+  const dayOfYear = Math.round((today - start) / 86400000) + 1;
+  const thursday = new Date(today);
+  thursday.setUTCDate(thursday.getUTCDate() + 3 - (thursday.getUTCDay() + 6) % 7);
+  const weekYear = thursday.getUTCFullYear();
+  const first = new Date(wallClockUTC({ year: weekYear, month: 1, day: 4 }));
+  first.setUTCDate(first.getUTCDate() + 3 - (first.getUTCDay() + 6) % 7);
+  return { dayOfYear, daysInYear, percentage: dayOfYear / daysInYear * 100, weekOfYear: 1 + Math.round((thursday - first) / 604800000), weekYear };
+}
+function offsetForZone(zone, instant) {
+  return new Intl.DateTimeFormat("en-US", { timeZone: zone, timeZoneName: "shortOffset" }).formatToParts(new Date(instant))
+    .find(part => part.type === "timeZoneName")?.value || "Offset unavailable";
+}
+function countryForZone(zone, catalogue) {
+  const key = Object.hasOwn(catalogue.zones, zone) ? zone : Object.keys(catalogue.zones).find(key => key.toLowerCase() === zone.toLowerCase());
+  const code = catalogue.zones[key];
+  return code ? { code, ...catalogue.countries[code] } : null;
+}
+(function clockRuntime({ zonedParts, wallClockUTC, localTimeCandidates, dayDifference, calendarFacts, offsetForZone, countryForZone, countryData }) {
+  const PARIS = "Europe/Paris", VIEW_KEY = "world-clock-view-mode", CITIES_KEY = "world-clock-cities";
+  const DEFAULTS = [
+    { city: "London", tz: "Europe/London" }, { city: "New York", tz: "America/New_York" },
+    { city: "Seattle", tz: "America/Los_Angeles" }, { city: "Houston", tz: "America/Chicago" },
+    { city: "Hyderabad", tz: "Asia/Kolkata" }, { city: "Bengaluru", tz: "Asia/Kolkata" },
+    { city: "Johannesburg", tz: "Africa/Johannesburg" },
+  ];
+  const el = Object.fromEntries(["parisTime", "parisDate", "parisOffset", "clockMode", "timezoneGrid", "zoneInput", "zoneOptions", "addZone", "zoneError", "meetingBase", "meetingTime", "meetingMinutes", "meetingMinuteLabel", "occurrenceField", "meetingOccurrence", "previewMeeting", "liveClock", "copyTimes", "meetingStatus", "dayOfYear", "weekOfYear", "yearProgress", "weekContext"].map(id => [id, document.getElementById(id)]));
+  const state = { cities: [...DEFAULTS], preview: null, view: "cards" };
+  function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
+  function validZone(zone) { try { new Intl.DateTimeFormat("en", { timeZone: zone }).format(); return true; } catch { return false; } }
+  function cityName(zone) { return zone.split("/").at(-1).replace(/_/g, " "); }
+  function countryFlag(zone) {
+    const country = countryForZone(zone, countryData);
+    if (!country) {
+      const globe = node("span", undefined, "clock-flag-neutral");
+      globe.setAttribute("role", "img");
+      globe.setAttribute("aria-label", "No country flag for this timezone");
+      globe.title = "No country flag for this timezone";
+      globe.innerHTML = '<svg width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
+      return globe;
     }
-
-    function loadView() {
-      try {
-        return localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "cards";
-      } catch {
-        return "cards";
-      }
+    const flag = node("img", undefined, "country-flag");
+    flag.src = country.flag; flag.alt = country.name; flag.title = country.name;
+    flag.width = 24; flag.height = 18;
+    flag.addEventListener("error", () => {
+      console.warn(`Country flag unavailable: ${country.flag}`);
+      const fallback = node("span", country.code, "clock-flag-neutral");
+      fallback.title = `${country.name}: flag unavailable`;
+      fallback.setAttribute("role", "img");
+      fallback.setAttribute("aria-label", fallback.title);
+      flag.replaceWith(fallback);
+    }, { once: true });
+    return flag;
+  }
+  function time(zone, instant) { return new Intl.DateTimeFormat("en-GB", { timeZone: zone, hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }).format(new Date(instant)); }
+  function date(zone, instant) { return new Intl.DateTimeFormat("en-GB", { timeZone: zone, weekday: "short", year: "numeric", month: "short", day: "numeric" }).format(new Date(instant)); }
+  function localInput(instant, zone) {
+    const parts = zonedParts(instant, zone), pad = value => String(value).padStart(2, "0");
+    return `${parts.year}-${pad(parts.month)}-${pad(parts.day)}T${pad(parts.hour)}:${pad(parts.minute)}`;
+  }
+  try {
+    const saved = localStorage.getItem(CITIES_KEY);
+    if (saved) {
+      const cities = JSON.parse(saved);
+      if (!Array.isArray(cities) || cities.some(city => !city || typeof city.city !== "string" || !city.city.trim() || typeof city.tz !== "string" || !validZone(city.tz))) throw new Error("Invalid saved city list");
+      state.cities = cities;
     }
-
-    applyView(loadView());
-
-    viewButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const view = button.dataset.view;
-        applyView(view);
-        try {
-          localStorage.setItem(VIEW_STORAGE_KEY, view);
-        } catch {
-          // ignore storage errors (private browsing, quota, etc.)
-        }
-      });
+    state.view = localStorage.getItem(VIEW_KEY) === "list" ? "list" : "cards";
+  } catch (error) { console.warn("Clock preferences unavailable.", error); SiteUX.notice("Clock preferences could not be read; defaults are shown."); }
+  let suggestions = [];
+  try { suggestions = Intl.supportedValuesOf ? Intl.supportedValuesOf("timeZone") : []; }
+  catch (error) { console.warn("Timezone suggestions unavailable; IANA names can still be entered.", error); }
+  suggestions = [...new Set([PARIS, "UTC", ...DEFAULTS.map(city => city.tz), ...suggestions])];
+  suggestions.forEach(zone => { const option = new Option(cityName(zone), zone); option.label = cityName(zone); el.zoneOptions.append(option); });
+  function saveCities() {
+    try { localStorage.setItem(CITIES_KEY, JSON.stringify(state.cities)); }
+    catch (error) { console.warn("Cities could not be saved.", error); SiteUX.notice("City selection changed for this page only; storage is unavailable."); }
+  }
+  function renderCities() {
+    el.timezoneGrid.replaceChildren();
+    state.cities.forEach((city, index) => {
+      const article = node("article", undefined, "world-zone");
+      article.dataset.zoneIndex = index;
+      const header = node("div", undefined, "world-zone-head");
+      const place = node("div", undefined, "world-place-heading");
+      const heading = node("h3", undefined, "world-city-title");
+      heading.append(countryFlag(city.tz), node("span", city.city));
+      const currentOffset = node("span", "", "timezone-offset");
+      currentOffset.dataset.field = "offset";
+      currentOffset.title = "GMT offset at the displayed instant";
+      place.append(heading, currentOffset);
+      header.append(place);
+      const remove = node("button", "Remove", "clock-action");
+      remove.type = "button"; remove.setAttribute("aria-label", `Remove ${city.city}`);
+      remove.addEventListener("click", () => { state.cities.splice(index, 1); saveCities(); renderCities(); el.zoneInput.focus({ preventScroll: true }); });
+      header.append(remove);
+      const clock = node("p", "", "world-zone-time"); clock.dataset.field = "time";
+      const day = node("p", "", "world-zone-date"); day.dataset.field = "date";
+      const shift = node("p", "", "world-zone-shift"); shift.dataset.field = "shift";
+      const details = node("details", undefined, "world-zone-details");
+      details.append(node("summary", "Timezone details"), node("p", `IANA zone: ${city.tz}`));
+      article.append(header, clock, day, shift, details); el.timezoneGrid.append(article);
     });
-
-    const PARIS_TZ = "Europe/Paris";
-    const FLAGS = {
-      GB: '<svg class="flag" viewBox="0 0 60 40" aria-hidden="true"><rect width="60" height="40" fill="#00247d"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 L26,17.3 M60,0 L34,17.3 M0,40 L26,22.7 M60,40 L34,22.7" stroke="#cf142b" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="14"/><path d="M30,0 V40 M0,20 H60" stroke="#cf142b" stroke-width="8"/></svg>',
-      US: '<svg class="flag" viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#B22234"/><g fill="#fff"><rect y="2.31" width="60" height="2.31"/><rect y="6.92" width="60" height="2.31"/><rect y="11.54" width="60" height="2.31"/><rect y="16.15" width="60" height="2.31"/><rect y="20.77" width="60" height="2.31"/><rect y="25.38" width="60" height="2.31"/></g><rect width="24" height="16.15" fill="#3C3B6E"/></svg>',
-      IN: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="3" height="0.667" fill="#FF9933"/><rect width="3" height="0.667" y="1.333" fill="#138808"/><circle cx="1.5" cy="1" r="0.28" fill="none" stroke="#000080" stroke-width="0.04"/><circle cx="1.5" cy="1" r="0.04" fill="#000080"/></svg>',
-      ZA: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#001489"/><path d="M0,0 L1.6,1 L0,2 Z" fill="#DE3831"/><path d="M0,0.5 L2,1 L0,1.5 Z" fill="#fff"/><path d="M0,0.65 L2.1,1 L0,1.35 Z" fill="#007A4D"/><path d="M0,0 L1,0.65 L1,1.35 L0,2 Z" fill="#FFB612"/><path d="M0,0.15 L0.85,0.75 L0.85,1.25 L0,1.85 Z" fill="#000"/></svg>',
-      FR: '<svg class="flag" viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect width="1" height="2" fill="#0055A4"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>',
-    };
-    const OTHER_ZONES = [
-      { city: "London", country: "United Kingdom", flag: FLAGS.GB, tz: "Europe/London" },
-      { city: "New York", country: "United States", flag: FLAGS.US, tz: "America/New_York" },
-      { city: "Seattle", country: "United States", flag: FLAGS.US, tz: "America/Los_Angeles" },
-      { city: "Houston", country: "United States", flag: FLAGS.US, tz: "America/Chicago" },
-      { city: "Hyderabad", country: "India", flag: FLAGS.IN, tz: "Asia/Kolkata" },
-      { city: "Bengaluru", country: "India", flag: FLAGS.IN, tz: "Asia/Kolkata" },
-      { city: "Johannesburg", country: "South Africa", flag: FLAGS.ZA, tz: "Africa/Johannesburg" },
-    ];
-
-    const grid = document.getElementById("timezoneGrid");
-    OTHER_ZONES.forEach((zone, index) => {
-      const card = document.createElement("article");
-      card.className = "timezone-card";
-      card.innerHTML = `
-        <div class="timezone-card-head">
-          <span class="timezone-card-city">${zone.flag} ${zone.city}</span>
-          <span class="timezone-card-offset" id="offset-${index}"></span>
-        </div>
-        <p class="timezone-card-time" id="time-${index}">--:--</p>
-        <p class="timezone-card-date" id="date-${index}"></p>
-        <p class="timezone-card-country">${zone.country}</p>
-      `;
-      grid.appendChild(card);
-    });
-
-    function getGmtOffsetLabel(timeZone, date) {
-      const parts = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "shortOffset" }).formatToParts(date);
-      return parts.find((part) => part.type === "timeZoneName")?.value || "GMT";
-    }
-
-    function isLeapYear(year) {
-      return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-    }
-
-    function getIsoWeeksInYear(year) {
-      const p = (y) => (y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400)) % 7;
-      return (p(year) === 4 || p(year - 1) === 3) ? 53 : 52;
-    }
-
-    function getDateParts(timeZone, date) {
-      const dtf = new Intl.DateTimeFormat("en-CA", {
-        timeZone, year: "numeric", month: "2-digit", day: "2-digit",
-      });
-      const parts = dtf.formatToParts(date).reduce((acc, part) => {
-        acc[part.type] = part.value;
-        return acc;
-      }, {});
-      return { year: Number(parts.year), month: Number(parts.month), day: Number(parts.day) };
-    }
-
-    function getDayOfYear(parts) {
-      const start = Date.UTC(parts.year, 0, 1);
-      const current = Date.UTC(parts.year, parts.month - 1, parts.day);
-      return Math.floor((current - start) / 86400000) + 1;
-    }
-
-    function getIsoWeek(parts) {
-      const d = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
-      const dayNum = (d.getUTCDay() + 6) % 7;
-      d.setUTCDate(d.getUTCDate() - dayNum + 3);
-      const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
-      const firstDayNum = (firstThursday.getUTCDay() + 6) % 7;
-      firstThursday.setUTCDate(firstThursday.getUTCDate() - firstDayNum + 3);
-      return 1 + Math.round((d - firstThursday) / (7 * 24 * 3600 * 1000));
-    }
-
-    const timeFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
-      timeZone, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false,
-    });
-    const shortTimeFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
-      timeZone, hour: "2-digit", minute: "2-digit", hour12: false,
-    });
-    const dateFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
-      timeZone, weekday: "long", day: "numeric", month: "long", year: "numeric",
-    });
-    const shortDateFormatter = (timeZone) => new Intl.DateTimeFormat("en-GB", {
-      timeZone, weekday: "short", day: "numeric", month: "short",
-    });
-
-    const parisTimeFormatter = timeFormatter(PARIS_TZ);
-    const parisDateFormatter = dateFormatter(PARIS_TZ);
-    const zoneTimeFormatters = OTHER_ZONES.map((zone) => shortTimeFormatter(zone.tz));
-    const zoneDateFormatters = OTHER_ZONES.map((zone) => shortDateFormatter(zone.tz));
-
-    function tick() {
-      const now = new Date();
-      document.getElementById("parisTime").textContent = parisTimeFormatter.format(now);
-      document.getElementById("parisDate").textContent = parisDateFormatter.format(now);
-
-      const parisParts = getDateParts(PARIS_TZ, now);
-      const dayOfYear = getDayOfYear(parisParts);
-      const weekOfYear = getIsoWeek(parisParts);
-      const totalDays = isLeapYear(parisParts.year) ? 366 : 365;
-      const totalWeeks = getIsoWeeksInYear(parisParts.year);
-      document.getElementById("dayOfYear").textContent = dayOfYear;
-      document.getElementById("dayOfYearSub").textContent = `of ${totalDays} \u00b7 ${(dayOfYear / totalDays * 100).toFixed(1)}%`;
-      document.getElementById("weekOfYear").textContent = weekOfYear;
-      document.getElementById("weekOfYearSub").textContent = `of ${totalWeeks} \u00b7 ${(weekOfYear / totalWeeks * 100).toFixed(1)}%`;
-
-      OTHER_ZONES.forEach((zone, index) => {
-        document.getElementById(`time-${index}`).textContent = zoneTimeFormatters[index].format(now);
-        document.getElementById(`date-${index}`).textContent = zoneDateFormatters[index].format(now);
-        document.getElementById(`offset-${index}`).textContent = getGmtOffsetLabel(zone.tz, now);
-      });
-    }
-
+    if (!state.cities.length) el.timezoneGrid.append(node("p", "Add a city to compare it with Paris."));
+    const chosen = el.meetingBase.value || PARIS;
+    el.meetingBase.replaceChildren(new Option("Paris — Europe/Paris", PARIS), new Option("UTC", "UTC"));
+    const seen = new Set([PARIS, "UTC"]);
+    state.cities.forEach(city => { if (!seen.has(city.tz)) { seen.add(city.tz); el.meetingBase.add(new Option(`${city.city} — ${city.tz}`, city.tz)); } });
+    if (!seen.has(chosen) && validZone(chosen)) { seen.add(chosen); el.meetingBase.add(new Option(`${chosen} (planning base)`, chosen)); }
+    el.meetingBase.value = seen.has(chosen) ? chosen : PARIS;
+    el.timezoneGrid.classList.toggle("list-view", state.view === "list");
     tick();
-    setInterval(tick, 1000);
-
-    const backToTop = document.getElementById("backToTop");
-    let scrollTicking = false;
-    window.addEventListener("scroll", () => {
-      if (scrollTicking) return;
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        backToTop.classList.toggle("visible", window.scrollY > 600);
-        scrollTicking = false;
-      });
-    }, { passive: true });
-    backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function tick() {
+    const instant = state.preview ?? Date.now();
+    el.parisTime.textContent = time(PARIS, instant);
+    el.parisDate.textContent = date(PARIS, instant);
+    el.parisOffset.textContent = offsetForZone(PARIS, instant);
+    el.clockMode.textContent = state.preview === null ? "Live clocks" : `Meeting preview — ${new Date(instant).toISOString()} (not live)`;
+    el.liveClock.disabled = state.preview === null;
+    const facts = calendarFacts(instant, PARIS);
+    el.dayOfYear.textContent = facts.dayOfYear;
+    el.yearProgress.textContent = `of ${facts.daysInYear} · ${facts.percentage.toFixed(1)}%`;
+    el.weekOfYear.textContent = facts.weekOfYear;
+    el.weekContext.textContent = `ISO week · ${facts.weekYear}`;
+    el.timezoneGrid.querySelectorAll("[data-zone-index]").forEach(article => {
+      const city = state.cities[Number(article.dataset.zoneIndex)];
+      article.querySelector('[data-field="time"]').textContent = time(city.tz, instant);
+      article.querySelector('[data-field="date"]').textContent = date(city.tz, instant);
+      const difference = dayDifference(instant, city.tz);
+      article.querySelector('[data-field="shift"]').textContent = difference === 0 ? "Same local date as Paris" : `${difference > 0 ? "+" : ""}${difference} day${Math.abs(difference) === 1 ? "" : "s"} relative to Paris`;
+      article.querySelector('[data-field="offset"]').textContent = offsetForZone(city.tz, instant);
     });
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("menuToggle");
-      var nav = document.getElementById("primaryNav");
-      if (!toggle || !nav) return;
-      function closeMenu() { nav.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); }
-      function openMenu() { nav.classList.add("nav-open"); toggle.setAttribute("aria-expanded", "true"); }
-      toggle.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (nav.classList.contains("nav-open")) closeMenu(); else openMenu();
-      });
-      nav.addEventListener("click", function (e) { if (e.target.tagName === "A") closeMenu(); });
-      document.addEventListener("click", function (e) {
-        if (!nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) closeMenu();
-      });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 760) closeMenu(); });
-    })();
-  </script>
-  <script>
-    (function () {
-      var toggle = document.getElementById("themeToggle");
-      if (!toggle) return;
-      toggle.addEventListener("click", function () {
-        var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        var next = isDark ? "light" : "dark";
-        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("site-theme", next); } catch (e) {}
-      });
-    })();
-  </script>
-  <script>
-    (function () {
-      var banner = document.getElementById("newsBanner");
-      var closeBtn = document.getElementById("newsBannerClose");
-      if (!banner || !closeBtn) return;
-      closeBtn.addEventListener("click", function () {
-        banner.setAttribute("hidden", "");
-        try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); } catch (e) {}
-      });
-    })();
-  </script>
+  }
+  function addCity() {
+    const entered = el.zoneInput.value.trim();
+    const alias = [...DEFAULTS, { city: "Paris", tz: PARIS }].find(city => city.city.toLowerCase() === entered.toLowerCase());
+    const matches = suggestions.filter(zone => cityName(zone).toLowerCase() === entered.toLowerCase());
+    const knownZone = Object.keys(countryData.zones).find(zone =>
+      /^(Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)\//.test(zone)
+      && zone.toLowerCase() === entered.toLowerCase());
+    const zone = alias?.tz || (validZone(entered) ? knownZone || new Intl.DateTimeFormat("en", { timeZone: entered }).resolvedOptions().timeZone : matches.length === 1 ? matches[0] : "");
+    if (!zone || !validZone(zone)) { el.zoneInput.setAttribute("aria-invalid", "true"); el.zoneError.textContent = "Choose a listed IANA timezone, for example Asia/Tokyo."; el.zoneInput.focus(); return; }
+    const city = alias?.city || cityName(zone);
+    if (zone === PARIS || state.cities.some(value => value.tz === zone && value.city === city)) { el.zoneError.textContent = `${city} is already shown.`; return; }
+    el.zoneInput.setAttribute("aria-invalid", "false"); el.zoneError.textContent = "";
+    state.cities.push({ city, tz: zone }); saveCities(); renderCities(); el.zoneInput.value = "";
+    SiteUX.notice(`${city} added. The IANA timezone determines seasonal offsets.`);
+  }
+  function preview() {
+    const value = el.meetingTime.value, zone = el.meetingBase.value;
+    const candidates = localTimeCandidates(value, zone);
+    const previous = el.meetingOccurrence.value;
+    el.meetingOccurrence.replaceChildren(new Option("Choose an occurrence", ""));
+    candidates.forEach((instant, index) => el.meetingOccurrence.add(new Option(`${index + 1}: ${offsetForZone(zone, instant)} — ${new Date(instant).toISOString()}`, String(instant))));
+    el.occurrenceField.hidden = candidates.length < 2;
+    el.meetingTime.setAttribute("aria-invalid", String(!candidates.length));
+    if (!candidates.length) { el.meetingStatus.textContent = `This is not a valid local time in ${zone}, or it falls in a daylight-saving gap. The displayed time has not changed.`; return; }
+    if (candidates.some(instant => String(instant) === previous)) el.meetingOccurrence.value = previous;
+    if (candidates.length > 1 && !el.meetingOccurrence.value) { el.meetingStatus.textContent = "This local time occurs twice. Choose the intended UTC offset; the displayed time has not changed."; return; }
+    state.preview = candidates.length === 1 ? candidates[0] : Number(el.meetingOccurrence.value);
+    tick();
+    const parts = zonedParts(state.preview, zone);
+    el.meetingMinutes.value = parts.hour * 60 + parts.minute;
+    el.meetingMinuteLabel.textContent = `${String(parts.hour).padStart(2, "0")}:${String(parts.minute).padStart(2, "0")} in ${zone}`;
+    el.meetingMinutes.setAttribute("aria-valuetext", el.meetingMinuteLabel.textContent);
+    el.meetingStatus.textContent = `Preview set to ${new Date(state.preview).toISOString()}. All clocks show that same instant.`;
+  }
+  el.addZone.addEventListener("click", addCity);
+  el.zoneInput.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); addCity(); } });
+  el.zoneInput.addEventListener("input", () => { el.zoneInput.removeAttribute("aria-invalid"); el.zoneError.textContent = ""; });
+  el.previewMeeting.addEventListener("click", preview);
+  el.meetingTime.addEventListener("change", preview);
+  el.meetingBase.addEventListener("change", () => { el.meetingOccurrence.value = ""; preview(); });
+  el.meetingOccurrence.addEventListener("change", preview);
+  el.meetingMinutes.addEventListener("input", () => {
+    const minutes = Number(el.meetingMinutes.value);
+    el.meetingTime.value = el.meetingTime.value.slice(0, 10) + `T${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+    preview();
+  });
+  el.liveClock.addEventListener("click", () => { state.preview = null; tick(); el.meetingStatus.textContent = "Live clocks resumed."; });
+  el.copyTimes.addEventListener("click", () => {
+    const instant = state.preview ?? Date.now();
+    const lines = [`${state.preview === null ? "Live comparison" : "Meeting preview"}: ${new Date(instant).toISOString()}`,
+      ...[{ city: "Paris", tz: PARIS }, ...state.cities].map(city => `${city.city}: ${date(city.tz, instant)} ${time(city.tz, instant)} — ${city.tz} (${offsetForZone(city.tz, instant)})`)];
+    SiteUX.copy(lines.join("\n"), "Time comparison", el.copyTimes);
+  });
+  document.querySelectorAll("[data-clock-view]").forEach(control => {
+    control.setAttribute("aria-pressed", String(control.dataset.clockView === state.view));
+    control.addEventListener("click", () => {
+      state.view = control.dataset.clockView; el.timezoneGrid.classList.toggle("list-view", state.view === "list");
+      document.querySelectorAll("[data-clock-view]").forEach(button => button.setAttribute("aria-pressed", String(button === control)));
+      try { localStorage.setItem(VIEW_KEY, state.view); } catch (error) { console.warn("Clock view could not be saved.", error); SiteUX.notice("View changed for this page only."); }
+    });
+  });
+  renderCities();
+  el.meetingTime.value = localInput(Date.now(), PARIS);
+  const initial = zonedParts(Date.now(), PARIS);
+  el.meetingMinutes.value = initial.hour * 60 + initial.minute;
+  el.meetingMinuteLabel.textContent = `${el.meetingTime.value.slice(11)} in ${PARIS}`;
+  el.meetingMinutes.setAttribute("aria-valuetext", el.meetingMinuteLabel.textContent);
+  setInterval(() => { if (!document.hidden) tick(); }, 1000);
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  const back = document.getElementById("backToTop");
+  window.addEventListener("scroll", () => back.classList.toggle("visible", scrollY > 600), { passive: true });
+  back.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+})({zonedParts,wallClockUTC,localTimeCandidates,dayDifference,calendarFacts,offsetForZone,countryForZone,countryData:{"countries":{"AD":{"name":"Andorra","flag":"/flags/ad.png"},"AE":{"name":"United Arab Emirates","flag":"/flags/ae.png"},"AF":{"name":"Afghanistan","flag":"/flags/af.png"},"AG":{"name":"Antigua & Barbuda","flag":"/flags/ag.png"},"AI":{"name":"Anguilla","flag":"/flags/ai.png"},"AL":{"name":"Albania","flag":"/flags/al.png"},"AM":{"name":"Armenia","flag":"/flags/am.png"},"AO":{"name":"Angola","flag":"/flags/ao.png"},"AQ":{"name":"Antarctica","flag":"/flags/aq.png"},"AR":{"name":"Argentina","flag":"/flags/ar.png"},"AS":{"name":"Samoa (American)","flag":"/flags/as.png"},"AT":{"name":"Austria","flag":"/flags/at.png"},"AU":{"name":"Australia","flag":"/flags/au.png"},"AW":{"name":"Aruba","flag":"/flags/aw.png"},"AX":{"name":"Åland Islands","flag":"/flags/ax.png"},"AZ":{"name":"Azerbaijan","flag":"/flags/az.png"},"BA":{"name":"Bosnia & Herzegovina","flag":"/flags/ba.png"},"BB":{"name":"Barbados","flag":"/flags/bb.png"},"BD":{"name":"Bangladesh","flag":"/flags/bd.png"},"BE":{"name":"Belgium","flag":"/flags/be.png"},"BF":{"name":"Burkina Faso","flag":"/flags/bf.png"},"BG":{"name":"Bulgaria","flag":"/flags/bg.png"},"BH":{"name":"Bahrain","flag":"/flags/bh.png"},"BI":{"name":"Burundi","flag":"/flags/bi.png"},"BJ":{"name":"Benin","flag":"/flags/bj.png"},"BL":{"name":"St Barthelemy","flag":"/flags/bl.png"},"BM":{"name":"Bermuda","flag":"/flags/bm.png"},"BN":{"name":"Brunei","flag":"/flags/bn.png"},"BO":{"name":"Bolivia","flag":"/flags/bo.png"},"BQ":{"name":"Caribbean NL","flag":"/flags/bq.png"},"BR":{"name":"Brazil","flag":"/flags/br.png"},"BS":{"name":"Bahamas","flag":"/flags/bs.png"},"BT":{"name":"Bhutan","flag":"/flags/bt.png"},"BW":{"name":"Botswana","flag":"/flags/bw.png"},"BY":{"name":"Belarus","flag":"/flags/by.png"},"BZ":{"name":"Belize","flag":"/flags/bz.png"},"CA":{"name":"Canada","flag":"/flags/ca.png"},"CC":{"name":"Cocos (Keeling) Islands","flag":"/flags/cc.png"},"CD":{"name":"Congo (Dem. Rep.)","flag":"/flags/cd.png"},"CF":{"name":"Central African Rep.","flag":"/flags/cf.png"},"CG":{"name":"Congo (Rep.)","flag":"/flags/cg.png"},"CH":{"name":"Switzerland","flag":"/flags/ch.png"},"CI":{"name":"Côte d’Ivoire","flag":"/flags/ci.png"},"CK":{"name":"Cook Islands","flag":"/flags/ck.png"},"CL":{"name":"Chile","flag":"/flags/cl.png"},"CM":{"name":"Cameroon","flag":"/flags/cm.png"},"CN":{"name":"China","flag":"/flags/cn.png"},"CO":{"name":"Colombia","flag":"/flags/co.png"},"CR":{"name":"Costa Rica","flag":"/flags/cr.png"},"CU":{"name":"Cuba","flag":"/flags/cu.png"},"CV":{"name":"Cape Verde","flag":"/flags/cv.png"},"CW":{"name":"Curaçao","flag":"/flags/cw.png"},"CX":{"name":"Christmas Island","flag":"/flags/cx.png"},"CY":{"name":"Cyprus","flag":"/flags/cy.png"},"CZ":{"name":"Czech Republic","flag":"/flags/cz.png"},"DE":{"name":"Germany","flag":"/flags/de.png"},"DJ":{"name":"Djibouti","flag":"/flags/dj.png"},"DK":{"name":"Denmark","flag":"/flags/dk.png"},"DM":{"name":"Dominica","flag":"/flags/dm.png"},"DO":{"name":"Dominican Republic","flag":"/flags/do.png"},"DZ":{"name":"Algeria","flag":"/flags/dz.png"},"EC":{"name":"Ecuador","flag":"/flags/ec.png"},"EE":{"name":"Estonia","flag":"/flags/ee.png"},"EG":{"name":"Egypt","flag":"/flags/eg.png"},"EH":{"name":"Western Sahara","flag":"/flags/eh.png"},"ER":{"name":"Eritrea","flag":"/flags/er.png"},"ES":{"name":"Spain","flag":"/flags/es.png"},"ET":{"name":"Ethiopia","flag":"/flags/et.png"},"FI":{"name":"Finland","flag":"/flags/fi.png"},"FJ":{"name":"Fiji","flag":"/flags/fj.png"},"FK":{"name":"Falkland Islands","flag":"/flags/fk.png"},"FM":{"name":"Micronesia","flag":"/flags/fm.png"},"FO":{"name":"Faroe Islands","flag":"/flags/fo.png"},"FR":{"name":"France","flag":"/flags/fr.png"},"GA":{"name":"Gabon","flag":"/flags/ga.png"},"GB":{"name":"Britain (UK)","flag":"/flags/gb.png"},"GD":{"name":"Grenada","flag":"/flags/gd.png"},"GE":{"name":"Georgia","flag":"/flags/ge.png"},"GF":{"name":"French Guiana","flag":"/flags/gf.png"},"GG":{"name":"Guernsey","flag":"/flags/gg.png"},"GH":{"name":"Ghana","flag":"/flags/gh.png"},"GI":{"name":"Gibraltar","flag":"/flags/gi.png"},"GL":{"name":"Greenland","flag":"/flags/gl.png"},"GM":{"name":"Gambia","flag":"/flags/gm.png"},"GN":{"name":"Guinea","flag":"/flags/gn.png"},"GP":{"name":"Guadeloupe","flag":"/flags/gp.png"},"GQ":{"name":"Equatorial Guinea","flag":"/flags/gq.png"},"GR":{"name":"Greece","flag":"/flags/gr.png"},"GS":{"name":"South Georgia & the South Sandwich Islands","flag":"/flags/gs.png"},"GT":{"name":"Guatemala","flag":"/flags/gt.png"},"GU":{"name":"Guam","flag":"/flags/gu.png"},"GW":{"name":"Guinea-Bissau","flag":"/flags/gw.png"},"GY":{"name":"Guyana","flag":"/flags/gy.png"},"HK":{"name":"Hong Kong","flag":"/flags/hk.png"},"HN":{"name":"Honduras","flag":"/flags/hn.png"},"HR":{"name":"Croatia","flag":"/flags/hr.png"},"HT":{"name":"Haiti","flag":"/flags/ht.png"},"HU":{"name":"Hungary","flag":"/flags/hu.png"},"ID":{"name":"Indonesia","flag":"/flags/id.png"},"IE":{"name":"Ireland","flag":"/flags/ie.png"},"IL":{"name":"Israel","flag":"/flags/il.png"},"IM":{"name":"Isle of Man","flag":"/flags/im.png"},"IN":{"name":"India","flag":"/flags/in.png"},"IO":{"name":"British Indian Ocean Territory","flag":"/flags/io.png"},"IQ":{"name":"Iraq","flag":"/flags/iq.png"},"IR":{"name":"Iran","flag":"/flags/ir.png"},"IS":{"name":"Iceland","flag":"/flags/is.png"},"IT":{"name":"Italy","flag":"/flags/it.png"},"JE":{"name":"Jersey","flag":"/flags/je.png"},"JM":{"name":"Jamaica","flag":"/flags/jm.png"},"JO":{"name":"Jordan","flag":"/flags/jo.png"},"JP":{"name":"Japan","flag":"/flags/jp.png"},"KE":{"name":"Kenya","flag":"/flags/ke.png"},"KG":{"name":"Kyrgyzstan","flag":"/flags/kg.png"},"KH":{"name":"Cambodia","flag":"/flags/kh.png"},"KI":{"name":"Kiribati","flag":"/flags/ki.png"},"KM":{"name":"Comoros","flag":"/flags/km.png"},"KN":{"name":"St Kitts & Nevis","flag":"/flags/kn.png"},"KP":{"name":"Korea (North)","flag":"/flags/kp.png"},"KR":{"name":"Korea (South)","flag":"/flags/kr.png"},"KW":{"name":"Kuwait","flag":"/flags/kw.png"},"KY":{"name":"Cayman Islands","flag":"/flags/ky.png"},"KZ":{"name":"Kazakhstan","flag":"/flags/kz.png"},"LA":{"name":"Laos","flag":"/flags/la.png"},"LB":{"name":"Lebanon","flag":"/flags/lb.png"},"LC":{"name":"St Lucia","flag":"/flags/lc.png"},"LI":{"name":"Liechtenstein","flag":"/flags/li.png"},"LK":{"name":"Sri Lanka","flag":"/flags/lk.png"},"LR":{"name":"Liberia","flag":"/flags/lr.png"},"LS":{"name":"Lesotho","flag":"/flags/ls.png"},"LT":{"name":"Lithuania","flag":"/flags/lt.png"},"LU":{"name":"Luxembourg","flag":"/flags/lu.png"},"LV":{"name":"Latvia","flag":"/flags/lv.png"},"LY":{"name":"Libya","flag":"/flags/ly.png"},"MA":{"name":"Morocco","flag":"/flags/ma.png"},"MC":{"name":"Monaco","flag":"/flags/mc.png"},"MD":{"name":"Moldova","flag":"/flags/md.png"},"ME":{"name":"Montenegro","flag":"/flags/me.png"},"MF":{"name":"St Martin (French)","flag":"/flags/mf.png"},"MG":{"name":"Madagascar","flag":"/flags/mg.png"},"MH":{"name":"Marshall Islands","flag":"/flags/mh.png"},"MK":{"name":"North Macedonia","flag":"/flags/mk.png"},"ML":{"name":"Mali","flag":"/flags/ml.png"},"MM":{"name":"Myanmar (Burma)","flag":"/flags/mm.png"},"MN":{"name":"Mongolia","flag":"/flags/mn.png"},"MO":{"name":"Macau","flag":"/flags/mo.png"},"MP":{"name":"Northern Mariana Islands","flag":"/flags/mp.png"},"MQ":{"name":"Martinique","flag":"/flags/mq.png"},"MR":{"name":"Mauritania","flag":"/flags/mr.png"},"MS":{"name":"Montserrat","flag":"/flags/ms.png"},"MT":{"name":"Malta","flag":"/flags/mt.png"},"MU":{"name":"Mauritius","flag":"/flags/mu.png"},"MV":{"name":"Maldives","flag":"/flags/mv.png"},"MW":{"name":"Malawi","flag":"/flags/mw.png"},"MX":{"name":"Mexico","flag":"/flags/mx.png"},"MY":{"name":"Malaysia","flag":"/flags/my.png"},"MZ":{"name":"Mozambique","flag":"/flags/mz.png"},"NA":{"name":"Namibia","flag":"/flags/na.png"},"NC":{"name":"New Caledonia","flag":"/flags/nc.png"},"NE":{"name":"Niger","flag":"/flags/ne.png"},"NF":{"name":"Norfolk Island","flag":"/flags/nf.png"},"NG":{"name":"Nigeria","flag":"/flags/ng.png"},"NI":{"name":"Nicaragua","flag":"/flags/ni.png"},"NL":{"name":"Netherlands","flag":"/flags/nl.png"},"NO":{"name":"Norway","flag":"/flags/no.png"},"NP":{"name":"Nepal","flag":"/flags/np.png"},"NR":{"name":"Nauru","flag":"/flags/nr.png"},"NU":{"name":"Niue","flag":"/flags/nu.png"},"NZ":{"name":"New Zealand","flag":"/flags/nz.png"},"OM":{"name":"Oman","flag":"/flags/om.png"},"PA":{"name":"Panama","flag":"/flags/pa.png"},"PE":{"name":"Peru","flag":"/flags/pe.png"},"PF":{"name":"French Polynesia","flag":"/flags/pf.png"},"PG":{"name":"Papua New Guinea","flag":"/flags/pg.png"},"PH":{"name":"Philippines","flag":"/flags/ph.png"},"PK":{"name":"Pakistan","flag":"/flags/pk.png"},"PL":{"name":"Poland","flag":"/flags/pl.png"},"PM":{"name":"St Pierre & Miquelon","flag":"/flags/pm.png"},"PN":{"name":"Pitcairn","flag":"/flags/pn.png"},"PR":{"name":"Puerto Rico","flag":"/flags/pr.png"},"PS":{"name":"Palestine","flag":"/flags/ps.png"},"PT":{"name":"Portugal","flag":"/flags/pt.png"},"PW":{"name":"Palau","flag":"/flags/pw.png"},"PY":{"name":"Paraguay","flag":"/flags/py.png"},"QA":{"name":"Qatar","flag":"/flags/qa.png"},"RE":{"name":"Réunion","flag":"/flags/re.png"},"RO":{"name":"Romania","flag":"/flags/ro.png"},"RS":{"name":"Serbia","flag":"/flags/rs.png"},"RU":{"name":"Russia","flag":"/flags/ru.png"},"RW":{"name":"Rwanda","flag":"/flags/rw.png"},"SA":{"name":"Saudi Arabia","flag":"/flags/sa.png"},"SB":{"name":"Solomon Islands","flag":"/flags/sb.png"},"SC":{"name":"Seychelles","flag":"/flags/sc.png"},"SD":{"name":"Sudan","flag":"/flags/sd.png"},"SE":{"name":"Sweden","flag":"/flags/se.png"},"SG":{"name":"Singapore","flag":"/flags/sg.png"},"SH":{"name":"St Helena","flag":"/flags/sh.png"},"SI":{"name":"Slovenia","flag":"/flags/si.png"},"SJ":{"name":"Svalbard & Jan Mayen","flag":"/flags/sj.png"},"SK":{"name":"Slovakia","flag":"/flags/sk.png"},"SL":{"name":"Sierra Leone","flag":"/flags/sl.png"},"SM":{"name":"San Marino","flag":"/flags/sm.png"},"SN":{"name":"Senegal","flag":"/flags/sn.png"},"SO":{"name":"Somalia","flag":"/flags/so.png"},"SR":{"name":"Suriname","flag":"/flags/sr.png"},"SS":{"name":"South Sudan","flag":"/flags/ss.png"},"ST":{"name":"Sao Tome & Principe","flag":"/flags/st.png"},"SV":{"name":"El Salvador","flag":"/flags/sv.png"},"SX":{"name":"St Maarten (Dutch)","flag":"/flags/sx.png"},"SY":{"name":"Syria","flag":"/flags/sy.png"},"SZ":{"name":"Eswatini (Swaziland)","flag":"/flags/sz.png"},"TC":{"name":"Turks & Caicos Is","flag":"/flags/tc.png"},"TD":{"name":"Chad","flag":"/flags/td.png"},"TF":{"name":"French S. Terr.","flag":"/flags/tf.png"},"TG":{"name":"Togo","flag":"/flags/tg.png"},"TH":{"name":"Thailand","flag":"/flags/th.png"},"TJ":{"name":"Tajikistan","flag":"/flags/tj.png"},"TK":{"name":"Tokelau","flag":"/flags/tk.png"},"TL":{"name":"East Timor","flag":"/flags/tl.png"},"TM":{"name":"Turkmenistan","flag":"/flags/tm.png"},"TN":{"name":"Tunisia","flag":"/flags/tn.png"},"TO":{"name":"Tonga","flag":"/flags/to.png"},"TR":{"name":"Turkey","flag":"/flags/tr.png"},"TT":{"name":"Trinidad & Tobago","flag":"/flags/tt.png"},"TV":{"name":"Tuvalu","flag":"/flags/tv.png"},"TW":{"name":"Taiwan","flag":"/flags/tw.png"},"TZ":{"name":"Tanzania","flag":"/flags/tz.png"},"UA":{"name":"Ukraine","flag":"/flags/ua.png"},"UG":{"name":"Uganda","flag":"/flags/ug.png"},"UM":{"name":"US minor outlying islands","flag":"/flags/um.png"},"US":{"name":"United States","flag":"/flags/us.png"},"UY":{"name":"Uruguay","flag":"/flags/uy.png"},"UZ":{"name":"Uzbekistan","flag":"/flags/uz.png"},"VA":{"name":"Vatican City","flag":"/flags/va.png"},"VC":{"name":"St Vincent","flag":"/flags/vc.png"},"VE":{"name":"Venezuela","flag":"/flags/ve.png"},"VG":{"name":"Virgin Islands (UK)","flag":"/flags/vg.png"},"VI":{"name":"Virgin Islands (US)","flag":"/flags/vi.png"},"VN":{"name":"Vietnam","flag":"/flags/vn.png"},"VU":{"name":"Vanuatu","flag":"/flags/vu.png"},"WF":{"name":"Wallis & Futuna","flag":"/flags/wf.png"},"WS":{"name":"Samoa (western)","flag":"/flags/ws.png"},"YE":{"name":"Yemen","flag":"/flags/ye.png"},"YT":{"name":"Mayotte","flag":"/flags/yt.png"},"ZA":{"name":"South Africa","flag":"/flags/za.png"},"ZM":{"name":"Zambia","flag":"/flags/zm.png"},"ZW":{"name":"Zimbabwe","flag":"/flags/zw.png"}},"zones":{"Africa/Abidjan":"CI","Africa/Accra":"GH","Africa/Addis_Ababa":"ET","Africa/Algiers":"DZ","Africa/Asmara":"ER","Africa/Asmera":"ER","Africa/Bamako":"ML","Africa/Bangui":"CF","Africa/Banjul":"GM","Africa/Bissau":"GW","Africa/Blantyre":"MW","Africa/Brazzaville":"CG","Africa/Bujumbura":"BI","Africa/Cairo":"EG","Africa/Casablanca":"MA","Africa/Ceuta":"ES","Africa/Conakry":"GN","Africa/Dakar":"SN","Africa/Dar_es_Salaam":"TZ","Africa/Djibouti":"DJ","Africa/Douala":"CM","Africa/El_Aaiun":"EH","Africa/Freetown":"SL","Africa/Gaborone":"BW","Africa/Harare":"ZW","Africa/Johannesburg":"ZA","Africa/Juba":"SS","Africa/Kampala":"UG","Africa/Khartoum":"SD","Africa/Kigali":"RW","Africa/Kinshasa":"CD","Africa/Lagos":"NG","Africa/Libreville":"GA","Africa/Lome":"TG","Africa/Luanda":"AO","Africa/Lubumbashi":"CD","Africa/Lusaka":"ZM","Africa/Malabo":"GQ","Africa/Maputo":"MZ","Africa/Maseru":"LS","Africa/Mbabane":"SZ","Africa/Mogadishu":"SO","Africa/Monrovia":"LR","Africa/Nairobi":"KE","Africa/Ndjamena":"TD","Africa/Niamey":"NE","Africa/Nouakchott":"MR","Africa/Ouagadougou":"BF","Africa/Porto-Novo":"BJ","Africa/Sao_Tome":"ST","Africa/Timbuktu":"CI","Africa/Tripoli":"LY","Africa/Tunis":"TN","Africa/Windhoek":"NA","America/Adak":"US","America/Anchorage":"US","America/Anguilla":"AI","America/Antigua":"AG","America/Araguaina":"BR","America/Argentina/Buenos_Aires":"AR","America/Argentina/Catamarca":"AR","America/Argentina/ComodRivadavia":"AR","America/Argentina/Cordoba":"AR","America/Argentina/Jujuy":"AR","America/Argentina/La_Rioja":"AR","America/Argentina/Mendoza":"AR","America/Argentina/Rio_Gallegos":"AR","America/Argentina/Salta":"AR","America/Argentina/San_Juan":"AR","America/Argentina/San_Luis":"AR","America/Argentina/Tucuman":"AR","America/Argentina/Ushuaia":"AR","America/Aruba":"AW","America/Asuncion":"PY","America/Atikokan":"CA","America/Atka":"US","America/Bahia":"BR","America/Bahia_Banderas":"MX","America/Barbados":"BB","America/Belem":"BR","America/Belize":"BZ","America/Blanc-Sablon":"CA","America/Boa_Vista":"BR","America/Bogota":"CO","America/Boise":"US","America/Buenos_Aires":"AR","America/Cambridge_Bay":"CA","America/Campo_Grande":"BR","America/Cancun":"MX","America/Caracas":"VE","America/Catamarca":"AR","America/Cayenne":"GF","America/Cayman":"KY","America/Chicago":"US","America/Chihuahua":"MX","America/Ciudad_Juarez":"MX","America/Coral_Harbour":"PA","America/Cordoba":"AR","America/Costa_Rica":"CR","America/Coyhaique":"CL","America/Creston":"CA","America/Cuiaba":"BR","America/Curacao":"CW","America/Danmarkshavn":"GL","America/Dawson":"CA","America/Dawson_Creek":"CA","America/Denver":"US","America/Detroit":"US","America/Dominica":"DM","America/Edmonton":"CA","America/Eirunepe":"BR","America/El_Salvador":"SV","America/Ensenada":"MX","America/Fort_Nelson":"CA","America/Fort_Wayne":"US","America/Fortaleza":"BR","America/Glace_Bay":"CA","America/Godthab":"GL","America/Goose_Bay":"CA","America/Grand_Turk":"TC","America/Grenada":"GD","America/Guadeloupe":"GP","America/Guatemala":"GT","America/Guayaquil":"EC","America/Guyana":"GY","America/Halifax":"CA","America/Havana":"CU","America/Hermosillo":"MX","America/Indiana/Indianapolis":"US","America/Indiana/Knox":"US","America/Indiana/Marengo":"US","America/Indiana/Petersburg":"US","America/Indiana/Tell_City":"US","America/Indiana/Vevay":"US","America/Indiana/Vincennes":"US","America/Indiana/Winamac":"US","America/Indianapolis":"US","America/Inuvik":"CA","America/Iqaluit":"CA","America/Jamaica":"JM","America/Jujuy":"AR","America/Juneau":"US","America/Kentucky/Louisville":"US","America/Kentucky/Monticello":"US","America/Knox_IN":"US","America/Kralendijk":"BQ","America/La_Paz":"BO","America/Lima":"PE","America/Los_Angeles":"US","America/Louisville":"US","America/Lower_Princes":"SX","America/Maceio":"BR","America/Managua":"NI","America/Manaus":"BR","America/Marigot":"MF","America/Martinique":"MQ","America/Matamoros":"MX","America/Mazatlan":"MX","America/Mendoza":"AR","America/Menominee":"US","America/Merida":"MX","America/Metlakatla":"US","America/Mexico_City":"MX","America/Miquelon":"PM","America/Moncton":"CA","America/Monterrey":"MX","America/Montevideo":"UY","America/Montreal":"CA","America/Montserrat":"MS","America/Nassau":"BS","America/New_York":"US","America/Nipigon":"CA","America/Nome":"US","America/Noronha":"BR","America/North_Dakota/Beulah":"US","America/North_Dakota/Center":"US","America/North_Dakota/New_Salem":"US","America/Nuuk":"GL","America/Ojinaga":"MX","America/Panama":"PA","America/Pangnirtung":"CA","America/Paramaribo":"SR","America/Phoenix":"US","America/Port_of_Spain":"TT","America/Port-au-Prince":"HT","America/Porto_Acre":"BR","America/Porto_Velho":"BR","America/Puerto_Rico":"PR","America/Punta_Arenas":"CL","America/Rainy_River":"CA","America/Rankin_Inlet":"CA","America/Recife":"BR","America/Regina":"CA","America/Resolute":"CA","America/Rio_Branco":"BR","America/Rosario":"AR","America/Santa_Isabel":"MX","America/Santarem":"BR","America/Santiago":"CL","America/Santo_Domingo":"DO","America/Sao_Paulo":"BR","America/Scoresbysund":"GL","America/Shiprock":"US","America/Sitka":"US","America/St_Barthelemy":"BL","America/St_Johns":"CA","America/St_Kitts":"KN","America/St_Lucia":"LC","America/St_Thomas":"VI","America/St_Vincent":"VC","America/Swift_Current":"CA","America/Tegucigalpa":"HN","America/Thule":"GL","America/Thunder_Bay":"CA","America/Tijuana":"MX","America/Toronto":"CA","America/Tortola":"VG","America/Vancouver":"CA","America/Virgin":"VI","America/Whitehorse":"CA","America/Winnipeg":"CA","America/Yakutat":"US","America/Yellowknife":"CA","Antarctica/Casey":"AQ","Antarctica/Davis":"AQ","Antarctica/DumontDUrville":"AQ","Antarctica/Macquarie":"AU","Antarctica/Mawson":"AQ","Antarctica/McMurdo":"AQ","Antarctica/Palmer":"AQ","Antarctica/Rothera":"AQ","Antarctica/South_Pole":"NZ","Antarctica/Syowa":"AQ","Antarctica/Troll":"AQ","Antarctica/Vostok":"AQ","Arctic/Longyearbyen":"SJ","Asia/Aden":"YE","Asia/Almaty":"KZ","Asia/Amman":"JO","Asia/Anadyr":"RU","Asia/Aqtau":"KZ","Asia/Aqtobe":"KZ","Asia/Ashgabat":"TM","Asia/Ashkhabad":"TM","Asia/Atyrau":"KZ","Asia/Baghdad":"IQ","Asia/Bahrain":"BH","Asia/Baku":"AZ","Asia/Bangkok":"TH","Asia/Barnaul":"RU","Asia/Beirut":"LB","Asia/Bishkek":"KG","Asia/Brunei":"BN","Asia/Calcutta":"IN","Asia/Chita":"RU","Asia/Choibalsan":"MN","Asia/Chongqing":"CN","Asia/Chungking":"CN","Asia/Colombo":"LK","Asia/Dacca":"BD","Asia/Damascus":"SY","Asia/Dhaka":"BD","Asia/Dili":"TL","Asia/Dubai":"AE","Asia/Dushanbe":"TJ","Asia/Famagusta":"CY","Asia/Gaza":"PS","Asia/Harbin":"CN","Asia/Hebron":"PS","Asia/Ho_Chi_Minh":"VN","Asia/Hong_Kong":"HK","Asia/Hovd":"MN","Asia/Irkutsk":"RU","Asia/Istanbul":"TR","Asia/Jakarta":"ID","Asia/Jayapura":"ID","Asia/Jerusalem":"IL","Asia/Kabul":"AF","Asia/Kamchatka":"RU","Asia/Karachi":"PK","Asia/Kashgar":"CN","Asia/Kathmandu":"NP","Asia/Katmandu":"NP","Asia/Khandyga":"RU","Asia/Kolkata":"IN","Asia/Krasnoyarsk":"RU","Asia/Kuala_Lumpur":"MY","Asia/Kuching":"MY","Asia/Kuwait":"KW","Asia/Macao":"MO","Asia/Macau":"MO","Asia/Magadan":"RU","Asia/Makassar":"ID","Asia/Manila":"PH","Asia/Muscat":"OM","Asia/Nicosia":"CY","Asia/Novokuznetsk":"RU","Asia/Novosibirsk":"RU","Asia/Omsk":"RU","Asia/Oral":"KZ","Asia/Phnom_Penh":"KH","Asia/Pontianak":"ID","Asia/Pyongyang":"KP","Asia/Qatar":"QA","Asia/Qostanay":"KZ","Asia/Qyzylorda":"KZ","Asia/Rangoon":"MM","Asia/Riyadh":"SA","Asia/Saigon":"VN","Asia/Sakhalin":"RU","Asia/Samarkand":"UZ","Asia/Seoul":"KR","Asia/Shanghai":"CN","Asia/Singapore":"SG","Asia/Srednekolymsk":"RU","Asia/Taipei":"TW","Asia/Tashkent":"UZ","Asia/Tbilisi":"GE","Asia/Tehran":"IR","Asia/Tel_Aviv":"IL","Asia/Thimbu":"BT","Asia/Thimphu":"BT","Asia/Tokyo":"JP","Asia/Tomsk":"RU","Asia/Ujung_Pandang":"ID","Asia/Ulaanbaatar":"MN","Asia/Ulan_Bator":"MN","Asia/Urumqi":"CN","Asia/Ust-Nera":"RU","Asia/Vientiane":"LA","Asia/Vladivostok":"RU","Asia/Yakutsk":"RU","Asia/Yangon":"MM","Asia/Yekaterinburg":"RU","Asia/Yerevan":"AM","Atlantic/Azores":"PT","Atlantic/Bermuda":"BM","Atlantic/Canary":"ES","Atlantic/Cape_Verde":"CV","Atlantic/Faeroe":"FO","Atlantic/Faroe":"FO","Atlantic/Jan_Mayen":"DE","Atlantic/Madeira":"PT","Atlantic/Reykjavik":"IS","Atlantic/South_Georgia":"GS","Atlantic/St_Helena":"SH","Atlantic/Stanley":"FK","Australia/ACT":"AU","Australia/Adelaide":"AU","Australia/Brisbane":"AU","Australia/Broken_Hill":"AU","Australia/Canberra":"AU","Australia/Currie":"AU","Australia/Darwin":"AU","Australia/Eucla":"AU","Australia/Hobart":"AU","Australia/LHI":"AU","Australia/Lindeman":"AU","Australia/Lord_Howe":"AU","Australia/Melbourne":"AU","Australia/North":"AU","Australia/NSW":"AU","Australia/Perth":"AU","Australia/Queensland":"AU","Australia/South":"AU","Australia/Sydney":"AU","Australia/Tasmania":"AU","Australia/Victoria":"AU","Australia/West":"AU","Australia/Yancowinna":"AU","Brazil/Acre":"BR","Brazil/DeNoronha":"BR","Brazil/East":"BR","Brazil/West":"BR","Canada/Atlantic":"CA","Canada/Central":"CA","Canada/Eastern":"CA","Canada/Mountain":"CA","Canada/Newfoundland":"CA","Canada/Pacific":"CA","Canada/Saskatchewan":"CA","Canada/Yukon":"CA","Chile/Continental":"CL","Chile/EasterIsland":"CL","Europe/Amsterdam":"NL","Europe/Andorra":"AD","Europe/Astrakhan":"RU","Europe/Athens":"GR","Europe/Belfast":"GB","Europe/Belgrade":"RS","Europe/Berlin":"DE","Europe/Bratislava":"SK","Europe/Brussels":"BE","Europe/Bucharest":"RO","Europe/Budapest":"HU","Europe/Busingen":"DE","Europe/Chisinau":"MD","Europe/Copenhagen":"DK","Europe/Dublin":"IE","Europe/Gibraltar":"GI","Europe/Guernsey":"GG","Europe/Helsinki":"FI","Europe/Isle_of_Man":"IM","Europe/Istanbul":"TR","Europe/Jersey":"JE","Europe/Kaliningrad":"RU","Europe/Kiev":"UA","Europe/Kirov":"RU","Europe/Kyiv":"UA","Europe/Lisbon":"PT","Europe/Ljubljana":"SI","Europe/London":"GB","Europe/Luxembourg":"LU","Europe/Madrid":"ES","Europe/Malta":"MT","Europe/Mariehamn":"AX","Europe/Minsk":"BY","Europe/Monaco":"MC","Europe/Moscow":"RU","Europe/Nicosia":"CY","Europe/Oslo":"NO","Europe/Paris":"FR","Europe/Podgorica":"ME","Europe/Prague":"CZ","Europe/Riga":"LV","Europe/Rome":"IT","Europe/Samara":"RU","Europe/San_Marino":"SM","Europe/Sarajevo":"BA","Europe/Saratov":"RU","Europe/Simferopol":"UA","Europe/Skopje":"MK","Europe/Sofia":"BG","Europe/Stockholm":"SE","Europe/Tallinn":"EE","Europe/Tirane":"AL","Europe/Tiraspol":"MD","Europe/Ulyanovsk":"RU","Europe/Uzhgorod":"UA","Europe/Vaduz":"LI","Europe/Vatican":"VA","Europe/Vienna":"AT","Europe/Vilnius":"LT","Europe/Volgograd":"RU","Europe/Warsaw":"PL","Europe/Zagreb":"HR","Europe/Zaporozhye":"UA","Europe/Zurich":"CH","Iceland":"IS","Indian/Antananarivo":"MG","Indian/Chagos":"IO","Indian/Christmas":"CX","Indian/Cocos":"CC","Indian/Comoro":"KM","Indian/Kerguelen":"TF","Indian/Mahe":"SC","Indian/Maldives":"MV","Indian/Mauritius":"MU","Indian/Mayotte":"YT","Indian/Reunion":"RE","Mexico/BajaNorte":"MX","Mexico/BajaSur":"MX","Mexico/General":"MX","Navajo":"US","Pacific/Apia":"WS","Pacific/Auckland":"NZ","Pacific/Bougainville":"PG","Pacific/Chatham":"NZ","Pacific/Chuuk":"FM","Pacific/Easter":"CL","Pacific/Efate":"VU","Pacific/Enderbury":"KI","Pacific/Fakaofo":"TK","Pacific/Fiji":"FJ","Pacific/Funafuti":"TV","Pacific/Galapagos":"EC","Pacific/Gambier":"PF","Pacific/Guadalcanal":"SB","Pacific/Guam":"GU","Pacific/Honolulu":"US","Pacific/Johnston":"US","Pacific/Kanton":"KI","Pacific/Kiritimati":"KI","Pacific/Kosrae":"FM","Pacific/Kwajalein":"MH","Pacific/Majuro":"MH","Pacific/Marquesas":"PF","Pacific/Midway":"UM","Pacific/Nauru":"NR","Pacific/Niue":"NU","Pacific/Norfolk":"NF","Pacific/Noumea":"NC","Pacific/Pago_Pago":"AS","Pacific/Palau":"PW","Pacific/Pitcairn":"PN","Pacific/Pohnpei":"FM","Pacific/Ponape":"FM","Pacific/Port_Moresby":"PG","Pacific/Rarotonga":"CK","Pacific/Saipan":"MP","Pacific/Samoa":"AS","Pacific/Tahiti":"PF","Pacific/Tarawa":"KI","Pacific/Tongatapu":"TO","Pacific/Truk":"FM","Pacific/Wake":"UM","Pacific/Wallis":"WF","Pacific/Yap":"PG","US/Alaska":"US","US/Aleutian":"US","US/Arizona":"US","US/Central":"US","US/East-Indiana":"US","US/Eastern":"US","US/Hawaii":"US","US/Indiana-Starke":"US","US/Michigan":"US","US/Mountain":"US","US/Pacific":"US","US/Samoa":"AS"}}});
+})();</script>
+
+
+
 <script data-share-script>
     (function () {
       var root = document.querySelector('.footer-share');
