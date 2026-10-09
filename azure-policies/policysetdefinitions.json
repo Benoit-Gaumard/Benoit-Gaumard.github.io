@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T10:51:58.391Z",
+  "generatedAt": "2026-10-08T13:02:15.002Z",
   "source": "Get-AzPolicySetDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
   "totalInitiatives": 188,
   "totalCategories": 23,
@@ -1902,7 +1902,7 @@
       "displayName": "[Deprecated]: Azure Security Benchmark v2",
       "description": "This initiative has been deprecated. The Azure Security Benchmark v2 policy set is now represented in the consolidated Azure Security Benchmark initiative, which also serves as the Azure Security Center default policy initiative. Please assign that initiative, or manage its policies and compliance results within Azure Security Center",
       "category": "Regulatory Compliance",
-      "version": "11.13.0-deprecated",
+      "version": "11.14.0-deprecated",
       "policyType": "BuiltIn",
       "policyCount": 144,
       "policies": [
@@ -7925,9 +7925,9 @@
       "displayName": "[Preview]: Enforce Encryption-in-Transit across Azure Services - TLS Version",
       "description": "Help restrict and audit Azure Services to use latest TLS versions",
       "category": "Sovereignty",
-      "version": "1.1.0-preview",
+      "version": "1.2.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 20,
+      "policyCount": 29,
       "policies": [
         {
           "id": "8b5c654c-fb07-471b-aa8f-15fea733f140",
@@ -8065,6 +8065,69 @@
         {
           "id": "bb3c7464-033e-41ee-81dc-480fde675b20",
           "referenceId": "tlsOnArcSQLManagedInstance",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f38646be-b908-491a-bc9b-fd507154f709",
+          "referenceId": "minTLSOnRedisCache",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c089a722-0fbf-4a16-ab4f-1f5065291844",
+          "referenceId": "minTLSOnEventGridDomain",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "786761a8-5b7f-4b82-bfb1-df2d008c16fc",
+          "referenceId": "minTLSOnEventGridNamespace",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "fd7fab04-d4f7-4991-aacd-b6bbd2557ff2",
+          "referenceId": "minTLSOnEventGridTopic",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "74d00793-ec3a-4504-94e3-0ec66963833b",
+          "referenceId": "minTLSOnIoTHub",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c8656c68-eb4e-4f72-a90a-54b6bfbd3c33",
+          "referenceId": "minTLSOnAPIManagementGatewayHostnameConfig",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "403594a1-5989-4edd-8ea3-cac19a8cc43a",
+          "referenceId": "minTLSOnServiceBusNamespace",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0ecbe514-db62-4284-992e-6dc3cde83d2b",
+          "referenceId": "minTLSOnEventHubNamespace",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "6313cbe8-6fb7-451b-a9e3-3f23b59843ca",
+          "referenceId": "minTLSOnApplicationGateway",
           "groupNames": [
             null
           ]
@@ -8410,9 +8473,9 @@
       "displayName": "[Preview]: Private Endpoint configured across Azure Services",
       "description": "Help audit Azure services to ensure private endpoints are configured by leveraging Azure Private Link",
       "category": "Sovereignty",
-      "version": "1.0.0-preview",
+      "version": "1.1.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 40,
+      "policyCount": 48,
       "policies": [
         {
           "id": "d6759c02-b87f-42b7-892e-71b3f471d782",
@@ -8693,6 +8756,62 @@
           "groupNames": [
             null
           ]
+        },
+        {
+          "id": "12e7176a-4919-47ef-922b-34eda4c7f0ce",
+          "referenceId": "privateLinkScopeOnAzureArcKubernetesClusters",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "efa3f296-ff2b-4f38-bc0d-5ef12c965b68",
+          "referenceId": "privateLinkScopeOnAzureArcServers",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "1abc5157-29f8-4dbd-b28e-ff99526cb8b7",
+          "referenceId": "privateEndpointOnElasticSanVolumeGroups",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "64528841-2f92-43f6-a137-d52e5c3dbeac",
+          "referenceId": "privateEndpointOnHealthDataServicesWorkspaces",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f39f5f49-4abf-44de-8c70-0756997bfb51",
+          "referenceId": "privateEndpointOnDiskAccessResources",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "960e650e-9ce3-4316-9590-8ee2c016ca2f",
+          "referenceId": "privateEndpointOnAzureCacheForRedisEnterprise",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0fc55270-f8bf-4feb-b7b8-5e7e7eacc6a6",
+          "referenceId": "privateEndpointOnAzureMonitorPrivateLinkScopes",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c8cc2f85-e019-4065-9fa3-5e6a2b2dde56",
+          "referenceId": "privateEndpointOnHDInsight",
+          "groupNames": [
+            null
+          ]
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/b71f6054-d890-4c78-b809-2ae9dc6a0cfc"
@@ -8952,9 +9071,9 @@
       "displayName": "[Preview]: Restrict Public Network Access across Azure Services",
       "description": "Help restrict Azure services to disable public network access, reducing exposure to the public internet",
       "category": "Sovereignty",
-      "version": "1.0.0-preview",
+      "version": "1.1.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 44,
+      "policyCount": 51,
       "policies": [
         {
           "id": "ee980b6d-0eca-4501-8d54-f6290fd512c3",
@@ -9260,6 +9379,55 @@
         {
           "id": "c5f34731-7ab9-42ff-922d-ef4920068b74",
           "referenceId": "disablePublicNetworkAccessOnHealthDataServicesDeidentificationService",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "df73bd95-24da-4a4f-96b9-4e8b94b402bd",
+          "referenceId": "disablePublicNetworkAccessOnAPIManagementServiceConfigurationEndpoints",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "701a595d-38fb-4a66-ae6d-fb3735217622",
+          "referenceId": "disablePublicNetworkAccessOnAppServiceSlots",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "d074ddf8-01a5-4b5e-a2b8-964aed452c0a",
+          "referenceId": "disablePublicNetworkAccessOnContainerAppsEnvironments",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c9299215-ae47-4f50-9c54-8a392f68a052",
+          "referenceId": "disablePublicNetworkAccessOnMySQLFlexibleServers",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "6a92fe1f-0b86-44ae-843d-2db3d2b571ae",
+          "referenceId": "disablePublicNetworkAccessOnElasticSan",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "8405fdab-1faf-48aa-b702-999c9c172094",
+          "referenceId": "disablePublicNetworkAccessOnManagedDiskExport",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "6c53d030-cc64-46f0-906d-2bc061cd1334",
+          "referenceId": "disablePublicNetworkAccessOnLogAnalyticsWorkspaces",
           "groupNames": [
             null
           ]
@@ -33103,7 +33271,7 @@
       "displayName": "Deployment safeguards should help guide developers towards AKS recommended best practices",
       "description": "A collection of Kubernetes best practices that are recommended by Azure Kubernetes Service (AKS). For the best experience, use deployment safeguards to assign this policy initiative: https://aka.ms/aks/deployment-safeguards. Azure Policy Add-On for AKS is a pre-requisite for applying these best practices to your clusters. For instructions on enabling the Azure Policy Add-On, go to aka.ms/akspolicydoc",
       "category": "Kubernetes",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "policyType": "BuiltIn",
       "policyCount": 27,
       "policies": [
@@ -38992,7 +39160,7 @@
       "displayName": "Enable ChangeTracking and Inventory for virtual machine scale sets",
       "description": "Enable ChangeTracking and Inventory for virtual machine scale sets. Takes Data Collection Rule ID as parameter and asks for an option to input applicable locations and user-assigned identity for Azure Monitor Agent.",
       "category": "ChangeTrackingAndInventory",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "policyType": "BuiltIn",
       "policyCount": 7,
       "policies": [
@@ -39053,7 +39221,7 @@
       "displayName": "Enable ChangeTracking and Inventory for virtual machines",
       "description": "Enable ChangeTracking and Inventory for virtual machines. Takes Data Collection Rule ID as parameter and asks for an option to input applicable locations and user-assigned identity for Azure Monitor Agent.",
       "category": "ChangeTrackingAndInventory",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "policyType": "BuiltIn",
       "policyCount": 7,
       "policies": [
@@ -77011,9 +77179,9 @@
       "displayName": "Microsoft cloud security benchmark",
       "description": "The Microsoft cloud security benchmark initiative represents the policies and controls implementing security recommendations defined in Microsoft cloud security benchmark, see https://aka.ms/azsecbm. This also serves as the Microsoft Defender for Cloud default policy initiative. You can directly assign this initiative, or manage its policies and compliance results within Microsoft Defender for Cloud.",
       "category": "Security Center",
-      "version": "57.59.0",
+      "version": "57.60.0",
       "policyType": "BuiltIn",
-      "policyCount": 224,
+      "policyCount": 216,
       "policies": [
         {
           "id": "0a075868-4c26-42ef-914c-5bc007359560",
@@ -77084,13 +77252,6 @@
         {
           "id": "34c877ad-507e-4c82-993e-3452a6e0ad3c",
           "referenceId": "disableUnrestrictedNetworkToStorageAccountMonitoring",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "f0308946-498a-43fd-8d44-a75b47cd2aef",
-          "referenceId": "disableUnrestrictedNetworkToStorageAccountMonitoringExARO",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_NS-2"
           ]
@@ -77918,29 +78079,8 @@
           ]
         },
         {
-          "id": "f5c8be13-ecfa-4ed7-beee-fcd8a6d9519d",
-          "referenceId": "storageAccountsShouldUseCustomerManagedKeyForEncryptionExAROMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_DP-5"
-          ]
-        },
-        {
           "id": "2a1a9cdf-e04d-429a-8416-3bfb72a1b26f",
           "referenceId": "storageAccountsShouldRestrictNetworkAccessUsingVirtualNetworkRulesMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "ed9bd083-7bfb-4fec-bbb4-12635e096a09",
-          "referenceId": "storageAccountsShouldRestrictNetworkAccessUsingVirtualNetworkRulesExAROMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "db4f9b05-5ffd-4b34-b714-3c710dbb3fd6",
-          "referenceId": "storageAccountsShouldRestrictNetworkAccessUsingVirtualNetworkRulesExDataBricksMonitoringEffect",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_NS-2"
           ]
@@ -78111,20 +78251,6 @@
         {
           "id": "6edd7eda-6dd8-40f7-810d-67160c639cd9",
           "referenceId": "storageAccountShouldUseAPrivateLinkConnectionMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "18ac0011-fb88-42b6-a025-b33b6f0d2cb3",
-          "referenceId": "storageAccountShouldUseAPrivateLinkConnectionExAROMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "1604f626-4d8d-4124-8bb8-b1e5f95562de",
-          "referenceId": "storageAccountShouldUseAPrivateLinkConnectionExDataBricksMonitoringEffect",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_NS-2"
           ]
@@ -78602,20 +78728,6 @@
           ]
         },
         {
-          "id": "05f95bb8-8ef8-4cef-8cad-5d30f9912850",
-          "referenceId": "storageAccountsShouldPreventSharedKeyAccessExARO",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_IM-1"
-          ]
-        },
-        {
-          "id": "fd9903f1-38c2-4d36-8e44-5c1c20c561e8",
-          "referenceId": "storageAccountsShouldPreventSharedKeyAccessExDataBricks",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_IM-1"
-          ]
-        },
-        {
           "id": "1dc2fc00-2245-4143-99f4-874c937f13ef",
           "referenceId": "aPIManagementServicePlatformVersionShouldBeStv2",
           "groupNames": [
@@ -78673,9 +78785,9 @@
       "displayName": "Microsoft cloud security benchmark v2",
       "description": "The Microsoft cloud security benchmark initiative represents the policies and controls implementing security recommendations defined in Microsoft cloud security benchmark, see https://aka.ms/MCSB. This also serves as the Microsoft Defender for Cloud default policy initiative. You can directly assign this initiative, or manage its policies and compliance results within Microsoft Defender for Cloud.",
       "category": "Security Center",
-      "version": "1.7.0",
+      "version": "1.8.0",
       "policyType": "BuiltIn",
-      "policyCount": 727,
+      "policyCount": 718,
       "policies": [
         {
           "id": "051cba44-2429-45b9-9649-46cec11c7119",
@@ -79234,13 +79346,6 @@
         {
           "id": "4733ea7b-a883-42fe-8cac-97454c2a9e4a",
           "referenceId": "StoragesInfrastructureEncryption",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_DP-4"
-          ]
-        },
-        {
-          "id": "f87b2739-92be-4121-af7f-39c0a5a24f20",
-          "referenceId": "StoragesInfrastructureEncryptionExARO",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_DP-4"
           ]
@@ -80083,13 +80188,6 @@
           ]
         },
         {
-          "id": "f0308946-498a-43fd-8d44-a75b47cd2aef",
-          "referenceId": "disableUnrestrictedNetworkToStorageAccountMonitoringExARO",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
           "id": "a451c1ef-c6ca-483d-87ed-f49761e3ffb5",
           "referenceId": "useRbacRulesMonitoring",
           "groupNames": [
@@ -80912,29 +81010,8 @@
           ]
         },
         {
-          "id": "f5c8be13-ecfa-4ed7-beee-fcd8a6d9519d",
-          "referenceId": "storageAccountsShouldUseCustomerManagedKeyForEncryptionExAROMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_DP-5"
-          ]
-        },
-        {
           "id": "2a1a9cdf-e04d-429a-8416-3bfb72a1b26f",
           "referenceId": "storageAccountsShouldRestrictNetworkAccessUsingVirtualNetworkRulesMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "ed9bd083-7bfb-4fec-bbb4-12635e096a09",
-          "referenceId": "storageAccountsShouldRestrictNetworkAccessUsingVirtualNetworkRulesExAROMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "db4f9b05-5ffd-4b34-b714-3c710dbb3fd6",
-          "referenceId": "storageAccountsShouldRestrictNetworkAccessUsingVirtualNetworkRulesExDataBricksMonitoringEffect",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_NS-2"
           ]
@@ -81105,20 +81182,6 @@
         {
           "id": "6edd7eda-6dd8-40f7-810d-67160c639cd9",
           "referenceId": "storageAccountShouldUseAPrivateLinkConnectionMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "18ac0011-fb88-42b6-a025-b33b6f0d2cb3",
-          "referenceId": "storageAccountShouldUseAPrivateLinkConnectionExAROMonitoringEffect",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_NS-2"
-          ]
-        },
-        {
-          "id": "1604f626-4d8d-4124-8bb8-b1e5f95562de",
-          "referenceId": "storageAccountShouldUseAPrivateLinkConnectionExDataBricksMonitoringEffect",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_NS-2"
           ]
@@ -81591,20 +81654,6 @@
         {
           "id": "8c6a50c6-9ffd-4ae7-986f-5fa6111f9a54",
           "referenceId": "storageAccountsShouldPreventSharedKeyAccess",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_IM-1"
-          ]
-        },
-        {
-          "id": "05f95bb8-8ef8-4cef-8cad-5d30f9912850",
-          "referenceId": "storageAccountsShouldPreventSharedKeyAccessExARO",
-          "groupNames": [
-            "Azure_Security_Benchmark_v3.0_IM-1"
-          ]
-        },
-        {
-          "id": "fd9903f1-38c2-4d36-8e44-5c1c20c561e8",
-          "referenceId": "storageAccountsShouldPreventSharedKeyAccessExDataBricks",
           "groupNames": [
             "Azure_Security_Benchmark_v3.0_IM-1"
           ]
@@ -107291,7 +107340,7 @@
       "displayName": "NL BIO Cloud Theme",
       "description": "This initiative includes policies that address the Dutch Baseline Informatiebeveiliging (BIO) controls specifically for the 'thema-uitwerking Clouddiensten' and include policies covered under the SOC2 and ISO 27001:2013 controls.",
       "category": "Regulatory Compliance",
-      "version": "1.16.0",
+      "version": "1.17.0",
       "policyType": "BuiltIn",
       "policyCount": 227,
       "policies": [
