@@ -488,13 +488,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1086,19 +1079,6 @@
       </div>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About the subnet calculator</h2>
-      <p>Subnetting turns one IPv4 network into several smaller ones. This calculator takes an address plus a CIDR prefix or a dotted-decimal mask and returns the network address, broadcast address, usable host range, host count, and wildcard mask — then splits that network into equal-sized subnets when you need to carve it up.</p>
-      <h3>How to use it</h3>
-      <ul>
-        <li>Enter any address in the network, such as <code>10.20.0.37</code>; the network address is derived for you.</li>
-        <li>Give the size as a prefix (<code>/24</code>) or as a mask (<code>255.255.255.0</code>) — the two are interchangeable.</li>
-        <li>Use the split option to divide the block into equal subnets and read off each range.</li>
-      </ul>
-      <h3>Planning an Azure virtual network</h3>
-      <p>Azure reserves five addresses in every subnet: the network address, the broadcast address, and three more for the default gateway and DNS mapping. A <code>/24</code> therefore offers 251 usable addresses rather than 254. Several services also require a dedicated subnet with a minimum size — Azure Bastion, Azure Firewall, and gateway subnets are the common ones — so leave room for them before you allocate the whole range to workloads.</p>
-      <p>Prefer a contiguous, non-overlapping plan across environments. Overlapping ranges are the single most common cause of failed VNet peering and site-to-site VPN connections, and they are painful to renumber once workloads are running.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

@@ -410,7 +410,7 @@ export function upgradeIPPage(source, kind) {
   const body = markup(kind);
   if (html.includes("<!-- ip-range-view:start -->")) html = html.replace(/<!-- ip-range-view:start -->[\s\S]*?<!-- ip-range-view:end -->\n?/, body);
   else {
-    const start = html.indexOf('    <section aria-label="Summary">'), end = html.indexOf('    <section class="page-notes"', start);
+    const start = html.indexOf('    <section aria-label="Summary">'), end = html.indexOf("  </main>", start);
     if (start < 0 || end < start) throw new Error(`IP view guard failed: ${kind}`);
     html = html.slice(0, start) + body + "\n" + html.slice(end);
   }

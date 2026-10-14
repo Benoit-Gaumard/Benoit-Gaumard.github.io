@@ -354,7 +354,7 @@ export function upgradeNewsPage(source, kind, slug) {
   let html = source.replace(/\r\n/g, "\n");
   if (html.includes("<!-- release-news-view:start -->")) html = html.replace(/<!-- release-news-view:start -->[\s\S]*?<!-- release-news-view:end -->\n?/, markup(kind));
   else {
-    const start = html.indexOf('    <section aria-label="Update browser">'), end = html.indexOf('    <section class="page-notes"', start);
+    const start = html.indexOf('    <section aria-label="Update browser">'), end = html.indexOf("  </main>", start);
     if (start < 0 || end < start) throw new Error(`News layout guard: ${kind}`);
     html = html.slice(0, start) + markup(kind) + "\n" + html.slice(end);
   }

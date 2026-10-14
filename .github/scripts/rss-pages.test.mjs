@@ -85,7 +85,9 @@ test("feed counters distinguish current UTC calendar activity from failed collec
 test("RSS watcher preserves preferences, useful defaults and independent count meanings", () => {
   const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
   for (const key of ["rssWatcherFavorites", "rssWatcherKeywords", "rssWatcherViewMode"]) assert.ok(html.includes(key));
-  assert.match(html, /<option value="" selected>All retained/);
+  assert.match(html, /<option value="0" selected>Today/);
+  assert.match(html, /params\.get\(control\.id\) \?\? \(control === elements\.lastUpdate \? "0" : ""\)/);
+  assert.match(html, /if \(control\.value \|\| control === elements\.lastUpdate\) params\.set\(control\.id, control\.value\)/);
   assert.match(html, /configured · \$\{payload\.succeededCount\} collection successes/);
   assert.match(html, /Show latest available dates/);
   assert.match(html, /Source labels|source labels/);
@@ -95,6 +97,10 @@ test("RSS watcher preserves preferences, useful defaults and independent count m
   assert.doesNotMatch(html, /Saved in this browser/);
   assert.match(html, /favoritesToggleLabel\.textContent = `My favorites/);
   assert.match(html, /class="favorites-filter" id="favoritesToggle"/);
+  assert.doesNotMatch(html, /createArticleSummary|rss-item-summary|summary\.textContent = "Summary"/);
+  assert.match(html, /titleRow\.append\(tags\)/);
+  assert.doesNotMatch(html, /head\.append\(tags\)/);
+  assert.match(html, /\.site-card-title-row \{[^}]*flex-wrap: wrap/);
   assert.match(html, /\.favorites-filter\[aria-pressed="true"\] svg path \{ fill: currentColor; \}/);
   const collector = readFileSync(join("rss-watcher", "fetch-updates.mjs"), "utf8");
   assert.match(collector, /lastAttemptAt: r\.attemptedAt/);

@@ -106,7 +106,8 @@ test('catalogue deep links match the current definition contract and preserve re
   assert.match(script, /url\.searchParams\.set\("tab", "policies"\)/);
   assert.match(script, /url\.searchParams\.set\("definition", name\)/);
   assert.match(script, /Look up current definition/);
-  assert.ok(html.indexOf('Back to the current policy catalogue') < html.indexOf('<section class="page-notes"'));
+  assert.ok(html.includes('Back to the current policy catalogue'));
+  assert.doesNotMatch(html, /class="page-notes"/);
 });
 
 test('retention and collector limitations agree with the data producer', () => {
@@ -115,8 +116,6 @@ test('retention and collector limitations agree with the data producer', () => {
   assert.match(collector, /\$ChangeLogMaxEntries = 3000/);
   assert.match(collector, /\$TrackedPolicyFields = @\("displayName", "category", "effect", "mode", "version", "policyType"\)/);
   assert.match(workflow, /cron: '0 6 \* \* \*'/);
-  assert.match(html, /shared limit of 3,000 policy and initiative events/);
-  assert.match(html, /untracked rule-only changes may not appear/);
   assert.doesNotMatch(html, /real edit bumps the version/);
 });
 

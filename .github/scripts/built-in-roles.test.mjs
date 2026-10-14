@@ -165,7 +165,6 @@ test('mobile entries, primary detail actions and collapsed empty permission grou
   assert.match(script, /role\[bucket\.key\]\.length > 0/);
   assert.match(script, /No \$\{bucket\.title\} entries are recorded/);
   assert.match(html, /Conditions and permission-block boundaries are not present/);
-  assert.match(html, /not a deny rule across other assignments/);
   assert.doesNotMatch(html, /cannot read your data, however broad/);
 });
 
@@ -178,7 +177,7 @@ test('comparison, exact role links, legacy filters and missing-role recovery sha
   assert.doesNotMatch(html, /data-url-state|execCommand/);
 });
 
-test('four counter cards precede search and preserve contextual help destinations', () => {
+test('four counter cards precede search', () => {
   const stats = html.split('<section class="dataset-stats"')[1].split('</section>')[0];
   assert.deepEqual([...stats.matchAll(/<div class="stat-label">([^<]+)<\/div>/g)].map(match => match[1]), ['Built-in roles', 'Categories', 'Privileged roles', 'Providers']);
   assert.equal([...stats.matchAll(/class="stat-card"/g)].length, 4);
@@ -186,8 +185,6 @@ test('four counter cards precede search and preserve contextual help destination
   assert.ok(html.indexOf('id="statsGrid"') < html.indexOf('id="search"'));
   assert.match(stats, /id="datasetSummary" role="status" aria-live="polite"/);
   assert.match(stats, /id="statsGrid" aria-busy="true"/);
-  for (const key of ['actions', 'notActions', 'dataActions', 'notDataActions']) assert.ok(html.includes(`id="${key}-help"`));
-  assert.match(html, /Counts on this page are recorded entries/);
   assert.match(html, /explicit provider names/);
 });
 

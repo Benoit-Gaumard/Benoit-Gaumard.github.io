@@ -395,7 +395,7 @@ export function upgradeFeedPage(source, kind) {
   const path = kind === "activity" ? "/rss-watcher/activity/" : "/microsoft-techcommunity-rss-feeds/";
   if (html.includes("<!-- feed-activity-view:start -->")) html = html.replace(/<!-- feed-activity-view:start -->[\s\S]*?<!-- feed-activity-view:end -->\n?/, markup(kind));
   else {
-    const start = html.indexOf('    <section class="stats-grid"'), end = kind === "activity" ? html.indexOf("  </main>", start) : html.indexOf('    <section class="page-notes"', start);
+    const start = html.indexOf('    <section class="stats-grid"'), end = kind === "activity" ? html.indexOf("  </main>", start) : html.indexOf("  </main>", start);
     if (start < 0 || end < start) throw new Error("Feed layout guard");
     html = html.slice(0, start) + markup(kind) + "\n" + html.slice(end);
   }

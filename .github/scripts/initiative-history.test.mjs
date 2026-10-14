@@ -123,7 +123,6 @@ test('initiative and member links target their own catalogue tabs and technical 
   assert.ok(script.indexOf('details.append(renderComposition(entry))') < script.indexOf('details.append(metadata, copy)'));
   assert.match(html, /href="\.\.\/policies-history\/"/);
   assert.match(html, /href="\.\.\/\?tab=initiatives"/);
-  assert.match(html, /Renaming|renaming the reference/);
   assert.doesNotMatch(script, /innerHTML|execCommand/);
 });
 

@@ -702,13 +702,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1219,7 +1212,6 @@
       <nav class="quick-links" aria-label="Page shortcuts">
         <a href="#mapPanel" data-open-details="mapPanel">Open map</a>
         <a href="#statsSection" data-open-details="statsSection">Statistics</a>
-        <a href="#dataSources" data-open-details="dataSources">Sources &amp; confidence</a>
       </nav>
     </section>
 
@@ -1249,7 +1241,7 @@
           </select>
         </div>
       </div>
-      <p class="source-note" id="zoneFilterHelp">Missing evidence means unknown, not no. Zone support varies by service. <a href="#zones-notes">About zones and regional pairs</a>.</p>
+      <p class="source-note" id="zoneFilterHelp">Missing evidence means unknown, not no. Zone support varies by service.</p>
       <div class="regions-toolbar">
         <div class="view-toggle" role="group" aria-label="Choose view">
           <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
@@ -1309,32 +1301,6 @@
       </div>
     </details>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Azure regions</h2>
-      <p>The physical regions returned for the scanning subscription, supplemented by Microsoft's public-region reference. A missing field is not a negative finding; the catalogue is not a guarantee that a service or SKU can be deployed by every subscription.</p>
-      <details class="data-sources" id="dataSources">
-        <summary>Sources and confidence by attribute</summary>
-        <dl class="source-list">
-          <dt>Name, ID and location type</dt><dd>Reported by the <a href="https://learn.microsoft.com/en-us/rest/api/resources/subscriptions/list-locations?view=rest-resources-2022-12-01">ARM locations API</a>. The directory includes Physical entries; Logical entries are counted separately.</dd>
-          <dt>Location, coordinates and geography</dt><dd>Reported by ARM metadata. Coordinates are regional approximations, not datacenter addresses. Continent groups are derived locally from the reported geography group.</dd>
-          <dt>Availability zones</dt><dd>A non-empty <code>location.availabilityZoneMappings</code> confirms support for the scanning subscription. Otherwise the <a href="https://learn.microsoft.com/en-us/azure/reliability/regions-list">Microsoft Learn public-region reference</a> supplies a positive zone count or explicit N/A. An absent, empty or unrecognized value remains unknown.</dd>
-          <dt>Preview status</dt><dd>Shown only when Microsoft Learn annotates the availability-zone column. One or more zones may be in preview; confirm service-specific availability before deployment.</dd>
-          <dt>Access restrictions</dt><dd>Based on the restriction marker in the region's own Microsoft Learn column, not its paired region and not ARM's Recommended/Other category. No marker means no restriction listed there, not guaranteed subscription access.</dd>
-          <dt>Paired region</dt><dd>Reported by ARM metadata. No reported pair does not establish a disaster-recovery recommendation. <a href="#zones-notes">Read the distinction between pairs and zones</a>.</dd>
-          <dt>Collection dates</dt><dd>ARM metadata and the public reference have separate check dates above. Neither date promises that an Azure service has completed its rollout.</dd>
-        </dl>
-      </details>
-      <h3>Choosing a region</h3>
-      <ul>
-        <li><strong>Data residency</strong> — a geography is the boundary most compliance requirements are written against.</li>
-        <li><strong>Latency</strong> — the closest region to your users usually matters more than any other factor.</li>
-        <li><strong>Service availability</strong> — not every service or VM family exists in every region, and previews are typically limited to a handful.</li>
-        <li><strong>Price</strong> — the same resource can differ noticeably in cost between regions.</li>
-        <li><strong>Capacity</strong> — popular regions can refuse specific VM sizes at times, which is worth testing before committing.</li>
-      </ul>
-      <h3 id="zones-notes">Pairs and zones are not the same thing</h3>
-      <p>Availability zones protect against a datacenter failure inside one region; a regional pair supports recovery from the loss of an entire region, and governs how some platform-managed replication and sequenced updates behave. A resilient design usually needs both, and a pair is not automatically the region you would choose for disaster recovery — check latency and service parity first.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1952,11 +1918,7 @@
           li.append(labelSpan, valueSpan);
           meta.append(li);
         });
-        const sourceLink = document.createElement("a");
-        sourceLink.href = "#dataSources";
-        sourceLink.textContent = "How to interpret these sources";
-        sourceLink.addEventListener("click", () => { document.getElementById("dataSources").open = true; });
-        details.append(meta, sourceLink);
+        details.append(meta);
         card.append(details);
 
         elements.regionCards.append(card);
@@ -2030,7 +1992,6 @@
         renderCards();
         if (location.hash === "#mapPanel") elements.mapPanel.open = true;
         if (location.hash === "#statsSection") document.getElementById("statsSection").open = true;
-        if (location.hash === "#dataSources") document.getElementById("dataSources").open = true;
         if (elements.mapPanel.open) showMap();
       } catch (error) {
         console.error("Unable to load Azure region data.", error);

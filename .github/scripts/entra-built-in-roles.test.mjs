@@ -141,7 +141,6 @@ test('copying explicitly identifies a template, not a tenant directoryRole objec
   assert.match(script, /copy\(role\.templateId, copyTemplate, "Built-in template ID"\)/);
   assert.match(script, /copyTemplate\.setAttribute\("aria-describedby", explanation\.id\)/);
   assert.match(script, /not an activated directoryRole\.id/);
-  assert.match(html, /does not retrieve tenant-specific object IDs/);
   assert.doesNotMatch(html, /role definition ID that is only stable within one tenant/);
 });
 

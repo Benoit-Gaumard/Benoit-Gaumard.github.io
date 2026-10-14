@@ -56,6 +56,7 @@ test("icons: compact preview preserves source terms and truthful export states",
 });
 test("icons: source and usage rights remain visible without a disclosure", () => {
   const source = html.icons;
+  assert.doesNotMatch(source, /About the Azure icon gallery|class="page-notes"/);
   assert.match(source, /<section class="usage-details" aria-labelledby="usage-rights-title">\s*<h2 id="usage-rights-title">Source and usage rights<\/h2>/);
   assert.doesNotMatch(source, /<details class="usage-details"|\.usage-details summary/);
   const rights = source.split('<section class="usage-details"')[1].split("</section>")[0];
@@ -89,6 +90,10 @@ test("IT gallery: real content before filters, descriptions retained by generato
   assert.match(source, /copy\.append\(title\)/);
 });
 test("curated links: exact URLs, visible metadata, descriptive labels and storage keys preserved", () => {
+  assert.match(html["favorite-links"], /id="categoryBadges" role="group" aria-label="Filter by category"/);
+  assert.doesNotMatch(html["favorite-links"], /<select id="categoryFilter"/);
+  assert.match(html["favorite-links"], /button\.dataset\.category = group/);
+  assert.match(html["favorite-links"], /button\.setAttribute\("aria-pressed", String\(button\.dataset\.category === category\)\)/);
   assert.doesNotMatch(html["favorite-links"], /Your saved links/);
   assert.match(html["favorite-links"], /My favorites \(0\)/);
   const sandbox = functions("favorite-links", ["parseCsvLine", "parseCsv", "hostnameFor", "groupFor", "presentLink"], {

@@ -717,13 +717,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1349,7 +1342,7 @@
         <span>Baseline: <strong id="baselineAt">Loading...</strong></span>
         <span>Retention: <strong id="retention">-</strong></span>
       </p>
-      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history. <a href="#notes-heading">Coverage and limitations</a>.</p>
+      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history.</p>
     </section>
 
     <section class="history-log" aria-label="Alias change log">
@@ -1408,15 +1401,6 @@
       <p class="catalogue-return"><a class="history-action" href="../">Back to the current alias catalogue</a></p>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">How this log is built</h2>
-      <p>This log compares recorded <code>Get-AzPolicyAlias</code> snapshots. It includes differences reconstructed from the snapshots retained in this repository and subsequent successful collections. Collection is scheduled daily at 06:00 UTC, with additional weekly and manual runs. Event dates are observation times, not Microsoft's publication or retirement dates.</p>
-      <p><strong>Added</strong> means an alias appeared for a resource type in the later snapshot; <strong>Removed</strong> means it was absent after being observed. Aliases can disappear and reappear between scans. Scope, provider responses and collection behavior may affect these observations; a removal does not prove that Microsoft retired the alias.</p>
-      <p><strong>Modified</strong> means the same resource type and exact alias name had a different recorded default path. Expand the event to compare Before and After. Casing and <code>[*]</code> remain unchanged. Renamed aliases or resource types are shown as removals and additions, not guessed renames. <code>null</code> means no path was supplied by the source and is distinct from an empty string.</p>
-      <p>The baseline is the oldest compared snapshot, not an official launch date. The first snapshot is not reported as additions. Up to <span id="retentionInline">180</span> days and 3,000 events are retained at each refresh; this cap can exclude older events or part of a busy day. The retained log is not the complete history of Azure.</p>
-      <p>Each event records both observation timestamps, its provider, resource type, alias and observed path. Reconstructed events also retain the source commit IDs in the JSON export. API-version-specific paths, modifiability metadata and policy-rule behavior are not stored in the source dataset and are not inferred here.</p>
-      <p>Counts and exports include <strong>all matching retained events</strong>, not only the displayed batch. Search also checks resource types and before/after paths. Recent periods use UTC calendar days ending today. <a href="../alias-changes.json">Inspect the source log</a> or <a href="../policy-aliases.json">download the current alias snapshot</a>.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1494,7 +1478,7 @@
     const state = { entries: [], filtered: [], visible: PAGE_SIZE, keys: new Map(), open: new Set(), status: "loading", generatedAt: null, baselineAt: null, retentionDays: null, filteredAt: null, filters: {} };
     const elements = Object.fromEntries([
       "search", "changeFilter", "providerFilter", "periodFilter", "clearFilters", "historyControls", "timeline",
-      "resultCount", "changeCounts", "refreshedAt", "baselineAt", "retention", "retentionInline", "loadMore", "exportChanges",
+      "resultCount", "changeCounts", "refreshedAt", "baselineAt", "retention", "loadMore", "exportChanges",
       "actionStatus", "copyFallback", "copyValue", "exportFallback", "historyError", "retryHistory", "undatedNotice",
       "historyExtra", "historyFilterToggle", "historyFiltersDone",
     ].map(id => [id, document.getElementById(id)]));
@@ -1896,7 +1880,6 @@
         elements.providerFilter.replaceChildren(new Option("All providers", ""));
         [...new Set(state.entries.map(entry => entry.provider).filter(Boolean))].sort().forEach(provider => elements.providerFilter.add(new Option(provider, provider)));
         elements.retention.textContent = state.retentionDays ? `Up to ${state.retentionDays} days` : "Not reported";
-        elements.retentionInline.textContent = state.retentionDays ? String(state.retentionDays) : "an unreported number of";
         const stamp = entryTimestamp({ detectedAt: state.generatedAt });
         elements.refreshedAt.textContent = Number.isFinite(stamp)
           ? new Date(stamp).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not recorded";

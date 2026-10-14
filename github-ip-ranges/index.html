@@ -622,13 +622,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1215,18 +1208,6 @@
     <details class="snapshot-statistics"><summary>Technical metadata</summary><dl class="ip-meta" id="snapshotDetails"></dl><p class="ip-help">Additional metadata from the same GitHub Meta API snapshot.</p></details>
     <!-- ip-range-view:end -->
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About GitHub IP ranges</h2>
-      <p>GitHub exposes the address ranges used by its services through the public Meta API. This page presents that data grouped by service: the website, the API, Git operations, GitHub Actions runners, GitHub Pages, Copilot, packages, webhooks, and importer traffic.</p>
-      <h3>Typical uses</h3>
-      <ul>
-        <li>Allowing outbound access to <code>github.com</code> and Git endpoints from a locked-down network.</li>
-        <li>Accepting inbound webhook deliveries on a self-hosted service.</li>
-        <li>Allowing hosted Actions runners to reach an internal artifact feed or a deployment target.</li>
-      </ul>
-      <h3>Good to know</h3>
-      <p>These ranges change without individual notice, so treat the Meta API as the source of truth and refresh any firewall list on a schedule rather than copying it once. The <code>actions</code> range in particular is very large and shared across all of GitHub's hosted runners, so allowing it is not equivalent to allowing only your own workflows — if that distinction matters, self-hosted runners with a fixed egress address are the stronger control.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

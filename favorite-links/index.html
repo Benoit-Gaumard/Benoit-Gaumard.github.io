@@ -596,13 +596,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -724,6 +717,10 @@
   </script>
   <style data-catalogue-ux>
     .extra-filters { margin: .5rem 0; }
+    .category-badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+    .category-badge { min-height: 44px; max-width: 100%; padding: .4rem .85rem; border: 1px solid var(--cp-border-strong); border-radius: 999px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; cursor: pointer; }
+    .category-badge:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .category-badge[aria-pressed="true"] { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
     .extra-filters summary { cursor: pointer; min-height: 44px; padding: .5rem 0; }
     .extra-filters select { min-height: 44px; max-width: 100%; color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border); padding: .5rem; }
     .link-card { cursor: default; }
@@ -1212,8 +1209,9 @@
     <section aria-label="Favorite links">
       <div class="filter-bar">
         <input id="searchInput" type="search" placeholder="Search links..." autocomplete="off" spellcheck="false" aria-label="Search links">
-        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
       </div>
+      <input id="categoryFilter" type="hidden" value="">
+      <div class="category-badges" id="categoryBadges" role="group" aria-label="Filter by category"></div>
       <details class="extra-filters"><summary>More filters &amp; sort</summary>
       <div class="filter-bar">
         <select id="topicFilter" aria-label="Filter by original topic"><option value="">All topics</option></select>
@@ -1251,18 +1249,6 @@
       <div class="link-cards" id="linkCards"></div>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About this link collection</h2>
-      <p>A curated set of references I actually return to — documentation, tooling, learning material, and community resources gathered while working on Azure and DevOps projects.</p>
-      <h3>What makes the list</h3>
-      <ul>
-        <li>Primary sources over aggregators, so the information stays current.</li>
-        <li>Tools that solve a real recurring problem rather than demonstrate a technique.</li>
-        <li>Material that has stayed useful over time, not just at the moment it was published.</li>
-      </ul>
-      <h3>Good to know</h3>
-      <p>Listing dates and dataset updates are not availability checks. Submitting a link requires a GitHub account. Labels and topic hints help you browse, but do not guarantee availability or endorse third-party claims.</p>
-    </section>
   </main>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
 
@@ -1375,6 +1361,7 @@
     const elements = {
       searchInput: document.getElementById("searchInput"),
       categoryFilter: document.getElementById("categoryFilter"),
+      categoryBadges: document.getElementById("categoryBadges"),
       sortSelect: document.getElementById("sortSelect"),
       highlightedOnly: document.getElementById("highlightedOnly"),
       favoritesFilter: document.getElementById("favoritesFilter"),
@@ -1570,7 +1557,20 @@
 
     function populateFilters() {
       const categories = [...new Set(links.map((link) => link.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-      [...new Set(links.map((link) => link.group))].sort().forEach((group) => elements.categoryFilter.append(new Option(group, group)));
+      elements.categoryBadges.replaceChildren();
+      ["", ...new Set(links.map((link) => link.group).sort())].forEach((group) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "category-badge";
+        button.dataset.category = group;
+        button.textContent = group || "All categories";
+        button.setAttribute("aria-pressed", String(group === elements.categoryFilter.value));
+        button.addEventListener("click", () => {
+          elements.categoryFilter.value = group;
+          elements.categoryFilter.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        elements.categoryBadges.append(button);
+      });
       categories.forEach((category) => document.getElementById("topicFilter").append(new Option(category, category)));
       const datalist = document.getElementById("submitLinkCategories");
       if (datalist) {
@@ -1699,6 +1699,9 @@
       if (resetPaging) visibleCount = PAGE_SIZE;
       const query = normalize(elements.searchInput.value.trim());
       const category = elements.categoryFilter.value;
+      elements.categoryBadges.querySelectorAll("button").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.category === category));
+      });
       const highlightedOnly = elements.highlightedOnly.checked;
 
       const filtered = links.filter((link) => {
@@ -1992,7 +1995,7 @@
       var controls = [].slice
         .call(scope.querySelectorAll("input[id], select[id]"))
         .filter(function (el) {
-          if (el.type === "hidden" || el.type === "button" || el.type === "submit") return false;
+          if ((el.type === "hidden" && el.id !== "categoryFilter") || el.type === "button" || el.type === "submit") return false;
           return !el.closest("[data-no-url-state]");
         });
       if (!controls.length) return;

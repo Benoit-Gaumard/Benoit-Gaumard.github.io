@@ -108,9 +108,9 @@ test('default batches make the footer reachable while preserving a 100-row optio
   assert.match(html, /id="resultCount" role="status" aria-live="polite" aria-atomic="true"/);
 });
 
-test('array-alias disclosure is removed from the filters without changing the reference notes', () => {
+test('array-alias disclosure is removed from the filters and the reference notes are gone', () => {
   assert.doesNotMatch(html, /alias-help|What does \[\*\] mean in an alias\?/);
-  assert.match(html, /id="array-aliases">Array aliases use <code>\[\*\]<\/code>/);
+  assert.doesNotMatch(html, /class="page-notes"|id="array-aliases"/);
 });
 
 test('legacy and new filters are restored by a single URL-state controller', () => {

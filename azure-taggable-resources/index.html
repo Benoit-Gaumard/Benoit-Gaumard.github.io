@@ -521,13 +521,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1065,7 +1058,7 @@
         <label class="filter-toggle"><input type="checkbox" id="costReportOnlyFilter" aria-describedby="costColumnHelp"> Tags in cost reports only</label>
         <button class="taggable-button" id="resetFilters" type="button" hidden>Reset filters</button>
       </div>
-      <p class="filter-help mobile-help"><span id="tagsColumnHelp">Support tags: the resource accepts tags.</span> <a href="#tag-support-notes">Details</a>.<br><span id="costColumnHelp">Tags in cost reports: the type passes tags to billing data.</span> <a href="#cost-report-notes">Cost guidance</a>.</p>
+      <p class="filter-help mobile-help"><span id="tagsColumnHelp">Support tags: the resource accepts tags.</span><br><span id="costColumnHelp">Tags in cost reports: the type passes tags to billing data.</span></p>
       <div class="results-toolbar">
         <div class="sort-controls">
           <label for="sortSelect">Sort by</label>
@@ -1102,21 +1095,6 @@
       <button class="load-more" id="loadMore" type="button" hidden>Load more resource types</button>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About tag support in Azure</h2>
-      <h3 id="tag-support-notes">What supports tags means</h3>
-      <p>The resource type has a tag property. That does not imply that its tags reach billing records. The two Yes/No values are independent facts from the Microsoft reference, not an inspection of your own resources.</p>
-      <h3 id="cost-report-notes">Why it matters for cost management</h3>
-      <p>Tags in cost reports means the resource type passes its tags to usage and cost records. Check this property when planning allocation by team, environment or application; accepting tags alone is not enough.</p>
-      <p><a href="https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/enable-tag-inheritance" target="_blank" rel="noopener">Tag inheritance in Cost Management</a> is a separate feature that can apply tags to usage records even when the underlying type does not support or emit them. A No in this reference is not proof that your costs must remain unallocated.</p>
-      <h3>Practical guidance</h3>
-      <ul>
-        <li>Tags are not inherited automatically: a resource does not take the tags of its resource group unless a policy applies them.</li>
-        <li>Use Azure Policy with the <code>Modify</code> effect to apply and remediate required tags at scale.</li>
-        <li>Keep the required set small — an owner, an environment, and a cost centre are enough to be useful and realistic to maintain.</li>
-        <li>Tag names are case-insensitive for lookup but preserve the case you set, so agree on one spelling early.</li>
-      </ul>
-    </section>
   </main>
 
   <footer class="site-footer">

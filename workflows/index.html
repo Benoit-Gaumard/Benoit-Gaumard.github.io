@@ -555,13 +555,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.05rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1105,25 +1098,6 @@
         </div>
       </div>
       <div class="workflow-controls"><label><input id="anomalyFirst" type="checkbox" checked> Anomalies first</label><label for="scheduleZone">Schedule timezone</label><select id="scheduleZone"></select></div><p id="workflowStatus" role="status" aria-live="polite"></p><p id="workflowError" role="alert" hidden></p><div class="workflow-cards" id="workflowCards"></div>
-    </section>
-
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About these scheduled workflows</h2>
-      <p>Several pages on this site display data that has to stay current: Azure and AWS release notes, Microsoft 365 roadmap items, RSS headlines, and the published IP ranges for Azure and GitHub. Each is refreshed by a scheduled GitHub Actions workflow, and this page reports the state of every one of them.</p>
-      <h3>How the refresh works</h3>
-      <ul>
-        <li>A workflow runs on a cron schedule, fetches the upstream source, and writes the result as static JSON into the repository.</li>
-        <li>A successful data-refresh workflow triggers the deployment workflow. Dataset pages serve the resulting static files; this status page separately queries GitHub when opened or refreshed.</li>
-        <li>Because the output is static, pages stay fast and keep working even when an upstream source is temporarily unavailable.</li>
-      </ul>
-      <h3>Why show the status</h3>
-      <p>A successful run is not proof that every published dataset is current. Run status and dataset collection timestamps are therefore shown separately. The last successful run is searched only within the latest 100 repository runs on <code>main</code>; an absent result does not mean the workflow has never succeeded.</p>
-      <p>Freshness uses the oldest required dataset's recorded <code>generatedAt</code>, not its commit time or deployment date. The alert threshold is the largest scheduled gap plus half that gap, capped at 12 hours of grace (36 hours for a daily job). Missing, unsupported or future timestamps remain unknown. This is an operational indicator, not an availability guarantee.</p>
-      <p>Run statuses are checked once when this page opens. Refresh statuses retries the lookup; there is no automatic minute-by-minute polling. Network, GitHub access and public API quota failures are reported as unavailable, not as failed workflow runs.</p>
-      <h3>Scheduled times, not guaranteed start times</h3>
-      <p>The catalog includes every cron-triggered workflow, including the weekly favicon refresh. Schedules are generated from the repository's workflow YAML files at each deployment, so they remain available even when GitHub run details cannot be loaded.</p>
-      <p>Each schedule shows the selected timezone and the original UTC time. Your browser's timezone is the default; Europe/Paris and UTC are also available. Times and weekdays refer to the next scheduled occurrence, taking daylight saving time into account; expand the run details, then Cron details, to see that date and the source expression. A local time may change when the clocks change, while the UTC schedule stays the same.</p>
-      <p>GitHub Actions can delay scheduled runs, and a disabled workflow will not run. These are planned trigger times, not a promise that a job starts immediately. Started reports the actual start of the latest run, which may also have been triggered manually.</p>
     </section>
   </main>
 

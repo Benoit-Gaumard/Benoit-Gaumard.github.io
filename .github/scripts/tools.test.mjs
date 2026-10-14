@@ -11,6 +11,7 @@ const script = html.match(/<script data-tools-script>([\s\S]*?)<\/script>/)[1];
 const families = new Set(runInNewContext(script.match(/const familyNames = new Map\([\s\S]*?\n    \]\);/)[0] + '\nArray.from(familyNames.keys());'));
 
 test('all 30 tools remain static links without nested controls', () => {
+  assert.doesNotMatch(html, /Open tool|tool-arrow/);
   assert.equal(cards.length, 30);
   assert.equal(new Set(cards.map(card => card[1])).size, 30);
   for (const [, id, , content] of cards) {

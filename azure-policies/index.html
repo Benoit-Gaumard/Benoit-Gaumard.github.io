@@ -326,7 +326,6 @@
     .filter-field { min-width: 0; }
     .filter-options { grid-column: 1 / -1; margin-top: .5rem; }
     .filter-options:not([open]) { grid-column: 2; grid-row: 2; }
-    #effectsHelp { grid-column: 1; grid-row: 2; }
     .filter-options summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); cursor: pointer; font-size: .85rem; }
     .option-fields { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
     .filter-help { margin: .5rem 0; max-width: 65ch; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
@@ -652,13 +651,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1225,10 +1217,9 @@
         <div class="filter-panel" id="policiesFilters" hidden>
           <div class="filter-grid">
             <div class="filter-field"><label for="policiesCategoryFilter">Category</label><select id="policiesCategoryFilter"><option value="">All categories</option></select></div>
-            <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter" aria-describedby="effectsHelp"><option value="">All effects</option></select></div>
+            <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter"><option value="">All effects</option></select></div>
             <div class="filter-field"><label for="policiesModeFilter">Mode</label><select id="policiesModeFilter"><option value="">All modes</option></select></div>
           </div>
-          <p class="filter-help" id="effectsHelp"><a href="#effects-notes">Understand Audit, Deny, Modify and DeployIfNotExists</a>.</p>
           <details class="filter-options" id="policiesOptions">
             <summary>Options</summary>
             <div class="option-fields">
@@ -1295,20 +1286,6 @@
       </aside>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Azure Policy definitions</h2>
-      <p>Every built-in Azure Policy definition and initiative, refreshed from Azure. Use it to find an existing policy before writing a custom one — the built-in library already covers most common governance requirements.</p>
-      <h3 id="effects-notes">Effects you will meet most often</h3>
-      <ul>
-        <li><strong>Audit</strong> — records non-compliance without blocking anything; the safe way to start.</li>
-        <li><strong>Deny</strong> — rejects a deployment that breaks the rule.</li>
-        <li><strong>DeployIfNotExists</strong> — provisions the missing configuration, and needs a managed identity with the right permissions.</li>
-        <li><strong>Modify</strong> — adds or updates properties such as tags on creation.</li>
-      </ul>
-      <h3>How to roll one out</h3>
-      <p>Assign in audit mode first, look at the compliance results over a full deployment cycle, then tighten to deny once you know what would have broken. Initiatives group related definitions so a whole standard can be assigned and reported as one unit, which is how the regulatory compliance baselines are packaged.</p>
-      <p>Evaluation is not instantaneous: compliance state refreshes roughly every 24 hours, or after a scan is triggered manually, so an empty result immediately after assignment usually means the scan has not run yet.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

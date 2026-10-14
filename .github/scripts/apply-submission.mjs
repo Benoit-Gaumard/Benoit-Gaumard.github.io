@@ -112,10 +112,25 @@ function csvCell(value) {
   return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
-function appendCsvRow(path, csv, values) {
-  const line = csv.header.map((column) => csvCell(values[column] ?? "")).join(",");
-  const body = csv.raw.endsWith(csv.eol) ? csv.raw : csv.raw + csv.eol;
-  writeFileSync(path, body + line + csv.eol, "utf8");
+function submissionRows(directory) {
+  return readdirSync(directory, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".csv"))
+    .flatMap((entry) => readCsv(`${directory}/${entry.name}`).rows);
+}
+
+function writeIssueCsv(directory, csv, values) {
+  const issueNumber = process.env.ISSUE_NUMBER;
+  if (!/^\d+$/.test(issueNumber || "")) {
+    throw new Error("ISSUE_NUMBER must be set to write a community submission.");
+  }
+  const path = `${directory}/issue-${issueNumber}.csv`;
+  if (readdirSync(directory).includes(`issue-${issueNumber}.csv`)) {
+    throw new Error(`A submission file already exists for issue #${issueNumber}.`);
+  }
+  const header = csv.header.join(",");
+  const row = csv.header.map((column) => csvCell(values[column] ?? "")).join(",");
+  writeFileSync(path, `${header}${csv.eol}${row}${csv.eol}`, "utf8");
+  return path;
 }
 
 function normalizeUrl(value) {
@@ -199,20 +214,22 @@ function optionalDescription(fields, label, max) {
 /* -------------------------------------------------------------------- forms */
 
 async function submitFavoriteLink(fields) {
-  const path = "favorite-links/favorite-links.csv";
-  const csv = readCsv(path);
+  const sourcePath = "favorite-links/favorite-links.csv";
+  const csv = readCsv(sourcePath);
+  const submissionsDirectory = "favorite-links/submissions";
+  const existingRows = submissionRows(submissionsDirectory);
   const title = requireText(fields, "link title", { max: 120 });
   const url = requireUrl(fields, "link url");
   const category = requireText(fields, "link category", { max: 40 });
   const description = optionalDescription(fields, "why is it useful?", 300);
 
   const key = normalizeUrl(url);
-  if (csv.rows.some((row) => normalizeUrl(row.url) === key)) {
+  if ([...csv.rows, ...existingRows].some((row) => normalizeUrl(row.url) === key)) {
     duplicate("This link is already in the collection.");
   }
 
   const finalCategory = matchExisting(csv.rows, "category", category);
-  appendCsvRow(path, csv, {
+  const path = writeIssueCsv(submissionsDirectory, csv, {
     title,
     url,
     description,
@@ -232,8 +249,8 @@ async function submitFavoriteLink(fields) {
 }
 
 async function submitFriendWebsite(fields) {
-  const path = "friends-websites/friends-websites.csv";
-  const csv = readCsv(path);
+  const csv = readCsv("friends-websites/friends-websites.csv");
+  const submissionsDirectory = "friends-websites/submissions";
   // fetch-updates.mjs re-reads this file with a naive comma split, so a comma
   // anywhere in a cell would silently corrupt the metadata refresh.
   const name = requireText(fields, "site owner", { max: 80, noCommas: true });
@@ -243,7 +260,7 @@ async function submitFriendWebsite(fields) {
   const country = requireText(fields, "country", { max: 40, noCommas: true });
 
   const key = normalizeUrl(url);
-  if (csv.rows.some((row) => normalizeUrl(row.url) === key)) {
+  if ([...csv.rows, ...submissionRows(submissionsDirectory)].some((row) => normalizeUrl(row.url) === key)) {
     duplicate("This website is already listed.");
   }
 
@@ -251,7 +268,7 @@ async function submitFriendWebsite(fields) {
   const finalSubcategory = matchExisting(csv.rows, "subcategory", subcategory);
   const finalCountry = matchExisting(csv.rows, "country", country);
 
-  appendCsvRow(path, csv, {
+  const path = writeIssueCsv(submissionsDirectory, csv, {
     name,
     category: finalCategory,
     subcategory: finalSubcategory,
@@ -272,19 +289,19 @@ async function submitFriendWebsite(fields) {
 }
 
 async function submitPortal(fields) {
-  const path = "microsoft-portals/portals-urls.csv";
-  const csv = readCsv(path);
+  const csv = readCsv("microsoft-portals/portals-urls.csv");
+  const submissionsDirectory = "microsoft-portals/submissions";
   const name = requireText(fields, "portal name", { max: 80 });
   const url = requireUrl(fields, "portal url", { allowedDomains: MICROSOFT_DOMAINS });
   const category = requireText(fields, "portal category", { max: 40 });
 
   const key = normalizeUrl(url);
-  if (csv.rows.some((row) => normalizeUrl(row.Url) === key)) {
+  if ([...csv.rows, ...submissionRows(submissionsDirectory)].some((row) => normalizeUrl(row.Url) === key)) {
     duplicate("This portal is already listed.");
   }
 
   const finalCategory = matchExisting(csv.rows, "Categorie", category);
-  appendCsvRow(path, csv, { Name: name, Categorie: finalCategory, Url: url });
+  const path = writeIssueCsv(submissionsDirectory, csv, { Name: name, Categorie: finalCategory, Url: url });
 
   return {
     files: [path],
@@ -296,8 +313,8 @@ async function submitPortal(fields) {
 }
 
 async function submitRssFeed(fields) {
-  const path = "rss-watcher/rss-feeds.csv";
-  const csv = readCsv(path);
+  const csv = readCsv("rss-watcher/rss-feeds.csv");
+  const submissionsDirectory = "rss-watcher/submissions";
   const name = requireText(fields, "feed name", { max: 80 });
   const url = requireUrl(fields, "feed url");
   const category = requireText(fields, "feed category", { max: 60 });
@@ -311,10 +328,11 @@ async function submitRssFeed(fields) {
   }
 
   const key = normalizeUrl(url);
-  if (csv.rows.some((row) => normalizeUrl(row.url) === key)) {
+  const allFeeds = [...csv.rows, ...submissionRows(submissionsDirectory)];
+  if (allFeeds.some((row) => normalizeUrl(row.url) === key)) {
     duplicate("This feed is already being watched.");
   }
-  if (csv.rows.some((row) => row.name.toLowerCase() === name.toLowerCase())) {
+  if (allFeeds.some((row) => row.name.toLowerCase() === name.toLowerCase())) {
     duplicate("A feed with that name is already being watched.");
   }
 
@@ -343,7 +361,7 @@ async function submitRssFeed(fields) {
   const finalCategory = matchExisting(csv.rows, "category", category);
   const finalSubcategory = matchExisting(csv.rows, "subcategory", subcategory);
 
-  appendCsvRow(path, csv, {
+  const path = writeIssueCsv(submissionsDirectory, csv, {
     name,
     category: finalCategory,
     subcategory: finalSubcategory,
@@ -403,17 +421,25 @@ async function submitImage(fields) {
   const slug = slugify(title);
   if (!slug) invalid("The title must contain at least one letter or digit.");
 
+  const issueNumber = process.env.ISSUE_NUMBER;
+  if (!/^\d+$/.test(issueNumber || "")) {
+    throw new Error("ISSUE_NUMBER must be set to write a community submission.");
+  }
   const existing = readdirSync(directory);
-  if (existing.some((file) => file.toLowerCase().replace(/\.[^.]+$/, "") === slug)) {
+  const submissionsDirectory = "it-images/submissions";
+  const submittedImages = readdirSync(submissionsDirectory);
+  const existingSlugs = [...existing, ...submittedImages]
+    .map((file) => file.toLowerCase().replace(/\.[^.]+$/, "").replace(/-issue-\d+$/, ""));
+  if (existingSlugs.includes(slug)) {
     duplicate("An image with that title is already in the gallery.");
   }
 
-  const filename = `${slug}.${signature.ext}`;
-  writeFileSync(`${directory}/${filename}`, bytes);
+  const filename = `${slug}-issue-${issueNumber}.${signature.ext}`;
+  const path = `${submissionsDirectory}/${filename}`;
+  writeFileSync(path, bytes);
 
   return {
-    files: [`${directory}/${filename}`, "it-images/images.json"],
-    regenerateManifest: true,
+    files: [path],
     title,
     prTitle: `Add IT image: ${title}`,
     summary: [
@@ -465,7 +491,6 @@ try {
     title: result.title,
     pr_title: result.prTitle,
     files: result.files.join(" "),
-    regenerate_manifest: result.regenerateManifest ? "true" : "false",
     summary: result.summary.map(([label, value]) => `| ${label} | ${value} |`).join("\n"),
     note: result.note,
   });
