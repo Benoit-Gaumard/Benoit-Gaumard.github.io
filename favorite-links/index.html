@@ -1212,9 +1212,10 @@
       </div>
       <input id="categoryFilter" type="hidden" value="">
       <div class="category-badges" id="categoryBadges" role="group" aria-label="Filter by category"></div>
+      <input id="topicFilter" type="hidden" value="">
+      <div class="category-badges" id="topicBadges" role="group" aria-label="Filter by topic"></div>
       <details class="extra-filters"><summary>More filters &amp; sort</summary>
       <div class="filter-bar">
-        <select id="topicFilter" aria-label="Filter by original topic"><option value="">All topics</option></select>
         <select id="sortSelect" aria-label="Sort order">
           <option value="latest" selected>Recently listed</option>
           <option value="featured">Featured first</option>
@@ -1362,6 +1363,8 @@
       searchInput: document.getElementById("searchInput"),
       categoryFilter: document.getElementById("categoryFilter"),
       categoryBadges: document.getElementById("categoryBadges"),
+      topicFilter: document.getElementById("topicFilter"),
+      topicBadges: document.getElementById("topicBadges"),
       sortSelect: document.getElementById("sortSelect"),
       highlightedOnly: document.getElementById("highlightedOnly"),
       favoritesFilter: document.getElementById("favoritesFilter"),
@@ -1571,7 +1574,20 @@
         });
         elements.categoryBadges.append(button);
       });
-      categories.forEach((category) => document.getElementById("topicFilter").append(new Option(category, category)));
+      elements.topicBadges.replaceChildren();
+      ["", ...categories].forEach((topic) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "category-badge";
+        button.dataset.topic = topic;
+        button.textContent = topic || "All topics";
+        button.setAttribute("aria-pressed", String(topic === elements.topicFilter.value));
+        button.addEventListener("click", () => {
+          elements.topicFilter.value = topic;
+          elements.topicFilter.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        elements.topicBadges.append(button);
+      });
       const datalist = document.getElementById("submitLinkCategories");
       if (datalist) {
         categories.forEach((category) => {
@@ -1702,11 +1718,14 @@
       elements.categoryBadges.querySelectorAll("button").forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.category === category));
       });
+      const topic = elements.topicFilter.value;
+      elements.topicBadges.querySelectorAll("button").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.topic === topic));
+      });
       const highlightedOnly = elements.highlightedOnly.checked;
 
       const filtered = links.filter((link) => {
         if (category && link.group !== category) return false;
-        const topic = document.getElementById("topicFilter").value;
         if (topic && link.category !== topic) return false;
         if (highlightedOnly && !link.isHighlighted) return false;
         if (favoritesOnly && !favorites.has(link.url)) return false;
@@ -1826,7 +1845,7 @@
 
     elements.searchInput.addEventListener("input", () => renderCards(true));
     elements.categoryFilter.addEventListener("change", () => renderCards(true));
-    document.getElementById("topicFilter").addEventListener("change", () => renderCards(true));
+    elements.topicFilter.addEventListener("change", () => renderCards(true));
     elements.sortSelect.addEventListener("change", () => renderCards(true));
     elements.highlightedOnly.addEventListener("change", () => renderCards(true));
     elements.favoritesFilter.addEventListener("click", () => {
@@ -1995,7 +2014,7 @@
       var controls = [].slice
         .call(scope.querySelectorAll("input[id], select[id]"))
         .filter(function (el) {
-          if ((el.type === "hidden" && el.id !== "categoryFilter") || el.type === "button" || el.type === "submit") return false;
+          if ((el.type === "hidden" && el.id !== "categoryFilter" && el.id !== "topicFilter") || el.type === "button" || el.type === "submit") return false;
           return !el.closest("[data-no-url-state]");
         });
       if (!controls.length) return;
