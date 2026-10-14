@@ -94,6 +94,11 @@ test("curated links: exact URLs, visible metadata, descriptive labels and storag
   assert.doesNotMatch(html["favorite-links"], /<select id="categoryFilter"/);
   assert.match(html["favorite-links"], /button\.dataset\.category = group/);
   assert.match(html["favorite-links"], /button\.setAttribute\("aria-pressed", String\(button\.dataset\.category === category\)\)/);
+  assert.match(html["favorite-links"], /id="topicBadges" role="group" aria-label="Filter by topic"/);
+  assert.doesNotMatch(html["favorite-links"], /<select id="topicFilter"/);
+  assert.match(html["favorite-links"], /button\.dataset\.topic = topic/);
+  assert.match(html["favorite-links"], /button\.setAttribute\("aria-pressed", String\(button\.dataset\.topic === topic\)\)/);
+  assert.match(html["favorite-links"], /el\.id !== "categoryFilter" && el\.id !== "topicFilter"/);
   assert.doesNotMatch(html["favorite-links"], /Your saved links/);
   assert.match(html["favorite-links"], /My favorites \(0\)/);
   const sandbox = functions("favorite-links", ["parseCsvLine", "parseCsv", "hostnameFor", "groupFor", "presentLink"], {
@@ -116,6 +121,45 @@ test("curated links: exact URLs, visible metadata, descriptive labels and storag
   assert.match(html["favorite-links"], /date\.textContent = dateLabel \|\| \(link\.dateAdded \? "Invalid date" : "Not dated"\)/);
   assert.doesNotMatch(functionSource(html["favorite-links"], "createCard"), /link-domain/);
   assert.doesNotMatch(html["favorite-links"], /\.link-card-row2\s*\{\s*display:\s*none/);
+});
+test("curated links: topic badges are sorted, unique and dispatch filter changes", () => {
+  const buttons = [];
+  const events = [];
+  const elements = {
+    categoryFilter: { value: "" },
+    categoryBadges: { replaceChildren() {}, append() {} },
+    topicFilter: { value: "Azure", dispatchEvent(event) { events.push(event); } },
+    topicBadges: { replaceChildren() { buttons.length = 0; }, append(button) { buttons.push(button); } },
+  };
+  functions("favorite-links", ["populateFilters"], {
+    elements,
+    links: [
+      { category: "DevOps", group: "Cloud" },
+      { category: "Azure", group: "Cloud" },
+      { category: "Azure", group: "Cloud" },
+      { category: "", group: "Other" },
+    ],
+    Event,
+    document: {
+      getElementById() { return null; },
+      createElement() {
+        return {
+          dataset: {},
+          attributes: {},
+          setAttribute(name, value) { this.attributes[name] = value; },
+          addEventListener(name, listener) { this[name] = listener; },
+        };
+      },
+    },
+  }).populateFilters();
+  assert.deepEqual(buttons.map(button => button.textContent), ["All topics", "Azure", "DevOps"]);
+  assert.deepEqual(buttons.map(button => button.attributes["aria-pressed"]), ["false", "true", "false"]);
+  buttons[2].click();
+  assert.equal(elements.topicFilter.value, "DevOps");
+  buttons[0].click();
+  assert.equal(elements.topicFilter.value, "");
+  assert.equal(events.length, 2);
+  assert.ok(events.every(event => event.type === "change" && event.bubbles));
 });
 test("friends: visible filters and controls precede results without invented data", () => {
   const source = html["friends-websites"];
