@@ -554,13 +554,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1169,20 +1162,6 @@
       </div>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About the SLA calculator</h2>
-      <p>A service level agreement expressed as a percentage is easier to reason about when you convert it into time. This page does that in three directions: allowed downtime for a given SLA, the SLA implied by an observed amount of downtime, and the composite figure you get when several services have to work together.</p>
-      <h3>What the percentages mean (30-day month)</h3>
-      <ul>
-        <li><strong>99.9%</strong> — about 43 minutes of downtime per month.</li>
-        <li><strong>99.95%</strong> — about 21 minutes per month.</li>
-        <li><strong>99.99%</strong> — about 4 minutes per month.</li>
-        <li><strong>99.999%</strong> — about 26 seconds per month.</li>
-      </ul>
-      <h3>Why composite SLAs matter</h3>
-      <p>When a request has to pass through several components in sequence, their availabilities multiply. An application gateway, a web app, and a database each at 99.95% give roughly 99.85% together — noticeably worse than any single component. Adding dependencies always lowers the ceiling, which is why redundancy inside a tier is worth more than another nine on paper.</p>
-      <p>Remember that a cloud provider's SLA is a financial commitment, not a prediction. Credits are paid when a target is missed; they do not restore your service or your data, and most SLAs exclude planned maintenance and customer misconfiguration.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

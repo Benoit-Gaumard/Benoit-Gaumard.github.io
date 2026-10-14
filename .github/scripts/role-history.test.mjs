@@ -37,7 +37,6 @@ test("the stored log is source-backed with baseline metadata and no invented fir
   assert.equal(payload.entries.filter(entry => entry.detectedAt === payload.baselineAt && entry.change === "added").length, 0);
   assert.match(html, /id="baselineAt"/);
   assert.match(html, /Last compared snapshot/);
-  assert.match(html, /An empty log does not prove/);
 });
 
 test("history validates role events and preserves permission evidence, nulls and booleans", () => {

@@ -492,13 +492,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1054,7 +1047,7 @@
       <section class="comparison-panel" id="comparisonPanel" aria-labelledby="comparisonHeading" hidden>
         <h2 id="comparisonHeading" tabindex="-1">Compare two roles</h2>
         <p class="roles-help" id="comparisonCaveat">This compares distinct listed patterns, ignoring case. It does not expand wildcards, subtract exclusions or calculate effective access. Conditions and permission-block boundaries are not present in this snapshot. Identical strings do not establish equivalent access; different strings may overlap.</p>
-        <div class="role-actions"><button class="role-action" id="closeComparison" type="button">Close comparison</button><button class="role-action" id="copyComparison" type="button">Copy comparison link</button><a href="#comparison-notes">How to read this comparison</a></div>
+        <div class="role-actions"><button class="role-action" id="closeComparison" type="button">Close comparison</button><button class="role-action" id="copyComparison" type="button">Copy comparison link</button></div>
         <div id="comparisonContent"></div>
       </section>
       <p id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading roles&hellip;</p>
@@ -1063,32 +1056,6 @@
       <button class="load-more" id="loadMore" type="button" hidden>Load more roles</button>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Azure built-in roles</h2>
-      <p>Azure role-based access control grants permissions through role definitions. A role definition is a list of allowed control-plane operations (<code>Actions</code>), operations carved back out of them (<code>NotActions</code>), and the equivalent pair for operations on the data inside a resource (<code>DataActions</code> and <code>NotDataActions</code>). Built-in roles are the ones Microsoft ships and maintains; their definition IDs are the same GUID in every tenant, which is why they can be referenced safely from templates and pipelines.</p>
-      <h3 id="actions-help">Actions: management operations</h3>
-      <p>Actions list allowed control-plane operation patterns. Counts on this page are recorded entries, not the number of operations a wildcard can match.</p>
-      <h3 id="dataActions-help">DataActions: data-plane operations</h3>
-      <p>DataActions list data-plane operation patterns, such as reading blobs. An empty list does not prove that all routes to data access are blocked: some management permissions can retrieve access keys or grant additional roles.</p>
-      <h3 id="notActions-help">NotActions: control-plane exclusions</h3>
-      <p>NotActions subtracts from the role's allowed Actions; it is not a deny assignment. Another role assignment can still grant an excluded operation.</p>
-      <h3 id="notDataActions-help">NotDataActions: data-plane exclusions</h3>
-      <p>NotDataActions excludes patterns from DataActions. It is not a deny rule across other assignments. Empty groups stay collapsed with an explicit zero count.</p>
-      <h3 id="comparison-notes">Comparing two roles</h3>
-      <p>The comparison shows distinct listed patterns shared by both roles or listed in only one, matching text without case differences. Original spellings and descriptions remain available. It does not expand wildcards or rank roles by privilege: <code>*</code> and <code>*/read</code> differ as strings even though their coverage overlaps.</p>
-      <p>The collector combines permission blocks into four lists and does not retain conditions. Assignment scopes, other roles, deny assignments and service authentication can change effective access. Assignable scopes describe where a role may be assigned, not where you currently hold it. Use the official <a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions" target="_blank" rel="noopener">role-definition guidance</a> and the linked role references before making an access decision.</p>
-      <h3>Reading the source</h3>
-      <ul>
-        <li><code>Actions</code> are management operations - creating, reading, updating or deleting the resource itself.</li>
-        <li><code>DataActions</code> describe direct data-plane permissions. Management rights and service-specific authentication need separate consideration.</li>
-        <li><code>NotActions</code> is a subtraction, not a deny. It removes an operation from this role only; another assignment can still grant it.</li>
-        <li>A wildcard such as <code>Microsoft.Compute/*</code> covers every current and future operation in that namespace, so the effective reach of a role grows as Azure does.</li>
-      </ul>
-      <h3>Choosing the right role</h3>
-      <p>Start from the narrowest role and assignment scope that meet the task. The Privileged badge reflects Microsoft's reference classification, not a risk score calculated by this page. A role without this badge is not necessarily harmless.</p>
-      <h3>Where this data comes from</h3>
-      <p>The refresh workflow collects Microsoft's generated Azure RBAC reference and its per-action descriptions. Last refreshed is the timestamp of this dataset, not the last modification date of each role. Original role IDs and permission strings are preserved when displayed or copied.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1413,10 +1380,7 @@
         group.open = state.groups.has(key) ? state.groups.get(key) : role[bucket.key].length > 0;
         const summary = node("summary", `${bucket.title} · ${role[bucket.key].length.toLocaleString("en-US")} recorded ${role[bucket.key].length === 1 ? "entry" : "entries"}`);
         summary.dataset.action = "group-" + bucket.key;
-        const help = node("p", bucket.help + " ", "roles-help");
-        const link = node("a", "Explanation");
-        link.href = "#" + bucket.key + "-help";
-        help.append(link);
+        const help = node("p", bucket.help, "roles-help");
         group.append(summary, help);
         if (role[bucket.key].length) group.append(permissionList(role[bucket.key].map(pair => ({ left: [pair], right: [] })), null, bucket.key + "-"));
         else group.append(node("p", `No ${bucket.title} entries are recorded for this role.`, "roles-help"));

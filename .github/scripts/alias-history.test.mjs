@@ -96,11 +96,9 @@ test("page explains observation limits, safely renders comparisons and publishes
   assert.doesNotMatch(script, /innerHTML|execCommand/);
   assert.match(script, /Compared with \(UTC\)/);
   assert.match(script, /Observed default path/);
-  assert.match(html, /a removal does not prove that Microsoft retired the alias/);
-  assert.match(html, /3,000 events/);
-  assert.match(html, /API-version-specific paths, modifiability metadata/);
   assert.match(html, /\.field-pair \{ grid-template-columns: minmax\(0, 1fr\); \}/);
   assert.match(html, /name="robots" content="noindex, follow"/);
+  assert.doesNotMatch(html, /class="page-notes"/);
   const workflow = read(".github/workflows/azure-policy-aliases-updates.yaml");
   assert.match(workflow, /actions\/setup-node@v4/);
   assert.match(workflow, /alias-history-data\.test\.mjs/);

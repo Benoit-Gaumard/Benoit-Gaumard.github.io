@@ -492,15 +492,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
-    .page-notes code { display: inline-block; max-width: 100%; white-space: nowrap; overflow-x: auto; vertical-align: bottom; }
-    .page-notes code:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1081,18 +1072,6 @@
       <button class="load-more" id="loadMore" type="button" hidden>Load more aliases</button>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Azure Policy aliases</h2>
-      <p>An alias exposes a specific property of a resource type to Azure Policy, so a rule can inspect it. Writing a custom policy means finding the right alias first, and this page lets you search the full published list.</p>
-      <h3>How aliases work</h3>
-      <ul>
-        <li>An alias looks like <code>Microsoft.Storage/storageAccounts/allowBlobPublicAccess</code> and maps to a property in the resource provider's API.</li>
-        <li>Aliases are versioned against API versions, and a property only becomes usable once an alias exists for it.</li>
-        <li id="array-aliases">Array aliases use <code>[*]</code> to address array members. Use <code>count</code> expressions when the rule needs an explicit count of members that satisfy a condition; do not treat the whole array as a single scalar value.</li>
-      </ul>
-      <h3>Good to know</h3>
-      <p>If a property has no alias, no policy can evaluate it — that is the usual reason a rule that looks correct never matches anything. The same list is available from the CLI with <code>az provider show</code>, but searching it here is faster when you only need to confirm that an alias exists and how it is spelled.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1282,7 +1261,7 @@
     }
 
     function updateScrollTargets() {
-      document.querySelectorAll(".technical-value, .page-notes code").forEach(code => { code.tabIndex = code.scrollWidth > code.clientWidth + 1 ? 0 : -1; });
+      document.querySelectorAll(".technical-value").forEach(code => { code.tabIndex = code.scrollWidth > code.clientWidth + 1 ? 0 : -1; });
     }
 
     function resultCell(tag, className, label) {

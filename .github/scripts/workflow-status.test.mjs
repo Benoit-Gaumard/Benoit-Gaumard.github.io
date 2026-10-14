@@ -42,6 +42,7 @@ test("published freshness uses actual data timestamps, not the current build tim
 });
 test("workflow catalog and UI regeneration preserve each other", () => {
   const html = readFileSync(join("workflows", "index.html"), "utf8");
+  assert.doesNotMatch(html, /About these scheduled workflows|class="page-notes"/);
   assert.equal(buildWorkflowPage(), html);
   assert.ok(upgradeWorkflowStatus(html) === html);
   assert.match(html, /Status lookup completed/);

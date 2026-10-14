@@ -123,7 +123,7 @@ test('each tab owns labelled filters, options and an accessible result count', (
   assert.match(script, /displayed \/ \$\{state\.rows\.length/);
   assert.match(script, /match the active filters/);
   assert.match(script, /filter\.label} ×/);
-  assert.match(html, /aria-describedby="effectsHelp"/);
+  assert.doesNotMatch(html, /effectsHelp|effects-notes/);
 });
 
 test('details are separate from favorites and carry metadata and copy actions', () => {

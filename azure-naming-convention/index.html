@@ -573,13 +573,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1210,21 +1203,6 @@
       </div>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Azure naming conventions</h2>
-      <p>Compose a naming proposal using Microsoft Cloud Adoption Framework abbreviations. The preview checks the rules recorded for the selected provider; it does not reserve the name or ask Azure to approve a deployment.</p>
-      <h3>The usual pattern</h3>
-      <p>The framework suggests composing a name from a resource type abbreviation, a workload or application name, an environment, a region, and an instance number — for example <code>vm-payments-prod-weu-01</code>. The order matters less than applying it consistently: names that sort predictably are far easier to filter, script against, and audit.</p>
-      <h3>Constraints to respect</h3>
-      <ul>
-        <li>Length limits vary widely; storage accounts allow 24 characters, lowercase letters and digits only, with no hyphens.</li>
-        <li>Key vaults allow hyphens and have their own 3-24 character limit. Global uniqueness does not imply a compact format.</li>
-        <li>Some names must be globally unique because they become part of a DNS name — storage accounts, key vaults, and web apps among them.</li>
-        <li>Most resources cannot be renamed after creation, so the cost of getting it wrong is a redeployment.</li>
-      </ul>
-      <p>If the complete name is too long, shorten the components yourself. This generator never truncates the output. When the reference provides only partial constraints, or no recorded rule for a type, the preview says so instead of claiming compatibility.</p>
-      <p>Keep genuinely variable information — owner, cost centre, criticality — in tags rather than in the name. Tags can be changed, queried, and used in cost reports; names cannot.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

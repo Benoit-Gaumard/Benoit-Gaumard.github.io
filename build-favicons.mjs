@@ -75,15 +75,22 @@ function collectDomains() {
   }
 
   const csvs = [
-    ["favorite-links/favorite-links.csv", "favorite-links"],
-    ["friends-websites/friends-websites.csv", "friends-websites"],
-    ["microsoft-portals/portals-urls.csv", "microsoft-portals"],
+    ["favorite-links/favorite-links.csv", "favorite-links", "favorite-links/submissions"],
+    ["friends-websites/friends-websites.csv", "friends-websites", "friends-websites/submissions"],
+    ["microsoft-portals/portals-urls.csv", "microsoft-portals", "microsoft-portals/submissions"],
   ];
-  for (const [path, src] of csvs) {
-    if (!existsSync(path)) continue;
-    for (const line of readFileSync(path, "utf8").split(/\r?\n/).slice(1)) {
-      const m = line.match(/https?:\/\/([^/,;"\s]+)/);
-      if (m) add(m[1], src);
+  for (const [path, src, submissionsDirectory] of csvs) {
+    const files = existsSync(path) ? [path] : [];
+    if (existsSync(submissionsDirectory)) {
+      files.push(...readdirSync(submissionsDirectory)
+        .filter((file) => /^issue-\d+\.csv$/.test(file))
+        .map((file) => join(submissionsDirectory, file)));
+    }
+    for (const file of files) {
+      for (const line of readFileSync(file, "utf8").split(/\r?\n/).slice(1)) {
+        const m = line.match(/https?:\/\/([^/,;"\s]+)/);
+        if (m) add(m[1], src);
+      }
     }
   }
 

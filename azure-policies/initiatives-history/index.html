@@ -717,13 +717,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1363,7 +1356,7 @@
         <span>Retention: <strong id="retention">-</strong></span>
         <a href="../policies-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Policies history</a>
       </p>
-      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history. <a href="#notes-heading">Coverage and limitations</a>.</p>
+      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history.</p>
     </section>
 
     <section class="history-log" aria-label="Initiative change log">
@@ -1423,19 +1416,6 @@
       <p class="catalogue-return"><a class="history-action" href="../?tab=initiatives">Back to the initiatives catalogue</a></p>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">How this log is built</h2>
-      <p>This derived log compares consecutive catalogue snapshots. The refresh is scheduled daily at 06:00 UTC; weekly snapshot and manual runs can also refresh it. A scheduled collection is not a guarantee that Azure changed that day, nor a real-time feed. Event dates are detection times, not publication dates.</p>
-      <p><strong>Added</strong> means present in the new scan but absent from the previous catalogue; <strong>Removed</strong> means the reverse. These observations do not establish Microsoft's exact publication or retirement date.</p>
-      <p><strong>Modified</strong> distinguishes metadata (name, category and definition type), version and member composition. New comparisons record added/removed member references even when the total count is unchanged. Expand an event for the recorded members and before/after metadata.</p>
-      <p>A member is identified by its policy ID and reference ID. The same policy can appear under multiple references, so member counts are not counts of unique policies. Changing the policy behind a reference, or renaming the reference, is recorded as a removal and an addition. Reordering members is ignored.</p>
-      <p>Names are captured from the policy catalogues available during comparison: the previous catalogue for removals and the new one for additions. If a name was unavailable, the exact ID remains accessible instead of an invented label. Catalogue links show the current definitions; removed definitions may no longer exist there.</p>
-      <p><strong>Older events may contain only a count change.</strong> A change from 20 to 29 is net +9 members, not proof that exactly nine were added: additions and removals could have happened together. Those missing identities are not reconstructed from today's catalogue. Missing or inconsistent member snapshots are explicitly marked unavailable.</p>
-      <p>The comparator does not detect parameter-value changes, group assignments, descriptions or rule-body edits unless tracked metadata or member identities also change. A version or composition change alone does not establish its impact on your Azure assignments.</p>
-      <p>Recording starts with the collector, without backfilling earlier Azure history. The first scan establishes a baseline. The retention limit is <span id="retentionInline">180</span> days at each refresh; a shared limit of 3,000 policy and initiative events can shorten that window. No retained event is not evidence of no historical change, and untracked rule-only changes may not appear.</p>
-      <p>Counts and the displayed detection-date range describe the <strong>active filters across all matching events</strong>, not only the displayed batch. The total retained count covers initiative events only. Recent-period filters use UTC calendar days ending today; all retained events remain available regardless of the age of the last refresh.</p>
-      <p>Export includes every matching event with its recorded fields, active filters and source timestamp, not just the visible batch. It does not reconstruct missing values. <a href="../policy-changes.json">Inspect the source log</a> (policies and initiatives).</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1513,7 +1493,7 @@
     const state = { entries: [], filtered: [], visible: PAGE_SIZE, keys: new Map(), open: new Set(), status: "loading", generatedAt: null, retentionDays: null, filteredAt: null, filters: {} };
     const elements = Object.fromEntries([
       "search", "changeFilter", "categoryFilter", "periodFilter", "clearFilters", "historyControls", "timeline",
-      "resultCount", "changeCounts", "refreshedAt", "retention", "retentionInline", "loadMore", "exportChanges",
+      "resultCount", "changeCounts", "refreshedAt", "retention", "loadMore", "exportChanges",
       "actionStatus", "copyFallback", "copyValue", "exportFallback", "historyError", "retryHistory", "undatedNotice",
       "historyExtra", "historyFilterToggle", "historyFiltersDone",
       "eventRange",
@@ -2033,7 +2013,6 @@
         elements.categoryFilter.replaceChildren(new Option("All categories", ""));
         [...new Set(state.entries.map(entry => entry.category).filter(Boolean))].sort().forEach(category => elements.categoryFilter.add(new Option(category, category)));
         elements.retention.textContent = state.retentionDays ? `Up to ${state.retentionDays} days` : "Not reported";
-        elements.retentionInline.textContent = state.retentionDays ? String(state.retentionDays) : "an unreported number of";
         const stamp = entryTimestamp({ detectedAt: state.generatedAt });
         elements.refreshedAt.textContent = Number.isFinite(stamp)
           ? new Date(stamp).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not recorded";

@@ -51,7 +51,8 @@ test('invalid coordinates do not remove a region from the directory', () => {
 });
 
 test('directory precedes map and collapsed statistics in the DOM', () => {
-  const ids = ['searchInput', 'zoneFilter', 'regionCards', 'mapPanel', 'statsSection', 'dataSources'];
+  const ids = ['searchInput', 'zoneFilter', 'regionCards', 'mapPanel', 'statsSection'];
+  assert.doesNotMatch(html, /dataSources|zones-notes/);
   const offsets = ids.map(id => html.indexOf(`id="${id}"`));
   assert.ok(offsets.every(offset => offset >= 0));
   assert.deepEqual(offsets, [...offsets].sort((a, b) => a - b));

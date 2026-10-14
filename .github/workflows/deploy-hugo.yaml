@@ -126,7 +126,7 @@ jobs:
           cp ../azure-ip-ranges/ip-ranges.json public/azure-ip-ranges/ip-ranges.json
           mkdir -p public/friends-websites
           cp ../friends-websites/index.html public/friends-websites/index.html
-          cp ../friends-websites/friends-websites.csv public/friends-websites/friends-websites.csv
+          node ../.github/scripts/build-submission-csv.mjs ../friends-websites/friends-websites.csv ../friends-websites/submissions public/friends-websites/friends-websites.csv
           cp ../friends-websites/websites-meta.json public/friends-websites/websites-meta.json
           mkdir -p public/azure-regions
           cp ../azure-regions/index.html public/azure-regions/index.html
@@ -144,10 +144,11 @@ jobs:
           mkdir -p public/it-images
           cp ../it-images/index.html public/it-images/index.html
           cp -R ../it-images/export public/it-images/export
-          node ../it-images/generate-manifest.mjs public/it-images/images.json
+          cp -R ../it-images/submissions/. public/it-images/export/
+          node ../it-images/generate-manifest.mjs public/it-images/images.json public/it-images/export
           mkdir -p public/favorite-links
           cp ../favorite-links/index.html public/favorite-links/index.html
-          cp ../favorite-links/favorite-links.csv public/favorite-links/favorite-links.csv
+          node ../.github/scripts/build-submission-csv.mjs ../favorite-links/favorite-links.csv ../favorite-links/submissions public/favorite-links/favorite-links.csv
           cp ../favorite-links/link-labels.json public/favorite-links/link-labels.json
           mkdir -p public/azure-policy-aliases
           cp ../azure-policy-aliases/index.html public/azure-policy-aliases/index.html
@@ -157,10 +158,11 @@ jobs:
           cp ../azure-policy-aliases/aliases-history/index.html public/azure-policy-aliases/aliases-history/index.html
           mkdir -p public/microsoft-portals
           cp ../microsoft-portals/index.html public/microsoft-portals/index.html
-          cp ../microsoft-portals/portals-urls.csv public/microsoft-portals/portals-urls.csv
+          node ../.github/scripts/build-submission-csv.mjs ../microsoft-portals/portals-urls.csv ../microsoft-portals/submissions public/microsoft-portals/portals-urls.csv
           cp ../microsoft-portals/portal-details.json public/microsoft-portals/portal-details.json
           mkdir -p public/rss-watcher
           cp ../rss-watcher/index.html public/rss-watcher/index.html
+          node ../.github/scripts/build-submission-csv.mjs ../rss-watcher/rss-feeds.csv ../rss-watcher/submissions public/rss-watcher/rss-feeds.csv
           cp ../rss-watcher/updates.json public/rss-watcher/updates.json
           cp ../rss-watcher/source-icons.json public/rss-watcher/source-icons.json
           cp -R ../rss-watcher/source-icons public/rss-watcher/source-icons

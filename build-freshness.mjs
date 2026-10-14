@@ -40,15 +40,37 @@ const FILES = [
   "graph-permissions/permissions.json",
 ];
 
+const SOURCE_FILES = {
+  "favorite-links/favorite-links.csv": ["favorite-links/favorite-links.csv", "favorite-links/submissions"],
+  "friends-websites/friends-websites.csv": ["friends-websites/friends-websites.csv", "friends-websites/submissions"],
+  "microsoft-portals/portals-urls.csv": ["microsoft-portals/portals-urls.csv", "microsoft-portals/submissions"],
+  "it-images/images.json": [
+    "it-images/images.json",
+    "it-images/image-descriptions.json",
+    "it-images/export",
+    "it-images/submissions",
+  ],
+};
+
 const manifest = {};
 let missing = 0;
 
 for (const file of FILES) {
-  if (!existsSync(join(REPO, file))) { console.warn(`  skipped (absent): ${file}`); missing++; continue; }
-  let iso = "";
-  try {
-    iso = execFileSync("git", ["-C", REPO, "log", "-1", "--format=%cI", "--", file], { encoding: "utf8" }).trim();
-  } catch { /* not a git checkout; fall through to build time */ }
+  const sources = SOURCE_FILES[file] || [file];
+  if (!sources.some((source) => existsSync(join(REPO, source)))) {
+    console.warn(`  skipped (absent): ${file}`);
+    missing++;
+    continue;
+  }
+  const timestamps = sources.flatMap((source) => {
+    try {
+      const timestamp = execFileSync("git", ["-C", REPO, "log", "-1", "--format=%cI", "--", source], { encoding: "utf8" }).trim();
+      return timestamp ? [timestamp] : [];
+    } catch {
+      return [];
+    }
+  });
+  let iso = timestamps.sort((left, right) => Date.parse(left) - Date.parse(right)).at(-1) || "";
   if (!iso) {
     // shallow clones and tarball builds have no history for the file
     iso = new Date().toISOString();

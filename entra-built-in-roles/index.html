@@ -468,13 +468,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1003,7 +996,7 @@
           <div class="directory-field"><label for="serviceFilter">Service</label><select id="serviceFilter"><option value="">All services</option></select></div>
           <label class="privileged-filter"><input id="privilegedOnlyFilter" type="checkbox" aria-describedby="privilegedHelp"><span>Privileged only <span id="privilegedCount"></span></span></label>
         </div>
-        <p class="directory-help" id="privilegedHelp">The badge follows Microsoft's published classification, not a calculated risk score. The count covers the whole dataset. <a href="#privileged-notes">About this classification</a>.</p>
+        <p class="directory-help" id="privilegedHelp">The badge follows Microsoft's published classification, not a calculated risk score. The count covers the whole dataset.</p>
         <div class="directory-options">
           <details class="sort-options"><summary>Sort roles</summary><div class="directory-actions"><label for="sortBy">Sort by</label><select id="sortBy"></select><button class="directory-action" id="sortDirection" type="button">Ascending</button></div></details>
           <button class="directory-action" id="resetFilters" type="button" hidden>Reset filters</button>
@@ -1018,29 +1011,6 @@
       <button class="directory-action load-more" id="loadMore" type="button" hidden>Load more roles</button>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Microsoft Entra ID built-in roles</h2>
-      <p>Entra ID directory roles govern users, groups, applications, devices, authentication methods and Microsoft services that use Entra identities. They are distinct from <a href="/azure-built-in-roles/">Azure RBAC roles</a>, which govern Azure resource access. This catalogue is a reference snapshot, not a view of your tenant's assignments or effective access.</p>
-      <h3 id="template-id-notes">Template ID, not an activated directory role ID</h3>
-      <p>The built-in template ID copied here identifies the same role template across directories. Do not confuse it with the tenant-specific <code>directoryRole.id</code> of an activated directory-role object. A role definition is another resource type: use the identifier expected by the API, rather than substituting a template ID for every parameter named <code>id</code>.</p>
-      <p>See Microsoft's descriptions of <a href="https://learn.microsoft.com/en-us/graph/api/resources/directoryrole?view=graph-rest-1.0" target="_blank" rel="noopener">directoryRole and roleTemplateId</a> and <a href="https://learn.microsoft.com/en-us/graph/api/resources/unifiedroledefinition?view=graph-rest-1.0" target="_blank" rel="noopener">unifiedRoleDefinition and templateId</a>. This page does not retrieve tenant-specific object IDs.</p>
-      <h3 id="graph-permission-notes">Roles are not Graph API permissions</h3>
-      <p>The <code>microsoft.directory/...</code> strings are directory RBAC resource actions, not Microsoft Graph OAuth scopes or application permissions such as <code>Directory.Read.All</code>. Check each endpoint's documented permissions and role requirements. An authorization error can have several causes; this catalogue does not diagnose token or assignment issues. Browse the separate <a href="/graph-permissions/">Microsoft Graph permissions</a> catalogue for those permissions.</p>
-      <h3 id="privileged-notes">Privileged classification</h3>
-      <p>The Privileged badge and filter reproduce Microsoft's classification in the source snapshot. A role not flagged as privileged is not necessarily harmless. The filter count is the dataset total; the result count reflects your combined search and service filters.</p>
-      <h3>Progressive action details</h3>
-      <p>Actions are grouped by the service namespace before the first slash. Open a service to read a batch of actions and their recorded descriptions; show more actions or services when needed. A search inside a role covers all its recorded actions, including groups and batches not yet displayed, without changing the catalogue filters. Counts are recorded entries, not an expansion of inherited or effective permissions.</p>
-      <p>An empty action list means no actions were recorded in this snapshot, not that the role has no permissions. Refer to Microsoft Learn for its current definition.</p>
-      <h3>Practical guidance</h3>
-      <ul>
-        <li>Prefer a narrow role over Global Administrator; most day-to-day tasks are covered by a specific administrator role listed here.</li>
-        <li>Scope role assignments to an administrative unit when the role supports it, so a helpdesk role does not reach the whole directory.</li>
-        <li>Keep at least two, and no more than a handful, of permanent Global Administrators, and exclude a break-glass account from Conditional Access.</li>
-        <li>Read the permissions rather than the name: several reader-sounding roles can read sensitive data, and some administrator roles are narrower than they sound.</li>
-      </ul>
-      <h3>Where this data comes from</h3>
-      <p>The refresh workflow collects Microsoft's Entra ID roles reference and its action descriptions. Last refreshed is the dataset timestamp, not the last modification date of each role. Original template IDs and resource-action strings are preserved.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1422,12 +1392,9 @@
       panel.setAttribute("aria-label", `Details for ${role.displayName}`);
       const actions = node("div", undefined, "directory-actions");
       const copyTemplate = button("Copy template ID", () => copy(role.templateId, copyTemplate, "Built-in template ID"), "copy-template");
-      const explanation = node("p", "Copies the built-in template ID, not an activated directoryRole.id in your tenant. Check which identifier your API accepts. ", "directory-help");
+      const explanation = node("p", "Copies the built-in template ID, not an activated directoryRole.id in your tenant. Check which identifier your API accepts.", "directory-help");
       explanation.id = "template-note-" + state.indices.get(roleKey(role.templateId));
       copyTemplate.setAttribute("aria-describedby", explanation.id);
-      const idHelp = node("a", "Identifier guidance");
-      idHelp.href = "#template-id-notes";
-      explanation.append(idHelp);
       const learn = node("a", "Microsoft Learn", "directory-action");
       learn.href = role.docUrl;
       learn.target = "_blank";

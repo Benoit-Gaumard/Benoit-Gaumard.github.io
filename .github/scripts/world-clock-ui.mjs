@@ -312,7 +312,7 @@ export function upgradeClock(source) {
   let html = source.replace(/\r+\n/g, "\n");
   if (html.includes("<!-- world-clock-view:start -->")) html = html.replace(/<!-- world-clock-view:start -->[\s\S]*?<!-- world-clock-view:end -->\n?/, MARKUP);
   else {
-    const start = html.indexOf('    <section aria-label="Paris time">'), end = html.indexOf('    <section class="page-notes"', start);
+    const start = html.indexOf('    <section aria-label="Paris time">'), end = html.indexOf("  </main>", start);
     if (start < 0 || end < start) throw new Error("Clock markup guard");
     html = html.slice(0, start) + MARKUP + "\n" + html.slice(end);
   }

@@ -29,7 +29,7 @@ jobs:
         run: node --test .github/scripts/rss-icons.test.mjs
 
       - name: Fetch latest RSS feeds
-        run: node rss-watcher/fetch-updates.mjs
+        run: node rss-watcher/fetch-updates.mjs "$RUNNER_TEMP/rss-feeds.csv"
 
       - name: Cache RSS source icons
         run: node rss-watcher/cache-icons.mjs

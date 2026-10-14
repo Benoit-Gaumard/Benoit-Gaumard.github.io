@@ -43,6 +43,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Test community submission generation
+        run: node --test .github/scripts/community-submissions.test.mjs
+
       - name: Ensure labels exist
         run: |
           gh label create community --color 5319e7 --description "Contributed by a visitor" --force
@@ -57,11 +60,8 @@ jobs:
         id: parse
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: node .github/scripts/apply-submission.mjs
-
-      - name: Regenerate image manifest
-        if: steps.parse.outputs.status == 'ok' && steps.parse.outputs.regenerate_manifest == 'true'
-        run: node it-images/generate-manifest.mjs
 
       - name: Reject invalid submission
         if: steps.parse.outputs.status == 'invalid'

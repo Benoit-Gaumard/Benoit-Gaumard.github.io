@@ -555,9 +555,9 @@
       transition: border-color .18s ease, transform .18s ease;
     }
     .site-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
-    .site-card-title-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; }
+    .site-card-title-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .25rem; }
     .site-card-head h2 { margin: 0; min-width: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
-    .site-tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .5rem; }
+    .site-tags { display: flex; flex-wrap: wrap; gap: .375rem; min-width: 0; }
     .site-articles { display: flex; flex-direction: column; gap: .25rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
     .site-article {
       display: flex;
@@ -800,13 +800,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -931,10 +924,8 @@
     .rss-field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
     .rss-field input,.rss-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
     .rss-help{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;margin:.75rem 0;}
-    .rss-options>summary,.rss-item-summary>summary{min-height:2.75rem;padding-block:.65rem;color:var(--cp-link);font-size:.85rem;cursor:pointer;}
-    .rss-item-summary{grid-column:1/-1;min-width:0;}
+    .rss-options>summary{min-height:2.75rem;padding-block:.65rem;color:var(--cp-link);font-size:.85rem;cursor:pointer;}
     .site-article{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;}
-    .rss-item-summary p{font-size:.9rem;line-height:1.55;max-width:80ch;overflow-wrap:anywhere;color:var(--cp-text-muted);}
     .icon-button,.language-option,.view-option,.favorites-filter,.clear-button,.submit-link-button{min-height:2.75rem;}
     .icon-button{min-width:2.75rem;width:2.75rem;height:2.75rem;}
     .keyword-chip button{min-width:2.75rem;min-height:2.75rem;}
@@ -944,13 +935,12 @@
     @media(max-width:48rem){
       .rss-primary{grid-template-columns:minmax(0,1fr);}
       .rss-controls .language-filter{width:fit-content;max-width:100%;}
-      .list-article{grid-template-columns:1.5rem minmax(0,1fr) auto;grid-template-areas:"icon source day" "title title title" "actions actions actions" "summary summary summary";gap:.5rem;}
+      .list-article{grid-template-columns:1.5rem minmax(0,1fr) auto;grid-template-areas:"icon source day" "title title title" "actions actions actions";gap:.5rem;}
       .list-article .list-icon-slot{grid-area:icon;}
       .list-article .list-source{grid-area:source;white-space:normal;overflow-wrap:anywhere;}
       .list-article .site-article-day{grid-area:day;}
       .list-article .site-article-title{grid-area:title;min-width:0;}
       .list-article .site-article-actions{grid-area:actions;}
-      .list-article .rss-item-summary{grid-area:summary;}
     }
 </style>
 <!-- site-ui:start -->
@@ -1433,7 +1423,7 @@
       <fieldset class="rss-controls" id="rssControls" disabled aria-label="Filter RSS headlines">
         <div class="rss-primary">
           <div class="rss-field"><label for="search">Search headlines</label><input id="search" type="search" placeholder="Title, description or source" autocomplete="off" spellcheck="false"></div>
-          <div class="rss-field"><label for="lastUpdate">Publication period (UTC)</label><select id="lastUpdate"><option value="" selected>All retained</option><option value="0">Today</option><option value="1">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div>
+          <div class="rss-field"><label for="lastUpdate">Publication period (UTC)</label><select id="lastUpdate"><option value="">All retained</option><option value="0" selected>Today</option><option value="1">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div>
         </div>
         <div class="rss-primary">
           <div class="rss-field"><label for="source">Source</label><select id="source"><option value="">All sources</option></select></div>
@@ -1480,18 +1470,6 @@
       <button class="site-ux-button" id="rssLoadMore" type="button" hidden>Show more</button>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About RSS Watcher</h2>
-      <p>An aggregator that pulls headlines from a curated set of technology sources and refreshes them through the day, so one page replaces a folder of bookmarks.</p>
-      <h3>How it works</h3>
-      <ul>
-        <li>A scheduled job fetches each feed and stores the result as static JSON alongside the page.</li>
-        <li>Items are grouped and dated so you can see what is genuinely new since your last visit.</li>
-        <li>Sources cover cloud platforms, security, and general engineering news.</li>
-      </ul>
-      <h3>Why RSS still earns its place</h3>
-      <p>A feed gives you the publisher's own headlines in publication order, with no ranking algorithm, no account, and no tracking of what you read. It is also resilient: if a source stops publishing or its feed breaks, that is visible immediately rather than silently absorbed. Feed health for every source tracked here is listed on the activity page.</p>
-    </section>
   </main>
 
   <dialog class="submit-dialog" id="submitDialog" aria-labelledby="submitHeading">
@@ -1681,7 +1659,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
 
     function syncRssUrl() {
       SiteUX.updateURL(params => {
-        [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => { params.delete(control.id); if (control.value) params.set(control.id, control.value); });
+        [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => { params.delete(control.id); if (control.value || control === elements.lastUpdate) params.set(control.id, control.value); });
         params.delete("language"); if (state.language) params.set("language", state.language);
         params.set("view", state.viewMode);
         params.set("keywords", JSON.stringify(state.keywords));
@@ -1693,7 +1671,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
       state.restoring = true;
       const params = new URLSearchParams(location.search);
       [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => {
-        const value = params.get(control.id) || "";
+        const value = params.get(control.id) ?? (control === elements.lastUpdate ? "0" : "");
         if (control.tagName === "SELECT" && value && ![...control.options].some(option => option.value === value)) {
           if (control === elements.lastUpdate) { control.value = ""; SiteUX.notice("Unsupported period; all retained dates are shown."); return; }
           control.add(new Option(`${value} (not in snapshot)`, value));
@@ -1721,17 +1699,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
     function updateRssOptions() {
       const active = Number(Boolean(elements.category.value)) + Number(Boolean(elements.subcategory.value)) + Number(state.keywords.length > 0);
       document.querySelector("#rssOptions > summary").textContent = `Categories and keywords${active ? " · " + active + " active" : ""}`;
-    }
-
-    function createArticleSummary(item) {
-      const details = document.createElement("details");
-      details.className = "rss-item-summary";
-      const summary = document.createElement("summary");
-      summary.textContent = "Summary";
-      const text = document.createElement("p");
-      text.textContent = item.description || "No summary was supplied by this feed.";
-      details.append(summary, text);
-      return details;
     }
 
     function formatDate(iso) {
@@ -1890,7 +1857,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
       actions.append(createFavoriteButton(item), createShareButton(item));
 
       li.append(day, link, actions);
-      li.append(createArticleSummary(item));
       return li;
     }
 
@@ -1920,7 +1886,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
       actions.append(createFavoriteButton(item), createShareButton(item));
 
       li.append(iconSlot, source, day, link, actions);
-      li.append(createArticleSummary(item));
       return li;
     }
 
@@ -1950,7 +1915,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
           chip.textContent = tag;
           tags.append(chip);
         });
-        head.append(tags);
+        titleRow.append(tags);
       }
 
       const list = document.createElement("ul");

@@ -3,13 +3,14 @@ import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp"]);
-const exportDirectory = join(dirname(fileURLToPath(import.meta.url)), "export");
+const exportDirectory = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), "export"));
 const outputPath = resolve(process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), "images.json"));
 const descriptions = JSON.parse(await readFile(join(dirname(fileURLToPath(import.meta.url)), "image-descriptions.json"), "utf8"));
 
 function titleFromFilename(filename) {
   return filename
     .replace(extname(filename), "")
+    .replace(/-issue-\d+$/, "")
     .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()

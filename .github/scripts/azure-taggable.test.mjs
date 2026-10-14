@@ -97,17 +97,15 @@ test('four visible catalogue counters precede filters and distinguish totals fro
 });
 
 test('both properties have accessible help and visible yes/no labels', () => {
-  for (const [control, help, note] of [
-    ['taggableOnlyFilter', 'tagsColumnHelp', 'tag-support-notes'],
-    ['costReportOnlyFilter', 'costColumnHelp', 'cost-report-notes'],
+  for (const [control, help] of [
+    ['taggableOnlyFilter', 'tagsColumnHelp'],
+    ['costReportOnlyFilter', 'costColumnHelp'],
   ]) {
     assert.match(html, new RegExp(`id="${control}" aria-describedby="${help}"`));
     assert.ok(html.includes(`id="${help}"`));
-    assert.ok(html.includes(`href="#${note}"`));
-    assert.ok(html.includes(`id="${note}"`));
   }
+  assert.doesNotMatch(html, /tag-support-notes|cost-report-notes/);
   assert.match(script, /badge\.textContent = value \? "Yes" : "No"/);
-  assert.match(html, /Tag inheritance in Cost Management/);
 });
 
 test('missing flags and duplicate identifiers fail rather than becoming No', () => {

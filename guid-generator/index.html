@@ -506,13 +506,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.3rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1084,20 +1077,6 @@
       </div>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About the GUID generator</h2>
-      <p>A GUID (Globally Unique Identifier), called a UUID outside the Microsoft world, is a 128-bit value written as 32 hexadecimal characters in five hyphen-separated groups. This page generates version 4 identifiers, which are derived from random data rather than from a timestamp or a MAC address. That makes them safe to generate offline, in bulk, and without coordinating with anything else.</p>
-      <h3>How to use it</h3>
-      <ul>
-        <li>Copy the single GUID immediately, or open <strong>Multiple identifiers</strong> for a batch of up to 500.</li>
-        <li><strong>Uppercase</strong> matches the convention used by many Microsoft tools and .NET output.</li>
-        <li><strong>Hyphens</strong> can be turned off for the compact 32-character form used in some APIs and URLs.</li>
-        <li><strong>Braces</strong> wrap the value in <code>{}</code>, the registry and COM style on Windows.</li>
-        <li><strong>Quotes</strong> and <strong>Comma-separated</strong> format text lists. Export JSON produces a valid array of strings, with no trailing comma or extra quote wrappers.</li>
-      </ul>
-      <h3>Good to know</h3>
-      <p>Generation happens entirely in your browser using <code>crypto.randomUUID()</code> when available, with a fallback for older browsers. Nothing is sent to a server, so the values are yours alone. A version 4 GUID has 122 random bits, which makes an accidental collision effectively impossible in practice — but it is random, not secret, so never use one as a password, an API key, or a bearer token.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

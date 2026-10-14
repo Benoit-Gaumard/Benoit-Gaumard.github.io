@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveFeedIcon } from "./cache-icons.mjs";
 
@@ -13,7 +13,7 @@ function stripLongDashes(text) {
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const csvPath = join(HERE, "rss-feeds.csv");
+const csvPath = resolve(process.argv[2] ?? join(HERE, "rss-feeds.csv"));
 const outputPath = join(HERE, "updates.json");
 const feedEnPath = join(HERE, "feed.en.xml");
 const feedFrPath = join(HERE, "feed.fr.xml");

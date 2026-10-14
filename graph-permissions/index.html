@@ -487,13 +487,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1049,31 +1042,6 @@
       <button class="graph-action load-more" id="loadMore" type="button" hidden>Load more permission names</button>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">About Microsoft Graph permissions</h2>
-      <p>Microsoft Graph supports delegated access and app-only access. The same permission name can have a delegated scope and an application app role, with separate IDs and descriptions. This catalogue also preserves resource-specific consent entries from the reference. It does not show whether consent has been granted in your tenant.</p>
-      <h3 id="permission-types">Delegated, application and resource-specific</h3>
-      <ul>
-        <li><strong>Delegated</strong> permissions are used when a user is signed in. The effective access is the intersection of the permission and what that user is already allowed to do, so a delegated <code>User.ReadWrite.All</code> still cannot edit a user the signed-in account has no rights over.</li>
-        <li><strong>Application</strong> permissions are app roles used without a signed-in user. Standard Graph application permissions require administrator consent. Endpoint-specific restrictions and resource scoping can still affect access.</li>
-        <li><strong>Resource-specific consent (RSC)</strong> is a separate consent model for particular resources. RSC can have delegated or application access modes, but this dataset does not classify those modes or store a comparable admin-consent flag. Consult the <a href="https://learn.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent" target="_blank" rel="noopener">RSC guidance</a> for consent rules and supported modes.</li>
-      </ul>
-      <h3 id="consent-notes">Understanding the consent flag</h3>
-      <p>Admin consent required is a property of a specific delegated or application variant, not a blanket property of the name. Selecting a type makes the consent filter apply to that type only. With All types, it matches names where at least one standard variant is marked as requiring admin consent; RSC does not supply this flag here.</p>
-      <p>When a type is selected, text search uses the permission name, resource and that variant's GUID and descriptions. Details still show the available variants together so their descriptions can be compared.</p>
-      <p>A delegated flag marked not required does not guarantee that users can consent: tenant policies can restrict user consent. Missing flags are shown as not recorded, never as no consent required. See Microsoft's <a href="https://learn.microsoft.com/en-us/graph/permissions-overview" target="_blank" rel="noopener">permissions and consent overview</a>.</p>
-      <h3 id="entra-role-notes">Permissions are not Entra ID roles</h3>
-      <p>Graph OAuth scopes and application permissions are distinct from <a href="/entra-built-in-roles/">Entra ID directory roles</a>. Some endpoints require both API permissions and an appropriate role or resource assignment. Check the endpoint's documented requirements; an authorization failure can have several causes and this reference cannot diagnose a tenant's access.</p>
-      <h3>Choosing the least privileged permission</h3>
-      <ul>
-        <li>Prefer the narrowest permission a call accepts; each Graph API method documents its own least privileged option.</li>
-        <li>Prefer delegated over application whenever a user is present, so the user's own limits still apply.</li>
-        <li>The <code>.All</code> suffix signals broad resource coverage, but the selected access type and endpoint-specific restrictions still matter. Read the corresponding description rather than inferring access from the name alone.</li>
-        <li>Keep the delegated and application GUIDs distinct when configuring permissions. OAuth scope parameters use the names or scopes required by the flow, not an arbitrary permission GUID. Check the relevant registration, consent or RSC manifest documentation.</li>
-      </ul>
-      <h3>Where this data comes from</h3>
-      <p>The refresh workflow collects Microsoft's public permissions reference, including its descriptions and RSC entries. Last refreshed is the dataset timestamp. Counts describe unique permission names and overlapping type memberships; the original names and GUIDs are preserved.</p>
-    </section>
   </main>
 
   <footer class="site-footer">

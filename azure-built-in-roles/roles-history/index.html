@@ -717,13 +717,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .page-notes { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--cp-border); max-width: 72ch; }
-    .page-notes h2 { margin: 0 0 .75rem; font-size: 1.35rem; color: var(--cp-text); }
-    .page-notes h3 { margin: 1.6rem 0 .5rem; font-size: 1.02rem; color: var(--cp-text); }
-    .page-notes p { margin: 0 0 .9rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes ul { margin: 0 0 .9rem; padding-left: 1.25rem; color: var(--cp-text-muted); line-height: 1.65; }
-    .page-notes li { margin-bottom: .35rem; }
-    .page-notes a { color: var(--cp-link); }
 
     /* Share links */
     .footer-share { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 14px; margin-bottom: 1.5rem; }
@@ -1348,7 +1341,7 @@
         <span>Baseline: <strong id="baselineAt">Loading...</strong></span>
         <span>Retention: <strong id="retention">-</strong></span>
       </p>
-      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history. <a href="#notes-heading">Coverage and limitations</a>.</p>
+      <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history.</p>
     </section>
 
     <section class="history-log" aria-label="Role change log">
@@ -1407,15 +1400,6 @@
       <p class="catalogue-return"><a class="history-action" href="../">Back to the current role catalogue</a></p>
     </section>
 
-    <section class="page-notes" aria-labelledby="notes-heading">
-      <h2 id="notes-heading">How this log is built</h2>
-      <p>This log compares consecutive complete snapshots of Microsoft's Azure RBAC reference. Collection is scheduled daily at 06:15 UTC; weekly and manual runs can also refresh it. A collection failure does not create removal events. Dates are observation times in the reference, not official Azure publication dates.</p>
-      <p><strong>Added</strong> means a role ID appeared in the new snapshot; <strong>Removed</strong> means it was no longer present. Neither observation establishes the exact date a role became available or was retired in Azure. Removed IDs remain visible and can be looked up in the current catalogue.</p>
-      <p><strong>Modified</strong> covers role name, description, category memberships, Microsoft's privileged classification, assignable scopes and all four permission buckets: Actions, NotActions, DataActions and NotDataActions. Before/after values preserve the recorded permission strings and their descriptions. Array order alone is ignored; changed strings, descriptions and duplicate counts are retained.</p>
-      <p>The first snapshot establishes a baseline, not hundreds of additions. The retained baseline is shown above. Earlier Azure history is not reconstructed. Up to <span id="retentionInline">180</span> days and 3,000 events are kept at each refresh. An empty log does not prove there were no changes before the baseline or between scans.</p>
-      <p>This is a reference diff, not an effective-access calculation. The collector flattens permission blocks and omits conditions; assignments, deny assignments, wildcard coverage and service authentication are not evaluated. A description or classification change may be a documentation correction, not a change to runtime permissions.</p>
-      <p>Counts and JSON export include <strong>all matching events</strong>, not just the visible batch. Recent periods use UTC calendar days ending today. <a href="../role-changes.json">Inspect the source log</a> or <a href="../roles.json">download the current role snapshot</a>.</p>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -1493,7 +1477,7 @@
     const state = { entries: [], filtered: [], visible: PAGE_SIZE, keys: new Map(), open: new Set(), status: "loading", generatedAt: null, baselineAt: null, retentionDays: null, filteredAt: null, filters: {} };
     const elements = Object.fromEntries([
       "search", "changeFilter", "categoryFilter", "periodFilter", "clearFilters", "historyControls", "timeline",
-      "resultCount", "changeCounts", "refreshedAt", "baselineAt", "retention", "retentionInline", "loadMore", "exportChanges",
+      "resultCount", "changeCounts", "refreshedAt", "baselineAt", "retention", "loadMore", "exportChanges",
       "actionStatus", "copyFallback", "copyValue", "exportFallback", "historyError", "retryHistory", "undatedNotice",
       "historyExtra", "historyFilterToggle", "historyFiltersDone",
     ].map(id => [id, document.getElementById(id)]));
@@ -1881,7 +1865,6 @@
         elements.categoryFilter.replaceChildren(new Option("All categories", ""));
         [...new Set(state.entries.map(entry => entry.category).filter(Boolean))].sort().forEach(category => elements.categoryFilter.add(new Option(category, category)));
         elements.retention.textContent = state.retentionDays ? `Up to ${state.retentionDays} days` : "Not reported";
-        elements.retentionInline.textContent = state.retentionDays ? String(state.retentionDays) : "an unreported number of";
         const stamp = entryTimestamp({ detectedAt: state.generatedAt });
         elements.refreshedAt.textContent = Number.isFinite(stamp)
           ? new Date(stamp).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC" : "Not recorded";
