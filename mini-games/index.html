@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Play five simple browser mini games: Breakout, Pong, Space Invaders, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.">
+  <meta name="description" content="Play six simple browser mini games: Breakout, Pong, Space Invaders, Runner, Catcher and Infinite Drive. No install or account needed.">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="benoit-gaumard.io" />
   <meta property="og:title" content="Mini Games | Benoit Gaumard" />
-  <meta property="og:description" content="Play five simple browser mini games: Breakout, Pong, Space Invaders, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger." />
+  <meta property="og:description" content="Play six simple browser mini games: Breakout, Pong, Space Invaders, Runner, Catcher and Infinite Drive. No install or account needed." />
   <meta property="og:url" content="https://benoit-gaumard.io/mini-games/" />
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -20,7 +20,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Mini Games",
-    "description": "Play five simple browser mini games: Breakout, Pong, Space Invaders, Runner and Catcher. No install, no account, playable with a keyboard, a mouse or your finger.",
+    "description": "Play six simple browser mini games: Breakout, Pong, Space Invaders, Runner, Catcher and Infinite Drive. No install or account needed.",
     "url": "https://benoit-gaumard.io/mini-games/",
     "applicationCategory": "GameApplication",
     "operatingSystem": "Any",
@@ -385,6 +385,11 @@
       touch-action: none;
       cursor: pointer;
     }
+    #gameCanvas.portrait { aspect-ratio: 5 / 8; }
+    .canvas-wrap:has(#gameCanvas.portrait) {
+      width: min(100%, calc((100dvh - 16rem) * .625));
+      justify-self: center;
+    }
     #gameCanvas:focus-visible { outline: 2px solid var(--cp-accent); outline-offset: -3px; }
     .game-overlay {
       position: absolute;
@@ -582,6 +587,7 @@
   .game-overlay { cursor: default; }
   #gameStage:fullscreen { max-width: none; width: 100%; height: 100%; overflow-y: auto; align-content: start; background: var(--cp-bg); padding: max(.75rem, env(safe-area-inset-top)) max(.75rem, env(safe-area-inset-right)) max(.75rem, env(safe-area-inset-bottom)) max(.75rem, env(safe-area-inset-left)); }
   #gameStage:fullscreen .canvas-wrap { width: min(100%, calc((100dvh - 13rem) * 1.6)); min-width: 12rem; justify-self: center; }
+  #gameStage:fullscreen .canvas-wrap:has(#gameCanvas.portrait) { width: min(100%, calc((100dvh - 13rem) * .625)); }
   @media (max-width: 700px) {
     main .intro { padding-block: 1rem; }
     .game-picker { display: none; }
@@ -1029,7 +1035,7 @@
 <li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
 <li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
 <li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
-<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/" aria-current="page"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Play six simple browser games - Breakout, Pong, Space Invaders, Runner, Catcher and Infinite Drive - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/" aria-current="page"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span><span class="site-tool-current">Current</span></a></li>
 <li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
 <li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
 <li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
@@ -1060,12 +1066,12 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true">&#127918;</span>Mini Games</h1>
-      <p class="intro-text">Five local arcade games. Play with a keyboard, mouse, or touch — no account needed.</p>
+      <p class="intro-text">Six local arcade games. Play with a keyboard, mouse, or touch — no account needed.</p>
     </section>
 
     <div class="mobile-game-picker">
       <label for="gameSelect">Choose a game</label>
-      <select id="gameSelect"><option value="breakout">Breakout</option><option value="pong">Pong</option><option value="invaders">Space Invaders</option><option value="runner">Runner</option><option value="catcher">Catcher</option></select>
+      <select id="gameSelect"><option value="breakout">Breakout</option><option value="pong">Pong</option><option value="invaders">Space Invaders</option><option value="runner">Runner</option><option value="catcher">Catcher</option><option value="drive">Infinite Drive</option></select>
     </div>
     <div class="game-picker" role="group" aria-label="Choose a game">
       <button type="button" class="game-tab" data-game="breakout" aria-pressed="true">
@@ -1088,11 +1094,15 @@
         <span class="game-tab-emoji" aria-hidden="true">&#129768;</span>
         <span class="game-tab-text"><strong>Catcher</strong><small>Catch the good drops</small></span>
       </button>
+      <button type="button" class="game-tab" data-game="drive" aria-pressed="false">
+        <span class="game-tab-emoji" aria-hidden="true">&#127950;</span>
+        <span class="game-tab-text"><strong>Infinite Drive</strong><small>Neon city, endless road</small></span>
+      </button>
     </div>
 
     <div class="game-stage" id="gameStage">
       <div class="game-hud">
-        <div class="hud-item"><span class="hud-label">Score</span><strong id="hudScore">0</strong></div>
+        <div class="hud-item"><span class="hud-label" id="hudScoreLabel">Score</span><strong id="hudScore">0</strong></div>
         <div class="hud-item"><span class="hud-label" id="hudBestLabel">Best</span><strong id="hudBest">0</strong></div>
         <div class="hud-item"><span class="hud-label" id="hudExtraLabel">Lives</span><strong id="hudExtra">3</strong></div>
       </div>
@@ -1202,6 +1212,7 @@
     const overlayText = document.getElementById("overlayText");
     const overlayButton = document.getElementById("overlayButton");
     const hudScore = document.getElementById("hudScore");
+    const hudScoreLabel = document.getElementById("hudScoreLabel");
     const hudBest = document.getElementById("hudBest");
     const hudBestLabel = document.getElementById("hudBestLabel");
     const hudExtra = document.getElementById("hudExtra");
@@ -1915,6 +1926,741 @@
       }
     };
 
+    const drive = {
+      key: "drive",
+      title: "Infinite Drive",
+      intro: "Take the wheel through a neon city. Dodge traffic, keep your three hearts, and see how far you can go.",
+      extraLabel: "Lives",
+      bestLabel: "Best",
+      hint: "Steer with the left and right arrows or A and D. On a phone, drag left or right on the road. Avoid the traffic.",
+      init() {
+        this.playerX = 250;
+        this.targetX = 250;
+        this.distance = 0;
+        this.speed = 310;
+        this.time = 0;
+        this.spawnIn = 1.1;
+        this.invulnerable = 0;
+        this.obstacles = [];
+        this.lives = 3;
+        this.city = [];
+        for (let side = 0; side < 2; side++) {
+          for (let i = 0; i < 7; i++) {
+            this.city.push({
+              x: side ? rand(414, 468) : rand(-18, 38),
+              y: rand(100, 360),
+              w: rand(38, 82),
+              h: rand(170, 420),
+              shade: i % 2 ? palette.violet : palette.accent,
+              windows: Math.floor(rand(3, 6))
+            });
+          }
+        }
+        state.score = 0;
+        state.extra = this.lives;
+      },
+      roadAt(z) {
+        const bend = Math.sin(this.distance / 2100) * 18;
+        return {
+          center: 250 + bend * z,
+          half: 25 + 205 * z
+        };
+      },
+      update(dt) {
+        this.time += dt;
+        this.speed = Math.min(720, 310 + this.distance / 42);
+        this.distance += this.speed * dt * 0.11;
+        state.score = Math.floor(this.distance);
+        state.extra = this.lives;
+        this.invulnerable = Math.max(0, this.invulnerable - dt);
+
+        let dir = 0;
+        if (keys.has("ArrowLeft") || keys.has("KeyA")) dir -= 1;
+        if (keys.has("ArrowRight") || keys.has("KeyD")) dir += 1;
+        if (dir) this.targetX += dir * 330 * dt;
+        if (pointer.active) this.targetX = pointer.x;
+
+        const road = this.roadAt(0.94);
+        this.targetX = clamp(this.targetX, road.center - road.half * 0.78, road.center + road.half * 0.78);
+        this.playerX += (this.targetX - this.playerX) * Math.min(1, dt * 8);
+
+        this.spawnIn -= dt;
+        if (this.spawnIn <= 0) {
+          const lane = Math.floor(rand(0, 3));
+          this.obstacles.push({ lane, z: 0, shade: [palette.danger, palette.warning, palette.cyan][Math.floor(rand(0, 3))] });
+          this.spawnIn = Math.max(0.52, rand(0.9, 1.55) * (330 / this.speed));
+        }
+
+        for (let i = this.obstacles.length - 1; i >= 0; i--) {
+          const obstacle = this.obstacles[i];
+          obstacle.z += this.speed * dt / 790;
+          if (obstacle.z >= 1.12) {
+            this.obstacles.splice(i, 1);
+            continue;
+          }
+          if (obstacle.z >= 0.84 && obstacle.z <= 0.96) {
+            const laneX = this.roadAt(obstacle.z).center + [-0.55, 0, 0.55][obstacle.lane] * this.roadAt(obstacle.z).half;
+            if (Math.abs(this.playerX - laneX) < 48) {
+              this.obstacles.splice(i, 1);
+              if (this.invulnerable <= 0) {
+                this.lives -= 1;
+                this.invulnerable = 1.25;
+                state.extra = this.lives;
+                if (this.lives <= 0) {
+                  finish("Game over", "You drove " + state.score + " metres through the neon city.");
+                  return;
+                }
+              }
+            }
+          }
+        }
+      },
+      drawBuilding(building) {
+        const { x, y, w, h, shade, windows } = building;
+        const nightRoad = document.documentElement.dataset.theme === "dark" ? palette.bg : palette.text;
+        ctx.globalAlpha = 0.82;
+        fillRR(x, y, w, h, 2, nightRoad);
+        ctx.globalAlpha = 0.65;
+        ctx.strokeStyle = shade;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x + 3, y + 3, w - 6, h - 6);
+        ctx.globalAlpha = 0.88;
+        for (let row = y + 16; row < y + h - 10; row += 29) {
+          for (let col = x + 9; col < x + w - 6; col += Math.max(15, (w - 14) / windows)) {
+            ctx.fillStyle = (Math.floor(row + col) % 3 === 0) ? palette.warning : shade;
+            ctx.fillRect(col, row, 6, 11);
+          }
+        }
+        ctx.globalAlpha = 1;
+      },
+      drawSportsCar(x, y, scale) {
+        ctx.save();
+        ctx.translate(x, y - 67 * scale);
+        ctx.scale(scale, scale);
+
+        ctx.fillStyle = palette.text;
+        ctx.globalAlpha = 0.5;
+        ctx.beginPath();
+        ctx.ellipse(0, 69, 48, 10, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        const rubber = ctx.createLinearGradient(-48, 0, 48, 0);
+        rubber.addColorStop(0, palette.bg);
+        rubber.addColorStop(0.5, palette.text);
+        rubber.addColorStop(1, palette.bg);
+        for (const side of [-1, 1]) {
+          fillRR(side * 36 - 10, -36, 20, 36, 7, rubber);
+          fillRR(side * 38 - 10, 31, 20, 36, 7, rubber);
+          fillRR(side * 38 - 7, 38, 14, 21, 5, palette.muted);
+          fillRR(side * 38 - 6, 41, 12, 15, 4, palette.border);
+        }
+
+        const paint = ctx.createLinearGradient(-48, 0, 48, 0);
+        paint.addColorStop(0, palette.bg);
+        paint.addColorStop(0.12, palette.accent);
+        paint.addColorStop(0.42, palette.cyan);
+        paint.addColorStop(0.55, palette.accent);
+        paint.addColorStop(0.9, palette.accent);
+        paint.addColorStop(1, palette.bg);
+        ctx.beginPath();
+        ctx.moveTo(-15, -66);
+        ctx.bezierCurveTo(-31, -64, -39, -55, -42, -39);
+        ctx.lineTo(-48, 34);
+        ctx.quadraticCurveTo(-50, 51, -40, 59);
+        ctx.quadraticCurveTo(-22, 66, 0, 68);
+        ctx.quadraticCurveTo(22, 66, 40, 59);
+        ctx.quadraticCurveTo(50, 51, 48, 34);
+        ctx.lineTo(42, -39);
+        ctx.bezierCurveTo(39, -55, 31, -64, 15, -66);
+        ctx.quadraticCurveTo(0, -69, -15, -66);
+        ctx.closePath();
+        ctx.fillStyle = paint;
+        ctx.shadowColor = palette.accent;
+        ctx.shadowBlur = 20;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = palette.surface;
+        ctx.globalAlpha = 0.8;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(-36, -49);
+        ctx.quadraticCurveTo(-24, -42, -19, -25);
+        ctx.lineTo(-13, 17);
+        ctx.quadraticCurveTo(-29, 27, -42, 18);
+        ctx.lineTo(-39, -34);
+        ctx.closePath();
+        const leftFender = ctx.createLinearGradient(-44, 0, -10, 0);
+        leftFender.addColorStop(0, palette.muted);
+        leftFender.addColorStop(0.58, palette.accent);
+        leftFender.addColorStop(1, palette.cyan);
+        ctx.fillStyle = leftFender;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(36, -49);
+        ctx.quadraticCurveTo(24, -42, 19, -25);
+        ctx.lineTo(13, 17);
+        ctx.quadraticCurveTo(29, 27, 42, 18);
+        ctx.lineTo(39, -34);
+        ctx.closePath();
+        ctx.fillStyle = paint;
+        ctx.fill();
+
+        const glass = ctx.createLinearGradient(0, -54, 0, 36);
+        glass.addColorStop(0, palette.border);
+        glass.addColorStop(0.28, palette.muted);
+        glass.addColorStop(1, palette.bg);
+        ctx.beginPath();
+        ctx.moveTo(-20, -53);
+        ctx.quadraticCurveTo(0, -58, 20, -53);
+        ctx.lineTo(30, -17);
+        ctx.quadraticCurveTo(34, -5, 34, 6);
+        ctx.lineTo(37, 27);
+        ctx.quadraticCurveTo(35, 34, 27, 37);
+        ctx.lineTo(-27, 37);
+        ctx.quadraticCurveTo(-35, 34, -37, 27);
+        ctx.lineTo(-34, 6);
+        ctx.quadraticCurveTo(-34, -5, -30, -17);
+        ctx.closePath();
+        ctx.fillStyle = glass;
+        ctx.fill();
+        ctx.strokeStyle = palette.surface;
+        ctx.globalAlpha = 0.85;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(-23, -47);
+        ctx.quadraticCurveTo(-20, -52, -13, -52);
+        ctx.lineTo(-9, -49);
+        ctx.lineTo(-12, -20);
+        ctx.lineTo(-23, -17);
+        ctx.closePath();
+        ctx.fillStyle = palette.surface;
+        ctx.globalAlpha = 0.42;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = palette.text;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -51);
+        ctx.lineTo(0, 32);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(-42, 20);
+        ctx.quadraticCurveTo(-23, 12, 0, 16);
+        ctx.quadraticCurveTo(23, 12, 42, 20);
+        ctx.lineTo(39, 33);
+        ctx.quadraticCurveTo(0, 42, -39, 33);
+        ctx.closePath();
+        ctx.fillStyle = palette.accent;
+        ctx.fill();
+        ctx.strokeStyle = palette.cyan;
+        ctx.globalAlpha = 0.75;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        ctx.shadowColor = palette.danger;
+        ctx.shadowBlur = 12;
+        fillRR(-37, 39, 22, 7, 3, palette.danger);
+        fillRR(15, 39, 22, 7, 3, palette.danger);
+        ctx.shadowBlur = 0;
+        fillRR(-35, 40, 18, 2, 1, palette.surface);
+        fillRR(17, 40, 18, 2, 1, palette.surface);
+
+        ctx.beginPath();
+        ctx.moveTo(-41, 51);
+        ctx.quadraticCurveTo(0, 62, 41, 51);
+        ctx.lineTo(39, 61);
+        ctx.quadraticCurveTo(0, 71, -39, 61);
+        ctx.closePath();
+        ctx.fillStyle = palette.text;
+        ctx.fill();
+        for (const side of [-1, 1]) {
+          ctx.beginPath();
+          ctx.ellipse(side * 30, 60, 5, 3, 0, 0, Math.PI * 2);
+          ctx.fillStyle = palette.border;
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(side * 30, 60, 3.5, 2, 0, 0, Math.PI * 2);
+          ctx.fillStyle = palette.bg;
+          ctx.fill();
+        }
+        fillRR(-12, 52, 24, 8, 2, palette.surface);
+        fillRR(-9, 54, 18, 4, 1, palette.muted);
+
+        ctx.strokeStyle = palette.surface;
+        ctx.globalAlpha = 0.72;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-23, -39);
+        ctx.quadraticCurveTo(-30, -4, -34, 17);
+        ctx.moveTo(23, -39);
+        ctx.quadraticCurveTo(30, -4, 34, 17);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      },
+      drawCar(x, y, scale, color, player) {
+        if (player) {
+          this.drawSportsCar(x, y, scale);
+          return;
+        }
+        ctx.save();
+        ctx.globalAlpha = player && this.invulnerable > 0 && Math.floor(this.time * 12) % 2 === 0 ? 0.35 : 1;
+        ctx.globalAlpha *= player ? 1 : 0.96;
+
+        const focal = 285;
+        const cameraAngle = 0.4;
+        const cameraY = 2.8;
+        const cameraZ = 5.8;
+        const yaw = player ? 0 : (x < 250 ? -0.12 : 0.12);
+        const sinCamera = Math.sin(cameraAngle);
+        const cosCamera = Math.cos(cameraAngle);
+        const sinYaw = Math.sin(yaw);
+        const cosYaw = Math.cos(yaw);
+        const anchorDepth = cameraY * sinCamera + cameraZ * cosCamera;
+        const anchorVertical = cameraY * cosCamera - 1.35 * sinCamera;
+        const surfaces = [];
+
+        function project(point) {
+          const px = (point.x * cosYaw + point.z * sinYaw) * scale;
+          const py = point.y * scale;
+          const pz = (-point.x * sinYaw + point.z * cosYaw) * scale;
+          const depth = cameraY * sinCamera + cameraZ * cosCamera - py * sinCamera - pz * cosCamera;
+          const vertical = py * cosCamera - pz * sinCamera;
+          return {
+            x: x + focal * px / depth,
+            y: y - focal * (vertical - anchorVertical) / depth,
+            depth: depth
+          };
+        }
+
+        function face(points, shade) {
+          const projected = points.map(project);
+          surfaces.push({
+            points: projected,
+            color: shade,
+            depth: projected.reduce((sum, point) => sum + point.depth, 0) / projected.length
+          });
+        }
+
+        function box(cx, cy, cz, wx, hy, dz, shade) {
+          const x0 = cx - wx / 2, x1 = cx + wx / 2;
+          const y0 = cy - hy / 2, y1 = cy + hy / 2;
+          const z0 = cz - dz / 2, z1 = cz + dz / 2;
+          face([{ x: x0, y: y0, z: z0 }, { x: x1, y: y0, z: z0 }, { x: x1, y: y0, z: z1 }, { x: x0, y: y0, z: z1 }], palette.text);
+          face([{ x: x0, y: y0, z: z0 }, { x: x0, y: y1, z: z0 }, { x: x0, y: y1, z: z1 }, { x: x0, y: y0, z: z1 }], palette.bg);
+          face([{ x: x1, y: y0, z: z0 }, { x: x1, y: y0, z: z1 }, { x: x1, y: y1, z: z1 }, { x: x1, y: y1, z: z0 }], palette.muted);
+          face([{ x: x0, y: y0, z: z1 }, { x: x1, y: y0, z: z1 }, { x: x1, y: y1, z: z1 }, { x: x0, y: y1, z: z1 }], shade);
+          face([{ x: x0, y: y1, z: z0 }, { x: x1, y: y1, z: z0 }, { x: x1, y: y1, z: z1 }, { x: x0, y: y1, z: z1 }], color);
+        }
+
+        function tire(side, z) {
+          const centerX = side * 0.91, centerY = 0.27, radiusY = 0.28, radiusZ = 0.32;
+          const points = [];
+          for (let i = 0; i < 12; i++) {
+            const angle = i * Math.PI / 6;
+            points.push({
+              x: centerX,
+              y: centerY + Math.cos(angle) * radiusY,
+              z: z + Math.sin(angle) * radiusZ
+            });
+          }
+          face(points, palette.text);
+          const rimPoints = [];
+          for (let i = 0; i < 10; i++) {
+            const angle = i * Math.PI / 5;
+            rimPoints.push({
+              x: centerX + side * 0.012,
+              y: centerY + Math.cos(angle) * 0.15,
+              z: z + Math.sin(angle) * 0.15
+            });
+          }
+          face(rimPoints, palette.border);
+        }
+
+        for (const side of [-1, 1]) {
+          tire(side, -0.91);
+          tire(side, 0.91);
+        }
+
+        const sections = player ? [
+          { z: -1.82, half: 0.62, top: 0.43 },
+          { z: -1.25, half: 0.88, top: 0.53 },
+          { z: -0.58, half: 0.98, top: 0.61 },
+          { z: 0.72, half: 1.02, top: 0.65 },
+          { z: 1.28, half: 0.94, top: 0.74 },
+          { z: 1.55, half: 0.78, top: 0.69 }
+        ] : [
+          { z: -1.65, half: 0.73, top: 0.55 },
+          { z: -1.15, half: 0.94, top: 0.68 },
+          { z: 0.7, half: 0.96, top: 0.68 },
+          { z: 1.35, half: 0.82, top: 0.8 }
+        ];
+        for (let i = 0; i < sections.length - 1; i++) {
+          const a = sections[i], b = sections[i + 1];
+          for (const side of [-1, 1]) {
+            face([
+              { x: side * a.half, y: 0.22, z: a.z },
+              { x: side * b.half, y: 0.22, z: b.z },
+              { x: side * b.half, y: b.top, z: b.z },
+              { x: side * a.half, y: a.top, z: a.z }
+            ], side < 0 ? palette.bg : palette.muted);
+          }
+          face([
+            { x: -a.half, y: a.top, z: a.z },
+            { x: a.half, y: a.top, z: a.z },
+            { x: b.half, y: b.top, z: b.z },
+            { x: -b.half, y: b.top, z: b.z }
+          ], player ? (i % 2 ? palette.accent : palette.cyan) : (i % 2 ? color : palette.surface));
+        }
+        if (player) {
+          face([
+            { x: -0.78, y: 0.22, z: 1.55 },
+            { x: 0.78, y: 0.22, z: 1.55 },
+            { x: 0.78, y: 0.69, z: 1.55 },
+            { x: -0.78, y: 0.69, z: 1.55 }
+          ], palette.accent);
+          face([
+            { x: -0.66, y: 0.75, z: 0.83 },
+            { x: 0.66, y: 0.75, z: 0.83 },
+            { x: 0.51, y: 1.16, z: 0.25 },
+            { x: -0.51, y: 1.16, z: 0.25 }
+          ], palette.text);
+          face([
+            { x: -0.58, y: 0.82, z: 0.88 },
+            { x: 0.58, y: 0.82, z: 0.88 },
+            { x: 0.44, y: 1.1, z: 0.31 },
+            { x: -0.44, y: 1.1, z: 0.31 }
+          ], palette.bg);
+          face([
+            { x: -0.44, y: 1.1, z: 0.31 },
+            { x: 0.44, y: 1.1, z: 0.31 },
+            { x: 0.49, y: 1.12, z: -0.5 },
+            { x: -0.49, y: 1.12, z: -0.5 }
+          ], palette.text);
+          face([
+            { x: -0.36, y: 1.08, z: 0.33 },
+            { x: -0.15, y: 1.08, z: 0.33 },
+            { x: -0.15, y: 1.1, z: -0.46 },
+            { x: -0.36, y: 1.1, z: -0.46 }
+          ], palette.muted);
+          face([
+            { x: 0.15, y: 1.08, z: 0.33 },
+            { x: 0.36, y: 1.08, z: 0.33 },
+            { x: 0.36, y: 1.1, z: -0.46 },
+            { x: 0.15, y: 1.1, z: -0.46 }
+          ], palette.muted);
+          face([
+            { x: -0.44, y: 1.1, z: -0.5 },
+            { x: 0.44, y: 1.1, z: -0.5 },
+            { x: 0.58, y: 0.72, z: -1.03 },
+            { x: -0.58, y: 0.72, z: -1.03 }
+          ], palette.bg);
+          face([
+            { x: -0.38, y: 1.08, z: -0.52 },
+            { x: 0.38, y: 1.08, z: -0.52 },
+            { x: 0.5, y: 0.78, z: -0.95 },
+            { x: -0.5, y: 0.78, z: -0.95 }
+          ], palette.muted);
+          face([
+            { x: -0.51, y: 1.16, z: 0.25 },
+            { x: 0.51, y: 1.16, z: 0.25 },
+            { x: 0.44, y: 1.1, z: 0.31 },
+            { x: -0.44, y: 1.1, z: 0.31 }
+          ], palette.border);
+          for (const side of [-1, 1]) {
+            box(side * 0.82, 0.79, 0.69, 0.1, 0.1, 0.18, palette.text);
+            box(side * 0.82, 0.79, 0.79, 0.065, 0.065, 0.04, palette.cyan);
+            box(side * 0.73, 0.25, 1.52, 0.26, 0.19, 0.12, palette.text);
+            box(side * 0.62, 0.56, 1.58, 0.16, 0.08, 0.05, palette.warning);
+            box(side * 0.74, 0.89, -1.3, 0.18, 0.1, 0.06, palette.surface);
+            box(side * 0.91, 0.3, 0.94, 0.12, 0.12, 0.12, palette.warning);
+          }
+          face([
+            { x: -0.82, y: 0.82, z: 1.48 },
+            { x: 0.82, y: 0.82, z: 1.48 },
+            { x: 0.68, y: 0.9, z: 1.5 },
+            { x: -0.68, y: 0.9, z: 1.5 }
+          ], palette.text);
+          face([
+            { x: -0.94, y: 0.32, z: 1.57 },
+            { x: 0.94, y: 0.32, z: 1.57 },
+            { x: 0.82, y: 0.44, z: 1.57 },
+            { x: -0.82, y: 0.44, z: 1.57 }
+          ], palette.text);
+          box(0, 0.37, 1.59, 0.22, 0.15, 0.06, palette.surface);
+          face([
+            { x: -0.85, y: 0.65, z: 1.575 },
+            { x: -0.16, y: 0.65, z: 1.575 },
+            { x: -0.3, y: 0.71, z: 1.58 },
+            { x: -0.85, y: 0.71, z: 1.58 }
+          ], palette.danger);
+          face([
+            { x: 0.16, y: 0.65, z: 1.575 },
+            { x: 0.85, y: 0.65, z: 1.575 },
+            { x: 0.85, y: 0.71, z: 1.58 },
+            { x: 0.3, y: 0.71, z: 1.58 }
+          ], palette.danger);
+          face([
+            { x: -0.12, y: 0.65, z: 1.58 },
+            { x: 0.12, y: 0.65, z: 1.58 },
+            { x: 0.12, y: 0.71, z: 1.58 },
+            { x: -0.12, y: 0.71, z: 1.58 }
+          ], palette.surface);
+          face([
+            { x: -0.74, y: 0.31, z: 1.575 },
+            { x: -0.38, y: 0.31, z: 1.575 },
+            { x: -0.38, y: 0.37, z: 1.58 },
+            { x: -0.74, y: 0.37, z: 1.58 }
+          ], palette.cyan);
+          face([
+            { x: 0.38, y: 0.31, z: 1.575 },
+            { x: 0.74, y: 0.31, z: 1.575 },
+            { x: 0.74, y: 0.37, z: 1.58 },
+            { x: 0.38, y: 0.37, z: 1.58 }
+          ], palette.cyan);
+        } else {
+          face([
+            { x: -0.82, y: 0.22, z: 1.35 },
+            { x: 0.82, y: 0.22, z: 1.35 },
+            { x: 0.82, y: 0.8, z: 1.35 },
+            { x: -0.82, y: 0.8, z: 1.35 }
+          ], color);
+
+          box(0, 0.23, 1.42, 1.7, 0.2, 0.2, palette.muted);
+          box(0, 0.91, 0.1, 1.25, 0.16, 1.0, palette.surface);
+          face([
+            { x: -0.61, y: 0.79, z: 0.92 },
+            { x: 0.61, y: 0.79, z: 0.92 },
+            { x: 0.53, y: 1.36, z: 0.52 },
+            { x: -0.53, y: 1.36, z: 0.52 }
+          ], palette.text);
+          face([
+            { x: -0.45, y: 1.04, z: 0.74 },
+            { x: -0.41, y: 1.12, z: 0.67 },
+            { x: 0.2, y: 1.12, z: 0.67 },
+            { x: 0.23, y: 1.04, z: 0.74 }
+          ], palette.muted);
+          face([
+            { x: -0.53, y: 1.36, z: 0.52 },
+            { x: 0.53, y: 1.36, z: 0.52 },
+            { x: 0.56, y: 1.4, z: -0.28 },
+            { x: -0.56, y: 1.4, z: -0.28 }
+          ], palette.surface);
+          for (const side of [-1, 1]) {
+            face([
+              { x: side * 0.61, y: 0.78, z: 0.87 },
+              { x: side * 0.82, y: 0.69, z: 1.23 },
+              { x: side * 0.56, y: 1.4, z: -0.28 },
+              { x: side * 0.53, y: 1.36, z: 0.52 }
+            ], side < 0 ? palette.bg : color);
+            face([
+              { x: side * 0.53, y: 1.36, z: 0.52 },
+              { x: side * 0.56, y: 1.4, z: -0.28 },
+              { x: side * 0.52, y: 1.36, z: -0.88 },
+              { x: side * 0.58, y: 0.78, z: -0.95 }
+            ], palette.muted);
+          }
+          face([
+            { x: -0.58, y: 0.78, z: -0.95 },
+            { x: 0.58, y: 0.78, z: -0.95 },
+            { x: 0.52, y: 1.36, z: -0.88 },
+            { x: -0.52, y: 1.36, z: -0.88 }
+          ], palette.border);
+          face([
+            { x: -0.53, y: 1.36, z: 0.52 },
+            { x: 0.53, y: 1.36, z: 0.52 },
+            { x: 0.56, y: 1.4, z: -0.28 },
+            { x: -0.56, y: 1.4, z: -0.28 }
+          ], palette.surface);
+
+          box(0, 0.61, 1.37, 1.38, 0.08, 0.05, palette.danger);
+          box(0, 0.48, 1.39, 0.88, 0.12, 0.04, palette.text);
+          for (const side of [-1, 1]) {
+            box(side * 0.62, 0.67, 1.38, 0.2, 0.1, 0.04, palette.danger);
+            box(side * 0.63, 0.76, 1.39, 0.16, 0.055, 0.035, palette.surface);
+            box(side * 0.94, 0.94, -1.02, 0.12, 0.12, 0.12, palette.warning);
+          }
+          box(0, 0.38, 1.4, 0.18, 0.12, 0.04, palette.surface);
+          face([
+            { x: -0.28, y: 0.69, z: 1.4 },
+            { x: 0.28, y: 0.69, z: 1.4 },
+            { x: 0.2, y: 0.73, z: 1.405 },
+            { x: -0.2, y: 0.73, z: 1.405 }
+          ], palette.border);
+        }
+
+        surfaces.sort((a, b) => b.depth - a.depth);
+        for (const surface of surfaces) {
+          ctx.beginPath();
+          ctx.moveTo(surface.points[0].x, surface.points[0].y);
+          for (let i = 1; i < surface.points.length; i++) ctx.lineTo(surface.points[i].x, surface.points[i].y);
+          ctx.closePath();
+          ctx.fillStyle = surface.color;
+          ctx.fill();
+          ctx.strokeStyle = palette.bg;
+          ctx.globalAlpha *= 0.16;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+          ctx.globalAlpha = player && this.invulnerable > 0 && Math.floor(this.time * 12) % 2 === 0 ? 0.35 : (player ? 1 : 0.96);
+        }
+
+        function screenFace(points, shade) {
+          const projected = points.map(project);
+          ctx.beginPath();
+          ctx.moveTo(projected[0].x, projected[0].y);
+          for (let i = 1; i < projected.length; i++) ctx.lineTo(projected[i].x, projected[i].y);
+          ctx.closePath();
+          ctx.fillStyle = shade;
+          ctx.fill();
+        }
+
+        if (player) {
+          for (const side of [-1, 1]) {
+            const wheelPoints = [];
+            const hubPoints = [];
+            const spokePoints = [];
+            for (let i = 0; i < 16; i++) {
+              const angle = i * Math.PI / 8;
+              wheelPoints.push(project({
+                x: side * 0.72 + Math.cos(angle) * 0.2,
+                y: 0.28 + Math.sin(angle) * 0.2,
+                z: 1.58
+              }));
+              hubPoints.push(project({
+                x: side * 0.72 + Math.cos(angle) * 0.115,
+                y: 0.28 + Math.sin(angle) * 0.115,
+                z: 1.59
+              }));
+              if (i % 2 === 0) {
+                const inner = project({ x: side * 0.72, y: 0.28, z: 1.595 });
+                const outer = project({
+                  x: side * 0.72 + Math.cos(angle) * 0.095,
+                  y: 0.28 + Math.sin(angle) * 0.095,
+                  z: 1.595
+                });
+                spokePoints.push([inner, outer]);
+              }
+            }
+            for (const [points, shade] of [[wheelPoints, palette.text], [hubPoints, palette.border]]) {
+              ctx.beginPath();
+              ctx.moveTo(points[0].x, points[0].y);
+              for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+              ctx.closePath();
+              ctx.fillStyle = shade;
+              ctx.fill();
+            }
+            ctx.strokeStyle = palette.surface;
+            ctx.lineWidth = 1.2;
+            for (const [inner, outer] of spokePoints) {
+              ctx.beginPath();
+              ctx.moveTo(inner.x, inner.y);
+              ctx.lineTo(outer.x, outer.y);
+              ctx.stroke();
+            }
+          }
+        }
+        ctx.restore();
+      },
+      draw() {
+        const W = 500, H = 800, horizon = 234, playerY = 636;
+        const nightRoad = document.documentElement.dataset.theme === "dark" ? palette.bg : palette.text;
+        const sky = ctx.createLinearGradient(0, 0, 0, horizon + 50);
+        sky.addColorStop(0, palette.violet);
+        sky.addColorStop(0.5, palette.accent);
+        sky.addColorStop(0.84, palette.danger);
+        sky.addColorStop(1, nightRoad);
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.globalAlpha = 0.65;
+        circle(250, 161, 48, palette.warning);
+        ctx.globalAlpha = 1;
+        for (let i = 0; i < 26; i++) {
+          const x = (i * 83 + 29) % W;
+          const y = (i * 47 + 21) % 174;
+          circle(x, y, i % 4 === 0 ? 1.7 : 1, palette.surface);
+        }
+
+        this.city.forEach(building => this.drawBuilding(building));
+        ctx.fillStyle = palette.danger;
+        ctx.globalAlpha = 0.72;
+        ctx.fillRect(0, horizon, W, 8);
+        ctx.globalAlpha = 1;
+
+        const far = this.roadAt(0), near = this.roadAt(1);
+        ctx.beginPath();
+        ctx.moveTo(far.center - far.half, horizon);
+        ctx.lineTo(far.center + far.half, horizon);
+        ctx.lineTo(near.center + near.half, H);
+        ctx.lineTo(near.center - near.half, H);
+        ctx.closePath();
+        const asphalt = ctx.createLinearGradient(0, horizon, 0, H);
+        asphalt.addColorStop(0, palette.violet);
+        asphalt.addColorStop(0.25, nightRoad);
+        asphalt.addColorStop(1, nightRoad);
+        ctx.fillStyle = asphalt;
+        ctx.fill();
+
+        ctx.save();
+        ctx.shadowColor = palette.danger;
+        ctx.shadowBlur = 16;
+        ctx.strokeStyle = palette.danger;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(far.center - far.half, horizon);
+        ctx.lineTo(near.center - near.half, H);
+        ctx.moveTo(far.center + far.half, horizon);
+        ctx.lineTo(near.center + near.half, H);
+        ctx.stroke();
+        ctx.restore();
+
+        const dashOffset = (this.distance * 0.009) % 0.18;
+        for (let i = 0; i < 7; i++) {
+          const z = (i * 0.18 + dashOffset) % 1;
+          const road = this.roadAt(z);
+          const y = horizon + (H - horizon) * z;
+          const dashH = 2 + z * 17;
+          for (const lane of [-1 / 3, 1 / 3]) {
+            const x = road.center + road.half * lane;
+            ctx.globalAlpha = 0.4 + z * 0.6;
+            fillRR(x - 1.5 - z * 2, y - dashH / 2, 3 + z * 4, dashH, 2, palette.cyan);
+          }
+        }
+        ctx.globalAlpha = 1;
+
+        for (const obstacle of this.obstacles) {
+          if (obstacle.z <= 0 || obstacle.z >= 1.05) continue;
+          const road = this.roadAt(obstacle.z);
+          const x = road.center + [-0.55, 0, 0.55][obstacle.lane] * road.half;
+          const scale = 0.2 + obstacle.z * 0.8;
+          const y = horizon + (playerY - horizon) * Math.pow(obstacle.z, 1.55) - 75 * scale;
+          this.drawCar(x, y, scale, obstacle.shade, false);
+        }
+
+        this.drawCar(this.playerX, playerY, 1.08, palette.accent, true);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "700 19px Consolas, 'Courier New', monospace";
+        ctx.fillStyle = palette.surface;
+        for (let i = 0; i < 3; i++) {
+          ctx.fillStyle = i < this.lives ? palette.danger : palette.muted;
+          ctx.fillText("♥", W / 2 + (i - 1) * 30, 36);
+        }
+        ctx.font = "700 15px Consolas, 'Courier New', monospace";
+        ctx.fillText(String(state.score).padStart(5, "0") + " m", W / 2, 66);
+        badge("NEON CITY");
+      }
+    };
+
     const catcher = {
       key: "catcher",
       title: "Catcher",
@@ -1994,11 +2740,12 @@
       }
     };
 
-    const GAMES = { breakout: breakout, pong: pong, invaders: invaders, runner: runner, catcher: catcher };
+    const GAMES = { breakout: breakout, pong: pong, invaders: invaders, runner: runner, catcher: catcher, drive: drive };
     let game = breakout;
 
     function syncHud() {
-      hudScore.textContent = String(state.score);
+      hudScoreLabel.textContent = game.key === "drive" ? "Distance" : "Score";
+      hudScore.textContent = String(state.score) + (game.key === "drive" ? " m" : "");
       hudBest.textContent = String(best[state.key] || 0);
       hudBestLabel.textContent = game.bestLabel;
       hudExtra.textContent = String(state.extra);
@@ -2022,6 +2769,8 @@
       state.over = false;
       game = GAMES[key];
       game.init();
+      canvas.classList.toggle("portrait", key === "drive");
+      resize();
       tabs.forEach((t) => t.setAttribute("aria-pressed", t.dataset.game === key ? "true" : "false"));
       document.getElementById("gameSelect").value = key;
       canvas.setAttribute("aria-label", `${game.title} play area`);
@@ -2085,27 +2834,35 @@
     }
 
     function draw() {
-      ctx.clearRect(0, 0, GAME_W, GAME_H);
+      const size = gameDimensions();
+      ctx.clearRect(0, 0, size.width, size.height);
       game.draw();
+    }
+
+    function gameDimensions() {
+      return state.key === "drive"
+        ? { width: 500, height: 800 }
+        : { width: GAME_W, height: GAME_H };
     }
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
       if (!rect.width) return;
+      const size = gameDimensions();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const w = Math.max(1, Math.round(rect.width * dpr));
-      const h = Math.max(1, Math.round(rect.width * (GAME_H / GAME_W) * dpr));
+      const h = Math.max(1, Math.round(rect.width * (size.height / size.width) * dpr));
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
-      const s = canvas.width / GAME_W;
-      ctx.setTransform(s, 0, 0, s, 0, 0);
+      ctx.setTransform(canvas.width / size.width, 0, 0, canvas.height / size.height, 0, 0);
       draw();
     }
 
     function toLocal(e) {
       const rect = canvas.getBoundingClientRect();
+      const size = gameDimensions();
       return {
-        x: (e.clientX - rect.left) / rect.width * GAME_W,
-        y: (e.clientY - rect.top) / rect.height * GAME_H
+        x: (e.clientX - rect.left) / rect.width * size.width,
+        y: (e.clientY - rect.top) / rect.height * size.height
       };
     }
 
