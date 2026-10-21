@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-20T11:07:27.070Z",
+  "generatedAt": "2026-10-21T11:23:30.494Z",
   "source": "Get-AzPolicySetDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
-  "totalInitiatives": 188,
+  "totalInitiatives": 193,
   "totalCategories": 23,
   "initiatives": [
     {
@@ -5791,6 +5791,44 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/93d2179e-3068-c82f-2428-d614ae836a04"
     },
     {
+      "name": "24da7f6e-ca7a-4ede-bef4-25f158872a36",
+      "displayName": "[Preview]: Assess workload readiness for continuity on Azure Local",
+      "description": "Assess whether the Azure resource types used by a workload are supported on connected Azure Local to help determine continuity readiness if Azure Public access is disrupted. Use Audit to report unsupported resource types, Deny to prevent their creation, or Disabled to turn off the assessment.",
+      "category": "Sovereignty",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyCount": 1,
+      "policies": [
+        {
+          "id": "9d35b50d-a1a5-4d67-a7ab-5115442bbfbb",
+          "referenceId": "azureLocal",
+          "groupNames": [
+            null
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/24da7f6e-ca7a-4ede-bef4-25f158872a36"
+    },
+    {
+      "name": "cde006e8-1f6a-487f-94dd-1b40bb200cfa",
+      "displayName": "[Preview]: Assess workload readiness for continuity on Azure Local disconnected operations",
+      "description": "Assess whether the Azure resource types used by a workload are supported in Azure Local disconnected operations, so that the workload can continue to operate if it must move off public Azure into a disconnected environment. Set the effect to Audit to report resource types that are not supported, to Deny to prevent those resource types from being created so that the migration path stays open, or to Disabled to turn the assessment off.",
+      "category": "Sovereignty",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyCount": 1,
+      "policies": [
+        {
+          "id": "dabf7c7f-5354-42de-a92a-8367f538dd71",
+          "referenceId": "azureLocalDisconnectedOperations",
+          "groupNames": [
+            null
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/cde006e8-1f6a-487f-94dd-1b40bb200cfa"
+    },
+    {
       "name": "c138fd1a-e08f-4318-9490-d11ef2c2f9c1",
       "displayName": "[Preview]: Audit configuration against Automanage Best Practices",
       "description": "Automanage Machine Best Practices ensures that managed resources are setup in accordance with the desired state as defined in the assigned Configuration Profile.",
@@ -5843,6 +5881,67 @@
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/c138fd1a-e08f-4318-9490-d11ef2c2f9c1"
+    },
+    {
+      "name": "48da5be7-5507-4c72-99a3-7b74141147c1",
+      "displayName": "[Preview]: Azure Baseline Security Mode",
+      "description": "Azure Baseline Security Mode (https://aka.ms/AzureBSM) helps you secure your Azure environment with a curated set of Microsoft-recommended security controls. It simplifies the adoption of high-impact security protections, helping reduce risk and strengthen your security posture with minimal effort.",
+      "category": "General",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyCount": 7,
+      "policies": [
+        {
+          "id": "4fa4b6c0-31ca-4c0d-b10d-24b96f62a751",
+          "referenceId": "blockStorageAccountPublicAccess",
+          "groupNames": [
+            "Authentication"
+          ]
+        },
+        {
+          "id": "0b60c0b2-2dc2-4e1c-b5c9-abbed971de53",
+          "referenceId": "blockKeyVaultWithoutPurgeProtection",
+          "groupNames": [
+            "Data Protection"
+          ]
+        },
+        {
+          "id": "8c6a50c6-9ffd-4ae7-986f-5fa6111f9a54",
+          "referenceId": "blockStorageAccountSharedKeyAccess",
+          "groupNames": [
+            "Authentication"
+          ]
+        },
+        {
+          "id": "fe83a0eb-a853-422d-aac2-1bffd182c5d0",
+          "referenceId": "blockStorageAccountBelowMinimumTls",
+          "groupNames": [
+            "Data Protection"
+          ]
+        },
+        {
+          "id": "405c5871-3e91-4644-8a63-58e19d68ff5b",
+          "referenceId": "blockKeyVaultPublicNetworkAccess",
+          "groupNames": [
+            "Network"
+          ]
+        },
+        {
+          "id": "404c3081-a854-4457-ae30-26a93ef643f9",
+          "referenceId": "blockStorageAccountInsecureTransfer",
+          "groupNames": [
+            "Data Protection"
+          ]
+        },
+        {
+          "id": "1e66c121-a66a-4b1f-9b83-0fd99bf0fc2d",
+          "referenceId": "blockKeyVaultWithoutSoftDelete",
+          "groupNames": [
+            "Data Protection"
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/48da5be7-5507-4c72-99a3-7b74141147c1"
     },
     {
       "name": "39a366e6-fdde-4f41-bbf8-3757f46d1611",
@@ -7079,6 +7178,25 @@
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/ca122c06-05f6-4423-9018-ccb523168eb2"
+    },
+    {
+      "name": "35877bcb-9bd2-49fc-8a00-4614b3a0e73a",
+      "displayName": "[Preview]: Data Residency for Replication across Azure Services",
+      "description": "Help restrict replication, replicated backups, and data processing to approved locations and security boundaries across supported Azure services.",
+      "category": "Sovereignty",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyCount": 1,
+      "policies": [
+        {
+          "id": "0473574d-2d43-4217-aefe-941fcdf7e684",
+          "referenceId": "allowedReplicationLocationsCosmosDB",
+          "groupNames": [
+            null
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/35877bcb-9bd2-49fc-8a00-4614b3a0e73a"
     },
     {
       "name": "e20d08c5-6d64-656d-6465-ce9e37fd0ebc",
@@ -8370,7 +8488,7 @@
       "displayName": "[Preview]: Nexus Compute Cluster Security Baseline",
       "description": "This initiative includes policies designed to reflect the security baseline expectations of Nexus Compute Clusters. It ensures that the cluster configurations adhere to specific security controls that are critical for maintaining a secure environment.",
       "category": "Nexus",
-      "version": "2.0.0-preview",
+      "version": "2.1.0-preview",
       "policyType": "BuiltIn",
       "policyCount": 13,
       "policies": [
@@ -77058,6 +77176,60 @@
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/e0782c37-30da-4a78-9f92-50bfe7aa2553"
+    },
+    {
+      "name": "d7e9a08c-cb4e-4f50-9c66-4ec2e5c47596",
+      "displayName": "Key Vault should enforce network and access guardrails in mission platforms",
+      "description": "This policy set applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. Apply Key Vault network restrictions, soft-delete checks, and RBAC permission-model checks to reduce unintended access and data loss. The modifier disables unrestricted public access while audit policies report configurations that require review.",
+      "category": "Mission",
+      "version": "1.0.0",
+      "policyType": "BuiltIn",
+      "policyCount": 6,
+      "policies": [
+        {
+          "id": "fb759c06-d992-42c0-b099-9e09cf902093",
+          "referenceId": "kvEnableFirewall",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "db98217a-80f5-4cbd-bc9c-91640765ed90",
+          "referenceId": "kvAllowedIpRules",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "7671c803-6fb1-4a5f-a127-1eb7cf83bea2",
+          "referenceId": "restrictExternalPeKv",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "1e66c121-a66a-4b1f-9b83-0fd99bf0fc2d",
+          "referenceId": "KeyVaultShouldEnableSoftDelete",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "405c5871-3e91-4644-8a63-58e19d68ff5b",
+          "referenceId": "KeyVaultShouldDisablePublicNetworkAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "12d4fa5e-1f9f-4c21-97a9-b99b3c6611b5",
+          "referenceId": "KeyVaultShouldUseRBAC",
+          "groupNames": [
+            null
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/d7e9a08c-cb4e-4f50-9c66-4ec2e5c47596"
     },
     {
       "name": "a8640138-9b0a-4a28-b8cb-1666c838647d",
