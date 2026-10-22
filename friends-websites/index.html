@@ -421,6 +421,7 @@
       overflow: hidden;
     }
     .friend-url { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; overflow-wrap: anywhere; }
+    .friend-date { margin: 0; color: var(--cp-text-muted); font-size: 0.8rem; }
     .friend-arrow {
       margin-top: auto;
       display: flex;
@@ -458,7 +459,8 @@
     }
     .friend-cards.list-view .friend-tags { order: 3; flex: 0 0 auto; flex-wrap: nowrap; }
     .friend-cards.list-view .friend-description, .friend-cards.list-view .friend-url { display: none; }
-    .friend-cards.list-view .friend-arrow { order: 4; flex: 0 0 auto; margin-top: 0; }
+    .friend-cards.list-view .friend-date { order: 4; flex: 0 0 auto; white-space: nowrap; }
+    .friend-cards.list-view .friend-arrow { order: 5; flex: 0 0 auto; margin-top: 0; }
 
     .empty-state {
       padding: 2.5rem;
@@ -1517,6 +1519,13 @@
         url.className = "friend-url";
         url.textContent = hostnameFor(friend.url);
 
+        const added = document.createElement("p");
+        added.className = "friend-date";
+        const addedDate = /^\d{4}-\d{2}-\d{2}$/.test(friend.dateAdded) ? new Date(`${friend.dateAdded}T00:00:00Z`) : null;
+        added.textContent = addedDate && !Number.isNaN(addedDate.getTime())
+          ? `Added ${addedDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" })}`
+          : "Added date not recorded";
+
         const arrow = document.createElement("span");
         arrow.className = "friend-arrow";
         arrow.innerHTML = 'Visit site <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
@@ -1528,7 +1537,7 @@
           description.textContent = friend.description;
           card.append(description);
         }
-        card.append(url, arrow);
+        card.append(url, added, arrow);
         elements.friendCards.append(card);
       });
     }

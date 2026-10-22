@@ -52,8 +52,6 @@
     gtag('js', new Date());
     gtag('config', 'G-75X1Q2PPLE');
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636684537203477" crossorigin="anonymous"></script>
-
   <script>
     (function () {
       try {
@@ -427,9 +425,10 @@
     .tool-card:hover, .tool-card:focus-within {
       border-color: var(--cp-accent);
     }
-    .tool-link { display: grid; grid-template-columns: 3rem minmax(0, 1fr); grid-template-rows: auto 1fr auto; align-items: start; gap: .75rem; flex: 1; min-width: 0; padding: 1.25rem; color: var(--cp-text); text-decoration: none; border-radius: inherit; }
+    .tool-link { display: grid; grid-template-columns: 3rem minmax(0, 1fr); grid-template-rows: auto 1fr auto; align-items: start; gap: .75rem; flex: 1; min-width: 0; padding: 1.25rem; color: var(--cp-text); text-decoration: none; border-radius: inherit; transition: background-color .16s ease; }
+    .tool-card:hover .tool-link, .tool-card:focus-within .tool-link { background: var(--cp-accent-soft); }
     .tool-link > h2 { padding-right: 2.75rem; align-self: center; }
-    .tool-link > p, .tool-link > .tool-updated { grid-column: 1 / -1; }
+    .tool-link > p { grid-column: 1 / -1; }
     .tool-link:focus-visible { outline-offset: -3px; }
     .tool-card.is-dragging, .tool-card.is-reordered { border-color: var(--cp-accent); outline: 3px solid var(--cp-accent); outline-offset: 1px; }
     .tool-card.is-dragging .tool-link, .tool-card.is-reordered .tool-link { background: var(--cp-accent-soft); }
@@ -489,7 +488,7 @@
       place-items: center;
       padding: 0;
       border: 1px solid var(--cp-border);
-      border-radius: 6px;
+      border-radius: 50%;
       background: var(--cp-panel-strong);
       color: var(--cp-text-muted);
       cursor: pointer;
@@ -529,11 +528,6 @@
       grid-column: 2;
       font-size: 0.85rem;
     }
-    .tool-cards.list-view .tool-card .tool-updated {
-      grid-row: 3;
-      grid-column: 2;
-      margin: 0;
-    }
     .tool-card .tool-icon {
       display: grid;
       place-items: center;
@@ -570,9 +564,6 @@
       color: var(--cp-text-muted);
     }
     .empty-state p { margin: 0 0 1rem; }
-    .catalog-ad { margin: 2rem 0; padding: 1rem 0; border-block: 1px solid var(--cp-border); text-align: center; min-width: 0; }
-    .ad-label { display: block; margin-bottom: .75rem; font-size: 0.75rem; color: var(--cp-text-muted); }
-    .catalog-ad .adsbygoogle { min-height: 280px; }
     @media (max-width: 60rem) { .tool-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 40rem) {
       .tool-cards { grid-template-columns: minmax(0, 1fr); }
@@ -581,7 +572,6 @@
       .tool-cards.list-view .tool-card .tool-icon { display: none; }
       .tool-cards.list-view .tool-card h2 { grid-column: 1; grid-row: 1; padding-right: 3rem; }
       .tool-cards.list-view .tool-card p { grid-column: 1; grid-row: 2; }
-      .tool-cards.list-view .tool-card .tool-updated { grid-column: 1; grid-row: 3; }
       .tools-toolbar { align-items: flex-start; }
       main { padding-top: 1.5rem; }
     }
@@ -685,7 +675,7 @@
       .news-banner, .site-header, .site-footer, .skip-link,
       .theme-toggle, .section-nav, .load-more, .copy-button, .copyable::after,
       .breadcrumb, .filters, .search-row, .toolbar, .pagination, #catalogControls,
-      .favorite-button, .reorder-controls, .catalog-ad, .back-to-top { display: none !important; }
+      .favorite-button, .reorder-controls, .back-to-top { display: none !important; }
       :root { --cp-bg: #fff; --cp-surface: #fff; --cp-surface-soft: #fff; }
       * { background: transparent !important; color: #000 !important; box-shadow: none !important; }
       body { font-size: 11pt; }
@@ -709,8 +699,6 @@
         scroll-behavior: auto !important;
       }
     }
-    .tool-updated { display: block; margin: .35rem 0 0; color: var(--cp-text-muted); font-size: 0.75rem; }
-    .tool-updated:empty { display: none; }
     /* a group whose cards are all filtered out should take its heading with it */
 
     /* Share links */
@@ -1212,7 +1200,7 @@
     </section>
 
     <section id="catalog" aria-label="Tool catalogue">
-      <noscript><p>Search, filters and saved preferences need JavaScript. All tools are available below.</p><style>.catalog-ad { display: none; }</style></noscript>
+      <noscript><p>Search, filters and saved preferences need JavaScript. All tools are available below.</p></noscript>
       <div id="catalogControls" hidden>
       <div class="tools-search">
         <div class="search-field">
@@ -1262,7 +1250,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-azure-regions">Azure Regions</h2>
           <p>Explore Azure datacenter locations and regional information worldwide.</p>
-          <span class="tool-updated" data-file="azure-regions/regions.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-naming-convention/" data-families="azure-reference utilities">
@@ -1270,7 +1257,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-azure-naming-convention">Azure Naming Convention</h2>
           <p>Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations.</p>
-          <span class="tool-updated" data-file="azure-naming-convention/abbreviations.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-taggable-resources/" data-families="azure-reference">
@@ -1278,7 +1264,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-azure-taggable-resources">Azure Taggable Resources</h2>
           <p>Check which Azure resource types support tags and whether tags appear in the cost report.</p>
-          <span class="tool-updated" data-file="azure-taggable-resources/tag-support.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-policy-aliases/" data-families="azure-reference">
@@ -1286,7 +1271,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-azure-policy-aliases">Azure Policy Aliases</h2>
           <p>Search all supported Azure Policy aliases to use when authoring custom policy definitions.</p>
-          <span class="tool-updated" data-file="azure-policy-aliases/policy-aliases.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-policies/" data-families="azure-reference">
@@ -1294,7 +1278,6 @@
           <span class="tool-icon" aria-hidden="true">📋</span>
           <h2 id="tool-azure-policies">Azure Policies</h2>
           <p>Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure.</p>
-          <span class="tool-updated" data-file="azure-policies/policydefinitions.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-built-in-roles/" data-families="azure-reference">
@@ -1302,26 +1285,15 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-azure-built-in-roles">Azure Built-in Roles</h2>
           <p>Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions.</p>
-          <span class="tool-updated" data-file="azure-built-in-roles/roles.json"></span>
           </a>
         </article>
       </div>
-      <aside class="catalog-ad" id="toolsAd" aria-label="Advertisement" hidden>
-        <span class="ad-label">Advertisement</span>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6636684537203477"
-             data-ad-slot="4494484671"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </aside>
       <div class="tool-cards" id="moreToolCards">
         <article class="tool-card" data-tool-id="/entra-built-in-roles/" data-families="azure-reference">
           <a class="tool-link" href="/entra-built-in-roles/" aria-labelledby="tool-entra-built-in-roles">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-entra-built-in-roles">Entra ID Built-in Roles</h2>
           <p>Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions.</p>
-          <span class="tool-updated" data-file="entra-built-in-roles/roles.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/graph-permissions/" data-families="azure-reference">
@@ -1329,7 +1301,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-graph-permissions">Microsoft Graph Permissions</h2>
           <p>Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description.</p>
-          <span class="tool-updated" data-file="graph-permissions/permissions.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-ip-ranges/" data-families="azure-reference">
@@ -1337,7 +1308,6 @@
           <span class="tool-icon" aria-hidden="true">☁️</span>
           <h2 id="tool-azure-ip-ranges">Azure IP Ranges</h2>
           <p>IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool.</p>
-          <span class="tool-updated" data-file="azure-ip-ranges/ip-ranges.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/github-ip-ranges/" data-families="utilities">
@@ -1345,15 +1315,13 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-github-ip-ranges">GitHub IP Ranges</h2>
           <p>IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool.</p>
-          <span class="tool-updated" data-file="github-ip-ranges/ip-ranges.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/azure-release-updates/" data-families="news">
           <a class="tool-link" href="/azure-release-updates/" aria-labelledby="tool-azure-release-updates">
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="28" height="28"></span>
-          <h2 id="tool-azure-release-updates">Azure Updates</h2>
+          <h2 id="tool-azure-release-updates">Azure Release Updates</h2>
           <p>Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed.</p>
-          <span class="tool-updated" data-file="azure-release-updates/updates.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/m365-release-updates/" data-families="news">
@@ -1361,7 +1329,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-m365-release-updates">M365 Updates</h2>
           <p>Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed.</p>
-          <span class="tool-updated" data-file="m365-release-updates/updates.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/aws-release-updates/" data-families="news">
@@ -1369,7 +1336,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-aws-release-updates">AWS Updates</h2>
           <p>Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed.</p>
-          <span class="tool-updated" data-file="aws-release-updates/updates.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/rss-watcher/" data-families="news">
@@ -1377,7 +1343,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-rss-watcher">RSS Watcher</h2>
           <p>Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day.</p>
-          <span class="tool-updated" data-file="rss-watcher/updates.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/microsoft-techcommunity-rss-feeds/" data-families="news">
@@ -1385,7 +1350,6 @@
           <span class="tool-icon" aria-hidden="true">📢</span>
           <h2 id="tool-microsoft-techcommunity-rss-feeds">Microsoft Techcommunity RSS Feeds</h2>
           <p>Consolidate latest activities from Microsoft Tech Community blogs.</p>
-          <span class="tool-updated" data-file="microsoft-techcommunity-rss-feeds/feeds-status.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/subnet-calculator/" data-families="calculators">
@@ -1442,7 +1406,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-icons">Icons</h2>
           <p>Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation.</p>
-          <span class="tool-updated" data-file="icons/icons.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/emoji-sheet/" data-families="assets">
@@ -1450,7 +1413,6 @@
           <span class="tool-icon" aria-hidden="true">😀</span>
           <h2 id="tool-emoji-sheet">Emoji</h2>
           <p>A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation.</p>
-          <span class="tool-updated" data-file="emoji-sheet/emojis.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/it-images/" data-families="assets">
@@ -1458,7 +1420,6 @@
           <span class="tool-icon" aria-hidden="true">😂</span>
           <h2 id="tool-it-images">IT Images &amp; Memes</h2>
           <p>A collection of funny IT memes, developer humor, and tech-related images.</p>
-          <span class="tool-updated" data-file="it-images/images.json"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/favorite-links/" data-families="community">
@@ -1466,7 +1427,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-favorite-links">My Favorite Links</h2>
           <p>A curated collection of useful links and resources.</p>
-          <span class="tool-updated" data-file="favorite-links/favorite-links.csv"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/friends-websites/" data-families="community">
@@ -1474,7 +1434,6 @@
           <span class="tool-icon" aria-hidden="true">🤝</span>
           <h2 id="tool-friends-websites">My Friends' Websites</h2>
           <p>Discover amazing websites from my network of friends and colleagues.</p>
-          <span class="tool-updated" data-file="friends-websites/friends-websites.csv"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/microsoft-portals/" data-families="azure-reference community">
@@ -1482,7 +1441,6 @@
           <span class="tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="28" height="28"></span>
           <h2 id="tool-microsoft-portals">Microsoft Portals</h2>
           <p>Browse a selection of Microsoft administration portals with task-based search.</p>
-          <span class="tool-updated" data-file="microsoft-portals/portals-urls.csv"></span>
           </a>
         </article>
         <article class="tool-card" data-tool-id="/world-clock/" data-families="utilities">
@@ -1658,8 +1616,6 @@
     let cancelDrag = null;
     let highlightedCard = null;
     let moveHighlightTimer = null;
-    let adRequested = false;
-
     function normalize(value) {
       return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
@@ -1702,17 +1658,6 @@
       return `<svg width="16" height="16" viewBox="0 0 24 24" fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
     }
 
-    function requestAd() {
-      if (adRequested || !visibleCards.length) return;
-      adRequested = true;
-      document.getElementById("toolsAd").hidden = false;
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (error) {
-        console.warn("The catalogue advertisement could not be initialized.", error);
-      }
-    }
-
     function renderCards(focusFallback = searchInput, updateUrl = true) {
       if (cancelDrag) cancelDrag();
       clearMoveHighlight();
@@ -1739,7 +1684,7 @@
         card.querySelector('[data-move="-1"]').setAttribute("aria-disabled", String(index <= 0));
         card.querySelector('[data-move="1"]').setAttribute("aria-disabled", String(index < 0 || index === visibleCards.length - 1));
       });
-      // Only cards move between the two groups; a requested ad stays in place.
+      // Keep the first six visible tools in the featured group.
       grids[0].append(...visibleCards.slice(0, 6));
       grids[1].append(...visibleCards.slice(6), ...orderedCards.filter((card) => card.hidden));
       grids.forEach((grid) => grid.classList.toggle("list-view", view === "list"));
@@ -1763,7 +1708,6 @@
       reorderToggle.setAttribute("aria-pressed", String(reorderMode));
       document.getElementById("reorderHint").hidden = !reorderMode;
       if (updateUrl) syncUrl();
-      requestAd();
     }
 
     function clearMoveHighlight() {
@@ -1955,26 +1899,6 @@
     readUrlState();
     document.getElementById("catalogControls").hidden = false;
     renderCards(searchInput, false);
-
-    // Only data-backed catalogues have dates; local calculators and generators do not.
-    (async function showUpdatedDates() {
-      try {
-        const response = await fetch("/freshness.json", { cache: "no-store" });
-        if (!response.ok) throw new Error(`Freshness request returned ${response.status}`);
-        const stamps = await response.json();
-        if (!stamps || typeof stamps !== "object" || Array.isArray(stamps)) throw new Error("Invalid freshness manifest");
-        let missing = false;
-        document.querySelectorAll(".tool-updated").forEach((slot) => {
-          const iso = stamps[slot.dataset.file];
-          const date = typeof iso === "string" ? new Date(iso) : null;
-          if (!date || Number.isNaN(date.getTime())) { missing = true; return; }
-          slot.textContent = "Updated " + date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-        });
-        if (missing) throw new Error("Some catalogue dates are missing");
-      } catch (error) {
-        reportNotice("freshness", "Some update dates are unavailable. Tool links still work; check the source date on each tool.", error);
-      }
-    })();
 
     const backToTop = document.getElementById("backToTop");
     let scrollTicking = false;

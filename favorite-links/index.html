@@ -472,12 +472,17 @@
       flex-direction: row;
       flex-wrap: nowrap;
       align-items: center;
-      gap: 1rem;
+      gap: .75rem;
       padding: .45rem .9rem;
     }
     .link-cards.list-view .link-card:hover, .link-cards.list-view .link-card:focus-visible { transform: none; }
-    .link-cards.list-view .link-card-row1 { flex: 1 1 auto; }
-    .link-cards.list-view .link-card-row2 { flex: 0 0 auto; }    .load-more {
+    .link-cards.list-view .favorite-button { position: static; order: 3; flex: 0 0 2.75rem; width: 2.75rem; height: 2.75rem; }
+    .link-cards.list-view .link-card-row1 { order: 1; flex: 1 1 auto; padding-right: 0; }
+    .link-cards.list-view .link-card-row1 h2 { min-width: 0; overflow: hidden; }
+    .link-cards.list-view .link-card-row1 h2 a { display: block; min-height: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .link-cards.list-view .link-card-row2 { order: 2; display: flex; flex: 0 1 auto; align-items: center; gap: .65rem; width: auto; }
+    .link-cards.list-view .link-tag { max-width: 8rem; }
+    .load-more {
       grid-column: 1 / -1;
       justify-self: center;
       margin-top: .5rem;
@@ -729,7 +734,15 @@
     .link-domain { margin: .5rem 0; font-size: .875rem; overflow-wrap: anywhere; color: var(--cp-text-muted); }
     .favorite-button { width: 44px; height: 44px; }
     .favorites-filter, .submit-link-button, .view-toggle-button, .filter-toggle { min-height: 44px; }
-    .link-cards.list-view .link-card { display: flex; flex-direction: column; align-items: stretch; gap: .4rem; padding: .7rem .9rem; }
+    .link-cards.list-view .link-card { flex-direction: row; align-items: center; gap: .3rem; padding: .35rem .45rem; }
+    .link-cards.list-view .link-avatar { display: none; }
+    .link-cards.list-view .link-card-row1 { min-width: 0; }
+    .link-cards.list-view .link-card-row2 { gap: .25rem; }
+    .link-cards.list-view .link-tag { max-width: clamp(2.5rem, 14vw, 5rem); padding-inline: .3rem; font-size: .7rem; }
+    .link-cards.list-view .link-date { font-size: .7rem; }
+    .link-cards.list-view .link-rating { gap: 0; }
+    .link-cards.list-view .link-rating svg { width: .65rem; height: .65rem; }
+    .link-cards.list-view .favorite-button { flex-basis: 2.75rem; width: 2.75rem; height: 2.75rem; }
     .links-toolbar, .results-actions { flex-wrap: wrap; }
     @media (max-width: 48rem) {
       .filter-bar input:not([type="checkbox"]), .filter-bar select { flex: none; width: 100%; max-width: 100%; min-height: 44px; }
@@ -1211,7 +1224,6 @@
         <input id="searchInput" type="search" placeholder="Search links..." autocomplete="off" spellcheck="false" aria-label="Search links">
       </div>
       <input id="categoryFilter" type="hidden" value="">
-      <div class="category-badges" id="categoryBadges" role="group" aria-label="Filter by category"></div>
       <input id="topicFilter" type="hidden" value="">
       <div class="category-badges" id="topicBadges" role="group" aria-label="Filter by topic"></div>
       <details class="extra-filters"><summary>More filters &amp; sort</summary>
@@ -1362,7 +1374,6 @@
     const elements = {
       searchInput: document.getElementById("searchInput"),
       categoryFilter: document.getElementById("categoryFilter"),
-      categoryBadges: document.getElementById("categoryBadges"),
       topicFilter: document.getElementById("topicFilter"),
       topicBadges: document.getElementById("topicBadges"),
       sortSelect: document.getElementById("sortSelect"),
@@ -1560,20 +1571,6 @@
 
     function populateFilters() {
       const categories = [...new Set(links.map((link) => link.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-      elements.categoryBadges.replaceChildren();
-      ["", ...new Set(links.map((link) => link.group).sort())].forEach((group) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "category-badge";
-        button.dataset.category = group;
-        button.textContent = group || "All categories";
-        button.setAttribute("aria-pressed", String(group === elements.categoryFilter.value));
-        button.addEventListener("click", () => {
-          elements.categoryFilter.value = group;
-          elements.categoryFilter.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-        elements.categoryBadges.append(button);
-      });
       elements.topicBadges.replaceChildren();
       ["", ...categories].forEach((topic) => {
         const button = document.createElement("button");
@@ -1715,9 +1712,6 @@
       if (resetPaging) visibleCount = PAGE_SIZE;
       const query = normalize(elements.searchInput.value.trim());
       const category = elements.categoryFilter.value;
-      elements.categoryBadges.querySelectorAll("button").forEach((button) => {
-        button.setAttribute("aria-pressed", String(button.dataset.category === category));
-      });
       const topic = elements.topicFilter.value;
       elements.topicBadges.querySelectorAll("button").forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.topic === topic));

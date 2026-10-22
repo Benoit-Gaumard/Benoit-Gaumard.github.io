@@ -404,16 +404,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: .5rem;
+      justify-content: center;
+      gap: .25rem;
       min-width: 0;
-      padding: 1rem .5rem .75rem;
+      min-height: 5.25rem;
+      padding: .5rem;
       border: 1px solid var(--cp-border);
       border-radius: 8px;
       background: var(--cp-surface);
       box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
-      transition: border-color .18s ease, transform .18s ease;
+      transition: border-color .18s ease, transform .18s ease, z-index 0s;
     }
-    .emoji-card:hover { border-color: var(--cp-accent); transform: translateY(-2px); }
+    .emoji-card:hover, .emoji-card:focus-within { z-index: 3; border-color: var(--cp-accent); transform: translateY(-2px); }
     .favorite-button {
       position: absolute;
       top: .4rem;
@@ -437,7 +439,7 @@
       color: var(--cp-warning);
     }
     .emoji-glyph {
-      width: 100%;
+      width: auto;
       border: 0;
       background: transparent;
       cursor: pointer;
@@ -445,6 +447,31 @@
       line-height: 1;
       padding: .25rem;
     }
+    .emoji-details {
+      position: absolute;
+      top: calc(100% - .25rem);
+      left: 0;
+      z-index: 3;
+      display: grid;
+      justify-items: center;
+      gap: .4rem;
+      width: 100%;
+      padding: .6rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 8px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .15s ease, visibility .15s ease;
+    }
+    .emoji-card:hover .emoji-details, .emoji-card:focus-within .emoji-details {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .emoji-name { margin: 0; font-size: .875rem; text-align: center; overflow-wrap: anywhere; }
     .emoji-codes { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem; max-width: 100%; }
     .emoji-code { min-height: 1.5rem;
       border: 1px solid var(--cp-border-strong);
@@ -702,10 +729,9 @@
     .filter-fields { display: grid; gap: .5rem; padding-top: .5rem; }
     .filter-fields label { position: static; width: auto; height: auto; display: block; clip: auto; margin: 0 0 .25rem; }
     .results-actions, .results-bar { flex-wrap: wrap; }
-    .favorite-button { position: static; align-self: flex-end; width: 44px; height: 44px; flex: none; }
+    .favorite-button { position: absolute; top: .25rem; right: .25rem; align-self: auto; width: 44px; height: 44px; flex: none; }
     .favorites-filter, .clear-button, .emoji-code { min-height: 44px; min-width: 44px; }
     .emoji-glyph { min-height: 64px; }
-    .emoji-name { margin: 0; font-size: .875rem; text-align: center; overflow-wrap: anywhere; }
     .emoji-code { border-radius: .625rem; font-family: Consolas, "Courier New", monospace; font-size: .75rem; }
     .gallery { align-content: start; }
     .pagination { flex-wrap: wrap; }
@@ -1413,7 +1439,10 @@
         codes.append(chip);
       });
 
-      card.append(favorite, glyph, name, codes);
+      const details = document.createElement("div");
+      details.className = "emoji-details";
+      details.append(name, codes);
+      card.append(favorite, glyph, details);
       return card;
     }
 

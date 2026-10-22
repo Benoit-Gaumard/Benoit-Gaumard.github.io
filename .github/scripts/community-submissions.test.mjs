@@ -71,7 +71,9 @@ test("friend website and Microsoft portal issues write separate CSVs", (t) => {
       assert.equal(result.status, 0, result.stderr);
       assert.match(result.stdout, /status: ok/);
       assert.equal(readFileSync(source, "utf8"), readFileSync(resolve(sourcePath), "utf8"));
-      assert.ok(readFileSync(join(submissions, `issue-${key === "friends" ? "201" : "202"}.csv`), "utf8").includes("Example"));
+      const submission = readFileSync(join(submissions, `issue-${key === "friends" ? "201" : "202"}.csv`), "utf8");
+      assert.ok(submission.includes("Example"));
+      if (key === "friends") assert.match(submission, /,FALSE,\d{4}-\d{2}-\d{2}\r?\n$/);
     }
   });
 

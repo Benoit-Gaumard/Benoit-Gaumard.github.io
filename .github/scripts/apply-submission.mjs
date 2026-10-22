@@ -274,6 +274,7 @@ async function submitFriendWebsite(fields) {
     subcategory: finalSubcategory,
     country: finalCountry,
     url,
+    dateAdded: new Date().toISOString().slice(0, 10),
     // Submissions land disabled: merging the pull request never publishes on
     // its own, the row only appears once enabled is flipped by hand.
     enabled: "FALSE",

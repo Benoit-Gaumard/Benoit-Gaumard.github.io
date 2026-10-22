@@ -672,6 +672,10 @@
  .clock-calendar-card h2{font-size:.9rem;line-height:1.4;color:var(--cp-text-muted);margin:0;}
  .clock-calendar-value{font-size:2.5rem;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums;margin:0;}
  .clock-calendar-note{font-size:.85rem;line-height:1.5;color:var(--cp-text-muted);font-variant-numeric:tabular-nums;margin:0;}
+ .clock-progress{display:block;width:100%;height:.6rem;overflow:hidden;border:0;border-radius:999px;background:var(--cp-surface-soft);accent-color:var(--cp-accent);}
+ .clock-progress::-webkit-progress-bar{border-radius:999px;background:var(--cp-surface-soft);}
+ .clock-progress::-webkit-progress-value{border-radius:999px;background:var(--cp-accent);}
+ .clock-progress::-moz-progress-bar{border-radius:999px;background:var(--cp-accent);}
  .world-primary-time{font-size:clamp(2.25rem,9vw,4.5rem);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2;margin:.25rem 0;}
  .clock-help,.world-zone-date,.world-zone-shift{color:var(--cp-text-muted);font-size:.9rem;line-height:1.5;}
  .clock-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.75rem 0;}
@@ -689,6 +693,7 @@
  .world-place-heading{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;min-width:0;}
  .world-city-title{display:flex;align-items:center;gap:.5rem;min-width:0;max-width:100%;}
  .world-city-title span{min-width:0;overflow-wrap:anywhere;}
+ .world-zone-country{color:var(--cp-text-muted);font-size:.85rem;}
  .country-flag,.clock-flag-neutral{display:inline-flex;align-items:center;justify-content:center;flex:none;width:24px;height:18px;object-fit:contain;}
  .clock-flag-neutral{font-size:.75rem;color:var(--cp-text-muted);}
  .timezone-offset{display:inline-flex;align-items:center;padding:.2rem .5rem;border:1px solid var(--cp-border-strong);border-radius:999px;background:var(--cp-accent-soft);color:var(--cp-link);font-size:.8rem;font-weight:650;white-space:nowrap;font-variant-numeric:tabular-nums;}
@@ -1174,8 +1179,8 @@
 <!-- world-clock-view:start -->
  <div class="world-overview">
  <section class="world-primary" aria-labelledby="parisHeading"><div class="world-place-heading"><h2 id="parisHeading" class="world-city-title"><img class="country-flag" src="/flags/fr.png" alt="" width="24" height="18"><span>Paris, France</span></h2><span id="parisOffset" class="timezone-offset" title="GMT offset at the displayed instant">--</span></div><p id="clockMode" class="clock-help">Live clocks</p><p class="world-primary-time" id="parisTime" aria-live="off">--:--:--</p><p id="parisDate" class="clock-help" aria-live="off"></p><p class="clock-help">Europe/Paris</p></section>
- <section class="clock-calendar-card" aria-labelledby="dayOfYearHeading"><h2 id="dayOfYearHeading">Day of the Year</h2><p id="dayOfYear" class="clock-calendar-value" aria-live="off">--</p><p id="yearProgress" class="clock-calendar-note"></p></section>
- <section class="clock-calendar-card" aria-labelledby="weekOfYearHeading"><h2 id="weekOfYearHeading">Week of the Year</h2><p id="weekOfYear" class="clock-calendar-value" aria-live="off">--</p><p id="weekContext" class="clock-calendar-note"></p></section>
+ <section class="clock-calendar-card" aria-labelledby="dayOfYearHeading"><h2 id="dayOfYearHeading">Day of the Year</h2><p id="dayOfYear" class="clock-calendar-value" aria-live="off">--</p><progress id="yearProgressBar" class="clock-progress" max="366" value="0" aria-label="Day of the year progress"></progress><p id="yearProgress" class="clock-calendar-note"></p></section>
+ <section class="clock-calendar-card" aria-labelledby="weekOfYearHeading"><h2 id="weekOfYearHeading">Week of the Year</h2><p id="weekOfYear" class="clock-calendar-value" aria-live="off">--</p><progress id="weekProgressBar" class="clock-progress" max="53" value="0" aria-label="Week of the year progress"></progress><p id="weekContext" class="clock-calendar-note"></p></section>
  </div>
  <details class="clock-planner" id="meetingPlanner"><summary>Plan a meeting across timezones</summary><p class="clock-help">Choose a local date and time in the base timezone. Each city uses its offset for that instant, including seasonal changes. Ambiguous or nonexistent local times require an explicit choice.</p>
  <div class="clock-fields"><div class="clock-field"><label for="meetingBase">Base timezone</label><select id="meetingBase"></select></div><div class="clock-field"><label for="meetingTime">Meeting date and local time</label><input id="meetingTime" type="datetime-local" step="60" aria-describedby="meetingStatus"></div>
@@ -1300,7 +1305,11 @@ function calendarFacts(instant, timeZone = "Europe/Paris") {
   const weekYear = thursday.getUTCFullYear();
   const first = new Date(wallClockUTC({ year: weekYear, month: 1, day: 4 }));
   first.setUTCDate(first.getUTCDate() + 3 - (first.getUTCDay() + 6) % 7);
-  return { dayOfYear, daysInYear, percentage: dayOfYear / daysInYear * 100, weekOfYear: 1 + Math.round((thursday - first) / 604800000), weekYear };
+  const nextFirst = new Date(wallClockUTC({ year: weekYear + 1, month: 1, day: 4 }));
+  nextFirst.setUTCDate(nextFirst.getUTCDate() + 3 - (nextFirst.getUTCDay() + 6) % 7);
+  const weekOfYear = 1 + Math.round((thursday - first) / 604800000);
+  const weeksInYear = Math.round((nextFirst - first) / 604800000);
+  return { dayOfYear, daysInYear, percentage: dayOfYear / daysInYear * 100, weekOfYear, weeksInYear, weekYear };
 }
 function offsetForZone(zone, instant) {
   return new Intl.DateTimeFormat("en-US", { timeZone: zone, timeZoneName: "shortOffset" }).formatToParts(new Date(instant))
@@ -1319,7 +1328,7 @@ function countryForZone(zone, catalogue) {
     { city: "Hyderabad", tz: "Asia/Kolkata" }, { city: "Bengaluru", tz: "Asia/Kolkata" },
     { city: "Johannesburg", tz: "Africa/Johannesburg" },
   ];
-  const el = Object.fromEntries(["parisTime", "parisDate", "parisOffset", "clockMode", "timezoneGrid", "zoneInput", "zoneOptions", "addZone", "zoneError", "meetingBase", "meetingTime", "meetingMinutes", "meetingMinuteLabel", "occurrenceField", "meetingOccurrence", "previewMeeting", "liveClock", "copyTimes", "meetingStatus", "dayOfYear", "weekOfYear", "yearProgress", "weekContext"].map(id => [id, document.getElementById(id)]));
+  const el = Object.fromEntries(["parisTime", "parisDate", "parisOffset", "clockMode", "timezoneGrid", "zoneInput", "zoneOptions", "addZone", "zoneError", "meetingBase", "meetingTime", "meetingMinutes", "meetingMinuteLabel", "occurrenceField", "meetingOccurrence", "previewMeeting", "liveClock", "copyTimes", "meetingStatus", "dayOfYear", "weekOfYear", "yearProgress", "weekContext", "yearProgressBar", "weekProgressBar"].map(id => [id, document.getElementById(id)]));
   const state = { cities: [...DEFAULTS], preview: null, view: "cards" };
   function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
   function validZone(zone) { try { new Intl.DateTimeFormat("en", { timeZone: zone }).format(); return true; } catch { return false; } }
@@ -1379,7 +1388,8 @@ function countryForZone(zone, catalogue) {
       const header = node("div", undefined, "world-zone-head");
       const place = node("div", undefined, "world-place-heading");
       const heading = node("h3", undefined, "world-city-title");
-      heading.append(countryFlag(city.tz), node("span", city.city));
+      const country = countryForZone(city.tz, countryData);
+      heading.append(countryFlag(city.tz), node("span", city.city), node("span", country?.name || "Country unavailable", "world-zone-country"));
       const currentOffset = node("span", "", "timezone-offset");
       currentOffset.dataset.field = "offset";
       currentOffset.title = "GMT offset at the displayed instant";
@@ -1416,8 +1426,12 @@ function countryForZone(zone, catalogue) {
     const facts = calendarFacts(instant, PARIS);
     el.dayOfYear.textContent = facts.dayOfYear;
     el.yearProgress.textContent = `of ${facts.daysInYear} · ${facts.percentage.toFixed(1)}%`;
+    el.yearProgressBar.max = facts.daysInYear;
+    el.yearProgressBar.value = facts.dayOfYear;
     el.weekOfYear.textContent = facts.weekOfYear;
-    el.weekContext.textContent = `ISO week · ${facts.weekYear}`;
+    el.weekContext.textContent = `of ${facts.weeksInYear} ISO weeks · ${facts.weekYear}`;
+    el.weekProgressBar.max = facts.weeksInYear;
+    el.weekProgressBar.value = facts.weekOfYear;
     el.timezoneGrid.querySelectorAll("[data-zone-index]").forEach(article => {
       const city = state.cities[Number(article.dataset.zoneIndex)];
       article.querySelector('[data-field="time"]').textContent = time(city.tz, instant);
