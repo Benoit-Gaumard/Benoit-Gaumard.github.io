@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-22T11:23:10.971Z",
+  "generatedAt": "2026-10-23T11:13:37.126Z",
   "source": "Get-AzPolicyDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
-  "totalPolicies": 2882,
-  "totalCategories": 100,
+  "totalPolicies": 2910,
+  "totalCategories": 101,
   "policies": [
     {
       "name": "b4d66858-c922-44e3-9566-5cdb7a7be744",
@@ -4273,6 +4273,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/42daa904-5969-47ef-92cb-b75df946195a"
     },
     {
+      "name": "37ccbf90-57ed-4a86-b246-cece8ed746fe",
+      "displayName": "[Preview]: API Management services should use private link",
+      "description": "API Management services should have at least one approved private endpoint connection. Clients in a virtual network can securely access API Management services that have private endpoint connections through private links.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/37ccbf90-57ed-4a86-b246-cece8ed746fe"
+    },
+    {
       "name": "22888755-d824-4e43-8e0b-42d481836554",
       "displayName": "[Preview]: App Service Plans should be Zone Redundant",
       "description": "App Service Plans can be configured to be Zone Redundant or not. When the 'zoneRedundant' property is set to 'false' for an App Service Plan, it is not configured for Zone Redundancy. This policy identifies and enforces the Zone Redundancy configuration for App Service Plans.",
@@ -4328,6 +4339,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0f2d8593-4667-4932-acca-6a9f187af109"
     },
     {
+      "name": "1c641ad7-3397-4594-b82a-ddc627e14582",
+      "displayName": "[Preview]: Audit Local Administrator Password Solution (LAPS)",
+      "description": "This policy audits the configuration of Local Administrator Password Solution (LAPS). For more information, see https://aka.ms/LAPS4ARC.",
+      "category": "Guest Configuration",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1c641ad7-3397-4594-b82a-ddc627e14582"
+    },
+    {
       "name": "fe4e11ff-f561-4d4a-877c-256cc0b6470e",
       "displayName": "[Preview]: Audit SSH security posture for Windows",
       "description": "This policy audits SSH server security configuration on Windows Server 2019, 2022, and 2025 machines (Azure VMs and Arc-enabled machines). For more information including pre-requisites, settings in scope, defaults, and customization, see https://learn.microsoft.com/azure/osconfig/overviewsshposture-control-windows.",
@@ -4370,6 +4392,28 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/90bc8109-d21a-4692-88fc-51419391da3d"
+    },
+    {
+      "name": "a2713d30-18dc-48a3-8e2f-0966c2133989",
+      "displayName": "[Preview]: Azure API Management additional gateway locations should use allowed locations",
+      "description": "Restrict Azure API Management additional gateway locations to approved regions to meet data residency and sovereignty requirements. This policy evaluates secondary multi-region deployments and does not evaluate the service's primary location.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a2713d30-18dc-48a3-8e2f-0966c2133989"
+    },
+    {
+      "name": "5204629f-8140-4a58-90a7-de4e04957a97",
+      "displayName": "[Preview]: Azure Application Gateway should use private link",
+      "description": "Azure Application Gateway instances should have at least one approved private endpoint connection. Clients in a virtual network can securely access resources that have private endpoint connections through private links.",
+      "category": "Sovereignty",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/5204629f-8140-4a58-90a7-de4e04957a97"
     },
     {
       "name": "8dfab9c4-fe7b-49ad-85e4-1e9be085358f",
@@ -4482,6 +4526,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ec9fea60-a9ec-4efb-8115-3c3c5e061510"
     },
     {
+      "name": "f5727640-3711-4df4-bce5-3ba3ad4bad85",
+      "displayName": "[Preview]: Azure Container Instances container groups should disable public network access",
+      "description": "Disabling public network access on Azure Container Instances container groups improves security by preventing the deployment of public inbound IP endpoints.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/f5727640-3711-4df4-bce5-3ba3ad4bad85"
+    },
+    {
       "name": "cbe58ab0-07a8-43ea-9ccc-8ea33e4d6aa5",
       "displayName": "[Preview]: Azure Data Explorer Clusters should be Zone Redundant",
       "description": "Azure Data Explorer Clusters can be configured to be Zone Redundant or not. An Azure Data Explorer Cluster is considered Zone Redundant if it has at least two entries in its zones array. This policy helps ensure the your Azure Data Explorer Clusters are Zone Redundant.",
@@ -4537,6 +4592,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e687207c-8d66-460e-a8a5-12f95256116c"
     },
     {
+      "name": "28db9b68-6637-453e-afc5-1dbb3b16df1b",
+      "displayName": "[Preview]: Azure Event Hubs geo-replication locations should use allowed regions",
+      "description": "Restrict all Azure Event Hubs geo-replication locations, including primary and secondary regions, to approved regions to meet data residency and sovereignty requirements.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/28db9b68-6637-453e-afc5-1dbb3b16df1b"
+    },
+    {
       "name": "bf45a74c-ed4f-4300-8afe-d6f0abdfe75b",
       "displayName": "[Preview]: Azure HDInsight should be Zone Aligned",
       "description": "Azure HDInsight can be configured to be Zone Aligned or not. Azure HDInsight that has exactly one entry in its zones array is considered Zone Aligned. This policy ensures that an Azure HDInsight cluster is configured to operate within a single availability zone.",
@@ -4557,6 +4623,17 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/093e16cd-84e0-4332-b550-82f55cf85f28"
+    },
+    {
+      "name": "93fc07ef-f4b9-418a-9190-6e2628e72856",
+      "displayName": "[Preview]: Azure IoT Hub disaster recovery secondary locations should use allowed locations",
+      "description": "Audit Azure IoT hubs when their Microsoft-managed disaster recovery secondary location is outside the list of allowed locations. This policy does not evaluate the hub's primary location.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/93fc07ef-f4b9-418a-9190-6e2628e72856"
     },
     {
       "name": "2d7e144b-159c-44fc-95c1-ac3dbf5e6e54",
@@ -4636,6 +4713,28 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/59fee2f4-d439-4f1b-9b9a-982e1474bfd8"
     },
     {
+      "name": "f6c2ab23-7f3b-47db-a0dc-24fc64d658fa",
+      "displayName": "[Preview]: Azure Kubernetes Service clusters should disable public network access",
+      "description": "Disabling public network access improves security by preventing Azure Kubernetes Service cluster API servers from being accessed over public networks. Ensure that a private access path is configured before disabling public network access.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/f6c2ab23-7f3b-47db-a0dc-24fc64d658fa"
+    },
+    {
+      "name": "973a0211-4dcc-42ea-87eb-e9be5db0e585",
+      "displayName": "[Preview]: Azure Kubernetes Service clusters should use private endpoints",
+      "description": "Azure Private Link lets you connect your virtual networks to Azure services without a public IP address at the source or destination. By requiring an approved private endpoint connection for Azure Kubernetes Service clusters, you can reduce exposure of the API server to the public internet.",
+      "category": "Sovereignty",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/973a0211-4dcc-42ea-87eb-e9be5db0e585"
+    },
+    {
       "name": "2dec5f47-bc40-40d1-8c7d-a39d9d6808d1",
       "displayName": "[Preview]: Azure Kubernetes Service Managed Clusters should be Zone Redundant",
       "description": "Azure Kubernetes Service Managed Clusters can be configured to be Zone Redundant or not. The policy checks the node pools in the cluster and ensures that avaialbilty zones are set for all the node pools.",
@@ -4680,6 +4779,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/bdd8bbb2-1efd-48dc-a0fd-8ddcba2e96cd"
     },
     {
+      "name": "e1d59f09-0884-4a5b-80cc-5ec5ed5cb984",
+      "displayName": "[Preview]: Azure Managed Instance for Apache Cassandra data centers should use customer-managed keys to encrypt disks and backup storage",
+      "description": "Use customer-managed keys to manage encryption at rest for managed disks and backup storage in Azure Managed Instance for Apache Cassandra data centers. Customer-managed keys enable data to be encrypted with Azure Key Vault keys that you own and manage.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "All",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e1d59f09-0884-4a5b-80cc-5ec5ed5cb984"
+    },
+    {
       "name": "49af39b4-9394-4043-b153-f4a67201368b",
       "displayName": "[Preview]: Azure Managed Lustre file systems should use customer-managed keys for encryption",
       "description": "Use customer-managed keys to manage encryption at rest for Azure Managed Lustre file systems. Customer-managed keys enable data to be encrypted with Azure Key Vault keys that you own and manage.",
@@ -4700,6 +4810,39 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0f8a6cc3-040f-4b9b-8828-b37490729517"
+    },
+    {
+      "name": "e312c3b8-c565-45aa-9ddf-bec26b618285",
+      "displayName": "[Preview]: Azure Migrate projects should disable public network access",
+      "description": "Disabling public network access improves security by ensuring that Azure Migrate projects and assessment projects aren't exposed on the public internet.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e312c3b8-c565-45aa-9ddf-bec26b618285"
+    },
+    {
+      "name": "54e3763b-72a6-4c12-af2e-544b39d6bfee",
+      "displayName": "[Preview]: Azure Migrate projects should use private endpoints",
+      "description": "Azure Private Link lets you connect your virtual networks to Azure services without a public IP address at the source or destination. By requiring an approved private endpoint connection for Azure Migrate projects, you can reduce data leakage risks.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/54e3763b-72a6-4c12-af2e-544b39d6bfee"
+    },
+    {
+      "name": "8855a114-45dd-4bb9-9953-4cc527764c90",
+      "displayName": "[Preview]: Azure NetApp Files accounts should use customer-managed keys to encrypt data at rest",
+      "description": "Use customer-managed keys to manage encryption at rest for Azure NetApp Files accounts. Customer-managed keys enable data to be encrypted with an Azure Key Vault key created and owned by you, giving you control over the key lifecycle, including rotation and management.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/8855a114-45dd-4bb9-9953-4cc527764c90"
     },
     {
       "name": "fa498b91-8a7e-4710-9578-da944c68d1fe",
@@ -4735,6 +4878,39 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ea4d0edd-1555-4917-8d8f-042f98fa6a0e"
     },
     {
+      "name": "9bf20ff2-0f28-47ea-ab41-0d070cf1d73b",
+      "displayName": "[Preview]: Azure Service Bus geo-replication locations should use allowed regions",
+      "description": "Restrict the Azure regions where Service Bus data is actively replicated, including primary and secondary regions, to meet data residency and sovereignty requirements.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/9bf20ff2-0f28-47ea-ab41-0d070cf1d73b"
+    },
+    {
+      "name": "4778c705-6ec3-4a0e-86bb-01b7da8a5bf4",
+      "displayName": "[Preview]: Azure SQL databases with a default secondary location should use an allowed location",
+      "description": "Audit Azure SQL databases with a default secondary location when that location is not in the list of allowed locations.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4778c705-6ec3-4a0e-86bb-01b7da8a5bf4"
+    },
+    {
+      "name": "25ff226b-1747-454d-8ae2-0c11e0935753",
+      "displayName": "[Preview]: Azure SQL Managed Instance databases with a default secondary location should use an allowed location",
+      "description": "Audit Azure SQL Managed Instance databases with a default secondary location when that location is not in the list of allowed locations. This policy does not evaluate the managed instance or database primary location.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/25ff226b-1747-454d-8ae2-0c11e0935753"
+    },
+    {
       "name": "dad3a6b9-4451-492f-a95c-69efc6f3fada",
       "displayName": "[Preview]: Azure Stack HCI servers should have consistently enforced application control policies",
       "description": "At a minimum, apply the Microsoft WDAC base policy in enforced mode on all Azure Stack HCI servers. Applied Windows Defender Application Control (WDAC) policies must be consistent across servers in the same cluster.",
@@ -4766,6 +4942,17 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ee8ca833-1583-4d24-837e-96c2af9488a4"
+    },
+    {
+      "name": "53ed4ed6-59b1-4f85-b6b3-36178fe76759",
+      "displayName": "[Preview]: Azure Stream Analytics clusters should have a fully configured managed private endpoint connection",
+      "description": "Managed private endpoints enable private outbound connectivity from Azure Stream Analytics clusters to supported input and output resources. This policy audits clusters that do not have at least one managed private endpoint with a completed setup.",
+      "category": "Sovereignty",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/53ed4ed6-59b1-4f85-b6b3-36178fe76759"
     },
     {
       "name": "ae243d87-5cf3-4dce-90bd-6d62be328de3",
@@ -5131,6 +5318,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6a6f7384-63de-11ea-bc55-0242ac130003"
     },
     {
+      "name": "87ed7fc8-023e-45fa-8315-a1e54c60188f",
+      "displayName": "[Preview]: Configure Local Administrator Password Solution (LAPS)",
+      "description": "This policy configures Local Administrator Password Solution (LAPS). For more information, see https://aka.ms/LAPS4ARC.",
+      "category": "Guest Configuration",
+      "effect": "DeployIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/87ed7fc8-023e-45fa-8315-a1e54c60188f"
+    },
+    {
       "name": "1d413020-63de-11ea-bc55-0242ac130003",
       "displayName": "[Preview]: Configure log filter expressions and datastore to be used for full logs for specified Azure Machine Learning computes",
       "description": "Provide log filter expression and datastore to be used for full logs in specified Azure Machine Learning computes and can be assigned at the workspace. For more information, visit https://aka.ms/amlpolicydoc.",
@@ -5184,6 +5382,17 @@
       "version": "6.7.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/17b3de92-f710-4cf4-aa55-0e7859f1ed7b"
+    },
+    {
+      "name": "98d99685-d085-4b73-b584-c4f1c631c78b",
+      "displayName": "[Preview]: Configure vaulted backup with auto-protection for ADLS blobs on storage accounts without a given tag to a backup vault",
+      "description": "Enforce vaulted backup with auto-protection for Azure Data Lake Storage (hierarchical namespace) blobs on all storage accounts that do not contain a given tag to a central backup vault. Auto-protection backs up all blob containers in the storage account, including containers created in the future. Doing this can help you manage vaulted backup of blobs contained across multiple storage accounts at scale. For more details, refer to https://aka.ms/AB-BlobBackupAzPolicies",
+      "category": "Backup",
+      "effect": "DeployIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/98d99685-d085-4b73-b584-c4f1c631c78b"
     },
     {
       "name": "09911771-6d7f-4c4d-bee6-052b8839e9bb",
@@ -5250,6 +5459,17 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/42daa904-5969-47ef-92fb-b75df946195a"
+    },
+    {
+      "name": "0253f0dc-b6de-4795-97ae-1ee0b4ffe3a6",
+      "displayName": "[Preview]: Container Apps environments should use customer-managed keys to encrypt data at rest",
+      "description": "Use customer-managed keys to manage encryption at rest for Container Apps environments. Customer-managed keys enable data to be encrypted with an Azure Key Vault key created and owned by you, giving you control over the key lifecycle, including rotation and management.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0253f0dc-b6de-4795-97ae-1ee0b4ffe3a6"
     },
     {
       "name": "f58e8c0a-3c79-431a-abf8-cd1b895478e8",
@@ -5472,6 +5692,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/47031206-ce96-41f8-861b-6a915f3de284"
     },
     {
+      "name": "92af37fe-f8ff-4ebd-883d-2f80cd765f8f",
+      "displayName": "[Preview]: IoT Hub Device Provisioning Service linked IoT Hub locations should use allowed locations",
+      "description": "Restrict the locations of IoT hubs linked to Azure IoT Hub Device Provisioning Service to approved regions to meet data residency and sovereignty requirements. This policy evaluates linked IoT Hub allocation destinations and does not evaluate the provisioning service's primary location.",
+      "category": "Sovereignty",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/92af37fe-f8ff-4ebd-883d-2f80cd765f8f"
+    },
+    {
       "name": "5e5a0673-649e-4d50-bf9d-5a387a4e2081",
       "displayName": "[Preview]: Kubernetes cluster containers should use only allowed sysctl interfaces",
       "description": "Containers should use only allowed sysctl interfaces in a Kubernetes cluster. This policy is generally available for Kubernetes Service (AKS), and preview for Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc.",
@@ -5514,6 +5745,17 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b89ebd51-73f9-4e3e-a1ac-c1c143aaa500"
+    },
+    {
+      "name": "6d86b8b7-3ede-4904-a398-51148422ee4d",
+      "displayName": "[Preview]: Linux machines should have Azure inventory enabled",
+      "description": "Machine inventory provides centralized visibility into details about Azure and Arc-enabled Linux machines, such as their software and daemons. Machines are non-compliant when the Azure Machine Configuration inventory feature is not enabled. Requires that prerequisites are deployed to the policy assignment scope. For details, visit https://aka.ms/gcpol.",
+      "category": "Guest Configuration",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6d86b8b7-3ede-4904-a398-51148422ee4d"
     },
     {
       "name": "70aa7a1c-b0c7-4b2f-922b-8489d97cbb9f",
@@ -5679,6 +5921,50 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e7352ad2-6c86-4a07-9573-47f67b557ba8"
+    },
+    {
+      "name": "b6ca2367-8597-4a3f-ab19-48f58d6d9278",
+      "displayName": "[Preview]: Microsoft Foundry agents should not use denied agent kinds",
+      "description": "Helps organizations prevent Microsoft Foundry agent kinds that are prohibited by organizational requirements.",
+      "category": "Cognitive Services",
+      "effect": "Audit",
+      "mode": "Microsoft.CognitiveServices.Data",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b6ca2367-8597-4a3f-ab19-48f58d6d9278"
+    },
+    {
+      "name": "85455646-5d02-433e-a42d-265151140427",
+      "displayName": "[Preview]: Microsoft Foundry agents should only use allowed agent kinds",
+      "description": "Helps organizations govern Microsoft Foundry agent creation by restricting agents to explicitly allowed kinds.",
+      "category": "Cognitive Services",
+      "effect": "Audit",
+      "mode": "Microsoft.CognitiveServices.Data",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/85455646-5d02-433e-a42d-265151140427"
+    },
+    {
+      "name": "215c2c77-3afb-4f55-be2f-709b60dc8d53",
+      "displayName": "[Preview]: Microsoft Foundry hosted agents should not use denied container images",
+      "description": "Helps organizations prevent hosted agents from using container images prohibited by organizational supply-chain requirements.",
+      "category": "Cognitive Services",
+      "effect": "Audit",
+      "mode": "Microsoft.CognitiveServices.Data",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/215c2c77-3afb-4f55-be2f-709b60dc8d53"
+    },
+    {
+      "name": "d0d9ac6c-628b-46c1-a177-eb22b12ce588",
+      "displayName": "[Preview]: Microsoft Foundry hosted agents should only use allowed container images",
+      "description": "Helps organizations govern hosted agent supply-chain sources by restricting container images to allowed image references or registry patterns.",
+      "category": "Cognitive Services",
+      "effect": "Audit",
+      "mode": "Microsoft.CognitiveServices.Data",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/d0d9ac6c-628b-46c1-a177-eb22b12ce588"
     },
     {
       "name": "0d6d79a8-8406-4e87-814d-2dcd83b2c355",
@@ -5998,6 +6284,17 @@
       "version": "1.0.0-preview",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/da8a2248-6b4a-44a7-96bf-bf1c0dd208c3"
+    },
+    {
+      "name": "2625021b-d2ab-4e03-9de0-1b5e02f3fa02",
+      "displayName": "[Preview]: Windows machines should have Azure inventory enabled",
+      "description": "Machine inventory provides centralized visibility into details about Azure and Arc-enabled Windows machines, such as their operating systems, applications, services, and certificates. Machines are non-compliant when the Azure Machine Configuration inventory feature is not enabled. Requires that prerequisites are deployed to the policy assignment scope. For details, visit https://aka.ms/gcpol.",
+      "category": "Guest Configuration",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/2625021b-d2ab-4e03-9de0-1b5e02f3fa02"
     },
     {
       "name": "50c52fc9-cb21-4d99-9031-d6a0c613361c",
@@ -16104,7 +16401,7 @@
       "category": "Kubernetes",
       "effect": "DeployIfNotExists",
       "mode": "Indexed",
-      "version": "4.2.0",
+      "version": "4.3.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a8eff44f-8c92-45c3-a3fb-9880802d67a7"
     },
@@ -25300,7 +25597,7 @@
       "category": "Kubernetes",
       "effect": "Audit",
       "mode": "Microsoft.Kubernetes.Data",
-      "version": "6.4.0",
+      "version": "7.0.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/098fc59e-46c7-4d99-9b16-64990e543d75"
     },
@@ -29934,6 +30231,17 @@
       "version": "3.0.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/89099bee-89e0-4b26-a5f4-165451757743"
+    },
+    {
+      "name": "b9f8555f-abee-4709-be6b-cc34789f6cc8",
+      "displayName": "SRE Agents should not be configured in Autonomous mode",
+      "description": "Require human approval before SRE Agents perform write actions on Azure resources, reducing the risk of unintended autonomous changes.",
+      "category": "SRE Agent",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b9f8555f-abee-4709-be6b-cc34789f6cc8"
     },
     {
       "name": "fbb99e8e-e444-4da0-9ff1-75c92f5a85b2",
