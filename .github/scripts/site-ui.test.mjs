@@ -138,7 +138,7 @@ test("saved favorite stars share yellow highlighting without recoloring other to
   assert.match(read("rss-watcher/index.html"), /button\.className = "icon-button favorite-button";/);
 });
 test("tool navigation derives its labels, links and icons from the catalogue", () => {
-  assert.equal(tools.length, 31);
+  assert.equal(tools.length, 32);
   assert.equal(new Set(tools.map(tool => tool.href)).size, tools.length);
   assert.ok(tools.some(tool => tool.title === "IT Images &amp; Memes"));
   assert.ok(tools.every(tool => tool.description && (tool.symbol || tool.icon.startsWith("/tools/images/"))));

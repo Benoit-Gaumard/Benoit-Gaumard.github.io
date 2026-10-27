@@ -1,0 +1,475 @@
+{
+  "generatedAt": "2026-10-27T16:31:18Z",
+  "decks": [
+    {
+      "id": "github-copilot-principles-v13",
+      "title": "GitHub Copilot: Understanding the basics (v13)",
+      "description": "Updated edition of the beginner-friendly GitHub Copilot deck, with a new under-the-hood slide on how Copilot works.",
+      "language": "en",
+      "author": "Benoit Gaumard",
+      "date": "2026-10-27",
+      "tags": [
+        "GitHub Copilot",
+        "AI",
+        "Beginners"
+      ],
+      "width": 1600,
+      "height": 900,
+      "slideCount": 48,
+      "chapters": [
+        {
+          "label": "01",
+          "title": "Discover GitHub Copilot",
+          "slide": 4
+        },
+        {
+          "label": "02",
+          "title": "Understand AI",
+          "slide": 8
+        },
+        {
+          "label": "03",
+          "title": "Use Copilot",
+          "slide": 19
+        },
+        {
+          "label": "04",
+          "title": "Use it well",
+          "slide": 28
+        },
+        {
+          "label": "A",
+          "title": "Going further",
+          "slide": 41
+        }
+      ],
+      "slides": [
+        {
+          "title": "GitHub Copilot",
+          "text": "// github · copilot · 2026 · GitHub Copilot · Understanding the basics · An artificial intelligence assistant that helps write code — explained simply, no background needed. · Benoit Gaumard · Microsoft France · October 2026 · It suggests · as you type · It answers · your questions · It acts · on a task you give it"
+        },
+        {
+          "title": "On the agenda",
+          "text": "// agenda · On the agenda · 01 · Discover GitHub Copilot · What is it? · Why it's useful · Who does what? · 02 · Understand AI · Machine learning · LLMs & top 10 models · Natural language & English · Inference & GPUs · AI & environment · RAG · 03 · Use Copilot · The 3 modes · A request from A to Z · Sessions · The instructions sheet · Agents & harness · Copilot CLI vs gh · 04 · Use it well · Asking well · Your turn · When it gets it wrong · Security · Cost & plans · Checklist · ★ · Wrapping up · What's next? · True or false quiz · Your questions · Key takeaways · Appendix — Skills · MCP · H..."
+        },
+        {
+          "title": "Words to know",
+          "text": "// before we start · Words to know · Eight words that come up often. That's all you need to follow along! · Code · The written instructions that make an app or a website work. · Repository · The shared folder that holds all the code of a project. · Machine learning · A machine that learns from examples, without written rules. · Model (LLM) · The AI's \"brain\", trained on huge amounts of text. · Prompt · The instruction or question you write to the AI. · Token · A small piece of a word: the AI's unit of measure. · GPU · The ultra-fast computing chip that runs AI. · Agent · An AI you hand a ta..."
+        },
+        {
+          "title": "Discover GitHub Copilot",
+          "text": "01 · // part 1 of 4 · Discover GitHub Copilot · What is it? · Why it's useful · Who does what?"
+        },
+        {
+          "title": "What is GitHub Copilot?",
+          "text": "// 01 · introduction · What is GitHub Copilot? · An assistant powered by artificial intelligence (AI) that helps people write software. You talk to it in plain English, and it suggests, writes or fixes code. · It completes code as you type, like the suggestions on a phone keyboard. · It answers questions and explains a program in simple words. · It can also handle a whole task: change, test, fix. · It runs on AI \"brains\" of your choice: Claude, GPT, Gemini. · Where do you find it? · In the code editor · the developer's \"word processor\" · On the GitHub website · where teams share their code..."
+        },
+        {
+          "title": "Why it's useful",
+          "text": "// 01 · what it's for · Why it's useful · Copilot doesn't replace developers: it takes the tedious work off their plate so they can focus on the interesting part. · 55% · faster to complete the same coding task · Controlled study, GitHub / Microsoft Research (2023) · 90% · of developers feel more fulfilled at work · GitHub × Accenture study (2024) · 85% · feel more confident in their code quality · GitHub studies · Save time · Repetitive tasks (tests, documentation, formatting) take seconds. · Understand faster · An unfamiliar program? It explains it in simple words. · Learn · A patient tut..."
+        },
+        {
+          "title": "Who does what? 6 tools not to confuse",
+          "text": "// 01 · don't mix them up · Who does what? 6 tools not to confuse · our topic · GitHub Copilot · GitHub (Microsoft) · An AI assistant for coding · Developers · Code editor, GitHub, terminal · Yes · Knows your project and acts on the code · GitHub CLI · GitHub (Microsoft) · A \"remote control\" for GitHub · Developers · The terminal · No · Precise, predictable, scriptable · Microsoft 365 Copilot · Microsoft · An AI assistant in Office apps · People at work · Word, Excel, Outlook, Teams · Yes · Knows your work emails, files and meetings · Copilot Studio · Microsoft · A workshop to build your ow..."
+        },
+        {
+          "title": "Understand AI",
+          "text": "02 · // part 2 of 4 · Understand AI · Machine learning · LLMs & top 10 models · Natural language & English · Inference & GPUs · AI & environment · RAG"
+        },
+        {
+          "title": "Machine learning: learning by example",
+          "text": "// 02 · understand ai · Machine learning: learning by example · Instead of writing rules by hand, you show thousands of examples: the machine finds the rules itself. · Artificial intelligence · machines that imitate intelligence · Machine learning · they learn from examples · Deep learning · using \"neural networks\" · Generative AI & LLMs · they create text, code… · Copilot is here · 01 · Examples · Thousands of photos, texts or lines of code. · 02 · Training · The machine looks for what repeats. · 03 · A model · It can recognize, predict or write. · Classic program: a human writes the rules..."
+        },
+        {
+          "title": "What is an LLM?",
+          "text": "// 02 · understand ai · What is an LLM? · The LLM (Large Language Model) is Copilot's \"brain\". It has read huge amounts of text and code and learned to guess the most likely next words — like your phone keyboard, only far more powerful. · Tokens — the AI cuts text into small pieces of words. Its memory and its cost are counted in tokens. · It guesses — it writes piece by piece, picking the most likely one each time. · No memories — it only knows what you show it in the conversation. · Several models — fast ones for small tasks, more \"thoughtful\" ones for hard ones. · How it \"writes\" · The c..."
+        },
+        {
+          "title": "The 10 latest major models on the market",
+          "text": "// 02 · understand ai · The 10 latest major models on the market · September–October 2026: a major new model ships almost every week. · RELEASED · MODEL · MAKER · ACCESS · STRENGTH · INDEPENDENT SCORE · Oct 23 · Kimi K3.1 Pro · Moonshot AI China · Open · Strongest Chinese model measured so far · 55 · Oct 15 · Muse Spark Open · Meta USA · Open · Most capable US open model, per Meta · 39 · Oct 13 · Gemini 4 Argon · Google USA · Closed · Coding, vision, very long outputs · 53 · Oct 12 · Muse Wonder · Meta USA · Closed · \"Active memory\" for long tasks · 52 · Oct 6 · Mistral Large 4 · Mistral AI..."
+        },
+        {
+          "title": "The 10 best models on the market",
+          "text": "// 02 · understand ai · The 10 best models on the market · Overall ranking across all independent benchmarks, as of October 27, 2026. · 2 · Claude Fable 5.1 · Anthropic · 70.4 · 1 · Claude Opus 5.5 · Anthropic · 72.4 · 3 · GPT-6 Astra · OpenAI · 70.3 · OVERALL SCORE · COST / SESSION* · 4 · GPT-6.1 Sol OpenAI · 69.7 · $0.16 · 5 · Gemini 4 Argon Google · 69.3 · $0.16 · 6 · Muse Spark 1.3 Meta · 66.9 · $0.09 · 7 · Kimi K3.1 Pro Moonshot AI · 66.4 · $0.16 · 8 · Gemini 3.8 Flash Google · 64.3 · $0.06 · 9 · DeepSeek V4.1 Flash DeepSeek · 63.9 · $0.02 · 10 · GLM 5.3 Flash Z.ai · 62.2 · $0.01 · 1...."
+        },
+        {
+          "title": "Natural language: talking to the machine",
+          "text": "// 02 · understand ai · Natural language: talking to the machine · Natural language is the language we speak every day (English, French…), as opposed to programming languages. · Machine language · What the computer understands directly · 10110000 01100001 · Programming language · Precise and rigid: you have to learn it · for x in items: print(x) · Natural language · Our own language, in our own words · \"Print every item in the list\" · Open to everyone — no syntax to learn: you describe what you want, in your own words. · Copilot translates — the LLM understands the intent and turns it into..."
+        },
+        {
+          "title": "Why does AI work best in English?",
+          "text": "// 02 · understand ai · Why does AI work best in English? · Copilot understands many languages very well… but it's still most at ease in English. Four reasons. · Language of websites · English · 49.5% · Spanish · 6.1% · German · 5.9% · Japanese · 4.9% · French · 4.6% · Source: W3Techs, October 2026 · More examples — almost half of the web is in English, under 5% in French: the AI has read far more English text. · Code speaks English — keywords (if, for, print), documentation, help forums: nearly all of it is in English. · Tokens built for English — the same sentence in another language is o..."
+        },
+        {
+          "title": "Training and inference",
+          "text": "// 02 · understand ai · Training and inference · An AI goes through two very different moments: it learns once, then it answers millions of times. · Training · Like a doctor's long years of medical school. · WHEN · Once, before it goes into service · HOW LONG · Weeks, even months · RESOURCES · Thousands of GPUs at the same time · WHO · Model makers (OpenAI, Anthropic, Google…) · Inference · Like an appointment with that doctor. · WHEN · Every time you ask a question · HOW LONG · A few seconds · RESOURCES · A few GPUs in a data center · WHO · You, through Copilot · With Copilot — every quest..."
+        },
+        {
+          "title": "The GPU: the engine of AI",
+          "text": "// 02 · understand ai · The GPU: the engine of AI · AI needs billions of small calculations. That takes a special chip: the GPU (graphics processing unit). · CPU · GPU · A few very versatile cores: star chefs. · Thousands of small cores: a kitchen crew all working at the same time. · Born for video games — displaying millions of pixels at once. · Perfect for AI — it repeats the same small calculation billions of times: ideal for parallel work. · In the cloud — Copilot doesn't run on your computer, but on GPUs in data centers. · Scarce and expensive — in high demand and power-hungry: that's..."
+        },
+        {
+          "title": "AI and the environment",
+          "text": "// 02 · understand ai · AI and the environment · The GPUs in data centers use a lot of electricity. What do the numbers say? · ×2 · data center electricity use between 2024 and 2030 (≈ 945 TWh) · < 3% · of global electricity in 2030: rising fast, but still limited · +30% · a year for AI servers, versus +9% for conventional servers · Source: IEA (International Energy Agency), \"Energy and AI\" report (2025), Base Case. · Why it uses energy · Thousands of GPUs computing nonstop · They need cooling: air conditioning, sometimes water · Making chips and servers has a cost too · What everyone can d..."
+        },
+        {
+          "title": "RAG: look it up before answering",
+          "text": "// 02 · understand ai · RAG: look it up before answering · RAG = \"Retrieval-Augmented Generation\". Think of an open-book exam. · You ask a question · \"How do we run the tests in this project?\" · Copilot searches · It looks through your files, documentation, tickets… and keeps the useful passages. · It answers, with sources · The question and the passages found go to the LLM together: the answer is precise and up to date. · Without RAG: it answers from memory · Knowledge frozen at its training date · Doesn't know your internal documents · Higher risk of making things up · With RAG: it checks..."
+        },
+        {
+          "title": "Use Copilot",
+          "text": "03 · // part 3 of 4 · Use Copilot · The 3 modes · A request from A to Z · Sessions · The instructions sheet · Agents & harness · Copilot CLI vs gh"
+        },
+        {
+          "title": "Three ways to work with Copilot",
+          "text": "// 03 · in practice · Three ways to work with Copilot · Just like with a colleague: you can ask for advice, a small fix, or hand over a whole task. · Ask · You ask a question. Copilot answers without changing anything — like asking for advice. · \"What does this piece of code do?\" · Edit · You ask for a specific change. Copilot edits the files involved. · \"Add a Send button.\" · Agent · You hand over a task. Copilot plans, acts, checks and retries until it's done. · \"Build a complete Contact page.\" · Plan mode → it proposes a plan first, you approve it. Autopilot → it goes all the way without..."
+        },
+        {
+          "title": "A request, from start to finish",
+          "text": "// 03 · in practice · A request, from start to finish · A real example in 5 steps: adding an \"Export to PDF\" button to an Invoices page. · 01 · The request · You · \"Add an Export to PDF button to the Invoices page.\" · 02 · The plan · Copilot · \"My plan: 1. add the button, 2. build the export, 3. test. Shall I start?\" · 03 · The work · Copilot · It edits 2 files, runs the tests… and fixes an error on its own. · 04 · The review · You · You look at the changes, then: \"Make the button blue.\" · + <button>Export to PDF</button> · + function exportPDF() {…} · green = added · 05 · The approval · Yo..."
+        },
+        {
+          "title": "Sessions: a memory, but not infinite",
+          "text": "// 03 · under the hood · Sessions: a memory, but not infinite · A session is a conversation with Copilot. Like our brain, it remembers what was said… but its memory isn't unlimited. · A session “thinks” with its working memory. · A working memory — during the conversation, Copilot remembers what you said and the files it saw. · Limited space — like a whiteboard: it fills up as the conversation goes on. · Smart forgetting — when nearly full, it summarizes older parts to make room — some details get lost. · A lasting memory — some rules can be kept from one conversation to the next (instructi..."
+        },
+        {
+          "title": "Managing your conversations",
+          "text": "// 03 · method · Managing your conversations · Golden rule: one topic = one conversation. A tidy memory = better answers, at a lower cost. · 01 · Start · State the goal right away and show the right files. · 02 · Plan · Ask for its plan first, then approve it. · 03 · Execute · Let it move forward in small steps. · 04 · Verify · Look at the changes, test them. · 05 · Close · Wrap up, then start fresh. · Keep the same conversation when… · You're continuing the same work · The conversation holds useful decisions · Answers stay accurate and on point · Start a new one when… · You move on to anot..."
+        },
+        {
+          "title": "The instructions sheet",
+          "text": "// 03 · customization · The instructions sheet · Like the note you leave for a babysitter: the house rules, what to do and what not to do. Copilot rereads it automatically with every request. · It lives with the project: .github/copilot-instructions.md · A format several AIs understand: AGENTS.md · Written once, it serves the whole team. · What goes in it: the style to follow, how to test, pitfalls to avoid. · copilot-instructions.md # Copilot Instructions - Use TypeScript and the repo's style. - Run `npm test` before committing. - Document every exported function. - Don't add dependencies..."
+        },
+        {
+          "title": "Agents",
+          "text": "// 03 · autonomy · Agents · An agent doesn't just give advice: you hand it a task, and it takes care of it. Three forms. · Agent mode · right in front of you · In the editor, it reads, plans, edits several files and fixes itself while you watch. · Coding agent · in the background · You give it a task on GitHub: it works on its own and comes back with a proposal to review. · Agents · made to measure · Specialized assistants (tester, reviewer…) with their own role and tools, for repetitive tasks. · Good to know — like a team, several agents can share the work at the same time."
+        },
+        {
+          "title": "The harness: what turns an LLM into an agent",
+          "text": "// 03 · under the hood · The harness: what turns an LLM into an agent · Like a horse's harness, it's the equipment that lets you steer the model's power. · HARNESS · LLM · the brain · Action loop · think → act → check · Tools · files, terminal, MCP · Context & memory · instructions, summaries · Guardrails · permissions, approvals · Planning · plans, sub-agents · Interface · editor, terminal, cloud · Agent = LLM + Harness · The LLM thinks, the harness acts — it gives the model tools, runs its actions, feeds back the result… and repeats until the goal is reached. · Same model, different resul..."
+        },
+        {
+          "title": "GitHub Copilot CLI vs GitHub CLI",
+          "text": "// 03 · comparison · GitHub Copilot CLI vs GitHub CLI · Two terminal tools with very similar names — but one is an AI, the other isn't. · GitHub Copilot CLI · $ copilot · An AI assistant directed in everyday language. · Started with copilot, then you talk to it normally. · It plans, writes and runs code — with your OK. · Several AI \"brains\" to choose from. · GitHub CLI · $ gh · A \"remote control\" for GitHub, with precise commands. · Started with gh, followed by exact instructions. · E.g.: gh pr create = propose a change. · No AI: it does exactly what you type. · vs · Watch the names — the o..."
+        },
+        {
+          "title": "Use it well",
+          "text": "04 · // part 4 of 4 · Use it well · Asking well · Your turn · When it gets it wrong · Security · Cost & plans · Checklist"
+        },
+        {
+          "title": "Asking the right way",
+          "text": "// 04 · asking well · Asking the right way · A request to the AI is called a \"prompt\". Like a brief to a contractor: six key ingredients. · prompt.md · Add an \"Export to PDF\" button · to the Invoices page. · Files: #invoices.html · #export.js · Same style as the other buttons, · no new tool to install. · Don't touch any other page. · Show the changes, then explain · in 3 simple sentences. · Check that everything still works. · 1 · Goal · What you want, in one sentence. · 2 · Context · Where it happens: the files involved. · 3 · Rules · What must be respected. · 4 · Off-limits · What must st..."
+        },
+        {
+          "title": "Your turn!",
+          "text": "// 04 · workshop · Your turn! · Let's turn a vague request into a precise one, together. · The vague request · \"Make me a contact page.\" · 5 questions to ask yourself · 1 · What exactly? (which fields, which button) · 2 · Where? (which page, which files) · 3 · What rules? (style, tools) · 4 · What must stay untouched? · 5 · How do we check it works? · A precise version · \"Create a Contact page with a form (name, email, message) and a Send button. Same style as the home page. Don't change other pages. Check that an invalid email is rejected.\" · For the presenter — let the audience suggest th..."
+        },
+        {
+          "title": "When Copilot gets it wrong",
+          "text": "// 04 · critical thinking · When Copilot gets it wrong · AI gives the answer that \"sounds right\", not always the true one — and it can be confidently wrong. · It makes things up · Called a \"hallucination\": a tool or feature that doesn't exist, presented as real. · It's out of date · It learned up to a certain date: it may miss what's new or suggest old ways. · Hidden mistakes · A result that looks right… but hides an error or a security hole. · It guesses · When information is missing, it fills in the gaps at random. · Good reflexes · Always review it, like an intern's work · Test before yo..."
+        },
+        {
+          "title": "Security and permissions",
+          "text": "// 04 · trust · Security and permissions · The more Copilot acts on its own, the more guardrails you need. Good news: at every step, you stay in control. · autonomy & risk → · 01 · Read & suggest · It proposes, you choose. · 02 · Edit files · You see and approve every change. · 03 · Take actions · It asks for your OK before acting. · 04 · Solo mission · It works in an isolated space; a human reviews everything. · For everyone · Read before approving an action · Don't authorize everything up front · Never share passwords or personal data · For the company · Choose which features and tools ar..."
+        },
+        {
+          "title": "How much does it cost? How credits work",
+          "text": "// 04 · costs · How much does it cost? How credits work · Since June 2026, Copilot works like a phone plan: every exchange uses up credits. · Cost ≈ model × tokens · tokens = text read + text written by the AI · 1 credit = 1 US cent. Every subscription includes a monthly allowance of credits. · Two things raise the bill: the \"brain\" you pick and the amount of text processed. · A quick question = a few cents; a long task handed to an agent = much more. · Uses credits · Chatting with the assistant · Handing a task to an agent · Getting code reviewed · Included, no credits · Automatic suggesti..."
+        },
+        {
+          "title": "Plans and how to get started",
+          "text": "// 04 · subscribing · Plans and how to get started · A free plan to discover it, paid plans to go further. · Free · $0 · To try it: 2,000 suggestions a month, limited chat and agent use. · Student · $0 · Free for verified students. · Pro · $10 / month · Everyday use: unlimited suggestions, agents, $15 of credits included. · Pro+ · $39 / month · The most powerful models, $70 of credits included. · Max · $100 / month · Heavy agent use, $200 of credits included. · Business / Enterprise · per user · For companies: central management, policies, security. · Get started in 3 steps · 1 · Create a G..."
+        },
+        {
+          "title": "Checklist: 10 good habits",
+          "text": "// 04 · takeaways · Checklist: 10 good habits · Share it with your team — and review it before every new session. · 01 · Write the project's instructions sheet · The house rules, written once. · 02 · Precise requests · Goal, files, rules, off-limits, answer format. · 03 · Just the right information · The useful files, not the whole project. · 04 · The right model for the job · Simple for simple, advanced for complex. · 05 · A plan before action · Ask for its plan, then let it act. · 06 · One topic = one conversation · Start fresh when the topic changes. · 07 · Agents with limits · Clear sco..."
+        },
+        {
+          "title": "What's next?",
+          "text": "// wrap-up · trends · What's next? · Trends already visible today, and set to accelerate. · More autonomous agents · You hand them whole tasks; several work in parallel. · The developer as conductor · Less typing, more design, review and decision-making. · AI in every tool · Editor, terminal, GitHub website, mobile, team chat. · Trust at the center · Security, verification and clear rules become essential. · What doesn't change — you need to know what you want… and check what you get."
+        },
+        {
+          "title": "True or false?",
+          "text": "// wrap-up · quiz · True or false? · Six statements: you decide! · 1 · “Copilot runs on my computer.” · 2 · “AI always knows when it's wrong.” · 3 · “You can talk to Copilot in French.” · 4 · “A long conversation can make it \"forget\" instructions.” · 5 · “Suggestions as you type use up credits.” · 6 · “GitHub CLI and GitHub Copilot CLI are the same thing.”"
+        },
+        {
+          "title": "True or false? The answers",
+          "text": "// wrap-up · quiz · True or false? The answers · So, how many did you get right? · 1 · FALSE · “Copilot runs on my computer.” · It runs on GPUs, in data centers. · 2 · FALSE · “AI always knows when it's wrong.” · It can be confidently wrong: always check. · 3 · TRUE · “You can talk to Copilot in French.” · Yes! It's just a bit better in English. · 4 · TRUE · “A long conversation can make it \"forget\" instructions.” · Its memory is limited: it summarizes itself when full. · 5 · FALSE · “Suggestions as you type use up credits.” · They're included, unlimited on paid plans. · 6 · FALSE · “GitHub..."
+        },
+        {
+          "title": "The questions everyone asks",
+          "text": "// wrap-up · your questions · The questions everyone asks · Will it replace developers? · No. It's a tool to go faster; humans keep the judgment and the responsibility. GitHub says so itself. · Do I need to know how to code? · To get the most out of it, yes: you need to be able to review what it suggests. But it's a great help for learning. · Does it see my code? · It reads what it needs to answer. On business plans, that code doesn't train the AI; on individual plans, you can opt out in settings. · Who owns the code it writes? · You decide whether to use it, and you're responsible for it...."
+        },
+        {
+          "title": "Key takeaways",
+          "text": "// recap · Key takeaways · Copilot is an AI assistant that helps write code, in everyday language. · You choose how much help you want: advice, a fix or a whole task. · Clear instructions and a tidy memory = better results. · AI can be wrong: review it, check it, keep the final say. · Thank you · Questions? · Benoit Gaumard Microsoft France"
+        },
+        {
+          "title": "Going further",
+          "text": "A · // appendix · Going further · Reference slides, for the curious."
+        },
+        {
+          "title": "Skills: recipe cards",
+          "text": "// appendix · customization · Skills: recipe cards · \"Recipes\" Copilot pulls out of the drawer only when it needs them: for a specific task, it follows the steps described, one by one. · One recipe = a folder with a SKILL.md file (name, purpose, steps). · For the project: .github/skills/ · For you: ~/.copilot/skills/ · The instructions sheet is always read; a recipe, only when needed. · Examples: create a page our way, prepare a release. · SKILL.md --- name: new-page description: Create a site page following our rules. --- 1. Start from the page template. 2. Add it to the menu. 3. Check it..."
+        },
+        {
+          "title": "What is an MCP server?",
+          "text": "// appendix · connect · What is an MCP server? · MCP is a \"universal plug\" that connects Copilot to other tools and sources of information. · Copilot · the assistant · MCP · the plug · GitHub · tasks and projects · Browser · open and test a website · Data · information databases · Documentation · user guides, wikis · An MCP server is an adapter: it gives Copilot new abilities. · Without MCP, Copilot only sees what you show it. With it, it can go and look things up. · Be careful: each connection grants access. Trusted tools only. · // example conversation You: which tasks are running late th..."
+        },
+        {
+          "title": "How it all fits together",
+          "text": "// appendix · synthesis · How it all fits together · Four pieces that fit together — a bit like welcoming a new colleague. · Instructions · the house rules · What's always true in the project. · Skills · the recipe cards · Procedures, pulled out only when needed. · Agents · the colleague · The one who carries out the tasks. · MCP · the toolbox · Connections to your other tools and data."
+        },
+        {
+          "title": "The 12 bad habits that cost you",
+          "text": "// appendix · bad habits · The 12 bad habits that cost you · With usage-based billing, every bad habit shows up on the bill. The good news: they're easy to fix. · 1 · Not sharing the project's rules · 2 · Requests that are too vague · 3 · The most expensive model for everything · 4 · Letting an agent act without limits · 5 · Making it read the whole project · 6 · Asking again without clarifying · 7 · No rules for tests · 8 · Forgetting about security · 9 · Letting the AI make big decisions · 10 · Only looking at cost · 11 · Reinventing your requests every time · 12 · Giving access, without..."
+        },
+        {
+          "title": "Habits 1–6: asking well",
+          "text": "// appendix · avoid → better · Habits 1–6: asking well · 1 · Not sharing the project's rules · Avoid: \"Write tests.\" with nothing else. → Better: write the instructions sheet once: tools, style, security. · 2 · Requests that are too vague · Avoid: \"Look at the app and improve it.\" → Better: name the files, the problem, what not to touch, and the answer format. · 3 · The most expensive model for everything · Avoid: the top-tier model to explain three lines. → Better: a standard model for simple work, an advanced one for complex work. · 4 · Letting an agent act without limits · Avoid: \"Fix ev..."
+        },
+        {
+          "title": "Habits 7–12: quality, security, organization",
+          "text": "// appendix · avoid → better · Habits 7–12: quality, security, organization · 7 · No rules for tests · Avoid: \"Write tests for this code.\" → Better: name the tool, the cases to cover (normal, error, edge) and naming. · 8 · Forgetting about security · Avoid: \"Create a file upload page.\" → Better: set the rules: accepted types, max size, who has access, nothing sensitive logged. · 9 · Letting the AI make big decisions · Avoid: \"Which database should we use? Install it.\" → Better: have it compare options; the decision stays human and written down. · 10 · Only looking at cost · Avoid: judging C..."
+        },
+        {
+          "title": "Useful resources",
+          "text": "// appendix · to go further · Useful resources · The official documentation · docs.github.com/copilot · Learn by doing · skills.github.com · Copilot in the terminal · github.com/features/copilot/cli · Tailor Copilot to your project · docs.github.com/copilot/customizing-copilot · Community resources · github.com/github/awesome-copilot · The GitHub blog (AI news) · github.blog"
+        }
+      ]
+    },
+    {
+      "id": "github-copilot-principles-v12",
+      "title": "GitHub Copilot: Understanding the basics (v12)",
+      "description": "A beginner-friendly tour of GitHub Copilot: what it is, how AI works, how to use it well, costs and best practices.",
+      "language": "en",
+      "author": "Benoit Gaumard",
+      "date": "2026-10-27",
+      "tags": [
+        "GitHub Copilot",
+        "AI",
+        "Beginners"
+      ],
+      "width": 1600,
+      "height": 900,
+      "slideCount": 47,
+      "chapters": [
+        {
+          "label": "01",
+          "title": "Discover GitHub Copilot",
+          "slide": 4
+        },
+        {
+          "label": "02",
+          "title": "Understand AI",
+          "slide": 8
+        },
+        {
+          "label": "03",
+          "title": "Use Copilot",
+          "slide": 19
+        },
+        {
+          "label": "04",
+          "title": "Use it well",
+          "slide": 27
+        },
+        {
+          "label": "A",
+          "title": "Going further",
+          "slide": 40
+        }
+      ],
+      "slides": [
+        {
+          "title": "GitHub Copilot",
+          "text": "// github · copilot · 2026 · GitHub Copilot · Understanding the basics · An artificial intelligence assistant that helps write code — explained simply, no background needed. · Benoit Gaumard · Microsoft France · October 2026 · It suggests · as you type · It answers · your questions · It acts · on a task you give it"
+        },
+        {
+          "title": "On the agenda",
+          "text": "// agenda · On the agenda · 01 · Discover GitHub Copilot · What is it? · Why it's useful · Who does what? · 02 · Understand AI · Machine learning · LLMs & top 10 models · Natural language & English · Inference & GPUs · AI & environment · RAG · 03 · Use Copilot · The 3 modes · A request from A to Z · Sessions · The instructions sheet · Agents · Copilot CLI vs gh · 04 · Use it well · Asking well · Your turn · When it gets it wrong · Security · Cost & plans · Checklist · ★ · Wrapping up · What's next? · True or false quiz · Your questions · Key takeaways · Appendix — Skills · MCP · How it all..."
+        },
+        {
+          "title": "Words to know",
+          "text": "// before we start · Words to know · Eight words that come up often. That's all you need to follow along! · Code · The written instructions that make an app or a website work. · Repository · The shared folder that holds all the code of a project. · Machine learning · A machine that learns from examples, without written rules. · Model (LLM) · The AI's \"brain\", trained on huge amounts of text. · Prompt · The instruction or question you write to the AI. · Token · A small piece of a word: the AI's unit of measure. · GPU · The ultra-fast computing chip that runs AI. · Agent · An AI you hand a ta..."
+        },
+        {
+          "title": "Discover GitHub Copilot",
+          "text": "01 · // part 1 of 4 · Discover GitHub Copilot · What is it? · Why it's useful · Who does what?"
+        },
+        {
+          "title": "What is GitHub Copilot?",
+          "text": "// 01 · introduction · What is GitHub Copilot? · An assistant powered by artificial intelligence (AI) that helps people write software. You talk to it in plain English, and it suggests, writes or fixes code. · It completes code as you type, like the suggestions on a phone keyboard. · It answers questions and explains a program in simple words. · It can also handle a whole task: change, test, fix. · It runs on AI \"brains\" of your choice: Claude, GPT, Gemini. · Where do you find it? · In the code editor · the developer's \"word processor\" · On the GitHub website · where teams share their code..."
+        },
+        {
+          "title": "Why it's useful",
+          "text": "// 01 · what it's for · Why it's useful · Copilot doesn't replace developers: it takes the tedious work off their plate so they can focus on the interesting part. · 55% · faster to complete the same coding task · Controlled study, GitHub / Microsoft Research (2023) · 90% · of developers feel more fulfilled at work · GitHub × Accenture study (2024) · 85% · feel more confident in their code quality · GitHub studies · Save time · Repetitive tasks (tests, documentation, formatting) take seconds. · Understand faster · An unfamiliar program? It explains it in simple words. · Learn · A patient tut..."
+        },
+        {
+          "title": "Who does what? 6 tools not to confuse",
+          "text": "// 01 · don't mix them up · Who does what? 6 tools not to confuse · our topic · GitHub Copilot · GitHub (Microsoft) · An AI assistant for coding · Developers · Code editor, GitHub, terminal · Yes · Knows your project and acts on the code · GitHub CLI · GitHub (Microsoft) · A \"remote control\" for GitHub · Developers · The terminal · No · Precise, predictable, scriptable · Microsoft 365 Copilot · Microsoft · An AI assistant in Office apps · People at work · Word, Excel, Outlook, Teams · Yes · Knows your work emails, files and meetings · Copilot Studio · Microsoft · A workshop to build your ow..."
+        },
+        {
+          "title": "Understand AI",
+          "text": "02 · // part 2 of 4 · Understand AI · Machine learning · LLMs & top 10 models · Natural language & English · Inference & GPUs · AI & environment · RAG"
+        },
+        {
+          "title": "Machine learning: learning by example",
+          "text": "// 02 · understand ai · Machine learning: learning by example · Instead of writing rules by hand, you show thousands of examples: the machine finds the rules itself. · Artificial intelligence · machines that imitate intelligence · Machine learning · they learn from examples · Deep learning · using \"neural networks\" · Generative AI & LLMs · they create text, code… · Copilot is here · 01 · Examples · Thousands of photos, texts or lines of code. · 02 · Training · The machine looks for what repeats. · 03 · A model · It can recognize, predict or write. · Classic program: a human writes the rules..."
+        },
+        {
+          "title": "What is an LLM?",
+          "text": "// 02 · understand ai · What is an LLM? · The LLM (Large Language Model) is Copilot's \"brain\". It has read huge amounts of text and code and learned to guess the most likely next words — like your phone keyboard, only far more powerful. · Tokens — the AI cuts text into small pieces of words. Its memory and its cost are counted in tokens. · It guesses — it writes piece by piece, picking the most likely one each time. · No memories — it only knows what you show it in the conversation. · Several models — fast ones for small tasks, more \"thoughtful\" ones for hard ones. · How it \"writes\" · The c..."
+        },
+        {
+          "title": "The 10 latest major models on the market",
+          "text": "// 02 · understand ai · The 10 latest major models on the market · September–October 2026: a major new model ships almost every week. · RELEASED · MODEL · MAKER · ACCESS · STRENGTH · INDEPENDENT SCORE · Oct 23 · Kimi K3.1 Pro · Moonshot AI China · Open · Strongest Chinese model measured so far · 55 · Oct 15 · Muse Spark Open · Meta USA · Open · Most capable US open model, per Meta · 39 · Oct 13 · Gemini 4 Argon · Google USA · Closed · Coding, vision, very long outputs · 53 · Oct 12 · Muse Wonder · Meta USA · Closed · \"Active memory\" for long tasks · 52 · Oct 6 · Mistral Large 4 · Mistral AI..."
+        },
+        {
+          "title": "The 10 best models on the market",
+          "text": "// 02 · understand ai · The 10 best models on the market · Overall ranking across all independent benchmarks, as of October 27, 2026. · 2 · Claude Fable 5.1 · Anthropic · 70.4 · 1 · Claude Opus 5.5 · Anthropic · 72.4 · 3 · GPT-6 Astra · OpenAI · 70.3 · OVERALL SCORE · COST / SESSION* · 4 · GPT-6.1 Sol OpenAI · 69.7 · $0.16 · 5 · Gemini 4 Argon Google · 69.3 · $0.16 · 6 · Muse Spark 1.3 Meta · 66.9 · $0.09 · 7 · Kimi K3.1 Pro Moonshot AI · 66.4 · $0.16 · 8 · Gemini 3.8 Flash Google · 64.3 · $0.06 · 9 · DeepSeek V4.1 Flash DeepSeek · 63.9 · $0.02 · 10 · GLM 5.3 Flash Z.ai · 62.2 · $0.01 · 1...."
+        },
+        {
+          "title": "Natural language: talking to the machine",
+          "text": "// 02 · understand ai · Natural language: talking to the machine · Natural language is the language we speak every day (English, French…), as opposed to programming languages. · Machine language · What the computer understands directly · 10110000 01100001 · Programming language · Precise and rigid: you have to learn it · for x in items: print(x) · Natural language · Our own language, in our own words · \"Print every item in the list\" · Open to everyone — no syntax to learn: you describe what you want, in your own words. · Copilot translates — the LLM understands the intent and turns it into..."
+        },
+        {
+          "title": "Why does AI work best in English?",
+          "text": "// 02 · understand ai · Why does AI work best in English? · Copilot understands many languages very well… but it's still most at ease in English. Four reasons. · Language of websites · English · 49.5% · Spanish · 6.1% · German · 5.9% · Japanese · 4.9% · French · 4.6% · Source: W3Techs, October 2026 · More examples — almost half of the web is in English, under 5% in French: the AI has read far more English text. · Code speaks English — keywords (if, for, print), documentation, help forums: nearly all of it is in English. · Tokens built for English — the same sentence in another language is o..."
+        },
+        {
+          "title": "Training and inference",
+          "text": "// 02 · understand ai · Training and inference · An AI goes through two very different moments: it learns once, then it answers millions of times. · Training · Like a doctor's long years of medical school. · WHEN · Once, before it goes into service · HOW LONG · Weeks, even months · RESOURCES · Thousands of GPUs at the same time · WHO · Model makers (OpenAI, Anthropic, Google…) · Inference · Like an appointment with that doctor. · WHEN · Every time you ask a question · HOW LONG · A few seconds · RESOURCES · A few GPUs in a data center · WHO · You, through Copilot · With Copilot — every quest..."
+        },
+        {
+          "title": "The GPU: the engine of AI",
+          "text": "// 02 · understand ai · The GPU: the engine of AI · AI needs billions of small calculations. That takes a special chip: the GPU (graphics processing unit). · CPU · GPU · A few very versatile cores: star chefs. · Thousands of small cores: a kitchen crew all working at the same time. · Born for video games — displaying millions of pixels at once. · Perfect for AI — it repeats the same small calculation billions of times: ideal for parallel work. · In the cloud — Copilot doesn't run on your computer, but on GPUs in data centers. · Scarce and expensive — in high demand and power-hungry: that's..."
+        },
+        {
+          "title": "AI and the environment",
+          "text": "// 02 · understand ai · AI and the environment · The GPUs in data centers use a lot of electricity. What do the numbers say? · ×2 · data center electricity use between 2024 and 2030 (≈ 945 TWh) · < 3% · of global electricity in 2030: rising fast, but still limited · +30% · a year for AI servers, versus +9% for conventional servers · Source: IEA (International Energy Agency), \"Energy and AI\" report (2025), Base Case. · Why it uses energy · Thousands of GPUs computing nonstop · They need cooling: air conditioning, sometimes water · Making chips and servers has a cost too · What everyone can d..."
+        },
+        {
+          "title": "RAG: look it up before answering",
+          "text": "// 02 · understand ai · RAG: look it up before answering · RAG = \"Retrieval-Augmented Generation\". Think of an open-book exam. · You ask a question · \"How do we run the tests in this project?\" · Copilot searches · It looks through your files, documentation, tickets… and keeps the useful passages. · It answers, with sources · The question and the passages found go to the LLM together: the answer is precise and up to date. · Without RAG: it answers from memory · Knowledge frozen at its training date · Doesn't know your internal documents · Higher risk of making things up · With RAG: it checks..."
+        },
+        {
+          "title": "Use Copilot",
+          "text": "03 · // part 3 of 4 · Use Copilot · The 3 modes · A request from A to Z · Sessions · The instructions sheet · Agents · Copilot CLI vs gh"
+        },
+        {
+          "title": "Three ways to work with Copilot",
+          "text": "// 03 · in practice · Three ways to work with Copilot · Just like with a colleague: you can ask for advice, a small fix, or hand over a whole task. · Ask · You ask a question. Copilot answers without changing anything — like asking for advice. · \"What does this piece of code do?\" · Edit · You ask for a specific change. Copilot edits the files involved. · \"Add a Send button.\" · Agent · You hand over a task. Copilot plans, acts, checks and retries until it's done. · \"Build a complete Contact page.\" · Plan mode → it proposes a plan first, you approve it. Autopilot → it goes all the way without..."
+        },
+        {
+          "title": "A request, from start to finish",
+          "text": "// 03 · in practice · A request, from start to finish · A real example in 5 steps: adding an \"Export to PDF\" button to an Invoices page. · 01 · The request · You · \"Add an Export to PDF button to the Invoices page.\" · 02 · The plan · Copilot · \"My plan: 1. add the button, 2. build the export, 3. test. Shall I start?\" · 03 · The work · Copilot · It edits 2 files, runs the tests… and fixes an error on its own. · 04 · The review · You · You look at the changes, then: \"Make the button blue.\" · + <button>Export to PDF</button> · + function exportPDF() {…} · green = added · 05 · The approval · Yo..."
+        },
+        {
+          "title": "Sessions: a memory, but not infinite",
+          "text": "// 03 · under the hood · Sessions: a memory, but not infinite · A session is a conversation with Copilot. Like our brain, it remembers what was said… but its memory isn't unlimited. · A session “thinks” with its working memory. · A working memory — during the conversation, Copilot remembers what you said and the files it saw. · Limited space — like a whiteboard: it fills up as the conversation goes on. · Smart forgetting — when nearly full, it summarizes older parts to make room — some details get lost. · A lasting memory — some rules can be kept from one conversation to the next (instructi..."
+        },
+        {
+          "title": "Managing your conversations",
+          "text": "// 03 · method · Managing your conversations · Golden rule: one topic = one conversation. A tidy memory = better answers, at a lower cost. · 01 · Start · State the goal right away and show the right files. · 02 · Plan · Ask for its plan first, then approve it. · 03 · Execute · Let it move forward in small steps. · 04 · Verify · Look at the changes, test them. · 05 · Close · Wrap up, then start fresh. · Keep the same conversation when… · You're continuing the same work · The conversation holds useful decisions · Answers stay accurate and on point · Start a new one when… · You move on to anot..."
+        },
+        {
+          "title": "The instructions sheet",
+          "text": "// 03 · customization · The instructions sheet · Like the note you leave for a babysitter: the house rules, what to do and what not to do. Copilot rereads it automatically with every request. · It lives with the project: .github/copilot-instructions.md · A format several AIs understand: AGENTS.md · Written once, it serves the whole team. · What goes in it: the style to follow, how to test, pitfalls to avoid. · copilot-instructions.md # Copilot Instructions - Use TypeScript and the repo's style. - Run `npm test` before committing. - Document every exported function. - Don't add dependencies..."
+        },
+        {
+          "title": "Agents",
+          "text": "// 03 · autonomy · Agents · An agent doesn't just give advice: you hand it a task, and it takes care of it. Three forms. · Agent mode · right in front of you · In the editor, it reads, plans, edits several files and fixes itself while you watch. · Coding agent · in the background · You give it a task on GitHub: it works on its own and comes back with a proposal to review. · Agents · made to measure · Specialized assistants (tester, reviewer…) with their own role and tools, for repetitive tasks. · Good to know — like a team, several agents can share the work at the same time."
+        },
+        {
+          "title": "GitHub Copilot CLI vs GitHub CLI",
+          "text": "// 03 · comparison · GitHub Copilot CLI vs GitHub CLI · Two terminal tools with very similar names — but one is an AI, the other isn't. · GitHub Copilot CLI · $ copilot · An AI assistant directed in everyday language. · Started with copilot, then you talk to it normally. · It plans, writes and runs code — with your OK. · Several AI \"brains\" to choose from. · GitHub CLI · $ gh · A \"remote control\" for GitHub, with precise commands. · Started with gh, followed by exact instructions. · E.g.: gh pr create = propose a change. · No AI: it does exactly what you type. · vs · Watch the names — the o..."
+        },
+        {
+          "title": "Use it well",
+          "text": "04 · // part 4 of 4 · Use it well · Asking well · Your turn · When it gets it wrong · Security · Cost & plans · Checklist"
+        },
+        {
+          "title": "Asking the right way",
+          "text": "// 04 · asking well · Asking the right way · A request to the AI is called a \"prompt\". Like a brief to a contractor: six key ingredients. · prompt.md · Add an \"Export to PDF\" button · to the Invoices page. · Files: #invoices.html · #export.js · Same style as the other buttons, · no new tool to install. · Don't touch any other page. · Show the changes, then explain · in 3 simple sentences. · Check that everything still works. · 1 · Goal · What you want, in one sentence. · 2 · Context · Where it happens: the files involved. · 3 · Rules · What must be respected. · 4 · Off-limits · What must st..."
+        },
+        {
+          "title": "Your turn!",
+          "text": "// 04 · workshop · Your turn! · Let's turn a vague request into a precise one, together. · The vague request · \"Make me a contact page.\" · 5 questions to ask yourself · 1 · What exactly? (which fields, which button) · 2 · Where? (which page, which files) · 3 · What rules? (style, tools) · 4 · What must stay untouched? · 5 · How do we check it works? · A precise version · \"Create a Contact page with a form (name, email, message) and a Send button. Same style as the home page. Don't change other pages. Check that an invalid email is rejected.\" · For the presenter — let the audience suggest th..."
+        },
+        {
+          "title": "When Copilot gets it wrong",
+          "text": "// 04 · critical thinking · When Copilot gets it wrong · AI gives the answer that \"sounds right\", not always the true one — and it can be confidently wrong. · It makes things up · Called a \"hallucination\": a tool or feature that doesn't exist, presented as real. · It's out of date · It learned up to a certain date: it may miss what's new or suggest old ways. · Hidden mistakes · A result that looks right… but hides an error or a security hole. · It guesses · When information is missing, it fills in the gaps at random. · Good reflexes · Always review it, like an intern's work · Test before yo..."
+        },
+        {
+          "title": "Security and permissions",
+          "text": "// 04 · trust · Security and permissions · The more Copilot acts on its own, the more guardrails you need. Good news: at every step, you stay in control. · autonomy & risk → · 01 · Read & suggest · It proposes, you choose. · 02 · Edit files · You see and approve every change. · 03 · Take actions · It asks for your OK before acting. · 04 · Solo mission · It works in an isolated space; a human reviews everything. · For everyone · Read before approving an action · Don't authorize everything up front · Never share passwords or personal data · For the company · Choose which features and tools ar..."
+        },
+        {
+          "title": "How much does it cost? How credits work",
+          "text": "// 04 · costs · How much does it cost? How credits work · Since June 2026, Copilot works like a phone plan: every exchange uses up credits. · Cost ≈ model × tokens · tokens = text read + text written by the AI · 1 credit = 1 US cent. Every subscription includes a monthly allowance of credits. · Two things raise the bill: the \"brain\" you pick and the amount of text processed. · A quick question = a few cents; a long task handed to an agent = much more. · Uses credits · Chatting with the assistant · Handing a task to an agent · Getting code reviewed · Included, no credits · Automatic suggesti..."
+        },
+        {
+          "title": "Plans and how to get started",
+          "text": "// 04 · subscribing · Plans and how to get started · A free plan to discover it, paid plans to go further. · Free · $0 · To try it: 2,000 suggestions a month, limited chat and agent use. · Student · $0 · Free for verified students. · Pro · $10 / month · Everyday use: unlimited suggestions, agents, $15 of credits included. · Pro+ · $39 / month · The most powerful models, $70 of credits included. · Max · $100 / month · Heavy agent use, $200 of credits included. · Business / Enterprise · per user · For companies: central management, policies, security. · Get started in 3 steps · 1 · Create a G..."
+        },
+        {
+          "title": "Checklist: 10 good habits",
+          "text": "// 04 · takeaways · Checklist: 10 good habits · Share it with your team — and review it before every new session. · 01 · Write the project's instructions sheet · The house rules, written once. · 02 · Precise requests · Goal, files, rules, off-limits, answer format. · 03 · Just the right information · The useful files, not the whole project. · 04 · The right model for the job · Simple for simple, advanced for complex. · 05 · A plan before action · Ask for its plan, then let it act. · 06 · One topic = one conversation · Start fresh when the topic changes. · 07 · Agents with limits · Clear sco..."
+        },
+        {
+          "title": "What's next?",
+          "text": "// wrap-up · trends · What's next? · Trends already visible today, and set to accelerate. · More autonomous agents · You hand them whole tasks; several work in parallel. · The developer as conductor · Less typing, more design, review and decision-making. · AI in every tool · Editor, terminal, GitHub website, mobile, team chat. · Trust at the center · Security, verification and clear rules become essential. · What doesn't change — you need to know what you want… and check what you get."
+        },
+        {
+          "title": "True or false?",
+          "text": "// wrap-up · quiz · True or false? · Six statements: you decide! · 1 · “Copilot runs on my computer.” · 2 · “AI always knows when it's wrong.” · 3 · “You can talk to Copilot in French.” · 4 · “A long conversation can make it \"forget\" instructions.” · 5 · “Suggestions as you type use up credits.” · 6 · “GitHub CLI and GitHub Copilot CLI are the same thing.”"
+        },
+        {
+          "title": "True or false? The answers",
+          "text": "// wrap-up · quiz · True or false? The answers · So, how many did you get right? · 1 · FALSE · “Copilot runs on my computer.” · It runs on GPUs, in data centers. · 2 · FALSE · “AI always knows when it's wrong.” · It can be confidently wrong: always check. · 3 · TRUE · “You can talk to Copilot in French.” · Yes! It's just a bit better in English. · 4 · TRUE · “A long conversation can make it \"forget\" instructions.” · Its memory is limited: it summarizes itself when full. · 5 · FALSE · “Suggestions as you type use up credits.” · They're included, unlimited on paid plans. · 6 · FALSE · “GitHub..."
+        },
+        {
+          "title": "The questions everyone asks",
+          "text": "// wrap-up · your questions · The questions everyone asks · Will it replace developers? · No. It's a tool to go faster; humans keep the judgment and the responsibility. GitHub says so itself. · Do I need to know how to code? · To get the most out of it, yes: you need to be able to review what it suggests. But it's a great help for learning. · Does it see my code? · It reads what it needs to answer. On business plans, that code doesn't train the AI; on individual plans, you can opt out in settings. · Who owns the code it writes? · You decide whether to use it, and you're responsible for it...."
+        },
+        {
+          "title": "Key takeaways",
+          "text": "// recap · Key takeaways · Copilot is an AI assistant that helps write code, in everyday language. · You choose how much help you want: advice, a fix or a whole task. · Clear instructions and a tidy memory = better results. · AI can be wrong: review it, check it, keep the final say. · Thank you · Questions? · Benoit Gaumard Microsoft France"
+        },
+        {
+          "title": "Going further",
+          "text": "A · // appendix · Going further · Reference slides, for the curious."
+        },
+        {
+          "title": "Skills: recipe cards",
+          "text": "// appendix · customization · Skills: recipe cards · \"Recipes\" Copilot pulls out of the drawer only when it needs them: for a specific task, it follows the steps described, one by one. · One recipe = a folder with a SKILL.md file (name, purpose, steps). · For the project: .github/skills/ · For you: ~/.copilot/skills/ · The instructions sheet is always read; a recipe, only when needed. · Examples: create a page our way, prepare a release. · SKILL.md --- name: new-page description: Create a site page following our rules. --- 1. Start from the page template. 2. Add it to the menu. 3. Check it..."
+        },
+        {
+          "title": "What is an MCP server?",
+          "text": "// appendix · connect · What is an MCP server? · MCP is a \"universal plug\" that connects Copilot to other tools and sources of information. · Copilot · the assistant · MCP · the plug · GitHub · tasks and projects · Browser · open and test a website · Data · information databases · Documentation · user guides, wikis · An MCP server is an adapter: it gives Copilot new abilities. · Without MCP, Copilot only sees what you show it. With it, it can go and look things up. · Be careful: each connection grants access. Trusted tools only. · // example conversation You: which tasks are running late th..."
+        },
+        {
+          "title": "How it all fits together",
+          "text": "// appendix · synthesis · How it all fits together · Four pieces that fit together — a bit like welcoming a new colleague. · Instructions · the house rules · What's always true in the project. · Skills · the recipe cards · Procedures, pulled out only when needed. · Agents · the colleague · The one who carries out the tasks. · MCP · the toolbox · Connections to your other tools and data."
+        },
+        {
+          "title": "The 12 bad habits that cost you",
+          "text": "// appendix · bad habits · The 12 bad habits that cost you · With usage-based billing, every bad habit shows up on the bill. The good news: they're easy to fix. · 1 · Not sharing the project's rules · 2 · Requests that are too vague · 3 · The most expensive model for everything · 4 · Letting an agent act without limits · 5 · Making it read the whole project · 6 · Asking again without clarifying · 7 · No rules for tests · 8 · Forgetting about security · 9 · Letting the AI make big decisions · 10 · Only looking at cost · 11 · Reinventing your requests every time · 12 · Giving access, without..."
+        },
+        {
+          "title": "Habits 1–6: asking well",
+          "text": "// appendix · avoid → better · Habits 1–6: asking well · 1 · Not sharing the project's rules · Avoid: \"Write tests.\" with nothing else. → Better: write the instructions sheet once: tools, style, security. · 2 · Requests that are too vague · Avoid: \"Look at the app and improve it.\" → Better: name the files, the problem, what not to touch, and the answer format. · 3 · The most expensive model for everything · Avoid: the top-tier model to explain three lines. → Better: a standard model for simple work, an advanced one for complex work. · 4 · Letting an agent act without limits · Avoid: \"Fix ev..."
+        },
+        {
+          "title": "Habits 7–12: quality, security, organization",
+          "text": "// appendix · avoid → better · Habits 7–12: quality, security, organization · 7 · No rules for tests · Avoid: \"Write tests for this code.\" → Better: name the tool, the cases to cover (normal, error, edge) and naming. · 8 · Forgetting about security · Avoid: \"Create a file upload page.\" → Better: set the rules: accepted types, max size, who has access, nothing sensitive logged. · 9 · Letting the AI make big decisions · Avoid: \"Which database should we use? Install it.\" → Better: have it compare options; the decision stays human and written down. · 10 · Only looking at cost · Avoid: judging C..."
+        },
+        {
+          "title": "Useful resources",
+          "text": "// appendix · to go further · Useful resources · The official documentation · docs.github.com/copilot · Learn by doing · skills.github.com · Copilot in the terminal · github.com/features/copilot/cli · Tailor Copilot to your project · docs.github.com/copilot/customizing-copilot · Community resources · github.com/github/awesome-copilot · The GitHub blog (AI news) · github.blog"
+        }
+      ]
+    }
+  ]
+}

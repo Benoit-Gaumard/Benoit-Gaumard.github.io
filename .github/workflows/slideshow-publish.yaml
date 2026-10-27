@@ -1,0 +1,65 @@
+name: Publish Slideshow Decks
+
+# Drop a .pptx (and/or a PDF exported from PowerPoint) in slideshow/inbox/, optionally with a
+# <same-name>.json metadata file, and push to main: the deck is converted to WebP slides,
+# added to slideshow/decks.json, removed from the inbox and the site is redeployed.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'slideshow/inbox/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: slideshow-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install LibreOffice, Poppler and fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends libreoffice-impress poppler-utils unzip \
+            fonts-crosextra-carlito fonts-crosextra-caladea fonts-cascadia-code fonts-noto-core \
+            fonts-noto-color-emoji fonts-dejavu-core > /dev/null
+          mkdir -p ~/.local/share/fonts/selawik ~/.config/fontconfig
+          curl -fsSL -o /tmp/selawik.zip https://github.com/microsoft/Selawik/releases/download/1.01/Selawik_Release.zip
+          unzip -q -o -j /tmp/selawik.zip '*.ttf' -d ~/.local/share/fonts/selawik
+          cp slideshow/fonts.conf ~/.config/fontconfig/fonts.conf
+          fc-cache -f > /dev/null
+          pip install --quiet Pillow python-pptx
+
+      - name: Publish decks from the inbox
+        id: publish
+        run: python slideshow/publish-inbox.py
+
+      - name: Commit and push
+        if: success() || failure()
+        env:
+          PUBLISHED: ${{ steps.publish.outputs.published }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A slideshow/decks slideshow/decks.json slideshow/inbox
+          if git diff --cached --quiet; then
+            echo "Nothing to publish."
+          else
+            git commit -m "chore: publish slideshow deck(s) ${PUBLISHED}"
+            git pull --rebase
+            git push
+          fi
