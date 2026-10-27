@@ -1,0 +1,38 @@
+name: Refresh AI Leaderboard
+
+on:
+  schedule:
+    # 06:00 UTC every Monday (LMArena publishes new snapshots about weekly)
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ai-leaderboard-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest LMArena leaderboard and OpenRouter models
+        run: node ai-leaderboard/fetch-updates.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- ai-leaderboard/leaderboard.json; then
+            echo "No changes to AI leaderboard data."
+          else
+            git add ai-leaderboard/leaderboard.json
+            git commit -m "chore: refresh AI Leaderboard data"
+            git pull --rebase
+            git push
+          fi

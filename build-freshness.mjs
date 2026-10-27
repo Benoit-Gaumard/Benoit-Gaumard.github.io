@@ -38,6 +38,7 @@ const FILES = [
   "azure-built-in-roles/roles.json",
   "entra-built-in-roles/roles.json",
   "graph-permissions/permissions.json",
+  "ai-leaderboard/leaderboard.json",
 ];
 
 const SOURCE_FILES = {

@@ -85,7 +85,7 @@ test("rejects malformed or unsupported schedules instead of dropping entries", (
   }
 });
 
-test("the generated catalog contains all 15 current workflows and all 21 crons", () => {
+test("the generated catalog contains all 16 current workflows and all 22 crons", () => {
   const daily = ["0 6 * * *"];
   const snapshot = ["0 6 * * *", "0 18 * * 1"];
   assert.deepEqual(Object.fromEntries(catalog.map(({ file, schedules }) => [file, schedules])), {
@@ -104,9 +104,10 @@ test("the generated catalog contains all 15 current workflows and all 21 crons",
     "entra-built-in-roles-updates.yaml": ["30 6 * * *", "30 18 * * 1"],
     "graph-permissions-updates.yaml": ["45 6 * * *", "45 18 * * 1"],
     "favicons-refresh.yaml": ["0 4 * * 0"],
+    "ai-leaderboard-updates.yaml": ["0 6 * * 1"],
   });
-  assert.equal(catalog.length, 15);
-  assert.equal(catalog.flatMap((workflow) => workflow.schedules).length, 21);
+  assert.equal(catalog.length, 16);
+  assert.equal(catalog.flatMap((workflow) => workflow.schedules).length, 22);
   assert.equal(buildWorkflowPage(), html, "checked-in catalog must match YAML and regenerate idempotently");
 });
 
@@ -233,7 +234,7 @@ test("loading cards already contain every schedule before the API responds", () 
   assert.ok(start > 0 && end > start);
   runInContext(html.slice(start, end), context);
   context.renderCards();
-  assert.equal(cards.length, 15);
+  assert.equal(cards.length, 16);
   for (const card of cards) assert.match(card.innerHTML, /class="workflow-schedule"/);
   assert.equal(cards.reduce((count, card) => count + (card.innerHTML.match(/<time datetime=/g) || []).length, 0), 21);
 });

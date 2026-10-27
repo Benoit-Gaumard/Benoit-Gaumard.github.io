@@ -23,6 +23,7 @@ const DATASETS = {
   "azure-built-in-roles-updates.yaml": ["azure-built-in-roles/roles.json"],
   "entra-built-in-roles-updates.yaml": ["entra-built-in-roles/roles.json"],
   "graph-permissions-updates.yaml": ["graph-permissions/permissions.json"],
+  "ai-leaderboard-updates.yaml": ["ai-leaderboard/leaderboard.json"],
 };
 
 export function buildDatasetFreshness(root = ROOT) {
