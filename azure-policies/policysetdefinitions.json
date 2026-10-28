@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T11:47:48.466Z",
+  "generatedAt": "2026-10-28T12:22:13.640Z",
   "source": "Get-AzPolicySetDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
   "totalInitiatives": 193,
   "totalCategories": 23,
@@ -7184,13 +7184,62 @@
       "displayName": "[Preview]: Data Residency for Replication across Azure Services",
       "description": "Help restrict replication, replicated backups, and data processing to approved locations and security boundaries across supported Azure services.",
       "category": "Sovereignty",
-      "version": "1.0.0-preview",
+      "version": "1.1.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 1,
+      "policyCount": 8,
       "policies": [
         {
           "id": "0473574d-2d43-4217-aefe-941fcdf7e684",
           "referenceId": "allowedReplicationLocationsCosmosDB",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "4778c705-6ec3-4a0e-86bb-01b7da8a5bf4",
+          "referenceId": "allowedDefaultSecondaryLocationSqlDatabase",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "9bf20ff2-0f28-47ea-ab41-0d070cf1d73b",
+          "referenceId": "allowedGeoReplicationLocationsServiceBus",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "28db9b68-6637-453e-afc5-1dbb3b16df1b",
+          "referenceId": "allowedGeoReplicationLocationsEventHubs",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a2713d30-18dc-48a3-8e2f-0966c2133989",
+          "referenceId": "allowedReplicaLocationsAPIManagement",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "25ff226b-1747-454d-8ae2-0c11e0935753",
+          "referenceId": "allowedDefaultSecondaryLocationSqlManagedInstanceDatabase",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "92af37fe-f8ff-4ebd-883d-2f80cd765f8f",
+          "referenceId": "allowedReplicaLocationsIoTDps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "93fc07ef-f4b9-418a-9190-6e2628e72856",
+          "referenceId": "allowedSecondaryLocationsIoTHub",
           "groupNames": [
             null
           ]
@@ -7524,9 +7573,9 @@
       "displayName": "[Preview]: Enforce Encryption-at-Rest with Customer Managed Keys (CMK) across Azure Services",
       "description": "Help restrict and audit Azure services to use customer-managed keys for encryption at rest across supported services.",
       "category": "Sovereignty",
-      "version": "2.0.0-preview",
+      "version": "2.1.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 49,
+      "policyCount": 55,
       "policies": [
         {
           "id": "f7d52b2d-e161-4dfa-a82b-55e564167385",
@@ -7867,6 +7916,48 @@
         {
           "id": "9c376cb6-0545-4233-a22c-074540d4d935",
           "referenceId": "customerManagedKeysOnServiceBus",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0253f0dc-b6de-4795-97ae-1ee0b4ffe3a6",
+          "referenceId": "customerManagedKeysOnContainerAppsEnvironment",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "e687207c-8d66-460e-a8a5-12f95256116c",
+          "referenceId": "customerManagedKeysOnDatabricksWorkspace",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "49af39b4-9394-4043-b153-f4a67201368b",
+          "referenceId": "customerManagedKeysOnAzureManagedLustreFileSystems",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "8855a114-45dd-4bb9-9953-4cc527764c90",
+          "referenceId": "customerManagedKeysOnAzureNetAppFilesAccounts",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "ea4d0edd-1555-4917-8d8f-042f98fa6a0e",
+          "referenceId": "customerManagedKeysOnAzureRedHatOpenShiftClusters",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "e1d59f09-0884-4a5b-80cc-5ec5ed5cb984",
+          "referenceId": "customerManagedKeysOnAzureManagedInstanceCassandraDataCenters",
           "groupNames": [
             null
           ]
@@ -8591,9 +8682,9 @@
       "displayName": "[Preview]: Private Endpoint configured across Azure Services",
       "description": "Help audit Azure services to ensure private endpoints are configured by leveraging Azure Private Link",
       "category": "Sovereignty",
-      "version": "1.1.0-preview",
+      "version": "1.2.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 48,
+      "policyCount": 54,
       "policies": [
         {
           "id": "d6759c02-b87f-42b7-892e-71b3f471d782",
@@ -8930,6 +9021,48 @@
           "groupNames": [
             null
           ]
+        },
+        {
+          "id": "37ccbf90-57ed-4a86-b246-cece8ed746fe",
+          "referenceId": "privateEndpointOnApiManagementServices",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "5204629f-8140-4a58-90a7-de4e04957a97",
+          "referenceId": "privateEndpointOnApplicationGateway",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "ec9fea60-a9ec-4efb-8115-3c3c5e061510",
+          "referenceId": "privateEndpointOnContainerAppsEnvironments",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "973a0211-4dcc-42ea-87eb-e9be5db0e585",
+          "referenceId": "privateEndpointOnAzureKubernetesServiceClusters",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "54e3763b-72a6-4c12-af2e-544b39d6bfee",
+          "referenceId": "privateEndpointOnAzureMigrateProjects",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "53ed4ed6-59b1-4f85-b6b3-36178fe76759",
+          "referenceId": "privateEndpointOnStreamAnalyticsClusters",
+          "groupNames": [
+            null
+          ]
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/b71f6054-d890-4c78-b809-2ae9dc6a0cfc"
@@ -9189,9 +9322,9 @@
       "displayName": "[Preview]: Restrict Public Network Access across Azure Services",
       "description": "Help restrict Azure services to disable public network access, reducing exposure to the public internet",
       "category": "Sovereignty",
-      "version": "1.1.0-preview",
+      "version": "1.2.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 51,
+      "policyCount": 60,
       "policies": [
         {
           "id": "ee980b6d-0eca-4501-8d54-f6290fd512c3",
@@ -9546,6 +9679,69 @@
         {
           "id": "6c53d030-cc64-46f0-906d-2bc061cd1334",
           "referenceId": "disablePublicNetworkAccessOnLogAnalyticsWorkspaces",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c4225fe7-a11b-4e6b-8f9c-989dd2907bd2",
+          "referenceId": "disablePublicNetworkAccessOnAzureCommunicationServices",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "093e16cd-84e0-4332-b550-82f55cf85f28",
+          "referenceId": "disablePublicNetworkAccessOnAzureHealthDataServicesWorkspaces",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f6c2ab23-7f3b-47db-a0dc-24fc64d658fa",
+          "referenceId": "disablePublicNetworkAccessOnAzureKubernetesServiceClusters",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0f8a6cc3-040f-4b9b-8828-b37490729517",
+          "referenceId": "disablePublicNetworkAccessOnAzureManagedRedis",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "e312c3b8-c565-45aa-9ddf-bec26b618285",
+          "referenceId": "disablePublicNetworkAccessOnAzureMigrateProjects",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "1bc02227-0cb6-4e11-8f53-eb0b22eab7e8",
+          "referenceId": "disablePublicNetworkAccessOnApplicationInsightsComponents",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a88d4a2c-216a-4fdb-8df0-b8ad54354f57",
+          "referenceId": "disablePublicNetworkAccessOnAzureRedHatOpenShiftClusters",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "9dfea752-dd46-4766-aed1-c355fa93fb91",
+          "referenceId": "disablePublicNetworkAccessOnAzureSQLManagedInstances",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f5727640-3711-4df4-bce5-3ba3ad4bad85",
+          "referenceId": "disablePublicNetworkAccessOnAzureContainerInstances",
           "groupNames": [
             null
           ]
