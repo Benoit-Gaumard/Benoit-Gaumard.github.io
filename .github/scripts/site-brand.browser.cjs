@@ -4,7 +4,7 @@ const runSuite = require(process.env.SITE_UX_HARNESS);
 runSuite("site-branding", async ({ context, test, base, assert, path, artifacts }) => {
   const routes = ["/", "/index_fr.html", "/tools/", "/icons/", "/privacy/", "/articles/azure-policy-part-1-what-is-a-policy/"];
   for (const [width, theme] of [[320, "light"], [390, "dark"], [768, "light"], [1440, "dark"]]) {
-    await test(`site name and navigation stay visible at ${width}px ${theme}`, async () => {
+    await test(`responsive branding and navigation at ${width}px ${theme}`, async () => {
       const ctx = await context({ viewport: { width, height: 900 }, colorScheme: theme });
       const page = await ctx.newPage(), errors = [];
       page.on("pageerror", error => errors.push(error.message));
@@ -16,6 +16,11 @@ runSuite("site-branding", async ({ context, test, base, assert, path, artifacts 
           assert.equal(await name.textContent(), "benoit-gaumard.io", route);
           assert.equal(await name.getAttribute("href"), "https://benoit-gaumard.io/");
           assert.equal(await brand.locator(".brand").getAttribute("href"), route === "/index_fr.html" ? "/index_fr.html" : "/");
+          if (width <= 768 && selector.startsWith(".site-header")) {
+            assert.equal(await name.isVisible(), false, route);
+            assert.equal(await brand.locator(".brand").isVisible(), true, route);
+            continue;
+          }
           const bounds = await brand.evaluate(node => {
             const image = node.querySelector("img").getBoundingClientRect(), label = node.querySelector(".site-brand-name").getBoundingClientRect();
             return { imageRight: image.right, labelLeft: label.left, labelRight: label.right, labelHeight: label.height,
@@ -89,6 +94,11 @@ runSuite("site-branding", async ({ context, test, base, assert, path, artifacts 
             assert.ok(a.right <= b.left + 1 || b.right <= a.left + 1 || a.bottom <= b.top + 1 || b.bottom <= a.top + 1,
               `${route}: header overlap between ${a.name} and ${b.name}`);
           }
+          if (width <= 768) {
+            const row = controls;
+            const center = row[0].top + (row[0].bottom - row[0].top) / 2;
+            assert.ok(row.every(control => Math.abs((control.top + control.bottom) / 2 - center) < 2), route + ": single mobile header row");
+          }
         }
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, route);
         if (width < 769) {
@@ -136,11 +146,12 @@ runSuite("site-branding", async ({ context, test, base, assert, path, artifacts 
     const ctx = await context({ viewport: { width: 320, height: 900 }, javaScriptEnabled: false }), page = await ctx.newPage();
     await page.route("https://benoit-gaumard.io/**", route => route.fulfill({ contentType: "text/html", body: "<!doctype html><title>Requested site link</title>" }));
     await page.goto(base + "/index_fr.html");
-    assert.equal(await page.locator(".site-brand-name:visible").count(), 2);
+    assert.equal(await page.locator(".site-brand-name:visible").count(), 1);
+    assert.equal(await page.locator(".site-header .site-brand-name").isVisible(), false);
     assert.equal(await page.locator(".footer-group > a[href='/privacy/']").isVisible(), true);
     assert.equal(await page.locator(".footer-bottom > span").first().textContent(), "© 2026 Benoit Gaumard - Built with ❤️ - All Rights Reserved");
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
-    await page.locator(".site-header .site-brand-name").click();
+    await page.locator(".site-footer .site-brand-name").click();
     await page.waitForURL("https://benoit-gaumard.io/");
     await ctx.close();
   });

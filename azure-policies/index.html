@@ -786,12 +786,16 @@
   .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
   .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-tool-link:focus-visible { outline-offset:-3px; }
-  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  @media(max-width:48rem) {
+    :root { --header-h:4rem; }
+    .site-header .site-brand-name { display:none; }
+    .site-header .header-inner:has(.site-branding) { flex-wrap:nowrap;gap:.25rem;padding-block:.5rem;min-height:4rem; }
+    .site-header .header-inner > .site-branding { flex-basis:auto;flex-shrink:0; }
+    .site-header .brand .mark { width:1.75rem;height:1.75rem; }
+    .site-header .header-actions { margin-left:auto;gap:.125rem;flex-wrap:nowrap; }
+    .site-tool-switcher > summary { gap:.25rem;padding-inline:.375rem;font-size:.8rem; }
+  }
   @media(max-width:40rem) {
-    :root { --header-h:6.875rem; }
-    .site-header .header-inner:has(.site-branding) { flex-wrap:wrap;gap:.25rem .5rem;padding-block:.5rem; }
-    .site-header .header-inner > .site-branding { flex-basis:100%; }
-    .site-header .header-actions { margin-left:auto; }
     .site-tool-panel { max-height:min(36rem,calc(100dvh - 13rem)); }
     body:not(:has(.section-nav)) main :is([id],.tool-card) { scroll-margin-top:8rem; }
   }

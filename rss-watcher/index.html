@@ -920,27 +920,38 @@
   }
   </script>
 <style data-rss-ux>    .rss-controls{border:0;padding:0;margin:0;min-width:0;}
-    .rss-primary{display:grid;grid-template-columns:minmax(0,2fr) minmax(10rem,1fr);align-items:end;gap:.75rem;margin:.75rem 0;}
+    .rss-primary{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) minmax(0,1.5fr) auto;align-items:end;gap:.75rem;margin:.75rem 0;}
+    .rss-secondary{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,2fr);align-items:end;gap:.75rem;margin:.75rem 0;}
+    .rss-language-label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
+    .rss-controls .language-filter{height:3rem;}
     .rss-field{min-width:0;}
     .rss-field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
     .rss-field input,.rss-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
     .rss-help{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;margin:.75rem 0;}
-    .rss-options>summary{min-height:2.75rem;padding-block:.65rem;color:var(--cp-link);font-size:.85rem;cursor:pointer;}
-    .site-article{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;}
+    .site-grid{align-items:stretch;grid-auto-rows:32rem;}
+    .site-card{height:32rem;overflow:hidden;}
+    .site-card-head{height:4.5rem;flex:none;overflow:auto;}
+    .site-card .site-articles{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-inline:.5rem;scrollbar-gutter:stable;}
+    .site-card>.rss-help{margin:0;flex:none;}
+    .site-card>.site-ux-button{flex:none;align-self:start;min-height:2.75rem;}
+    .site-card-footer-space{height:2.75rem;flex:none;}
+    .site-article{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;flex:none;}
     .icon-button,.language-option,.view-option,.favorites-filter,.clear-button,.submit-link-button{min-height:2.75rem;}
     .icon-button{min-width:2.75rem;width:2.75rem;height:2.75rem;}
     .keyword-chip button{min-width:2.75rem;min-height:2.75rem;}
     .site-card:hover{transform:none;}
-    .site-article-title{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.5;}
+    .site-article-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal;line-height:1.5;}
     #rssLoadMore{display:block;margin:1rem auto;}
+    @media(max-width:64rem){
+      .rss-primary{grid-template-columns:repeat(2,minmax(0,1fr));}
+    }
     @media(max-width:48rem){
-      .rss-primary{grid-template-columns:minmax(0,1fr);}
+      .rss-primary,.rss-secondary{grid-template-columns:minmax(0,1fr);}
       .rss-controls .language-filter{width:fit-content;max-width:100%;}
-      .list-article{grid-template-columns:1.5rem minmax(0,1fr) auto;grid-template-areas:"icon source day" "title title title" "actions actions actions";gap:.5rem;}
+      .list-article{grid-template-columns:1.5rem minmax(0,1fr) auto;grid-template-areas:"icon title actions";gap:.5rem;}
       .list-article .list-icon-slot{grid-area:icon;}
-      .list-article .list-source{grid-area:source;white-space:normal;overflow-wrap:anywhere;}
-      .list-article .site-article-day{grid-area:day;}
-      .list-article .site-article-title{grid-area:title;min-width:0;}
+      .list-article .list-source,.list-article .site-article-day{display:none;}
+      .list-article .site-article-title{grid-area:title;min-width:0;margin:0;}
       .list-article .site-article-actions{grid-area:actions;}
     }
 </style>
@@ -1006,12 +1017,16 @@
   .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
   .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
   .site-tool-link:focus-visible { outline-offset:-3px; }
-  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  @media(max-width:48rem) {
+    :root { --header-h:4rem; }
+    .site-header .site-brand-name { display:none; }
+    .site-header .header-inner:has(.site-branding) { flex-wrap:nowrap;gap:.25rem;padding-block:.5rem;min-height:4rem; }
+    .site-header .header-inner > .site-branding { flex-basis:auto;flex-shrink:0; }
+    .site-header .brand .mark { width:1.75rem;height:1.75rem; }
+    .site-header .header-actions { margin-left:auto;gap:.125rem;flex-wrap:nowrap; }
+    .site-tool-switcher > summary { gap:.25rem;padding-inline:.375rem;font-size:.8rem; }
+  }
   @media(max-width:40rem) {
-    :root { --header-h:6.875rem; }
-    .site-header .header-inner:has(.site-branding) { flex-wrap:wrap;gap:.25rem .5rem;padding-block:.5rem; }
-    .site-header .header-inner > .site-branding { flex-basis:100%; }
-    .site-header .header-actions { margin-left:auto; }
     .site-tool-panel { max-height:min(36rem,calc(100dvh - 13rem)); }
     body:not(:has(.section-nav)) main :is([id],.tool-card) { scroll-margin-top:8rem; }
   }
@@ -1428,20 +1443,20 @@
         <div class="rss-primary">
           <div class="rss-field"><label for="search">Search headlines</label><input id="search" type="search" placeholder="Title, description or source" autocomplete="off" spellcheck="false"></div>
           <div class="rss-field"><label for="lastUpdate">Publication period (UTC)</label><select id="lastUpdate"><option value="">All retained</option><option value="0" selected>Today</option><option value="1">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div>
-        </div>
-        <div class="rss-primary">
           <div class="rss-field"><label for="source">Source</label><select id="source"><option value="">All sources</option></select></div>
+          <div class="rss-field"><span class="rss-language-label" id="languageLabel">Langues</span>
           <div class="language-filter" role="group" aria-label="Feed language">
             <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true" aria-label="All languages" title="All languages"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><path d="M2 12h20"/></svg></button>
             <button class="language-option" id="languageEn" type="button" data-lang="EN" aria-pressed="false" aria-label="English" title="English"><img class="flag" src="/flags/en.png" alt="" width="24" height="18"></button>
             <button class="language-option" id="languageFr" type="button" data-lang="FR" aria-pressed="false" aria-label="French" title="French"><img class="flag" src="/flags/fr.png" alt="" width="24" height="18"></button>
           </div>
+          </div>
         </div>
-        <details class="rss-options" id="rssOptions"><summary>Categories and highlighted keywords</summary>
-          <div class="rss-primary"><div class="rss-field"><label for="category">Category</label><select id="category"><option value="">All categories</option></select></div><div class="rss-field"><label for="subcategory">Subcategory</label><select id="subcategory"><option value="">All subcategories</option></select></div></div>
+        <div class="rss-secondary">
+          <div class="rss-field"><label for="category">Category</label><select id="category"><option value="">All categories</option></select></div><div class="rss-field"><label for="subcategory">Subcategory</label><select id="subcategory"><option value="">All subcategories</option></select></div>
           <div class="rss-field"><label for="keywordInput">Highlight keywords</label><input id="keywordInput" type="text" placeholder="Add a keyword and press Enter" autocomplete="off" spellcheck="false"></div>
+        </div>
           <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
-        </details>
         <p class="rss-help">Language filters the configured feed language, not the interface. Favorites and keyword preferences are local to this browser; EN/FR RSS links above are separate subscription feeds.</p>
       </fieldset>
 
@@ -1700,11 +1715,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
       state.restoring = false;
     }
 
-    function updateRssOptions() {
-      const active = Number(Boolean(elements.category.value)) + Number(Boolean(elements.subcategory.value)) + Number(state.keywords.length > 0);
-      document.querySelector("#rssOptions > summary").textContent = `Categories and keywords${active ? " · " + active + " active" : ""}`;
-    }
-
     function formatDate(iso) {
       const date = new Date(iso);
       return !iso || Number.isNaN(date.getTime()) ? "Not recorded" : date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }) + " UTC";
@@ -1853,7 +1863,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
       link.href = item.link;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.title = item.title;
+      link.title = [item.title, item.description].filter(Boolean).join("\n\n");
       if (fillHighlightedTitle(link, item.title, keywordRegex)) li.classList.add("is-highlighted");
 
       const actions = document.createElement("div");
@@ -1882,7 +1892,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
       link.href = item.link;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.title = item.title;
+      link.title = [item.title, item.source, item.description].filter(Boolean).join("\n\n");
       if (fillHighlightedTitle(link, item.title, keywordRegex)) li.classList.add("is-highlighted");
 
       const actions = document.createElement("div");
@@ -1942,6 +1952,11 @@ function matchesPeriod(iso, period, now = Date.now()) {
           if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ block: "start", behavior: "instant" }); }
         });
         card.append(more);
+      } else {
+        const space = document.createElement("div");
+        space.className = "site-card-footer-space";
+        space.setAttribute("aria-hidden", "true");
+        card.append(space);
       }
       return card;
     }
@@ -2002,7 +2017,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
       const more = document.getElementById("rssLoadMore");
       more.hidden = state.viewMode === "list" ? state.visibleItems >= totalArticles : state.visibleGroups >= totalSites;
       more.textContent = state.viewMode === "list" ? `Show ${Math.min(30, totalArticles - state.visibleItems)} more articles` : `Show ${Math.min(12, totalSites - state.visibleGroups)} more source groups`;
-      updateRssOptions();
       if (!state.restoring && state.ready) syncRssUrl();
       elements.siteGrid.setAttribute("aria-busy", "false");
     }

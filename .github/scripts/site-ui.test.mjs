@@ -9,6 +9,16 @@ import { analyticsSnippet, injectAnalytics } from "../../build-seo.mjs";
 const root = new URL("../../", import.meta.url);
 const read = path => readFileSync(new URL(path, root), "utf8");
 const tools = parseToolNavigation(read("tools/index.html"));
+test("mobile headers hide only the site name and keep compact controls on one row", () => {
+  assert.match(siteStyles, /@media\(max-width:48rem\)[\s\S]*?\.site-header \.site-brand-name \{ display:none; \}/);
+  assert.match(siteStyles, /\.header-inner:has\(\.site-branding\) \{ flex-wrap:nowrap;/);
+  assert.match(siteStyles, /\.header-inner > \.site-branding \{ flex-basis:auto;flex-shrink:0;/);
+  assert.match(siteStyles, /\.header-actions \{ margin-left:auto;gap:\.125rem;flex-wrap:nowrap;/);
+  assert.doesNotMatch(siteStyles, /--header-h:6\.875rem|flex-basis:100%/);
+  for (const path of ["index.html", "tools/index.html", "rss-watcher/index.html", "prompts/index.html"]) {
+    assert.ok(read(path).replace(/\r\n/g, "\n").includes(siteStyles), path);
+  }
+});
 test("inline enhancement is idempotent and keeps pages standalone", () => {
   for (const path of ["index.html", "index_fr.html", "tools/index.html", "graph-permissions/index.html", "privacy/index.html", "404.html"]) {
     const route = path === "index.html" ? "/" : "/" + path.replace(/index\.html$/, "");

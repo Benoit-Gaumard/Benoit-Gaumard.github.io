@@ -136,7 +136,7 @@ test("RSS source logos are local, source-specific and visible before titles in b
   assert.match(html, /image\.loading = "eager"/);
   assert.match(html, /slot\.setAttribute\("aria-hidden", "true"\)/);
   assert.match(html, /Icon unavailable for/);
-  assert.match(html, /grid-template-areas:"icon source day"/);
+  assert.match(html, /grid-template-areas:"icon title actions"/);
   assert.doesNotMatch(html, /\.list-article \.list-icon-slot\{display:none/);
   const deploy = readFileSync(join(".github", "workflows", "deploy-hugo.yaml"), "utf8");
   assert.match(deploy, /cp \.\.\/rss-watcher\/source-icons\.json public\/rss-watcher\/source-icons\.json/);
@@ -150,4 +150,20 @@ test("all RSS page scripts compile", () => {
   for (const file of [join("rss-watcher", "index.html"), join("rss-watcher", "activity", "index.html"), join("microsoft-techcommunity-rss-feeds", "index.html")]) {
     for (const [, attrs, code] of readFileSync(file, "utf8").matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) attrs.includes("application/ld+json") ? JSON.parse(code) : new Script(code);
   }
+});
+
+test("RSS watcher has two visible filter rows, uniform scrollable cards and single-line headlines", () => {
+  const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
+  const primary = html.split('<div class="rss-primary">')[1].split('<div class="rss-secondary">')[0];
+  for (const id of ["search", "lastUpdate", "source", "languageAll", "languageEn", "languageFr"]) assert.ok(primary.includes(`id="${id}"`), id);
+  const secondary = html.split('<div class="rss-secondary">')[1].split('id="keywordChips"')[0];
+  for (const id of ["category", "subcategory", "keywordInput"]) assert.ok(secondary.includes(`id="${id}"`), id);
+  assert.doesNotMatch(html, /<details class="rss-options"/);
+  assert.doesNotMatch(html, /rssOptions|updateRssOptions/);
+  assert.match(html, /\.site-grid\{[^}]*grid-auto-rows:32rem/);
+  assert.match(html, /\.site-card\{height:32rem;overflow:hidden;/);
+  assert.match(html, /\.site-card \.site-articles\{[^}]*min-height:0;overflow-y:auto/);
+  assert.match(html, /\.site-article-title\{white-space:nowrap;overflow:hidden;text-overflow:ellipsis/);
+  assert.match(html, /link\.title = \[item\.title, item\.description\]/);
+  assert.match(html, /link\.title = \[item\.title, item\.source, item\.description\]/);
 });

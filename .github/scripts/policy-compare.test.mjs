@@ -11,6 +11,21 @@ const script = html.match(/<script data-compare-script>([\s\S]*?)<\/script>/)[1]
 const helpers = runInNewContext(`${script.slice(script.indexOf('function stableJson('), script.indexOf('async function fetchJson('))}; ({ stableJson, jsonDifferences, memberDifferences, versionDefinition });`);
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test('comparison uses the shared Azure page design and responsive navigation', () => {
+  const reference = read('azure-policies/initiatives-history/index.html');
+  for (const selector of ['news-banner', 'site-header', 'menu-toggle', 'header-links', 'social-link', 'theme-toggle', 'site-footer', 'footer-main']) {
+    assert.ok(html.includes(`class="${selector}`), selector);
+  }
+  for (const value of ['#f5faff', '#0c1420', '#0b6fb8', '#4fa8ea']) {
+    assert.ok(reference.includes(value));
+    assert.ok(html.includes(value));
+  }
+  assert.match(html, /"menu":true,"theme":true,"banner":true/);
+  assert.match(html, /class="compare-sources"/);
+  assert.match(html, /<main id="main" tabindex="-1">/);
+  assert.doesNotMatch(html, /class="history-filter-grid"/);
+});
+
 test('policy JSON differences ignore object order, preserve array order and escape JSON pointer keys', () => {
   assert.equal(helpers.jsonDifferences({ b: 2, a: 1 }, { a: 1, b: 2 }).length, 0);
   const left = { parameters: { x: { defaultValue: false } }, policyRule: { then: { effect: 'Audit' } } };
