@@ -418,8 +418,6 @@
     .workflow-schedule-details code { color: var(--cp-text); }
     .workflow-schedule-details small { display: block; }
     .workflow-error { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; }
-    .workflow-link { align-self: flex-start; display: inline-flex; align-items: center; min-height: 1.5rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
-    .workflow-link:hover { text-decoration: underline; }
 
     .workflow-cards.list-view { grid-template-columns: 1fr; gap: .6rem; }
     .workflow-cards.list-view .workflow-card {
@@ -442,7 +440,6 @@
     .workflow-cards.list-view .workflow-badge, .workflow-cards.list-view .workflow-meta, .workflow-cards.list-view .workflow-error { display: none; }
     .workflow-cards.list-view .workflow-schedule { flex: 0 1 20rem; }
     .workflow-cards.list-view .workflow-note { display: none; }
-    .workflow-cards.list-view .workflow-link { flex: 0 0 auto; align-self: center; white-space: nowrap; }
 
     .site-footer {
       border-top: 1px solid var(--cp-border);
@@ -516,7 +513,6 @@
       .header-inner, main, .footer-inner { width: min(100% - 1rem, 90rem); }
       main { padding-top: 1.75rem; }
       .workflow-toolbar { flex-direction: column; align-items: stretch; gap: .5rem; }
-      .workflow-cards.list-view .workflow-link { display: none; }
       .workflow-meta { grid-template-columns: 1fr; }
       .back-to-top { right: 1rem; bottom: 1rem; }
       .footer-main { grid-template-columns: 1fr; }
@@ -596,7 +592,13 @@
     .workflow-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin:1rem 0;font-size:.85rem;}
     .workflow-controls label{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;}
     .workflow-controls select{min-height:2.75rem;max-width:100%;padding:.5rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);}
-    #refreshButton,.view-toggle-button,.workflow-link{min-height:2.75rem;}
+    #refreshButton,.view-toggle-button{min-height:2.75rem;}
+    .workflow-search{display:grid;gap:.4rem;max-width:36rem;margin-top:1rem;}
+    .workflow-search label{font-size:.9rem;font-weight:600;}
+    .workflow-search input{width:100%;min-width:0;min-height:2.9rem;padding:.5rem .85rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
+    .workflow-search input::placeholder{color:var(--cp-text-muted);opacity:1;}
+    .workflow-search-count{margin:0;color:var(--cp-text-muted);font-size:.85rem;}
+    .workflow-empty{grid-column:1/-1;color:var(--cp-text-muted);}
     #workflowStatus,#workflowError,.workflow-summary{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;}
     #workflowError{padding:1rem;border:1px solid var(--cp-danger);border-radius:8px;color:var(--cp-danger);}
     .workflow-freshness{font-size:.95rem;font-weight:650;line-height:1.5;}
@@ -1023,7 +1025,7 @@
   <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
   <div class="site-tool-panel" id="siteToolPanel">
     <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
-    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">32 tools</p>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">33 tools</p>
     <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Ranking of the latest LLMs from the LMArena leaderboard, with scores, licenses, context windows and prices, refreshed weekly."><a class="site-tool-link" href="/ai-leaderboard/"><span class="site-tool-icon" aria-hidden="true">🏆</span><span class="site-tool-name">AI Leaderboard</span></a></li>
 <li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
 <li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
@@ -1048,6 +1050,7 @@
 <li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
 <li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
 <li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="My library of ready-to-use AI prompts for Azure, IaC and DevOps: fill in the blanks, copy, or open them in ChatGPT, Claude or Perplexity."><a class="site-tool-link" href="/prompts/"><span class="site-tool-icon" aria-hidden="true">💬</span><span class="site-tool-name">Prompts</span></a></li>
 <li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
 <li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
 <li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
@@ -1099,7 +1102,7 @@
           </div>
         </div>
       </div>
-      <div class="workflow-controls"><label><input id="anomalyFirst" type="checkbox" checked> Anomalies first</label><label for="scheduleZone">Schedule timezone</label><select id="scheduleZone"></select></div><p id="workflowStatus" role="status" aria-live="polite"></p><p id="workflowError" role="alert" hidden></p><div class="workflow-cards" id="workflowCards"></div>
+      <div class="workflow-search"><label for="workflowSearch">Search workflows</label><input id="workflowSearch" type="search" placeholder="Name, file or status" autocomplete="off" spellcheck="false"><p id="workflowSearchCount" class="workflow-search-count" role="status" aria-live="polite"></p></div><div class="workflow-controls"><label><input id="anomalyFirst" type="checkbox" checked> Anomalies first</label><label for="scheduleZone">Schedule timezone</label><select id="scheduleZone"></select></div><p id="workflowStatus" role="status" aria-live="polite"></p><p id="workflowError" role="alert" hidden></p><div class="workflow-cards" id="workflowCards"></div>
     </section>
   </main>
 
@@ -1391,7 +1394,7 @@ function workflowRuns(workflow, runs) {
   const WORKFLOWS = JSON.parse(document.getElementById("workflow-catalog").textContent);
   const VIEW_KEY = "workflows-view-mode";
   const state = { loading: false, results: [], view: "cards", anomalyFirst: true, zone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris" };
-  const el = Object.fromEntries(["workflowCards", "refreshButton", "lastChecked", "workflowStatus", "workflowError", "anomalyFirst", "scheduleTimezone", "scheduleZone"].map(id => [id, document.getElementById(id)]));
+  const el = Object.fromEntries(["workflowCards", "refreshButton", "lastChecked", "workflowStatus", "workflowError", "anomalyFirst", "scheduleTimezone", "scheduleZone", "workflowSearch", "workflowSearchCount"].map(id => [id, document.getElementById(id)]));
   function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
   function date(iso) { const value = new Date(iso); return typeof iso !== "string" || Number.isNaN(value.getTime()) ? "Not recorded" : value.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC"; }
   function runStatus(run, error) {
@@ -1412,7 +1415,12 @@ function workflowRuns(workflow, runs) {
   function render() {
     el.workflowCards.replaceChildren();
     el.workflowCards.classList.toggle("list-view", state.view === "list");
-    const results = [...state.results].sort((a, b) => (state.anomalyFirst ? rank(a) - rank(b) : 0) || a.workflow.name.localeCompare(b.workflow.name));
+    const fold = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const terms = fold(el.workflowSearch.value).trim().split(/\s+/).filter(Boolean);
+    const results = state.results.filter(({ workflow, technical, freshness }) => {
+      const haystack = fold([workflow.name, workflow.file, technical.label, freshness.label].join(" "));
+      return terms.every(term => haystack.includes(term));
+    }).sort((a, b) => (state.anomalyFirst ? rank(a) - rank(b) : 0) || a.workflow.name.localeCompare(b.workflow.name));
     results.forEach(result => {
       const { workflow, latest, success, technical, freshness, metadata, apiError } = result;
       const card = node("article", undefined, "workflow-card");
@@ -1447,16 +1455,12 @@ function workflowRuns(workflow, runs) {
       else datasets.append(node("li", metadata?.note || "No published dataset timestamp mapping is available."));
       details.append(datasets);
       card.append(details);
-      const workflowUrl = `https://github.com/${REPO}/actions/workflows/${encodeURIComponent(workflow.file)}`;
-      const link = node("a", latest ? "View latest run on GitHub" : "View workflow on GitHub", "workflow-link");
-      let target = null;
-      try { if (latest?.html_url) target = new URL(latest.html_url); }
-      catch (error) { console.warn("Run link unavailable; the workflow link remains accessible.", error); }
-      link.href = target && target.protocol === "https:" && target.hostname === "github.com" ? target.href : workflowUrl;
-      if (link.href === workflowUrl) link.textContent = "View workflow on GitHub";
-      link.target = "_blank"; link.rel = "noopener noreferrer";
-      card.append(link); el.workflowCards.append(card);
+      el.workflowCards.append(card);
     });
+    if (state.results.length) {
+      el.workflowSearchCount.textContent = terms.length ? `${results.length} of ${state.results.length} workflows` : `${state.results.length} workflows`;
+      if (!results.length) el.workflowCards.append(node("p", "No workflow matches your search.", "workflow-empty"));
+    }
     el.scheduleTimezone.textContent = state.zone;
   }
   async function refresh() {
@@ -1522,6 +1526,8 @@ function workflowRuns(workflow, runs) {
   el.scheduleZone.value = state.zone;
   el.scheduleZone.addEventListener("change", () => { state.zone = el.scheduleZone.value; render(); });
   el.anomalyFirst.addEventListener("change", () => { state.anomalyFirst = el.anomalyFirst.checked; render(); });
+  el.workflowSearch.addEventListener("input", render);
+  el.workflowSearch.addEventListener("keydown", event => { if (event.key === "Escape" && el.workflowSearch.value) { el.workflowSearch.value = ""; render(); } });
   el.refreshButton.addEventListener("click", refresh);
   document.getElementById("currentYear").textContent = new Date().getFullYear();
   const back = document.getElementById("backToTop");

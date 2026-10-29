@@ -42,7 +42,7 @@ function statusRuntime({ datasetStatus, workflowRuns }) {
   const WORKFLOWS = JSON.parse(document.getElementById("workflow-catalog").textContent);
   const VIEW_KEY = "workflows-view-mode";
   const state = { loading: false, results: [], view: "cards", anomalyFirst: true, zone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris" };
-  const el = Object.fromEntries(["workflowCards", "refreshButton", "lastChecked", "workflowStatus", "workflowError", "anomalyFirst", "scheduleTimezone", "scheduleZone"].map(id => [id, document.getElementById(id)]));
+  const el = Object.fromEntries(["workflowCards", "refreshButton", "lastChecked", "workflowStatus", "workflowError", "anomalyFirst", "scheduleTimezone", "scheduleZone", "workflowSearch", "workflowSearchCount"].map(id => [id, document.getElementById(id)]));
   function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
   function date(iso) { const value = new Date(iso); return typeof iso !== "string" || Number.isNaN(value.getTime()) ? "Not recorded" : value.toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) + " UTC"; }
   function runStatus(run, error) {
@@ -63,7 +63,12 @@ function statusRuntime({ datasetStatus, workflowRuns }) {
   function render() {
     el.workflowCards.replaceChildren();
     el.workflowCards.classList.toggle("list-view", state.view === "list");
-    const results = [...state.results].sort((a, b) => (state.anomalyFirst ? rank(a) - rank(b) : 0) || a.workflow.name.localeCompare(b.workflow.name));
+    const fold = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const terms = fold(el.workflowSearch.value).trim().split(/\s+/).filter(Boolean);
+    const results = state.results.filter(({ workflow, technical, freshness }) => {
+      const haystack = fold([workflow.name, workflow.file, technical.label, freshness.label].join(" "));
+      return terms.every(term => haystack.includes(term));
+    }).sort((a, b) => (state.anomalyFirst ? rank(a) - rank(b) : 0) || a.workflow.name.localeCompare(b.workflow.name));
     results.forEach(result => {
       const { workflow, latest, success, technical, freshness, metadata, apiError } = result;
       const card = node("article", undefined, "workflow-card");
@@ -98,16 +103,12 @@ function statusRuntime({ datasetStatus, workflowRuns }) {
       else datasets.append(node("li", metadata?.note || "No published dataset timestamp mapping is available."));
       details.append(datasets);
       card.append(details);
-      const workflowUrl = `https://github.com/${REPO}/actions/workflows/${encodeURIComponent(workflow.file)}`;
-      const link = node("a", latest ? "View latest run on GitHub" : "View workflow on GitHub", "workflow-link");
-      let target = null;
-      try { if (latest?.html_url) target = new URL(latest.html_url); }
-      catch (error) { console.warn("Run link unavailable; the workflow link remains accessible.", error); }
-      link.href = target && target.protocol === "https:" && target.hostname === "github.com" ? target.href : workflowUrl;
-      if (link.href === workflowUrl) link.textContent = "View workflow on GitHub";
-      link.target = "_blank"; link.rel = "noopener noreferrer";
-      card.append(link); el.workflowCards.append(card);
+      el.workflowCards.append(card);
     });
+    if (state.results.length) {
+      el.workflowSearchCount.textContent = terms.length ? `${results.length} of ${state.results.length} workflows` : `${state.results.length} workflows`;
+      if (!results.length) el.workflowCards.append(node("p", "No workflow matches your search.", "workflow-empty"));
+    }
     el.scheduleTimezone.textContent = state.zone;
   }
   async function refresh() {
@@ -173,6 +174,8 @@ function statusRuntime({ datasetStatus, workflowRuns }) {
   el.scheduleZone.value = state.zone;
   el.scheduleZone.addEventListener("change", () => { state.zone = el.scheduleZone.value; render(); });
   el.anomalyFirst.addEventListener("change", () => { state.anomalyFirst = el.anomalyFirst.checked; render(); });
+  el.workflowSearch.addEventListener("input", render);
+  el.workflowSearch.addEventListener("keydown", event => { if (event.key === "Escape" && el.workflowSearch.value) { el.workflowSearch.value = ""; render(); } });
   el.refreshButton.addEventListener("click", refresh);
   document.getElementById("currentYear").textContent = new Date().getFullYear();
   const back = document.getElementById("backToTop");
@@ -186,6 +189,7 @@ export function upgradeWorkflowStatus(source) {
   html = html.replace('Last refreshed: <strong id="lastChecked">', 'Status lookup completed: <strong id="lastChecked">');
   html = html.replace(/<p class="intro-text">[\s\S]*?<\/p>/, '<p class="intro-text">Check scheduled GitHub Actions runs separately from the age of published data. Refresh only reads statuses and timestamp metadata; it does not run collectors or update datasets.</p>');
   if (!html.includes('id="workflowStatus"')) html = html.replace('<div class="workflow-cards" id="workflowCards">', '<div class="workflow-controls"><label><input id="anomalyFirst" type="checkbox" checked> Anomalies first</label><label for="scheduleZone">Schedule timezone</label><select id="scheduleZone"></select></div><p id="workflowStatus" role="status" aria-live="polite"></p><p id="workflowError" role="alert" hidden></p><div class="workflow-cards" id="workflowCards">');
+  if (!html.includes('id="workflowSearch"')) html = html.replace('<div class="workflow-controls">', '<div class="workflow-search"><label for="workflowSearch">Search workflows</label><input id="workflowSearch" type="search" placeholder="Name, file or status" autocomplete="off" spellcheck="false"><p id="workflowSearchCount" class="workflow-search-count" role="status" aria-live="polite"></p></div><div class="workflow-controls">');
   const script = `<script data-workflow-status>(()=>{\n${[cadenceHours, datasetStatus, workflowRuns].map(fn => fn.toString()).join("\n")}\n(${statusRuntime.toString()})({datasetStatus,workflowRuns});\n})();</script>`;
   if (html.includes("<script data-workflow-status>")) html = html.replace(/<script data-workflow-status>[\s\S]*?<\/script>/, () => script);
   else {
@@ -197,7 +201,13 @@ export function upgradeWorkflowStatus(source) {
     .workflow-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin:1rem 0;font-size:.85rem;}
     .workflow-controls label{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;}
     .workflow-controls select{min-height:2.75rem;max-width:100%;padding:.5rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);}
-    #refreshButton,.view-toggle-button,.workflow-link{min-height:2.75rem;}
+    #refreshButton,.view-toggle-button{min-height:2.75rem;}
+    .workflow-search{display:grid;gap:.4rem;max-width:36rem;margin-top:1rem;}
+    .workflow-search label{font-size:.9rem;font-weight:600;}
+    .workflow-search input{width:100%;min-width:0;min-height:2.9rem;padding:.5rem .85rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
+    .workflow-search input::placeholder{color:var(--cp-text-muted);opacity:1;}
+    .workflow-search-count{margin:0;color:var(--cp-text-muted);font-size:.85rem;}
+    .workflow-empty{grid-column:1/-1;color:var(--cp-text-muted);}
     #workflowStatus,#workflowError,.workflow-summary{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;}
     #workflowError{padding:1rem;border:1px solid var(--cp-danger);border-radius:8px;color:var(--cp-danger);}
     .workflow-freshness{font-size:.95rem;font-weight:650;line-height:1.5;}

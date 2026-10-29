@@ -10,10 +10,10 @@ const cards = [...html.matchAll(/<article class="tool-card" data-tool-id="([^"]+
 const script = html.match(/<script data-tools-script>([\s\S]*?)<\/script>/)[1];
 const families = new Set(runInNewContext(script.match(/const familyNames = new Map\([\s\S]*?\n    \]\);/)[0] + '\nArray.from(familyNames.keys());'));
 
-test('all 32 tools remain static links without nested controls', () => {
+test('all 33 tools remain static links without nested controls', () => {
   assert.doesNotMatch(html, /Open tool|tool-arrow/);
-  assert.equal(cards.length, 32);
-  assert.equal(new Set(cards.map(card => card[1])).size, 32);
+  assert.equal(cards.length, 33);
+  assert.equal(new Set(cards.map(card => card[1])).size, 33);
   for (const [, id, , content] of cards) {
     const link = content.match(/<a class="tool-link" href="([^"]+)" aria-labelledby="([^"]+)">([\s\S]*?)<\/a>/);
     assert.ok(link, id);

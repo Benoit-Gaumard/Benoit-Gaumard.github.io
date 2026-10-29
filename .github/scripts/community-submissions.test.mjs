@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { copyFileSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -181,4 +181,24 @@ test("submission CSV build rejects files with a different schema", (t) => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /unexpected CSV header/);
+});
+
+test("fold-submissions merges submission files into the reference CSV and deletes them", async (t) => {
+  const directory = temporaryDirectory(t);
+  const submissions = join(directory, "submissions");
+  mkdirSync(submissions);
+  const header = "title,url,description,category,rating,isHighlighted,dateAdded";
+  const csv = join(directory, "links.csv");
+  writeFileSync(csv, `${header}\r\nExisting,https://example.com/,,AI,0,false,2026-01-01\r\n`);
+  writeFileSync(join(submissions, ".gitkeep"), "");
+  writeFileSync(join(submissions, "issue-2.csv"), `${header}\n"New, site",https://new.example/,,AI,0,false,2026-01-02\n`);
+  writeFileSync(join(submissions, "issue-1.csv"), `${header}\nDup,http://www.example.com,,AI,0,false,2026-01-02\n`);
+  const { foldSubmissions } = await import(pathToFileURL(resolve(".github/scripts/fold-submissions.mjs")).href);
+  const result = foldSubmissions(csv, submissions);
+  assert.deepEqual(result, { added: ["issue-2.csv"], skipped: ["issue-1.csv"] });
+  assert.equal(
+    readFileSync(csv, "utf8"),
+    `${header}\r\nExisting,https://example.com/,,AI,0,false,2026-01-01\r\n"New, site",https://new.example/,,AI,0,false,2026-01-02\r\n`,
+  );
+  assert.deepEqual(readdirSync(submissions), [".gitkeep"]);
 });

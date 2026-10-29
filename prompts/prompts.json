@@ -1,0 +1,239 @@
+{
+  "count": 11,
+  "categories": [
+    "Azure",
+    "Development",
+    "DevOps",
+    "Infrastructure as Code",
+    "Monitoring",
+    "Operations",
+    "Productivity",
+    "Prompting",
+    "Writing"
+  ],
+  "prompts": [
+    {
+      "id": "azure-well-architected-review",
+      "title": "Azure Well-Architected review",
+      "description": "Get a structured review of an Azure architecture against the five Well-Architected pillars, with prioritized fixes.",
+      "category": "Azure",
+      "tags": [
+        "architecture",
+        "waf",
+        "review",
+        "reliability",
+        "security"
+      ],
+      "models": "Any LLM",
+      "date": "2026-07-01",
+      "featured": true,
+      "variables": [
+        "Workload description",
+        "SLA target",
+        "Architecture details"
+      ],
+      "body": "You are a senior Microsoft Azure solutions architect. Review the architecture below against the five pillars of the Azure Well-Architected Framework: Reliability, Security, Cost Optimization, Operational Excellence and Performance Efficiency.\n\nContext:\n- Workload: {{Workload description}}\n- Business criticality and SLA target: {{SLA target}}\n- Architecture (services, regions, network, identity): {{Architecture details}}\n\nFor each pillar:\n1. List what is already good.\n2. List the risks, each with a severity (High, Medium, Low) and the reason.\n3. Recommend concrete fixes that name the Azure service, SKU or feature to use.\n\nFinish with a table of the top 5 actions, ranked by impact versus effort. Ask me questions first if a critical piece of information is missing. Do not invent services that do not exist."
+    },
+    {
+      "id": "bicep-module-generator",
+      "title": "Bicep module generator",
+      "description": "Generate a clean, parameterized and secure-by-default Bicep module for any Azure resource.",
+      "category": "Infrastructure as Code",
+      "tags": [
+        "bicep",
+        "iac",
+        "azure",
+        "avm"
+      ],
+      "models": "Any LLM, GitHub Copilot",
+      "date": "2026-07-01",
+      "featured": true,
+      "variables": [
+        "Azure resource",
+        "Naming convention"
+      ],
+      "body": "Act as an Azure infrastructure-as-code expert. Write a production-ready Bicep module that deploys {{Azure resource}}.\n\nRequirements:\n- Target API version: the latest stable one you know of. Say which one you used.\n- Parameters with @description, sensible defaults and @allowed values where relevant.\n- Secure by default: private networking when the service supports it, TLS 1.2 minimum, managed identity, public network access disabled, diagnostic settings sent to a Log Analytics workspace passed as a parameter.\n- Naming follows this convention: {{Naming convention}}\n- Tags passed as an object parameter.\n- Outputs: resource ID, name and any endpoint a consumer would need.\n\nFollow the Azure Verified Modules (AVM) style. After the code, give a short example of how to call the module from a main.bicep file, and list the security choices you made."
+    },
+    {
+      "id": "improve-my-prompt",
+      "title": "Improve my prompt",
+      "description": "A meta-prompt that rewrites your prompt to be clearer, more specific and more reliable.",
+      "category": "Prompting",
+      "tags": [
+        "meta",
+        "prompt-engineering",
+        "clarity"
+      ],
+      "models": "Any LLM",
+      "date": "2026-07-01",
+      "featured": true,
+      "variables": [
+        "Your prompt",
+        "What you want to get"
+      ],
+      "body": "You are a prompt engineering expert. Improve the prompt below so that an LLM gives a more accurate, useful and consistent answer.\n\nMy prompt:\n\"\"\"\n{{Your prompt}}\n\"\"\"\n\nGoal of the prompt: {{What you want to get}}\n\nSteps:\n1. Diagnose the prompt in a few bullets: ambiguity, missing context, missing output format, missing constraints.\n2. Ask me up to 3 questions only if they would change the result a lot.\n3. Write the improved prompt. Include a role, context, the task, constraints, the expected output format and an example if useful. Mark anything I must fill in as a placeholder wrapped in double curly braces.\n4. Explain in 3 bullets what you changed and why."
+    },
+    {
+      "id": "kql-query-builder",
+      "title": "KQL query builder",
+      "description": "Turn a plain-language question into a commented KQL query for Log Analytics, Microsoft Sentinel or Azure Resource Graph.",
+      "category": "Monitoring",
+      "tags": [
+        "kql",
+        "log-analytics",
+        "sentinel",
+        "resource-graph"
+      ],
+      "models": "Any LLM",
+      "date": "2026-07-01",
+      "featured": true,
+      "variables": [
+        "Target (Log Analytics, Sentinel or Resource Graph)",
+        "Your question",
+        "Tables or columns"
+      ],
+      "body": "You are a Kusto Query Language (KQL) expert. Write a query for {{Target (Log Analytics, Sentinel or Resource Graph)}} that answers this question:\n\n\"{{Your question}}\"\n\nKnown tables or columns (optional): {{Tables or columns}}\n\nRequirements:\n- Filter on time early (default: the last 24 hours) and project only the useful columns.\n- Comment each step with //.\n- Prefer summarize and render for anything that is a trend.\n- If a table name is a guess, say so and suggest how to check it.\n\nAfter the query, explain in three bullet points how it works and one way to turn it into an alert rule."
+    },
+    {
+      "id": "azure-cost-optimization",
+      "title": "Azure cost optimization plan",
+      "description": "Analyze an Azure cost export and get a prioritized FinOps action plan with estimated savings.",
+      "category": "Azure",
+      "tags": [
+        "finops",
+        "cost",
+        "azure",
+        "optimization"
+      ],
+      "models": "Any LLM",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "Cost data",
+        "Context (production or not, working hours, growth)"
+      ],
+      "body": "Act as an Azure FinOps practitioner. Here is a summary of my monthly Azure spend (service, resource, SKU, cost, usage):\n\n{{Cost data}}\n\nEnvironment context: {{Context (production or not, working hours, growth)}}\n\nProduce:\n1. The top cost drivers and whether each looks normal.\n2. Quick wins (rightsizing, shutting down idle resources, deleting orphaned disks and IPs, cheaper storage tiers).\n3. Commitment options (Reservations, Savings Plan, Azure Hybrid Benefit) with the break-even reasoning.\n4. Architecture changes worth considering for the long term.\n5. A table of actions with estimated monthly savings, effort and risk.\n\nState your assumptions clearly. Do not recommend anything that would reduce production reliability without flagging it."
+    },
+    {
+      "id": "incident-postmortem",
+      "title": "Blameless incident postmortem",
+      "description": "Turn raw incident notes into a clear, blameless postmortem with a timeline, root cause and follow-up actions.",
+      "category": "Operations",
+      "tags": [
+        "incident",
+        "postmortem",
+        "sre",
+        "rca"
+      ],
+      "models": "Any LLM",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "Incident notes"
+      ],
+      "body": "You are an experienced SRE. Write a blameless postmortem from the raw notes below.\n\nRaw notes, chat logs and timestamps:\n{{Incident notes}}\n\nUse this structure:\n1. Summary (3 sentences: what happened, impact, how it was fixed)\n2. Impact (users, services, duration, SLA or SLO consumed)\n3. Timeline in UTC as a table (time, event, source)\n4. Root cause, using the \"5 whys\" method\n5. What went well and what went wrong\n6. Action items as a table (action, owner role, priority, type: prevent, detect or mitigate)\n\nStay factual and blameless: describe systems and processes, never people. Mark clearly any point you had to assume."
+    },
+    {
+      "id": "terraform-to-bicep",
+      "title": "Convert Terraform to Bicep",
+      "description": "Translate Terraform (azurerm) code into equivalent, idiomatic Bicep and flag what does not map one to one.",
+      "category": "Infrastructure as Code",
+      "tags": [
+        "terraform",
+        "bicep",
+        "migration",
+        "iac"
+      ],
+      "models": "Any LLM, GitHub Copilot",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "Terraform code"
+      ],
+      "body": "Convert the following Terraform code that uses the azurerm provider into idiomatic Bicep.\n\n```hcl\n{{Terraform code}}\n```\n\nRules:\n- Map each azurerm resource to its Microsoft.* resource type and a stable API version.\n- Turn variables into Bicep parameters (keep descriptions and defaults) and locals into variables.\n- Use symbolic references instead of hard-coded resource IDs, and existing resources where Terraform used data sources.\n- Replace count and for_each with Bicep loops.\n\nThen add a section named \"Not a 1:1 mapping\" that lists anything that behaves differently (state, lifecycle blocks, provider-only features) and how to handle it."
+    },
+    {
+      "id": "github-actions-workflow",
+      "title": "GitHub Actions workflow",
+      "description": "Generate a secure GitHub Actions workflow with OIDC to Azure, least-privilege permissions and caching.",
+      "category": "DevOps",
+      "tags": [
+        "github-actions",
+        "ci-cd",
+        "oidc",
+        "azure"
+      ],
+      "models": "Any LLM, GitHub Copilot",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "What the workflow should do",
+        "Stack (language, framework, IaC)",
+        "Trigger (push, pull request, schedule, manual)"
+      ],
+      "body": "Write a GitHub Actions workflow (YAML) for this need: {{What the workflow should do}}\n\nTechnology stack: {{Stack (language, framework, IaC)}}\nTrigger: {{Trigger (push, pull request, schedule, manual)}}\n\nRequirements:\n- Authenticate to Azure with OpenID Connect (azure/login with federated credentials), never with a client secret.\n- Set top-level permissions to the minimum needed and widen them per job only when required.\n- Pin third-party actions to a full commit SHA and add a comment with the version.\n- Use concurrency to avoid overlapping deployments, and cache dependencies.\n- Use separate build and deploy jobs, with a GitHub environment that needs approval for production.\n\nAfter the YAML, list the secrets and variables to create and the Azure role assignments needed."
+    },
+    {
+      "id": "linkedin-post-from-article",
+      "title": "LinkedIn post from an article",
+      "description": "Turn a technical article or release note into an engaging, non-cringe LinkedIn post.",
+      "category": "Writing",
+      "tags": [
+        "linkedin",
+        "social",
+        "writing",
+        "content"
+      ],
+      "models": "Any LLM",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "Output language",
+        "Article text or link summary",
+        "Audience (for example, Azure architects, developers, IT managers)"
+      ],
+      "body": "Write a LinkedIn post in {{Output language}} based on the content below.\n\n{{Article text or link summary}}\n\nAudience: {{Audience (for example, Azure architects, developers, IT managers)}}\n\nGuidelines:\n- First line: a hook under 15 words that makes people click \"see more\", with no clickbait.\n- 3 to 5 short paragraphs or bullets with the key takeaways and why they matter in practice.\n- One personal insight or opinion, written in the first person.\n- End with an open question to invite comments.\n- At most 3 hashtags and 2 emoji. No buzzwords like \"game changer\" or \"revolutionize\".\n- Under 1,300 characters.\n\nThen give 2 alternative hooks."
+    },
+    {
+      "id": "meeting-notes-to-actions",
+      "title": "Meeting notes to action items",
+      "description": "Turn a messy transcript or notes into a crisp summary, decisions and an owner-based action list.",
+      "category": "Productivity",
+      "tags": [
+        "meetings",
+        "summary",
+        "actions",
+        "teams"
+      ],
+      "models": "Any LLM, Microsoft 365 Copilot",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "Meeting topic",
+        "Notes or transcript",
+        "Output language"
+      ],
+      "body": "Here are the notes or the transcript of a meeting about {{Meeting topic}}:\n\n{{Notes or transcript}}\n\nWrite, in {{Output language}}:\n1. A 5-line executive summary.\n2. The decisions made (one bullet each).\n3. A table of action items: action, owner, due date (write \"TBD\" when unknown).\n4. Open questions and risks.\n5. A short follow-up email I can send to attendees.\n\nDo not invent decisions or owners that are not in the notes."
+    },
+    {
+      "id": "code-review-assistant",
+      "title": "Thorough code review",
+      "description": "Ask for a senior-level code review focused on bugs, security and maintainability, not style nitpicks.",
+      "category": "Development",
+      "tags": [
+        "code-review",
+        "security",
+        "quality",
+        "copilot"
+      ],
+      "models": "Any LLM, GitHub Copilot",
+      "date": "2026-07-01",
+      "featured": false,
+      "variables": [
+        "Language",
+        "Code to review"
+      ],
+      "body": "Act as a senior {{Language}} engineer doing a code review. Review the code below.\n\n```\n{{Code to review}}\n```\n\nFocus on, in this order:\n1. Bugs and logic errors (edge cases, null handling, concurrency, off-by-one errors).\n2. Security issues (injection, secrets, authorization, unsafe deserialization).\n3. Performance problems that matter at scale.\n4. Maintainability: naming, duplication, overly complex functions.\n\nIgnore pure formatting and style preferences. For each finding, give the line or snippet, why it is a problem, a severity and a suggested fix as code. If the code is good, say so briefly instead of inventing problems."
+    }
+  ]
+}

@@ -113,6 +113,34 @@ test('semantic version and member-count sorting are retained', () => {
   assert.equal(helpers.sortDefinitions(sample, 'policyCount', 'asc')[0].name, 'a');
 });
 
+test('list tables expose sortable columns suited to each catalogue and preserve detail actions', () => {
+  assert.match(script, /\[\["displayName", "Name"\], \["category", "Category"\], \["effect", "Effect"\], \["mode", "Mode"\], \["version", "Version"\]\]/);
+  assert.match(script, /\[\["displayName", "Name"\], \["category", "Category"\], \["policyCount", "Policies"\], \["version", "Version"\]\]/);
+  assert.match(script, /currentView === "list" && shown\.length \? \[renderTable\(shown\)\] : shown\.map\(renderEntry\)/);
+  assert.match(script, /th\.setAttribute\("aria-sort"/);
+  assert.match(script, /state\.sortDir = state\.sortKey === key && state\.sortDir === "asc" \? "desc" : "asc"/);
+  assert.match(script, /inner\.append\(nameToggle\(row\), favoriteButton\(row\)\)/);
+  assert.match(script, /detailCell\.colSpan = columns\.length/);
+  assert.match(script, /if \(!detailRow\.hidden\) definitionDetail\(row, detail\)/);
+  assert.match(script, /wrap\.tabIndex = 0/);
+});
+
+test('all table columns sort the complete filtered catalogue before pagination', () => {
+  for (const [rows, keys] of [
+    [policies.policies, ['displayName', 'category', 'effect', 'mode', 'version']],
+    [initiatives.initiatives, ['displayName', 'category', 'policyCount', 'version']],
+  ]) {
+    for (const key of keys) {
+      const original = rows.map(row => row.name);
+      const ascending = helpers.sortDefinitions(rows, key, 'asc');
+      const descending = helpers.sortDefinitions(rows, key, 'desc');
+      assert.deepEqual(Array.from(ascending, row => row.name), Array.from(descending, row => row.name).reverse(), key);
+      assert.deepEqual(rows.map(row => row.name), original, 'sorting must not mutate source data');
+    }
+  }
+  assert.ok(script.indexOf('sortDefinitions(state.filtered, state.sortKey, state.sortDir)') < script.indexOf('sorted.slice(0, state.visible)'));
+});
+
 test('each tab owns labelled filters, options and an accessible result count', () => {
   for (const prefix of ['policies', 'initiatives']) {
     assert.match(html, new RegExp(`id="${prefix}FilterToggle"[^>]*aria-controls="${prefix}Filters"`));

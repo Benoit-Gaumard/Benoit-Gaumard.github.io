@@ -1255,6 +1255,49 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-policies/policies-history/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-policy-stats>
+    .policy-stats{display:grid;gap:1rem;margin:0 0 2rem;}
+    .policy-stats h2{margin:0;font-size:1.35rem;}
+    .policy-stats h3{margin:0;font-size:1rem;}
+    .stats-help{margin:0;color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;max-width:52rem;}
+    .stats-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem;}
+    .stat-card,.stats-panel{min-width:0;padding:1.25rem;background:var(--cp-panel-strong);border:1px solid var(--cp-border);border-radius:12px;box-shadow:var(--cp-shadow);}
+    .stat-card h3{color:var(--cp-text-muted);font-size:.85rem;font-weight:600;}
+    .stat-value{margin:.35rem 0 .15rem;font-size:2.25rem;font-weight:750;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--cp-text);}
+    .stat-value.is-deprecated{color:var(--cp-warning);}
+    .stat-note{margin:0;color:var(--cp-text-muted);font-size:.85rem;}
+    .stats-panel{display:grid;gap:.85rem;align-content:start;}
+    .stats-panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;}
+    .stats-toggle{display:inline-flex;gap:.25rem;padding:.25rem;border:1px solid var(--cp-border);border-radius:10px;background:var(--cp-surface);}
+    .stats-toggle button{min-height:2.75rem;min-width:4.5rem;padding:.4rem .9rem;border:0;border-radius:7px;background:transparent;color:var(--cp-text-muted);font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+    .stats-toggle button:hover{color:var(--cp-text);}
+    .stats-toggle button[aria-pressed="true"]{background:var(--cp-accent-soft);color:var(--cp-accent);}
+    .stats-toggle button:focus-visible,.stats-more:focus-visible,.stats-data summary:focus-visible{outline:3px solid var(--cp-accent);outline-offset:2px;}
+    .stats-chart{min-height:13.75rem;}
+    .stats-svg{display:block;max-width:100%;overflow:visible;}
+    .stats-grid-line{stroke:var(--cp-border);stroke-width:1;}
+    .stats-axis{fill:var(--cp-text-muted);font-size:.75rem;}
+    .stats-value-label{fill:var(--cp-text);font-size:.8rem;font-weight:700;}
+    .stats-line{fill:none;stroke:var(--cp-accent);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;}
+    .stats-area{fill:var(--cp-accent-soft);stroke:none;}
+    .stats-point{fill:var(--cp-surface);stroke:var(--cp-accent);stroke-width:2.5;}
+    .stats-data summary{min-height:2.75rem;display:flex;align-items:center;cursor:pointer;color:var(--cp-link);font-size:.85rem;}
+    .stats-table-wrap{overflow-x:auto;}
+    .stats-data table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums;}
+    .stats-data th,.stats-data td{padding:.45rem .6rem;border-bottom:1px solid var(--cp-border);text-align:right;white-space:nowrap;}
+    .stats-data th:first-child{text-align:left;}
+    .stats-data thead th{color:var(--cp-text-muted);font-weight:600;}
+    .stats-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:1rem;align-items:start;}
+    .bar-list{display:grid;gap:.5rem;margin:0;padding:0;list-style:none;}
+    .bar-list li{display:grid;grid-template-columns:minmax(0,11rem) minmax(3rem,1fr) 3.5rem;align-items:center;gap:.75rem;font-size:.85rem;}
+    .bar-list li[hidden]{display:none;}
+    .bar-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .bar-track{height:.6rem;border-radius:999px;background:var(--cp-surface-soft);overflow:hidden;}
+    .bar-fill{display:block;height:100%;border-radius:inherit;background:var(--cp-accent);}
+    .bar-value{text-align:right;font-weight:650;font-variant-numeric:tabular-nums;}
+    .stats-more{justify-self:start;}
+    @media(max-width:30rem){.bar-list li{grid-template-columns:minmax(0,1fr) 3rem;row-gap:.25rem;}.bar-track{grid-column:1/-1;grid-row:2;}.stat-value{font-size:1.9rem;}}
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1284,7 +1327,7 @@
   <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
   <div class="site-tool-panel" id="siteToolPanel">
     <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
-    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">32 tools</p>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">33 tools</p>
     <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Ranking of the latest LLMs from the LMArena leaderboard, with scores, licenses, context windows and prices, refreshed weekly."><a class="site-tool-link" href="/ai-leaderboard/"><span class="site-tool-icon" aria-hidden="true">🏆</span><span class="site-tool-name">AI Leaderboard</span></a></li>
 <li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
 <li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
@@ -1309,6 +1352,7 @@
 <li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
 <li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
 <li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="My library of ready-to-use AI prompts for Azure, IaC and DevOps: fill in the blanks, copy, or open them in ChatGPT, Claude or Perplexity."><a class="site-tool-link" href="/prompts/"><span class="site-tool-icon" aria-hidden="true">💬</span><span class="site-tool-name">Prompts</span></a></li>
 <li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
 <li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
 <li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
@@ -1345,6 +1389,55 @@
       </p>
       <p class="history-help">An empty log is not proof of no past changes. Retention and tracked fields limit this history.</p>
     </section>
+
+    <!-- policy-stats:start -->
+    <section class="policy-stats" id="policyStats" aria-labelledby="statsHeading" aria-busy="true">
+      <h2 id="statsHeading">Policies at a glance</h2>
+      <p class="stats-help" id="statsSource">Loading catalogue statistics&hellip;</p>
+      <div class="stats-cards">
+        <article class="stat-card">
+          <h3>Total Policies</h3>
+          <p class="stat-value" id="statTotal">&ndash;</p>
+          <p class="stat-note" id="statTotalNote"></p>
+        </article>
+        <article class="stat-card">
+          <h3>Deprecated Policies</h3>
+          <p class="stat-value is-deprecated" id="statDeprecated">&ndash;</p>
+          <p class="stat-note" id="statDeprecatedNote"></p>
+        </article>
+      </div>
+      <article class="stats-panel">
+        <div class="stats-panel-head">
+          <h3 id="chartTitle">Policies Over Time by Month</h3>
+          <div class="stats-toggle" role="group" aria-label="Group the chart by">
+            <button type="button" data-stats-period="month" aria-pressed="true">Month</button>
+            <button type="button" data-stats-period="year" aria-pressed="false">Year</button>
+          </div>
+        </div>
+        <div class="stats-chart" id="statsChart"></div>
+        <details class="stats-data">
+          <summary>Show chart data</summary>
+          <div class="stats-table-wrap">
+            <table>
+              <thead><tr><th scope="col">Period</th><th scope="col">Total</th><th scope="col">Deprecated</th><th scope="col">Net change</th><th scope="col">Snapshot</th></tr></thead>
+              <tbody id="statsTableBody"></tbody>
+            </table>
+          </div>
+        </details>
+      </article>
+        <div class="stats-split">
+          <article class="stats-panel">
+            <h3>Policies by Category</h3>
+            <ol class="bar-list" id="byCategory"></ol>
+            <button class="history-action stats-more" id="categoryMore" type="button" aria-controls="byCategory" aria-expanded="false" hidden>Show all categories</button>
+          </article>
+          <article class="stats-panel">
+            <h3>Policies by Effect</h3>
+            <ol class="bar-list" id="byEffect"></ol>
+          </article>
+        </div>
+    </section>
+    <!-- policy-stats:end -->
 
     <section class="history-log" aria-label="Policy change log">
       <noscript><p>JavaScript is needed to filter this log. <a href="../policy-changes.json">Download the source log</a> (includes policies and initiatives), or <a href="../">open Azure Policies</a>.</p></noscript>
@@ -1976,5 +2069,165 @@
     })();
   </script>
 
+<script data-policy-stats>(function statsRuntime(config) {
+  const $ = id => document.getElementById(id);
+  const root = $("policyStats");
+  if (!root) return;
+  const number = value => Number(value).toLocaleString("en-US");
+  const monthLabel = key => new Date(`${key}-01T00:00:00Z`).toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+  const dayLabel = iso => new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  const svgNode = (tag, attrs, text) => {
+    const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.entries(attrs).forEach(([name, value]) => element.setAttribute(name, value));
+    if (text !== undefined) element.textContent = text;
+    return element;
+  };
+  const state = { period: "month", data: null };
+
+  function periods(snapshots) {
+    const groups = new Map();
+    snapshots.forEach(point => groups.set(state.period === "month" ? point.date.slice(0, 7) : point.date.slice(0, 4), point));
+    let previous = null;
+    return [...groups].map(([key, point]) => {
+      const row = { key, label: state.period === "month" ? monthLabel(key) : key, ...point, change: previous ? point.total - previous.total : null };
+      previous = point;
+      return row;
+    });
+  }
+
+  function niceStep(span) {
+    const raw = span / 4, power = 10 ** Math.floor(Math.log10(raw || 1));
+    return [1, 2, 2.5, 5, 10].map(step => step * power).find(step => step >= raw) || power * 10;
+  }
+
+  function drawChart(rows) {
+    const host = $("statsChart");
+    host.replaceChildren();
+    if (!rows.length) { host.append(Object.assign(document.createElement("p"), { className: "stats-help", textContent: "No snapshot is available yet." })); return; }
+    const width = Math.max(280, host.clientWidth || 640), height = width < 480 ? 220 : 260;
+    const pad = { top: 28, right: 20, bottom: 36, left: width < 480 ? 44 : 56 };
+    const values = rows.map(row => row.total);
+    let min = Math.min(...values), max = Math.max(...values);
+    const margin = Math.max(5, Math.round((max - min) * 0.25));
+    const step = niceStep(max - min + margin * 2);
+    min = Math.floor((min - margin) / step) * step; max = Math.ceil((max + margin) / step) * step;
+    if (min < 0) min = 0;
+    const x = index => rows.length === 1 ? pad.left + (width - pad.left - pad.right) / 2 : pad.left + index * (width - pad.left - pad.right) / (rows.length - 1);
+    const y = value => pad.top + (max - value) * (height - pad.top - pad.bottom) / (max - min || 1);
+    const first = rows[0], last = rows.at(-1);
+    const svg = svgNode("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img", "aria-labelledby": "statsChartTitle statsChartDesc", class: "stats-svg" });
+    svg.append(svgNode("title", { id: "statsChartTitle" }, $("chartTitle").textContent));
+    svg.append(svgNode("desc", { id: "statsChartDesc" }, rows.length === 1
+      ? `${number(first.total)} ${config.noun} in ${first.label}.`
+      : `${number(first.total)} ${config.noun} in ${first.label}, ${number(last.total)} in ${last.label}.`));
+    for (let tick = min; tick <= max; tick += step) {
+      svg.append(svgNode("line", { x1: pad.left, x2: width - pad.right, y1: y(tick), y2: y(tick), class: "stats-grid-line" }));
+      svg.append(svgNode("text", { x: pad.left - 8, y: y(tick) + 4, "text-anchor": "end", class: "stats-axis" }, number(tick)));
+    }
+    const points = rows.map((row, index) => [x(index), y(row.total)]);
+    if (points.length > 1) {
+      const line = points.map(([px, py], index) => `${index ? "L" : "M"}${px},${py}`).join(" ");
+      svg.append(svgNode("path", { d: `${line} L${points.at(-1)[0]},${y(min)} L${points[0][0]},${y(min)} Z`, class: "stats-area" }));
+      svg.append(svgNode("path", { d: line, class: "stats-line" }));
+    }
+    const labelEvery = Math.max(1, Math.ceil(rows.length / Math.floor((width - pad.left - pad.right) / 70)));
+    rows.forEach((row, index) => {
+      const [px, py] = points[index];
+      const point = svgNode("circle", { cx: px, cy: py, r: 4.5, class: "stats-point" });
+      point.append(svgNode("title", {}, `${row.label}: ${number(row.total)} ${config.noun}${row.change === null ? "" : ` (${row.change >= 0 ? "+" : ""}${number(row.change)})`}`));
+      svg.append(point);
+      if (index % labelEvery === 0 || index === rows.length - 1) {
+        const edge = rows.length > 1 && index === 0 ? ["start", -6] : rows.length > 1 && index === rows.length - 1 ? ["end", 6] : ["middle", 0];
+        svg.append(svgNode("text", { x: px + edge[1], y: py - 12, "text-anchor": edge[0], class: "stats-value-label" }, number(row.total)));
+        svg.append(svgNode("text", { x: px + edge[1], y: height - pad.bottom + 22, "text-anchor": edge[0], class: "stats-axis" }, row.label));
+      }
+    });
+    host.append(svg);
+  }
+
+  function drawTable(rows) {
+    const body = $("statsTableBody");
+    body.replaceChildren(...rows.map(row => {
+      const tr = document.createElement("tr");
+      [row.label, number(row.total), number(row.deprecated), row.change === null ? "—" : `${row.change >= 0 ? "+" : ""}${number(row.change)}`, dayLabel(row.date)]
+        .forEach((value, index) => { const cell = document.createElement(index ? "td" : "th"); if (!index) cell.scope = "row"; cell.textContent = value; tr.append(cell); });
+      return tr;
+    }));
+  }
+
+  function bars(listId, entries, limit) {
+    const list = $(listId);
+    if (!list) return;
+    const max = entries[0]?.[1] || 1;
+    list.replaceChildren(...entries.map(([label, count], index) => {
+      const item = document.createElement("li");
+      if (limit && index >= limit) item.hidden = true;
+      const name = Object.assign(document.createElement("span"), { className: "bar-label", textContent: label });
+      const track = Object.assign(document.createElement("span"), { className: "bar-track" });
+      const fill = Object.assign(document.createElement("span"), { className: "bar-fill" });
+      fill.style.width = `${Math.max(1, (count / max) * 100)}%`;
+      track.append(fill);
+      const value = Object.assign(document.createElement("span"), { className: "bar-value", textContent: number(count) });
+      item.append(name, track, value);
+      return item;
+    }));
+  }
+
+  function renderChart() {
+    const rows = periods(state.data.snapshots);
+    $("chartTitle").textContent = `${config.title} Over Time by ${state.period === "month" ? "Month" : "Year"}`;
+    root.querySelectorAll("[data-stats-period]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.statsPeriod === state.period)));
+    drawChart(rows);
+    drawTable(rows);
+  }
+
+  function render(stats) {
+    const data = state.data = stats[config.kind];
+    const first = data.snapshots[0];
+    $("statTotal").textContent = number(data.total);
+    $("statTotalNote").textContent = first && first.date < String(data.asOf || "").slice(0, 10)
+      ? `${data.total - first.total >= 0 ? "+" : ""}${number(data.total - first.total)} since ${dayLabel(first.date)}`
+      : "Current built-in catalogue";
+    $("statDeprecated").textContent = number(data.deprecated);
+    $("statDeprecatedNote").textContent = `${data.total ? ((data.deprecated / data.total) * 100).toFixed(1) : "0"}% of the catalogue`;
+    $("statsSource").textContent = `Catalogue scanned ${data.asOf ? dayLabel(data.asOf) : "on an unrecorded date"} (UTC). Azure does not publish creation dates, so the trend is built from weekly catalogue snapshots${first ? ` since ${dayLabel(first.date)}` : ""}: each period shows its last snapshot.`;
+    bars("byCategory", data.byCategory || [], 10);
+    bars("byEffect", data.byEffect || []);
+    const more = $("categoryMore");
+    if (more) {
+      const total = (data.byCategory || []).length;
+      more.hidden = total <= 10;
+      more.textContent = `Show all ${number(total)} categories`;
+      more.setAttribute("aria-expanded", "false");
+    }
+    renderChart();
+    root.setAttribute("aria-busy", "false");
+  }
+
+  root.querySelectorAll("[data-stats-period]").forEach(button => button.addEventListener("click", () => {
+    state.period = button.dataset.statsPeriod;
+    if (state.data) renderChart();
+  }));
+  $("categoryMore")?.addEventListener("click", event => {
+    const button = event.currentTarget, expanded = button.getAttribute("aria-expanded") === "true";
+    [...$("byCategory").children].forEach((item, index) => { item.hidden = expanded && index >= 10; });
+    button.setAttribute("aria-expanded", String(!expanded));
+    button.textContent = expanded ? `Show all ${number($("byCategory").children.length)} categories` : "Show top 10 only";
+  });
+  let width = 0;
+  new ResizeObserver(entries => {
+    const next = Math.round(entries[0].contentRect.width);
+    if (state.data && Math.abs(next - width) > 8) { width = next; renderChart(); }
+  }).observe($("statsChart"));
+
+  fetch("../policy-stats.json", { cache: "no-cache" })
+    .then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
+    .then(render)
+    .catch(error => {
+      console.warn("Catalogue statistics unavailable.", error);
+      root.setAttribute("aria-busy", "false");
+      $("statsSource").textContent = "Catalogue statistics could not be loaded. The change log below is unaffected.";
+    });
+})({"kind":"policies","title":"Policies","noun":"policies"});</script>
 </body>
 </html>

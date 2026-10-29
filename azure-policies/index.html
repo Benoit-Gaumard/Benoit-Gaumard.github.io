@@ -323,7 +323,28 @@
     .filters-toggle { flex: 0 0 auto; }
     .filter-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; margin-bottom: .75rem; }
     .filter-grid { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
-    .filter-field { min-width: 0; }
+    .filter-field { position: relative; min-width: 0; }
+    .multi-trigger { display: flex; align-items: center; justify-content: space-between; gap: .5rem; width: 100%; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); font: inherit; text-align: left; cursor: pointer; }
+    .multi-trigger:hover { border-color: var(--cp-accent); }
+    .multi-trigger:focus-visible, .multi-popover input:focus-visible, .multi-option input:focus-visible, .multi-actions button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 2px; }
+    .multi-trigger:disabled { cursor: wait; opacity: .7; }
+    .multi-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .multi-trigger[data-active="true"] .multi-value { color: var(--cp-link); font-weight: 650; }
+    .multi-trigger svg { flex: 0 0 auto; transition: transform .15s ease-out; }
+    .multi-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .multi-popover { position: absolute; z-index: 40; top: calc(100% + .35rem); left: 0; right: 0; min-width: min(18rem, 90vw); display: grid; gap: .5rem; padding: .6rem; border: 1px solid var(--cp-border-strong); border-radius: 10px; background: var(--cp-panel-strong); box-shadow: var(--cp-shadow); }
+    .multi-popover input[type="search"] { width: 100%; min-width: 0; height: 2.75rem; padding: .4rem .65rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; }
+    .multi-popover input[type="search"]::placeholder { color: var(--cp-text-muted); opacity: 1; }
+    .multi-actions { display: flex; justify-content: space-between; gap: .5rem; }
+    .multi-actions button { min-height: 2.75rem; padding: .25rem .4rem; border: 0; background: none; color: var(--cp-link); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+    .multi-actions button:hover { text-decoration: underline; }
+    .multi-options { max-height: 17rem; margin: 0; padding: 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; }
+    .multi-option label { display: flex; align-items: center; gap: .6rem; min-height: 2.75rem; padding: .25rem .5rem; border-radius: 6px; cursor: pointer; font-size: .9rem; font-weight: 400; margin: 0; }
+    .multi-option label:hover { background: var(--cp-surface-soft); }
+    .multi-option input { flex: 0 0 auto; width: 1.1rem; height: 1.1rem; margin: 0; accent-color: var(--cp-accent); }
+    .multi-option .multi-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    .multi-option .multi-count { color: var(--cp-text-muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+    .multi-empty { margin: 0; padding: .5rem; color: var(--cp-text-muted); font-size: .85rem; }
     .filter-options { grid-column: 1 / -1; margin-top: .5rem; }
     .filter-options:not([open]) { grid-column: 2; grid-row: 2; }
     .filter-options summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); cursor: pointer; font-size: .85rem; }
@@ -457,6 +478,23 @@
 
     .policy-results { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; align-items: start; }
     .policy-results.is-cards { grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr)); }
+    .definition-table-wrap { min-width: 0; overflow-x: auto; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); }
+    .definition-table { width: 100%; min-width: 48rem; border-collapse: collapse; font-size: .85rem; text-align: left; }
+    .definition-table caption { padding: .75rem 1rem; text-align: left; color: var(--cp-text-muted); font-size: .8rem; }
+    .definition-table th, .definition-table td { padding: .65rem .85rem; border-bottom: 1px solid var(--cp-border); vertical-align: top; }
+    .definition-table thead th { background: var(--cp-surface-soft); white-space: nowrap; }
+    .definition-table tbody > tr:last-child > * { border-bottom: 0; }
+    .definition-table .definition-row:hover > * { background: var(--cp-surface-soft); }
+    .definition-table .definition-name { width: 48%; min-width: 18rem; font-weight: 400; }
+    .definition-table .definition-name-inner { display: flex; align-items: flex-start; gap: .6rem; }
+    .definition-table .name-toggle { flex: 1; min-width: 0; }
+    .definition-table .fav-button { flex: 0 0 auto; }
+    .definition-table .definition-detail { border-top: 0; padding: .5rem; }
+    .definition-table .definition-version { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .table-sort { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; border: 0; padding: .25rem 0; background: none; color: var(--cp-text); font: inherit; font-weight: 650; cursor: pointer; }
+    .table-sort:hover, .definition-table th[aria-sort="ascending"] .table-sort, .definition-table th[aria-sort="descending"] .table-sort { color: var(--cp-link); }
+    .table-sort:focus-visible, .definition-table-wrap:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: -3px; }
+    .table-sort-icon { font-size: 1rem; }
     .policy-entry {
       display: flex;
       flex-direction: column;
@@ -1103,7 +1141,7 @@
   <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
   <div class="site-tool-panel" id="siteToolPanel">
     <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
-    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">32 tools</p>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">33 tools</p>
     <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Ranking of the latest LLMs from the LMArena leaderboard, with scores, licenses, context windows and prices, refreshed weekly."><a class="site-tool-link" href="/ai-leaderboard/"><span class="site-tool-icon" aria-hidden="true">🏆</span><span class="site-tool-name">AI Leaderboard</span></a></li>
 <li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
 <li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
@@ -1128,6 +1166,7 @@
 <li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
 <li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
 <li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="My library of ready-to-use AI prompts for Azure, IaC and DevOps: fill in the blanks, copy, or open them in ChatGPT, Claude or Perplexity."><a class="site-tool-link" href="/prompts/"><span class="site-tool-icon" aria-hidden="true">💬</span><span class="site-tool-name">Prompts</span></a></li>
 <li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
 <li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
 <li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
@@ -1218,9 +1257,9 @@
         </div>
         <div class="filter-panel" id="policiesFilters" hidden>
           <div class="filter-grid">
-            <div class="filter-field"><label for="policiesCategoryFilter">Category</label><select id="policiesCategoryFilter"><option value="">All categories</option></select></div>
-            <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter"><option value="">All effects</option></select></div>
-            <div class="filter-field"><label for="policiesModeFilter">Mode</label><select id="policiesModeFilter"><option value="">All modes</option></select></div>
+            <div class="filter-field"><label for="policiesCategoryFilter">Category</label><select id="policiesCategoryFilter" multiple hidden></select></div>
+            <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter" multiple hidden></select></div>
+            <div class="filter-field"><label for="policiesModeFilter">Mode</label><select id="policiesModeFilter" multiple hidden></select></div>
           </div>
           <details class="filter-options" id="policiesOptions">
             <summary>Options</summary>
@@ -1257,7 +1296,7 @@
         </div>
         <div class="filter-panel" id="initiativesFilters" hidden>
           <div class="filter-grid">
-            <div class="filter-field"><label for="initiativesCategoryFilter">Category</label><select id="initiativesCategoryFilter"><option value="">All categories</option></select></div>
+            <div class="filter-field"><label for="initiativesCategoryFilter">Category</label><select id="initiativesCategoryFilter" multiple hidden></select></div>
           </div>
           <details class="filter-options" id="initiativesOptions">
             <summary>Options</summary>
@@ -1672,7 +1711,10 @@
         if (criteria.hidePreview && lifecycle === "preview") return false;
         if (criteria.hideDeprecated && lifecycle === "deprecated") return false;
         if (criteria.favoritesOnly && !criteria.favorites.has(row.name)) return false;
-        if (Object.entries(criteria.filters).some(([key, value]) => value && row[key] !== value)) return false;
+        if (Object.entries(criteria.filters).some(([key, value]) => {
+          const wanted = [].concat(value || []).filter(Boolean);
+          return wanted.length && !wanted.includes(row[key]);
+        })) return false;
         return !query || normalize(`${row.displayName} ${row.description || ""} ${row.category || ""} ${row.name} ${row.policyDefinitionId || ""}`).includes(query);
       });
     }
@@ -1688,6 +1730,138 @@
       });
     }
 
+    function selectedValues(select) {
+      return [...select.selectedOptions].map(option => option.value).filter(Boolean);
+    }
+
+    // Searchable checkbox dropdown layered over a hidden <select multiple>, which stays the source of truth.
+    function multiSelect(select, label) {
+      const plural = label.toLowerCase().replace(/y$/, "ie") + "s";
+      const field = select.closest(".filter-field");
+      const labelNode = field.querySelector("label");
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.id = `${select.id}Button`;
+      trigger.className = "multi-trigger";
+      trigger.setAttribute("aria-haspopup", "true");
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.setAttribute("aria-controls", `${select.id}Popover`);
+      const valueText = Object.assign(document.createElement("span"), { className: "multi-value", id: `${select.id}Value` });
+      trigger.append(valueText);
+      trigger.insertAdjacentHTML("beforeend", '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>');
+      labelNode.htmlFor = trigger.id;
+      labelNode.id = `${select.id}Label`;
+      trigger.setAttribute("aria-labelledby", `${labelNode.id} ${valueText.id}`);
+
+      const popover = Object.assign(document.createElement("div"), { className: "multi-popover", id: `${select.id}Popover`, hidden: true });
+      popover.setAttribute("role", "group");
+      popover.setAttribute("aria-label", `${label} options`);
+      const search = Object.assign(document.createElement("input"), { type: "search", placeholder: `Search ${plural}...`, autocomplete: "off", spellcheck: false });
+      search.setAttribute("aria-label", `Search ${plural}`);
+      const actions = Object.assign(document.createElement("div"), { className: "multi-actions" });
+      const selectShown = Object.assign(document.createElement("button"), { type: "button", textContent: "Select shown" });
+      const clearAll = Object.assign(document.createElement("button"), { type: "button", textContent: "Clear" });
+      actions.append(selectShown, clearAll);
+      const list = Object.assign(document.createElement("ul"), { className: "multi-options" });
+      const empty = Object.assign(document.createElement("p"), { className: "multi-empty", hidden: true });
+      empty.setAttribute("role", "status");
+      popover.append(search, actions, list, empty);
+      field.append(trigger, popover);
+
+      const boxes = () => [...list.querySelectorAll("input[type=checkbox]")];
+      const shownBoxes = () => boxes().filter(box => !box.closest("li").hidden);
+      const emit = () => select.dispatchEvent(new Event("change", { bubbles: true }));
+
+      function sync() {
+        const chosen = new Set(selectedValues(select));
+        boxes().forEach(box => { box.checked = chosen.has(box.value); });
+        const values = [...chosen];
+        valueText.textContent = !values.length ? `All ${plural}` : values.length === 1 ? values[0] : `${values.length} ${plural} selected`;
+        trigger.dataset.active = String(values.length > 0);
+        trigger.title = values.join(", ");
+      }
+
+      function filterList() {
+        const query = normalize(search.value.trim());
+        let shown = 0;
+        list.querySelectorAll("li").forEach(item => {
+          item.hidden = Boolean(query) && !normalize(item.dataset.value).includes(query);
+          if (!item.hidden) shown++;
+        });
+        empty.hidden = shown > 0;
+        empty.textContent = shown ? "" : `No ${label.toLowerCase()} matches "${search.value.trim()}".`;
+        selectShown.disabled = !shown;
+      }
+
+      let lastCounts = new Map();
+      function refresh(counts = lastCounts) {
+        lastCounts = counts;
+        list.replaceChildren(...[...select.options].filter(option => option.value).map(option => {
+          const item = Object.assign(document.createElement("li"), { className: "multi-option" });
+          item.dataset.value = option.value;
+          const row = document.createElement("label");
+          const box = Object.assign(document.createElement("input"), { type: "checkbox", value: option.value });
+          const name = Object.assign(document.createElement("span"), { className: "multi-name", textContent: option.textContent });
+          row.append(box, name);
+          if (counts.has(option.value)) row.append(Object.assign(document.createElement("span"), { className: "multi-count", textContent: counts.get(option.value).toLocaleString("en-US") }));
+          item.append(row);
+          return item;
+        }));
+        trigger.disabled = !list.children.length;
+        filterList();
+        sync();
+      }
+
+      function open() {
+        popover.hidden = false;
+        trigger.setAttribute("aria-expanded", "true");
+        search.focus({ preventScroll: true });
+      }
+      function close(returnFocus = false) {
+        if (popover.hidden) return;
+        popover.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+        search.value = "";
+        filterList();
+        if (returnFocus) trigger.focus({ preventScroll: true });
+      }
+
+      trigger.addEventListener("click", () => (popover.hidden ? open() : close()));
+      search.addEventListener("input", filterList);
+      list.addEventListener("change", event => {
+        const option = [...select.options].find(item => item.value === event.target.value);
+        if (option) option.selected = event.target.checked;
+        sync();
+        emit();
+      });
+      selectShown.addEventListener("click", () => {
+        const shown = new Set(shownBoxes().map(box => box.value));
+        [...select.options].forEach(option => { if (shown.has(option.value)) option.selected = true; });
+        sync();
+        emit();
+      });
+      clearAll.addEventListener("click", () => {
+        [...select.options].forEach(option => { option.selected = false; });
+        sync();
+        emit();
+        search.focus({ preventScroll: true });
+      });
+      popover.addEventListener("keydown", event => {
+        if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); close(true); return; }
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+        const items = shownBoxes();
+        if (!items.length) return;
+        event.preventDefault();
+        const index = items.indexOf(document.activeElement);
+        const next = event.key === "ArrowDown" ? (index < 0 ? 0 : Math.min(index + 1, items.length - 1)) : index <= 0 ? -1 : index - 1;
+        (next < 0 ? search : items[next]).focus();
+      });
+      document.addEventListener("pointerdown", event => { if (!field.contains(event.target)) close(); });
+      field.addEventListener("focusout", event => { if (event.relatedTarget && !field.contains(event.relatedTarget)) close(); });
+      refresh();
+      return { sync, refresh, close };
+    }
+
     function createBrowser(config) {
       const prefix = config.key;
       const node = suffix => document.getElementById(prefix + suffix);
@@ -1700,7 +1874,10 @@
       };
       const el = {
         panel: node("Panel"), controls: node("Controls"), search: node("Search"),
-        filters: config.filters.map(([key, suffix, label]) => ({ key, label, select: node(suffix) })),
+        filters: config.filters.map(([key, suffix, label]) => {
+          const select = node(suffix);
+          return { key, label, select, widget: multiSelect(select, label) };
+        }),
         favoritesOnly: node("FavoritesOnly"), hidePreview: node("HidePreview"), hideDeprecated: node("HideDeprecated"),
         favCount: node("FavCount"), filterToggle: node("FilterToggle"), filterPanel: node("Filters"),
         options: node("Options"), summary: node("ActiveFilters"), clear: node("Clear"),
@@ -1715,7 +1892,7 @@
 
       function criteria() {
         return {
-          query: el.search.value, filters: Object.fromEntries(el.filters.map(filter => [filter.key, filter.select.value])),
+          query: el.search.value, filters: Object.fromEntries(el.filters.map(filter => [filter.key, selectedValues(filter.select)])),
           hidePreview: el.hidePreview.checked, hideDeprecated: el.hideDeprecated.checked,
           favoritesOnly: el.favoritesOnly.checked, favorites: state.favorites,
         };
@@ -1725,7 +1902,9 @@
         const values = [];
         if (el.search.value.trim()) values.push({ label: `Search: ${el.search.value.trim()}`, clear: () => { el.search.value = ""; } });
         el.filters.forEach(filter => {
-          if (filter.select.value) values.push({ label: `${filter.label}: ${filter.select.value}`, clear: () => { filter.select.value = ""; } });
+          [...filter.select.selectedOptions].filter(option => option.value).forEach(option => {
+            values.push({ label: `${filter.label}: ${option.value}`, clear: () => { option.selected = false; } });
+          });
         });
         [
           [el.favoritesOnly, "Favorites only"], [el.hideDeprecated, "Deprecated hidden"], [el.hidePreview, "Preview hidden"],
@@ -1764,25 +1943,30 @@
         const optionsCount = [el.favoritesOnly, el.hidePreview, el.hideDeprecated].filter(control => control.checked).length;
         el.options.querySelector("summary").textContent = optionsCount ? `Options · ${optionsCount} active` : "Options";
         el.favCount.textContent = `(${state.favorites.size})`;
+        el.filters.forEach(filter => filter.widget.sync());
         el.clear.hidden = !filters.length;
         syncPanel();
       }
 
       function populateFilters() {
-        el.filters.forEach(({ key, select, label }) => {
-          const values = [...new Set(state.rows.map(row => row[key]).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-          select.replaceChildren(new Option(values.length ? `All ${label.toLowerCase()} values` : `${label} not reported`, ""));
-          values.forEach(value => select.add(new Option(value, value)));
-          select.disabled = !values.length;
+        el.filters.forEach(({ key, select, widget }) => {
+          const counts = new Map();
+          state.rows.forEach(row => { if (row[key]) counts.set(row[key], (counts.get(row[key]) || 0) + 1); });
+          const values = [...counts.keys()].sort((a, b) => a.localeCompare(b));
+          select.replaceChildren(...values.map(value => new Option(value, value)));
+          widget.refresh(counts);
         });
       }
 
       function restore(params) {
         el.search.value = params.get(el.search.id) || "";
-        el.filters.forEach(({ select }) => {
-          const value = params.get(select.id) || "";
-          if (value && ![...select.options].some(option => option.value === value)) select.add(new Option(`${value} (not in dataset)`, value));
-          select.value = value;
+        el.filters.forEach(({ select, widget }) => {
+          const wanted = params.getAll(select.id).filter(Boolean);
+          wanted.forEach(value => {
+            if (![...select.options].some(option => option.value === value)) select.add(new Option(`${value} (not in dataset)`, value));
+          });
+          [...select.options].forEach(option => { option.selected = wanted.includes(option.value); });
+          widget.refresh();
         });
         el.favoritesOnly.checked = params.get(el.favoritesOnly.id) === "1";
         el.hideDeprecated.checked = params.has(el.hideDeprecated.id) ? params.get(el.hideDeprecated.id) === "1" : true;
@@ -1796,9 +1980,11 @@
 
       function writeParams(params) {
         if (state.status !== "ready") return;
-        [el.search, ...el.filters.map(filter => filter.select)].forEach(control => {
-          params.delete(control.id);
-          if (control.value) params.set(control.id, control.value);
+        params.delete(el.search.id);
+        if (el.search.value) params.set(el.search.id, el.search.value);
+        el.filters.forEach(({ select }) => {
+          params.delete(select.id);
+          selectedValues(select).forEach(value => params.append(select.id, value));
         });
         params.delete(el.favoritesOnly.id);
         if (el.favoritesOnly.checked) params.set(el.favoritesOnly.id, "1");
@@ -1879,14 +2065,8 @@
         host.append(description, metadata, actions, prefix === "policies" ? jsonPanel(row) : memberPanel(row));
       }
 
-      function renderEntry(row) {
-        const article = document.createElement("article");
-        article.className = "policy-entry";
-        article.dataset.definitionId = row.name;
+      function nameToggle(row) {
         const index = state.indices.get(row.name);
-        const head = document.createElement("div");
-        head.className = "policy-entry-head";
-        const heading = document.createElement("h3");
         const toggle = document.createElement("button");
         const open = state.openId === row.name;
         toggle.type = "button";
@@ -1907,7 +2087,19 @@
           const target = findEntry(row.name)?.querySelector(".name-toggle");
           (target || el.search).focus({ preventScroll: true });
         });
-        heading.append(toggle);
+        return toggle;
+      }
+
+      function renderEntry(row) {
+        const article = document.createElement("article");
+        article.className = "policy-entry";
+        article.dataset.definitionId = row.name;
+        const index = state.indices.get(row.name);
+        const open = state.openId === row.name;
+        const head = document.createElement("div");
+        head.className = "policy-entry-head";
+        const heading = document.createElement("h3");
+        heading.append(nameToggle(row));
         head.append(heading, favoriteButton(row));
         const meta = document.createElement("div");
         meta.className = "policy-meta";
@@ -1949,6 +2141,86 @@
         return article;
       }
 
+      function renderTable(rows) {
+        const columns = prefix === "policies"
+          ? [["displayName", "Name"], ["category", "Category"], ["effect", "Effect"], ["mode", "Mode"], ["version", "Version"]]
+          : [["displayName", "Name"], ["category", "Category"], ["policyCount", "Policies"], ["version", "Version"]];
+        const wrap = document.createElement("div");
+        wrap.className = "definition-table-wrap";
+        wrap.tabIndex = 0;
+        wrap.setAttribute("role", "region");
+        wrap.setAttribute("aria-label", `${prefix === "policies" ? "Policies" : "Initiatives"} table, scroll horizontally for more columns`);
+        const table = document.createElement("table");
+        table.className = "definition-table";
+        const caption = document.createElement("caption");
+        caption.textContent = "Select a column heading to sort. Select a name to open its definition.";
+        const thead = document.createElement("thead");
+        const headers = document.createElement("tr");
+        columns.forEach(([key, label]) => {
+          const th = document.createElement("th");
+          th.scope = "col";
+          th.setAttribute("aria-sort", state.sortKey === key ? (state.sortDir === "asc" ? "ascending" : "descending") : "none");
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "table-sort";
+          button.dataset.sortKey = key;
+          button.append(document.createTextNode(label));
+          const icon = document.createElement("span");
+          icon.className = "table-sort-icon";
+          icon.setAttribute("aria-hidden", "true");
+          icon.textContent = state.sortKey === key ? (state.sortDir === "asc" ? "\u2191" : "\u2193") : "\u2195";
+          button.append(icon);
+          button.setAttribute("aria-label", `Sort by ${label}, ${state.sortKey === key && state.sortDir === "asc" ? "descending" : "ascending"}`);
+          button.addEventListener("click", () => {
+            state.sortDir = state.sortKey === key && state.sortDir === "asc" ? "desc" : "asc";
+            state.sortKey = key;
+            render();
+            syncUrl();
+            el.results.querySelector(`[data-sort-key="${key}"]`).focus({ preventScroll: true });
+          });
+          th.append(button);
+          headers.append(th);
+        });
+        thead.append(headers);
+        const tbody = document.createElement("tbody");
+        rows.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.className = "definition-row";
+          tr.dataset.definitionId = row.name;
+          columns.forEach(([key]) => {
+            const cell = document.createElement(key === "displayName" ? "th" : "td");
+            if (key === "displayName") {
+              cell.scope = "row";
+              cell.className = "definition-name";
+              const inner = document.createElement("div");
+              inner.className = "definition-name-inner";
+              inner.append(nameToggle(row), favoriteButton(row));
+              cell.append(inner);
+            } else if (key === "effect" && row.effect) cell.append(effectBadge(row.effect));
+            else {
+              const value = key === "policyCount" ? row.policyCount ?? row.policies?.length : row[key];
+              cell.textContent = value == null || value === "" ? "Not reported" : typeof value === "number" ? value.toLocaleString("en-US") : value;
+              if (key === "version") cell.className = "definition-version";
+            }
+            tr.append(cell);
+          });
+          const detailRow = document.createElement("tr");
+          detailRow.hidden = state.openId !== row.name;
+          const detailCell = document.createElement("td");
+          detailCell.colSpan = columns.length;
+          const detail = document.createElement("div");
+          detail.className = "definition-detail";
+          detail.id = `${prefix}-detail-${state.indices.get(row.name)}`;
+          if (!detailRow.hidden) definitionDetail(row, detail);
+          detailCell.append(detail);
+          detailRow.append(detailCell);
+          tbody.append(tr, detailRow);
+        });
+        table.append(caption, thead, tbody);
+        wrap.append(table);
+        return wrap;
+      }
+
       function findEntry(id) {
         return [...el.panel.querySelectorAll("[data-definition-id]")].find(entry => entry.dataset.definitionId === id);
       }
@@ -1968,7 +2240,7 @@
         const sorted = sortDefinitions(state.filtered, state.sortKey, state.sortDir);
         const shown = sorted.slice(0, state.visible);
         el.results.classList.toggle("is-cards", currentView === "cards");
-        el.results.replaceChildren(...shown.map(renderEntry));
+        el.results.replaceChildren(...(currentView === "list" && shown.length ? [renderTable(shown)] : shown.map(renderEntry)));
         if (!shown.length) {
           const empty = document.createElement("div");
           empty.className = "empty-state";
@@ -2019,7 +2291,7 @@
       function resetFilters() {
         clearTimeout(searchTimer);
         el.search.value = "";
-        el.filters.forEach(({ select }) => { select.value = ""; });
+        el.filters.forEach(({ select, widget }) => { [...select.options].forEach(option => { option.selected = false; }); widget.close(); });
         el.favoritesOnly.checked = el.hidePreview.checked = el.hideDeprecated.checked = false;
         el.search.focus({ preventScroll: true });
         applyFilter();

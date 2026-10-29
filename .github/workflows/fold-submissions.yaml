@@ -1,0 +1,55 @@
+name: Fold Community Submissions
+
+# Community submission PRs add one submissions/issue-N.csv file each (conflict-free).
+# Once merged on main, fold them into the reference CSV and delete them, so the
+# reference CSV (e.g. favorite-links/favorite-links.csv) always holds every entry.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'favorite-links/submissions/issue-*.csv'
+      - 'friends-websites/submissions/issue-*.csv'
+      - 'microsoft-portals/submissions/issue-*.csv'
+      - 'rss-watcher/submissions/issue-*.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fold-submissions
+  cancel-in-progress: false
+
+jobs:
+  fold:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fold submissions into reference CSVs
+        run: |
+          node .github/scripts/fold-submissions.mjs \
+            favorite-links/favorite-links.csv favorite-links/submissions \
+            friends-websites/friends-websites.csv friends-websites/submissions \
+            microsoft-portals/portals-urls.csv microsoft-portals/submissions \
+            rss-watcher/rss-feeds.csv rss-watcher/submissions
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A favorite-links friends-websites microsoft-portals rss-watcher
+          if git diff --cached --quiet; then
+            echo "Nothing to fold."
+          else
+            git commit -m "chore: fold community submissions into reference CSVs"
+            git pull --rebase
+            git push
+          fi
