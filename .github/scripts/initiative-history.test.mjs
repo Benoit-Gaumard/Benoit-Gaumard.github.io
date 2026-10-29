@@ -137,3 +137,13 @@ test('inline scripts, unique IDs and the collector check are wired for deploymen
   const workflow = readFileSync(new URL('.github/workflows/azure-policies-updates.yaml', root), 'utf8');
   assert.ok(workflow.indexOf('initiative-history.test.ps1') < workflow.indexOf('name: Fetch latest Azure Policies'));
 });
+test('initiative category chart includes every initiative and remains repeatable', async () => {
+  const { buildStats, injectStats } = await import('../../azure-policies/policy-stats.mjs');
+  const page = readFileSync(new URL('../../azure-policies/initiatives-history/index.html', import.meta.url), 'utf8');
+  assert.ok(page.includes('Initiatives by Category'));
+  assert.equal(page.split('id="byCategory"').length - 1, 1);
+  assert.ok(page.includes('id="categoryMore"'));
+  const stats = buildStats().initiatives;
+  assert.equal(stats.byCategory.reduce((sum, [, count]) => sum + count, 0), stats.total);
+  assert.equal(injectStats(page, 'initiatives'), page);
+});

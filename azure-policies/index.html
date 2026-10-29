@@ -346,9 +346,7 @@
     .multi-option .multi-count { color: var(--cp-text-muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
     .multi-empty { margin: 0; padding: .5rem; color: var(--cp-text-muted); font-size: .85rem; }
     .filter-options { grid-column: 1 / -1; margin-top: .5rem; }
-    .filter-options:not([open]) { grid-column: 2; grid-row: 2; }
-    .filter-options summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); cursor: pointer; font-size: .85rem; }
-    .option-fields { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+    .option-fields { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-bottom: .75rem; }
     .filter-help { margin: .5rem 0; max-width: 65ch; color: var(--cp-text-muted); font-size: .8rem; line-height: 1.5; }
     .filter-help a { display: inline-flex; align-items: center; min-height: 2.75rem; }
     .sort-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; font-size: .85rem; }
@@ -1201,6 +1199,7 @@
         <span>Source: <a id="sourceLink" href="https://learn.microsoft.com/en-us/powershell/module/az.resources/get-azpolicydefinition" target="_blank" rel="noopener">Get-AzPolicyDefinition</a></span>
         <a href="policies-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Policies history</a>
         <a href="initiatives-history/"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg> Initiatives history</a>
+        <a href="compare/">Compare policies / initiatives</a>
       </p>
     </section>
 
@@ -1255,22 +1254,21 @@
           </div>
           <button class="policy-action filters-toggle" id="policiesFilterToggle" type="button" aria-expanded="false" aria-controls="policiesFilters">Filters · 2 active</button>
         </div>
+        <div class="option-fields" role="group" aria-label="Policy visibility filters">
+          <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
+          <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated" checked> Hide deprecated</label>
+          <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview" checked> Hide preview</label>
+        </div>
         <div class="filter-panel" id="policiesFilters" hidden>
           <div class="filter-grid">
             <div class="filter-field"><label for="policiesCategoryFilter">Category</label><select id="policiesCategoryFilter" multiple hidden></select></div>
             <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter" multiple hidden></select></div>
             <div class="filter-field"><label for="policiesModeFilter">Mode</label><select id="policiesModeFilter" multiple hidden></select></div>
           </div>
-          <details class="filter-options" id="policiesOptions">
-            <summary>Options</summary>
-            <div class="option-fields">
-              <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
-              <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated" checked> Hide deprecated</label>
-              <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview" checked> Hide preview</label>
-            </div>
+          <div class="filter-options">
             <p class="filter-help">Preview and deprecated definitions are hidden initially. Reset all filters shows the complete catalogue. Favorites stay in this browser.</p>
             <div class="sort-controls"><label for="policiesSort">Sort by</label><select id="policiesSort"></select><button class="policy-action" id="policiesSortDirection" type="button">Ascending</button></div>
-          </details>
+          </div>
           <div class="filter-summary" id="policiesActiveFilters" aria-label="Active policy filters"></div>
           <div class="browser-actions">
             <button class="policy-action" id="policiesClear" type="button">Reset all filters</button>
@@ -1294,20 +1292,19 @@
           </div>
           <button class="policy-action filters-toggle" id="initiativesFilterToggle" type="button" aria-expanded="false" aria-controls="initiativesFilters">Filters · 2 active</button>
         </div>
+        <div class="option-fields" role="group" aria-label="Initiative visibility filters">
+          <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated" checked> Hide deprecated</label>
+          <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview" checked> Hide preview</label>
+        </div>
         <div class="filter-panel" id="initiativesFilters" hidden>
           <div class="filter-grid">
             <div class="filter-field"><label for="initiativesCategoryFilter">Category</label><select id="initiativesCategoryFilter" multiple hidden></select></div>
           </div>
-          <details class="filter-options" id="initiativesOptions">
-            <summary>Options</summary>
-            <div class="option-fields">
-              <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
-              <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated" checked> Hide deprecated</label>
-              <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview" checked> Hide preview</label>
-            </div>
+          <div class="filter-options">
             <p class="filter-help">Favorites stay in this browser. Reset all filters also clears the preview and deprecated exclusions.</p>
             <div class="sort-controls"><label for="initiativesSort">Sort by</label><select id="initiativesSort"></select><button class="policy-action" id="initiativesSortDirection" type="button">Ascending</button></div>
-          </details>
+          </div>
           <div class="filter-summary" id="initiativesActiveFilters" aria-label="Active initiative filters"></div>
           <div class="browser-actions">
             <button class="policy-action" id="initiativesClear" type="button">Reset all filters</button>
@@ -1880,7 +1877,7 @@
         }),
         favoritesOnly: node("FavoritesOnly"), hidePreview: node("HidePreview"), hideDeprecated: node("HideDeprecated"),
         favCount: node("FavCount"), filterToggle: node("FilterToggle"), filterPanel: node("Filters"),
-        options: node("Options"), summary: node("ActiveFilters"), clear: node("Clear"),
+        summary: node("ActiveFilters"), clear: node("Clear"),
         sort: node("Sort"), direction: node("SortDirection"), results: node("Results"), count: node("ResultCount"),
         linked: node("Linked"), more: node("LoadMore"), error: node("Error"), retry: node("Retry"),
       };
@@ -1940,8 +1937,6 @@
           el.summary.append(button);
         });
         el.filterToggle.textContent = `Filters · ${filters.length} active`;
-        const optionsCount = [el.favoritesOnly, el.hidePreview, el.hideDeprecated].filter(control => control.checked).length;
-        el.options.querySelector("summary").textContent = optionsCount ? `Options · ${optionsCount} active` : "Options";
         el.favCount.textContent = `(${state.favorites.size})`;
         el.filters.forEach(filter => filter.widget.sync());
         el.clear.hidden = !filters.length;
@@ -2062,6 +2057,11 @@
           action("Copy ID", button => copyText(row.name, button, "Definition ID")),
           action("Copy definition link", button => copyText(catalogueUrl(prefix, row.name).href, button, "Definition link")),
         );
+        const compare = document.createElement("a");
+        compare.className = "policy-action";
+        compare.href = `/azure-policies/compare/?kind=${prefix}&left=${encodeURIComponent(row.name)}`;
+        compare.textContent = "Compare this definition";
+        actions.append(compare);
         host.append(description, metadata, actions, prefix === "policies" ? jsonPanel(row) : memberPanel(row));
       }
 

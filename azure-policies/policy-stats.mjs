@@ -243,18 +243,18 @@ const PAGES = {
 };
 
 function section(page) {
-  const breakdowns = page.kind === "policies" ? `
+  const breakdowns = `
         <div class="stats-split">
           <article class="stats-panel">
-            <h3>Policies by Category</h3>
+            <h3>${page.title} by Category</h3>
             <ol class="bar-list" id="byCategory"></ol>
             <button class="history-action stats-more" id="categoryMore" type="button" aria-controls="byCategory" aria-expanded="false" hidden>Show all categories</button>
-          </article>
+          </article>${page.kind === "policies" ? `
           <article class="stats-panel">
             <h3>Policies by Effect</h3>
             <ol class="bar-list" id="byEffect"></ol>
-          </article>
-        </div>` : "";
+          </article>` : ""}
+        </div>`;
   return `<!-- policy-stats:start -->
     <section class="policy-stats" id="policyStats" aria-labelledby="statsHeading" aria-busy="true">
       <h2 id="statsHeading">${page.title} at a glance</h2>

@@ -146,8 +146,13 @@ test('each tab owns labelled filters, options and an accessible result count', (
     assert.match(html, new RegExp(`id="${prefix}FilterToggle"[^>]*aria-controls="${prefix}Filters"`));
     assert.match(html, new RegExp(`id="${prefix}ResultCount" role="status" aria-live="polite" aria-atomic="true"`));
     assert.match(html, new RegExp(`id="${prefix}Panel" role="tabpanel" aria-labelledby="tab`));
-    assert.ok(html.includes(`id="${prefix}Options"`));
+    for (const suffix of ['FavoritesOnly', 'HideDeprecated', 'HidePreview']) {
+      const position = html.indexOf(`id="${prefix}${suffix}"`);
+      assert.ok(position > html.indexOf(`id="${prefix}Controls"`) && position < html.indexOf(`id="${prefix}Filters"`), prefix + suffix);
+    }
   }
+  assert.doesNotMatch(html, /<details class="filter-options"|<summary>Options<\/summary>/);
+  assert.doesNotMatch(script, /el\.options/);
   assert.match(script, /displayed \/ \$\{state\.rows\.length/);
   assert.match(script, /match the active filters/);
   assert.match(script, /filter\.label} ×/);

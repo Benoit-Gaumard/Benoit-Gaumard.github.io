@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compare Azure Policies &amp; Initiatives | Benoit Gaumard</title>
+  <meta name="description" content="Compare two Azure built-in policies or initiatives side by side: metadata, policy rules, parameters and initiative membership differences.">
+  <link rel="canonical" href="https://benoit-gaumard.io/azure-policies/compare/">
+  <meta property="og:title" content="Compare Azure Policies &amp; Initiatives">
+  <meta property="og:description" content="Explore policy rules, parameters and initiative membership differences side by side.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://benoit-gaumard.io/azure-policies/compare/">
+  <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.5; }
+    a { color: var(--cp-link); text-underline-offset: .2rem; }
+    button, input, select { font: inherit; }
+    button, select, input { color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border-strong); border-radius: .625rem; }
+    button { min-height: 2.75rem; padding: .5rem .85rem; cursor: pointer; }
+    button:hover { border-color: var(--cp-accent); }
+    button:disabled { cursor: not-allowed; opacity: .6; }
+    :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
+    .skip-link { position: absolute; top: -5rem; left: 1rem; z-index: 100; padding: .75rem; background: var(--cp-surface); }
+    .skip-link:focus { top: .5rem; }
+    .site-header { border-bottom: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .header-inner { width: min(100% - 2rem, 90rem); margin: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; padding: .75rem 0; }
+    .brand { display: inline-flex; align-items: center; }
+    .header-actions { display: flex; align-items: center; gap: .75rem; }
+    main { width: min(100% - 2rem, 90rem); margin: 2rem auto 4rem; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.15; margin: 1rem 0; }
+    h2 { font-size: 1.2rem; margin: 0 0 .75rem; }
+    h3 { font-size: 1rem; margin: 0 0 .5rem; }
+    p { margin: .5rem 0; }
+    .muted, .source { color: var(--cp-text-muted); font-size: .9rem; }
+    .intro { max-width: 55rem; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin: 1.5rem 0 1rem; }
+    .type-field { display: grid; gap: .4rem; }
+    .type-field select { min-height: 2.75rem; padding: .5rem .75rem; min-width: 12rem; }
+    .check-label { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; }
+    input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--cp-accent); }
+    .selectors, .json-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .panel { min-width: 0; padding: 1.25rem; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .picker label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .35rem; }
+    .picker input, .picker select { width: 100%; min-width: 0; padding: .5rem .75rem; }
+    .picker input { min-height: 2.75rem; margin-bottom: .5rem; }
+    .picker select { height: 12rem; border-color: var(--cp-border); border-radius: .625rem; }
+    .picker option { padding: .5rem; white-space: normal; overflow-wrap: anywhere; }
+    .picked { overflow-wrap: anywhere; min-height: 3rem; margin: .75rem 0; font-weight: 650; }
+    .pick-actions { display: flex; align-items: center; gap: .75rem; }
+    .pick-actions a { min-height: 2.75rem; display: inline-flex; align-items: center; }
+    .share { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+    .share input { flex: 1 1 20rem; min-width: 0; min-height: 2.75rem; padding: .5rem .75rem; font-size: .85rem; }
+    .status { padding: .75rem 0; }
+    .error { padding: 1rem; margin: 1rem 0; border: 1px solid var(--cp-danger); border-radius: .625rem; }
+    .comparison-section { margin-top: 1.5rem; }
+    .table-wrap { min-width: 0; max-width: 100%; overflow-x: auto; border: 1px solid var(--cp-border); border-radius: .625rem; background: var(--cp-surface); }
+    table { width: 100%; min-width: 40rem; border-collapse: collapse; table-layout: fixed; font-size: .9rem; }
+    th, td { padding: .75rem 1rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--cp-border); overflow-wrap: anywhere; }
+    th { font-weight: 650; }
+    thead th { background: var(--cp-surface-soft); }
+    thead th:first-child { width: 22%; }
+    tbody tr:last-child > * { border-bottom: 0; }
+    tr.changed > * { background: var(--cp-accent-soft); }
+    .change-note { display: block; font-size: .75rem; color: var(--cp-accent); font-weight: 650; margin-top: .25rem; }
+    .value-json { white-space: pre-wrap; font: .8rem/1.5 Consolas, "Courier New", Courier, monospace; margin: 0; overflow-wrap: anywhere; }
+    .legend { margin-bottom: .75rem; color: var(--cp-text-muted); font-size: .85rem; }
+    .full-json { margin-top: 1rem; }
+    .full-json summary { min-height: 2.75rem; cursor: pointer; padding: .5rem 0; }
+    .json-pair pre { overflow: auto; max-height: 35rem; padding: 1rem; background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: .625rem; font: .8rem/1.5 Consolas, "Courier New", Courier, monospace; }
+    footer { border-top: 1px solid var(--cp-border); padding: 1.5rem; text-align: center; font-size: .85rem; color: var(--cp-text-muted); }
+    @media (max-width: 40rem) { .selectors, .json-pair { grid-template-columns: minmax(0, 1fr); } .header-inner, main { width: calc(100% - 1rem); } .header-actions { gap: .35rem; } .panel { padding: 1rem; } }
+  </style>
+<!-- site-ui:start -->
+<!-- site-ui-config: {"menu":false,"theme":true,"banner":false,"path":"/azure-policies/compare/","errorPage":false,"language":"en"} -->
+<style data-site-ui>
+  .site-header .menu-toggle,.site-header .theme-toggle,.site-header .social-link,.news-banner-close { min-width:2.75rem;min-height:2.75rem;width:2.75rem;height:2.75rem; }
+  .site-header .header-links a { min-height:2.75rem; }
+  .site-branding { display:inline-flex;align-items:center;gap:.5rem;max-width:100%;flex:none; }
+  .site-brand-name { display:inline-flex;align-items:center;min-height:2.75rem;color:var(--cp-text);font-size:1rem;font-weight:700;text-decoration:none;white-space:nowrap; }
+  .site-brand-name:hover { color:var(--cp-link);text-decoration:underline;text-underline-offset:.2rem; }
+  .site-brand-name:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-footer .footer-group { gap:.25rem; }
+  .site-footer .footer-group > a { min-height:1.5rem; }
+  .site-footer .footer-main { grid-template-columns:minmax(16rem,1.3fr) minmax(8rem,.7fr) minmax(10rem,.8fr) minmax(14rem,1.2fr); }
+  .site-footer .site-footer-extra > a { overflow-wrap:anywhere; }
+  .site-footer .footer-bottom { flex-wrap:wrap;justify-content:center;align-items:center;text-align:center; }
+  .site-footer .footer-bottom > span { min-width:0;line-height:1.5; }
+  .site-footer .footer-bottom > span:first-child { width:100%; }
+  .site-header .header-links a[aria-current] { color:var(--cp-text);font-weight:700;text-decoration:underline;text-underline-offset:.35rem; }
+  .news-banner-text { animation:none!important;padding-left:0!important;transform:none!important; }
+  .news-banner-track { white-space:normal!important;mask-image:none!important;-webkit-mask-image:none!important; }
+  .news-banner,.news-banner-text a,.news-banner-close { color:var(--cp-accent-fg); }
+  :root[data-theme="dark"] { --cp-accent-fg:#0c1420; }
+  .back-to-top:not(.visible) { visibility:hidden; }
+  .back-to-top.visible { visibility:visible; }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] { color:var(--cp-warning);border-color:var(--cp-warning);background:var(--cp-warning-bg); }
+  button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg,button:is(.favorite-button,.fav-button,.news-favorite,.favorites-filter)[aria-pressed="true"] svg path { fill:currentColor; }
+  .site-ux-button:focus-visible,.site-ux-dialog textarea:focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-ux-status { position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:1000;max-width:min(40rem,calc(100% - 2rem));margin:0;padding:.65rem 1rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-panel-strong);color:var(--cp-text);font-size:.9rem;line-height:1.5;pointer-events:none; }
+  .site-ux-status:empty { display:none; }
+  .site-ux-dialog { width:min(44rem,calc(100% - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;padding:1.25rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text); }
+  .site-ux-dialog::backdrop { background:rgba(10,17,28,.84); }
+  .site-ux-dialog h2 { margin:0 0 .75rem;font-size:1.35rem; }
+  .site-ux-dialog p { line-height:1.6; }
+  .site-ux-dialog textarea { display:block;width:100%;min-height:8rem;max-height:50dvh;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font-family:ui-monospace,monospace;font-size:.85rem; }
+  .site-ux-actions { display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem; }
+  .site-ux-button { display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer; }
+  .site-header .header-inner:has(.site-tool-switcher) { position:relative; }
+  .site-tool-switcher { flex:none; }
+  .site-tool-switcher > summary { display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem .625rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font-size:.85rem;font-weight:600;white-space:nowrap;cursor:pointer;list-style:none; }
+  .site-tool-switcher > summary::-webkit-details-marker { display:none; }
+  .site-tool-switcher > summary:hover,.site-tool-switcher[open] > summary { border-color:var(--cp-accent);background:var(--cp-accent-soft); }
+  .site-tool-switcher[open] > summary svg { transform:rotate(180deg); }
+  .site-tool-panel { position:absolute;right:0;top:calc(100% + .5rem);z-index:40;display:flex;flex-direction:column;width:min(30rem,calc(100vw - 2rem));max-height:min(36rem,calc(100dvh - 10rem));padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);color:var(--cp-text);box-shadow:0 8px 24px rgba(10,17,28,.18); }
+  .site-tool-switcher:not([open]) > .site-tool-panel,.site-tool-switcher [hidden] { display:none; }
+  .site-tool-search { display:grid;gap:.375rem;flex:none; }
+  .site-tool-search label { font-size:.85rem;font-weight:600; }
+  .site-tool-search input { min-width:0;width:100%;height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface-soft);color:var(--cp-text);font:inherit;font-size:1rem; }
+  .site-tool-search input::placeholder { color:var(--cp-text-muted);opacity:1; }
+  .site-tool-panel .site-tool-count { flex:none;margin:.5rem 0;font-size:.8rem;color:var(--cp-text-muted); }
+  .site-tool-list { min-height:0;overflow:auto;overscroll-behavior:contain; }
+  .site-tool-list ul { padding:0;margin:0;list-style:none; }
+  .site-tool-list li { margin:0; }
+  .site-tool-link { display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.625rem;min-height:2.75rem;padding:.5rem;border-radius:6px;color:var(--cp-text);font-size:.9rem;line-height:1.4;text-decoration:none; }
+  .site-tool-link img { width:1.25rem;height:1.25rem;object-fit:contain; }
+  .site-tool-icon { display:flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;font-size:1rem; }
+  .site-tool-link > span { min-width:0;overflow-wrap:anywhere; }
+  .site-tool-link:hover,.site-tool-link[aria-current] { background:var(--cp-accent-soft);color:var(--cp-link); }
+  .site-tool-current { font-size:.75rem;font-weight:600; }
+  .site-tool-empty { padding:.5rem; }
+  .site-tool-empty p { margin:0 0 .5rem;font-size:.9rem; }
+  .site-tool-catalogue { flex:none;display:flex;align-items:center;min-height:2.75rem;margin-top:.5rem;border-top:1px solid var(--cp-border);color:var(--cp-link);font-size:.85rem; }
+  .site-tool-switcher :is(summary,input,a,button):focus-visible { outline:3px solid var(--cp-accent);outline-offset:2px; }
+  .site-tool-link:focus-visible { outline-offset:-3px; }
+  @media(max-width:48rem) { .site-header .header-inner:has(.site-tool-switcher) { gap:.5rem; } }
+  @media(max-width:40rem) {
+    :root { --header-h:6.875rem; }
+    .site-header .header-inner:has(.site-branding) { flex-wrap:wrap;gap:.25rem .5rem;padding-block:.5rem; }
+    .site-header .header-inner > .site-branding { flex-basis:100%; }
+    .site-header .header-actions { margin-left:auto; }
+    .site-tool-panel { max-height:min(36rem,calc(100dvh - 13rem)); }
+    body:not(:has(.section-nav)) main :is([id],.tool-card) { scroll-margin-top:8rem; }
+  }
+  .site-footer .footer-main > * { min-width:0; }
+  @media(max-width:64rem) { .site-footer .footer-main { grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem; }.site-footer .footer-about{grid-column:1/-1;} }
+  @media(max-width:32rem) { .site-footer .footer-main { grid-template-columns:minmax(0,1fr); }.site-footer .footer-about{grid-column:auto;} .site-footer .footer-group > a{min-height:2rem;} .site-footer .footer-bottom{padding-bottom:2.75rem;} .filter-bar input:not([type="checkbox"]):not([type="radio"]),.filter-bar select{flex:none;min-width:0;width:100%;max-width:100%;min-height:3rem;} }
+  @media print { .site-ux-status,.site-ux-dialog,.site-tool-switcher{display:none!important;} }
+</style>
+<script data-site-ui>(function siteRuntime(config) {
+  const french = config.language === "fr";
+  let status, statusTimer, copyDialog, returnFocus, consentPending = false;
+  let savedTheme;
+  try { savedTheme = localStorage.getItem("site-theme"); }
+  catch (error) { console.warn("Theme preference unavailable; using the system preference.", error); }
+  const darkTheme = savedTheme === "dark" || (savedTheme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  if (darkTheme) document.documentElement.setAttribute("data-theme", "dark");
+  else document.documentElement.removeAttribute("data-theme");
+  function text(tag, value, className) {
+    const node = document.createElement(tag);
+    if (value !== undefined) node.textContent = value;
+    if (className) node.className = className;
+    return node;
+  }
+  function notice(message, duration = 7000) {
+    if (!status) {
+      status = text("p", "", "site-ux-status");
+      status.id = "siteUxStatus";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      document.body.append(status);
+    }
+    clearTimeout(statusTimer);
+    status.textContent = message;
+    if (duration) statusTimer = setTimeout(() => { status.textContent = ""; }, duration);
+  }
+  function manualCopy(value, label, source) {
+    if (!copyDialog) {
+      copyDialog = text("dialog", undefined, "site-ux-dialog");
+      copyDialog.id = "siteCopyDialog";
+      copyDialog.setAttribute("aria-labelledby", "siteCopyHeading");
+      const heading = text("h2", "", "");
+      heading.id = "siteCopyHeading";
+      const explanation = text("p", french ? "La copie automatique a été refusée. Sélectionnez le texte et copiez-le manuellement." : "Automatic copying was denied. Select the text and copy it manually.");
+      const area = document.createElement("textarea");
+      area.readOnly = true;
+      area.setAttribute("aria-label", french ? "Texte à copier" : "Text to copy");
+      const actions = text("div", undefined, "site-ux-actions");
+      const select = text("button", french ? "Tout sélectionner" : "Select all", "site-ux-button");
+      select.type = "button";
+      select.addEventListener("click", () => { area.focus(); area.select(); });
+      const close = text("button", french ? "Fermer" : "Close", "site-ux-button");
+      close.type = "button";
+      close.addEventListener("click", () => copyDialog.close());
+      actions.append(select, close);
+      copyDialog.append(heading, explanation, area, actions);
+      copyDialog.addEventListener("close", () => { if (returnFocus?.isConnected && returnFocus.checkVisibility()) returnFocus.focus({ preventScroll: true }); });
+      document.body.append(copyDialog);
+    }
+    returnFocus = source || document.activeElement;
+    copyDialog.querySelector("h2").textContent = (french ? "Copier : " : "Copy: ") + label;
+    copyDialog.querySelector("textarea").value = value;
+    if (!copyDialog.open) copyDialog.showModal();
+    copyDialog.querySelector("textarea").focus();
+    copyDialog.querySelector("textarea").select();
+  }
+  async function copy(value, label = "Value", control) {
+    try {
+      await navigator.clipboard.writeText(String(value));
+      notice(french ? `${label} copié.` : `${label} copied.`);
+      if (control) { control.classList.add("is-copied"); setTimeout(() => control.classList.remove("is-copied"), 1600); }
+      return true;
+    } catch (error) {
+      console.warn("Clipboard access unavailable.", error);
+      notice(french ? "Copie automatique indisponible." : "Automatic copying is unavailable.");
+      manualCopy(String(value), label, control);
+      return false;
+    }
+  }
+  function download(value, filename, mime = "text/plain;charset=utf-8", label = filename) {
+    let url;
+    const link = document.createElement("a");
+    try {
+      url = URL.createObjectURL(new Blob([value], { type: mime }));
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      notice(french ? `Téléchargement demandé : ${label}.` : `Download requested: ${label}.`);
+      return true;
+    } catch (error) {
+      console.error("Download could not be started.", error);
+      notice(french ? "Téléchargement indisponible. Une copie manuelle est proposée." : "Download unavailable. A manual copy is available.");
+      manualCopy(String(value), label);
+      return false;
+    } finally {
+      link.remove();
+      if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }
+  async function fetchJSON(url, timeout = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { cache: "no-store", signal: controller.signal });
+      if (!response.ok) throw new Error(`Request failed (${response.status}) for ${url}`);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function updateURL(change, push = false) {
+    try {
+      const url = new URL(location.href);
+      change(url.searchParams, url);
+      if (url.href !== location.href) history[push ? "pushState" : "replaceState"](history.state, "", url);
+      window.dispatchEvent(new Event("siteurlchange"));
+    } catch (error) {
+      console.warn("URL state could not be updated.", error);
+      notice(french ? "La vue fonctionne, mais son adresse n'a pas pu être actualisée." : "The view works, but its address could not be updated.");
+    }
+  }
+  function privacyChoices(control) {
+    if (consentPending) return;
+    consentPending = true;
+    if (control) control.disabled = true;
+    let finished = false;
+    const finish = message => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      consentPending = false;
+      if (control) control.disabled = false;
+      notice(message, 12000);
+    };
+    const unavailable = french
+      ? "Le gestionnaire de consentement n'est pas disponible (chargement bloqué, message non configuré ou région non concernée). Aucun nouvel enregistrement de choix n'est confirmé."
+      : "The consent manager is unavailable (blocked loading, unpublished message or inapplicable region). No newly saved choices have been confirmed.";
+    const timer = setTimeout(() => finish(unavailable), 10000);
+    notice(french ? "Ouverture du gestionnaire de consentement…" : "Opening the consent manager…");
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (finished) return;
+      try {
+        if (typeof window.googlefc.showRevocationMessage !== "function") { finish(unavailable); return; }
+        window.googlefc.showRevocationMessage();
+        finish(french ? "Le dialogue Google a été demandé. Vérifiez vos choix dans ce dialogue." : "The Google consent dialog was requested. Review your choices in that dialog.");
+      } catch (error) { console.warn("Consent manager could not be opened.", error); finish(unavailable); }
+    } });
+    if (!document.querySelector('script[src*="fundingchoicesmessages.google.com/i/"]') && typeof window.googlefc.showRevocationMessage !== "function") {
+      const script = document.createElement("script");
+      script.src = "https://fundingchoicesmessages.google.com/i/pub-6636684537203477?ers=1";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.addEventListener("error", () => { script.remove(); finish(unavailable); });
+      document.head.append(script);
+    }
+  }
+  window.SiteUX = { copy, download, fetchJSON, updateURL, notice, privacyChoices };
+  function setupToolSwitcher(menu, nav) {
+    const switcher = document.getElementById("siteToolSwitcher");
+    if (!switcher) return;
+    const summary = switcher.querySelector("summary");
+    const search = document.getElementById("siteToolSearch");
+    const items = [...switcher.querySelectorAll("#siteToolLinks > li")];
+    const normalize = value => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const indexed = items.map(item => ({ item, text: normalize(`${item.querySelector(".site-tool-name").textContent} ${item.dataset.toolKeywords} ${item.querySelector("a").getAttribute("href")}`) }));
+    const visibleLinks = () => items.filter(item => !item.hidden).map(item => item.querySelector("a"));
+    const close = restore => {
+      switcher.open = false;
+      if (restore) summary.focus({ preventScroll: true });
+    };
+    function filter() {
+      const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+      indexed.forEach(({ item, text }) => { item.hidden = !terms.every(term => text.includes(term)); });
+      const count = visibleLinks().length;
+      document.getElementById("siteToolCount").textContent = terms.length ? `${count} of ${items.length} tools` : `${items.length} tools`;
+      switcher.querySelector(".site-tool-empty").hidden = count !== 0;
+      switcher.querySelector(".site-tool-list").scrollTop = 0;
+    }
+    switcher.querySelector(".site-tool-search").hidden = false;
+    switcher.addEventListener("toggle", () => {
+      if (!switcher.open) return;
+      nav?.classList.remove("nav-open");
+      menu?.setAttribute("aria-expanded", "false");
+      search.value = "";
+      filter();
+      search.focus({ preventScroll: true });
+    });
+    search.addEventListener("input", filter);
+    switcher.querySelector("[data-tool-search-clear]").addEventListener("click", () => {
+      search.value = "";
+      filter();
+      search.focus();
+    });
+    switcher.addEventListener("keydown", event => {
+      if (event.key === "Escape" && switcher.open) {
+        event.preventDefault();
+        event.stopPropagation();
+        close(true);
+        return;
+      }
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      const links = visibleLinks(), index = links.indexOf(document.activeElement);
+      if (event.target === search && event.key === "Enter" && search.value.trim() && links.length === 1) {
+        event.preventDefault();
+        links[0].click();
+      } else if ((event.target === search || index >= 0) && ["ArrowDown", "ArrowUp"].includes(event.key) && links.length) {
+        event.preventDefault();
+        const next = index < 0 ? (event.key === "ArrowDown" ? 0 : links.length - 1)
+          : (index + (event.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+        links[next].focus();
+      } else if (index >= 0 && ["Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        links[event.key === "Home" ? 0 : links.length - 1].focus();
+      }
+    });
+    switcher.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (link && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) close(true);
+    });
+    document.addEventListener("click", event => { if (!switcher.contains(event.target)) close(false); });
+    document.addEventListener("focusin", event => { if (switcher.open && !switcher.contains(event.target)) close(false); });
+    menu?.addEventListener("click", () => close(false));
+    window.addEventListener("pagehide", () => close(false));
+    window.addEventListener("pageshow", event => { if (event.persisted && switcher.open) close(false); });
+  }
+  function init() {
+    const menu = document.getElementById("menuToggle");
+    const nav = document.getElementById("primaryNav");
+    if (menu && nav && config.menu) {
+      const close = restore => {
+        const wasOpen = nav.classList.contains("nav-open");
+        nav.classList.remove("nav-open");
+        menu.setAttribute("aria-expanded", "false");
+        if (restore && wasOpen) menu.focus({ preventScroll: true });
+      };
+      menu.addEventListener("click", event => {
+        event.stopPropagation();
+        const open = !nav.classList.contains("nav-open");
+        nav.classList.toggle("nav-open", open);
+        menu.setAttribute("aria-expanded", String(open));
+      });
+      nav.addEventListener("click", event => { if (event.target.closest("a")) close(false); });
+      document.addEventListener("click", event => { if (!nav.contains(event.target) && !menu.contains(event.target)) close(false); });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !event.defaultPrevented && !document.querySelector("dialog[open]")) close(true);
+      });
+      window.addEventListener("resize", () => { if (getComputedStyle(menu).display === "none") close(false); });
+    }
+    setupToolSwitcher(menu, nav);
+    const theme = document.getElementById("themeToggle");
+    function themeLabel() {
+      if (!theme) return;
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      const label = french ? (dark ? "Activer le thème clair" : "Activer le thème sombre") : (dark ? "Switch to light theme" : "Switch to dark theme");
+      theme.setAttribute("aria-label", label);
+      theme.title = label;
+    }
+    if (theme && config.theme) theme.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("site-theme", dark ? "light" : "dark"); }
+      catch (error) { console.warn("Theme preference could not be saved.", error); notice(french ? "Thème modifié pour cette page ; préférence non enregistrée." : "Theme changed for this page; the preference could not be saved."); }
+      themeLabel();
+    });
+    themeLabel();
+    const banner = document.getElementById("newsBanner");
+    if (banner && config.banner) document.getElementById("newsBannerClose")?.addEventListener("click", () => {
+      banner.hidden = true;
+      try { localStorage.setItem("news-banner-dismissed", "2026-08-21"); }
+      catch (error) { console.warn("Banner preference could not be saved.", error); notice(french ? "Le bandeau est fermé pour cette page." : "The banner is dismissed for this page."); }
+      (document.querySelector(".site-header .brand") || menu)?.focus({ preventScroll: true });
+    });
+    if (nav && !config.errorPage) {
+      const page = config.path;
+      const destination = page === "/" || page === "/index_fr.html" ? (page === "/index_fr.html" ? "/index_fr.html" : "/")
+        : page.startsWith("/articles/") ? "/articles/" : page.startsWith("/privacy/") ? "" : "/tools/";
+      nav.querySelectorAll("a").forEach(link => {
+        const target = new URL(link.href, location.href).pathname;
+        link.removeAttribute("aria-current");
+        if (target === destination) link.setAttribute("aria-current", target === page ? "page" : "location");
+      });
+    }
+    document.querySelectorAll("[data-privacy-choices]").forEach(control => control.addEventListener("click", () => privacyChoices(control)));
+    document.addEventListener("click", event => {
+      const favorite = event.target.closest('[data-share="favorite"]');
+      if (!favorite) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const hint = favorite.closest(".footer-share")?.querySelector("[data-share-hint]");
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mac = /Mac/i.test(navigator.userAgent);
+      const message = mobile ? (french ? "Utilisez le menu Partager ou le menu du navigateur, puis Ajouter aux favoris." : "Use your browser's Share or menu action, then Add Bookmark.")
+        : (french ? "Utilisez " : "Press ") + (mac ? "⌘" : "Ctrl") + (french ? " + D pour ajouter un favori du navigateur." : " + D to create a browser bookmark.");
+      if (hint) hint.textContent = message;
+      notice(message);
+    }, true);
+    document.querySelectorAll('[data-share="favorite"]').forEach(button => {
+      const label = french ? "Favori du navigateur" : "Browser bookmark";
+      button.setAttribute("aria-label", label);
+      const textNode = [...button.childNodes].find(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+      if (textNode) textNode.textContent = label;
+    });
+    function updateShareLinks() {
+      const root = document.querySelector(".footer-share");
+      if (!root) return;
+      const url = encodeURIComponent(location.href.split("#")[0]), title = encodeURIComponent(document.title);
+      const targets = { linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + url, twitter: "https://twitter.com/intent/tweet?url=" + url + "&text=" + title,
+        reddit: "https://www.reddit.com/submit?url=" + url + "&title=" + title, mail: "mailto:?subject=" + title + "&body=" + url };
+      root.querySelectorAll("a[data-share]").forEach(link => { if (targets[link.dataset.share]) link.href = targets[link.dataset.share]; });
+    }
+    document.querySelector(".footer-share")?.addEventListener("focusin", updateShareLinks);
+    document.querySelector(".footer-share")?.addEventListener("pointerdown", updateShareLinks);
+    window.addEventListener("siteurlchange", updateShareLinks);
+    window.addEventListener("popstate", updateShareLinks);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})({"menu":false,"theme":true,"banner":false,"path":"/azure-policies/compare/","errorPage":false,"language":"en"});</script>
+<!-- site-ui:end -->
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to comparison</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="site-branding"><a class="brand" href="/" aria-label="Benoit Gaumard - home"><img src="/favicon.svg" alt="" width="32" height="32"></a><a class="site-brand-name" href="https://benoit-gaumard.io/">benoit-gaumard.io</a></span>
+      <div class="header-actions">
+<!-- tool-switcher:start -->
+<details class="site-tool-switcher" id="siteToolSwitcher">
+  <summary aria-controls="siteToolPanel"><span>Switch tool</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <div class="site-tool-panel" id="siteToolPanel">
+    <div class="site-tool-search" hidden><label for="siteToolSearch">Find a tool</label><input id="siteToolSearch" type="search" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-controls="siteToolLinks"></div>
+    <p class="site-tool-count" id="siteToolCount" role="status" aria-live="polite" aria-atomic="true">33 tools</p>
+    <nav class="site-tool-list" aria-label="Switch to another tool"><ul id="siteToolLinks"><li data-tool-keywords="Ranking of the latest LLMs from the LMArena leaderboard, with scores, licenses, context windows and prices, refreshed weekly."><a class="site-tool-link" href="/ai-leaderboard/"><span class="site-tool-icon" aria-hidden="true">🏆</span><span class="site-tool-name">AI Leaderboard</span></a></li>
+<li data-tool-keywords="Latest AWS service updates, refreshed automatically from the official AWS What's New RSS feed."><a class="site-tool-link" href="/aws-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/aws.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">AWS Updates</span></a></li>
+<li data-tool-keywords="Every Azure RBAC built-in role with its category, role definition ID, assignable scopes and per-action descriptions."><a class="site-tool-link" href="/azure-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by Azure services (service tags), fetched from the official Microsoft download, with an IP lookup tool."><a class="site-tool-link" href="/azure-ip-ranges/"><span class="site-tool-icon" aria-hidden="true">☁️</span><span class="site-tool-name">Azure IP Ranges</span></a></li>
+<li data-tool-keywords="Generate Azure resource names following the Cloud Adoption Framework convention, and browse abbreviations."><a class="site-tool-link" href="/azure-naming-convention/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/naming.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Naming Convention</span></a></li>
+<li data-tool-keywords="Browse all built-in Azure Policy definitions and initiatives, refreshed directly from Azure."><a class="site-tool-link" href="/azure-policies/" aria-current="location"><span class="site-tool-icon" aria-hidden="true">📋</span><span class="site-tool-name">Azure Policies</span><span class="site-tool-current">Current</span></a></li>
+<li data-tool-keywords="Search all supported Azure Policy aliases to use when authoring custom policy definitions."><a class="site-tool-link" href="/azure-policy-aliases/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/policy.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Policy Aliases</span></a></li>
+<li data-tool-keywords="Explore Azure datacenter locations and regional information worldwide."><a class="site-tool-link" href="/azure-regions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Regions</span></a></li>
+<li data-tool-keywords="Latest Azure service updates, refreshed automatically from the official Azure Updates RSS feed."><a class="site-tool-link" href="/azure-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/updates.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Release Updates</span></a></li>
+<li data-tool-keywords="Check which Azure resource types support tags and whether tags appear in the cost report."><a class="site-tool-link" href="/azure-taggable-resources/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/tags.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Azure Taggable Resources</span></a></li>
+<li data-tool-keywords="A curated collection of emojis with copy-ready shortcodes for chat, code, and documentation."><a class="site-tool-link" href="/emoji-sheet/"><span class="site-tool-icon" aria-hidden="true">😀</span><span class="site-tool-name">Emoji</span></a></li>
+<li data-tool-keywords="Every Microsoft Entra ID built-in directory role with its template ID, privileged flag and per-permission descriptions."><a class="site-tool-link" href="/entra-built-in-roles/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/entra-roles.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Entra ID Built-in Roles</span></a></li>
+<li data-tool-keywords="IP address ranges used by GitHub services, fetched from the GitHub Meta API, with an IP lookup tool."><a class="site-tool-link" href="/github-ip-ranges/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/github.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">GitHub IP Ranges</span></a></li>
+<li data-tool-keywords="Generate one or many random GUIDs / UUIDs, with options for uppercase, hyphens, braces, and quotes."><a class="site-tool-link" href="/guid-generator/"><span class="site-tool-icon" aria-hidden="true">🆔</span><span class="site-tool-name">GUID Generator</span></a></li>
+<li data-tool-keywords="Browse, preview, and download thousands of Azure SVG icons for diagrams and documentation."><a class="site-tool-link" href="/icons/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/icons.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Icons</span></a></li>
+<li data-tool-keywords="A collection of funny IT memes, developer humor, and tech-related images."><a class="site-tool-link" href="/it-images/"><span class="site-tool-icon" aria-hidden="true">😂</span><span class="site-tool-name">IT Images &amp; Memes</span></a></li>
+<li data-tool-keywords="Latest Microsoft 365 roadmap updates, refreshed automatically from the official RSS feed."><a class="site-tool-link" href="/m365-release-updates/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/m365.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">M365 Updates</span></a></li>
+<li data-tool-keywords="Every Graph API permission - delegated, application and resource-specific - with its identifier, consent requirement and description."><a class="site-tool-link" href="/graph-permissions/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/graph-permissions.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Graph Permissions</span></a></li>
+<li data-tool-keywords="Browse a selection of Microsoft administration portals with task-based search."><a class="site-tool-link" href="/microsoft-portals/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/portals.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Microsoft Portals</span></a></li>
+<li data-tool-keywords="Consolidate latest activities from Microsoft Tech Community blogs."><a class="site-tool-link" href="/microsoft-techcommunity-rss-feeds/"><span class="site-tool-icon" aria-hidden="true">📢</span><span class="site-tool-name">Microsoft Techcommunity RSS Feeds</span></a></li>
+<li data-tool-keywords="Play five simple browser games - Breakout, Pong, Space Invaders, Runner and Catcher - with a keyboard, a mouse, or your finger."><a class="site-tool-link" href="/mini-games/"><span class="site-tool-icon" aria-hidden="true">🕹️</span><span class="site-tool-name">Mini Games</span></a></li>
+<li data-tool-keywords="A curated collection of useful links and resources."><a class="site-tool-link" href="/favorite-links/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/favorites.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">My Favorite Links</span></a></li>
+<li data-tool-keywords="Discover amazing websites from my network of friends and colleagues."><a class="site-tool-link" href="/friends-websites/"><span class="site-tool-icon" aria-hidden="true">🤝</span><span class="site-tool-name">My Friends' Websites</span></a></li>
+<li data-tool-keywords="Calculate X% of Y, what percent X is of Y, percentage change, and add or subtract a percentage from a value."><a class="site-tool-link" href="/percentage-calculator/"><span class="site-tool-icon" aria-hidden="true">💯</span><span class="site-tool-name">Percentage Calculator</span></a></li>
+<li data-tool-keywords="My library of ready-to-use AI prompts for Azure, IaC and DevOps: fill in the blanks, copy, or open them in ChatGPT, Claude or Perplexity."><a class="site-tool-link" href="/prompts/"><span class="site-tool-icon" aria-hidden="true">💬</span><span class="site-tool-name">Prompts</span></a></li>
+<li data-tool-keywords="Spin a wheel to generate a random letter (A-Z) or number (0-100), excluding already picked values."><a class="site-tool-link" href="/random-wheel/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/wheel.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Random Wheel</span></a></li>
+<li data-tool-keywords="Read tech news of the moment in one place, aggregated from many RSS feeds and refreshed throughout the day."><a class="site-tool-link" href="/rss-watcher/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/rss.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">RSS Watcher</span></a></li>
+<li data-tool-keywords="Calculate allowed downtime for any SLA percentage, reverse-calculate an SLA from downtime, and combine multiple service SLAs."><a class="site-tool-link" href="/sla-calculator/"><span class="site-tool-icon" aria-hidden="true">🛡️</span><span class="site-tool-name">SLA Calculator</span></a></li>
+<li data-tool-keywords="Browse my presentation decks in an interactive slideshow with chapters, transitions, autoplay, a laser pointer and full screen."><a class="site-tool-link" href="/slideshow/"><span class="site-tool-icon" aria-hidden="true">🎞️</span><span class="site-tool-name">Slideshow</span></a></li>
+<li data-tool-keywords="Calculate IPv4 subnet details from an IP and CIDR prefix or mask, and split a network into equal-sized subnets."><a class="site-tool-link" href="/subnet-calculator/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/subnet.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Subnet Calculator</span></a></li>
+<li data-tool-keywords="Convert between common units of length, weight, temperature, volume, speed, area, data, and time."><a class="site-tool-link" href="/units-converter/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/converter.png" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Units Converter</span></a></li>
+<li data-tool-keywords="Live status of the scheduled GitHub Actions workflows that refresh Azure, M365, and RSS Watcher data."><a class="site-tool-link" href="/workflows/"><span class="site-tool-icon" aria-hidden="true"><img src="/tools/images/workflows.svg" alt="" width="20" height="20" loading="lazy"></span><span class="site-tool-name">Workflows</span></a></li>
+<li data-tool-keywords="Current time and date in Paris, plus a quick glance at colleague timezones around the world."><a class="site-tool-link" href="/world-clock/"><span class="site-tool-icon" aria-hidden="true">🕐</span><span class="site-tool-name">World Clock</span></a></li></ul><div class="site-tool-empty" hidden><p>No tools match your search.</p><button class="site-ux-button" type="button" data-tool-search-clear>Clear search</button></div></nav>
+    <a class="site-tool-catalogue" href="/tools/">All tools</a>
+  </div>
+</details>
+<!-- tool-switcher:end -->
+
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">◐</button>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <a href="/azure-policies/">&#8592; Azure Policies</a>
+    <h1>Compare Azure Policies &amp; Initiatives</h1>
+    <p class="intro">Choose two definitions to compare them side by side. Highlight metadata changes, inspect policy parameters and rules, or see which policies two initiatives share.</p>
+    <p class="source" id="source">Loading the current Azure catalogue...</p>
+    <p class="source">Source: <a href="https://learn.microsoft.com/powershell/module/az.resources/get-azpolicydefinition">Get-AzPolicyDefinition</a> and <a href="https://learn.microsoft.com/powershell/module/az.resources/get-azpolicysetdefinition">Get-AzPolicySetDefinition</a>. Current snapshots only, not historical versions. Initiative comparison covers the member IDs, reference IDs and groups recorded in this catalogue; initiative parameter mappings are not available.</p>
+    <div class="error" id="loadError" role="alert" hidden><p id="loadErrorText"></p><button id="retry" type="button">Retry catalogue</button></div>
+    <fieldset id="controls" disabled style="border:0;padding:0;margin:0;min-width:0">
+      <legend class="muted">Comparison settings</legend>
+      <div class="toolbar">
+        <label class="type-field" for="kind">Definition type<select id="kind"><option value="policies">Policies</option><option value="initiatives">Initiatives</option></select></label>
+        <button type="button" id="swap">Swap Left / Right</button>
+        <label class="check-label"><input type="checkbox" id="differences">Show differences only</label>
+      </div>
+      <div class="selectors">
+        <section class="panel picker" aria-labelledby="leftHeading">
+          <h2 id="leftHeading">Left</h2>
+          <label for="leftSearch">Search by name, category or ID</label>
+          <input type="search" id="leftSearch" placeholder="Find a definition..." autocomplete="off" aria-controls="leftSelect">
+          <label for="leftSelect">Choose Left definition</label>
+          <select id="leftSelect" size="6"></select>
+          <p class="muted" id="leftCount" role="status"></p>
+          <p class="picked" id="leftPicked">No definition selected.</p>
+          <div class="pick-actions"><button type="button" id="leftClear">Clear Left</button><a id="leftOpen" hidden>Open in catalogue</a></div>
+        </section>
+        <section class="panel picker" aria-labelledby="rightHeading">
+          <h2 id="rightHeading">Right</h2>
+          <label for="rightSearch">Search by name, category or ID</label>
+          <input type="search" id="rightSearch" placeholder="Find a definition..." autocomplete="off" aria-controls="rightSelect">
+          <label for="rightSelect">Choose Right definition</label>
+          <select id="rightSelect" size="6"></select>
+          <p class="muted" id="rightCount" role="status"></p>
+          <p class="picked" id="rightPicked">No definition selected.</p>
+          <div class="pick-actions"><button type="button" id="rightClear">Clear Right</button><a id="rightOpen" hidden>Open in catalogue</a></div>
+        </section>
+      </div>
+    </fieldset>
+    <div class="share">
+      <label for="shareLink">Comparison link</label><input id="shareLink" readonly aria-label="Shareable comparison link">
+      <button id="copyLink" type="button">Copy link</button>
+    </div>
+    <p class="status" id="status" role="status" aria-live="polite">Choose a Left and a Right definition to begin.</p>
+    <div id="comparison"></div>
+    <noscript><p>This comparison requires JavaScript. <a href="../policydefinitions.json">Download the policies catalogue</a> or <a href="../policysetdefinitions.json">download the initiatives catalogue</a>.</p></noscript>
+  </main>
+  <footer>
+    <nav class="footer-group" aria-label="Explore"><strong>Explore</strong> &middot; <a href="/tools/">All tools</a> &middot;
+          <a href="/privacy/">Privacy</a></nav>
+    <p>&copy; 2026 Benoit Gaumard</p>
+  </footer>
+  <!-- site-ui-config: {"menu":false,"theme":true,"banner":false} -->
+  <script data-compare-script>
+    const $ = id => document.getElementById(id);
+    const sides = ["left", "right"];
+    const state = { kind: "policies", left: "", right: "", datasets: null, maps: null, rules: null, rulesPromise: null, rulesError: "", revision: 0 };
+    const fold = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+    function stableJson(value) {
+      if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+      if (value !== null && typeof value === "object") return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableJson(value[key])}`).join(",")}}`;
+      return JSON.stringify(value);
+    }
+
+    function jsonDifferences(left, right, path = "") {
+      if (stableJson(left) === stableJson(right)) return [];
+      const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
+      if (object(left) && object(right)) {
+        return [...new Set([...Object.keys(left), ...Object.keys(right)])].sort().flatMap(key =>
+          jsonDifferences(left[key], right[key], `${path}/${key.replace(/~/g, "~0").replace(/\//g, "~1")}`));
+      }
+      return [{ path: path || "/", left, right }];
+    }
+
+    function memberDifferences(left, right) {
+      const key = member => JSON.stringify([member.id.toLowerCase(), member.referenceId || ""]);
+      const a = new Map(left.map(member => [key(member), member]));
+      const b = new Map(right.map(member => [key(member), member]));
+      return [...new Set([...a.keys(), ...b.keys()])].map(id => {
+        const l = a.get(id), r = b.get(id);
+        const groups = member => [...(member?.groupNames || [])].filter(value => value != null).sort();
+        return { left: l, right: r, changed: !l || !r || stableJson(groups(l)) !== stableJson(groups(r)) };
+      });
+    }
+
+    async function fetchJson(url) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      try {
+        const response = await fetch(url, { signal: controller.signal, cache: "no-cache" });
+        if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+        return await response.json();
+      } finally { clearTimeout(timeout); }
+    }
+
+    function readUrl() {
+      const params = new URLSearchParams(location.search);
+      state.kind = params.get("kind") === "initiatives" ? "initiatives" : "policies";
+      sides.forEach(side => { state[side] = params.get(side) || ""; $(side + "Search").value = ""; });
+      $("kind").value = state.kind;
+      $("differences").checked = params.get("differences") === "1";
+    }
+
+    function syncUrl() {
+      const url = new URL(location.href);
+      ["kind", "left", "right", "differences"].forEach(key => url.searchParams.delete(key));
+      url.searchParams.set("kind", state.kind);
+      sides.forEach(side => { if (state[side]) url.searchParams.set(side, state[side]); });
+      if ($("differences").checked) url.searchParams.set("differences", "1");
+      $("shareLink").value = url.href;
+      try { history.replaceState(null, "", url); }
+      catch (error) { console.warn("Comparison URL could not be updated.", error); $("status").textContent += " The address could not be updated; use the comparison link field."; }
+    }
+
+    function populate(side) {
+      const search = fold($(side + "Search").value.trim());
+      const rows = state.datasets[state.kind][state.kind];
+      const found = rows.filter(row => fold(`${row.displayName} ${row.category} ${row.name}`).includes(search));
+      const chosen = state.maps[state.kind].get(state[side]);
+      const shown = chosen ? [chosen, ...found.filter(row => row !== chosen)] : found;
+      const select = $(side + "Select");
+      select.replaceChildren(new Option("Choose a definition...", ""), ...shown.map(row => new Option(`${row.displayName} (${row.category || "Not reported"})`, row.name)));
+      select.value = chosen ? chosen.name : "";
+      select.scrollTop = 0;
+      $(side + "Count").textContent = `${found.length.toLocaleString("en-US")} matches${chosen && !found.includes(chosen) ? " + current selection" : ""}`;
+      paintSelection(side);
+    }
+
+    function paintSelection(side) {
+      const chosen = state.maps[state.kind].get(state[side]);
+      $(side + "Picked").textContent = chosen ? chosen.displayName : state[side] ? "This definition was not found in the current catalogue. Choose another definition." : "No definition selected.";
+      const link = $(side + "Open");
+      link.hidden = !chosen;
+      if (chosen) link.href = `/azure-policies/?tab=${state.kind}&definition=${encodeURIComponent(chosen.name)}`;
+      $(side + "Clear").disabled = !state[side];
+    }
+
+    function cellValue(value) {
+      const pre = document.createElement("pre");
+      pre.className = "value-json";
+      pre.textContent = value === undefined ? "Not present" : JSON.stringify(value, null, 2);
+      return pre;
+    }
+
+    function makeTable(title, firstLabel) {
+      const section = document.createElement("section");
+      section.className = "comparison-section";
+      const heading = document.createElement("h2");
+      heading.textContent = title;
+      const wrap = document.createElement("div");
+      wrap.className = "table-wrap";
+      wrap.tabIndex = 0;
+      wrap.setAttribute("role", "region");
+      wrap.setAttribute("aria-label", title + ", scroll horizontally for Left and Right");
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const head = document.createElement("tr");
+      [firstLabel, "Left", "Right"].forEach(text => {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = text;
+        head.append(th);
+      });
+      const body = document.createElement("tbody");
+      thead.append(head);
+      table.append(thead, body);
+      wrap.append(table);
+      section.append(heading, wrap);
+      $("comparison").append(section);
+      return { section, body };
+    }
+
+    function addRow(body, label, left, right, changed, json = false) {
+      if ($("differences").checked && !changed) return;
+      const tr = document.createElement("tr");
+      tr.classList.toggle("changed", changed);
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = label;
+      if (changed) {
+        const note = document.createElement("span");
+        note.className = "change-note";
+        note.textContent = "Different";
+        th.append(note);
+      }
+      tr.append(th);
+      [left, right].forEach(value => {
+        const td = document.createElement("td");
+        if (value instanceof Node) td.append(value);
+        else if (json) td.append(cellValue(value));
+        else td.textContent = value === undefined || value === "" ? "Not reported" : String(value);
+        tr.append(td);
+      });
+      body.append(tr);
+    }
+
+    function emptyTable(body, message) {
+      if (body.children.length) return;
+      const tr = document.createElement("tr"), td = document.createElement("td");
+      td.colSpan = 3;
+      td.textContent = message;
+      tr.append(td);
+      body.append(tr);
+    }
+
+    function fullJson(left, right, label) {
+      const details = document.createElement("details");
+      details.className = "full-json";
+      const summary = document.createElement("summary");
+      summary.textContent = label;
+      const pair = document.createElement("div");
+      pair.className = "json-pair";
+      [left, right].forEach((value, index) => {
+        const div = document.createElement("div"), h3 = document.createElement("h3");
+        h3.textContent = index ? "Right" : "Left";
+        const pre = cellValue(value);
+        pre.tabIndex = 0;
+        pre.setAttribute("aria-label", `${h3.textContent} ${label}`);
+        div.append(h3, pre);
+        pair.append(div);
+      });
+      details.append(summary, pair);
+      $("comparison").append(details);
+    }
+
+    function memberLabel(member) {
+      if (!member) return "Not present";
+      const div = document.createElement("div");
+      const policy = state.maps.policies.get(member.id);
+      const link = document.createElement("a");
+      link.href = `/azure-policies/?tab=policies&definition=${encodeURIComponent(member.id)}`;
+      link.textContent = policy?.displayName || member.id;
+      const reference = document.createElement("p");
+      reference.className = "muted";
+      reference.textContent = `Reference: ${member.referenceId || "Not reported"}; groups: ${(member.groupNames || []).filter(Boolean).join(", ") || "None"}`;
+      div.append(link, reference);
+      return div;
+    }
+
+    function renderMembers(left, right) {
+      const rows = memberDifferences(left.policies, right.policies);
+      const table = makeTable("Initiative members", "Policy / reference");
+      const summary = document.createElement("p");
+      summary.className = "legend";
+      const common = rows.filter(row => row.left && row.right).length;
+      summary.textContent = `${common} shared references; ${rows.filter(row => !row.right).length} Left only; ${rows.filter(row => !row.left).length} Right only. References are matched by policy ID and reference ID; group changes are highlighted.`;
+      table.section.insertBefore(summary, table.section.lastChild);
+      rows.forEach(row => {
+        const member = row.left || row.right;
+        addRow(table.body, `${state.maps.policies.get(member.id)?.displayName || member.id} / ${member.referenceId || "(no reference)"}`, memberLabel(row.left), memberLabel(row.right), row.changed);
+      });
+      emptyTable(table.body, $("differences").checked ? "No member differences." : "Neither initiative includes member policies.");
+      fullJson(left.policies, right.policies, "View recorded member JSON");
+    }
+
+    async function loadRules() {
+      if (state.rules) return state.rules;
+      if (!state.rulesPromise) {
+        state.rulesPromise = fetchJson("../policyrules.json").then(payload => {
+          if (!payload.rules || typeof payload.rules !== "object" || Array.isArray(payload.rules)) throw new Error("Invalid policy rule dataset.");
+          state.rules = payload.rules;
+          state.rulesError = "";
+          return state.rules;
+        }).catch(error => {
+          state.rulesError = `Policy rules could not be loaded: ${error.message}`;
+          console.error("Policy comparison rules failed.", error);
+          throw error;
+        }).finally(() => { state.rulesPromise = null; });
+      }
+      return state.rulesPromise;
+    }
+
+    async function render() {
+      const revision = ++state.revision;
+      $("comparison").replaceChildren();
+      if (!state.maps) return;
+      const left = state.maps[state.kind].get(state.left), right = state.maps[state.kind].get(state.right);
+      if (!left || !right) {
+        $("status").textContent = sides.some(side => state[side] && !state.maps[state.kind].has(state[side]))
+          ? "A linked definition was not found in the current catalogue. Choose another definition."
+          : "Choose a Left and a Right definition to begin.";
+        return;
+      }
+      $("status").textContent = left.name === right.name ? "You selected the same definition on both sides." : `Comparing ${left.displayName} with ${right.displayName}.`;
+      const table = makeTable("Metadata", "Field");
+      const fields = [["displayName", "Name"], ["name", "ID"], ["category", "Category"], ["description", "Description"], ["version", "Version"], ["policyType", "Definition type"], ["policyDefinitionId", "Resource ID"]];
+      if (state.kind === "policies") fields.splice(3, 0, ["effect", "Effect"], ["mode", "Mode"]);
+      else fields.push(["policyCount", "Member policies"]);
+      fields.forEach(([key, label]) => addRow(table.body, label, left[key], right[key], stableJson(left[key]) !== stableJson(right[key])));
+      emptyTable(table.body, "No metadata differences.");
+      if (state.kind === "initiatives") { renderMembers(left, right); return; }
+      const loading = document.createElement("p");
+      loading.className = "status";
+      loading.setAttribute("role", "status");
+      loading.textContent = "Loading policy parameters and rules...";
+      $("comparison").append(loading);
+      let rules;
+      try { rules = await loadRules(); }
+      catch {
+        if (revision !== state.revision) return;
+        loading.textContent = state.rulesError;
+        const retry = document.createElement("button");
+        retry.type = "button";
+        retry.textContent = "Retry policy rules";
+        retry.addEventListener("click", () => render());
+        loading.append(document.createTextNode(" "), retry);
+        return;
+      }
+      if (revision !== state.revision) return;
+      loading.remove();
+      const a = rules[left.name], b = rules[right.name];
+      if (!a || !b) {
+        const missing = document.createElement("p");
+        missing.setAttribute("role", "status");
+        missing.textContent = `The rule dataset does not include ${!a && !b ? "either selected definition" : !a ? "the Left definition" : "the Right definition"}. Metadata remains available; rules cannot be compared.`;
+        $("comparison").append(missing);
+        return;
+      }
+      const changes = jsonDifferences(a, b);
+      const diff = makeTable("Definition JSON differences", "JSON path");
+      const note = document.createElement("p");
+      note.className = "legend";
+      note.textContent = `${changes.length.toLocaleString("en-US")} changed JSON paths. Object key order is ignored. Arrays are compared as ordered values. Only changed paths are listed.`;
+      diff.section.insertBefore(note, diff.section.lastChild);
+      changes.forEach(change => addRow(diff.body, change.path, change.left, change.right, true, true));
+      emptyTable(diff.body, "The recorded JSON definitions are identical.");
+      fullJson(a, b, "View complete policy JSON");
+    }
+
+    function update(refreshChoices = true) {
+      sides.forEach(refreshChoices ? populate : paintSelection);
+      render();
+      syncUrl();
+    }
+
+    async function load() {
+      $("controls").disabled = true;
+      $("retry").disabled = true;
+      $("loadError").hidden = true;
+      $("source").textContent = "Loading the current Azure catalogue...";
+      try {
+        const [policies, initiatives] = await Promise.all([fetchJson("../policydefinitions.json"), fetchJson("../policysetdefinitions.json")]);
+        for (const [kind, dataset] of [["policies", policies], ["initiatives", initiatives]]) {
+          const rows = dataset[kind];
+          if (!Array.isArray(rows) || rows.some(row => !row || typeof row.name !== "string" || !row.name || typeof row.displayName !== "string" || (kind === "initiatives" && (!Array.isArray(row.policies) || row.policies.some(member => !member || typeof member.id !== "string")))) || new Set(rows.map(row => row.name)).size !== rows.length) throw new Error(`Invalid ${kind} catalogue.`);
+          rows.sort((a, b) => a.displayName.localeCompare(b.displayName));
+        }
+        state.datasets = { policies, initiatives };
+        state.maps = Object.fromEntries(Object.entries(state.datasets).map(([kind, dataset]) => [kind, new Map(dataset[kind].map(row => [row.name, row]))]));
+        $("controls").disabled = false;
+        $("source").textContent = `Catalogue snapshots (UTC): policies ${policies.generatedAt || "date not recorded"}; initiatives ${initiatives.generatedAt || "date not recorded"}.`;
+        update();
+      } catch (error) {
+        console.error("Comparison catalogue failed.", error);
+        $("loadErrorText").textContent = `The catalogue could not be loaded: ${error.message}`;
+        $("loadError").hidden = false;
+        $("source").textContent = "Catalogue unavailable. Retry to compare definitions.";
+      } finally { $("retry").disabled = false; }
+    }
+
+    sides.forEach(side => {
+      $(side + "Search").addEventListener("input", () => populate(side));
+      $(side + "Select").addEventListener("change", event => { state[side] = event.target.value; update(false); });
+      $(side + "Clear").addEventListener("click", () => { state[side] = ""; $(side + "Search").value = ""; update(); });
+    });
+    $("kind").addEventListener("change", () => {
+      state.kind = $("kind").value;
+      sides.forEach(side => { state[side] = ""; $(side + "Search").value = ""; });
+      update();
+    });
+    $("swap").addEventListener("click", () => { [state.left, state.right] = [state.right, state.left]; sides.forEach(side => { $(side + "Search").value = ""; }); update(); });
+    $("differences").addEventListener("change", () => { render(); syncUrl(); });
+    $("retry").addEventListener("click", load);
+    $("copyLink").addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText($("shareLink").value); $("status").textContent = "Comparison link copied."; }
+      catch (error) { console.warn("Comparison link clipboard unavailable.", error); $("shareLink").focus(); $("shareLink").select(); $("status").textContent = "Automatic copying is unavailable. Copy the selected link manually."; }
+    });
+    window.addEventListener("popstate", () => { readUrl(); if (state.maps) update(); });
+    readUrl();
+    $("shareLink").value = location.href;
+    load();
+  </script>
+</body>
+</html>
