@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Compare Azure Policies &amp; Initiatives | Benoit Gaumard</title>
-  <meta name="description" content="Compare two Azure built-in policies or initiatives side by side: metadata, policy rules, parameters and initiative membership differences.">
+  <meta name="description" content="Compare official Azure policy or initiative versions side by side: metadata, JSON rules, parameters and initiative membership differences.">
   <link rel="canonical" href="https://benoit-gaumard.io/azure-policies/compare/">
   <meta property="og:title" content="Compare Azure Policies &amp; Initiatives">
-  <meta property="og:description" content="Explore policy rules, parameters and initiative membership differences side by side.">
+  <meta property="og:description" content="Choose official Azure versions and explore policy rules, parameters and initiative membership differences side by side.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://benoit-gaumard.io/azure-policies/compare/">
   <meta property="og:image" content="https://benoit-gaumard.io/og-image.png">
@@ -107,6 +107,7 @@
     .picker input, .picker select { width: 100%; min-width: 0; padding: .5rem .75rem; }
     .picker input { min-height: 2.75rem; margin-bottom: .5rem; }
     .picker select { height: 12rem; border-color: var(--cp-border); border-radius: .625rem; }
+    .picker select.version-select { height: 2.75rem; margin-top: .25rem; }
     .picker option { padding: .5rem; white-space: normal; overflow-wrap: anywhere; }
     .picked { overflow-wrap: anywhere; min-height: 3rem; margin: .75rem 0; font-weight: 650; }
     .pick-actions { display: flex; align-items: center; gap: .75rem; }
@@ -577,9 +578,9 @@
   <main id="main">
     <a href="/azure-policies/">&#8592; Azure Policies</a>
     <h1>Compare Azure Policies &amp; Initiatives</h1>
-    <p class="intro">Choose two definitions to compare them side by side. Highlight metadata changes, inspect policy parameters and rules, or see which policies two initiatives share.</p>
+    <p class="intro">Choose two definitions and their official Azure versions to compare them side by side. Compare revisions of the same policy or initiative, highlight metadata changes, and inspect rules, parameters and membership.</p>
     <p class="source" id="source">Loading the current Azure catalogue...</p>
-    <p class="source">Source: <a href="https://learn.microsoft.com/powershell/module/az.resources/get-azpolicydefinition">Get-AzPolicyDefinition</a> and <a href="https://learn.microsoft.com/powershell/module/az.resources/get-azpolicysetdefinition">Get-AzPolicySetDefinition</a>. Current snapshots only, not historical versions. Initiative comparison covers the member IDs, reference IDs and groups recorded in this catalogue; initiative parameter mappings are not available.</p>
+    <p class="source">Source: Azure Resource Manager <a href="https://learn.microsoft.com/rest/api/policy-authorization/policy-definition-versions/list-built-in">policy versions</a> and <a href="https://learn.microsoft.com/rest/api/policy-authorization/policy-set-definition-versions/list-built-in">initiative versions</a>. Choose an official version independently on each side, including two versions of the same definition. Complete definitions include policy rules, parameters and initiative parameter mappings. Only versions published by Azure and retrieved by the refresh workflow are offered.</p>
     <div class="error" id="loadError" role="alert" hidden><p id="loadErrorText"></p><button id="retry" type="button">Retry catalogue</button></div>
     <fieldset id="controls" disabled style="border:0;padding:0;margin:0;min-width:0">
       <legend class="muted">Comparison settings</legend>
@@ -597,6 +598,8 @@
           <select id="leftSelect" size="6"></select>
           <p class="muted" id="leftCount" role="status"></p>
           <p class="picked" id="leftPicked">No definition selected.</p>
+          <label for="leftVersion">Left version</label>
+          <select class="version-select" id="leftVersion" disabled><option value="">Choose a definition first</option></select>
           <div class="pick-actions"><button type="button" id="leftClear">Clear Left</button><a id="leftOpen" hidden>Open in catalogue</a></div>
         </section>
         <section class="panel picker" aria-labelledby="rightHeading">
@@ -607,6 +610,8 @@
           <select id="rightSelect" size="6"></select>
           <p class="muted" id="rightCount" role="status"></p>
           <p class="picked" id="rightPicked">No definition selected.</p>
+          <label for="rightVersion">Right version</label>
+          <select class="version-select" id="rightVersion" disabled><option value="">Choose a definition first</option></select>
           <div class="pick-actions"><button type="button" id="rightClear">Clear Right</button><a id="rightOpen" hidden>Open in catalogue</a></div>
         </section>
       </div>
@@ -628,7 +633,7 @@
   <script data-compare-script>
     const $ = id => document.getElementById(id);
     const sides = ["left", "right"];
-    const state = { kind: "policies", left: "", right: "", datasets: null, maps: null, rules: null, rulesPromise: null, rulesError: "", revision: 0 };
+    const state = { kind: "policies", left: "", right: "", leftVersion: "", rightVersion: "", datasets: null, maps: null, versionsIndex: null, definitions: new Map(), revision: 0 };
     const fold = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
     function stableJson(value) {
@@ -653,9 +658,38 @@
       const b = new Map(right.map(member => [key(member), member]));
       return [...new Set([...a.keys(), ...b.keys()])].map(id => {
         const l = a.get(id), r = b.get(id);
-        const groups = member => [...(member?.groupNames || [])].filter(value => value != null).sort();
-        return { left: l, right: r, changed: !l || !r || stableJson(groups(l)) !== stableJson(groups(r)) };
+        const settings = member => ({
+          groups: [...(member?.groupNames || [])].filter(value => value != null).sort(),
+          parameters: member?.parameters || {},
+          definitionVersion: member?.definitionVersion || "",
+        });
+        return { left: l, right: r, changed: !l || !r || stableJson(settings(l)) !== stableJson(settings(r)) };
       });
+    }
+
+    function versionDefinition(row, version, properties) {
+      const effect = properties.policyRule?.then?.effect;
+      const parameter = typeof effect === "string" ? /parameters\(\s*'([^']+)'\s*\)/i.exec(effect)?.[1] : null;
+      const members = properties.policyDefinitions;
+      return {
+        ...row,
+        displayName: properties.displayName,
+        description: properties.description,
+        category: properties.metadata?.category,
+        policyType: properties.policyType,
+        version,
+        mode: properties.mode,
+        effect: parameter ? properties.parameters?.[parameter]?.defaultValue : effect,
+        policyDefinitionId: `${row.policyDefinitionId}/versions/${version}`,
+        policyCount: members?.length,
+        policies: members?.map(member => ({
+          id: member.policyDefinitionId.split("/").pop(),
+          referenceId: member.policyDefinitionReferenceId || "",
+          groupNames: member.groupNames || [],
+          parameters: member.parameters || {},
+          definitionVersion: member.definitionVersion || "",
+        })),
+      };
     }
 
     async function fetchJson(url) {
@@ -671,16 +705,21 @@
     function readUrl() {
       const params = new URLSearchParams(location.search);
       state.kind = params.get("kind") === "initiatives" ? "initiatives" : "policies";
-      sides.forEach(side => { state[side] = params.get(side) || ""; $(side + "Search").value = ""; });
+      sides.forEach(side => { state[side] = params.get(side) || ""; state[side + "Version"] = params.get(side + "Version") || ""; $(side + "Search").value = ""; });
       $("kind").value = state.kind;
       $("differences").checked = params.get("differences") === "1";
     }
 
     function syncUrl() {
       const url = new URL(location.href);
-      ["kind", "left", "right", "differences"].forEach(key => url.searchParams.delete(key));
+      ["kind", "left", "right", "leftVersion", "rightVersion", "differences"].forEach(key => url.searchParams.delete(key));
       url.searchParams.set("kind", state.kind);
-      sides.forEach(side => { if (state[side]) url.searchParams.set(side, state[side]); });
+      sides.forEach(side => {
+        if (state[side]) {
+          url.searchParams.set(side, state[side]);
+          if (state[side + "Version"]) url.searchParams.set(side + "Version", state[side + "Version"]);
+        }
+      });
       if ($("differences").checked) url.searchParams.set("differences", "1");
       $("shareLink").value = url.href;
       try { history.replaceState(null, "", url); }
@@ -701,8 +740,34 @@
       paintSelection(side);
     }
 
+    function compareVersions(left, right) {
+      const [a, ...aSuffix] = left.split("-"), [b, ...bSuffix] = right.split("-");
+      const base = a.localeCompare(b, "en", { numeric: true });
+      if (base) return base;
+      if (!aSuffix.length || !bSuffix.length) return Number(!aSuffix.length) - Number(!bSuffix.length);
+      const aParts = aSuffix.join("-").split("."), bParts = bSuffix.join("-").split(".");
+      for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+        if (aParts[i] === undefined || bParts[i] === undefined) return aParts.length - bParts.length;
+        const numericA = /^\d+$/.test(aParts[i]), numericB = /^\d+$/.test(bParts[i]);
+        const difference = numericA && numericB ? Number(aParts[i]) - Number(bParts[i])
+          : numericA !== numericB ? (numericA ? -1 : 1)
+          : aParts[i] < bParts[i] ? -1 : aParts[i] > bParts[i] ? 1 : 0;
+        if (difference) return difference;
+      }
+      return 0;
+    }
+
     function paintSelection(side) {
       const chosen = state.maps[state.kind].get(state[side]);
+      const versions = [...(state.versionsIndex[state.kind][state[side]] || [])].sort((a, b) => compareVersions(b, a));
+      const select = $(side + "Version");
+      if (chosen && !state[side + "Version"]) state[side + "Version"] = versions.includes(chosen.version) ? chosen.version : versions[0] || "";
+      select.replaceChildren(...versions.map(version => new Option(`${version}${version === chosen?.version ? " (current catalogue)" : ""}`, version)));
+      const wanted = state[side + "Version"];
+      if (wanted && !versions.includes(wanted)) select.add(new Option(`${wanted} (not available)`, wanted));
+      if (!chosen || !versions.length) select.replaceChildren(new Option(chosen ? "No official versions available" : "Choose a definition first", ""));
+      select.disabled = !chosen || !versions.length;
+      if (chosen && versions.length) select.value = wanted;
       $(side + "Picked").textContent = chosen ? chosen.displayName : state[side] ? "This definition was not found in the current catalogue. Choose another definition." : "No definition selected.";
       const link = $(side + "Open");
       link.hidden = !chosen;
@@ -807,8 +872,9 @@
       link.textContent = policy?.displayName || member.id;
       const reference = document.createElement("p");
       reference.className = "muted";
-      reference.textContent = `Reference: ${member.referenceId || "Not reported"}; groups: ${(member.groupNames || []).filter(Boolean).join(", ") || "None"}`;
+      reference.textContent = `Reference: ${member.referenceId || "Not reported"}; policy version: ${member.definitionVersion || "Not pinned"}; groups: ${(member.groupNames || []).filter(Boolean).join(", ") || "None"}`;
       div.append(link, reference);
+      if (Object.keys(member.parameters || {}).length) div.append(cellValue(member.parameters));
       return div;
     }
 
@@ -818,79 +884,73 @@
       const summary = document.createElement("p");
       summary.className = "legend";
       const common = rows.filter(row => row.left && row.right).length;
-      summary.textContent = `${common} shared references; ${rows.filter(row => !row.right).length} Left only; ${rows.filter(row => !row.left).length} Right only. References are matched by policy ID and reference ID; group changes are highlighted.`;
+      summary.textContent = `${common} shared references; ${rows.filter(row => !row.right).length} Left only; ${rows.filter(row => !row.left).length} Right only. References are matched by policy ID and reference ID; group, pinned-version and parameter changes are highlighted.`;
       table.section.insertBefore(summary, table.section.lastChild);
       rows.forEach(row => {
         const member = row.left || row.right;
         addRow(table.body, `${state.maps.policies.get(member.id)?.displayName || member.id} / ${member.referenceId || "(no reference)"}`, memberLabel(row.left), memberLabel(row.right), row.changed);
       });
       emptyTable(table.body, $("differences").checked ? "No member differences." : "Neither initiative includes member policies.");
-      fullJson(left.policies, right.policies, "View recorded member JSON");
     }
 
-    async function loadRules() {
-      if (state.rules) return state.rules;
-      if (!state.rulesPromise) {
-        state.rulesPromise = fetchJson("../policyrules.json").then(payload => {
-          if (!payload.rules || typeof payload.rules !== "object" || Array.isArray(payload.rules)) throw new Error("Invalid policy rule dataset.");
-          state.rules = payload.rules;
-          state.rulesError = "";
-          return state.rules;
-        }).catch(error => {
-          state.rulesError = `Policy rules could not be loaded: ${error.message}`;
-          console.error("Policy comparison rules failed.", error);
-          throw error;
-        }).finally(() => { state.rulesPromise = null; });
+    async function loadVersion(id, version, kind) {
+      if (!state.versionsIndex[kind][id]?.includes(version)) throw new Error(`Official version ${version || "(none)"} is not available for ${id}.`);
+      const key = `${kind}/${id}/${version}`;
+      if (!state.definitions.has(key)) {
+        const promise = fetchJson(`../versions/${kind}/${encodeURIComponent(id)}/${encodeURIComponent(version)}.json`).then(properties => {
+          if (!properties?.displayName || (kind === "policies" ? !properties.policyRule : !Array.isArray(properties.policyDefinitions))) throw new Error(`The data for official version ${version} is incomplete.`);
+          const reported = properties.version || properties.metadata?.version;
+          if (reported && reported !== version) throw new Error(`The data contains version ${reported} instead of ${version}.`);
+          return properties;
+        }).catch(error => { state.definitions.delete(key); throw error; });
+        state.definitions.set(key, promise);
       }
-      return state.rulesPromise;
+      return state.definitions.get(key);
     }
 
     async function render() {
       const revision = ++state.revision;
       $("comparison").replaceChildren();
+      $("comparison").setAttribute("aria-busy", "false");
       if (!state.maps) return;
-      const left = state.maps[state.kind].get(state.left), right = state.maps[state.kind].get(state.right);
-      if (!left || !right) {
+      const leftRow = state.maps[state.kind].get(state.left), rightRow = state.maps[state.kind].get(state.right);
+      if (!leftRow || !rightRow) {
         $("status").textContent = sides.some(side => state[side] && !state.maps[state.kind].has(state[side]))
           ? "A linked definition was not found in the current catalogue. Choose another definition."
           : "Choose a Left and a Right definition to begin.";
         return;
       }
-      $("status").textContent = left.name === right.name ? "You selected the same definition on both sides." : `Comparing ${left.displayName} with ${right.displayName}.`;
-      const table = makeTable("Metadata", "Field");
-      const fields = [["displayName", "Name"], ["name", "ID"], ["category", "Category"], ["description", "Description"], ["version", "Version"], ["policyType", "Definition type"], ["policyDefinitionId", "Resource ID"]];
-      if (state.kind === "policies") fields.splice(3, 0, ["effect", "Effect"], ["mode", "Mode"]);
-      else fields.push(["policyCount", "Member policies"]);
-      fields.forEach(([key, label]) => addRow(table.body, label, left[key], right[key], stableJson(left[key]) !== stableJson(right[key])));
-      emptyTable(table.body, "No metadata differences.");
-      if (state.kind === "initiatives") { renderMembers(left, right); return; }
-      const loading = document.createElement("p");
-      loading.className = "status";
-      loading.setAttribute("role", "status");
-      loading.textContent = "Loading policy parameters and rules...";
-      $("comparison").append(loading);
-      let rules;
-      try { rules = await loadRules(); }
-      catch {
+      const kind = state.kind, leftVersion = state.leftVersion, rightVersion = state.rightVersion;
+      $("status").textContent = "Loading the selected official versions...";
+      $("comparison").setAttribute("aria-busy", "true");
+      let a, b;
+      try {
+        [a, b] = await Promise.all([loadVersion(leftRow.name, leftVersion, kind), loadVersion(rightRow.name, rightVersion, kind)]);
+      } catch (error) {
         if (revision !== state.revision) return;
-        loading.textContent = state.rulesError;
+        console.error("Official version comparison failed.", error);
+        $("status").textContent = `The selected versions could not be loaded: ${error.message}`;
         const retry = document.createElement("button");
         retry.type = "button";
-        retry.textContent = "Retry policy rules";
+        retry.textContent = "Retry selected versions";
         retry.addEventListener("click", () => render());
-        loading.append(document.createTextNode(" "), retry);
+        $("comparison").replaceChildren(retry);
+        $("comparison").setAttribute("aria-busy", "false");
         return;
       }
       if (revision !== state.revision) return;
-      loading.remove();
-      const a = rules[left.name], b = rules[right.name];
-      if (!a || !b) {
-        const missing = document.createElement("p");
-        missing.setAttribute("role", "status");
-        missing.textContent = `The rule dataset does not include ${!a && !b ? "either selected definition" : !a ? "the Left definition" : "the Right definition"}. Metadata remains available; rules cannot be compared.`;
-        $("comparison").append(missing);
-        return;
-      }
+      $("comparison").setAttribute("aria-busy", "false");
+      const left = versionDefinition(leftRow, leftVersion, a), right = versionDefinition(rightRow, rightVersion, b);
+      $("status").textContent = left.name === right.name && leftVersion === rightVersion
+        ? "You selected the same definition and version on both sides."
+        : `Comparing ${left.displayName} (${leftVersion}) with ${right.displayName} (${rightVersion}).`;
+      const table = makeTable("Metadata", "Field");
+      const fields = [["displayName", "Name"], ["name", "ID"], ["category", "Category"], ["description", "Description"], ["version", "Version"], ["policyType", "Definition type"], ["policyDefinitionId", "Resource ID"]];
+      if (kind === "policies") fields.splice(3, 0, ["effect", "Effect"], ["mode", "Mode"]);
+      else fields.push(["policyCount", "Member policies"]);
+      fields.forEach(([key, label]) => addRow(table.body, label, left[key], right[key], stableJson(left[key]) !== stableJson(right[key])));
+      emptyTable(table.body, "No metadata differences.");
+      if (kind === "initiatives") renderMembers(left, right);
       const changes = jsonDifferences(a, b);
       const diff = makeTable("Definition JSON differences", "JSON path");
       const note = document.createElement("p");
@@ -899,7 +959,7 @@
       diff.section.insertBefore(note, diff.section.lastChild);
       changes.forEach(change => addRow(diff.body, change.path, change.left, change.right, true, true));
       emptyTable(diff.body, "The recorded JSON definitions are identical.");
-      fullJson(a, b, "View complete policy JSON");
+      fullJson(a, b, kind === "policies" ? "View complete policy JSON" : "View complete initiative JSON");
     }
 
     function update(refreshChoices = true) {
@@ -914,16 +974,18 @@
       $("loadError").hidden = true;
       $("source").textContent = "Loading the current Azure catalogue...";
       try {
-        const [policies, initiatives] = await Promise.all([fetchJson("../policydefinitions.json"), fetchJson("../policysetdefinitions.json")]);
+        const [policies, initiatives, versionsIndex] = await Promise.all([fetchJson("../policydefinitions.json"), fetchJson("../policysetdefinitions.json"), fetchJson("../versions-index.json")]);
+        if (!versionsIndex || ["policies", "initiatives"].some(kind => !versionsIndex[kind] || typeof versionsIndex[kind] !== "object" || Array.isArray(versionsIndex[kind]) || Object.values(versionsIndex[kind]).some(values => !Array.isArray(values) || values.some(version => typeof version !== "string" || !/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(version))))) throw new Error("Invalid official version index.");
         for (const [kind, dataset] of [["policies", policies], ["initiatives", initiatives]]) {
           const rows = dataset[kind];
           if (!Array.isArray(rows) || rows.some(row => !row || typeof row.name !== "string" || !row.name || typeof row.displayName !== "string" || (kind === "initiatives" && (!Array.isArray(row.policies) || row.policies.some(member => !member || typeof member.id !== "string")))) || new Set(rows.map(row => row.name)).size !== rows.length) throw new Error(`Invalid ${kind} catalogue.`);
           rows.sort((a, b) => a.displayName.localeCompare(b.displayName));
         }
         state.datasets = { policies, initiatives };
+        state.versionsIndex = versionsIndex;
         state.maps = Object.fromEntries(Object.entries(state.datasets).map(([kind, dataset]) => [kind, new Map(dataset[kind].map(row => [row.name, row]))]));
         $("controls").disabled = false;
-        $("source").textContent = `Catalogue snapshots (UTC): policies ${policies.generatedAt || "date not recorded"}; initiatives ${initiatives.generatedAt || "date not recorded"}.`;
+        $("source").textContent = `Official Azure versions refreshed (UTC): ${versionsIndex.generatedAt || "date not recorded"}. Catalogue: policies ${policies.generatedAt || "date not recorded"}; initiatives ${initiatives.generatedAt || "date not recorded"}.`;
         update();
       } catch (error) {
         console.error("Comparison catalogue failed.", error);
@@ -935,15 +997,21 @@
 
     sides.forEach(side => {
       $(side + "Search").addEventListener("input", () => populate(side));
-      $(side + "Select").addEventListener("change", event => { state[side] = event.target.value; update(false); });
-      $(side + "Clear").addEventListener("click", () => { state[side] = ""; $(side + "Search").value = ""; update(); });
+      $(side + "Select").addEventListener("change", event => { state[side] = event.target.value; state[side + "Version"] = ""; update(false); });
+      $(side + "Version").addEventListener("change", event => { state[side + "Version"] = event.target.value; render(); syncUrl(); });
+      $(side + "Clear").addEventListener("click", () => { state[side] = ""; state[side + "Version"] = ""; $(side + "Search").value = ""; update(); });
     });
     $("kind").addEventListener("change", () => {
       state.kind = $("kind").value;
-      sides.forEach(side => { state[side] = ""; $(side + "Search").value = ""; });
+      sides.forEach(side => { state[side] = ""; state[side + "Version"] = ""; $(side + "Search").value = ""; });
       update();
     });
-    $("swap").addEventListener("click", () => { [state.left, state.right] = [state.right, state.left]; sides.forEach(side => { $(side + "Search").value = ""; }); update(); });
+    $("swap").addEventListener("click", () => {
+      [state.left, state.right] = [state.right, state.left];
+      [state.leftVersion, state.rightVersion] = [state.rightVersion, state.leftVersion];
+      sides.forEach(side => { $(side + "Search").value = ""; });
+      update();
+    });
     $("differences").addEventListener("change", () => { render(); syncUrl(); });
     $("retry").addEventListener("click", load);
     $("copyLink").addEventListener("click", async () => {

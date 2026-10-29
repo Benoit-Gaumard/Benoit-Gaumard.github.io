@@ -491,4 +491,14 @@ $changesPayload = [ordered]@{
 ($changesPayload | ConvertTo-Json -Depth 10) + "`n" | Set-Content -Path $changesOutputPath -NoNewline -Encoding utf8
 Write-Host "Recorded $($newEntries.Count) change(s) this run, $($allEntries.Count) kept in $changesOutputPath"
 
-Disconnect-AzAccount -ErrorAction SilentlyContinue | Out-Null
+try {
+  $accessToken = (Get-AzAccessToken -ResourceUrl "https://management.azure.com/").Token
+  $env:AZURE_ACCESS_TOKEN = if ($accessToken -is [System.Security.SecureString]) {
+    ([System.Net.NetworkCredential]::new("", $accessToken)).Password
+  } else { [string]$accessToken }
+  & node (Join-Path $scriptDir "fetch-versions.mjs")
+  if ($LASTEXITCODE -ne 0) { throw "Official Azure version export failed (exit $LASTEXITCODE)." }
+} finally {
+  Remove-Item Env:\AZURE_ACCESS_TOKEN -ErrorAction SilentlyContinue
+  Disconnect-AzAccount -ErrorAction SilentlyContinue | Out-Null
+}

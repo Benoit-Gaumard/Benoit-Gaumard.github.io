@@ -32,6 +32,11 @@ jobs:
         shell: pwsh
         run: ./.github/scripts/initiative-history.test.ps1
 
+      - name: Set up Node.js for the version exporter
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
       - name: Fetch latest Azure Policies
         shell: pwsh
         env:
@@ -56,6 +61,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add azure-policies/policydefinitions.json azure-policies/policysetdefinitions.json azure-policies/policyrules.json azure-policies/policy-changes.json
+          git add azure-policies/versions-index.json azure-policies/versions
           if [ -d azure-policies/history ]; then
             git add azure-policies/history
           fi

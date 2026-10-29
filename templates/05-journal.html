@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>05 — Journal / Tools design study</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="templates.css">
+  <script src="templates.js" defer></script>
+</head>
+<body class="journal" data-design="journal">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="review-bar" id="review"></div>
+  <header class="site-header" id="header"></header>
+  <main class="wrap" id="main">
+    <section class="hero">
+      <div><p class="eyebrow">The tools collection / Benoit Gaumard</p><h1>Made for<br>curious minds.</h1></div>
+      <p class="lede">Useful things, carefully collected.<br>A place to explore the cloud, sharpen your workflow and follow your next idea.</p>
+    </section>
+    <section class="editor-picks" aria-label="Editor's selection">
+      <a class="editor-pick" href="/azure-policies/">
+        <span class="editor-art" data-icon="shield" aria-hidden="true"></span>
+        <div><p>The cloud collection</p><h2>A clearer view<br>of Azure governance.</h2></div>
+        <span class="pick-bottom"><span>Explore Azure Policies</span><span class="pick-arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <a class="editor-pick" href="/prompts/">
+        <span class="editor-art" data-icon="spark" aria-hidden="true"></span>
+        <div><p>The creative collection</p><h2>Start with<br>a better prompt.</h2></div>
+        <span class="pick-bottom"><span>Open the prompt library</span><span class="pick-arrow" aria-hidden="true">↗</span></span>
+      </a>
+    </section>
+    <section class="catalog-shell" aria-label="Tool catalogue">
+      <div id="searchHost"></div>
+      <div class="toolbar"><div class="filters" id="filters"></div><button class="saved-toggle" id="savedToggle" type="button" aria-pressed="false"></button></div>
+      <div class="results-line"><p id="resultCount" role="status" aria-live="polite"></p><button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button></div>
+      <p class="storage-notice" id="storageNotice" role="status" hidden></p>
+      <div id="toolResults"></div>
+      <div class="empty" id="empty" hidden><h2>Something else in mind?</h2><p>Try another word. There is more to discover.</p><button id="emptyReset" type="button">Show all tools</button></div>
+      <noscript><p>This interactive design study needs JavaScript. <a href="/tools/">Browse the original tool catalogue.</a></p></noscript>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="wrap footer-inner"><p>A collection by Benoit Gaumard. Always a work in progress.</p><p>Concept 05 / Journal · <a href="./">Explore all five designs</a></p></div></footer>
+</body>
+</html>

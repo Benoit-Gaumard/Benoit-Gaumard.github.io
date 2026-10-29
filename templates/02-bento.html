@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>02 — Bento / Tools design study</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="templates.css">
+  <script src="templates.js" defer></script>
+</head>
+<body class="bento" data-design="bento">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="review-bar" id="review"></div>
+  <header class="site-header" id="header"></header>
+  <main class="wrap" id="main">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Small tools. Bigger possibilities.</p>
+        <h1>A little more<br>possibility.</h1>
+        <p class="lede">Explore the cloud. Make something new.<br>Find a simpler way through your day.</p>
+        <div class="hero-actions"><a class="button-link" href="#catalog">Explore the toolkit <span aria-hidden="true">→</span></a><span class="muted">Built to be useful.</span></div>
+      </div>
+      <div class="object-stage" aria-hidden="true">
+        <div class="object-ring"><div class="object-core">bg.</div></div>
+        <div class="object-chip"><span data-icon="shield"></span>Cloud, made clearer.</div>
+        <div class="object-chip"><span data-icon="spark"></span>Ideas, ready to go.</div>
+      </div>
+    </section>
+    <section class="catalog-shell" id="catalog" aria-label="Tool catalogue">
+      <div id="searchHost"></div>
+      <div class="toolbar"><div class="filters" id="filters"></div><button class="saved-toggle" id="savedToggle" type="button" aria-pressed="false"></button></div>
+      <div class="results-line"><p id="resultCount" role="status" aria-live="polite"></p><button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button></div>
+      <p class="storage-notice" id="storageNotice" role="status" hidden></p>
+      <div class="tool-grid" id="toolResults"></div>
+      <div class="empty" id="empty" hidden><h2>No tools found.</h2><p>A fresh search might be all you need.</p><button id="emptyReset" type="button">Show all tools</button></div>
+      <noscript><p>This interactive design study needs JavaScript. <a href="/tools/">Browse the original tool catalogue.</a></p></noscript>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="wrap footer-inner"><p>Small things, thoughtfully made. / Benoit Gaumard</p><p>Concept 02 / Bento · <a href="./">Explore all five designs</a></p></div></footer>
+</body>
+</html>

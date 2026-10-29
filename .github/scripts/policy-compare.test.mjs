@@ -8,7 +8,7 @@ const root = new URL('../../', import.meta.url);
 const read = file => readFileSync(new URL(file, root), 'utf8');
 const html = read('azure-policies/compare/index.html');
 const script = html.match(/<script data-compare-script>([\s\S]*?)<\/script>/)[1];
-const helpers = runInNewContext(`${script.slice(script.indexOf('function stableJson('), script.indexOf('async function fetchJson('))}; ({ stableJson, jsonDifferences, memberDifferences });`);
+const helpers = runInNewContext(`${script.slice(script.indexOf('function stableJson('), script.indexOf('async function fetchJson('))}; ({ stableJson, jsonDifferences, memberDifferences, versionDefinition });`);
 const plain = value => JSON.parse(JSON.stringify(value));
 
 test('policy JSON differences ignore object order, preserve array order and escape JSON pointer keys', () => {
@@ -67,7 +67,7 @@ test('comparison scripts parse, IDs are unique, and the shared shell remains rep
   assert.equal(enhancePage(html, { path: '/azure-policies/compare/' }), html);
   assert.match(html, /aria-current="location"/);
   assert.match(script, /revision !== state\.revision/);
-  assert.match(script, /Retry policy rules/);
+  assert.match(script, /Retry selected versions/);
   assert.match(script, /linked definition was not found/);
   assert.match(script, /navigator\.clipboard\.writeText/);
   assert.doesNotMatch(script, /\.innerHTML\s*=/);
@@ -80,5 +80,48 @@ test('comparison is discoverable, deployed and uses the existing refreshed datas
   assert.ok(read('sitemap.xml').includes('https://benoit-gaumard.io/azure-policies/compare/'));
   assert.match(script, /fetchJson\("\.\.\/policydefinitions\.json"\)/);
   assert.match(script, /fetchJson\("\.\.\/policysetdefinitions\.json"\)/);
-  assert.match(script, /fetchJson\("\.\.\/policyrules\.json"\)/);
+  assert.match(script, /fetchJson\("\.\.\/versions-index\.json"\)/);
+  assert.match(script, /fetchJson\(`\.\.\/versions\//);
+  const refresh = read('.github/workflows/azure-policies-updates.yaml');
+  assert.match(refresh, /actions\/setup-node/);
+  assert.match(refresh, /git add azure-policies\/versions-index\.json azure-policies\/versions/);
+  assert.match(read('azure-policies/fetch-updates.ps1'), /fetch-versions\.mjs/);
+  assert.match(read('.github/workflows/deploy-hugo.yaml'), /cp -R \.\.\/azure-policies\/versions public\/azure-policies\/versions/);
+});
+
+test('versioned metadata comes from the chosen definition, not the current catalogue', () => {
+  const row = { name: 'policy-id', displayName: 'Current', version: '3.0.0', category: 'Current category', policyDefinitionId: '/providers/Microsoft.Authorization/policyDefinitions/policy-id' };
+  const old = helpers.versionDefinition(row, '1.0.0', {
+    displayName: 'Old name', metadata: { category: 'Old category' }, mode: 'All', policyType: 'BuiltIn',
+    parameters: { effect: { defaultValue: 'Deny' } }, policyRule: { then: { effect: "[parameters('effect')]" } },
+  });
+  assert.equal(old.version, '1.0.0');
+  assert.equal(old.displayName, 'Old name');
+  assert.equal(old.category, 'Old category');
+  assert.equal(old.effect, 'Deny');
+  assert.ok(old.policyDefinitionId.endsWith('/versions/1.0.0'));
+  const initiative = helpers.versionDefinition(row, '2.0.0', {
+    displayName: 'Initiative', policyDefinitions: [{ policyDefinitionId: '/providers/Microsoft.Authorization/policyDefinitions/member-id', policyDefinitionReferenceId: 'ref', definitionVersion: '1.*.*', parameters: { effect: { value: 'Audit' } } }],
+  });
+  assert.equal(initiative.policies[0].id, 'member-id');
+  assert.equal(initiative.policies[0].definitionVersion, '1.*.*');
+  assert.equal(initiative.policies[0].parameters.effect.value, 'Audit');
+});
+
+test('initiative comparison highlights version pins and parameter mappings', () => {
+  const member = { id: 'policy', referenceId: 'ref', definitionVersion: '1.*.*', parameters: { x: { value: false } } };
+  assert.equal(helpers.memberDifferences([member], [{ ...member, definitionVersion: '2.*.*' }])[0].changed, true);
+  assert.equal(helpers.memberDifferences([member], [{ ...member, parameters: { x: { value: true } } }])[0].changed, true);
+  assert.equal(helpers.memberDifferences([member], [member])[0].changed, false);
+  for (const side of ['left', 'right']) assert.ok(html.includes(`id="${side}Version"`));
+  assert.match(script, /\[state\.leftVersion, state\.rightVersion\] = \[state\.rightVersion, state\.leftVersion\]/);
+});
+
+test('version sorting orders stable releases above prereleases and handles numeric components', () => {
+  const compare = runInNewContext(`${script.slice(script.indexOf('function compareVersions('), script.indexOf('function paintSelection('))}; compareVersions;`);
+  assert.ok(compare('2.10.0', '2.9.0') > 0);
+  assert.ok(compare('2.0.0', '2.0.0-preview') > 0);
+  assert.ok(compare('2.0.0-preview.10', '2.0.0-preview.2') > 0);
+  assert.ok(compare('2.0.0-1', '2.0.0-alpha') < 0);
+  assert.equal(compare('1.0.0', '1.0.0'), 0);
 });

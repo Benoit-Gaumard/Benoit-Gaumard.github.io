@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>03 — Workspace / Tools design study</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="templates.css">
+  <script src="templates.js" defer></script>
+</head>
+<body class="workspace" data-design="workspace">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="review-bar" id="review"></div>
+  <header class="site-header" id="header"></header>
+  <main class="wrap workspace-layout" id="main">
+    <aside class="sidebar" aria-label="Library navigation">
+      <p class="sidebar-title">Your library</p>
+      <div class="filters" id="filters"></div>
+      <button class="saved-toggle" id="savedToggle" type="button" aria-pressed="false"></button>
+      <div class="sidebar-note"><strong>A little more organised.</strong>Save the tools you reach for.<br>Keep the rest within reach.<p>Design-study favorites stay separate from the live site.</p></div>
+    </aside>
+    <div class="workspace-content">
+      <section class="hero">
+        <p class="eyebrow">Tools / Overview</p>
+        <h1>Your toolkit.<br>In its place.</h1>
+        <p class="lede">Useful references and everyday utilities. Ready when you are.</p>
+      </section>
+      <section class="catalog-shell" aria-label="Tool catalogue">
+        <div id="searchHost"></div>
+        <div class="results-line"><p id="resultCount" role="status" aria-live="polite"></p><button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button></div>
+        <p class="storage-notice" id="storageNotice" role="status" hidden></p>
+        <div class="tool-grid" id="toolResults"></div>
+        <div class="empty" id="empty" hidden><h2>Nothing here just yet.</h2><p>Try a different search, or save a tool to keep it close.</p><button id="emptyReset" type="button">Show all tools</button></div>
+        <noscript><p>This interactive design study needs JavaScript. <a href="/tools/">Browse the original tool catalogue.</a></p></noscript>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="wrap footer-inner"><p>Benoit Gaumard / Your everyday toolkit.</p><p>Concept 03 / Workspace · <a href="./">Explore all five designs</a></p></div></footer>
+</body>
+</html>
