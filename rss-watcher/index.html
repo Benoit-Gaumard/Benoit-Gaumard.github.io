@@ -928,10 +928,10 @@
     .rss-field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
     .rss-field input,.rss-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
     .rss-help{color:var(--cp-text-muted);font-size:.85rem;line-height:1.5;margin:.75rem 0;}
-    .site-grid{align-items:stretch;grid-auto-rows:32rem;}
-    .site-card{height:32rem;overflow:hidden;}
-    .site-card-head{height:4.5rem;flex:none;overflow:auto;}
-    .site-card .site-articles{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-inline:.5rem;scrollbar-gutter:stable;}
+    .site-grid{align-items:stretch;grid-auto-rows:1fr;}
+    .site-card{height:100%;overflow:visible;}
+    .site-card-head{min-height:4.5rem;flex:none;overflow:visible;}
+    .site-card .site-articles{flex:1;min-height:0;overflow:visible;padding-inline:.5rem;}
     .site-card>.rss-help{margin:0;flex:none;}
     .site-card>.site-ux-button{flex:none;align-self:start;min-height:2.75rem;}
     .site-card-footer-space{height:2.75rem;flex:none;}
@@ -1614,7 +1614,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
   if (!Number.isInteger(count) || count < 1) throw new Error("Unsupported publication period");
   return value >= today - (count - 1) * day && value < today + day;
 }
-    const MAX_ARTICLES_PER_SITE = 10;
+    const MAX_ARTICLES_PER_SITE = 2;
     const FAVORITES_KEY = "rssWatcherFavorites";
     const KEYWORDS_KEY = "rssWatcherKeywords";
     const VIEW_MODE_KEY = "rssWatcherViewMode";

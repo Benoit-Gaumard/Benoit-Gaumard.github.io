@@ -11,6 +11,25 @@ const script = html.match(/<script data-compare-script>([\s\S]*?)<\/script>/)[1]
 const helpers = runInNewContext(`${script.slice(script.indexOf('function stableJson('), script.indexOf('async function fetchJson('))}; ({ stableJson, jsonDifferences, memberDifferences, versionDefinition });`);
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test('comparison restores the same banner dismissal and theme preferences as other Azure pages before rendering', () => {
+  const initialization = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+  const reference = read('azure-policies/initiatives-history/index.html');
+  assert.ok(reference.includes(initialization));
+  for (const dismissed of [null, '2026-08-20', '2026-08-21']) {
+    const attributes = {};
+    runInNewContext(initialization, {
+      localStorage: { getItem: key => key === 'site-theme' ? 'dark' : dismissed },
+      document: { documentElement: { setAttribute: (key, value) => { attributes[key] = value; } } },
+      window: { matchMedia: () => ({ matches: false }) },
+    });
+    assert.equal(attributes['data-news-banner'], dismissed === '2026-08-21' ? 'hidden' : undefined);
+    assert.equal(attributes['data-theme'], 'dark');
+  }
+  assert.doesNotThrow(() => runInNewContext(initialization, {
+    localStorage: { getItem() { throw new Error('Storage unavailable'); } },
+  }));
+});
+
 test('comparison uses the shared Azure page design and responsive navigation', () => {
   const reference = read('azure-policies/initiatives-history/index.html');
   for (const selector of ['news-banner', 'site-header', 'menu-toggle', 'header-links', 'social-link', 'theme-toggle', 'site-footer', 'footer-main']) {

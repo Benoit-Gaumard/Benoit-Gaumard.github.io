@@ -19,6 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,7 +29,7 @@ jobs:
           node-version: '22'
 
       - name: Test RSS source icon caching
-        run: node --test .github/scripts/rss-icons.test.mjs
+        run: node --test .github/scripts/rss-icons.test.mjs .github/scripts/rss-workflow.test.mjs
 
       - name: Fetch latest RSS feeds
         run: node rss-watcher/fetch-updates.mjs
@@ -35,6 +38,7 @@ jobs:
         run: node rss-watcher/cache-icons.mjs
 
       - name: Commit and push if changed
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -43,5 +47,21 @@ jobs:
             echo "No changes to RSS Watcher data."
           else
             git commit -m "chore: refresh RSS Watcher data"
-            git push
+            # Other refresh workflows also publish to main while feeds are fetched.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                echo "::error::RSS data conflicts with changes on main. No changes were pushed."
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              if [ "$attempt" -lt 3 ]; then
+                echo "::warning::RSS push failed (attempt $attempt/3). Synchronizing main before retrying."
+                sleep 5
+              fi
+            done
+            echo "::error::Unable to push RSS data after 3 attempts."
+            exit 1
           fi

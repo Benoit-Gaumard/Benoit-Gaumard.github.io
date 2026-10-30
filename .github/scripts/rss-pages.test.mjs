@@ -152,7 +152,7 @@ test("all RSS page scripts compile", () => {
   }
 });
 
-test("RSS watcher has two visible filter rows, uniform scrollable cards and single-line headlines", () => {
+test("RSS watcher has two visible filter rows, uniform cards without scrolling and two single-line headlines by default", () => {
   const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
   const primary = html.split('<div class="rss-primary">')[1].split('<div class="rss-secondary">')[0];
   for (const id of ["search", "lastUpdate", "source", "languageAll", "languageEn", "languageFr"]) assert.ok(primary.includes(`id="${id}"`), id);
@@ -160,9 +160,11 @@ test("RSS watcher has two visible filter rows, uniform scrollable cards and sing
   for (const id of ["category", "subcategory", "keywordInput"]) assert.ok(secondary.includes(`id="${id}"`), id);
   assert.doesNotMatch(html, /<details class="rss-options"/);
   assert.doesNotMatch(html, /rssOptions|updateRssOptions/);
-  assert.match(html, /\.site-grid\{[^}]*grid-auto-rows:32rem/);
-  assert.match(html, /\.site-card\{height:32rem;overflow:hidden;/);
-  assert.match(html, /\.site-card \.site-articles\{[^}]*min-height:0;overflow-y:auto/);
+  assert.match(html, /\.site-grid\{[^}]*grid-auto-rows:1fr/);
+  assert.match(html, /\.site-card\{height:100%;overflow:visible;/);
+  assert.match(html, /\.site-card-head\{min-height:4\.5rem;flex:none;overflow:visible;/);
+  assert.match(html, /\.site-card \.site-articles\{[^}]*min-height:0;overflow:visible/);
+  assert.match(html, /const MAX_ARTICLES_PER_SITE = 2;/);
   assert.match(html, /\.site-article-title\{white-space:nowrap;overflow:hidden;text-overflow:ellipsis/);
   assert.match(html, /link\.title = \[item\.title, item\.description\]/);
   assert.match(html, /link\.title = \[item\.title, item\.source, item\.description\]/);
