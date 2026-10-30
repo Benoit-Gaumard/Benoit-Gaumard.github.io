@@ -51,7 +51,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # A refresh commits new data after its starting head_sha.
+          # Deploy current main on completion, not the pre-refresh snapshot.
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
           submodules: recursive
           fetch-depth: 0
       - name: Setup Pages

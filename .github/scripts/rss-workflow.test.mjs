@@ -10,6 +10,12 @@ const script = workflow.split("      - name: Commit and push if changed\n")[1]
   .split("        run: |\n")[1].split("\n").map(line => line.replace(/^          /, "")).join("\n");
 const paths = ["updates.json", "feed.en.xml", "feed.fr.xml", "feeds-status.json", "feeds-meta.json", "source-icons.json"];
 
+test("deployment after a data refresh uses updated main rather than the refresh starting commit", () => {
+  const deploy = readFileSync(new URL("../workflows/deploy-hugo.yaml", import.meta.url), "utf8");
+  assert.ok(deploy.includes("ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}"));
+  assert.doesNotMatch(deploy, /ref:.*workflow_run\.head_sha/);
+});
+
 function git(cwd, ...args) {
   const command = cwd.endsWith("remote.git") ? ["--git-dir", cwd, ...args] : args;
   const result = spawnSync("git", command, { cwd, encoding: "utf8" });
