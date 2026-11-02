@@ -143,6 +143,20 @@ test("image issues save unique issue-scoped files and keep the manifest for depl
     assert.equal(manifest.images[0].title, "Example Diagram");
   });
 
+  test("image manifest keeps exported ID suffixes out of public titles", (t) => {
+    const directory = temporaryDirectory(t);
+    const images = join(directory, "export");
+    const output = join(directory, "images.json");
+    mkdirSync(images);
+    writeFileSync(join(images, "agile-vs-waterfall-699aea5e602bd2cd9ff10494.jpg"), new Uint8Array([255, 216, 255]));
+    const result = spawnSync(process.execPath, [imageManifestScript, output, images], { cwd: root, encoding: "utf8" });
+
+    assert.equal(result.status, 0, result.stderr);
+    const manifest = JSON.parse(readFileSync(output, "utf8"));
+    assert.equal(manifest.images[0].title, "Agile Vs Waterfall");
+    assert.equal(manifest.images[0].file, "agile-vs-waterfall-699aea5e602bd2cd9ff10494.jpg");
+  });
+
 test("submission CSV build combines independent issue files with the published CSV", (t) => {
   const directory = temporaryDirectory(t);
   const submissions = join(directory, "submissions");

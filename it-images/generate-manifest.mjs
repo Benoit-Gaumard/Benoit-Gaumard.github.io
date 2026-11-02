@@ -11,6 +11,7 @@ function titleFromFilename(filename) {
   return filename
     .replace(extname(filename), "")
     .replace(/-issue-\d+$/, "")
+    .replace(/-[0-9a-f]{24}$/i, "")
     .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
