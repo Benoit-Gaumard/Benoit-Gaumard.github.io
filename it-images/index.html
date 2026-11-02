@@ -688,20 +688,29 @@
   </script>
   <style data-catalogue-ux>
     #statsGrid { display: none; }
-    .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 0; align-items: start; }
-    .image-card { min-width: 0; grid-template-rows: auto auto; }
-    .preview-button { height: auto; aspect-ratio: auto; padding: .5rem; }
-    .preview-button img { width: 100%; height: auto; max-height: 32rem; object-fit: contain; }
+    .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; min-height: 0; align-items: stretch; }
+    .image-card { min-width: 0; height: 100%; grid-template-rows: auto 1fr; }
+    .preview-button { height: auto; aspect-ratio: 4 / 3; padding: .5rem; overflow: hidden; }
+    .preview-button img { width: 100%; height: 100%; object-fit: contain; }
+    .image-category { display: inline-block; margin: .35rem 0 0; color: var(--cp-text-muted); font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+    .category-bar { margin: 1rem 0 1.25rem; }
+    .category-filter { display: inline-flex; align-items: center; gap: .6rem; color: var(--cp-text); font-weight: 600; }
+    .category-filter select { min-height: 44px; min-width: 14rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); padding: .5rem .85rem; font: inherit; font-weight: 400; }
+    .result-count { color: var(--cp-text-muted); font-size: .875rem; }
     .image-credit { margin: .5rem 0; font-size: .875rem; overflow-wrap: anywhere; color: var(--cp-text-muted); }
     .close-button, .nav-button, .dialog-action, .clear-button, .submit-link-button { min-height: 44px; min-width: 44px; }
     .filter-bar { margin-top: 1rem; }
     #search[hidden] { display: none; }
     #dialogDescription { padding: 0 1rem; overflow-wrap: anywhere; }
     .filter-bar input { flex: 1 1 auto; }
+    @media (max-width: 64rem) and (min-width: 42.01rem) {
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 42rem) {
       .gallery { grid-template-columns: minmax(0, 1fr); }
       .filter-bar input { flex: none; width: 100%; min-height: 44px; }
-      .preview-button img { max-height: none; }
+      .category-filter { display: flex; width: 100%; }
+      .category-filter select { flex: 1; min-width: 0; }
     }
   </style>
 <!-- site-ui:start -->
@@ -1184,10 +1193,18 @@
     <section class="stats-grid" id="statsGrid" aria-label="Gallery statistics"></section>
 
     <section aria-label="Image gallery">
+      <div class="filter-bar category-bar">
+        <label class="category-filter" for="category">Category
+          <select id="category" aria-describedby="resultCount">
+            <option value="">All categories</option>
+          </select>
+        </label>
+        <span class="result-count" id="resultCount" aria-live="polite"></span>
+      </div>
       <div class="gallery" id="gallery" aria-live="polite"></div>
       <div class="filter-bar">
         <input id="search" type="search" placeholder="Search images..." autocomplete="off" spellcheck="false" aria-label="Search images" hidden>
-        <button class="clear-button" id="clearFilters" type="button" hidden>Clear search</button>
+        <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         <button class="submit-link-button" id="submitOpen" type="button" aria-describedby="submitHelp">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Submit an image
@@ -1314,11 +1331,13 @@
   </button>
 
   <script>
-    const state = { images: [], filtered: [], query: "", currentIndex: -1 };
+    const state = { images: [], filtered: [], query: "", category: "", currentIndex: -1 };
     const elements = {
       statsGrid: document.getElementById("statsGrid"),
       currentYear: document.getElementById("currentYear"),
       search: document.getElementById("search"),
+      category: document.getElementById("category"),
+      resultCount: document.getElementById("resultCount"),
       clearFilters: document.getElementById("clearFilters"),
       gallery: document.getElementById("gallery"),
       dialog: document.getElementById("previewDialog"),
@@ -1372,7 +1391,10 @@
       title.className = "image-title";
       title.textContent = image.title;
       title.title = image.title;
-      copy.append(title);
+      const category = document.createElement("p");
+      category.className = "image-category";
+      category.textContent = image.category || "Uncategorized";
+      copy.append(title, category);
 
       card.append(preview, copy);
       return card;
@@ -1380,12 +1402,13 @@
 
     function render() {
       elements.gallery.replaceChildren();
-      elements.clearFilters.hidden = state.query.length === 0;
+      elements.clearFilters.hidden = state.query.length === 0 && !state.category;
+      elements.resultCount.textContent = `${state.filtered.length} of ${state.images.length} images`;
 
       if (!state.filtered.length) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
-        empty.innerHTML = "<h2>No images found</h2><p>Try a different search term.</p>";
+        empty.innerHTML = "<h2>No images found</h2><p>Try a different search term or category.</p>";
         elements.gallery.append(empty);
         return;
       }
@@ -1397,10 +1420,25 @@
 
     function applyFilter() {
       const query = normalize(state.query.trim());
-      state.filtered = query
-        ? state.images.filter((image) => normalize(`${image.title} ${image.description || ""} ${image.transcription || ""}`).includes(query))
-        : state.images;
+      state.filtered = state.images.filter((image) =>
+        (!state.category || (image.category || "Uncategorized") === state.category) &&
+        (!query || normalize(`${image.title} ${image.category || ""} ${image.description || ""} ${image.transcription || ""}`).includes(query)));
       render();
+    }
+
+    function renderCategories() {
+      const counts = new Map();
+      state.images.forEach((image) => {
+        const category = image.category || "Uncategorized";
+        counts.set(category, (counts.get(category) || 0) + 1);
+      });
+      const options = [...counts].sort(([left], [right]) => left.localeCompare(right)).map(([category, count]) => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = `${category} (${count})`;
+        return option;
+      });
+      elements.category.replaceChildren(elements.category.options[0], ...options);
     }
 
     function openPreview(index) {
@@ -1450,6 +1488,7 @@
         const payload = await response.json();
         state.images = payload.images;
         state.filtered = payload.images;
+        renderCategories();
         window.dispatchEvent(new Event("catalogue-ready"));
         elements.search.hidden = state.images.length < 12;
         renderStats();
@@ -1466,10 +1505,17 @@
       clearTimeout(searchTimer);
       searchTimer = setTimeout(applyFilter, 100);
     });
+    elements.category.addEventListener("change", () => {
+      state.category = elements.category.value;
+      applyFilter();
+    });
     elements.clearFilters.addEventListener("click", () => {
       elements.search.value = "";
+      elements.category.value = "";
       state.query = "";
-      applyFilter();
+      state.category = "";
+      elements.category.dispatchEvent(new Event("change", { bubbles: true }));
+      elements.search.dispatchEvent(new Event("input", { bubbles: true }));
       elements.search.focus();
     });
 

@@ -24,6 +24,7 @@ const images = entries
   .map((entry) => ({
     file: entry.name,
     title: titleFromFilename(entry.name),
+    category: descriptions[entry.name]?.category || "Uncategorized",
     ...(descriptions[entry.name] || {
       description: "Description not yet recorded.",
       transcription: "Text transcription not yet recorded.",

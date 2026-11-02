@@ -420,10 +420,21 @@
       color: var(--cp-text);
       scroll-margin-top: 6rem;
       scroll-margin-bottom: 1rem;
-      transition: border-color .2s ease;
+      transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
     }
     .tool-card:hover, .tool-card:focus-within {
       border-color: var(--cp-accent);
+    }
+    .tool-card .tool-icon { transition: transform .3s ease; }
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      #catalog:not(:has(.is-dragging)) .tool-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 8px 10px -6px rgba(0, 0, 0, .1);
+        z-index: 1;
+      }
+      #catalog:not(:has(.is-dragging)) .tool-card:hover .tool-icon {
+        transform: scale(1.1) rotate(3deg);
+      }
     }
     .tool-link { display: grid; grid-template-columns: 3rem minmax(0, 1fr); grid-template-rows: auto 1fr auto; align-items: start; gap: .75rem; flex: 1; min-width: 0; padding: 1.25rem; color: var(--cp-text); text-decoration: none; border-radius: inherit; transition: background-color .16s ease; }
     .tool-card:hover .tool-link, .tool-card:focus-within .tool-link { background: var(--cp-accent-soft); }

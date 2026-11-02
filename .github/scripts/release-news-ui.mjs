@@ -72,6 +72,7 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
   const storageKey = config.slug + "-favorites";
   const el = Object.fromEntries(["newsControls", "search", "lastUpdate", "status", "category", "product", "favoritesFilter", "favoritesFilterLabel", "clearFilters", "retirements", "newsOptions", "resultCount", "updateList", "loadMore", "refreshedAt", "libraryCount", "newsError", "retryNews", "periodSummary"].map(id => [id, document.getElementById(id)]));
   const state = { status: "loading", items: [], filtered: [], visible: PAGE, favorites: new Set(), favoritesOnly: false };
+  const calendar = window.createReleaseCalendar({ controls: el.newsControls, results: el.updateList, apply: () => apply(), sync, kind: config.kind, productLabel });
   const STAR = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
   const controls = [el.search, el.lastUpdate, el.status, el.category, el.product].filter(Boolean);
   function node(tag, text, className) { const element = document.createElement(tag); if (text !== undefined) element.textContent = text; if (className) element.className = className; return element; }
@@ -97,10 +98,12 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
       });
       params.delete("favoritesOnly");
       if (state.favoritesOnly) params.set("favoritesOnly", "1");
+      calendar?.sync(params);
     });
   }
   function restore() {
     const params = new URLSearchParams(location.search);
+    calendar?.restore(params);
     controls.forEach(control => {
       const value = params.get(control.id) ?? (control === el.lastUpdate ? defaultPeriod : "");
       if (control.tagName === "SELECT" && value && ![...control.options].some(option => option.value === value)) {
@@ -176,6 +179,17 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
     el.favoritesFilter.setAttribute("aria-pressed", String(state.favoritesOnly));
   }
   function render() {
+    calendar?.render(state.filtered);
+    if (calendar?.active) {
+      el.resultCount.textContent = `${state.filtered.length} matching announcements · ${state.items.length} retained.`;
+      el.periodSummary.textContent = `Active period: ${calendar.summary}. Search, status, product and favorites filters still apply.`;
+      el.loadMore.hidden = true;
+      el.clearFilters.hidden = false;
+      el.newsOptions.querySelector("summary").textContent = `Filters and favorites${[el.status, el.category, el.product].some(control => control?.value) || state.favoritesOnly ? " · active" : ""}`;
+      if (el.retirements) el.retirements.setAttribute("aria-pressed", String(el.status.value === "Retirement"));
+      updateFavoriteFilter();
+      return;
+    }
     const shown = state.filtered.slice(0, state.visible);
     el.updateList.replaceChildren();
     if (shown.length) el.updateList.append(...shown.map(card));
@@ -207,7 +221,7 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
       && (!el.category?.value || item.categories.includes(el.category.value))
       && (!el.product.value || item.products.includes(el.product.value))
       && (!state.favoritesOnly || state.favorites.has(item.link))
-      && matchesPeriod(item.pubDate, el.lastUpdate.value));
+      && (calendar?.active ? calendar.matches(item.pubDate) : matchesPeriod(item.pubDate, el.lastUpdate.value)));
     state.visible = PAGE;
     render();
     if (updateUrl) sync();
@@ -372,6 +386,9 @@ export function upgradeNewsPage(source, kind, slug) {
   }
   html = html.replace(/  <script data-url-state>[\s\S]*?<\/script>/g, "").replace(/<style data-release-news>[\s\S]*?<\/style>\n?/g, "");
   html = html.replace("</head>", `<style data-release-news>${CSS}</style>\n</head>`);
+  if (!html.includes('src="/release-news/views.js"')) {
+    html = html.replace("</head>", '<link rel="stylesheet" href="/release-news/views.css">\n<script src="/release-news/views.js"></script>\n</head>');
+  }
   return enhancePage(html.replace(/\n/g, "\r\n"), { path: `/${slug}/` });
 }
 

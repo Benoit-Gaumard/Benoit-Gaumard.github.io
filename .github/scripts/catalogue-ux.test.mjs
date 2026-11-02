@@ -82,12 +82,16 @@ test("IT gallery: real content before filters, descriptions retained by generato
   for (const image of payload.images) {
     for (const field of ["description", "transcription", "credit", "license"]) assert.equal(image[field], descriptions[image.file][field]);
     assert.match(image.license, /not recorded/);
+    assert.ok(image.category && image.category === descriptions[image.file].category, `${image.file} needs a category`);
   }
+  assert.match(source, /<select id="category"/);
+  assert.match(source, /\.preview-button \{ height: auto; aspect-ratio: 4 \/ 3;/);
+  assert.ok(source.indexOf('<select id="category"') < source.indexOf('<div class="gallery" id="gallery"'));
   assert.match(read("it-images/generate-manifest.mjs"), /descriptions\[entry.name\]/);
   assert.match(source, /Submission requires a GitHub account/);
   assert.doesNotMatch(source, /Image text, source & usage|image-details|image-transcription|image-description\b/);
   assert.doesNotMatch(functionSource(source, "createCard"), /image-credit|createElement\("details"\)/);
-  assert.match(source, /copy\.append\(title\)/);
+  assert.match(source, /copy\.append\(title, category\)/);
 });
 test("curated links: exact URLs, visible metadata, descriptive labels and storage keys preserved", () => {
   assert.match(html["favorite-links"], /id="categoryBadges" role="group" aria-label="Filter by category"/);

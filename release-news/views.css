@@ -1,0 +1,33 @@
+.release-calendar [hidden], .release-calendar[hidden], .news-results[hidden] { display: none; }
+.calendar-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+.calendar-toolbar label { display: flex; align-items: center; gap: .5rem; }
+.calendar-toolbar input { min-height: 2.75rem; padding: .5rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; color-scheme: light dark; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .5rem; }
+.calendar-weekday { padding: .5rem; color: var(--cp-text-muted); font-weight: 650; }
+.calendar-day { min-width: 0; min-height: 8rem; padding: .65rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+.calendar-day h3 { margin: 0; font-size: 1rem; }
+.calendar-day time[aria-current] { display: inline-block; padding: .25rem .4rem; border-radius: 6px; background: var(--cp-accent); color: var(--cp-accent-fg); }
+.calendar-count { margin: .4rem 0; font-size: .75rem; color: var(--cp-text-muted); }
+.calendar-day ul { margin: 0; padding: 0; list-style: none; }
+.calendar-day li + li { margin-top: .5rem; padding-top: .5rem; border-top: 1px solid var(--cp-border); }
+.calendar-day a { display: block; padding: .25rem 0; color: var(--cp-link); font-size: .8rem; line-height: 1.5; overflow-wrap: anywhere; }
+@media (max-width: 64rem) {
+  .calendar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .calendar-weekday, .calendar-blank { display: none; }
+  .calendar-day h3 time::before { content: attr(datetime) " · "; font-weight: 400; font-size: .8rem; }
+}
+@media (max-width: 40rem) { .calendar-grid { grid-template-columns: minmax(0, 1fr); } }
+.release-diagrams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.diagram-summary { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 1rem; }
+.diagram-summary > div { flex: 1 1 12rem; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+.diagram-summary strong, .diagram-summary span { display: block; }
+.diagram-summary strong { font-size: 1.5rem; }
+.diagram-summary span { margin-top: .5rem; color: var(--cp-text-muted); }
+.release-chart { min-width: 0; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+.release-chart h3 { margin-top: 0; }
+.release-chart ul { list-style: none; padding: 0; margin: 0; }
+.release-chart li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; margin: 1rem 0; }
+.chart-label { overflow-wrap: anywhere; }
+.chart-track { grid-column: 1 / -1; height: .65rem; background: var(--cp-surface-soft); border-radius: 4px; overflow: hidden; }
+.chart-bar { height: 100%; background: var(--cp-accent); border-radius: inherit; }
+@media (max-width: 48rem) { .release-diagrams { grid-template-columns: minmax(0, 1fr); } }

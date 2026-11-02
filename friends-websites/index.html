@@ -364,7 +364,7 @@
 
     .friend-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1.25rem;
     }
     .friend-card {
@@ -714,6 +714,9 @@
     .friend-tags { margin: .25rem 0; }
     .friend-arrow, .submit-link-button, .view-toggle-button { min-height: 44px; }
     .friend-cards.list-view .friend-card { flex-wrap: wrap; }
+    @media (max-width: 64rem) and (min-width: 48.01rem) {
+      .friend-cards:not(.list-view) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 48rem) {
       .filter-bar { flex-direction: column; }
       .filter-bar .filter-field { flex: none; width: 100%; }
