@@ -85,7 +85,8 @@ async function fetchSiteMeta(url) {
 
 const csvText = await readFile(csvPath, "utf8");
 const rows = parseCsv(csvText).filter((row) => row.enabled?.toUpperCase() === "TRUE");
-const results = await Promise.all(rows.map((row) => fetchSiteMeta(row.url)));
+const urls = [...new Set(rows.map((row) => row.url))];
+const results = await Promise.all(urls.map(fetchSiteMeta));
 
 const payload = {
   generatedAt: new Date().toISOString(),
