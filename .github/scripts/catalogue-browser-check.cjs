@@ -319,13 +319,13 @@ runSuite("catalogue-ux", async ({ context, test, base, assert, artifacts, path }
     const page = await ctx.newPage();
     await page.goto(`${base}/friends-websites/`);
     await page.locator(".friend-card").first().waitFor();
-    assert.equal(await page.locator(".friend-card").count(), 2);
+    assert.equal(await page.locator(".friend-card").count(), 27);
     assert.doesNotMatch(await page.locator("#friendCards").textContent(), /Description\./);
     assert.equal(await page.locator(".filter-bar").getByLabel("Search", { exact: true }).isVisible(), true);
     assert.equal(await page.locator(".filter-bar").getByLabel("Category", { exact: true }).isVisible(), true);
     assert.equal(await page.locator(".filter-bar").getByLabel("Country", { exact: true }).isVisible(), true);
-    assert.deepEqual(await page.locator("#categoryFilter option").allTextContents(), ["All categories", "Blog"]);
-    assert.deepEqual(await page.locator("#countryFilter option").allTextContents(), ["All countries", "France"]);
+    assert.deepEqual(await page.locator("#categoryFilter option").allTextContents(), ["All categories", "Blog", "Website", "YouTube"]);
+    assert.deepEqual(await page.locator("#countryFilter option").allTextContents(), ["All countries", "France", "Switzerland"]);
     assert.match(await page.locator("#friendCards").textContent(), /Infrastructure/);
     assert.match(await page.locator("#friendCards").textContent(), /Networking/);
     await page.locator("#searchInput").fill("infrastructure");
@@ -375,15 +375,13 @@ runSuite("catalogue-ux", async ({ context, test, base, assert, artifacts, path }
   }
   await test("friends: combined search, category and country retain URL and view state", async () => {
     const ctx = await context({ viewport: { width: 390, height: 900 } }), page = await ctx.newPage();
-    const csv = [
-      "name,category,subcategory,country,url,enabled",
-      "Alice Cloud,Blog,Infra,France,https://example.org/alice,TRUE",
-      "Bob Cloud,Blog,Network,Belgium,https://example.org/bob,TRUE",
-      "Carol Designs,Portfolio,Design,Belgium,https://example.org/carol,TRUE",
-      "Disabled Site,News,Infra,Canada,https://example.org/disabled,FALSE",
-    ].join("\n");
-    await page.route("**/friends-websites.csv", route => route.fulfill({ contentType: "text/csv", body: csv }));
-    await page.route("**/websites-meta.json", route => route.fulfill({ json: { sites: [] } }));
+    const sites = [
+      { name: "Alice Cloud", category: "Blog", subcategory: "Infra", country: "France", url: "https://example.org/alice", enabled: true },
+      { name: "Bob Cloud", category: "Blog", subcategory: "Network", country: "Belgium", url: "https://example.org/bob", enabled: true },
+      { name: "Carol Designs", category: "Portfolio", subcategory: "Design", country: "Belgium", url: "https://example.org/carol", enabled: true },
+      { name: "Disabled Site", category: "News", subcategory: "Infra", country: "Canada", url: "https://example.org/disabled", enabled: false },
+    ];
+    await page.route("**/websites-meta.json", route => route.fulfill({ json: { sites } }));
     await page.goto(`${base}/friends-websites/?utm_source=controls#top`);
     await page.locator(".friend-card").first().waitFor();
     assert.deepEqual(await page.locator("#categoryFilter option").allTextContents(), ["All categories", "Blog", "Portfolio"]);
@@ -422,7 +420,7 @@ runSuite("catalogue-ux", async ({ context, test, base, assert, artifacts, path }
     const ctx = await context(), page = await ctx.newPage();
     let release;
     const gate = new Promise(resolve => { release = resolve; });
-    await page.route("**/friends-websites.csv", async route => {
+    await page.route("**/websites-meta.json", async route => {
       await gate;
       await route.fulfill({ status: 503, body: "Unavailable" });
     });
@@ -447,7 +445,6 @@ runSuite("catalogue-ux", async ({ context, test, base, assert, artifacts, path }
   });
   await test("friends: empty datasets retain all filters without fabricated options", async () => {
     const ctx = await context(), page = await ctx.newPage();
-    await page.route("**/friends-websites.csv", route => route.fulfill({ contentType: "text/csv", body: "name,category,subcategory,country,url,enabled\n" }));
     await page.route("**/websites-meta.json", route => route.fulfill({ json: { sites: [] } }));
     await page.goto(`${base}/friends-websites/`);
     await page.locator(".empty-state").waitFor();

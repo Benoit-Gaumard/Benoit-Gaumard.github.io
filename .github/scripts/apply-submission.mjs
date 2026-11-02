@@ -3,6 +3,7 @@
 // used, validates the payload, writes the change, and reports the outcome
 // through GITHUB_OUTPUT so the workflow can open a pull request or reject.
 import { readFileSync, writeFileSync, appendFileSync, readdirSync } from "node:fs";
+import { readCatalogue, readWebsiteSubmissions } from "../../friends-websites/catalogue.mjs";
 
 const MAX_URL = 400;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
@@ -249,43 +250,44 @@ async function submitFavoriteLink(fields) {
 }
 
 async function submitFriendWebsite(fields) {
-  const csv = readCsv("friends-websites/friends-websites.csv");
+  const { sites } = readCatalogue("friends-websites/websites-meta.json");
   const submissionsDirectory = "friends-websites/submissions";
-  // fetch-updates.mjs re-reads this file with a naive comma split, so a comma
-  // anywhere in a cell would silently corrupt the metadata refresh.
-  const name = requireText(fields, "site owner", { max: 80, noCommas: true });
+  const name = requireText(fields, "site owner", { max: 80 });
   const url = requireUrl(fields, "website url");
-  const category = requireText(fields, "website category", { max: 40, noCommas: true });
-  const subcategory = requireText(fields, "website topic", { max: 40, noCommas: true });
-  const country = requireText(fields, "country", { max: 40, noCommas: true });
+  const category = requireText(fields, "website category", { max: 40 });
+  const subcategory = requireText(fields, "website topic", { max: 40 });
+  const country = requireText(fields, "country", { max: 40 });
 
   const key = normalizeUrl(url);
-  if ([...csv.rows, ...submissionRows(submissionsDirectory)].some((row) => normalizeUrl(row.url) === key)) {
+  if ([...sites, ...readWebsiteSubmissions(submissionsDirectory).map(entry => entry.site)].some((row) => normalizeUrl(row.url) === key)) {
     duplicate("This website is already listed.");
   }
 
-  const finalCategory = matchExisting(csv.rows, "category", category);
-  const finalSubcategory = matchExisting(csv.rows, "subcategory", subcategory);
-  const finalCountry = matchExisting(csv.rows, "country", country);
+  const finalCategory = matchExisting(sites, "category", category);
+  const finalSubcategory = matchExisting(sites, "subcategory", subcategory);
+  const finalCountry = matchExisting(sites, "country", country);
 
-  const path = writeIssueCsv(submissionsDirectory, csv, {
+  const issueNumber = process.env.ISSUE_NUMBER;
+  if (!/^\d+$/.test(issueNumber || "")) throw new Error("ISSUE_NUMBER must be set to write a community submission.");
+  const path = `${submissionsDirectory}/issue-${issueNumber}.json`;
+  writeFileSync(path, JSON.stringify({
     name,
     category: finalCategory,
     subcategory: finalSubcategory,
     country: finalCountry,
     url,
     dateAdded: new Date().toISOString().slice(0, 10),
-    // Submissions land disabled: merging the pull request never publishes on
-    // its own, the row only appears once enabled is flipped by hand.
-    enabled: "FALSE",
-  });
+    enabled: false,
+    description: null,
+    faviconUrl: null,
+  }, null, 2) + "\n", { encoding: "utf8", flag: "wx" });
 
   return {
     files: [path],
     title: name,
     prTitle: `Add friend website: ${name}`,
     summary: [["Name", name], ["URL", url], ["Category", finalCategory], ["Topic", finalSubcategory], ["Country", finalCountry]],
-    note: "The row is added with enabled=FALSE, so merging does not publish it. Set enabled to TRUE when you want it live.",
+    note: "The site is added with enabled=false, so merging does not publish it. Set enabled to true in websites-meta.json when you want it live.",
   };
 }
 

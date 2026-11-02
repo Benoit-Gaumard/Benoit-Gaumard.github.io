@@ -12,7 +12,7 @@ const buildScript = resolve(".github/scripts/build-submission-csv.mjs");
 const imageManifestScript = resolve("it-images/generate-manifest.mjs");
 const sourceCsv = readFileSync(resolve("favorite-links/favorite-links.csv"), "utf8");
 const sourceFiles = {
-  friends: ["friends-websites/friends-websites.csv", "friends-websites/submissions"],
+  friends: ["friends-websites/websites-meta.json", "friends-websites/submissions"],
   portals: ["microsoft-portals/portals-urls.csv", "microsoft-portals/submissions"],
   rss: ["rss-watcher/rss-feeds.csv", "rss-watcher/submissions"],
 };
@@ -52,7 +52,7 @@ test("favorite-link issues write separate submission files without changing the 
   );
 });
 
-test("friend website and Microsoft portal issues write separate CSVs", (t) => {
+test("friend website and Microsoft portal issues write separate submission files", (t) => {
     const directory = temporaryDirectory(t);
     for (const [key, [sourcePath, submissionPath]] of Object.entries(sourceFiles).filter(([key]) => key !== "rss")) {
       const source = join(directory, sourcePath);
@@ -71,9 +71,9 @@ test("friend website and Microsoft portal issues write separate CSVs", (t) => {
       assert.equal(result.status, 0, result.stderr);
       assert.match(result.stdout, /status: ok/);
       assert.equal(readFileSync(source, "utf8"), readFileSync(resolve(sourcePath), "utf8"));
-      const submission = readFileSync(join(submissions, `issue-${key === "friends" ? "201" : "202"}.csv`), "utf8");
+      const submission = readFileSync(join(submissions, `issue-${key === "friends" ? "201.json" : "202.csv"}`), "utf8");
       assert.ok(submission.includes("Example"));
-      if (key === "friends") assert.match(submission, /,FALSE,\d{4}-\d{2}-\d{2}\r?\n$/);
+      if (key === "friends") assert.equal(JSON.parse(submission).enabled, false);
     }
   });
 

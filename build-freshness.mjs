@@ -19,7 +19,7 @@ const FILES = [
   "azure-naming-convention/abbreviations.json",
   "azure-regions/regions.json",
   "favorite-links/favorite-links.csv",
-  "friends-websites/friends-websites.csv",
+  "friends-websites/websites-meta.json",
   "microsoft-portals/portals-urls.csv",
   "it-images/images.json",
   // added so /tools/ can show a per-card "updated" date
@@ -43,7 +43,7 @@ const FILES = [
 
 const SOURCE_FILES = {
   "favorite-links/favorite-links.csv": ["favorite-links/favorite-links.csv", "favorite-links/submissions"],
-  "friends-websites/friends-websites.csv": ["friends-websites/friends-websites.csv", "friends-websites/submissions"],
+  "friends-websites/websites-meta.json": ["friends-websites/websites-meta.json", "friends-websites/submissions"],
   "microsoft-portals/portals-urls.csv": ["microsoft-portals/portals-urls.csv", "microsoft-portals/submissions"],
   "it-images/images.json": [
     "it-images/images.json",

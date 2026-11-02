@@ -1,15 +1,14 @@
 name: Fold Community Submissions
 
-# Community submission PRs add one submissions/issue-N.csv file each (conflict-free).
-# Once merged on main, fold them into the reference CSV and delete them, so the
-# reference CSV (e.g. favorite-links/favorite-links.csv) always holds every entry.
+# Community PRs add one issue-scoped file each (CSV, or JSON for friends' websites).
+# Fold merged submissions into their reference catalogue, then delete the proposals.
 on:
   push:
     branches:
       - main
     paths:
       - 'favorite-links/submissions/issue-*.csv'
-      - 'friends-websites/submissions/issue-*.csv'
+      - 'friends-websites/submissions/issue-*.json'
       - 'microsoft-portals/submissions/issue-*.csv'
       - 'rss-watcher/submissions/issue-*.csv'
   workflow_dispatch:
@@ -33,13 +32,13 @@ jobs:
         with:
           node-version: 20
 
-      - name: Fold submissions into reference CSVs
+      - name: Fold submissions into reference catalogues
         run: |
           node .github/scripts/fold-submissions.mjs \
             favorite-links/favorite-links.csv favorite-links/submissions \
-            friends-websites/friends-websites.csv friends-websites/submissions \
             microsoft-portals/portals-urls.csv microsoft-portals/submissions \
             rss-watcher/rss-feeds.csv rss-watcher/submissions
+          node friends-websites/catalogue.mjs fold friends-websites/websites-meta.json friends-websites/submissions
 
       - name: Commit and push
         run: |
@@ -49,7 +48,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nothing to fold."
           else
-            git commit -m "chore: fold community submissions into reference CSVs"
+            git commit -m "chore: fold community submissions into reference catalogues"
             git pull --rebase
             git push
           fi

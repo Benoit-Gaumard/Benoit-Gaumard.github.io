@@ -128,8 +128,7 @@ jobs:
           cp ../azure-ip-ranges/ip-ranges.json public/azure-ip-ranges/ip-ranges.json
           mkdir -p public/friends-websites
           cp ../friends-websites/index.html public/friends-websites/index.html
-          node ../.github/scripts/build-submission-csv.mjs ../friends-websites/friends-websites.csv ../friends-websites/submissions public/friends-websites/friends-websites.csv
-          cp ../friends-websites/websites-meta.json public/friends-websites/websites-meta.json
+          node ../friends-websites/catalogue.mjs build ../friends-websites/websites-meta.json ../friends-websites/submissions public/friends-websites/websites-meta.json
           mkdir -p public/azure-regions
           cp ../azure-regions/index.html public/azure-regions/index.html
           cp ../azure-regions/regions.json public/azure-regions/regions.json

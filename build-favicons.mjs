@@ -76,7 +76,6 @@ function collectDomains() {
 
   const csvs = [
     ["favorite-links/favorite-links.csv", "favorite-links", "favorite-links/submissions"],
-    ["friends-websites/friends-websites.csv", "friends-websites", "friends-websites/submissions"],
     ["microsoft-portals/portals-urls.csv", "microsoft-portals", "microsoft-portals/submissions"],
   ];
   for (const [path, src, submissionsDirectory] of csvs) {
@@ -85,6 +84,11 @@ function collectDomains() {
       files.push(...readdirSync(submissionsDirectory)
         .filter((file) => /^issue-\d+\.csv$/.test(file))
         .map((file) => join(submissionsDirectory, file)));
+    }
+
+    if (existsSync("friends-websites/websites-meta.json")) {
+      const { sites } = JSON.parse(readFileSync("friends-websites/websites-meta.json", "utf8"));
+      sites.filter(site => site.enabled).forEach(site => add(new URL(site.url).hostname, "friends-websites"));
     }
     for (const file of files) {
       for (const line of readFileSync(file, "utf8").split(/\r?\n/).slice(1)) {

@@ -1273,7 +1273,6 @@
         <label for="submitCountryInput">Country</label>
         <input id="submitCountryInput" type="text" maxlength="40" required autocomplete="off" list="submitCountries" placeholder="France">
         <datalist id="submitCountries"></datalist>
-        <p class="submit-field-hint">Commas are not accepted in any field.</p>
       </div>
       <div class="submit-dialog-actions">
         <p class="submit-dialog-note">A free GitHub account is needed to post the suggestion.</p>
@@ -1399,17 +1398,6 @@
 
     let friends = [];
     let directoryReady = false;
-
-    function parseCsv(text) {
-      const lines = text.trim().split(/\r?\n/);
-      const headers = lines[0].split(",").map((h) => h.trim());
-      return lines.slice(1).filter(Boolean).map((line) => {
-        const cells = line.split(",").map((c) => c.trim());
-        const row = {};
-        headers.forEach((header, index) => { row[header] = cells[index] ?? ""; });
-        return row;
-      });
-    }
 
     function initials(name) {
       return name.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
@@ -1559,7 +1547,7 @@
       try {
         var res = await fetch("/freshness.json", { cache: "no-store" });
         if (!res.ok) throw new Error(res.status);
-        var iso = (await res.json())["friends-websites/friends-websites.csv"];
+        var iso = (await res.json())["friends-websites/websites-meta.json"];
         var date = iso ? new Date(iso) : null;
         if (!date || isNaN(date)) throw new Error("no stamp");
         el.textContent = date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -1598,24 +1586,23 @@
 
     async function init() {
       await loadFaviconMap();
-      const [csvResponse, metaResponse] = await Promise.all([
-        fetch("./friends-websites.csv", { cache: "no-store" }),
-        fetch("./websites-meta.json", { cache: "no-store" }).catch(() => null),
-      ]);
+      const response = await fetch("./websites-meta.json", { cache: "no-store" });
       showRefreshedAt();
-      const csvText = await csvResponse.text();
-      if (!csvResponse.ok) throw new Error(`Websites request failed: ${csvResponse.status}`);
-      const metaByUrl = new Map();
-      if (metaResponse?.ok) {
-        const meta = await metaResponse.json();
-        meta.sites.forEach((site) => metaByUrl.set(site.url, site));
-      }
-      friends = parseCsv(csvText)
-        .filter((row) => row.enabled?.toUpperCase() === "TRUE")
-        .map((row) => {
-          const meta = metaByUrl.get(row.url);
-          const description = meta?.description?.trim();
-          return { ...row, faviconUrl: meta?.faviconUrl || null, description: description && !/^(description|todo|tbd)[.!]?$/i.test(description) ? description : null };
+      if (!response.ok) throw new Error(`Websites request failed: ${response.status}`);
+      const payload = await response.json();
+      if (!Array.isArray(payload.sites)) throw new Error("Missing website entries.");
+      payload.sites.forEach(site => {
+        if (!site || ["name", "category", "country", "url"].some(field => typeof site[field] !== "string" || !site[field].trim())
+          || typeof site.subcategory !== "string" || typeof site.enabled !== "boolean"
+          || (site.description != null && typeof site.description !== "string")) throw new Error("Invalid website entry.");
+        const url = new URL(site.url);
+        if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) throw new Error("Invalid website URL.");
+      });
+      friends = payload.sites
+        .filter(site => site.enabled)
+        .map(site => {
+          const description = site.description?.trim();
+          return { ...site, description: description && !/^(description|todo|tbd)[.!]?$/i.test(description) ? description : null };
         });
       populateFilters();
       directoryReady = true;
@@ -1719,12 +1706,6 @@
 
         if (!owner || !rawUrl || !category || !topic || !country) {
           showError("Every field is required.");
-          return;
-        }
-        // fetch-updates.mjs re-reads the CSV with a naive comma split, so a
-        // comma in any cell would break the metadata refresh downstream.
-        if ([owner, category, topic, country].some((value) => value.includes(","))) {
-          showError("Commas are not accepted - please remove them.");
           return;
         }
 

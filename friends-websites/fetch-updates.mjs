@@ -3,19 +3,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const csvPath = join(HERE, "friends-websites.csv");
 const outputPath = join(HERE, "websites-meta.json");
-
-function parseCsv(text) {
-  const lines = text.trim().split(/\r?\n/);
-  const headers = lines[0].split(",").map((h) => h.trim());
-  return lines.slice(1).filter(Boolean).map((line) => {
-    const cells = line.split(",").map((c) => c.trim());
-    const row = {};
-    headers.forEach((header, index) => { row[header] = cells[index] ?? ""; });
-    return row;
-  });
-}
+import { validateCatalogue } from "./catalogue.mjs";
 
 function parseAttributes(tagText) {
   const attrs = {};
@@ -83,12 +72,20 @@ async function fetchSiteMeta(url) {
   }
 }
 
-const csvText = await readFile(csvPath, "utf8");
-const rows = parseCsv(csvText).filter((row) => row.enabled?.toUpperCase() === "TRUE");
-const urls = [...new Set(rows.map((row) => row.url))];
-const results = await Promise.all(urls.map(fetchSiteMeta));
+const catalogue = validateCatalogue(JSON.parse(await readFile(outputPath, "utf8")));
+const results = await Promise.all(catalogue.sites.map(async (site) => {
+  if (!site.enabled) return site;
+  const meta = await fetchSiteMeta(site.url);
+  if (!meta.ok) {
+    console.warn(`Metadata unavailable for ${site.url}: ${meta.error}`);
+    return { ...site, ok: false, error: meta.error };
+  }
+  const { error, ...previous } = site;
+  return { ...previous, ...meta };
+}));
 
 const payload = {
+  ...catalogue,
   generatedAt: new Date().toISOString(),
   sites: results,
 };
