@@ -318,7 +318,7 @@
     .graph-field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .4rem; }
     .graph-field input, .graph-field select { min-width: 0; width: 100%; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
     .graph-field input::placeholder { color: var(--cp-text-muted); opacity: 1; }
-    .graph-options > summary, .dataset-statistics > summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); font-size: .85rem; cursor: pointer; }
+    .dataset-statistics > summary { min-height: 2.75rem; padding-block: .65rem; color: var(--cp-link); font-size: .85rem; cursor: pointer; }
     .graph-secondary { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(12rem, 1fr) minmax(0, 1fr) auto; align-items: end; gap: .75rem; }
     .graph-checkbox { display: flex; align-items: center; gap: .5rem; min-height: 3rem; font-size: .85rem; cursor: pointer; }
     .graph-checkbox input { flex: none; width: 1.15rem; height: 1.15rem; accent-color: var(--cp-accent); }
@@ -914,6 +914,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/graph-permissions/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1022,14 +1045,13 @@
 
     <section aria-label="Microsoft Graph permissions">
       <noscript><p>This catalogue needs JavaScript. <a href="./permissions.json">Download the permission dataset</a> or use Microsoft Learn above.</p></noscript>
-      <fieldset class="graph-controls" id="graphControls" disabled aria-label="Filter Graph permission names">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="graph-controls" id="graphControls" disabled aria-label="Filter Graph permission names">
         <div class="graph-primary">
           <div class="graph-field"><label for="typeFilter">Permission type</label><select id="typeFilter" aria-describedby="typeHelp"><option value="">All types</option><option value="delegated">Delegated</option><option value="application">Application</option><option value="rsc">RSC</option></select></div>
           <div class="graph-field"><label for="search">Search permissions</label><input id="search" type="search" placeholder="Name, description or GUID" autocomplete="off" spellcheck="false"></div>
         </div>
         <p class="graph-help" id="typeHelp">A permission name can exist in several types. Their IDs and consent requirements can differ.</p>
-        <details class="graph-options" id="filterOptions">
-          <summary>Filters and sort</summary>
+        <div class="graph-options" id="filterOptions">
           <div class="graph-secondary">
             <div class="graph-field"><label for="resourceFilter">Resource</label><select id="resourceFilter"><option value="">All resources</option></select></div>
             <label class="graph-checkbox"><input type="checkbox" id="adminConsentFilter" aria-describedby="consentFilterHelp"> Admin consent required</label>
@@ -1037,9 +1059,9 @@
             <button class="graph-action" id="sortDirection" type="button">Ascending</button>
           </div>
           <p class="graph-help" id="consentFilterHelp">With All types, the consent filter matches a name if at least one standard variant requires admin consent.</p>
-        </details>
+        </div>
         <button class="graph-action" id="resetFilters" type="button" hidden>Reset filters</button>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p class="graph-status" id="actionStatus" role="status" aria-live="polite"></p>
       <div class="graph-copy" id="copyFallback" hidden><label id="copyLabel" for="copyValue">Select and copy the value</label><textarea id="copyValue" rows="3" readonly></textarea></div>
       <div class="graph-error" id="dataError" role="alert" hidden><p>Graph permission data could not be loaded or validated. Please retry.</p><button class="graph-action" id="retry" type="button">Retry</button></div>
@@ -1559,8 +1581,6 @@
       el.consentFilterHelp.textContent = type === "rsc" ? "RSC has no comparable flag here. Admin consent required excludes these entries."
         : type ? `The admin-consent filter applies only to the ${TYPE_INFO[type].label} variant, not to another type with the same name.`
         : "With All types, the consent filter matches names with at least one delegated or application variant marked as requiring admin consent.";
-      const extra = Number(Boolean(el.resourceFilter.value)) + Number(el.adminConsentFilter.checked);
-      el.filterOptions.querySelector("summary").textContent = "Filters and sort" + (extra ? ` · ${extra} active` : "");
       el.resetFilters.hidden = !el.search.value && !el.resourceFilter.value && !type && !el.adminConsentFilter.checked;
       el.sortBy.value = state.sortKey;
       el.sortDirection.textContent = state.sortDir === "asc" ? "Ascending" : "Descending";

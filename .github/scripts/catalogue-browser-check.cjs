@@ -20,10 +20,8 @@ runSuite("catalogue-ux", async ({ context, test, base, assert, artifacts, path }
           const controls = await page.locator("main input:not([type=checkbox]), main select").evaluateAll((nodes) => nodes.filter((node) => node.getBoundingClientRect().height > 0).map((node) => ({ id: node.id, height: node.getBoundingClientRect().height })));
           assert.ok(controls.every((control) => control.height >= 44 && control.height < 75), JSON.stringify({ slug, controls }));
           if (slug === "icons" || slug === "emoji-sheet") {
-            assert.equal(await page.locator("#perPage").isVisible(), false);
-            await page.locator(".extra-filters summary").click();
             assert.equal(await page.locator("#perPage").isVisible(), true);
-            await page.locator(".extra-filters summary").click();
+            assert.equal(await page.locator(".extra-filters summary").count(), 0);
           }
           if (slug === "it-images") {
             const image = await page.locator(".preview-button").first().boundingBox();
@@ -43,7 +41,7 @@ runSuite("catalogue-ux", async ({ context, test, base, assert, artifacts, path }
     await page.waitForFunction(() => document.querySelector("#gallery").getAttribute("aria-busy") === "false");
     assert.equal(await page.locator("#source").inputValue(), "Microsoft");
     assert.equal(await page.locator("#category").inputValue(), "compute");
-    assert.equal(await page.locator("#gallery").getAttribute("data-density"), "compact");
+    assert.equal(await page.locator("#gallery").getAttribute("data-density"), "s");
     assert.ok(await page.locator(".icon-card").count());
     assert.match(await page.locator(".icon-card .category").first().textContent(), /Microsoft/);
     assert.equal(await page.locator(".icon-card .variant").count(), 0);

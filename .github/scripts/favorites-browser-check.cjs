@@ -13,7 +13,7 @@ runSuite("favorite-stars", async ({ context, test, base, assert, artifacts, path
     { route: "/rss-watcher/?lastUpdate=", star: ".favorite-button", filter: "#favoritesToggle", view: "#viewList" },
     ...["azure", "m365", "aws"].map(provider => ({
       route: `/${provider}-release-updates/?lastUpdate=`,
-      star: ".news-favorite", filter: "#favoritesFilter", disclosure: "#newsOptions > summary",
+      star: ".news-favorite", filter: "#favoritesFilter",
     })),
   ];
   const favoriteClasses = ".favorite-button,.fav-button,.news-favorite,.favorites-filter";
@@ -111,7 +111,6 @@ runSuite("favorite-stars", async ({ context, test, base, assert, artifacts, path
               await checkSelected(page, selectedSelector, theme);
             }
             if (surface.filter) {
-              if (surface.disclosure) await page.locator(surface.disclosure).click();
               await page.locator(surface.filter).click();
               assert.equal(await page.locator(surface.filter).getAttribute("aria-pressed"), "true");
               await checkSelected(page, surface.filter, theme);

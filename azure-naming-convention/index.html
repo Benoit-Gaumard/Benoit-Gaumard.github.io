@@ -1000,6 +1000,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-naming-convention/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1093,7 +1116,7 @@
         <p>The naming catalogue could not be loaded. No name can be validated until it is available.</p>
         <button class="catalogue-button" id="retryLoad" type="button">Retry loading catalogue</button>
       </div>
-      <div class="calculator-card">
+      <div class="calculator-card tool-controls-panel">
         <h2 class="card-heading" id="generatorHeading" tabindex="-1">Generate a resource name</h2>
         <div class="generator-layout">
         <section class="name-preview" id="namePreview" aria-labelledby="previewHeading">
@@ -1186,7 +1209,7 @@
     </section>
 
     <section id="abbreviations" aria-label="Abbreviations reference">
-      <div class="calculator-card">
+      <div class="calculator-card tool-controls-panel">
         <h2 class="card-heading">Resource type abbreviations</h2>
         <div class="table-toolbar">
           <label for="search">Search the catalogue</label>

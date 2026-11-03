@@ -3,6 +3,7 @@ import { readFile, writeFile, readdir } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { join, relative, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { frameToolControls } from "./tool-controls.mjs";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const START = "<!-- site-ui:start -->";
@@ -519,7 +520,7 @@ export function enhancePage(input, { path = "/", errorPage = false } = {}) {
   if (!html.includes("</head>")) throw new Error(`Missing document head: ${path}`);
   html = html.replace("</head>", snippet + "\n</head>");
   html = html.replace(/(<(pre|textarea|script)\b[^>]*>[\s\S]*?<\/\2>)|^[\t ]+$/gim, (match, literal) => literal || "");
-  return html.replace(/\r+\n/g, "\n").replace(/\r/g, "\n").replace(/\n/g, eol);
+  return frameToolControls(html.replace(/\r+\n/g, "\n").replace(/\r/g, "\n").replace(/\n/g, eol), path);
 }
 
 export async function applySiteUI(root = ROOT) {

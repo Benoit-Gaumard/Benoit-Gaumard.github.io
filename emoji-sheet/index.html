@@ -724,8 +724,13 @@
   }
   </script>
   <style data-catalogue-ux>
-    .toolbar { position: relative; top: auto; grid-template-columns: minmax(0, 1fr) auto; }
-    .extra-filters summary { cursor: pointer; min-height: 44px; padding: .625rem; }
+    .toolbar { position: relative; top: auto; grid-template-columns: minmax(0, 1fr); }
+    #category[hidden] { display: none; }
+    #categoryLabel { display: block; margin-bottom: .5rem; font-size: .85rem; font-weight: 600; }
+    .category-badges { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .category-badge { min-height: 44px; max-width: 100%; padding: .4rem .85rem; border: 1px solid var(--cp-border-strong); border-radius: 999px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: .85rem; cursor: pointer; overflow-wrap: anywhere; }
+    .category-badge:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .category-badge[aria-pressed="true"] { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
     .filter-fields { display: grid; gap: .5rem; padding-top: .5rem; }
     .filter-fields label { position: static; width: auto; height: auto; display: block; clip: auto; margin: 0 0 .25rem; }
     .results-actions, .results-bar { flex-wrap: wrap; }
@@ -1127,6 +1132,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/emoji-sheet/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1215,17 +1243,17 @@
     </section>
 
     <section aria-label="Emoji browser">
-      <div class="toolbar">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><div class="toolbar">
         <div class="field search-field">
           <label for="search">Search emojis</label>
           <input id="search" type="search" placeholder="Search by name, shortcode, or keyword..." autocomplete="off" spellcheck="false">
         </div>
-        <details class="extra-filters">
-          <summary>Filters</summary>
+        <div class="extra-filters">
           <div class="filter-fields">
             <div class="field">
-              <label for="category">Category</label>
-              <select id="category"><option value="">All categories</option></select>
+              <span id="categoryLabel">Categories</span>
+              <select id="category" aria-label="Category" hidden><option value="">All categories</option></select>
+              <div class="category-badges" id="categoryBadges" role="group" aria-labelledby="categoryLabel"></div>
             </div>
             <div class="field">
               <label for="perPage">Per page</label>
@@ -1237,7 +1265,7 @@
               </select>
             </div>
           </div>
-        </details>
+        </div>
       </div>
 
       <p class="hint">The large emoji copies the character; each <code>:shortcode:</code> button copies that alias. Stars only save favorites locally in this browser.</p>
@@ -1248,7 +1276,7 @@
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
         </div>
         <p id="resultCount" aria-live="polite">Loading emojis...</p>
-      </div>
+      </div></div><!-- tool-controls:end -->
 
       <div class="gallery" id="gallery" aria-busy="true"></div>
       <nav class="pagination" id="pagination" aria-label="Emoji pages">
@@ -1342,6 +1370,7 @@
     const elements = {
       search: document.getElementById("search"),
       category: document.getElementById("category"),
+      categoryBadges: document.getElementById("categoryBadges"),
       perPage: document.getElementById("perPage"),
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
@@ -1487,6 +1516,9 @@
     function applyFilters() {
       const query = normalize(elements.search.value.trim());
       const selectedCategory = elements.category.value;
+      elements.categoryBadges.querySelectorAll("button").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.category === selectedCategory));
+      });
       state.filtered = state.emojis.filter((item) => {
         const synonyms = { love: "heart", celebration: "party", cheers: "clinking", programmer: "technologist", merci: "pray", sourire: "smile", avion: "airplane", coeur: "heart" };
         const terms = query.split(/\s+/).filter(Boolean).map((term) => synonyms[term] || term);
@@ -1505,6 +1537,20 @@
       elements.category.replaceChildren(new Option(`All categories (${state.emojis.length.toLocaleString()})`, ""));
       [...counts.keys()].sort().forEach((category) => {
         elements.category.append(new Option(`${category} (${counts.get(category).toLocaleString()})`, category));
+      });
+      elements.categoryBadges.replaceChildren();
+      [...elements.category.options].forEach(option => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "category-badge";
+        button.dataset.category = option.value;
+        button.textContent = option.textContent;
+        button.setAttribute("aria-pressed", String(option.value === elements.category.value));
+        button.addEventListener("click", () => {
+          elements.category.value = option.value;
+          elements.category.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        elements.categoryBadges.append(button);
       });
     }
 

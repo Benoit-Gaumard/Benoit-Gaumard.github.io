@@ -41,6 +41,29 @@ test('unproven legacy false values never become confirmed negatives', () => {
   assert.equal(validate(withoutEvidence).regions[0].availabilityZones, null);
 });
 
+test('physical and logical locations retain validated provider namespaces', () => {
+  const normalized = validate(data);
+  for (const region of [...normalized.regions, ...normalized.logicalRegions]) {
+    assert.ok(Array.isArray(region.availableProviders));
+    assert.equal(new Set(region.availableProviders).size, region.availableProviders.length);
+  }
+  assert.ok(normalized.regions.find(region => region.id === 'francecentral').availableProviders.includes('Microsoft.Compute'));
+  assert.ok(normalized.logicalRegions.find(region => region.id === 'global').availableProviders.length > 0);
+  assert.ok(normalized.logicalRegions.every(region => region.latitude === null && region.longitude === null && region.availabilityZones === null));
+  assert.equal(zoneStatus(normalized.logicalRegions[0]).key, 'not-applicable');
+  assert.ok(Number.isFinite(Date.parse(data.sources.providers.checkedAt)));
+  const oldRegion = { ...data.regions[0] };
+  delete oldRegion.availableProviders;
+  assert.equal(validate({ ...data, regions: [oldRegion] }).regions[0].availableProviders, null);
+  assert.throws(() => validate({ ...data, regions: [{ ...oldRegion, availableProviders: 'Microsoft.Compute' }] }));
+  assert.throws(() => validate({ ...data, logicalRegions: [{ ...data.logicalRegions[0], availableProviders: [null] }] }));
+  assert.match(script, /region\.regionType === "Physical"/);
+  assert.match(script, /params\.get\("type"\)/);
+  assert.match(script, /url\.searchParams\.set\("type", elements\.typeFilter\.value\)/);
+  assert.match(html, /<label for="typeFilter">Type<\/label>/);
+  assert.match(script, /providerSummary\.textContent = `Available Providers/);
+});
+
 test('invalid coordinates do not remove a region from the directory', () => {
   const normalized = validate({ ...data, regions: [{ ...data.regions[0], latitude: 95, longitude: null }, { ...data.regions[1], latitude: 0, longitude: 0 }] });
   assert.equal(normalized.regions.length, 2);

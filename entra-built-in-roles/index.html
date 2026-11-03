@@ -319,7 +319,6 @@
     .privileged-filter { display: flex; align-items: center; min-height: 3rem; gap: .5rem; font-size: .85rem; font-weight: 600; cursor: pointer; }
     .privileged-filter input { width: 1.15rem; height: 1.15rem; flex: none; accent-color: var(--cp-accent); }
     .directory-options, .directory-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: .75rem 0; }
-    .sort-options > summary { min-height: 2.75rem; padding-block: .65rem; cursor: pointer; color: var(--cp-link); font-size: .85rem; }
     .directory-options select { min-height: 2.75rem; max-width: 100%; padding: .5rem; background: var(--cp-surface); color: var(--cp-text); border: 1px solid var(--cp-border-strong); border-radius: 6px; }
     .directory-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; max-width: 100%; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; overflow-wrap: anywhere; }
     .directory-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
@@ -895,6 +894,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/entra-built-in-roles/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -997,7 +1019,7 @@
 
     <section aria-label="Entra ID built-in roles">
       <noscript><p>This catalogue needs JavaScript. <a href="./roles.json">Download the role dataset</a> or use the Microsoft Learn reference above.</p></noscript>
-      <fieldset class="directory-controls" id="directoryControls" disabled aria-label="Filter directory roles">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="directory-controls" id="directoryControls" disabled aria-label="Filter directory roles">
         <div class="directory-filters">
           <div class="directory-field directory-search"><label for="search">Search directory roles</label><input id="search" type="search" placeholder="Name, template ID or action" autocomplete="off" spellcheck="false"></div>
           <div class="directory-field"><label for="serviceFilter">Service</label><select id="serviceFilter"><option value="">All services</option></select></div>
@@ -1005,10 +1027,10 @@
         </div>
         <p class="directory-help" id="privilegedHelp">The badge follows Microsoft's published classification, not a calculated risk score. The count covers the whole dataset.</p>
         <div class="directory-options">
-          <details class="sort-options"><summary>Sort roles</summary><div class="directory-actions"><label for="sortBy">Sort by</label><select id="sortBy"></select><button class="directory-action" id="sortDirection" type="button">Ascending</button></div></details>
+          <div class="sort-options"><div class="directory-actions"><label for="sortBy">Sort by</label><select id="sortBy"></select><button class="directory-action" id="sortDirection" type="button">Ascending</button></div></div>
           <button class="directory-action" id="resetFilters" type="button" hidden>Reset filters</button>
         </div>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p class="directory-status" id="actionStatus" role="status" aria-live="polite"></p>
       <div class="directory-copy" id="copyFallback" hidden><label id="copyLabel" for="copyValue">Select and copy the value</label><textarea id="copyValue" rows="3" readonly></textarea></div>
       <div class="directory-error" id="dataError" role="alert" hidden><p>Directory roles could not be loaded. Check the connection and retry.</p><button class="directory-action" id="retry" type="button">Retry</button></div>

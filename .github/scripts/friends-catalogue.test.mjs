@@ -26,6 +26,23 @@ test("single catalogue preserves all unique links, disabled entries and metadata
   assert.throws(() => validateCatalogue({ sites: [{ ...site, enabled: "TRUE" }] }), /Invalid/);
   assert.throws(() => validateCatalogue({ sites: [{ ...site, url: "javascript:alert(1)" }] }), /Invalid website URL/);
 });
+test("friend cards use the website domain cache, independent of remote favicon metadata", () => {
+  const html = readFileSync("friends-websites/index.html", "utf8");
+  assert.match(html, /const friendIconSrc = cachedFaviconFor\(hostFromUrl\(friend\.url\)\)/);
+  assert.doesNotMatch(html, /if \(friend\.faviconUrl\)|hostFromUrl\(friend\.faviconUrl\)/);
+  assert.match(html, /favicon\.src = friendIconSrc/);
+});
+test("favicon refresh follows catalogue edits and folds, and triggers Pages deployment", () => {
+  const refresh = readFileSync(".github/workflows/favicons-refresh.yaml", "utf8");
+  assert.match(refresh, /push:[\s\S]*?friends-websites\/websites-meta\.json/);
+  assert.match(refresh, /workflow_run:[\s\S]*?Fold Community Submissions/);
+  assert.match(refresh, /cron: '0 4 \* \* 0'/);
+  assert.match(refresh, /workflow_dispatch:/);
+  assert.match(refresh, /ref: main/);
+  assert.match(refresh, /git rebase origin\/main/);
+  const deploy = readFileSync(".github/workflows/deploy-hugo.yaml", "utf8");
+  assert.match(deploy, /workflows: \[[^\n]*"Refresh cached favicons"/);
+});
 test("JSON build and fold deduplicate proposals and keep them disabled", t => {
   const { dir, source, submissions } = fixture(t);
   const extra = { ...site, name: "New author", url: "https://new.example.org/", enabled: false };

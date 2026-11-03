@@ -701,14 +701,21 @@
     ]
   }
   </script>
+<link rel="stylesheet" href="/release-news/views.css">
+<script src="/release-news/views.js"></script>
 <style data-release-news>
   .news-controls{border:0;padding:0;margin:0;min-width:0;}
+  .news-controls-panel{padding:1.25rem;margin-bottom:1rem;border:1px solid var(--cp-border);border-radius:16px;background:var(--cp-surface);}
+  .news-controls-panel legend{padding:0 .5rem;font-size:1rem;font-weight:650;color:var(--cp-text);}
+  .news-controls-panel .news-primary{margin-bottom:1rem;}
+  .news-controls-panel .news-options>.news-help{margin-bottom:0;}
+  @media(max-width:42rem){.news-controls-panel{padding:.75rem;}}
   .news-primary{display:grid;grid-template-columns:minmax(0,2fr) minmax(9rem,1fr);gap:.75rem;}
   .news-field{min-width:0;}
   .news-field label{display:block;margin-bottom:.4rem;font-size:.85rem;font-weight:600;}
   .news-field input,.news-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
   .news-field input::placeholder{color:var(--cp-text-muted);}
-  .news-options>summary{min-height:2.75rem;padding-block:.65rem;cursor:pointer;color:var(--cp-link);font-size:.85rem;}
+  details.news-options>summary{min-height:2.75rem;padding-block:.65rem;cursor:pointer;color:var(--cp-link);font-size:.85rem;}
   .news-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;}
   .news-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.75rem 0;}
   .news-action{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer;}
@@ -1146,8 +1153,6 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-release-updates/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
-<link rel="stylesheet" href="/release-news/views.css">
-<script src="/release-news/views.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1241,12 +1246,10 @@
 
 <!-- release-news-view:start -->
   <section aria-label="Release announcements">
-    <fieldset class="news-controls" id="newsControls" disabled>
+    <fieldset class="news-controls news-controls-panel" id="newsControls" aria-label="Filter announcements and choose view" disabled>
       <div class="news-primary"><div class="news-field"><label for="search">Search announcements</label><input id="search" type="search" placeholder="Title, description or product" autocomplete="off"></div><div class="news-field"><label for="lastUpdate">Publication period</label><select id="lastUpdate"><option value="">All retained</option><option value="0" selected>Today</option><option value="yesterday">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div></div>
-      <details class="news-options" id="newsOptions"><summary>Filters and favorites</summary><div class="news-secondary"><div class="news-field"><label for="status">Status</label><select id="status"><option value="">All statuses</option></select></div><div class="news-field"><label for="product">Product</label><select id="product"><option value="">All products</option></select></div></div><div class="news-actions"><button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="favoritesFilterLabel">My favorites (0)</span></button></div><p class="news-help">Favorites stay in this browser. A shared filtered URL does not transfer your saved list.</p></details>
-      <div class="news-actions"><button class="news-action" id="retirements" type="button" aria-pressed="false">Retirements</button><button class="news-action" id="clearFilters" type="button" hidden>Reset filters</button></div>
+      <div class="news-options" id="newsOptions"><div class="news-secondary"><div class="news-field"><label for="status">Status</label><select id="status"><option value="">All statuses</option></select></div><div class="news-field"><label for="product">Product</label><select id="product"><option value="">All products</option></select></div></div><div class="news-actions"><button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="favoritesFilterLabel">My favorites (0)</span></button><button class="news-action" id="retirements" type="button" aria-pressed="false">Retirements</button><button class="news-action" id="clearFilters" type="button" hidden>Reset filters</button></div></div>
     </fieldset>
-    <p class="news-help" id="periodSummary"></p>
 
     <div class="news-error" id="newsError" role="alert" hidden><p>The announcement snapshot could not be loaded or validated.</p><button class="news-action" id="retryNews" type="button">Retry</button></div>
     <p class="news-count" id="resultCount" role="status" aria-live="polite">Loading announcements…</p><div class="news-results" id="updateList" aria-busy="true"></div><button class="news-action news-more" id="loadMore" type="button" hidden>More announcements</button>
@@ -1384,10 +1387,10 @@ function m365StatusClass(label) {
 }
 (function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, roadmapDates, azureStatusClass, m365StatusClass }) {
   const PAGE = 20;
+  let disclosureSequence = 0;
   const defaultPeriod = "0";
   const storageKey = config.slug + "-favorites";
-  let disclosureSequence = 0;
-  const el = Object.fromEntries(["newsControls", "search", "lastUpdate", "status", "category", "product", "favoritesFilter", "favoritesFilterLabel", "clearFilters", "retirements", "newsOptions", "resultCount", "updateList", "loadMore", "refreshedAt", "libraryCount", "newsError", "retryNews", "periodSummary"].map(id => [id, document.getElementById(id)]));
+  const el = Object.fromEntries(["newsControls", "search", "lastUpdate", "status", "category", "product", "favoritesFilter", "favoritesFilterLabel", "clearFilters", "retirements", "newsOptions", "resultCount", "updateList", "loadMore", "refreshedAt", "libraryCount", "newsError", "retryNews"].map(id => [id, document.getElementById(id)]));
   const state = { status: "loading", items: [], filtered: [], visible: PAGE, favorites: new Set(), favoritesOnly: false };
   const calendar = window.createReleaseCalendar({ controls: el.newsControls, results: el.updateList, apply: () => apply(), sync, kind: config.kind, productLabel });
   const STAR = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
@@ -1435,8 +1438,7 @@ function m365StatusClass(label) {
   function card(item) {
     const article = node("article", undefined, "news-entry");
     article.dataset.itemId = item.id;
-    const collapsible = config.kind === "m365" || config.kind === "azure";
-    if (collapsible) article.classList.add("news-entry-collapsible");
+    article.classList.add("news-entry-collapsible");
     const title = node("h2", undefined, "news-title");
     const link = node("a", item.title);
     link.href = item.link; link.target = "_blank"; link.rel = "noopener noreferrer";
@@ -1449,7 +1451,7 @@ function m365StatusClass(label) {
       else status.classList.add("status-badge", "default");
       meta.append(status);
     }
-    const date = node("time", `${config.kind === "m365" ? "Roadmap feed date" : "Published"}: ${formatDate(item.pubDate)}`);
+    const date = node("time", formatDate(item.pubDate));
     if (Number.isFinite(Date.parse(item.pubDate))) date.dateTime = item.pubDate;
     meta.append(date);
     const age = publicationAge(item.pubDate);
@@ -1459,10 +1461,11 @@ function m365StatusClass(label) {
       relative.title = `${config.kind === "m365" ? "Roadmap feed" : "Publication"} age based on the current UTC date`;
       meta.append(relative);
     }
+    if (item.statusLabel) meta.append(meta.querySelector(".news-status"));
     const favorite = button("", () => {
       if (state.favorites.has(item.link)) state.favorites.delete(item.link); else state.favorites.add(item.link);
       saveFavorites();
-      if (state.favoritesOnly) { (el.newsOptions.open ? el.favoritesFilter : el.newsOptions.querySelector("summary")).focus({ preventScroll: true }); apply(); }
+      if (state.favoritesOnly) { el.favoritesFilter.focus({ preventScroll: true }); apply(); }
       else { paintFavorite(); updateFavoriteFilter(); }
     });
     favorite.className = "news-favorite";
@@ -1474,9 +1477,7 @@ function m365StatusClass(label) {
       favorite.setAttribute("aria-label", `${active ? "Remove" : "Save"} ${item.title} ${active ? "from" : "to"} browser-local favorites`);
     }
     paintFavorite();
-    meta.append(favorite);
-    if (!collapsible) article.append(title, meta);
-    const details = collapsible ? node("div", undefined, "news-details") : article;
+    const details = node("div", undefined, "news-details");
     if (item.products.length) {
       const tags = node("ul", undefined, "news-products update-tags");
       tags.setAttribute("aria-label", "Products");
@@ -1492,7 +1493,7 @@ function m365StatusClass(label) {
       }
     }
     details.append(node("p", item.description, "news-description"));
-    if (collapsible) {
+    {
       const headingRow = node("div", undefined, "news-heading-row");
       const disclosureId = `news-details-${++disclosureSequence}`;
       details.id = disclosureId;
@@ -1510,7 +1511,7 @@ function m365StatusClass(label) {
         article.classList.toggle("is-expanded", expanded);
         details.hidden = !expanded;
       });
-      headingRow.append(title, meta, disclosure);
+      headingRow.append(meta, title, favorite, disclosure);
       article.append(headingRow, details);
     }
     return article;
@@ -1523,10 +1524,8 @@ function m365StatusClass(label) {
     calendar?.render(state.filtered);
     if (calendar?.active) {
       el.resultCount.textContent = `${state.filtered.length} matching announcements · ${state.items.length} retained.`;
-      el.periodSummary.textContent = `Active period: ${calendar.summary}. Search, status, product and favorites filters still apply.`;
       el.loadMore.hidden = true;
       el.clearFilters.hidden = false;
-      el.newsOptions.querySelector("summary").textContent = `Filters and favorites${[el.status, el.category, el.product].some(control => control?.value) || state.favoritesOnly ? " · active" : ""}`;
       if (el.retirements) el.retirements.setAttribute("aria-pressed", String(el.status.value === "Retirement"));
       updateFavoriteFilter();
       return;
@@ -1544,11 +1543,8 @@ function m365StatusClass(label) {
       el.updateList.append(empty);
     }
     el.resultCount.textContent = `${shown.length} displayed / ${state.filtered.length.toLocaleString("en-US")} matching announcements · ${state.items.length.toLocaleString("en-US")} retained.`;
-    el.periodSummary.textContent = `Active period: ${el.lastUpdate.selectedOptions[0]?.textContent || "All retained"} (UTC). Publication/feed dates are separate from the snapshot collection time.`;
     el.loadMore.hidden = shown.length >= state.filtered.length;
     el.loadMore.textContent = `Show ${Math.min(PAGE, state.filtered.length - shown.length)} more announcements`;
-    const active = [el.status, el.category, el.product].filter(control => control?.value).length;
-    el.newsOptions.querySelector("summary").textContent = `Filters and favorites${active || state.favoritesOnly ? " · " + (active + Number(state.favoritesOnly)) + " active" : ""}`;
     el.clearFilters.hidden = !controls.some(control => control.value) && !state.favoritesOnly;
     if (el.retirements) el.retirements.setAttribute("aria-pressed", String(el.status.value === "Retirement"));
     updateFavoriteFilter();

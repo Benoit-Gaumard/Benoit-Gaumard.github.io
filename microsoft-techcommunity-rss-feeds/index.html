@@ -942,6 +942,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/microsoft-techcommunity-rss-feeds/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1044,15 +1067,15 @@
     <noscript><p class="feed-stats-scope">Enable JavaScript to display the totals, or <a href="./feeds-status.json">download the recorded snapshot</a>.</p></noscript>
   </section>
   <section aria-label="Recorded feed activity">
-    <fieldset class="feed-controls" id="feedControls" disabled><div class="feed-filter-grid">
+    <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="feed-controls" id="feedControls" disabled><div class="feed-filter-grid">
       <div class="feed-field feed-search"><label for="search">Search feeds and titles</label><input id="search" type="search" autocomplete="off"></div>
       <div class="feed-field"><label for="statusFilter">Recorded status</label><select id="statusFilter"><option value="">All statuses</option><option value="collection-error">Collection error</option><option value="collection-success">Collection succeeded</option><option value="collection-unknown">Collection status unknown</option><option value="publication-quiet">No publication in preceding 30 days</option><option value="publication-recent">Published within preceding 30 days</option><option value="publication-unknown">Publication date unavailable</option><option value="publication-future">Future-dated publication</option></select></div>
       <div class="feed-field"><label for="categoryFilter">Category</label><select id="categoryFilter"><option value="">All categories</option></select></div>
 
     </div><div class="feed-toolbar"><label for="sortBy">Sort by</label><select id="sortBy"><option value="lastPublication">Last publication</option><option value="name">Name</option><option value="category">Category</option><option value="collection">Collection result</option></select><button class="feed-action" id="sortDirection" type="button">Descending</button><button class="feed-action" id="resetFilters" type="button">Reset filters</button></div>
-    <div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div></fieldset>
+    <div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div></fieldset></div><!-- tool-controls:end -->
 
-    <p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken. Copy an RSS URL into your reader, or import the selected feeds as OPML.</p>
+
     <div class="feed-error" id="feedError" role="alert" hidden><p>The feed-status snapshot could not be loaded.</p><button class="feed-action" id="retryFeeds" type="button">Retry</button></div>
     <p class="feed-count" id="resultCount" role="status" aria-live="polite">Loading feeds…</p><div id="feedResults"></div><button class="feed-action" id="loadMore" type="button" hidden>More feeds</button>
 
@@ -1205,11 +1228,12 @@ function opml(feeds, title = "Selected RSS feeds") {
       value.textContent = !counts ? "—" : count === null ? "Not recorded" : count.toLocaleString("en-US");
     });
     el.statsGrid.setAttribute("aria-busy", String(state.status === "loading" || state.status === "fetching"));
+    el.statsSummary.hidden = Boolean(counts && counts.today !== null);
     el.statsSummary.textContent = !counts
       ? state.status === "error" ? "Feed counts unavailable." : "Feed counts: loading..."
       : counts.today === null
-        ? "Complete catalogue totals, independent of filters. Publication activity is unavailable because the collection date is not recorded."
-        : "Complete catalogue totals, independent of filters. Activity counts use recorded publications for the current UTC day/week, not a live check.";
+        ? "Publication activity is unavailable because the collection date is not recorded."
+        : "";
   }
   function selectedCount() {
     el.selectionCount.textContent = `${state.selected.size} unique feed URLs selected across filters.`;
@@ -1243,8 +1267,12 @@ function opml(feeds, title = "Selected RSS feeds") {
     const group = node("div", undefined, "feed-actions");
     const open = node("a", "Open RSS feed", "feed-action");
     open.href = feed.url; open.target = "_blank"; open.rel = "noopener noreferrer";
-    const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
-    group.append(open, copy, selection(feed));
+    group.append(open);
+    if (!techCommunity) {
+      const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
+      group.append(copy);
+    }
+    group.append(selection(feed));
     return group;
   }
   function details(feed) {

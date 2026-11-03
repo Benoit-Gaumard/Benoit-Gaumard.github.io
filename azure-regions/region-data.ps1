@@ -79,6 +79,24 @@ function Get-RegionContinent {
   return 'Not classified'
 }
 
+function Get-RegionProviderNames {
+  param(
+    [Parameter(Mandatory)][string]$Id,
+    [Parameter(Mandatory)][string]$DisplayName,
+    [AllowEmptyCollection()][object[]]$Providers
+  )
+  $keys = @($Id, $DisplayName) | ForEach-Object { ($_ -replace '\s', '').ToLowerInvariant() }
+  return @($Providers | Where-Object {
+    $matchesLocation = $false
+    foreach ($resourceType in $_.resourceTypes) {
+      foreach ($location in $resourceType.locations) {
+        if ($location -and (($location -replace '\s', '').ToLowerInvariant() -in $keys)) { $matchesLocation = $true }
+      }
+    }
+    $matchesLocation
+  } | ForEach-Object { $_.namespace } | Sort-Object -Unique)
+}
+
 function New-RegionSources {
   param([string]$MetadataCheckedAt, [AllowNull()][string]$ReferenceCheckedAt)
   return [ordered]@{
@@ -93,6 +111,12 @@ function New-RegionSources {
       url = 'https://learn.microsoft.com/en-us/azure/reliability/regions-list'
       checkedAt = if ($ReferenceCheckedAt) { $ReferenceCheckedAt } else { $null }
       status = if ($ReferenceCheckedAt) { 'available' } else { 'unavailable' }
+    }
+    providers = [ordered]@{
+      name = 'Azure Resource Manager resource providers API'
+      url = 'https://learn.microsoft.com/en-us/rest/api/resources/providers/list?view=rest-resources-2021-04-01'
+      checkedAt = $MetadataCheckedAt
+      scope = 'Provider namespaces advertising at least one resource type in this location for the scanning subscription. Not a guarantee of service, SKU, capacity or subscription access.'
     }
   }
 }

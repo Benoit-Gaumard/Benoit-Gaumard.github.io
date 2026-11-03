@@ -4,6 +4,7 @@
 #
 # ARM supplies region metadata and subscription-specific zone mappings. The public
 # Microsoft Learn reference supplies explicit no-zone and restricted-access evidence.
+param([switch]$UseExistingContext)
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot 'region-data.ps1')
 
@@ -12,13 +13,15 @@ Import-Module Az.Accounts -ErrorAction Stop
 $clientId = $env:AZURE_CLIENT_ID
 $clientSecret = $env:AZURE_CLIENT_SECRET
 $tenantId = $env:AZURE_TENANT_ID
-if (-not $clientId -or -not $clientSecret -or -not $tenantId) {
+if (-not $UseExistingContext -and (-not $clientId -or -not $clientSecret -or -not $tenantId)) {
   throw "AZURE_CLIENT_ID, AZURE_CLIENT_SECRET and AZURE_TENANT_ID environment variables are required."
 }
 
-$secureSecret = ConvertTo-SecureString -String $clientSecret -AsPlainText -Force
-$credential = [System.Management.Automation.PSCredential]::new($clientId, $secureSecret)
-Connect-AzAccount -ServicePrincipal -Credential $credential -Tenant $tenantId | Out-Null
+if (-not $UseExistingContext) {
+  $secureSecret = ConvertTo-SecureString -String $clientSecret -AsPlainText -Force
+  $credential = [System.Management.Automation.PSCredential]::new($clientId, $secureSecret)
+  Connect-AzAccount -ServicePrincipal -Credential $credential -Tenant $tenantId | Out-Null
+}
 
 $subscriptionId = (Get-AzContext).Subscription.Id
 if (-not $subscriptionId) { throw "No subscription in the current Azure context; cannot query the locations API." }
@@ -32,6 +35,23 @@ if ($response.StatusCode -ne 200) {
 # Edge zones share the "Physical" region type but are not Azure regions, so keep only type=Region.
 $locations = @(($response.Content | ConvertFrom-Json).value | Where-Object { $_.type -eq "Region" })
 if (-not $locations.Count) { throw "ARM locations API returned no regions." }
+Write-Host "Fetching resource-provider location metadata..."
+$providers = [System.Collections.Generic.List[object]]::new()
+$providerPath = "/subscriptions/$subscriptionId/providers?api-version=2021-04-01"
+do {
+  $providerResponse = Invoke-AzRestMethod -Path $providerPath -Method GET
+  if ($providerResponse.StatusCode -ne 200) { throw "ARM providers API returned HTTP $($providerResponse.StatusCode)." }
+  $providerPage = $providerResponse.Content | ConvertFrom-Json
+  if ($null -eq $providerPage.value) { throw "ARM providers API returned no provider array." }
+  foreach ($provider in $providerPage.value) { $providers.Add($provider) }
+  $providerPath = $null
+  if ($providerPage.nextLink) {
+    $next = [uri]$providerPage.nextLink
+    if ($next.Scheme -ne 'https' -or $next.Host -ne 'management.azure.com') { throw "Unexpected providers pagination host." }
+    $providerPath = $next.PathAndQuery
+  }
+} while ($providerPath)
+if (-not $providers.Count) { throw "ARM providers API returned no providers." }
 $metadataCheckedAt = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
 $reference = $null
 $referenceCheckedAt = $null
@@ -53,8 +73,8 @@ foreach ($location in $locations) {
   $metadata = $location.metadata
 
   # Logical regions (global, asiapacific, unitedstates, ...) are aggregate ARM names with no
-  # datacenter behind them. They are kept aside so they feed the charts without polluting the
-  # directory, the map or the filters, which are all about real datacenters.
+  # datacenter behind them. Keep them separate in the snapshot and off the map.
+  $availableProviders = @(Get-RegionProviderNames -Id $location.name -DisplayName $location.displayName -Providers $providers.ToArray())
   if ($metadata.regionType -eq "Logical") {
     $logicalRegions.Add([ordered]@{
       name        = $location.displayName
@@ -62,6 +82,7 @@ foreach ($location in $locations) {
       regionType  = $metadata.regionType
       geography   = $metadata.geographyGroup
       regionCategory = $metadata.regionCategory
+      availableProviders = $availableProviders
     })
     continue
   }
@@ -93,6 +114,7 @@ foreach ($location in $locations) {
     regionType        = $metadata.regionType
     regionCategory    = $metadata.regionCategory
     pairedRegion      = $pairedRegion
+    availableProviders = $availableProviders
   }
   foreach ($key in $evidence.Keys) { $region[$key] = $evidence[$key] }
   $regions.Add($region)
@@ -121,4 +143,4 @@ $outputPath = Join-Path (Split-Path -Parent $PSCommandPath) "regions.json"
 
 Write-Host "Fetched $($sortedRegions.Count) physical regions and $($sortedLogicalRegions.Count) logical regions into $outputPath"
 
-Disconnect-AzAccount -ErrorAction SilentlyContinue | Out-Null
+if (-not $UseExistingContext) { Disconnect-AzAccount -ErrorAction SilentlyContinue | Out-Null }

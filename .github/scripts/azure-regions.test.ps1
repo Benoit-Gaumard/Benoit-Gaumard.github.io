@@ -60,3 +60,16 @@ Assert-Equal (New-RegionSources -MetadataCheckedAt '2026-09-08T10:00:00Z' -Refer
 Assert-Throws { ConvertFrom-RegionReferenceHtml '<html>No data</html>' } 'Missing table must fail visibly'
 Assert-Throws { ConvertFrom-RegionReferenceHtml ($fixture.Replace('<td>francesouth</td>', '<td>francecentral</td>')) } 'Duplicate identifiers must fail'
 Write-Host 'Azure Regions evidence tests passed.'
+$providers = @(
+  [pscustomobject]@{ namespace = 'Microsoft.Compute'; resourceTypes = @(
+    [pscustomobject]@{ locations = @('France Central', 'East US') },
+    [pscustomobject]@{ locations = @('francecentral') }
+  ) },
+  [pscustomobject]@{ namespace = 'Microsoft.Global'; resourceTypes = @([pscustomobject]@{ locations = @('Global') }) },
+  [pscustomobject]@{ namespace = 'Microsoft.NoLocations'; resourceTypes = @([pscustomobject]@{ locations = @() }) }
+)
+Assert-Equal ((@(Get-RegionProviderNames -Id 'francecentral' -DisplayName 'France Central' -Providers $providers)) -join ',') 'Microsoft.Compute' 'Provider namespaces match display names or programmatic IDs without duplicates'
+Assert-Equal ((@(Get-RegionProviderNames -Id 'global' -DisplayName 'Global' -Providers $providers)) -join ',') 'Microsoft.Global' 'Logical locations use explicit provider metadata'
+Assert-Equal (@(Get-RegionProviderNames -Id 'missing' -DisplayName 'Missing' -Providers $providers).Count) 0 'Missing locations do not imply global availability'
+Assert-Equal (@(Get-RegionProviderNames -Id 'global' -DisplayName 'Global' -Providers @()).Count) 0 'Empty provider metadata is supported'
+Write-Host 'Azure Regions provider tests passed.'

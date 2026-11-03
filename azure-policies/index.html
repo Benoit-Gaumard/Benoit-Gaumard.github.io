@@ -320,7 +320,6 @@
     .search-field label, .filter-field label { display: block; margin-bottom: .4rem; font-size: .85rem; font-weight: 650; }
     .search-row input, .filter-field select { width: 100%; min-width: 0; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
     .search-row input::placeholder { color: var(--cp-text-muted); opacity: 1; }
-    .filters-toggle { flex: 0 0 auto; }
     .filter-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; margin-bottom: .75rem; }
     .filter-grid { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
     .filter-field { position: relative; min-width: 0; }
@@ -354,7 +353,6 @@
     .policy-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; text-decoration: none; }
     .policy-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
     .policy-action:disabled { cursor: wait; }
-    .filters-toggle, .panel-close { display: none; }
     .filter-summary { display: flex; grid-column: 1; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .5rem 0; }
     .filter-chip { min-height: 2.75rem; max-width: 100%; padding: .35rem .65rem; border: 1px solid var(--cp-border); border-radius: 6px; color: var(--cp-text); background: var(--cp-surface-soft); font-size: .8rem; cursor: pointer; overflow-wrap: anywhere; }
     .filter-chip:hover { border-color: var(--cp-accent); }
@@ -632,7 +630,6 @@
       .header-links a:hover { background: var(--cp-surface-soft); }
       .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-about { grid-column: 1 / -1; }
-      .filters-toggle, .panel-close { display: inline-flex; }
       .filter-panel { display: block; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
       .filter-grid { grid-template-columns: minmax(0, 1fr); }
       .panel-toolbar { gap: .5rem; }
@@ -1114,6 +1111,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-policies/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1250,20 +1270,19 @@
       </div>
 
       <div id="policiesPanel" role="tabpanel" aria-labelledby="tabPolicies">
-        <fieldset id="policiesControls" disabled aria-label="Policy filters">
+        <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset id="policiesControls" disabled aria-label="Policy filters">
         <div class="search-row">
           <div class="search-field">
             <label for="policiesSearch">Search policies</label>
             <input id="policiesSearch" type="search" placeholder="Name, description, category or ID" autocomplete="off" spellcheck="false">
           </div>
-          <button class="policy-action filters-toggle" id="policiesFilterToggle" type="button" aria-expanded="false" aria-controls="policiesFilters">Filters · 2 active</button>
         </div>
         <div class="option-fields" role="group" aria-label="Policy visibility filters">
           <label class="filter-toggle"><input type="checkbox" id="policiesFavoritesOnly"> Favorites only <span class="fav-count" id="policiesFavCount">(0)</span></label>
           <label class="filter-toggle"><input type="checkbox" id="policiesHideDeprecated" checked> Hide deprecated</label>
           <label class="filter-toggle"><input type="checkbox" id="policiesHidePreview" checked> Hide preview</label>
         </div>
-        <div class="filter-panel" id="policiesFilters" hidden>
+        <div class="filter-panel" id="policiesFilters">
           <div class="filter-grid">
             <div class="filter-field"><label for="policiesCategoryFilter">Category</label><select id="policiesCategoryFilter" multiple hidden></select></div>
             <div class="filter-field"><label for="policiesEffectFilter">Effect</label><select id="policiesEffectFilter" multiple hidden></select></div>
@@ -1277,9 +1296,8 @@
           <div class="browser-actions">
             <button class="policy-action" id="policiesClear" type="button">Reset all filters</button>
           </div>
-          <button class="policy-action panel-close" id="policiesFiltersDone" type="button">Done</button>
         </div>
-        </fieldset>
+        </fieldset></div><!-- tool-controls:end -->
         <div class="data-error" id="policiesError" role="alert" hidden><p>Policy data could not be loaded.</p><button class="policy-action" id="policiesRetry" type="button">Retry policies</button></div>
         <p class="result-count" id="policiesResultCount" role="status" aria-live="polite" aria-atomic="true">Loading policies&hellip;</p>
         <div class="linked-definition" id="policiesLinked" hidden></div>
@@ -1288,20 +1306,19 @@
       </div>
 
       <div id="initiativesPanel" role="tabpanel" aria-labelledby="tabInitiatives" hidden>
-        <fieldset id="initiativesControls" disabled aria-label="Initiative filters">
+        <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset id="initiativesControls" disabled aria-label="Initiative filters">
         <div class="search-row">
           <div class="search-field">
             <label for="initiativesSearch">Search initiatives</label>
             <input id="initiativesSearch" type="search" placeholder="Name, description, category or ID" autocomplete="off" spellcheck="false">
           </div>
-          <button class="policy-action filters-toggle" id="initiativesFilterToggle" type="button" aria-expanded="false" aria-controls="initiativesFilters">Filters · 2 active</button>
         </div>
         <div class="option-fields" role="group" aria-label="Initiative visibility filters">
           <label class="filter-toggle"><input type="checkbox" id="initiativesFavoritesOnly"> Favorites only <span class="fav-count" id="initiativesFavCount">(0)</span></label>
           <label class="filter-toggle"><input type="checkbox" id="initiativesHideDeprecated" checked> Hide deprecated</label>
           <label class="filter-toggle"><input type="checkbox" id="initiativesHidePreview" checked> Hide preview</label>
         </div>
-        <div class="filter-panel" id="initiativesFilters" hidden>
+        <div class="filter-panel" id="initiativesFilters">
           <div class="filter-grid">
             <div class="filter-field"><label for="initiativesCategoryFilter">Category</label><select id="initiativesCategoryFilter" multiple hidden></select></div>
           </div>
@@ -1313,9 +1330,8 @@
           <div class="browser-actions">
             <button class="policy-action" id="initiativesClear" type="button">Reset all filters</button>
           </div>
-          <button class="policy-action panel-close" id="initiativesFiltersDone" type="button">Done</button>
         </div>
-        </fieldset>
+        </fieldset></div><!-- tool-controls:end -->
         <div class="data-error" id="initiativesError" role="alert" hidden><p>Initiative data could not be loaded.</p><button class="policy-action" id="initiativesRetry" type="button">Retry initiatives</button></div>
         <p class="result-count" id="initiativesResultCount" role="status" aria-live="polite" aria-atomic="true">Loading initiatives&hellip;</p>
         <div class="linked-definition" id="initiativesLinked" hidden></div>
@@ -1401,7 +1417,6 @@
   <script data-policies-script>
     const PAGE_SIZE = 100;
     const VIEW_MODE_KEY = "azurePoliciesViewMode";
-    const mobileFilters = window.matchMedia("(max-width: 48rem)");
     let activeTab = "policies";
     let currentView = "list";
     let adRequested = false;
@@ -1871,7 +1886,7 @@
         rows: [], filtered: [], byId: new Map(), indices: new Map(), visible: PAGE_SIZE,
         sortKey: "displayName", sortDir: "asc", favorites: loadFavorites(config.favoritesKey),
         openId: (initialParams.get("tab") || "policies") === prefix ? initialParams.get("definition") || "" : "",
-        status: "loading", generatedAt: null, panelOpen: false,
+        status: "loading", generatedAt: null,
       };
       const el = {
         panel: node("Panel"), controls: node("Controls"), search: node("Search"),
@@ -1880,7 +1895,7 @@
           return { key, label, select, widget: multiSelect(select, label) };
         }),
         favoritesOnly: node("FavoritesOnly"), hidePreview: node("HidePreview"), hideDeprecated: node("HideDeprecated"),
-        favCount: node("FavCount"), filterToggle: node("FilterToggle"), filterPanel: node("Filters"),
+        favCount: node("FavCount"),
         summary: node("ActiveFilters"), clear: node("Clear"),
         sort: node("Sort"), direction: node("SortDirection"), results: node("Results"), count: node("ResultCount"),
         linked: node("Linked"), more: node("LoadMore"), error: node("Error"), retry: node("Retry"),
@@ -1915,13 +1930,6 @@
         return values;
       }
 
-      function syncPanel() {
-        const visible = !mobileFilters.matches || state.panelOpen;
-        if (!visible && el.filterPanel.contains(document.activeElement)) el.filterToggle.focus();
-        if (!mobileFilters.matches && document.activeElement === el.filterToggle) el.search.focus();
-        el.filterPanel.hidden = !visible;
-        el.filterToggle.setAttribute("aria-expanded", String(visible));
-      }
 
       function renderSummary() {
         const filters = activeFilters();
@@ -1940,11 +1948,9 @@
           });
           el.summary.append(button);
         });
-        el.filterToggle.textContent = `Filters · ${filters.length} active`;
         el.favCount.textContent = `(${state.favorites.size})`;
         el.filters.forEach(filter => filter.widget.sync());
         el.clear.hidden = !filters.length;
-        syncPanel();
       }
 
       function populateFilters() {
@@ -2360,12 +2366,6 @@
       [...el.filters.map(filter => filter.select), el.favoritesOnly, el.hidePreview, el.hideDeprecated].forEach(control => {
         control.addEventListener("change", () => { clearTimeout(searchTimer); applyFilter(); syncUrl(); });
       });
-      el.filterToggle.addEventListener("click", () => { state.panelOpen = !state.panelOpen; syncPanel(); });
-      node("FiltersDone").addEventListener("click", () => { state.panelOpen = false; syncPanel(); el.filterToggle.focus(); });
-      el.filterPanel.addEventListener("keydown", event => {
-        if (event.key === "Escape" && mobileFilters.matches) { state.panelOpen = false; syncPanel(); el.filterToggle.focus(); }
-      });
-      mobileFilters.addEventListener("change", syncPanel);
       el.clear.addEventListener("click", resetFilters);
       el.sort.addEventListener("change", () => { state.sortKey = el.sort.value; render(); syncUrl(); });
       el.direction.addEventListener("click", () => { state.sortDir = state.sortDir === "asc" ? "desc" : "asc"; render(); syncUrl(); });
@@ -2381,7 +2381,6 @@
         }
       });
       el.retry.addEventListener("click", load);
-      syncPanel();
       return {
         state, load, render, writeParams, focusDefinition,
         restore(params) { clearTimeout(searchTimer); restore(params); applyFilter(false); },

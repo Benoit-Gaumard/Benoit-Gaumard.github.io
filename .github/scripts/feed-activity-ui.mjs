@@ -70,11 +70,12 @@ function activityRuntime(config, { publicationState, collectionState, feedCounts
       value.textContent = !counts ? "—" : count === null ? "Not recorded" : count.toLocaleString("en-US");
     });
     el.statsGrid.setAttribute("aria-busy", String(state.status === "loading" || state.status === "fetching"));
+    el.statsSummary.hidden = Boolean(counts && counts.today !== null);
     el.statsSummary.textContent = !counts
       ? state.status === "error" ? "Feed counts unavailable." : "Feed counts: loading..."
       : counts.today === null
-        ? "Complete catalogue totals, independent of filters. Publication activity is unavailable because the collection date is not recorded."
-        : "Complete catalogue totals, independent of filters. Activity counts use recorded publications for the current UTC day/week, not a live check.";
+        ? "Publication activity is unavailable because the collection date is not recorded."
+        : "";
   }
   function selectedCount() {
     el.selectionCount.textContent = `${state.selected.size} unique feed URLs selected across filters.`;
@@ -108,8 +109,12 @@ function activityRuntime(config, { publicationState, collectionState, feedCounts
     const group = node("div", undefined, "feed-actions");
     const open = node("a", "Open RSS feed", "feed-action");
     open.href = feed.url; open.target = "_blank"; open.rel = "noopener noreferrer";
-    const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
-    group.append(open, copy, selection(feed));
+    group.append(open);
+    if (!techCommunity) {
+      const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
+      group.append(copy);
+    }
+    group.append(selection(feed));
     return group;
   }
   function details(feed) {
@@ -381,7 +386,7 @@ function markup(kind) {
     </div><div class="feed-toolbar"><label for="sortBy">Sort by</label><select id="sortBy"><option value="lastPublication">Last publication</option><option value="name">Name</option><option value="category">Category</option><option value="collection">Collection result</option>${kind === "activity" ? '<option value="country">Language</option>' : ""}</select><button class="feed-action" id="sortDirection" type="button">Descending</button><button class="feed-action" id="resetFilters" type="button">Reset filters</button></div>
     <div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div></fieldset>
     ${kind === "activity" ? '<p class="feed-help" id="statsSummary">Feed counts: loading…</p>' : ""}
-    <p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken. Copy an RSS URL into your reader, or import the selected feeds as OPML.</p>
+    ${kind === "activity" ? '<p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken. Copy an RSS URL into your reader, or import the selected feeds as OPML.</p>' : ""}
     <div class="feed-error" id="feedError" role="alert" hidden><p>The feed-status snapshot could not be loaded.</p><button class="feed-action" id="retryFeeds" type="button">Retry</button></div>
     <p class="feed-count" id="resultCount" role="status" aria-live="polite">Loading feeds…</p><div id="feedResults"></div><button class="feed-action" id="loadMore" type="button" hidden>More feeds</button>
     ${kind === "activity" ? '<details class="feed-added" id="addedSection"><summary>Recently added feeds (five shown)</summary><p class="feed-help">Equal addition timestamps are ordered by name; this is not an exact ordering of those additions.</p><ul id="addedFeeds"></ul></details><p><a class="feed-action" href="../">Back to RSS Watcher</a></p>' : ""}

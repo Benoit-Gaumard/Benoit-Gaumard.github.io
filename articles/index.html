@@ -1161,9 +1161,8 @@
                 <button class="catalogue-button clear-search" id="clearSearch" type="button" aria-label="Clear search" title="Clear search" hidden>&times;</button>
               </div>
             </div>
-            <button class="catalogue-button" id="filterToggle" type="button" aria-expanded="false" aria-controls="filterPanel">Filters</button>
           </div>
-          <div class="filter-panel" id="filterPanel" hidden>
+          <div class="filter-panel" id="filterPanel">
             <div class="filter-field">
               <label for="categorySelect">Category</label>
               <select id="categorySelect"><option value="">All categories</option></select>
@@ -1995,8 +1994,6 @@
       searchInput: document.getElementById("searchInput"),
       clearSearch: document.getElementById("clearSearch"),
       clearAllFilters: document.getElementById("clearAllFilters"),
-      filterToggle: document.getElementById("filterToggle"),
-      filterPanel: document.getElementById("filterPanel"),
       activeFilterWrap: document.getElementById("activeFilterWrap"),
       favoritesFilter: document.getElementById("favoritesFilter"),
       featuredToggle: document.getElementById("featuredToggle"),
@@ -2263,8 +2260,6 @@
       applyView();
       elements.clearSearch.hidden = !elements.searchInput.value;
       elements.clearAllFilters.hidden = !elements.searchInput.value && !state.category && !state.tag && !state.month && !state.series && !state.favoritesOnly;
-      const filterCount = [state.category, state.tag, state.month, state.series].filter(Boolean).length;
-      elements.filterToggle.textContent = filterCount ? `Filters (${filterCount})` : "Filters";
       elements.sortSelect.value = state.sort;
       elements.featuredToggle.checked = state.showFeatured;
       if (focusedArticle) {
@@ -2611,17 +2606,6 @@
       syncUrl(false);
     });
     elements.clearAllFilters.addEventListener("click", clearAllFilters);
-    elements.filterToggle.addEventListener("click", () => {
-      elements.filterPanel.hidden = !elements.filterPanel.hidden;
-      elements.filterToggle.setAttribute("aria-expanded", String(!elements.filterPanel.hidden));
-    });
-    elements.filterPanel.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        elements.filterPanel.hidden = true;
-        elements.filterToggle.setAttribute("aria-expanded", "false");
-        elements.filterToggle.focus();
-      }
-    });
     elements.categorySelect.addEventListener("change", () => setCategory(elements.categorySelect.value));
     elements.tagSelect.addEventListener("change", () => setTag(elements.tagSelect.value));
     elements.tagToggle.addEventListener("click", () => {

@@ -921,6 +921,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/ai-leaderboard/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1031,7 +1054,7 @@
       <h2 id="ranking-title">Ranking</h2>
       <p class="section-lead">Arena scores are Elo-style ratings: a 100-point gap means the higher model wins about 64% of head-to-head votes. Models whose confidence intervals overlap can share a rank.</p>
       <div class="podium" id="podium" aria-label="Top three models"></div>
-      <fieldset class="lb-controls" id="lbControls" disabled>
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="lb-controls" id="lbControls" disabled>
         <legend class="sr-only">Filter the ranking</legend>
         <div class="lb-field"><label for="boardFilter">Arena</label><select id="boardFilter"></select></div>
         <div class="lb-field"><label for="categoryFilter">Category</label><select id="categoryFilter"></select></div>
@@ -1042,7 +1065,7 @@
       <div class="lb-toolbar">
         <p class="lb-count" id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading the leaderboard&hellip;</p>
         <button class="lb-action" id="resetFilters" type="button">Reset filters</button>
-      </div>
+      </div></div><!-- tool-controls:end -->
       <div class="lb-error" id="dataError" hidden>The leaderboard data could not be loaded. <button class="lb-action" id="retry" type="button">Retry</button></div>
       <div class="table-wrap">
         <table class="lb-table">

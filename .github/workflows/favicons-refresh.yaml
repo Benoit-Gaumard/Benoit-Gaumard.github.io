@@ -4,11 +4,20 @@ name: Refresh cached favicons
 # from Google. This keeps that cache current as links are added or removed:
 # it only downloads domains that are new or missing, so a normal run is cheap.
 #
-# Weekly rather than daily, because link lists change slowly and every run is a
-# few hundred requests to a third party. Use --all via workflow_dispatch to
-# force a full re-download when an icon has genuinely changed.
+# Run after catalogue changes and weekly to retry missing icons.
+# Use redownload via workflow_dispatch when an existing icon has changed.
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'friends-websites/websites-meta.json'
+      - 'favorite-links/favorite-links.csv'
+      - 'microsoft-portals/portals-urls.csv'
+      - 'build-favicons.mjs'
+  workflow_run:
+    workflows: ["Fold Community Submissions"]
+    types: [completed]
   schedule:
     # Sunday 04:00 UTC, well clear of the data refresh workflows
     - cron: '0 4 * * 0'
@@ -29,9 +38,13 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -55,5 +68,12 @@ jobs:
             echo "No favicon changes."
           else
             git commit -m "chore: refresh cached favicons"
-            git push
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main || { git rebase --abort; exit 1; }
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 5
+            done
+            echo "::error::Could not publish the favicon cache after three attempts."
+            exit 1
           fi

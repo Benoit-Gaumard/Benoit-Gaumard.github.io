@@ -929,6 +929,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/prompts/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1017,7 +1040,7 @@
 
     <section class="ss-section" aria-labelledby="library-title">
       <h2 id="library-title">Prompt library</h2>
-      <div class="lib-toolbar">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><div class="lib-toolbar">
         <div class="lib-search">
           <label for="promptSearch">Search prompts</label>
           <input id="promptSearch" type="search" placeholder="e.g. bicep, kql, review" autocomplete="off" spellcheck="false" aria-keyshortcuts="/">
@@ -1035,7 +1058,7 @@
         </div>
         <p class="lib-count" id="promptCount" role="status" aria-live="polite">Loading prompts...</p>
       </div>
-      <ul class="chip-row" id="categoryChips" aria-label="Filter by category"></ul>
+      <ul class="chip-row" id="categoryChips" aria-label="Filter by category"></ul></div><!-- tool-controls:end -->
       <div id="libraryError" class="ss-error" role="alert" hidden></div>
       <ul class="prompt-grid" id="promptGrid" aria-describedby="promptCount"></ul>
     </section>

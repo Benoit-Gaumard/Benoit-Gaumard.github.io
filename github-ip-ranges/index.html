@@ -1089,6 +1089,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/github-ip-ranges/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1193,16 +1216,16 @@
     <div class="ip-error" id="dataError" role="alert" hidden><p>The IP-range snapshot could not be loaded or validated. Please retry.</p><button class="ip-action" id="retry" type="button">Retry</button></div>
     <section class="ip-section" id="ip-lookup" aria-labelledby="lookupTitle">
       <h2 id="lookupTitle">Check an IP address</h2>
-      <fieldset class="ip-controls" id="lookupFields" disabled>
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="ip-controls" id="lookupFields" disabled>
         <div class="ip-fields"><div class="ip-field"><label for="lookupInput">IPv4 or IPv6 address</label><input id="lookupInput" type="text" autocomplete="off" spellcheck="false" aria-describedby="lookupHint lookupHeading"></div><button class="ip-action" id="lookupButton" type="button">Check</button></div>
         <p class="ip-help" id="lookupHint">Checks published ranges in the downloaded snapshot, not reachability or ownership of an individual resource.</p>
         <div class="ip-actions"><button class="ip-action" id="exampleV4" type="button">Use an IPv4 example</button><button class="ip-action" id="exampleV6" type="button">Use an IPv6 example</button></div>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p id="lookupHeading" role="status" aria-live="polite" aria-atomic="true">Enter an address or choose an example.</p><ul id="matchList"></ul><button class="ip-action" id="moreMatches" type="button" hidden>More matches</button>
     </section>
     <section class="ip-section" id="ip-browse" aria-labelledby="browseTitle">
       <h2 id="browseTitle">Choose a GitHub category</h2>
-      <fieldset class="ip-controls" id="browseFields" disabled>
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="ip-controls" id="browseFields" disabled>
         <div class="ip-field"><label for="categorySelect">Category and recorded range count</label><select id="categorySelect"><option value="">Choose a category</option></select></div>
         <h3 id="selectionTitle" tabindex="-1">Choose a selection to browse its ranges</h3>
         <dl class="ip-meta" id="selectionMeta"></dl>
@@ -1210,7 +1233,7 @@
         <p class="ip-count" id="prefixCount" role="status" aria-live="polite"></p>
         <div class="ip-actions"><button class="ip-action" id="copyPrefixes" type="button" disabled>Copy filtered prefixes</button><button class="ip-action" id="exportPrefixes" type="button" disabled>Export filtered prefixes</button></div>
         <ul id="prefixList"></ul><button class="ip-action" id="morePrefixes" type="button" hidden>More prefixes</button>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
     </section>
     <details class="snapshot-statistics"><summary>Technical metadata</summary><dl class="ip-meta" id="snapshotDetails"></dl><p class="ip-help">Additional metadata from the same GitHub Meta API snapshot.</p></details>
     <!-- ip-range-view:end -->

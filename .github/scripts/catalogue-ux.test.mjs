@@ -64,6 +64,36 @@ test("icons: source and usage rights remain visible without a disclosure", () =>
   assert.match(source, /elements\.sourceDisclaimerText\.textContent = disclaimer\.text/);
   assert.match(source, /elements\.sourceDisclaimerLink\.hidden = !disclaimer\.url/);
 });
+test("icons: cards and list share results and restore their view from the URL", () => {
+  const buttons = ["cards", "list"].map(view => ({
+    dataset: { view }, setAttribute(name, value) { this[name] = value; },
+  }));
+  const elements = { gallery: { dataset: {} }, density: { disabled: false } };
+  const sandbox = functions("icons", ["setView"], {
+    elements, document: { querySelectorAll: () => buttons },
+  });
+  sandbox.setView("list");
+  assert.equal(elements.gallery.dataset.view, "list");
+  assert.equal(elements.density.disabled, true);
+  assert.deepEqual(buttons.map(button => button["aria-pressed"]), ["false", "true"]);
+  for (const value of ["cards", "invalid", null]) {
+    sandbox.setView(value);
+    assert.equal(elements.gallery.dataset.view, "cards");
+    assert.equal(elements.density.disabled, false);
+    assert.deepEqual(buttons.map(button => button["aria-pressed"]), ["true", "false"]);
+  }
+  assert.match(html.icons, /setView\(params\.get\("view"\)\)/);
+  assert.match(html.icons, /params\.set\("view", elements\.gallery\.dataset\.view\)/);
+  assert.match(html.icons, /\.gallery\[data-view="list"\] \{ grid-template-columns: minmax\(0, 1fr\)/);
+});
+test("icons: S, M and L specify ten, eight and five desktop columns", () => {
+  for (const [density, columns] of [["s", 10], ["m", 8], ["l", 5]]) {
+    assert.match(html.icons, new RegExp(`<option value="${density}"(?: selected)?>${density.toUpperCase()} — ${columns} icons per row</option>`));
+    assert.match(html.icons, new RegExp(`\\.gallery\\[data-density="${density}"\\] \\{ grid-template-columns: repeat\\(${columns}, minmax\\(0, 1fr\\)\\)`));
+  }
+  assert.match(html.icons, /density === "compact" \? "s" : "m"/);
+  assert.match(html.icons, /\.gallery\[data-density\] \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+});
 test("emoji: readable names and separately labelled actions use the shared copy fallback", () => {
   assert.match(html["emoji-sheet"], /Copy emoji: \$\{item.description\}/);
   assert.match(html["emoji-sheet"], /Copy shortcode/);

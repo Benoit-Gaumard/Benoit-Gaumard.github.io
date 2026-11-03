@@ -143,7 +143,8 @@ test('all table columns sort the complete filtered catalogue before pagination',
 
 test('each tab owns labelled filters, options and an accessible result count', () => {
   for (const prefix of ['policies', 'initiatives']) {
-    assert.match(html, new RegExp(`id="${prefix}FilterToggle"[^>]*aria-controls="${prefix}Filters"`));
+    assert.match(html, new RegExp(`<div class="filter-panel" id="${prefix}Filters">`));
+    assert.doesNotMatch(html, new RegExp(`id="${prefix}(?:FilterToggle|FiltersDone)"`));
     assert.match(html, new RegExp(`id="${prefix}ResultCount" role="status" aria-live="polite" aria-atomic="true"`));
     assert.match(html, new RegExp(`id="${prefix}Panel" role="tabpanel" aria-labelledby="tab`));
     for (const suffix of ['FavoritesOnly', 'HideDeprecated', 'HidePreview']) {
@@ -208,13 +209,13 @@ test('view-link buttons are removed while definition copying and URL failure fee
   assert.equal(warnings[0][0], 'Policy view URL could not be updated.');
 });
 
-test('secondary controls live inside mobile filter panels', () => {
+test('secondary controls live inside permanently visible filter panels', () => {
   for (const prefix of ['policies', 'initiatives']) {
     const panelStart = html.indexOf(`id="${prefix}Filters"`);
-    const done = html.indexOf(`id="${prefix}FiltersDone"`);
+    const panelEnd = html.indexOf('</fieldset>', panelStart);
     for (const suffix of ['ActiveFilters', 'Clear']) {
       const control = html.indexOf(`id="${prefix}${suffix}"`);
-      assert.ok(control > panelStart && control < done, prefix + suffix);
+      assert.ok(control > panelStart && control < panelEnd, prefix + suffix);
     }
   }
 });

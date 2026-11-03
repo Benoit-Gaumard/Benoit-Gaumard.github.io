@@ -734,7 +734,6 @@
     .history-filters { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
     .history-filter-grid { display: grid; grid-template-columns: minmax(12rem, 2fr) repeat(3, minmax(9rem, 1fr)); gap: .75rem; }
     .history-extra { display: contents; }
-    .history-filter-toggle, .history-filter-done { display: none !important; }
     .history-field { min-width: 0; }
     .history-field label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .4rem; }
     .history-field input, .history-field select, .copy-fallback input { width: 100%; min-width: 0; height: 3rem; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); }
@@ -825,7 +824,6 @@
     @media (max-width: 48rem) {
       .history-filter-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
       .history-extra { display: grid; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); gap: .75rem; padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
-      .history-filter-toggle, .history-filter-done { display: inline-flex !important; width: fit-content; grid-column: 1 / -1; }
       .site-header { position: relative; }
       .timeline-heading { position: sticky; top: 0; z-index: 10; padding: .65rem .5rem; background: var(--cp-panel-strong); }
       .timeline-tally { margin-left: 0; flex-basis: 100%; }
@@ -1260,6 +1258,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-policy-aliases/aliases-history/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1354,7 +1375,7 @@
 
     <section class="history-log" aria-label="Alias change log">
       <noscript><p>JavaScript is needed to filter this log. <a href="../alias-changes.json">Download the source log</a>, or <a href="../">open Azure Policy Aliases</a>.</p></noscript>
-      <fieldset class="history-filters" id="historyControls" disabled aria-label="Filter retained alias events">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="history-filters" id="historyControls" disabled aria-label="Filter retained alias events">
         <div class="history-filter-grid">
         <div class="history-field">
           <label for="search">Search alias changes</label>
@@ -1369,7 +1390,6 @@
           <option value="90">Last 90 days</option>
         </select>
         </div>
-        <button class="history-action history-filter-toggle" id="historyFilterToggle" type="button" aria-expanded="false" aria-controls="historyExtra">More filters</button>
         <div class="history-extra" id="historyExtra">
         <div class="history-field">
           <label for="changeFilter">Change</label>
@@ -1384,7 +1404,6 @@
           <label for="providerFilter">Provider</label>
           <select id="providerFilter"><option value="">All providers</option></select>
         </div>
-        <button class="history-action history-filter-done" id="historyFiltersDone" type="button">Done</button>
         </div>
         </div>
         <p class="history-help" id="periodHelp">Recent periods end today (UTC), not on the last scan.</p>
@@ -1392,7 +1411,7 @@
           <button class="history-action" id="clearFilters" type="button" hidden>Reset all filters</button>
           <button class="history-action" id="exportChanges" type="button" disabled>Export filtered JSON</button>
         </div>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p class="history-counts" id="changeCounts">Counts: loading&hellip;</p>
       <p class="result-count" id="resultCount" alias="status" aria-live="polite" aria-atomic="true">Loading alias changes&hellip;</p>
       <p class="history-help" id="undatedNotice" hidden></p>
@@ -1487,10 +1506,7 @@
       "search", "changeFilter", "providerFilter", "periodFilter", "clearFilters", "historyControls", "timeline",
       "resultCount", "changeCounts", "refreshedAt", "baselineAt", "retention", "loadMore", "exportChanges",
       "actionStatus", "copyFallback", "copyValue", "exportFallback", "historyError", "retryHistory", "undatedNotice",
-      "historyExtra", "historyFilterToggle", "historyFiltersDone",
     ].map(id => [id, document.getElementById(id)]));
-    const mobileFilters = matchMedia("(max-width: 48rem)");
-    let moreFiltersOpen = false;
 
     function normalize(value) {
       return String(value ?? "").toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -1699,15 +1715,6 @@
       return item;
     }
 
-    function syncMoreFilters() {
-      const visible = !mobileFilters.matches || moreFiltersOpen;
-      if (!visible && elements.historyExtra.contains(document.activeElement)) elements.historyFilterToggle.focus();
-      if (!mobileFilters.matches && document.activeElement === elements.historyFilterToggle) elements.search.focus();
-      elements.historyExtra.hidden = !visible;
-      elements.historyFilterToggle.setAttribute("aria-expanded", String(visible));
-      const active = [elements.changeFilter, elements.providerFilter].filter(select => select.value).length;
-      elements.historyFilterToggle.textContent = `More filters · ${active} active`;
-    }
 
     function currentFilters() {
       return { search: elements.search.value.trim(), change: elements.changeFilter.value, provider: elements.providerFilter.value, days: elements.periodFilter.value ? Number(elements.periodFilter.value) : null };
@@ -1769,7 +1776,6 @@
       elements.loadMore.hidden = remaining <= 0;
       elements.loadMore.textContent = `Load ${Math.min(PAGE_SIZE, remaining)} more (${remaining.toLocaleString("en-US")} remaining)`;
       elements.exportChanges.disabled = !state.filtered.length;
-      syncMoreFilters();
     }
 
     function hasFilters() {
@@ -1921,16 +1927,6 @@
     elements.clearFilters.addEventListener("click", resetFilters);
     elements.exportChanges.addEventListener("click", exportFiltered);
     elements.retryHistory.addEventListener("click", init);
-    elements.historyFilterToggle.addEventListener("click", () => { moreFiltersOpen = !moreFiltersOpen; syncMoreFilters(); });
-    elements.historyFiltersDone.addEventListener("click", () => { moreFiltersOpen = false; syncMoreFilters(); elements.historyFilterToggle.focus(); });
-    elements.historyExtra.addEventListener("keydown", event => {
-      if (event.key === "Escape" && mobileFilters.matches) {
-        moreFiltersOpen = false;
-        syncMoreFilters();
-        elements.historyFilterToggle.focus();
-      }
-    });
-    mobileFilters.addEventListener("change", syncMoreFilters);
     elements.loadMore.addEventListener("click", () => {
       const next = state.filtered[state.visible];
       state.visible += PAGE_SIZE;
@@ -1948,7 +1944,6 @@
       window.dispatchEvent(new Event("historyfilterschange"));
     });
     document.getElementById("currentYear").textContent = new Date().getFullYear();
-    syncMoreFilters();
     init();
 
     let scrollTicking = false;

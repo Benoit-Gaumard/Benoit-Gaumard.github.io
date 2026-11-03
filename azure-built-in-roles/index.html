@@ -322,7 +322,6 @@
     .role-action { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; max-width: 100%; padding: .5rem .75rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; overflow-wrap: anywhere; }
     .role-action:hover { border-color: var(--cp-accent); color: var(--cp-link); }
     .role-action:disabled { cursor: not-allowed; color: var(--cp-text-muted); }
-    .filters-toggle, .filters-done { display: none; }
     .roles-help, .role-status { margin: .75rem 0; max-width: 85ch; color: var(--cp-text-muted); font-size: .85rem; line-height: 1.5; }
     .role-status:empty { margin: 0; }
     .roles-error { padding: 1rem; margin: 1rem 0; border: 1px solid var(--cp-danger); border-radius: 8px; color: var(--cp-danger); background: var(--cp-danger-bg); }
@@ -387,7 +386,6 @@
     .empty-roles h2 { font-size: 1.2rem; margin-top: 0; }
     .load-more { display: block; min-height: 2.75rem; margin: 1rem auto; padding: .65rem 1rem; border: 1px solid var(--cp-border-strong); border-radius: 8px; background: var(--cp-surface); color: var(--cp-text); font: inherit; cursor: pointer; }
     @media (max-width: 64rem) {
-      .filters-toggle, .filters-done { display: inline-flex; }
       .roles-filters { padding: .75rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface-soft); }
       .roles-filter-grid, .comparison-role-summaries, .permission-list > li { grid-template-columns: minmax(0, 1fr); }
       .role-meta { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
@@ -919,6 +917,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-built-in-roles/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1022,10 +1043,9 @@
 
     <section aria-label="Azure built-in roles">
       <noscript><p>This catalogue needs JavaScript. <a href="./roles.json">Download the role dataset</a> or use the Microsoft Learn reference above.</p></noscript>
-      <fieldset class="roles-controls" id="rolesControls" disabled aria-label="Filter and sort roles">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset class="roles-controls" id="rolesControls" disabled aria-label="Filter and sort roles">
         <div class="roles-search-row">
           <div class="roles-field"><label for="search">Search roles and permissions</label><input id="search" type="search" placeholder="Role, ID, description or action" autocomplete="off" spellcheck="false"></div>
-          <button class="role-action filters-toggle" id="filterToggle" type="button" aria-controls="roleFilters" aria-expanded="false">Filters · 0 active</button>
         </div>
         <div class="roles-filters" id="roleFilters">
           <div class="roles-filter-grid">
@@ -1039,10 +1059,9 @@
             <label for="sortBy">Sort by</label><select id="sortBy"></select>
             <button class="role-action" id="sortDirection" type="button">Ascending</button>
             <button class="role-action" id="resetFilters" type="button">Reset filters</button>
-            <button class="role-action filters-done" id="filtersDone" type="button">Done</button>
           </div>
         </div>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p class="roles-help" id="compareHint">Select up to two roles to compare their listed permission patterns, not effective access.</p>
       <p class="role-status" id="actionStatus" role="status" aria-live="polite"></p>
       <div class="copy-fallback" id="copyFallback" hidden><label for="copyValue" id="copyLabel">Select and copy the value</label><textarea id="copyValue" rows="3" readonly></textarea></div>
@@ -1142,10 +1161,10 @@
       { key: "notDataActions", title: "NotDataActions", count: "nNotDataActions", help: "Data-plane exclusions, not deny rules." },
     ];
     const SORTS = { roleName: "Role name", category: "Category", nActions: "Actions count", nNotActions: "NotActions count", nDataActions: "DataActions count", nNotDataActions: "NotDataActions count", id: "Role Definition Id" };
-    const state = { status: "loading", roles: [], filtered: [], byId: new Map(), indices: new Map(), visible: PAGE_SIZE, sortKey: "roleName", sortDir: "asc", open: new Set(), groups: new Map(), linkedId: "", selected: [], comparisonOpen: false, comparisonKey: "", filtersOpen: false };
+    const state = { status: "loading", roles: [], filtered: [], byId: new Map(), indices: new Map(), visible: PAGE_SIZE, sortKey: "roleName", sortDir: "asc", open: new Set(), groups: new Map(), linkedId: "", selected: [], comparisonOpen: false, comparisonKey: "" };
     const el = Object.fromEntries([
       "rolesControls", "search", "categoryFilter", "providerFilter", "actionTypeFilter", "privilegedOnlyFilter",
-      "sortBy", "sortDirection", "resetFilters", "filterToggle", "roleFilters", "filtersDone", "datasetSummary", "statsGrid",
+      "sortBy", "sortDirection", "resetFilters", "datasetSummary", "statsGrid",
       "actionStatus", "copyFallback", "copyValue", "copyLabel", "rolesError", "retryRoles", "refreshedAt",
       "comparisonSelection", "selectedRoles", "compareButton", "clearComparison", "comparisonPanel", "comparisonHeading",
       "comparisonContent", "closeComparison", "copyComparison", "resultCount", "linkedRole", "rolesResults", "loadMore", "compareHint",
@@ -1614,13 +1633,6 @@
     }
 
     function syncFilters() {
-      const visible = !compact.matches || state.filtersOpen;
-      if (!visible && el.roleFilters.contains(document.activeElement)) el.filterToggle.focus();
-      if (!compact.matches && document.activeElement === el.filterToggle) el.search.focus();
-      el.roleFilters.hidden = !visible;
-      el.filterToggle.setAttribute("aria-expanded", String(visible));
-      const count = filterControls.filter(control => control.type === "checkbox" ? control.checked : control.value.trim()).length;
-      el.filterToggle.textContent = `Filters · ${count} active`;
       el.sortBy.value = state.sortKey;
       el.sortDirection.textContent = state.sortDir === "asc" ? "Ascending" : "Descending";
     }
@@ -1784,11 +1796,6 @@
     Object.entries(SORTS).forEach(([key, label]) => el.sortBy.add(new Option(label, key)));
     el.search.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => applyFilters(), 150); });
     filterControls.slice(1).forEach(control => control.addEventListener("change", () => applyFilters()));
-    el.filterToggle.addEventListener("click", () => { state.filtersOpen = !state.filtersOpen; syncFilters(); });
-    el.filtersDone.addEventListener("click", () => { state.filtersOpen = false; syncFilters(); el.filterToggle.focus(); });
-    el.roleFilters.addEventListener("keydown", event => {
-      if (event.key === "Escape" && compact.matches) { state.filtersOpen = false; syncFilters(); el.filterToggle.focus(); }
-    });
     compact.addEventListener("change", () => { syncFilters(); render(); });
     el.resetFilters.addEventListener("click", resetFilters);
     el.sortBy.addEventListener("change", () => { state.sortKey = el.sortBy.value; render(); syncUrl(); });

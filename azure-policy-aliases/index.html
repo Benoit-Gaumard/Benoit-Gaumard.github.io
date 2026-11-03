@@ -337,8 +337,7 @@
     .sort-controls select { min-height: 2.75rem; max-width: 100%; padding: .4rem .5rem; border: 1px solid var(--cp-border-strong); border-radius: 6px; color: var(--cp-text); background: var(--cp-surface); }
     .catalogue-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin: 1rem 0; }
     .catalogue-options { flex: 1 1 11rem; min-width: 0; }
-    .catalogue-options summary { min-height: 2.75rem; padding-block: .75rem; color: var(--cp-link); cursor: pointer; font-size: .85rem; }
-    .catalogue-options[open] .sort-controls { padding-block: .5rem; }
+    .catalogue-options .sort-controls { padding-block: .5rem; }
     .data-error { margin: 1rem 0; padding: 1rem; border: 1px solid var(--cp-danger); border-radius: 8px; color: var(--cp-danger); background: var(--cp-danger-bg); line-height: 1.5; }
     .data-error p { margin-top: 0; }
     .action-status { margin: .5rem 0; font-size: .85rem; color: var(--cp-text-muted); line-height: 1.5; overflow-wrap: anywhere; }
@@ -919,6 +918,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-policy-aliases/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1026,7 +1048,7 @@
         <p>The alias catalogue could not be loaded. Filters and copying are unavailable until loading succeeds.</p>
         <button class="aliases-button" id="retryLoad" type="button">Retry loading catalogue</button>
       </div>
-      <fieldset id="filterControls" disabled aria-label="Search, filter and sort aliases">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset id="filterControls" disabled aria-label="Search, filter and sort aliases">
       <div class="filter-bar">
         <div class="filter-field">
           <label for="search">Search aliases</label>
@@ -1045,8 +1067,7 @@
       <p class="filter-help" id="typeHelp">Choose a provider, then search its types. Leave the type empty to include all its types.</p>
       <p class="field-error" id="typeError" hidden></p>
       <div class="catalogue-toolbar">
-        <details class="catalogue-options" id="displayOptions">
-          <summary>Sort and batch size</summary>
+        <div class="catalogue-options" id="displayOptions">
           <div class="sort-controls">
           <label for="sortSelect">Sort by</label>
           <select id="sortSelect"><option value="alias">Alias</option><option value="resourceType">Resource type</option><option value="defaultPath">Default path</option></select>
@@ -1054,12 +1075,12 @@
           <label for="pageSize">Per batch</label>
           <select id="pageSize"><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
           </div>
-        </details>
+        </div>
         <div class="filter-actions">
           <button class="aliases-button" id="clearFilters" type="button" hidden>Reset filters</button>
         </div>
       </div>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p id="resultCount" role="status" aria-live="polite" aria-atomic="true">Loading aliases&hellip;</p>
       <p class="filter-help" id="valueHelp">Long values scroll within each field. You can select and copy the text.</p>
       <p class="action-status" id="actionStatus" role="status" aria-live="polite"></p>

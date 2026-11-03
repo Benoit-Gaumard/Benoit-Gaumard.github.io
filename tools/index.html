@@ -548,7 +548,7 @@
       width: 3rem;
       height: 3rem;
       border-radius: 10px;
-      background: var(--cp-surface-soft);
+      background: transparent;
       font-size: 1.5rem;
     }
     .tool-card .tool-icon img {
@@ -1135,6 +1135,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/tools/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1217,19 +1240,17 @@
   <main id="top" tabindex="-1">
     <section class="intro" aria-labelledby="page-title">
       <h1 id="page-title">Tools</h1>
-      <p class="intro-text">Cloud references and everyday tools.</p>
+      <p class="intro-text">Useful tools. All in one place. A collection of IT tools to help you work faster and more easily.</p>
     </section>
 
     <section id="catalog" aria-label="Tool catalogue">
       <noscript><p>Search, filters and saved preferences need JavaScript. All tools are available below.</p></noscript>
-      <div id="catalogControls" hidden>
+      <div id="catalogControls" hidden class="tool-controls-panel">
       <div class="tools-search">
         <div class="search-field">
-          <label for="toolSearch">Search tools</label>
-          <input id="toolSearch" type="search" placeholder="Try DNS, permissions or calculator" autocomplete="off" spellcheck="false" aria-describedby="searchHint">
+          <input id="toolSearch" type="search" placeholder="Search tools" aria-label="Search tools" autocomplete="off" spellcheck="false">
         </div>
       </div>
-      <p class="search-hint" id="searchHint">Press Enter when one result remains.</p>
       <div class="tools-toolbar">
         <div class="toolbar-group">
         <div class="view-toggle" role="group" aria-label="Choose view">
@@ -1249,7 +1270,6 @@
         </div>
         <button type="button" class="reset-order-button" id="resetOrderButton" aria-haspopup="dialog" aria-controls="resetOrderDialog" hidden>Reset order</button>
       </div>
-      <p class="preference-hint">Favorite tools and their order are saved only in this browser.</p>
       <p class="preference-hint" id="reorderHint" hidden>Use the arrow buttons, or drag a handle. Moves apply to the currently visible tools.</p>
       <div class="results-toolbar">
         <p class="result-count" id="resultCount" role="status" aria-live="polite" aria-atomic="true"></p>

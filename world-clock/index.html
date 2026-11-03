@@ -1097,6 +1097,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/world-clock/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1195,8 +1218,8 @@
  <div class="clock-field clock-range" id="occurrenceField" hidden><label for="meetingOccurrence">This time occurs twice: choose an offset</label><select id="meetingOccurrence"><option value="">Choose an occurrence</option></select></div></div>
  <div class="clock-actions"><button class="clock-action" id="previewMeeting" type="button">Preview selected time</button><button class="clock-action" id="liveClock" type="button" disabled>Return to live time</button></div><p class="clock-help" id="meetingStatus" role="status" aria-live="polite"></p></details>
  <section aria-labelledby="comparisonHeading"><h2 id="comparisonHeading">Compare cities</h2><p class="clock-help">Dates are local to each city. Day differences are relative to Paris. GMT badges use the displayed instant, including seasonal changes; IANA names remain available in each detail.</p>
- <div class="clock-fields"><div class="clock-field"><label for="zoneInput">Add a city or IANA timezone</label><input id="zoneInput" list="zoneOptions" placeholder="Tokyo or Asia/Tokyo" aria-describedby="zoneError" autocomplete="off"><datalist id="zoneOptions"></datalist></div><div class="clock-actions"><button class="clock-action" id="addZone" type="button">Add city</button></div></div><p class="clock-help" id="zoneError" role="status"></p>
- <div class="clock-actions" role="group" aria-label="Clock view"><button class="clock-action" data-clock-view="cards" type="button" aria-pressed="true">Cards</button><button class="clock-action" data-clock-view="list" type="button" aria-pressed="false">List</button><button class="clock-action" id="copyTimes" type="button">Copy time comparison</button></div>
+ <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><div class="clock-fields"><div class="clock-field"><label for="zoneInput">Add a city or IANA timezone</label><input id="zoneInput" list="zoneOptions" placeholder="Tokyo or Asia/Tokyo" aria-describedby="zoneError" autocomplete="off"><datalist id="zoneOptions"></datalist></div><div class="clock-actions"><button class="clock-action" id="addZone" type="button">Add city</button></div></div><p class="clock-help" id="zoneError" role="status"></p>
+ <div class="clock-actions" role="group" aria-label="Clock view"><button class="clock-action" data-clock-view="cards" type="button" aria-pressed="true">Cards</button><button class="clock-action" data-clock-view="list" type="button" aria-pressed="false">List</button><button class="clock-action" id="copyTimes" type="button">Copy time comparison</button></div></div><!-- tool-controls:end -->
  <div class="world-zones" id="timezoneGrid" aria-live="off"></div></section>
  <!-- world-clock-view:end -->
 

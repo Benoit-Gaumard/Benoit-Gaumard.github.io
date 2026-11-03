@@ -55,7 +55,7 @@ test("all release products use individual badges while retaining AWS display-nam
 test("all release announcements use only their title link, without a duplicate summary or source link", () => {
   for (const slug of ["azure-release-updates", "m365-release-updates", "aws-release-updates"]) {
     const html = readFileSync(slug + "\\index.html", "utf8");
-    assert.match(html, /article\.append\(node\("p", item\.description, "news-description"\)\)/);
+    assert.match(html, /details\.append\(node\("p", item\.description, "news-description"\)\)/);
     assert.match(html, /link\.href = item\.link/);
     assert.doesNotMatch(html, /Full source summary|news-description-more|news-source|Read the (?:Azure|AWS) announcement|Open roadmap item/);
   }
@@ -101,10 +101,35 @@ test("Microsoft 365 adopts the Microsoft card layout without changing roadmap se
   assert.match(html, /const defaultPeriod = "0"/);
   assert.match(html, /else if \(config\.kind === "m365"\) status\.classList\.add\("status-badge", m365StatusClass\(item\.statusLabel\)\)/);
   assert.match(html, /Feed-date period/);
-  assert.match(html, /Roadmap feed date/);
+  assert.match(html, /Feed date is the date carried by the RSS entry/);
+  assert.match(html, /const date = node\("time", formatDate\(item\.pubDate\)\)/);
   assert.match(html, /const age = publicationAge\(item\.pubDate\)/);
   assert.match(html, /roadmapDates\(item\.description\)/);
   assert.doesNotMatch(html, /Open roadmap item/);
+});
+test("all providers share Azure's filter panel, date-first header and expandable details", () => {
+  const pages = ["azure", "m365", "aws"].map(kind => ({
+    kind, slug: `${kind}-release-updates`,
+    html: readFileSync(`${kind}-release-updates\\index.html`, "utf8"),
+  }));
+  const style = html => html.match(/<style data-release-news>([\s\S]*?)<\/style>/)[1];
+  const card = html => html.match(/  function card\(item\) \{[\s\S]*?(?=  function updateFavoriteFilter)/)[0];
+  for (const { kind, slug, html } of pages) {
+    assert.match(html, /<fieldset class="news-controls news-controls-panel" id="newsControls"/);
+    if (kind === "azure") {
+      assert.doesNotMatch(html, /Filters and views|Favorites stay in this browser\. A shared filtered URL does not transfer your saved list\./);
+      assert.match(html, /id="favoritesFilterLabel">My favorites \(0\)<\/span><\/button><button class="news-action" id="retirements"/);
+      assert.match(html, /Retirements<\/button><button class="news-action" id="clearFilters"/);
+    }
+    assert.equal(style(html), style(pages[0].html));
+    assert.equal(card(html), card(pages[0].html));
+    assert.match(html, /headingRow\.append\(meta, title, favorite, disclosure\)/);
+    assert.doesNotMatch(html, /Active period:|id="periodSummary"/);
+    assert.match(html, /details\.hidden = true/);
+    assert.match(html, /disclosure\.setAttribute\("aria-controls", disclosureId\)/);
+    assert.match(html, /details\.hidden = !expanded/);
+    assert.equal(upgradeNewsPage(html, kind, slug), html);
+  }
 });
 test("AWS keeps category/product filtering and never infers a status from its announcement title", () => {
   const html = readFileSync("aws-release-updates\\index.html", "utf8");

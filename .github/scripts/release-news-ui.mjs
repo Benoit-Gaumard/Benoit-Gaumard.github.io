@@ -68,9 +68,10 @@ export function m365StatusClass(label) {
 
 function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, roadmapDates, azureStatusClass, m365StatusClass }) {
   const PAGE = 20;
+  let disclosureSequence = 0;
   const defaultPeriod = "0";
   const storageKey = config.slug + "-favorites";
-  const el = Object.fromEntries(["newsControls", "search", "lastUpdate", "status", "category", "product", "favoritesFilter", "favoritesFilterLabel", "clearFilters", "retirements", "newsOptions", "resultCount", "updateList", "loadMore", "refreshedAt", "libraryCount", "newsError", "retryNews", "periodSummary"].map(id => [id, document.getElementById(id)]));
+  const el = Object.fromEntries(["newsControls", "search", "lastUpdate", "status", "category", "product", "favoritesFilter", "favoritesFilterLabel", "clearFilters", "retirements", "newsOptions", "resultCount", "updateList", "loadMore", "refreshedAt", "libraryCount", "newsError", "retryNews"].map(id => [id, document.getElementById(id)]));
   const state = { status: "loading", items: [], filtered: [], visible: PAGE, favorites: new Set(), favoritesOnly: false };
   const calendar = window.createReleaseCalendar({ controls: el.newsControls, results: el.updateList, apply: () => apply(), sync, kind: config.kind, productLabel });
   const STAR = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
@@ -118,6 +119,7 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
   function card(item) {
     const article = node("article", undefined, "news-entry");
     article.dataset.itemId = item.id;
+    article.classList.add("news-entry-collapsible");
     const title = node("h2", undefined, "news-title");
     const link = node("a", item.title);
     link.href = item.link; link.target = "_blank"; link.rel = "noopener noreferrer";
@@ -130,7 +132,7 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
       else status.classList.add("status-badge", "default");
       meta.append(status);
     }
-    const date = node("time", `${config.kind === "m365" ? "Roadmap feed date" : "Published"}: ${formatDate(item.pubDate)}`);
+    const date = node("time", formatDate(item.pubDate));
     if (Number.isFinite(Date.parse(item.pubDate))) date.dateTime = item.pubDate;
     meta.append(date);
     const age = publicationAge(item.pubDate);
@@ -140,10 +142,11 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
       relative.title = `${config.kind === "m365" ? "Roadmap feed" : "Publication"} age based on the current UTC date`;
       meta.append(relative);
     }
+    if (item.statusLabel) meta.append(meta.querySelector(".news-status"));
     const favorite = button("", () => {
       if (state.favorites.has(item.link)) state.favorites.delete(item.link); else state.favorites.add(item.link);
       saveFavorites();
-      if (state.favoritesOnly) { (el.newsOptions.open ? el.favoritesFilter : el.newsOptions.querySelector("summary")).focus({ preventScroll: true }); apply(); }
+      if (state.favoritesOnly) { el.favoritesFilter.focus({ preventScroll: true }); apply(); }
       else { paintFavorite(); updateFavoriteFilter(); }
     });
     favorite.className = "news-favorite";
@@ -155,23 +158,43 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
       favorite.setAttribute("aria-label", `${active ? "Remove" : "Save"} ${item.title} ${active ? "from" : "to"} browser-local favorites`);
     }
     paintFavorite();
-    meta.append(favorite);
-    article.append(title, meta);
+    const details = node("div", undefined, "news-details");
     if (item.products.length) {
       const tags = node("ul", undefined, "news-products update-tags");
       tags.setAttribute("aria-label", "Products");
       item.products.forEach(product => tags.append(node("li", config.kind === "aws" ? productLabel(product) : product, "update-tag")));
-      article.append(tags);
+      details.append(tags);
     }
     if (config.kind === "m365") {
       const targets = roadmapDates(item.description);
       if (targets.length) {
         const dates = node("dl", undefined, "news-dates");
         targets.forEach(target => dates.append(node("dt", target.label), node("dd", target.value)));
-        article.append(dates);
+        details.append(dates);
       }
     }
-    article.append(node("p", item.description, "news-description"));
+    details.append(node("p", item.description, "news-description"));
+    {
+      const headingRow = node("div", undefined, "news-heading-row");
+      const disclosureId = `news-details-${++disclosureSequence}`;
+      details.id = disclosureId;
+      details.hidden = true;
+      const disclosure = node("button", undefined, "news-disclosure");
+      disclosure.type = "button";
+      disclosure.setAttribute("aria-expanded", "false");
+      disclosure.setAttribute("aria-controls", disclosureId);
+      disclosure.setAttribute("aria-label", "Show update details");
+      disclosure.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+      disclosure.addEventListener("click", () => {
+        const expanded = disclosure.getAttribute("aria-expanded") !== "true";
+        disclosure.setAttribute("aria-expanded", String(expanded));
+        disclosure.setAttribute("aria-label", `${expanded ? "Hide" : "Show"} update details`);
+        article.classList.toggle("is-expanded", expanded);
+        details.hidden = !expanded;
+      });
+      headingRow.append(meta, title, favorite, disclosure);
+      article.append(headingRow, details);
+    }
     return article;
   }
   function updateFavoriteFilter() {
@@ -182,10 +205,8 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
     calendar?.render(state.filtered);
     if (calendar?.active) {
       el.resultCount.textContent = `${state.filtered.length} matching announcements · ${state.items.length} retained.`;
-      el.periodSummary.textContent = `Active period: ${calendar.summary}. Search, status, product and favorites filters still apply.`;
       el.loadMore.hidden = true;
       el.clearFilters.hidden = false;
-      el.newsOptions.querySelector("summary").textContent = `Filters and favorites${[el.status, el.category, el.product].some(control => control?.value) || state.favoritesOnly ? " · active" : ""}`;
       if (el.retirements) el.retirements.setAttribute("aria-pressed", String(el.status.value === "Retirement"));
       updateFavoriteFilter();
       return;
@@ -203,11 +224,8 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
       el.updateList.append(empty);
     }
     el.resultCount.textContent = `${shown.length} displayed / ${state.filtered.length.toLocaleString("en-US")} matching announcements · ${state.items.length.toLocaleString("en-US")} retained.`;
-    el.periodSummary.textContent = `Active period: ${el.lastUpdate.selectedOptions[0]?.textContent || "All retained"} (UTC). Publication/feed dates are separate from the snapshot collection time.`;
     el.loadMore.hidden = shown.length >= state.filtered.length;
     el.loadMore.textContent = `Show ${Math.min(PAGE, state.filtered.length - shown.length)} more announcements`;
-    const active = [el.status, el.category, el.product].filter(control => control?.value).length;
-    el.newsOptions.querySelector("summary").textContent = `Filters and favorites${active || state.favoritesOnly ? " · " + (active + Number(state.favoritesOnly)) + " active" : ""}`;
     el.clearFilters.hidden = !controls.some(control => control.value) && !state.favoritesOnly;
     if (el.retirements) el.retirements.setAttribute("aria-pressed", String(el.status.value === "Retirement"));
     updateFavoriteFilter();
@@ -303,12 +321,17 @@ function newsRuntime(config, { matchesPeriod, publicationAge, productLabel, road
 
 const CSS = `
   .news-controls{border:0;padding:0;margin:0;min-width:0;}
+  .news-controls-panel{padding:1.25rem;margin-bottom:1rem;border:1px solid var(--cp-border);border-radius:16px;background:var(--cp-surface);}
+  .news-controls-panel legend{padding:0 .5rem;font-size:1rem;font-weight:650;color:var(--cp-text);}
+  .news-controls-panel .news-primary{margin-bottom:1rem;}
+  .news-controls-panel .news-options>.news-help{margin-bottom:0;}
+  @media(max-width:42rem){.news-controls-panel{padding:.75rem;}}
   .news-primary{display:grid;grid-template-columns:minmax(0,2fr) minmax(9rem,1fr);gap:.75rem;}
   .news-field{min-width:0;}
   .news-field label{display:block;margin-bottom:.4rem;font-size:.85rem;font-weight:600;}
   .news-field input,.news-field select{width:100%;min-width:0;height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);}
   .news-field input::placeholder{color:var(--cp-text-muted);}
-  .news-options>summary{min-height:2.75rem;padding-block:.65rem;cursor:pointer;color:var(--cp-link);font-size:.85rem;}
+  details.news-options>summary{min-height:2.75rem;padding-block:.65rem;cursor:pointer;color:var(--cp-link);font-size:.85rem;}
   .news-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;}
   .news-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.75rem 0;}
   .news-action{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);font:inherit;font-size:.85rem;cursor:pointer;}
@@ -325,13 +348,24 @@ const CSS = `
   .news-title a{color:var(--cp-text);text-decoration:none;overflow-wrap:anywhere;}
   .news-title a:hover{text-decoration:underline;color:var(--cp-link);}
   .news-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .75rem;font-size:.8rem;color:var(--cp-text-muted);}
+  .news-entry-collapsible .news-heading-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .75rem;}
+  .news-entry-collapsible .news-title{flex:1 1 32rem;min-width:0;margin:0;font-size:1.05rem;}
+  .news-entry-collapsible .news-meta{flex:0 1 auto;}
+  .news-entry-collapsible .news-favorite{margin-left:0;}
+  .news-disclosure{display:inline-flex;align-items:center;justify-content:center;flex:none;width:2.75rem;height:2.75rem;padding:0;border:1px solid var(--cp-border);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);cursor:pointer;}
+  .news-disclosure:hover{border-color:var(--cp-accent);color:var(--cp-accent);}
+  .news-disclosure:focus-visible{outline:3px solid var(--cp-accent);outline-offset:2px;}
+  .news-disclosure svg{transition:transform .16s ease;}
+  .news-entry-collapsible.is-expanded .news-disclosure svg{transform:rotate(180deg);}
+  .news-details{padding-top:.25rem;}
+  .news-entry-collapsible .news-description{display:block;overflow:visible;}
   .news-status{font-weight:650;color:var(--cp-text);}
   .news-status.status-badge{display:inline-flex;align-items:center;min-height:1.75rem;max-width:100%;padding:.25rem .65rem;border:1px solid currentColor;border-radius:999px;font-size:.75rem;font-weight:700;line-height:1.3;white-space:normal;overflow-wrap:anywhere;}
   .news-status.status-badge.private-preview{background:var(--cp-violet-bg);color:var(--cp-violet);}
   .news-status.status-badge.default{background:var(--cp-surface-soft);color:var(--cp-text-muted);}
   .news-meta .update-relative{min-height:1.75rem;padding:.25rem .65rem;border:1px solid var(--cp-border-strong);line-height:1.3;}
   .news-meta .update-relative.is-recent{background:var(--cp-accent);color:var(--cp-accent-fg);border-color:var(--cp-accent);}
-  .news-favorite{display:inline-flex;align-items:center;justify-content:center;flex:none;width:2.75rem;height:2.75rem;padding:0;margin-left:auto;border:1px solid var(--cp-border);border-radius:6px;background:var(--cp-surface);color:var(--cp-text);cursor:pointer;}
+  .news-favorite{display:inline-flex;align-items:center;justify-content:center;flex:none;width:2.75rem;height:2.75rem;padding:0;margin-left:auto;border:1px solid var(--cp-border);border-radius:50%;background:var(--cp-surface);color:var(--cp-text);cursor:pointer;}
   .news-favorite[aria-pressed="true"]{color:var(--cp-link);border-color:var(--cp-accent);}
   .news-products{margin:.5rem 0;color:var(--cp-text-muted);font-size:.8rem;line-height:1.5;}
   .news-products.update-tags{padding:0;list-style:none;}
@@ -348,20 +382,26 @@ const CSS = `
 
 function markup(kind) {
   const aws = kind === "aws";
-  return `<!-- release-news-view:start -->
+  const html = `<!-- release-news-view:start -->
   <section aria-label="Release announcements">
-    <fieldset class="news-controls" id="newsControls" disabled>
+    <fieldset class="news-controls news-controls-panel" id="newsControls" disabled>
+      <legend>Filters and views</legend>
       <div class="news-primary"><div class="news-field"><label for="search">Search announcements</label><input id="search" type="search" placeholder="Title, description or product" autocomplete="off"></div><div class="news-field"><label for="lastUpdate">${kind === "m365" ? "Feed-date period" : "Publication period"}</label><select id="lastUpdate"><option value="">All retained</option><option value="0" selected>Today</option><option value="yesterday">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div></div>
-      <details class="news-options" id="newsOptions"><summary>Filters and favorites</summary><div class="news-secondary"><div class="news-field"><label for="${aws ? "category" : "status"}">${aws ? "Category" : "Status"}</label><select id="${aws ? "category" : "status"}"><option value="">All ${aws ? "categories" : "statuses"}</option></select></div><div class="news-field"><label for="product">Product</label><select id="product"><option value="">All products</option></select></div></div><div class="news-actions"><button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="favoritesFilterLabel">My favorites (0)</span></button></div><p class="news-help">Favorites stay in this browser. A shared filtered URL does not transfer your saved list.</p></details>
+      <div class="news-options" id="newsOptions"><div class="news-secondary"><div class="news-field"><label for="${aws ? "category" : "status"}">${aws ? "Category" : "Status"}</label><select id="${aws ? "category" : "status"}"><option value="">All ${aws ? "categories" : "statuses"}</option></select></div><div class="news-field"><label for="product">Product</label><select id="product"><option value="">All products</option></select></div></div><div class="news-actions"><button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="favoritesFilterLabel">My favorites (0)</span></button></div><p class="news-help">Favorites stay in this browser. A shared filtered URL does not transfer your saved list.</p></div>
       <div class="news-actions">${kind === "azure" ? '<button class="news-action" id="retirements" type="button" aria-pressed="false">Retirements</button>' : ""}<button class="news-action" id="clearFilters" type="button" hidden>Reset filters</button></div>
     </fieldset>
-    <p class="news-help" id="periodSummary"></p>
     ${kind === "m365" ? '<details class="news-options"><summary>Roadmap dates and statuses</summary><p class="news-help">Feed date is the date carried by the RSS entry, not a guaranteed deployment start. GA and Preview targets retain the roadmap wording and may change. In development is planned work; Rolling out is an ongoing rollout; Launched is a source status, not proof that every tenant already has the feature. Cancelled entries are not a promise of delivery.</p></details>' : ""}
     <div class="news-error" id="newsError" role="alert" hidden><p>The announcement snapshot could not be loaded or validated.</p><button class="news-action" id="retryNews" type="button">Retry</button></div>
     <p class="news-count" id="resultCount" role="status" aria-live="polite">Loading announcements…</p><div class="news-results" id="updateList" aria-busy="true"></div><button class="news-action news-more" id="loadMore" type="button" hidden>More announcements</button>
   </section>
   <!-- release-news-view:end -->
 `;
+  if (kind !== "azure") return html;
+  return html
+    .replace('<fieldset class="news-controls news-controls-panel" id="newsControls" disabled>', '<fieldset class="news-controls news-controls-panel" id="newsControls" aria-label="Filter announcements and choose view" disabled>')
+    .replace('      <legend>Filters and views</legend>\n', "")
+    .replace('<p class="news-help">Favorites stay in this browser. A shared filtered URL does not transfer your saved list.</p>', "")
+    .replace(/(<span id="favoritesFilterLabel">My favorites \(0\)<\/span><\/button>)(<\/div><\/div>)\s*<div class="news-actions">([^]*?)<\/div>/, "$1$3$2");
 }
 
 export function upgradeNewsPage(source, kind, slug) {

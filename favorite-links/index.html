@@ -431,7 +431,7 @@
       height: 2rem;
       flex: 0 0 auto;
       border-radius: 8px;
-      background: var(--cp-surface-soft);
+      background: transparent;
       color: var(--cp-accent);
       font-weight: 800;
       font-size: 0.85rem;
@@ -726,7 +726,6 @@
     .category-badge { min-height: 44px; max-width: 100%; padding: .4rem .85rem; border: 1px solid var(--cp-border-strong); border-radius: 999px; background: var(--cp-surface); color: var(--cp-text); font-size: .85rem; cursor: pointer; }
     .category-badge:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
     .category-badge[aria-pressed="true"] { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
-    .extra-filters summary { cursor: pointer; min-height: 44px; padding: .5rem 0; }
     .extra-filters select { min-height: 44px; max-width: 100%; color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border); padding: .5rem; }
     .link-card { cursor: default; }
     .link-card-row1 h2 { white-space: normal; overflow-wrap: anywhere; }
@@ -1143,6 +1142,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/favorite-links/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1231,13 +1253,13 @@
     </section>
 
     <section aria-label="Favorite links">
-      <div class="filter-bar">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><div class="filter-bar">
         <input id="searchInput" type="search" placeholder="Search links..." autocomplete="off" spellcheck="false" aria-label="Search links">
       </div>
       <input id="categoryFilter" type="hidden" value="">
       <input id="topicFilter" type="hidden" value="">
       <div class="category-badges" id="topicBadges" role="group" aria-label="Filter by topic"></div>
-      <details class="extra-filters"><summary>More filters &amp; sort</summary>
+      <div class="extra-filters">
       <div class="filter-bar">
         <select id="sortSelect" aria-label="Sort order">
           <option value="latest" selected>Recently listed</option>
@@ -1248,7 +1270,7 @@
         </select>
         <label class="filter-toggle"><input type="checkbox" id="highlightedOnly"> Featured only</label>
       </div>
-      </details>
+      </div>
       <div class="links-toolbar">
         <div class="results-actions">
           <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
@@ -1269,7 +1291,7 @@
         </div>
         <p class="link-domain" id="submitHelp">Submitting a link opens GitHub and requires an account.</p>
         <p class="results-count" id="resultsCount" aria-live="polite"></p>
-      </div>
+      </div></div><!-- tool-controls:end -->
       <div class="link-cards" id="linkCards"></div>
     </section>
 

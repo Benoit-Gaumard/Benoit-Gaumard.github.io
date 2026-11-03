@@ -865,7 +865,6 @@
     .breadcrumb[hidden], #dialogSourceLink[hidden], #pngCapability[hidden] { display: none; }
     .usage-details h2 { margin: 0; padding: .5rem 0; color: var(--cp-text-muted); font-size: 1rem; font-weight: 600; }
     .field { min-width: 0; }
-    .extra-filters summary { cursor: pointer; min-height: 44px; padding: .625rem; color: var(--cp-text); }
     .filter-fields { display: grid; gap: .5rem; padding-top: .5rem; }
     .filter-fields label { position: static; width: auto; height: auto; clip: auto; display: block; margin: 0 0 .25rem; }
     .results-actions, .results-bar { flex-wrap: wrap; }
@@ -874,20 +873,39 @@
     .category { overflow-wrap: anywhere; white-space: normal; margin: .5rem 0; font-size: .75rem; color: var(--cp-text-muted); }
     .icon-name { display: block; overflow: visible; }
     .gallery { align-content: start; }
-    .gallery[data-density="compact"] { grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: .5rem; }
-    .gallery[data-density="compact"] .icon-card { grid-template-rows: 7rem auto; }
+    .gallery[data-density="s"] { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: .5rem; }
+    .gallery[data-density="m"] { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    .gallery[data-density="l"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .gallery[data-density="s"] .icon-card { grid-template-rows: 7rem auto; }
     .source-disclaimer { box-shadow: none; }
     .source-disclaimer strong, .source-disclaimer a { color: var(--cp-link); }
     #dialogSourceLink { display: inline-flex; align-items: center; min-height: 2.75rem; }
     #pngCapability { margin: 0; font-size: .875rem; overflow-wrap: anywhere; }
     .dialog-actions [disabled] { opacity: .65; cursor: not-allowed; }
     .pagination { flex-wrap: wrap; }
+    @media (max-width: 64rem) {
+      .gallery[data-density="s"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .gallery[data-density="m"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .gallery[data-density="l"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
     @media (max-width: 42rem) {
       .toolbar { grid-template-columns: minmax(0, 1fr); }
       .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .gallery[data-density="compact"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .gallery[data-density] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .dialog-action.primary { width: 100%; justify-content: center; }
     }
+    .view-toggle { display: inline-flex; gap: .25rem; padding: .25rem; border: 1px solid var(--cp-border); border-radius: 8px; background: var(--cp-surface); }
+    .view-toggle-button { min-height: 44px; padding: .5rem .75rem; border: 0; border-radius: 6px; background: transparent; color: var(--cp-text-muted); font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+    .view-toggle-button:hover { color: var(--cp-link); }
+    .view-toggle-button[aria-pressed="true"] { background: var(--cp-accent-soft); color: var(--cp-link); }
+    .gallery[data-view="list"] { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+    .gallery[data-view="list"] .icon-card { grid-template-columns: 5rem minmax(0, 1fr); grid-template-rows: auto; min-height: 6rem; }
+    .gallery[data-view="list"] .preview-button { grid-column: 1; grid-row: 1; border-bottom: 0; border-right: 1px solid var(--cp-border); }
+    .gallery[data-view="list"] .preview-button img { width: 3rem; height: 3rem; }
+    .gallery[data-view="list"] .card-copy { grid-column: 2; grid-row: 1; align-self: center; padding: .75rem 3.75rem .75rem .75rem; }
+    .gallery[data-view="list"] .icon-name { min-height: 0; overflow-wrap: anywhere; }
+    .gallery[data-view="list"] .favorite-button { top: .75rem; }
+    .gallery[data-view="list"] .category { margin-bottom: 0; }
   </style>
 <!-- site-ui:start -->
 <!-- site-ui-config: {"menu":true,"theme":true,"banner":true,"path":"/icons/","errorPage":false,"language":"en"} -->
@@ -1279,6 +1297,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/icons/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1373,7 +1414,7 @@
         <span class="breadcrumb-category" id="breadcrumbCategory">All</span>
       </nav>
 
-      <div class="toolbar">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><div class="toolbar">
         <div class="field search-field">
           <label for="search">Search icons</label>
           <input id="search" type="search" placeholder="Search by service or category..." autocomplete="off" spellcheck="false">
@@ -1388,8 +1429,7 @@
             <option value="Extra">Extra</option>
           </select>
         </div>
-        <details class="extra-filters">
-          <summary>More filters &amp; density</summary>
+        <div class="extra-filters">
           <div class="filter-fields">
             <div class="field">
               <label for="category">Category</label>
@@ -1406,10 +1446,10 @@
             </div>
             <div class="field">
               <label for="density">Grid density</label>
-              <select id="density"><option value="comfortable">Comfortable grid</option><option value="compact">Compact grid</option></select>
+              <select id="density"><option value="s">S — 10 icons per row</option><option value="m" selected>M — 8 icons per row</option><option value="l">L — 5 icons per row</option></select>
             </div>
           </div>
-        </details>
+        </div>
       </div>
 
       <section class="usage-details" aria-labelledby="usage-rights-title">
@@ -1425,11 +1465,15 @@
         <div class="results-actions">
           <button class="favorites-filter" id="favoritesFilter" type="button" aria-pressed="false">☆ My favorites (0)</button>
           <button class="clear-button" id="clearFilters" type="button" hidden>Clear filters</button>
+          <div class="view-toggle" role="group" aria-label="Choose icon view">
+            <button class="view-toggle-button" type="button" data-view="cards" aria-pressed="true">Cards</button>
+            <button class="view-toggle-button" type="button" data-view="list" aria-pressed="false">List</button>
+          </div>
         </div>
         <p id="resultCount" aria-live="polite">Loading icons...</p>
-      </div>
+      </div></div><!-- tool-controls:end -->
 
-      <div class="gallery" id="gallery" aria-busy="true"></div>
+      <div class="gallery" id="gallery" data-view="cards" aria-busy="true"></div>
       <nav class="pagination" id="pagination" aria-label="Icon pages">
         <button class="pagination-button" id="previousPage" type="button">Previous</button>
         <span class="pagination-status" id="paginationStatus" aria-live="polite">Page 1 of 1</span>
@@ -1573,6 +1617,7 @@
       source: document.getElementById("source"),
       category: document.getElementById("category"),
       perPage: document.getElementById("perPage"),
+      density: document.getElementById("density"),
       gallery: document.getElementById("gallery"),
       resultCount: document.getElementById("resultCount"),
       libraryCount: document.getElementById("libraryCount"),
@@ -1617,8 +1662,10 @@
       elements.category.value = params.get("category") || "";
       elements.perPage.value = ["50", "100", "200", "all"].includes(params.get("perPage")) ? params.get("perPage") : "50";
       state.pageSize = elements.perPage.value === "all" ? Infinity : Number(elements.perPage.value);
-      document.getElementById("density").value = params.get("density") === "compact" ? "compact" : "comfortable";
-      elements.gallery.dataset.density = document.getElementById("density").value;
+      const density = params.get("density");
+      elements.density.value = ["s", "m", "l"].includes(density) ? density : density === "compact" ? "s" : "m";
+      elements.gallery.dataset.density = elements.density.value;
+      setView(params.get("view"));
       updateSourceDisclaimer();
       updateBreadcrumb();
     }
@@ -1626,6 +1673,22 @@
     document.getElementById("density").addEventListener("change", (event) => {
       elements.gallery.dataset.density = event.target.value;
       applyFilters();
+    });
+
+    function setView(value) {
+      const view = value === "list" ? "list" : "cards";
+      elements.gallery.dataset.view = view;
+      elements.density.disabled = view === "list";
+      document.querySelectorAll(".view-toggle-button").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.view === view));
+      });
+    }
+
+    document.querySelectorAll(".view-toggle-button").forEach(button => {
+      button.addEventListener("click", () => {
+        setView(button.dataset.view);
+        SiteUX.updateURL(params => params.set("view", elements.gallery.dataset.view));
+      });
     });
 
     function loadFavorites() {

@@ -536,6 +536,11 @@
     .region-meta li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; }
     .region-meta .meta-label { color: var(--cp-text-muted); }
     .region-meta .meta-value { font-weight: 600; text-align: right; min-width: 0; overflow-wrap: anywhere; }
+    .region-type { color: var(--cp-text-muted); font-size: .85rem; font-weight: 600; }
+    .region-providers { margin-top: .75rem; min-width: 0; }
+    .region-providers summary { min-height: 2.75rem; padding-block: .5rem; cursor: pointer; color: var(--cp-link); font-size: .85rem; font-weight: 600; }
+    .provider-list { display: flex; flex-wrap: wrap; gap: .35rem; padding: 0; margin: .5rem 0; list-style: none; }
+    .provider-list li { padding: .25rem .5rem; border: 1px solid var(--cp-border); border-radius: 6px; background: var(--cp-surface-soft); color: var(--cp-text); font-size: .75rem; overflow-wrap: anywhere; max-width: 100%; }
 
     .region-cards.list-view { grid-template-columns: 1fr; gap: .6rem; }
     .region-cards.list-view .region-card {
@@ -555,6 +560,7 @@
     .region-cards.list-view .region-badge { flex: 0 0 auto; }
     .region-cards.list-view .region-restricted-tag { flex: 0 0 auto; margin: 0; }
     .region-cards.list-view .region-details { grid-column: 1 / -1; margin: 0; }
+    .region-cards.list-view .region-providers { grid-column: 1 / -1; margin: 0; }
     .region-cards.list-view .region-details .region-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1.5rem; }
 
     .empty-state {
@@ -1130,6 +1136,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/azure-regions/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1213,8 +1242,8 @@
     <section class="intro" aria-labelledby="page-title">
       <p class="tool-breadcrumb"><a href="/tools/">&larr; All tools</a></p>
       <h1 id="page-title"><span class="page-icon" aria-hidden="true"><img src="/tools/images/locations.svg" alt="" width="28" height="28"></span>Azure Regions</h1>
-      <p class="intro-text">Find physical Azure regions, availability-zone evidence and paired regions.</p>
-      <p class="directory-scope" id="scopeSummary">The directory and map show physical regions. Logical ARM locations are counted separately, not as datacenters.</p>
+      <p class="intro-text">Explore physical Azure regions, logical ARM locations and available resource providers.</p>
+      <p class="directory-scope" id="scopeSummary">The directory includes physical and logical locations. Only physical regions appear on the map.</p>
       <p class="refresh-meta">ARM metadata collected: <strong id="refreshedAt">Loading&hellip;</strong></p>
       <p class="refresh-meta">Microsoft Learn reference checked: <strong id="referenceAt">Loading&hellip;</strong></p>
       <nav class="quick-links" aria-label="Page shortcuts">
@@ -1223,17 +1252,21 @@
       </nav>
     </section>
 
-    <section id="directory" aria-label="Physical Azure regions directory">
+    <section id="directory" aria-label="Azure regions and logical locations directory">
       <noscript><p>The directory needs JavaScript. <a href="./regions.json">Download the region data</a> or consult the <a href="https://learn.microsoft.com/en-us/azure/reliability/regions-list">Microsoft Learn region list</a>.</p></noscript>
       <div class="data-error" id="dataError" role="alert" hidden>
         <p>Region data could not be loaded. Check your connection and try again.</p>
         <button class="region-button" id="retryData" type="button">Retry loading data</button>
       </div>
-      <fieldset id="directoryControls" disabled aria-label="Filter physical regions">
+      <!-- tool-controls:start --><div class="tool-controls-panel" role="region" aria-label="Filters and options"><fieldset id="directoryControls" disabled aria-label="Filter Azure locations">
       <div class="filter-bar">
         <div class="filter-field">
           <label for="searchInput">Search regions</label>
           <input type="search" id="searchInput" placeholder="Name, location or programmatic name" autocomplete="off">
+        </div>
+        <div class="filter-field">
+          <label for="typeFilter">Type</label>
+          <select id="typeFilter"><option value="">All types</option><option value="Physical">Physical</option><option value="Logical">Logical</option></select>
         </div>
         <div class="filter-field">
           <label for="continentFilter">Continent group</label>
@@ -1250,6 +1283,7 @@
         </div>
       </div>
       <p class="source-note" id="zoneFilterHelp">Missing evidence means unknown, not no. Zone support varies by service.</p>
+      <p class="source-note">Available Providers lists ARM namespaces advertising at least one resource type in this location for the scanning subscription, not guaranteed service, SKU or capacity availability. Logical locations are administrative scopes, not datacenters. <a href="https://learn.microsoft.com/en-us/rest/api/resources/providers/list?view=rest-resources-2021-04-01" target="_blank" rel="noopener noreferrer">Provider data reference</a>.</p>
       <div class="regions-toolbar">
         <div class="view-toggle" role="group" aria-label="Choose view">
           <button type="button" class="view-toggle-button" data-view="cards" aria-pressed="true">
@@ -1263,9 +1297,9 @@
         </div>
         <button class="region-button" id="clearFilters" type="button" hidden>Clear filters</button>
       </div>
-      </fieldset>
+      </fieldset></div><!-- tool-controls:end -->
       <p class="notice" id="sourceWarning" role="status" hidden></p>
-      <p class="results-count" id="resultsCount" role="status" aria-live="polite" aria-atomic="true">Loading physical regions&hellip;</p>
+      <p class="results-count" id="resultsCount" role="status" aria-live="polite" aria-atomic="true">Loading Azure locations&hellip;</p>
       <div class="region-cards" id="regionCards"></div>
     </section>
 
@@ -1387,6 +1421,7 @@
       searchInput: document.getElementById("searchInput"),
       continentFilter: document.getElementById("continentFilter"),
       zoneFilter: document.getElementById("zoneFilter"),
+      typeFilter: document.getElementById("typeFilter"),
       controls: document.getElementById("directoryControls"),
       clearFilters: document.getElementById("clearFilters"),
       dataError: document.getElementById("dataError"),
@@ -1426,12 +1461,14 @@
     }
 
     function zoneStatus(region) {
+      if (region.regionType === "Logical") return { key: "not-applicable", label: "Availability zones: Not applicable", className: "is-unknown" };
       if (region.availabilityZones === true) return { key: "yes", label: "Availability zones: Yes", className: "is-az", color: "#157f57" };
       if (region.availabilityZones === false) return { key: "no", label: "Availability zones: No", className: "is-no-az", color: "#0b6fb8" };
       return { key: "unknown", label: "Zone information unavailable", className: "is-unknown", color: "#96610a" };
     }
 
     function evidenceText(region) {
+      if (region.regionType === "Logical") return "Logical ARM location: an administrative scope, not a physical datacenter region.";
       if (region.availabilityZonesSource === "arm") return "Confirmed by ARM zone mappings for the scanning subscription.";
       if (region.availabilityZonesSource === "microsoft-learn") return region.availabilityZones
         ? "Support documented by Microsoft Learn." : "Microsoft Learn lists N/A for availability zones.";
@@ -1442,6 +1479,11 @@
       if (!payload || !Array.isArray(payload.regions) || !Array.isArray(payload.logicalRegions)) throw new Error("Invalid region catalogue");
       const ids = new Set();
       const trusted = payload.schemaVersion >= 2;
+      function providers(region) {
+        if (region.availableProviders === undefined) return null;
+        if (!Array.isArray(region.availableProviders) || region.availableProviders.some(name => typeof name !== "string" || !name.trim())) throw new Error("Invalid available providers");
+        return [...new Set(region.availableProviders)].sort((a, b) => a.localeCompare(b));
+      }
       const regions = payload.regions.map((region) => {
         if (!region || typeof region.id !== "string" || !/^[a-z0-9]+$/.test(region.id)
           || typeof region.name !== "string" || !region.name || region.regionType !== "Physical" || ids.has(region.id)) {
@@ -1454,6 +1496,7 @@
         const hasRestrictionEvidence = trusted && region.restrictedSource === "microsoft-learn" && typeof region.restricted === "boolean";
         return {
           ...region,
+          availableProviders: providers(region),
           availabilityZones: supported ? true : unsupported ? false : null,
           availabilityZonesSource: supported || unsupported ? source : null,
           availabilityZonesPreview: supported && region.availabilityZonesPreview === true,
@@ -1467,11 +1510,17 @@
           longitude: Number.isFinite(region.longitude) && Math.abs(region.longitude) <= 180 ? region.longitude : null,
         };
       });
-      payload.logicalRegions.forEach((region) => {
-        if (!region || typeof region.id !== "string" || region.regionType !== "Logical" || ids.has(region.id)) throw new Error("Invalid or duplicate logical location");
+      const logicalRegions = payload.logicalRegions.map((region) => {
+        if (!region || typeof region.id !== "string" || !/^[a-z0-9]+$/.test(region.id) || typeof region.name !== "string" || !region.name || region.regionType !== "Logical" || ids.has(region.id)) throw new Error("Invalid or duplicate logical location");
         ids.add(region.id);
+        return {
+          ...region, availableProviders: providers(region), physicalLocation: "Not applicable",
+          geography: region.geography || "Not reported", continent: "Not applicable",
+          pairedRegion: null, latitude: null, longitude: null,
+          availabilityZones: null, availabilityZonesSource: null, restricted: null,
+        };
       });
-      return { ...payload, regions: regions.sort((a, b) => a.name.localeCompare(b.name)) };
+      return { ...payload, regions: regions.sort((a, b) => a.name.localeCompare(b.name)), logicalRegions };
     }
 
     const MAP_TILES = {
@@ -1557,6 +1606,7 @@
     }
 
     function renderMap(regions) {
+      regions = regions.filter(region => region.regionType === "Physical");
       if (!mapState.map) return;
       mapState.markers.forEach((marker) => marker.remove());
       mapState.markers = regions
@@ -1641,6 +1691,10 @@
 
     function logicalRegions() {
       return Array.isArray(state.data.logicalRegions) ? state.data.logicalRegions : [];
+    }
+
+    function catalogueRegions() {
+      return [...state.data.regions, ...logicalRegions()].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     function renderStats() {
@@ -1820,7 +1874,7 @@
     }
 
     function populateFilters() {
-      const continents = [...new Set(state.data.regions.map((r) => r.continent))].sort();
+      const continents = [...new Set(catalogueRegions().map((r) => r.continent))].sort();
       elements.continentFilter.replaceChildren(new Option("All groups", ""));
       continents.forEach((continent) => elements.continentFilter.append(new Option(continent, continent)));
     }
@@ -1831,11 +1885,12 @@
       const continent = elements.continentFilter.value;
       const zones = elements.zoneFilter.value;
 
-      return state.data.regions.filter((region) => {
+      return catalogueRegions().filter((region) => {
+        if (elements.typeFilter.value && region.regionType !== elements.typeFilter.value) return false;
         if (continent && region.continent !== continent) return false;
         if (zones && zoneStatus(region).key !== zones) return false;
         if (query) {
-          const haystack = `${region.name} ${region.id} ${region.physicalLocation} ${region.geography} ${region.continent}`.toLowerCase();
+          const haystack = `${region.name} ${region.id} ${region.physicalLocation} ${region.geography} ${region.continent} ${region.regionType} ${(region.availableProviders || []).join(" ")}`.toLowerCase();
           if (!haystack.includes(query)) return false;
         }
         return true;
@@ -1845,9 +1900,9 @@
     function renderCards() {
       if (!state.data) return;
       const filtered = getFilteredRegions();
-      const unknown = filtered.filter((region) => region.availabilityZones === null).length;
-      elements.resultsCount.textContent = `${filtered.length} of ${state.data.regions.length} physical regions${unknown ? ` · zone information unavailable for ${unknown}` : ""}.`;
-      elements.clearFilters.hidden = !elements.searchInput.value && !elements.continentFilter.value && !elements.zoneFilter.value;
+      const unknown = filtered.filter((region) => region.regionType === "Physical" && region.availabilityZones === null).length;
+      elements.resultsCount.textContent = `${filtered.length} of ${catalogueRegions().length} locations · ${filtered.filter(region => region.regionType === "Physical").length} Physical · ${filtered.filter(region => region.regionType === "Logical").length} Logical${unknown ? ` · zone information unavailable for ${unknown}` : ""}.`;
+      elements.clearFilters.hidden = !elements.searchInput.value && !elements.continentFilter.value && !elements.zoneFilter.value && !elements.typeFilter.value;
       elements.regionCards.replaceChildren();
       renderMap(filtered);
 
@@ -1857,7 +1912,7 @@
         const text = document.createElement("p");
         text.textContent = elements.zoneFilter.value === "yes" && state.data.regions.some((region) => region.availabilityZones === null)
           ? "No confirmed matches. Regions with unavailable zone information are excluded, not classified as unsupported."
-          : "No physical regions match your filters.";
+          : "No Azure locations match your filters.";
         const button = document.createElement("button");
         button.type = "button";
         button.className = "region-button";
@@ -1888,6 +1943,10 @@
         const code = document.createElement("code");
         code.textContent = region.id;
         idRow.append(code);
+        const type = document.createElement("span");
+        type.className = "region-type";
+        type.textContent = `Type: ${region.regionType}`;
+        idRow.append(type);
         card.append(idRow);
         const evidence = document.createElement("p");
         evidence.className = "region-evidence";
@@ -1929,6 +1988,30 @@
         details.append(meta);
         card.append(details);
 
+        const providerDetails = document.createElement("details");
+        providerDetails.className = "region-providers";
+        const providerSummary = document.createElement("summary");
+        providerSummary.textContent = `Available Providers (${region.availableProviders === null ? "Not collected" : region.availableProviders.length})`;
+        providerDetails.append(providerSummary);
+        const providerHelp = document.createElement("p");
+        providerHelp.className = "source-note";
+        providerHelp.textContent = region.availableProviders === null
+          ? "Provider metadata was not collected in this snapshot."
+          : region.availableProviders.length
+            ? `ARM provider metadata checked: ${displayDate(state.data.sources?.providers?.checkedAt)}. Namespaces are not a guarantee of service or SKU availability.`
+            : "No provider advertises this location in the collected ARM metadata. This does not prove that no services are available.";
+        providerDetails.append(providerHelp);
+        if (region.availableProviders?.length) {
+          const list = document.createElement("ul");
+          list.className = "provider-list";
+          region.availableProviders.forEach(name => {
+            const item = document.createElement("li");
+            item.textContent = name;
+            list.append(item);
+          });
+          providerDetails.append(list);
+        }
+        card.append(providerDetails);
         elements.regionCards.append(card);
       });
     }
@@ -1943,6 +2026,7 @@
       elements.continentFilter.value = continent;
       const zones = params.get("zoneFilter") ?? (params.get("azOnlyFilter") === "1" ? "yes" : "");
       elements.zoneFilter.value = ["", "yes", "no", "unknown"].includes(zones) ? zones : "";
+      elements.typeFilter.value = ["Physical", "Logical"].includes(params.get("type")) ? params.get("type") : "";
       if (!["", "yes", "no", "unknown"].includes(zones)) warn("url", "An unknown availability-zone filter was ignored. Select a status below.");
       const view = params.get("view");
       if (view === "cards" || view === "list") applyView(view);
@@ -1950,7 +2034,8 @@
 
     function syncUrl() {
       const url = new URL(location.href);
-      ["q", "searchInput", "continentFilter", "azOnlyFilter", "zoneFilter", "view"].forEach((key) => url.searchParams.delete(key));
+      ["q", "searchInput", "continentFilter", "azOnlyFilter", "zoneFilter", "view", "type"].forEach((key) => url.searchParams.delete(key));
+      if (elements.typeFilter.value) url.searchParams.set("type", elements.typeFilter.value);
       if (elements.searchInput.value.trim()) url.searchParams.set("q", elements.searchInput.value.trim());
       if (elements.continentFilter.value) url.searchParams.set("continentFilter", elements.continentFilter.value);
       if (elements.zoneFilter.value) url.searchParams.set("zoneFilter", elements.zoneFilter.value);
@@ -1966,6 +2051,7 @@
       elements.searchInput.value = "";
       elements.continentFilter.value = "";
       elements.zoneFilter.value = "";
+      elements.typeFilter.value = "";
       elements.searchInput.focus({ preventScroll: true });
       renderCards();
       syncUrl();
@@ -1977,7 +2063,7 @@
       state.loading = true;
       elements.controls.disabled = true;
       elements.retryData.disabled = true;
-      elements.resultsCount.textContent = "Loading physical regions...";
+      elements.resultsCount.textContent = "Loading Azure locations...";
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
       try {
@@ -1989,7 +2075,7 @@
         document.getElementById("refreshedAt").title = state.data.sources?.metadata?.checkedAt || state.data.generatedAt || "Not available";
         document.getElementById("referenceAt").textContent = displayDate(state.data.sources?.reference?.checkedAt);
         document.getElementById("referenceAt").title = state.data.sources?.reference?.checkedAt || "Not available";
-        document.getElementById("scopeSummary").textContent = `${state.data.regions.length} physical regions + ${logicalRegions().length} logical ARM locations = ${state.data.regions.length + logicalRegions().length} total. Directory and map: physical regions only.`;
+        document.getElementById("scopeSummary").textContent = `${state.data.regions.length} physical regions + ${logicalRegions().length} logical ARM locations = ${catalogueRegions().length} total. The directory includes both types; the map shows physical regions only.`;
         if (!state.data.sources?.reference?.checkedAt) warn("reference", "The public reference is unavailable for this dataset. Fields without confirmed ARM evidence remain unknown.");
         if (!(state.data.schemaVersion >= 2)) warn("legacy", "This older dataset did not track zone evidence. Its unsupported-zone and restricted-access flags are treated as unknown.");
         renderStats();
@@ -2015,7 +2101,7 @@
       }
     }
 
-    [elements.searchInput, elements.continentFilter, elements.zoneFilter].forEach((control) => {
+    [elements.searchInput, elements.continentFilter, elements.zoneFilter, elements.typeFilter].forEach((control) => {
       control.addEventListener(control === elements.searchInput ? "input" : "change", () => { renderCards(); syncUrl(); });
     });
     elements.clearFilters.addEventListener("click", clearFilters);

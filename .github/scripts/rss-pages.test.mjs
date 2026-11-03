@@ -49,6 +49,9 @@ test("Tech Community exposes five source-backed counters before the filters", ()
   assert.match(stats, /Since Monday \(UTC\)/);
   assert.match(stats, /Last collection failed, not proof of permanent failure/);
   assert.match(html, /renderStats\(\); el\.retryFeeds\.disabled = false/);
+  assert.doesNotMatch(html, /Collection results and publication dates describe the snapshot|Complete catalogue totals, independent of filters/);
+  assert.match(html, /el\.statsSummary\.hidden = Boolean\(counts && counts\.today !== null\)/);
+  assert.match(html, /if \(!techCommunity\) \{\s*const copy = button\("Copy RSS URL"/);
 });
 
 test("Tech Community tables and cards expose the requested fields and Latest article prefix", () => {

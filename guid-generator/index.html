@@ -546,8 +546,7 @@
 <style data-tool-ux>
   #singleGuid { font-size: 1.25rem; overflow-wrap: anywhere; padding: 1rem; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface-soft); margin-top: 0; user-select: all; }
   #singleGuid:focus-visible { outline: 2px solid var(--cp-accent); }
-  main details { margin-top: 1rem; }
-  main summary { min-height: 44px; padding-block: .65rem; cursor: pointer; font-weight: 600; }
+  .format-options, #batchOptions { margin-top: 1rem; }
   .options-row { align-items: stretch; }
   .options-row fieldset { border: 1px solid var(--cp-border); border-radius: 10px; padding: .5rem .75rem; min-width: 0; }
   .options-row legend { color: var(--cp-text-muted); font-size: .875rem; }
@@ -955,6 +954,29 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })({"menu":true,"theme":true,"banner":true,"path":"/guid-generator/","errorPage":false,"language":"en"});</script>
 <!-- site-ui:end -->
+<style data-tool-controls>
+  main .tool-controls-panel {
+    min-width:0;padding:1.25rem;margin:0 0 1rem;border:1px solid var(--cp-border);
+    border-radius:16px;background:var(--cp-surface);
+  }
+  main .tool-controls-panel[hidden] { display:none; }
+  .tool-controls-panel > fieldset { margin-bottom:0; }
+  .tool-controls-panel > .toolbar {
+    position:static;top:auto;margin:0 0 1rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;
+  }
+  .tool-controls-panel > :last-child { margin-bottom:0; }
+  .tool-controls-panel .filter-panel,.tool-controls-panel .roles-filters,.tool-controls-panel .history-extra {
+    border:0;background:transparent;padding-inline:0;
+  }
+  .tool-controls-panel > .filter-bar { margin-bottom:1rem; }
+  .tool-controls-panel .category-filter { flex-wrap:wrap;min-width:0;max-width:100%; }
+  .tool-controls-panel .category-filter select { flex:1 1 12rem;width:auto;min-width:0;max-width:100%; }
+  .ip-section:has(> .tool-controls-panel) {
+    padding:0;border:0;border-radius:0;background:transparent;
+  }
+  .tool-controls-panel > .toolbar::before { content:none; }
+  @media(max-width:42rem) { main .tool-controls-panel { padding:.75rem; } }
+</style>
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -1042,15 +1064,14 @@
     </section>
 
     <section aria-label="GUID generator">
-      <div class="calculator-card">
+      <div class="calculator-card tool-controls-panel">
         <p class="guid-value" id="singleGuid" tabindex="0"></p>
         <div class="button-row">
           <button class="primary-button" id="copySingle" type="button">Copy GUID</button>
           <button class="secondary-button" id="newSingle" type="button">New GUID</button>
         </div>
         <p id="generationStatus" role="status" aria-live="polite"></p>
-        <details class="format-options">
-          <summary>Format options</summary>
+        <div class="format-options"><h3>Format options</h3>
           <div class="options-row" id="optionsRow">
             <fieldset><legend>Letter case</legend><label class="option-toggle"><input type="checkbox" id="optUppercase"> Uppercase</label></fieldset>
             <fieldset><legend>Identifier format</legend>
@@ -1063,9 +1084,8 @@
             </fieldset>
           </div>
           <p>Format preview: <code id="formatPreview"></code></p>
-        </details>
-        <details id="batchOptions">
-          <summary>Multiple identifiers — generate a batch</summary>
+        </div>
+        <div id="batchOptions"><h3>Multiple identifiers — generate a batch</h3>
         <div class="field-row">
           <div class="unit-field value-field">
             <label for="quantity">Batch quantity (1–500)</label>
@@ -1080,7 +1100,7 @@
           <button class="secondary-button" id="exportJson" type="button" disabled>Export JSON</button>
         </div>
         <ul class="results-list" id="guidList"></ul>
-        </details>
+        </div>
       </div>
     </section>
 
