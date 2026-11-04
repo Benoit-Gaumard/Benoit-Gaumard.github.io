@@ -30,15 +30,31 @@ const USER_AGENT = "Mozilla/5.0 (compatible; RSSWatcherBot/1.0; +https://benoit-
 
 const ENTITY_MAP = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
 function decodeEntities(text) {
-  return text.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, entity) => {
-    if (entity[0] === "#") {
-      const codePoint = entity[1].toLowerCase() === "x"
-        ? parseInt(entity.slice(2), 16)
-        : parseInt(entity.slice(1), 10);
-      return Number.isNaN(codePoint) ? match : String.fromCodePoint(codePoint);
-    }
-    return ENTITY_MAP[entity.toLowerCase()] ?? match;
-  });
+  const latinNames = "nbsp iexcl cent pound curren yen brvbar sect uml copy ordf laquo not shy reg macr deg plusmn sup2 sup3 acute micro para middot cedil sup1 ordm raquo frac14 frac12 frac34 iquest Agrave Aacute Acirc Atilde Auml Aring AElig Ccedil Egrave Eacute Ecirc Euml Igrave Iacute Icirc Iuml ETH Ntilde Ograve Oacute Ocirc Otilde Ouml times Oslash Ugrave Uacute Ucirc Uuml Yacute THORN szlig agrave aacute acirc atilde auml aring aelig ccedil egrave eacute ecirc euml igrave iacute icirc iuml eth ntilde ograve oacute ocirc otilde ouml divide oslash ugrave uacute ucirc uuml yacute thorn yuml".split(" ");
+  const named = Object.fromEntries(latinNames.map((name, index) => [name, String.fromCodePoint(160 + index)]));
+  Object.assign(named, ENTITY_MAP, { OElig: "\u0152", oelig: "\u0153", rsquo: "\u2019", lsquo: "\u2018", ldquo: "\u201c", rdquo: "\u201d", ndash: "\u2013", mdash: "\u2014", hellip: "\u2026", euro: "\u20ac" });
+  // Syndicators sometimes encode ampersands twice; bound repeated decoding.
+  for (let pass = 0; pass < 5; pass++) {
+    const decoded = text.replace(/&(#(?:x[0-9a-f]+|[0-9]+)|[a-z]+);/gi, (match, entity) => {
+      if (entity[0] !== "#") return named[entity] ?? match;
+      const codePoint = entity[1].toLowerCase() === "x" ? parseInt(entity.slice(2), 16) : Number(entity.slice(1));
+      return codePoint > 0 && codePoint <= 0x10ffff && !(codePoint >= 0xd800 && codePoint <= 0xdfff)
+        ? String.fromCodePoint(codePoint) : match;
+    });
+    if (decoded === text) break;
+    text = decoded;
+  }
+  return text;
+}
+
+function decodeFeed(bytes, contentType = "") {
+  const data = new Uint8Array(bytes);
+  if ((data[0] === 0xff && data[1] === 0xfe) || (data[0] === 0x3c && data[1] === 0)) return new TextDecoder("utf-16le", { fatal: true }).decode(data);
+  if ((data[0] === 0xfe && data[1] === 0xff) || (data[0] === 0 && data[1] === 0x3c)) return new TextDecoder("utf-16be", { fatal: true }).decode(data);
+  if (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) return new TextDecoder("utf-8", { fatal: true }).decode(data);
+  const charset = contentType.match(/charset\s*=\s*["']?([^;"'\s]+)/i)?.[1];
+  const declaration = new TextDecoder("ascii").decode(data.slice(0, 256)).match(/<\?xml\b[^>]*encoding\s*=\s*["']([^"']+)["']/i)?.[1];
+  return new TextDecoder(charset || declaration || "utf-8", { fatal: true }).decode(data);
 }
 
 function stripHtml(text) {
@@ -53,7 +69,7 @@ function unwrapCdata(text) {
 function extractTag(xml, tag) {
   const match = xml.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`, "i"));
   if (!match) return "";
-  return decodeEntities(stripHtml(unwrapCdata(match[1].trim())));
+  return stripHtml(decodeEntities(unwrapCdata(match[1].trim())));
 }
 
 function extractAtomLink(xml) {
@@ -212,7 +228,7 @@ async function fetchFeed(feed) {
       signal: AbortSignal.timeout(FEED_TIMEOUT_MS),
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const xml = await response.text();
+    const xml = decodeFeed(await response.arrayBuffer(), response.headers.get("content-type") || "");
     const icon = extractFeedIcon(xml, response.url || feed.url);
     const items = parseItems(xml)
       .filter((item) => item.title && item.link && item.pubDate)

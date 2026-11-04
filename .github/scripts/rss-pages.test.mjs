@@ -32,8 +32,9 @@ test("activity and feed-directory views are generated repeatably", () => {
       assert.doesNotMatch(html, /id="statsGrid"/);
     }
     assert.match(html, /Collection snapshot/);
-    assert.match(html, /Copy RSS URL/);
-    assert.match(html, /Export selected OPML/);
+    assert.doesNotMatch(html, /Copy RSS URL/);
+    if (kind === "techcommunity") assert.match(html, /Export selected OPML/);
+    else assert.doesNotMatch(html, /id="selectMatching"|id="clearSelection"|id="exportSelected"|id="selectionCount"/);
     assert.match(html, /Last attempt/);
     assert.match(html, /No error detail supplied/);
   }
@@ -51,7 +52,7 @@ test("Tech Community exposes five source-backed counters before the filters", ()
   assert.match(html, /renderStats\(\); el\.retryFeeds\.disabled = false/);
   assert.doesNotMatch(html, /Collection results and publication dates describe the snapshot|Complete catalogue totals, independent of filters/);
   assert.match(html, /el\.statsSummary\.hidden = Boolean\(counts && counts\.today !== null\)/);
-  assert.match(html, /if \(!techCommunity\) \{\s*const copy = button\("Copy RSS URL"/);
+  assert.match(html, /if \(techCommunity\) group\.append\(selection\(feed\)\)/);
 });
 
 test("Tech Community tables and cards expose the requested fields and Latest article prefix", () => {
@@ -155,7 +156,7 @@ test("all RSS page scripts compile", () => {
   }
 });
 
-test("RSS watcher has two visible filter rows, uniform cards without scrolling and two single-line headlines by default", () => {
+test("RSS watcher has two visible filter rows, uniform cards without scrolling and ten single-line headlines by default", () => {
   const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
   const primary = html.split('<div class="rss-primary">')[1].split('<div class="rss-secondary">')[0];
   for (const id of ["search", "lastUpdate", "source", "languageAll", "languageEn", "languageFr"]) assert.ok(primary.includes(`id="${id}"`), id);
@@ -167,8 +168,40 @@ test("RSS watcher has two visible filter rows, uniform cards without scrolling a
   assert.match(html, /\.site-card\{height:100%;overflow:visible;/);
   assert.match(html, /\.site-card-head\{min-height:4\.5rem;flex:none;overflow:visible;/);
   assert.match(html, /\.site-card \.site-articles\{[^}]*min-height:0;overflow:visible/);
-  assert.match(html, /const MAX_ARTICLES_PER_SITE = 2;/);
+  assert.match(html, /const MAX_ARTICLES_PER_SITE = 10;/);
+  assert.match(html, /articles: group\.articles\.slice\(0, state\.sourceLimits\.get\(group\.source\) \|\| MAX_ARTICLES_PER_SITE\)/);
+  assert.match(html, /state\.sourceLimits\.set\(group\.source, old \+ MAX_ARTICLES_PER_SITE\)/);
   assert.match(html, /\.site-article-title\{white-space:nowrap;overflow:hidden;text-overflow:ellipsis/);
   assert.match(html, /link\.title = \[item\.title, item\.description\]/);
   assert.match(html, /link\.title = \[item\.title, item\.source, item\.description\]/);
+});
+
+test("RSS source, category and subcategory dropdowns share searchable checkbox selection and repeated URL parameters", () => {
+  const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
+  assert.match(html, /id="source" multiple hidden/);
+  assert.match(html, /id="sourceToggle"[^>]*aria-expanded="false" aria-controls="sourcePanel"/);
+  assert.match(html, /id="sourceSearch" type="search"/);
+  assert.match(html, /id="category" multiple hidden/);
+  assert.match(html, /id="categoryToggle"[^>]*aria-expanded="false" aria-controls="categoryPanel"/);
+  assert.match(html, /id="categorySearch" type="search"/);
+  assert.match(html, /id="subcategory" multiple hidden/);
+  assert.match(html, /id="subcategoryToggle"[^>]*aria-expanded="false" aria-controls="subcategoryPanel"/);
+  assert.match(html, /id="subcategorySearch" type="search"/);
+  assert.match(html, /params\.getAll\(id\)/);
+  assert.match(html, /params\.append\(id, option\.value\)/);
+  assert.match(html, /!selectedSources\.size \|\| selectedSources\.has\(item\.source\)/);
+  assert.match(html, /checkbox\.type = "checkbox"/);
+  assert.match(html, /!selectedCategories\.size \|\| item\.categories\.some\(category => selectedCategories\.has\(category\)\)/);
+  assert.match(html, /!selectedSubcategories\.size \|\| selectedSubcategories\.has\(item\.subcategory\)/);
+  assert.match(html, /search\.addEventListener\("input", \(\) => renderFilterOptions\(id\)\)/);
+  assert.match(html, /closeFilterPanel\(id, true\)/);
+});
+
+test("RSS cards show every matching source while list articles remain progressively loaded", () => {
+  const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
+  assert.doesNotMatch(html, /visibleGroups|more source groups/);
+  assert.match(html, /state\.groups\.forEach\(\(group\) => fragment\.append\(createSiteCard/);
+  assert.match(html, /more\.hidden = state\.viewMode !== "list" \|\| state\.visibleItems >= totalArticles/);
+  assert.match(html, /state\.filteredItems\.slice\(0, state\.visibleItems\)/);
+  assert.doesNotMatch(html, /libraryCount|updates tracked/);
 });

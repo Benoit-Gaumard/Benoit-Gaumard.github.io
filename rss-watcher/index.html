@@ -942,6 +942,17 @@
     .site-card:hover{transform:none;}
     .site-article-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal;line-height:1.5;}
     #rssLoadMore{display:block;margin:1rem auto;}
+    #rssLoadMore[hidden]{display:none;}
+    .rss-source-filter{position:relative;}
+    .rss-source-toggle{width:100%;min-width:0;min-height:3rem;padding:.5rem .75rem;border:1px solid var(--cp-border-strong);border-radius:8px;background:var(--cp-surface);color:var(--cp-text);text-align:left;overflow-wrap:anywhere;cursor:pointer;}
+    .rss-source-toggle::after{content:" \25BE";float:right;}
+    .rss-source-panel{position:absolute;top:100%;left:0;z-index:20;width:100%;min-width:0;box-sizing:border-box;padding:.75rem;border:1px solid var(--cp-border-strong);border-radius:10px;background:var(--cp-surface);}
+    .rss-source-panel[hidden]{display:none;}
+    .rss-source-options{max-height:18rem;overflow-y:auto;overscroll-behavior:contain;}
+    .rss-source-options label{display:flex;align-items:center;gap:.5rem;min-height:2.75rem;padding:.25rem;overflow-wrap:anywhere;cursor:pointer;}
+    .rss-source-options input[type="checkbox"]{width:1.125rem;height:1.125rem;flex:none;}
+    .rss-source-panel .site-ux-button{margin-top:.5rem;}
+    .rss-source-toggle:focus-visible,.rss-source-options input:focus-visible{outline:3px solid var(--cp-accent);outline-offset:2px;}
     @media(max-width:64rem){
       .rss-primary{grid-template-columns:repeat(2,minmax(0,1fr));}
     }
@@ -1466,7 +1477,18 @@
         <div class="rss-primary">
           <div class="rss-field"><label for="search">Search headlines</label><input id="search" type="search" placeholder="Title, description or source" autocomplete="off" spellcheck="false"></div>
           <div class="rss-field"><label for="lastUpdate">Publication period (UTC)</label><select id="lastUpdate"><option value="">All retained</option><option value="0" selected>Today</option><option value="1">Yesterday</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select></div>
-          <div class="rss-field"><label for="source">Source</label><select id="source"><option value="">All sources</option></select></div>
+          <div class="rss-field rss-source-filter" id="sourceFilter">
+            <label id="sourceLabel" for="sourceToggle">Source</label>
+            <select id="source" multiple hidden aria-label="Selected sources"></select>
+            <button id="sourceToggle" class="rss-source-toggle" type="button" aria-expanded="false" aria-controls="sourcePanel">All sources</button>
+            <div id="sourcePanel" class="rss-source-panel" hidden role="group" aria-labelledby="sourceLabel">
+              <label for="sourceSearch">Search sources</label>
+              <input id="sourceSearch" type="search" placeholder="Search sources..." autocomplete="off">
+              <button id="sourceClear" class="site-ux-button" type="button">All sources</button>
+              <p id="sourceSearchCount" class="rss-help" role="status" aria-live="polite"></p>
+              <div id="sourceOptions" class="rss-source-options"></div>
+            </div>
+          </div>
           <div class="rss-field"><span class="rss-language-label" id="languageLabel">Langues</span>
           <div class="language-filter" role="group" aria-label="Feed language">
             <button class="language-option" id="languageAll" type="button" data-lang="" aria-pressed="true" aria-label="All languages" title="All languages"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><path d="M2 12h20"/></svg></button>
@@ -1476,11 +1498,33 @@
           </div>
         </div>
         <div class="rss-secondary">
-          <div class="rss-field"><label for="category">Category</label><select id="category"><option value="">All categories</option></select></div><div class="rss-field"><label for="subcategory">Subcategory</label><select id="subcategory"><option value="">All subcategories</option></select></div>
+          <div class="rss-field rss-source-filter" id="categoryFilter">
+            <label id="categoryLabel" for="categoryToggle">Category</label>
+            <select id="category" multiple hidden aria-label="Selected categories"></select>
+            <button id="categoryToggle" class="rss-source-toggle" type="button" aria-expanded="false" aria-controls="categoryPanel">All categories</button>
+            <div id="categoryPanel" class="rss-source-panel" hidden role="group" aria-labelledby="categoryLabel">
+              <label for="categorySearch">Search categories</label>
+              <input id="categorySearch" type="search" placeholder="Search categories..." autocomplete="off">
+              <button id="categoryClear" class="site-ux-button" type="button">All categories</button>
+              <p id="categorySearchCount" class="rss-help" role="status" aria-live="polite"></p>
+              <div id="categoryOptions" class="rss-source-options"></div>
+            </div>
+          </div>
+          <div class="rss-field rss-source-filter" id="subcategoryFilter">
+            <label id="subcategoryLabel" for="subcategoryToggle">Subcategory</label>
+            <select id="subcategory" multiple hidden aria-label="Selected subcategories"></select>
+            <button id="subcategoryToggle" class="rss-source-toggle" type="button" aria-expanded="false" aria-controls="subcategoryPanel">All subcategories</button>
+            <div id="subcategoryPanel" class="rss-source-panel" hidden role="group" aria-labelledby="subcategoryLabel">
+              <label for="subcategorySearch">Search subcategories</label>
+              <input id="subcategorySearch" type="search" placeholder="Search subcategories..." autocomplete="off">
+              <button id="subcategoryClear" class="site-ux-button" type="button">All subcategories</button>
+              <p id="subcategorySearchCount" class="rss-help" role="status" aria-live="polite"></p>
+              <div id="subcategoryOptions" class="rss-source-options"></div>
+            </div>
+          </div>
           <div class="rss-field"><label for="keywordInput">Highlight keywords</label><input id="keywordInput" type="text" placeholder="Add a keyword and press Enter" autocomplete="off" spellcheck="false"></div>
         </div>
           <div class="keyword-chips" id="keywordChips" aria-live="polite"></div>
-        <p class="rss-help">Language filters the configured feed language, not the interface. Favorites and keyword preferences are local to this browser; EN/FR RSS links above are separate subscription feeds.</p>
       </fieldset>
 
       <div class="results-bar" aria-live="polite">
@@ -1614,7 +1658,6 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="currentYear">2026</span> Benoit Gaumard - Built with ❤️ - All Rights Reserved</span>
-        <span id="libraryCount"></span>
       </div>
     </div>
   </footer>
@@ -1637,7 +1680,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
   if (!Number.isInteger(count) || count < 1) throw new Error("Unsupported publication period");
   return value >= today - (count - 1) * day && value < today + day;
 }
-    const MAX_ARTICLES_PER_SITE = 2;
+    const MAX_ARTICLES_PER_SITE = 10;
     const FAVORITES_KEY = "rssWatcherFavorites";
     const KEYWORDS_KEY = "rssWatcherKeywords";
     const VIEW_MODE_KEY = "rssWatcherViewMode";
@@ -1672,7 +1715,7 @@ function matchesPeriod(iso, period, now = Date.now()) {
       catch (error) { console.warn("RSS view preference is unavailable.", error); return "cards"; }
     }
 
-    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords(), language: "", viewMode: loadViewMode(), ready: false, loading: false, restoring: true, visibleItems: 30, visibleGroups: 12, sourceLimits: new Map() };
+    const state = { updates: [], filteredItems: [], groups: [], favorites: loadFavorites(), favoritesOnly: false, keywords: loadKeywords(), language: "", viewMode: loadViewMode(), ready: false, loading: false, restoring: true, visibleItems: 30, sourceLimits: new Map() };
     const elements = {
       search: document.getElementById("search"),
       source: document.getElementById("source"),
@@ -1681,7 +1724,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
       lastUpdate: document.getElementById("lastUpdate"),
       siteGrid: document.getElementById("siteGrid"),
       resultCount: document.getElementById("resultCount"),
-      libraryCount: document.getElementById("libraryCount"),
       currentYear: document.getElementById("currentYear"),
       refreshedAt: document.getElementById("refreshedAt"),
       feedMeta: document.getElementById("feedMeta"),
@@ -1701,7 +1743,11 @@ function matchesPeriod(iso, period, now = Date.now()) {
 
     function syncRssUrl() {
       SiteUX.updateURL(params => {
-        [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => { params.delete(control.id); if (control.value || control === elements.lastUpdate) params.set(control.id, control.value); });
+        [elements.search, elements.lastUpdate].forEach(control => { params.delete(control.id); if (control.value || control === elements.lastUpdate) params.set(control.id, control.value); });
+        ["source", "category", "subcategory"].forEach(id => {
+          params.delete(id);
+          [...elements[id].selectedOptions].forEach(option => params.append(id, option.value));
+        });
         params.delete("language"); if (state.language) params.set("language", state.language);
         params.set("view", state.viewMode);
         params.set("keywords", JSON.stringify(state.keywords));
@@ -1712,13 +1758,23 @@ function matchesPeriod(iso, period, now = Date.now()) {
     function restoreRssUrl() {
       state.restoring = true;
       const params = new URLSearchParams(location.search);
-      [elements.search, elements.source, elements.category, elements.subcategory, elements.lastUpdate].forEach(control => {
+      [elements.search, elements.lastUpdate].forEach(control => {
         const value = params.get(control.id) ?? (control === elements.lastUpdate ? "0" : "");
         if (control.tagName === "SELECT" && value && ![...control.options].some(option => option.value === value)) {
           if (control === elements.lastUpdate) { control.value = ""; SiteUX.notice("Unsupported period; all retained dates are shown."); return; }
           control.add(new Option(`${value} (not in snapshot)`, value));
         }
         control.value = value;
+      });
+      ["source", "category", "subcategory"].forEach(id => {
+        const selected = new Set(params.getAll(id).filter(Boolean));
+        selected.forEach(value => {
+          if (![...elements[id].options].some(option => option.value === value)) {
+            elements[id].add(new Option(`${value} (not in snapshot)`, value));
+          }
+        });
+        [...elements[id].options].forEach(option => { option.selected = selected.has(option.value); });
+        renderFilterOptions(id);
       });
       state.language = ["EN", "FR"].includes(params.get("language")) ? params.get("language") : "";
       if (["cards", "list"].includes(params.get("view"))) state.viewMode = params.get("view");
@@ -2028,18 +2084,18 @@ function matchesPeriod(iso, period, now = Date.now()) {
         elements.siteGrid.append(list);
       } else {
         const fragment = document.createDocumentFragment();
-        state.groups.slice(0, state.visibleGroups).forEach((group) => fragment.append(createSiteCard(group, keywordRegex)));
+        state.groups.forEach((group) => fragment.append(createSiteCard(group, keywordRegex)));
         elements.siteGrid.append(fragment);
       }
 
       const totalArticles = state.filteredItems.length;
       const totalSites = state.groups.length;
-      const displayed = state.viewMode === "list" ? Math.min(state.visibleItems, totalArticles) : state.groups.slice(0, state.visibleGroups).reduce((sum, group) => sum + group.articles.length, 0);
+      const displayed = state.viewMode === "list" ? Math.min(state.visibleItems, totalArticles) : state.groups.reduce((sum, group) => sum + group.articles.length, 0);
       elements.resultCount.textContent = `${displayed.toLocaleString()} displayed / ${totalArticles.toLocaleString()} matching articles across ${totalSites.toLocaleString()} source labels · ${elements.lastUpdate.selectedOptions[0]?.textContent || "All retained"} (UTC).`;
-      elements.clearFilters.hidden = !elements.search.value && !elements.source.value && !elements.category.value && !elements.subcategory.value && !elements.lastUpdate.value && !state.language && !state.favoritesOnly;
+      elements.clearFilters.hidden = !elements.search.value && !elements.source.selectedOptions.length && !elements.category.selectedOptions.length && !elements.subcategory.selectedOptions.length && !elements.lastUpdate.value && !state.language && !state.favoritesOnly;
       const more = document.getElementById("rssLoadMore");
-      more.hidden = state.viewMode === "list" ? state.visibleItems >= totalArticles : state.visibleGroups >= totalSites;
-      more.textContent = state.viewMode === "list" ? `Show ${Math.min(30, totalArticles - state.visibleItems)} more articles` : `Show ${Math.min(12, totalSites - state.visibleGroups)} more source groups`;
+      more.hidden = state.viewMode !== "list" || state.visibleItems >= totalArticles;
+      more.textContent = `Show ${Math.min(30, Math.max(0, totalArticles - state.visibleItems))} more articles`;
       if (!state.restoring && state.ready) syncRssUrl();
       elements.siteGrid.setAttribute("aria-busy", "false");
     }
@@ -2048,22 +2104,21 @@ function matchesPeriod(iso, period, now = Date.now()) {
       if (!state.ready) return;
       clearTimeout(searchTimer);
       const query = normalize(elements.search.value.trim());
-      const selectedSource = elements.source.value;
-      const selectedCategory = elements.category.value;
-      const selectedSubcategory = elements.subcategory.value;
+      const selectedSources = new Set([...elements.source.selectedOptions].map(option => option.value));
+      const selectedCategories = new Set([...elements.category.selectedOptions].map(option => option.value));
+      const selectedSubcategories = new Set([...elements.subcategory.selectedOptions].map(option => option.value));
       state.filteredItems = state.updates.filter((item) => {
         const haystack = normalize(`${item.title} ${item.description} ${item.source} ${item.categories.join(" ")}`);
         const matchesQuery = !query || haystack.includes(query);
         return matchesQuery
-          && (!selectedSource || item.source === selectedSource)
-          && (!selectedCategory || item.categories.includes(selectedCategory))
-          && (!selectedSubcategory || item.subcategory === selectedSubcategory)
+          && (!selectedSources.size || selectedSources.has(item.source))
+          && (!selectedCategories.size || item.categories.some(category => selectedCategories.has(category)))
+          && (!selectedSubcategories.size || selectedSubcategories.has(item.subcategory))
           && matchesPeriod(item.pubDate, elements.lastUpdate.value)
           && (!state.favoritesOnly || state.favorites.has(item.id))
           && (!state.language || item.country === state.language);
       });
       state.visibleItems = 30;
-      state.visibleGroups = 12;
       state.groups = buildGroups(state.filteredItems);
       render();
     }
@@ -2078,20 +2133,23 @@ function matchesPeriod(iso, period, now = Date.now()) {
         if (item.subcategory) subcategoryCounts.set(item.subcategory, (subcategoryCounts.get(item.subcategory) || 0) + 1);
       });
 
-      elements.source.replaceChildren(new Option(`All sources (${state.updates.length.toLocaleString()})`, ""));
+      elements.source.replaceChildren();
       [...sourceCounts.keys()].sort((a, b) => a.localeCompare(b)).forEach((label) => {
         elements.source.append(new Option(`${label} (${sourceCounts.get(label).toLocaleString()})`, label));
       });
+      renderFilterOptions("source");
 
-      elements.category.replaceChildren(new Option(`All categories (${state.updates.length.toLocaleString()})`, ""));
+      elements.category.replaceChildren();
       [...categoryCounts.keys()].sort((a, b) => a.localeCompare(b)).forEach((tag) => {
         elements.category.append(new Option(`${tag} (${categoryCounts.get(tag).toLocaleString()})`, tag));
       });
+      renderFilterOptions("category");
 
-      elements.subcategory.replaceChildren(new Option(`All subcategories (${state.updates.length.toLocaleString()})`, ""));
+      elements.subcategory.replaceChildren();
       [...subcategoryCounts.keys()].sort((a, b) => a.localeCompare(b)).forEach((tag) => {
         elements.subcategory.append(new Option(`${tag} (${subcategoryCounts.get(tag).toLocaleString()})`, tag));
       });
+      renderFilterOptions("subcategory");
     }
 
     function showError() {
@@ -2102,7 +2160,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
       error.innerHTML = "<h2>The updates feed could not be loaded</h2><p>Check the connection and retry.</p>";
       elements.refreshedAt.textContent = "Unavailable";
       elements.feedMeta.textContent = "Feed counts unavailable";
-      elements.libraryCount.textContent = "Article count unavailable";
       document.getElementById("rssLoadMore").hidden = true;
       const retry = document.createElement("button");
       retry.type = "button"; retry.className = "site-ux-button"; retry.id = "rssRetry"; retry.textContent = "Retry";
@@ -2223,7 +2280,6 @@ function matchesPeriod(iso, period, now = Date.now()) {
         }) + " UTC";
         elements.feedMeta.textContent = `${payload.feedCount} configured · ${payload.succeededCount} collection successes · ${payload.failedCount} collection errors in this snapshot`;
         populateFilters();
-        elements.libraryCount.textContent = `${state.updates.length.toLocaleString()} updates tracked`;
         state.ready = true;
         document.getElementById("rssControls").disabled = false;
         [elements.favoritesToggle, ...elements.viewOptions].forEach(control => { control.disabled = false; });
@@ -2242,9 +2298,72 @@ function matchesPeriod(iso, period, now = Date.now()) {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(applyFilters, 100);
     });
-    elements.source.addEventListener("change", applyFilters);
-    elements.category.addEventListener("change", applyFilters);
-    elements.subcategory.addEventListener("change", applyFilters);
+    function closeFilterPanel(id, restoreFocus = false) {
+      document.getElementById(`${id}Panel`).hidden = true;
+      const toggle = document.getElementById(`${id}Toggle`);
+      toggle.setAttribute("aria-expanded", "false");
+      if (restoreFocus) toggle.focus();
+    }
+    function updateFilterLabel(id) {
+      const selected = [...elements[id].selectedOptions];
+      const plural = { source: "sources", category: "categories", subcategory: "subcategories" }[id];
+      document.getElementById(`${id}Toggle`).textContent = selected.length === 0 ? `All ${plural}`
+        : selected.length === 1 ? selected[0].value : `${selected.length} ${plural} selected`;
+    }
+    function renderFilterOptions(id) {
+      const options = document.getElementById(`${id}Options`);
+      const query = normalize(document.getElementById(`${id}Search`).value.trim());
+      const plural = { source: "sources", category: "categories", subcategory: "subcategories" }[id];
+      updateFilterLabel(id);
+      options.replaceChildren();
+      let matches = 0;
+      [...elements[id].options].forEach(option => {
+        if (!normalize(option.textContent).includes(query)) return;
+        matches++;
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = option.selected;
+        checkbox.addEventListener("change", () => {
+          option.selected = checkbox.checked;
+          updateFilterLabel(id);
+          applyFilters();
+        });
+        label.append(checkbox, document.createTextNode(option.textContent));
+        options.append(label);
+      });
+      document.getElementById(`${id}SearchCount`).textContent = matches ? `${matches} ${plural} found` : `No ${plural} match your search.`;
+    }
+    ["source", "category", "subcategory"].forEach(id => {
+      const filter = document.getElementById(`${id}Filter`);
+      const toggle = document.getElementById(`${id}Toggle`);
+      const panel = document.getElementById(`${id}Panel`);
+      const search = document.getElementById(`${id}Search`);
+      toggle.addEventListener("click", () => {
+        if (!panel.hidden) { closeFilterPanel(id); return; }
+        search.value = "";
+        renderFilterOptions(id);
+        panel.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+        search.focus();
+      });
+      search.addEventListener("input", () => renderFilterOptions(id));
+      document.getElementById(`${id}Clear`).addEventListener("click", () => {
+        [...elements[id].options].forEach(option => { option.selected = false; });
+        renderFilterOptions(id);
+        applyFilters();
+      });
+      filter.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !panel.hidden) { event.preventDefault(); closeFilterPanel(id, true); }
+      });
+      filter.addEventListener("focusout", event => {
+        if (!filter.contains(event.relatedTarget)) closeFilterPanel(id);
+      });
+      document.addEventListener("click", event => {
+        if (!filter.contains(event.target)) closeFilterPanel(id);
+      });
+      elements[id].addEventListener("change", () => { renderFilterOptions(id); applyFilters(); });
+    });
     elements.lastUpdate.addEventListener("change", applyFilters);
     elements.favoritesToggle.addEventListener("click", () => {
       state.favoritesOnly = !state.favoritesOnly;
@@ -2274,9 +2393,12 @@ function matchesPeriod(iso, period, now = Date.now()) {
     });
     elements.clearFilters.addEventListener("click", () => {
       elements.search.value = "";
-      elements.source.value = "";
-      elements.category.value = "";
-      elements.subcategory.value = "";
+      ["source", "category", "subcategory"].forEach(id => {
+        [...elements[id].options].forEach(option => { option.selected = false; });
+        document.getElementById(`${id}Search`).value = "";
+        renderFilterOptions(id);
+        closeFilterPanel(id);
+      });
       elements.lastUpdate.value = "";
       state.favoritesOnly = false;
       elements.favoritesToggle.setAttribute("aria-pressed", "false");
@@ -2286,8 +2408,9 @@ function matchesPeriod(iso, period, now = Date.now()) {
       elements.search.focus();
     });
     document.getElementById("rssLoadMore").addEventListener("click", () => {
-      const old = state.viewMode === "list" ? Math.min(state.visibleItems, state.filteredItems.length) : state.groups.slice(0, state.visibleGroups).reduce((sum, group) => sum + group.articles.length, 0);
-      if (state.viewMode === "list") state.visibleItems += 30; else state.visibleGroups += 12;
+      if (state.viewMode !== "list") return;
+      const old = Math.min(state.visibleItems, state.filteredItems.length);
+      state.visibleItems += 30;
       render();
       const next = elements.siteGrid.querySelectorAll(".site-article-title")[old];
       if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ block: "start", behavior: "instant" }); }

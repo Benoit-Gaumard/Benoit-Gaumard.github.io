@@ -78,6 +78,7 @@ function activityRuntime(config, { publicationState, collectionState, feedCounts
         : "";
   }
   function selectedCount() {
+    if (!techCommunity) return;
     el.selectionCount.textContent = `${state.selected.size} unique feed URLs selected across filters.`;
     el.exportSelected.disabled = !state.selected.size;
     el.clearSelection.disabled = !state.selected.size;
@@ -110,11 +111,7 @@ function activityRuntime(config, { publicationState, collectionState, feedCounts
     const open = node("a", "Open RSS feed", "feed-action");
     open.href = feed.url; open.target = "_blank"; open.rel = "noopener noreferrer";
     group.append(open);
-    if (!techCommunity) {
-      const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
-      group.append(copy);
-    }
-    group.append(selection(feed));
+    if (techCommunity) group.append(selection(feed));
     return group;
   }
   function details(feed) {
@@ -309,9 +306,11 @@ function activityRuntime(config, { publicationState, collectionState, feedCounts
   el.sortBy.addEventListener("change", () => { state.sort = el.sortBy.value; render(); sync(); });
   el.sortDirection.addEventListener("click", () => { state.direction = state.direction === "asc" ? "desc" : "asc"; render(); sync(); });
   el.loadMore.addEventListener("click", () => { const old = state.visible; state.visible += PAGE; render(); const row = el.feedResults.querySelectorAll("[data-feed-index]")[old]; const control = row?.querySelector("a,summary,button"); if (control) { control.focus({ preventScroll: true }); row.scrollIntoView({ block: "start", behavior: "instant" }); } });
-  el.selectMatching.addEventListener("click", () => { state.filtered.forEach(feed => state.selected.add(feed.url)); render(); });
-  el.clearSelection.addEventListener("click", () => { state.selected.clear(); render(); el.selectMatching.focus(); });
-  el.exportSelected.addEventListener("click", () => SiteUX.download(opml(state.feeds.filter(feed => state.selected.has(feed.url))), config.kind + "-feeds.opml", "text/x-opml;charset=utf-8", `${state.selected.size} selected RSS URLs`));
+  if (techCommunity) {
+    el.selectMatching.addEventListener("click", () => { state.filtered.forEach(feed => state.selected.add(feed.url)); render(); });
+    el.clearSelection.addEventListener("click", () => { state.selected.clear(); render(); el.selectMatching.focus(); });
+    el.exportSelected.addEventListener("click", () => SiteUX.download(opml(state.feeds.filter(feed => state.selected.has(feed.url))), config.kind + "-feeds.opml", "text/x-opml;charset=utf-8", `${state.selected.size} selected RSS URLs`));
+  }
   el.retryFeeds.addEventListener("click", load);
   compact.addEventListener("change", render);
   window.addEventListener("popstate", () => { if (state.status === "ready") restore(); });
@@ -384,9 +383,9 @@ function markup(kind) {
       <div class="feed-field"><label for="categoryFilter">Category</label><select id="categoryFilter"><option value="">All categories</option></select></div>
       ${kind === "activity" ? '<div class="feed-field"><label for="languageFilter">Feed language</label><select id="languageFilter"><option value="">All recorded languages</option></select></div>' : ""}
     </div><div class="feed-toolbar"><label for="sortBy">Sort by</label><select id="sortBy"><option value="lastPublication">Last publication</option><option value="name">Name</option><option value="category">Category</option><option value="collection">Collection result</option>${kind === "activity" ? '<option value="country">Language</option>' : ""}</select><button class="feed-action" id="sortDirection" type="button">Descending</button><button class="feed-action" id="resetFilters" type="button">Reset filters</button></div>
-    <div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div></fieldset>
+    ${kind === "techcommunity" ? '<div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div>' : ""}</fieldset>
     ${kind === "activity" ? '<p class="feed-help" id="statsSummary">Feed counts: loading…</p>' : ""}
-    ${kind === "activity" ? '<p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken. Copy an RSS URL into your reader, or import the selected feeds as OPML.</p>' : ""}
+    ${kind === "activity" ? '<p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken.</p>' : ""}
     <div class="feed-error" id="feedError" role="alert" hidden><p>The feed-status snapshot could not be loaded.</p><button class="feed-action" id="retryFeeds" type="button">Retry</button></div>
     <p class="feed-count" id="resultCount" role="status" aria-live="polite">Loading feeds…</p><div id="feedResults"></div><button class="feed-action" id="loadMore" type="button" hidden>More feeds</button>
     ${kind === "activity" ? '<details class="feed-added" id="addedSection"><summary>Recently added feeds (five shown)</summary><p class="feed-help">Equal addition timestamps are ordered by name; this is not an exact ordering of those additions.</p><ul id="addedFeeds"></ul></details><p><a class="feed-action" href="../">Back to RSS Watcher</a></p>' : ""}

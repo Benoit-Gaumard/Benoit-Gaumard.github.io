@@ -1236,6 +1236,7 @@ function opml(feeds, title = "Selected RSS feeds") {
         : "";
   }
   function selectedCount() {
+    if (!techCommunity) return;
     el.selectionCount.textContent = `${state.selected.size} unique feed URLs selected across filters.`;
     el.exportSelected.disabled = !state.selected.size;
     el.clearSelection.disabled = !state.selected.size;
@@ -1268,11 +1269,7 @@ function opml(feeds, title = "Selected RSS feeds") {
     const open = node("a", "Open RSS feed", "feed-action");
     open.href = feed.url; open.target = "_blank"; open.rel = "noopener noreferrer";
     group.append(open);
-    if (!techCommunity) {
-      const copy = button("Copy RSS URL", () => SiteUX.copy(feed.url, `${feed.name} RSS URL`, copy));
-      group.append(copy);
-    }
-    group.append(selection(feed));
+    if (techCommunity) group.append(selection(feed));
     return group;
   }
   function details(feed) {
@@ -1467,9 +1464,11 @@ function opml(feeds, title = "Selected RSS feeds") {
   el.sortBy.addEventListener("change", () => { state.sort = el.sortBy.value; render(); sync(); });
   el.sortDirection.addEventListener("click", () => { state.direction = state.direction === "asc" ? "desc" : "asc"; render(); sync(); });
   el.loadMore.addEventListener("click", () => { const old = state.visible; state.visible += PAGE; render(); const row = el.feedResults.querySelectorAll("[data-feed-index]")[old]; const control = row?.querySelector("a,summary,button"); if (control) { control.focus({ preventScroll: true }); row.scrollIntoView({ block: "start", behavior: "instant" }); } });
-  el.selectMatching.addEventListener("click", () => { state.filtered.forEach(feed => state.selected.add(feed.url)); render(); });
-  el.clearSelection.addEventListener("click", () => { state.selected.clear(); render(); el.selectMatching.focus(); });
-  el.exportSelected.addEventListener("click", () => SiteUX.download(opml(state.feeds.filter(feed => state.selected.has(feed.url))), config.kind + "-feeds.opml", "text/x-opml;charset=utf-8", `${state.selected.size} selected RSS URLs`));
+  if (techCommunity) {
+    el.selectMatching.addEventListener("click", () => { state.filtered.forEach(feed => state.selected.add(feed.url)); render(); });
+    el.clearSelection.addEventListener("click", () => { state.selected.clear(); render(); el.selectMatching.focus(); });
+    el.exportSelected.addEventListener("click", () => SiteUX.download(opml(state.feeds.filter(feed => state.selected.has(feed.url))), config.kind + "-feeds.opml", "text/x-opml;charset=utf-8", `${state.selected.size} selected RSS URLs`));
+  }
   el.retryFeeds.addEventListener("click", load);
   compact.addEventListener("change", render);
   window.addEventListener("popstate", () => { if (state.status === "ready") restore(); });
