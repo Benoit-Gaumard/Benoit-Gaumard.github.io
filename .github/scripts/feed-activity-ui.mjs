@@ -58,12 +58,7 @@ function activityRuntime(config, { publicationState, collectionState, feedCounts
   function normalize(value) { return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
   function safeUrl(value) { const url = new URL(value); if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) throw new Error("Invalid feed/article URL"); return value; }
   function renderStats() {
-    if (config.kind === "activity") {
-      el.statsSummary.textContent = state.status === "ready"
-        ? `${state.feeds.length} configured feed entries · ${state.feeds.filter(feed => feed.collection.key === "success").length} collection successes · ${state.feeds.filter(feed => feed.collection.key === "error").length} collection errors. Publication recency is a separate measure, evaluated at this snapshot's collection time.`
-        : state.status === "error" ? "Feed counts unavailable." : "Feed counts: loading...";
-      return;
-    }
+    if (config.kind === "activity") return;
     const counts = state.status === "ready" ? feedCounts(state.feeds, state.generatedAt) : null;
     el.statsGrid.querySelectorAll("[data-stat]").forEach(value => {
       const count = counts?.[value.dataset.stat];
@@ -384,8 +379,6 @@ function markup(kind) {
       ${kind === "activity" ? '<div class="feed-field"><label for="languageFilter">Feed language</label><select id="languageFilter"><option value="">All recorded languages</option></select></div>' : ""}
     </div><div class="feed-toolbar"><label for="sortBy">Sort by</label><select id="sortBy"><option value="lastPublication">Last publication</option><option value="name">Name</option><option value="category">Category</option><option value="collection">Collection result</option>${kind === "activity" ? '<option value="country">Language</option>' : ""}</select><button class="feed-action" id="sortDirection" type="button">Descending</button><button class="feed-action" id="resetFilters" type="button">Reset filters</button></div>
     ${kind === "techcommunity" ? '<div class="feed-toolbar"><button class="feed-action" id="selectMatching" type="button">Select all matching feeds</button><button class="feed-action" id="clearSelection" type="button" disabled>Clear selection</button><button class="feed-action" id="exportSelected" type="button" disabled>Export selected OPML</button><span class="feed-help" id="selectionCount">0 selected</span></div>' : ""}</fieldset>
-    ${kind === "activity" ? '<p class="feed-help" id="statsSummary">Feed counts: loading…</p>' : ""}
-    ${kind === "activity" ? '<p class="feed-help">Collection results and publication dates describe the snapshot, not a live health check. A quiet feed is not necessarily broken.</p>' : ""}
     <div class="feed-error" id="feedError" role="alert" hidden><p>The feed-status snapshot could not be loaded.</p><button class="feed-action" id="retryFeeds" type="button">Retry</button></div>
     <p class="feed-count" id="resultCount" role="status" aria-live="polite">Loading feeds…</p><div id="feedResults"></div><button class="feed-action" id="loadMore" type="button" hidden>More feeds</button>
     ${kind === "activity" ? '<details class="feed-added" id="addedSection"><summary>Recently added feeds (five shown)</summary><p class="feed-help">Equal addition timestamps are ordered by name; this is not an exact ordering of those additions.</p><ul id="addedFeeds"></ul></details><p><a class="feed-action" href="../">Back to RSS Watcher</a></p>' : ""}

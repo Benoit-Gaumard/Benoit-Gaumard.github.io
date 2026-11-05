@@ -30,6 +30,8 @@ test("activity and feed-directory views are generated repeatably", () => {
     if (kind === "activity") {
       assert.doesNotMatch(html, />Dead(?: feeds| \(error\))?/i);
       assert.doesNotMatch(html, /id="statsGrid"/);
+      assert.doesNotMatch(html, /id="statsSummary"|configured feed entries|Publication recency is a separate measure/);
+      assert.doesNotMatch(html, /Collection results and publication dates describe the snapshot|A quiet feed is not necessarily broken/);
     }
     assert.match(html, /Collection snapshot/);
     assert.doesNotMatch(html, /Copy RSS URL/);
@@ -92,11 +94,11 @@ test("RSS watcher preserves preferences, useful defaults and independent count m
   assert.match(html, /<option value="0" selected>Today/);
   assert.match(html, /params\.get\(control\.id\) \?\? \(control === elements\.lastUpdate \? "0" : ""\)/);
   assert.match(html, /if \(control\.value \|\| control === elements\.lastUpdate\) params\.set\(control\.id, control\.value\)/);
-  assert.match(html, /configured · \$\{payload\.succeededCount\} collection successes/);
+  assert.doesNotMatch(html, /feedMeta|collection successes|View the collection schedule/);
   assert.match(html, /Show latest available dates/);
   assert.match(html, /Source labels|source labels/);
   assert.match(html, /state\.filteredItems\.slice\(0, state\.visibleItems\)/);
-  assert.match(html, /GitHub account required/);
+  assert.match(html, /Suggest a feed\s*<\/button>/);
   assert.doesNotMatch(html, /data-url-state/);
   assert.doesNotMatch(html, /Saved in this browser/);
   assert.match(html, /favoritesToggleLabel\.textContent = `My favorites/);
@@ -156,7 +158,7 @@ test("all RSS page scripts compile", () => {
   }
 });
 
-test("RSS watcher has two visible filter rows, uniform cards without scrolling and ten single-line headlines by default", () => {
+test("RSS watcher has two visible filter rows, compact cards without scrolling and ten single-line headlines by default", () => {
   const html = readFileSync(join("rss-watcher", "index.html"), "utf8");
   const primary = html.split('<div class="rss-primary">')[1].split('<div class="rss-secondary">')[0];
   for (const id of ["search", "lastUpdate", "source", "languageAll", "languageEn", "languageFr"]) assert.ok(primary.includes(`id="${id}"`), id);
@@ -164,9 +166,10 @@ test("RSS watcher has two visible filter rows, uniform cards without scrolling a
   for (const id of ["category", "subcategory", "keywordInput"]) assert.ok(secondary.includes(`id="${id}"`), id);
   assert.doesNotMatch(html, /<details class="rss-options"/);
   assert.doesNotMatch(html, /rssOptions|updateRssOptions/);
-  assert.match(html, /\.site-grid\{[^}]*grid-auto-rows:1fr/);
-  assert.match(html, /\.site-card\{height:100%;overflow:visible;/);
-  assert.match(html, /\.site-card-head\{min-height:4\.5rem;flex:none;overflow:visible;/);
+  assert.match(html, /\.site-grid\{[^}]*grid-auto-rows:auto;gap:\.5rem/);
+  assert.match(html, /\.site-card\{height:auto;overflow:visible;gap:\.375rem/);
+  assert.match(html, /\.site-card-head\{min-height:0;flex:none;overflow:visible;/);
+  assert.doesNotMatch(html, /site-card-footer-space/);
   assert.match(html, /\.site-card \.site-articles\{[^}]*min-height:0;overflow:visible/);
   assert.match(html, /const MAX_ARTICLES_PER_SITE = 10;/);
   assert.match(html, /articles: group\.articles\.slice\(0, state\.sourceLimits\.get\(group\.source\) \|\| MAX_ARTICLES_PER_SITE\)/);
