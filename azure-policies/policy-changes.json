@@ -1,10 +1,261 @@
 {
-  "generatedAt": "2026-11-12T14:49:45.891Z",
+  "generatedAt": "2026-11-13T14:10:49.247Z",
   "source": "Diff between two consecutive runs of azure-policies/fetch-updates.ps1",
   "retentionDays": 180,
-  "lastRunEntries": 53,
-  "totalEntries": 193,
+  "lastRunEntries": 7,
+  "totalEntries": 200,
   "entries": [
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "modified",
+      "name": "35877bcb-9bd2-49fc-8a00-4614b3a0e73a",
+      "displayName": "[Preview]: Data Residency for Replication across Azure Services",
+      "category": "Sovereignty",
+      "fields": [
+        {
+          "field": "version",
+          "from": "1.1.0-preview",
+          "to": "1.2.0-preview"
+        },
+        {
+          "field": "policyCount",
+          "from": "8",
+          "to": "14"
+        }
+      ],
+      "composition": {
+        "status": "compared",
+        "beforeCount": 8,
+        "afterCount": 14,
+        "added": [
+          {
+            "id": "99645d66-5f63-4f02-b947-46de4e9a040e",
+            "referenceId": "allowedFailoverGroupPartnerLocationsSqlManagedDatabase",
+            "displayName": "[Preview]: SQL Managed Instance databases should use failover groups with partner regions in allowed locations"
+          },
+          {
+            "id": "e4bff06e-8af8-455b-8bec-58515205f65b",
+            "referenceId": "allowedPartnerLocationsSqlFailoverGroup",
+            "displayName": "[Preview]: Azure SQL Database failover groups should use allowed partner locations"
+          },
+          {
+            "id": "c58f681b-52c4-4935-820b-e2ced188a98c",
+            "referenceId": "allowedReplicaLocationsAMLRegistry",
+            "displayName": "[Preview]: Azure Machine Learning registry replica locations should use allowed locations"
+          },
+          {
+            "id": "1ab7fa8d-5574-4983-97ed-2a184ca9526e",
+            "referenceId": "allowedReplicaLocationsLogAnalyticsWorkspace",
+            "displayName": "[Preview]: Log Analytics workspace replicas should use allowed locations"
+          },
+          {
+            "id": "0eb02880-8961-46b2-a106-107bb2058f00",
+            "referenceId": "allowedReplicaLocationsManagedHsm",
+            "displayName": "[Preview]: Azure Key Vault Managed HSM extended regions should use allowed locations"
+          },
+          {
+            "id": "9860282b-3c80-4538-8bd7-dbc8cf012c6e",
+            "referenceId": "allowedReplicaLocationsNetAppVolume",
+            "displayName": "[Preview]: Azure NetApp Files volumes should replicate only with volumes in allowed locations"
+          }
+        ],
+        "removed": []
+      }
+    },
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "modified",
+      "name": "bebfcba2-e789-4da6-9043-726ef3a00d02",
+      "displayName": "[Preview]: Enforce Data Residency across Azure Services",
+      "category": "Sovereignty",
+      "fields": [
+        {
+          "field": "version",
+          "from": "1.0.0-preview",
+          "to": "1.1.0-preview"
+        },
+        {
+          "field": "policyCount",
+          "from": "6",
+          "to": "5"
+        }
+      ],
+      "composition": {
+        "status": "compared",
+        "beforeCount": 6,
+        "afterCount": 5,
+        "added": [],
+        "removed": [
+          {
+            "id": "0473574d-2d43-4217-aefe-941fcdf7e684",
+            "referenceId": "allowedLocationsCosmosDB",
+            "displayName": "Azure Cosmos DB allowed locations"
+          }
+        ]
+      }
+    },
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "modified",
+      "name": "8d844a0d-ea22-48f3-a6f2-07e6e2111a27",
+      "displayName": "App Service resources should enforce boundary protection in mission platforms",
+      "category": "Mission",
+      "fields": [
+        {
+          "field": "displayName",
+          "from": "Control the use of App Service for Cloud in Mission Platforms",
+          "to": "App Service resources should enforce boundary protection in mission platforms"
+        },
+        {
+          "field": "version",
+          "from": "1.0.0",
+          "to": "1.1.0"
+        },
+        {
+          "field": "policyCount",
+          "from": "60",
+          "to": "64"
+        }
+      ],
+      "composition": {
+        "status": "compared",
+        "beforeCount": 60,
+        "afterCount": 64,
+        "added": [
+          {
+            "id": "5747353b-1ca9-42c1-a4dd-b874b894f3d4",
+            "referenceId": "WebAppSlotVnetConfigurationRouting",
+            "displayName": "App Service app slots should enable configuration routing to Azure Virtual Network"
+          },
+          {
+            "id": "f5c0bfb3-acea-47b1-b477-b0edcdf6edc1",
+            "referenceId": "WebAppSlotVnetRouteAllEnabled",
+            "displayName": "App Service app slots should enable outbound application traffic routing to Azure Virtual Network"
+          },
+          {
+            "id": "801543d1-1953-4a90-b8b0-8cf6d41473a5",
+            "referenceId": "WebAppVnetConfigurationRouting",
+            "displayName": "App Service apps should enable configuration routing to Azure Virtual Network"
+          },
+          {
+            "id": "a691eacb-474d-47e4-b287-b4813ca44222",
+            "referenceId": "WebAppVnetRouteAllEnabled",
+            "displayName": "App Service apps should enable outbound application traffic routing to Azure Virtual Network"
+          }
+        ],
+        "removed": []
+      }
+    },
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "added",
+      "name": "ea051ed8-5972-4f02-8879-5a154fa519f1",
+      "displayName": "Control the use of Redis Cache in Mission Platforms",
+      "category": "Mission"
+    },
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "modified",
+      "name": "85175a36-2f12-419a-96b4-18d5b0096531",
+      "displayName": "Enable allLogs category group resource logging for supported resources to Event Hub",
+      "category": "Monitoring",
+      "fields": [
+        {
+          "field": "version",
+          "from": "1.0.0",
+          "to": "1.1.0"
+        },
+        {
+          "field": "policyCount",
+          "from": "140",
+          "to": "139"
+        }
+      ],
+      "composition": {
+        "status": "compared",
+        "beforeCount": 140,
+        "afterCount": 139,
+        "added": [],
+        "removed": [
+          {
+            "id": "ec51b91e-e03d-4435-b6e7-dcaffe6ba5c0",
+            "referenceId": "customproviders-resourceproviders",
+            "displayName": "[Deprecated]: Enable logging by category group for microsoft.customproviders/resourceproviders to Event Hub"
+          }
+        ]
+      }
+    },
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "modified",
+      "name": "0884adba-2312-4468-abeb-5422caed1038",
+      "displayName": "Enable allLogs category group resource logging for supported resources to Log Analytics",
+      "category": "Monitoring",
+      "fields": [
+        {
+          "field": "version",
+          "from": "1.0.0",
+          "to": "1.1.0"
+        },
+        {
+          "field": "policyCount",
+          "from": "140",
+          "to": "139"
+        }
+      ],
+      "composition": {
+        "status": "compared",
+        "beforeCount": 140,
+        "afterCount": 139,
+        "added": [],
+        "removed": [
+          {
+            "id": "65a1573e-cc90-412b-8db2-ba60731b0ea6",
+            "referenceId": "customproviders-resourceproviders",
+            "displayName": "[Deprecated]: Enable logging by category group for microsoft.customproviders/resourceproviders to Log Analytics"
+          }
+        ]
+      }
+    },
+    {
+      "detectedAt": "2026-11-13T14:10:49.247Z",
+      "kind": "initiative",
+      "change": "modified",
+      "name": "b6b86da9-e527-49de-ac59-6af0a9db10b8",
+      "displayName": "Enable allLogs category group resource logging for supported resources to storage",
+      "category": "Monitoring",
+      "fields": [
+        {
+          "field": "version",
+          "from": "1.0.0",
+          "to": "1.1.0"
+        },
+        {
+          "field": "policyCount",
+          "from": "140",
+          "to": "139"
+        }
+      ],
+      "composition": {
+        "status": "compared",
+        "beforeCount": 140,
+        "afterCount": 139,
+        "added": [],
+        "removed": [
+          {
+            "id": "7646801f-46d5-48d0-9e18-efb884944f3e",
+            "referenceId": "customproviders-resourceproviders",
+            "displayName": "[Deprecated]: Enable logging by category group for microsoft.customproviders/resourceproviders to Storage"
+          }
+        ]
+      }
+    },
     {
       "detectedAt": "2026-11-12T14:49:45.891Z",
       "kind": "policy",

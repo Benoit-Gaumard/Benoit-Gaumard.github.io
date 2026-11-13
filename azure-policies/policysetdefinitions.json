@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-12T14:49:58.821Z",
+  "generatedAt": "2026-11-13T14:11:01.360Z",
   "source": "Get-AzPolicySetDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
-  "totalInitiatives": 193,
+  "totalInitiatives": 194,
   "totalCategories": 23,
   "initiatives": [
     {
@@ -7184,9 +7184,9 @@
       "displayName": "[Preview]: Data Residency for Replication across Azure Services",
       "description": "Help restrict replication, replicated backups, and data processing to approved locations and security boundaries across supported Azure services.",
       "category": "Sovereignty",
-      "version": "1.1.0-preview",
+      "version": "1.2.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 8,
+      "policyCount": 14,
       "policies": [
         {
           "id": "0473574d-2d43-4217-aefe-941fcdf7e684",
@@ -7240,6 +7240,48 @@
         {
           "id": "93fc07ef-f4b9-418a-9190-6e2628e72856",
           "referenceId": "allowedSecondaryLocationsIoTHub",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0eb02880-8961-46b2-a106-107bb2058f00",
+          "referenceId": "allowedReplicaLocationsManagedHsm",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c58f681b-52c4-4935-820b-e2ced188a98c",
+          "referenceId": "allowedReplicaLocationsAMLRegistry",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "99645d66-5f63-4f02-b947-46de4e9a040e",
+          "referenceId": "allowedFailoverGroupPartnerLocationsSqlManagedDatabase",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "1ab7fa8d-5574-4983-97ed-2a184ca9526e",
+          "referenceId": "allowedReplicaLocationsLogAnalyticsWorkspace",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "9860282b-3c80-4538-8bd7-dbc8cf012c6e",
+          "referenceId": "allowedReplicaLocationsNetAppVolume",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "e4bff06e-8af8-455b-8bec-58515205f65b",
+          "referenceId": "allowedPartnerLocationsSqlFailoverGroup",
           "groupNames": [
             null
           ]
@@ -7519,9 +7561,9 @@
       "displayName": "[Preview]: Enforce Data Residency across Azure Services",
       "description": "Help restrict and audit the Azure Regions that Azure Services can be deployed into. Helping to enforce Level 1 - Data Residency Sovereignty Controls detailed here: https://aka.ms/sovereign/controls",
       "category": "Sovereignty",
-      "version": "1.0.0-preview",
+      "version": "1.1.0-preview",
       "policyType": "BuiltIn",
-      "policyCount": 6,
+      "policyCount": 5,
       "policies": [
         {
           "id": "e56962a6-4747-49cd-b67b-bf8b01975c4c",
@@ -7533,13 +7575,6 @@
         {
           "id": "e765b5de-1225-4ba3-bd56-1ac6695af988",
           "referenceId": "allowedLocationsResourceGroups",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "0473574d-2d43-4217-aefe-941fcdf7e684",
-          "referenceId": "allowedLocationsCosmosDB",
           "groupNames": [
             null
           ]
@@ -10146,6 +10181,466 @@
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/0a2ebd47-3fb9-4735-a006-b7f31ddadd9f"
+    },
+    {
+      "name": "8d844a0d-ea22-48f3-a6f2-07e6e2111a27",
+      "displayName": "App Service resources should enforce boundary protection in mission platforms",
+      "description": "This policy set applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. Apply App Service security controls to protect network boundaries, restrict access, and configure secure application settings within Mission Platform deployments.",
+      "category": "Mission",
+      "version": "1.1.0",
+      "policyType": "BuiltIn",
+      "policyCount": 64,
+      "policies": [
+        {
+          "id": "1b5ef780-c53c-4a64-87f3-bb9c8c8094ba",
+          "referenceId": "AppServiceShouldDisablePublicNetworkAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "701a595d-38fb-4a66-ae6d-fb3735217622",
+          "referenceId": "AppServiceShouldDisableSlotsPublicNetworkAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "fb74e86f-d351-4b8d-b034-93da7391c01f",
+          "referenceId": "AppServiceEnvironmentShouldHaveInternalEncryptionEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "4ee5b817-627a-435a-8932-116193268172",
+          "referenceId": "AppServiceUseTheLatestTlsVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "4dcfb8b5-05cd-4090-a931-2ec29057e1fc",
+          "referenceId": "AppServiceShouldUseHttpsTrafficOnly",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a4af4a39-4135-47fb-b175-47fbdf85311d",
+          "referenceId": "AppServiceShouldOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "6d555dd1-86f2-4f1c-8ed7-5abae7c6cbab",
+          "referenceId": "AppServiceFaShouldOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a096cbd0-4693-432f-9374-682f485f23f3",
+          "referenceId": "AppServiceConfigureFunctionAppsToOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "5e5dbe3f-2702-4ffc-8b1e-0cae008a5c71",
+          "referenceId": "AppServiceFunctionAppSlotsShouldOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "08cf2974-d178-48a0-b26d-f6b8e555748b",
+          "referenceId": "AppServiceConfigureFunctionAppsSlotsTodOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0f98368e-36bc-4716-8ac2-8f8067203b63",
+          "referenceId": "AppServiceConfigureAppServiceAppsToOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "ae1b9a8c-dfce-4605-bd91-69213b4a26fc",
+          "referenceId": "AppServiceAppSlotsShouldOnlyBeAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a18c77f2-3d6d-497a-9f61-849a7e8a3b79",
+          "referenceId": "AppServiceConfigureAppServiceAppSlotsToOnlyAccessibleOverHttps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "2b9ad585-36bc-4615-b300-fd4435808332",
+          "referenceId": "AppServiceAppsShouldUseManagedIdentity",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0da106f2-4ca3-48e8-bc85-c638fe6aea8f",
+          "referenceId": "AppServiceFunctionAppsShouldUseManagedIdentity",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "8c122334-9d20-4eb8-89ea-ac9a705b74ae",
+          "referenceId": "AppServiceAppsShouldUseLatestHttpVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "91a78b24-f231-4a8a-8da9-02c35b2b6510",
+          "referenceId": "AppServiceAppsShouldHaveResourceLogsEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "d639b3af-a535-4bef-8dcf-15078cddf5e2",
+          "referenceId": "AppServiceAppSlotsShouldHaveResourceLogsEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "496223c3-ad65-4ecd-878a-bae78737e9ed",
+          "referenceId": "AppServiceAppsThatUseJavaShouldUseLatestVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "7008174a-fd10-4ef0-817e-fc820a951d73",
+          "referenceId": "AppServiceAppsThatUsePythonShouldUseLatestVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "7261b898-8a84-4db8-9e04-18527132abb3",
+          "referenceId": "AppServiceAppsThatUsePHPShouldUseLatestVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "9d0b6ea4-93e2-4578-bf2f-6bb17d22b4bc",
+          "referenceId": "AppServiceFunctionAppsThatUseJavaShouldUseLatestVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "7238174a-fd10-4ef0-817e-fc820a951d73",
+          "referenceId": "AppServiceFunctionAppsThatUsePythonShouldUseLatestVersion",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "cae7c12e-764b-4c87-841a-fdc6675d196f",
+          "referenceId": "AppServiceAppSlotsShouldNotHaveCORSConfiguredToAccessYourApps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a08ae1ab-8d1d-422b-a123-df82b307ba61",
+          "referenceId": "AppServiceAppSlotsShouldHaveRemoteDebuggingTurnedOff",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "4a15c15f-90d5-4a1f-8b63-2903944963fd",
+          "referenceId": "AppServiceAppSlotsShouldUseManagedIdentity",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "95bccee9-a7f8-4bec-9ee9-62c3473701fc",
+          "referenceId": "AppServiceAppSlotsShouldHaveAuthenticationEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "cb510bfd-1cba-4d9f-a230-cb0976f4bb71",
+          "referenceId": "AppServiceAppShouldHaveRemoteDebuggingTurnedOff",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "5744710e-cc2f-4ee8-8809-3b11e89f4bc9",
+          "referenceId": "AppServiceAppShouldNotHaveCORSConfiguredAccessYourApps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "cca5adfe-626b-4cc6-8522-f5b6ed2391bd",
+          "referenceId": "AppServiceAppSlotsTurnOffRemoteDebugging",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "70adbb40-e092-42d5-a6f8-71c540a5efdb",
+          "referenceId": "AppServiceConfigureFunctionAppSlotsToTurnOffRemoteDebugging",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "25a5046c-c423-4805-9235-e844ae9ef49b",
+          "referenceId": "AppServiceConfigureFunctionAppsToTurnOffRemoteDebugging",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "89691ef9-8c50-49a8-8950-9c7fba41699e",
+          "referenceId": "AppServiceFunctionAppSlotsShouldHaveRemoteDebuggingTurnedOff",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a1a22235-dd10-4062-bd55-7d62778f41b0",
+          "referenceId": "AppServiceFunctionAppSlotsShouldNotHaveCORSConfiguredToAccessYourApps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "c75248c1-ea1d-4a9c-8fc9-29a6aabd5da8",
+          "referenceId": "AppServiceFunctionAppsShouldHaveAuthenticationEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0e60b895-3786-45da-8377-9c6b4b6ac5f9",
+          "referenceId": "AppServiceFunctionAppsShouldHaveRemoteDebuggingTurnedOff",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0820b7b9-23aa-4725-a1ce-ae4558f718e5",
+          "referenceId": "AppServiceFunctionAppsShouldNotHaveCORSConfiguredAccessYourApps",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "11c82d0c-db9f-4d7b-97c5-f3f9aa957da2",
+          "referenceId": "AppServiceFunctionAppsSlotsShouldNotHavePublicNetworkAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "969ac98b-88a8-449f-883c-2e9adb123127",
+          "referenceId": "AppServiceFunctionAppsShouldNotHavePublicNetworkAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "b0779e02-7159-4057-bcbf-bd6132847d2b",
+          "referenceId": "AppNetAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "0e3ccb86-ad68-43a5-8cd0-42035638b199",
+          "referenceId": "AppSlotNetAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "ea6df8ed-090c-4fda-8379-cb1b428e8fdb",
+          "referenceId": "appVnetInject",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "df42d971-b39b-43a4-a987-b29d1bfbffba",
+          "referenceId": "appSlotVnetInject",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "86b1d4f9-358c-407c-9bb0-52bf287b222f",
+          "referenceId": "AppVnetRouting",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "41c4164d-a848-48d3-b10f-c3076787f0f5",
+          "referenceId": "AppSlotVnetRouting",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "801543d1-1953-4a90-b8b0-8cf6d41473a5",
+          "referenceId": "WebAppVnetConfigurationRouting",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "5747353b-1ca9-42c1-a4dd-b874b894f3d4",
+          "referenceId": "WebAppSlotVnetConfigurationRouting",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a691eacb-474d-47e4-b287-b4813ca44222",
+          "referenceId": "WebAppVnetRouteAllEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f5c0bfb3-acea-47b1-b477-b0edcdf6edc1",
+          "referenceId": "WebAppSlotVnetRouteAllEnabled",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "73aa9838-1906-4490-aa32-f7b89a8f4554",
+          "referenceId": "AppRfc1918Routing",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "3235e3fc-9982-4886-9346-2dc3535b1496",
+          "referenceId": "AppSlotRfc1918Routing",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a83269e2-b4f7-4a3f-b5ed-897c787cbc7c",
+          "referenceId": "AppRestrictExternalPE",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f36fcc62-6b1b-46e3-9a94-97af3eb4a55e",
+          "referenceId": "AppRestrictSiteAccessRules",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "86bd411a-a3c4-45a5-9af5-e365febff482",
+          "referenceId": "AppRestrictSlotAccessRules",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "1d1e7723-ab70-4ce1-a12e-bf6977859d06",
+          "referenceId": "AppDenyNetDelete",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "d349a603-3f16-4a04-88ac-9db1ca4013d1",
+          "referenceId": "AppSlotDenyNetDelete",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "50d7880f-06c8-402f-9236-0417e5b1559c",
+          "referenceId": "ASERestrictILBMode",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "b5c4b32e-8699-4bfa-8868-9ed118e9982f",
+          "referenceId": "ASERestrictNetAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "a475e840-2781-4c79-aaf0-4047828759b1",
+          "referenceId": "ASERestrictExternalPE",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "bfe08d89-8736-48a7-b88e-76fa3f286881",
+          "referenceId": "ASERequireEncryption",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "b546c248-6dee-41e6-82f7-978634aeb73d",
+          "referenceId": "AppConfigNetAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "32a7ec27-785d-4efb-98bd-9a0fffc7777c",
+          "referenceId": "AppConfigRestrictSiteAccessRules",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "f9fd212a-5a3c-4754-a9af-560ec3b1ae13",
+          "referenceId": "AppConfigRestrictSlotAccessRules",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "21c2b371-0891-40a0-82e6-629defc1f36a",
+          "referenceId": "AppConfigSlotNetAccess",
+          "groupNames": [
+            null
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/8d844a0d-ea22-48f3-a6f2-07e6e2111a27"
     },
     {
       "name": "f03d9540-4405-4365-8272-318999d1b37a",
@@ -26852,438 +27347,6 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/ba557f41-8712-41bc-a2c4-2db129c43561"
     },
     {
-      "name": "8d844a0d-ea22-48f3-a6f2-07e6e2111a27",
-      "displayName": "Control the use of App Service for Cloud in Mission Platforms",
-      "description": "This policy applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. This initiative deploys Azure policies for App Service ensuring boundary protection of this resource while it operates within the logically separated structure of Mission Platform.",
-      "category": "Mission",
-      "version": "1.0.0",
-      "policyType": "BuiltIn",
-      "policyCount": 60,
-      "policies": [
-        {
-          "id": "1b5ef780-c53c-4a64-87f3-bb9c8c8094ba",
-          "referenceId": "AppServiceShouldDisablePublicNetworkAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "701a595d-38fb-4a66-ae6d-fb3735217622",
-          "referenceId": "AppServiceShouldDisableSlotsPublicNetworkAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "fb74e86f-d351-4b8d-b034-93da7391c01f",
-          "referenceId": "AppServiceEnvironmentShouldHaveInternalEncryptionEnabled",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "4ee5b817-627a-435a-8932-116193268172",
-          "referenceId": "AppServiceUseTheLatestTlsVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "4dcfb8b5-05cd-4090-a931-2ec29057e1fc",
-          "referenceId": "AppServiceShouldUseHttpsTrafficOnly",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a4af4a39-4135-47fb-b175-47fbdf85311d",
-          "referenceId": "AppServiceShouldOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "6d555dd1-86f2-4f1c-8ed7-5abae7c6cbab",
-          "referenceId": "AppServiceFaShouldOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a096cbd0-4693-432f-9374-682f485f23f3",
-          "referenceId": "AppServiceConfigureFunctionAppsToOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "5e5dbe3f-2702-4ffc-8b1e-0cae008a5c71",
-          "referenceId": "AppServiceFunctionAppSlotsShouldOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "08cf2974-d178-48a0-b26d-f6b8e555748b",
-          "referenceId": "AppServiceConfigureFunctionAppsSlotsTodOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "0f98368e-36bc-4716-8ac2-8f8067203b63",
-          "referenceId": "AppServiceConfigureAppServiceAppsToOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "ae1b9a8c-dfce-4605-bd91-69213b4a26fc",
-          "referenceId": "AppServiceAppSlotsShouldOnlyBeAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a18c77f2-3d6d-497a-9f61-849a7e8a3b79",
-          "referenceId": "AppServiceConfigureAppServiceAppSlotsToOnlyAccessibleOverHttps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "2b9ad585-36bc-4615-b300-fd4435808332",
-          "referenceId": "AppServiceAppsShouldUseManagedIdentity",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "0da106f2-4ca3-48e8-bc85-c638fe6aea8f",
-          "referenceId": "AppServiceFunctionAppsShouldUseManagedIdentity",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "8c122334-9d20-4eb8-89ea-ac9a705b74ae",
-          "referenceId": "AppServiceAppsShouldUseLatestHttpVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "91a78b24-f231-4a8a-8da9-02c35b2b6510",
-          "referenceId": "AppServiceAppsShouldHaveResourceLogsEnabled",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "d639b3af-a535-4bef-8dcf-15078cddf5e2",
-          "referenceId": "AppServiceAppSlotsShouldHaveResourceLogsEnabled",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "496223c3-ad65-4ecd-878a-bae78737e9ed",
-          "referenceId": "AppServiceAppsThatUseJavaShouldUseLatestVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "7008174a-fd10-4ef0-817e-fc820a951d73",
-          "referenceId": "AppServiceAppsThatUsePythonShouldUseLatestVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "7261b898-8a84-4db8-9e04-18527132abb3",
-          "referenceId": "AppServiceAppsThatUsePHPShouldUseLatestVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "9d0b6ea4-93e2-4578-bf2f-6bb17d22b4bc",
-          "referenceId": "AppServiceFunctionAppsThatUseJavaShouldUseLatestVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "7238174a-fd10-4ef0-817e-fc820a951d73",
-          "referenceId": "AppServiceFunctionAppsThatUsePythonShouldUseLatestVersion",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "cae7c12e-764b-4c87-841a-fdc6675d196f",
-          "referenceId": "AppServiceAppSlotsShouldNotHaveCORSConfiguredToAccessYourApps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a08ae1ab-8d1d-422b-a123-df82b307ba61",
-          "referenceId": "AppServiceAppSlotsShouldHaveRemoteDebuggingTurnedOff",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "4a15c15f-90d5-4a1f-8b63-2903944963fd",
-          "referenceId": "AppServiceAppSlotsShouldUseManagedIdentity",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "95bccee9-a7f8-4bec-9ee9-62c3473701fc",
-          "referenceId": "AppServiceAppSlotsShouldHaveAuthenticationEnabled",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "cb510bfd-1cba-4d9f-a230-cb0976f4bb71",
-          "referenceId": "AppServiceAppShouldHaveRemoteDebuggingTurnedOff",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "5744710e-cc2f-4ee8-8809-3b11e89f4bc9",
-          "referenceId": "AppServiceAppShouldNotHaveCORSConfiguredAccessYourApps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "cca5adfe-626b-4cc6-8522-f5b6ed2391bd",
-          "referenceId": "AppServiceAppSlotsTurnOffRemoteDebugging",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "70adbb40-e092-42d5-a6f8-71c540a5efdb",
-          "referenceId": "AppServiceConfigureFunctionAppSlotsToTurnOffRemoteDebugging",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "25a5046c-c423-4805-9235-e844ae9ef49b",
-          "referenceId": "AppServiceConfigureFunctionAppsToTurnOffRemoteDebugging",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "89691ef9-8c50-49a8-8950-9c7fba41699e",
-          "referenceId": "AppServiceFunctionAppSlotsShouldHaveRemoteDebuggingTurnedOff",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a1a22235-dd10-4062-bd55-7d62778f41b0",
-          "referenceId": "AppServiceFunctionAppSlotsShouldNotHaveCORSConfiguredToAccessYourApps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "c75248c1-ea1d-4a9c-8fc9-29a6aabd5da8",
-          "referenceId": "AppServiceFunctionAppsShouldHaveAuthenticationEnabled",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "0e60b895-3786-45da-8377-9c6b4b6ac5f9",
-          "referenceId": "AppServiceFunctionAppsShouldHaveRemoteDebuggingTurnedOff",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "0820b7b9-23aa-4725-a1ce-ae4558f718e5",
-          "referenceId": "AppServiceFunctionAppsShouldNotHaveCORSConfiguredAccessYourApps",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "11c82d0c-db9f-4d7b-97c5-f3f9aa957da2",
-          "referenceId": "AppServiceFunctionAppsSlotsShouldNotHavePublicNetworkAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "969ac98b-88a8-449f-883c-2e9adb123127",
-          "referenceId": "AppServiceFunctionAppsShouldNotHavePublicNetworkAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "b0779e02-7159-4057-bcbf-bd6132847d2b",
-          "referenceId": "AppNetAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "0e3ccb86-ad68-43a5-8cd0-42035638b199",
-          "referenceId": "AppSlotNetAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "ea6df8ed-090c-4fda-8379-cb1b428e8fdb",
-          "referenceId": "appVnetInject",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "df42d971-b39b-43a4-a987-b29d1bfbffba",
-          "referenceId": "appSlotVnetInject",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "86b1d4f9-358c-407c-9bb0-52bf287b222f",
-          "referenceId": "AppVnetRouting",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "41c4164d-a848-48d3-b10f-c3076787f0f5",
-          "referenceId": "AppSlotVnetRouting",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "73aa9838-1906-4490-aa32-f7b89a8f4554",
-          "referenceId": "AppRfc1918Routing",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "3235e3fc-9982-4886-9346-2dc3535b1496",
-          "referenceId": "AppSlotRfc1918Routing",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a83269e2-b4f7-4a3f-b5ed-897c787cbc7c",
-          "referenceId": "AppRestrictExternalPE",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "f36fcc62-6b1b-46e3-9a94-97af3eb4a55e",
-          "referenceId": "AppRestrictSiteAccessRules",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "86bd411a-a3c4-45a5-9af5-e365febff482",
-          "referenceId": "AppRestrictSlotAccessRules",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "1d1e7723-ab70-4ce1-a12e-bf6977859d06",
-          "referenceId": "AppDenyNetDelete",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "d349a603-3f16-4a04-88ac-9db1ca4013d1",
-          "referenceId": "AppSlotDenyNetDelete",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "50d7880f-06c8-402f-9236-0417e5b1559c",
-          "referenceId": "ASERestrictILBMode",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "b5c4b32e-8699-4bfa-8868-9ed118e9982f",
-          "referenceId": "ASERestrictNetAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "a475e840-2781-4c79-aaf0-4047828759b1",
-          "referenceId": "ASERestrictExternalPE",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "bfe08d89-8736-48a7-b88e-76fa3f286881",
-          "referenceId": "ASERequireEncryption",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "b546c248-6dee-41e6-82f7-978634aeb73d",
-          "referenceId": "AppConfigNetAccess",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "32a7ec27-785d-4efb-98bd-9a0fffc7777c",
-          "referenceId": "AppConfigRestrictSiteAccessRules",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "f9fd212a-5a3c-4754-a9af-560ec3b1ae13",
-          "referenceId": "AppConfigRestrictSlotAccessRules",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "21c2b371-0891-40a0-82e6-629defc1f36a",
-          "referenceId": "AppConfigSlotNetAccess",
-          "groupNames": [
-            null
-          ]
-        }
-      ],
-      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/8d844a0d-ea22-48f3-a6f2-07e6e2111a27"
-    },
-    {
       "name": "684f53ea-e4f7-4973-93cc-da5c8b3bcbeb",
       "displayName": "Control the use of AVD for Cloud in Mission Platforms",
       "description": "This policy initiative applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. This policy set deploys the required policy guardrails governing the use of Azure Virtual Desktops within the Environment. See the list of policies of the services that are included.",
@@ -27856,6 +27919,32 @@
         }
       ],
       "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/3c28c64f-9636-46e3-8ae6-8e585b85870e"
+    },
+    {
+      "name": "ea051ed8-5972-4f02-8879-5a154fa519f1",
+      "displayName": "Control the use of Redis Cache in Mission Platforms",
+      "description": "This policy set applies exclusively to Mission Platform products and services; usage outside of these scopes is not supported. Restricting public network access and external private endpoint connections helps protect Redis cached data and maintain subscription boundaries.",
+      "category": "Mission",
+      "version": "1.0.0",
+      "policyType": "BuiltIn",
+      "policyCount": 2,
+      "policies": [
+        {
+          "id": "470baccb-7e51-4549-8b1a-3e5be069f663",
+          "referenceId": "RedisCacheRestrictPublicNetworkAccess",
+          "groupNames": [
+            null
+          ]
+        },
+        {
+          "id": "91de0ea5-83b9-4110-a7dd-3d5053465b11",
+          "referenceId": "RedisCacheRestrictExternalPrivateEndpoints",
+          "groupNames": [
+            null
+          ]
+        }
+      ],
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/ea051ed8-5972-4f02-8879-5a154fa519f1"
     },
     {
       "name": "eeba0a64-ba0e-4568-bedd-4541aaff45ed",
@@ -34799,9 +34888,9 @@
       "displayName": "Enable allLogs category group resource logging for supported resources to Event Hub",
       "description": "Resource logs should be enabled to track activities and events that take place on your resources and give you visibility and insights into any changes that occur. This initiative deploys diagnostic setting using the allLogs category group to route logs to Event Hub for all supported resources.",
       "category": "Monitoring",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
-      "policyCount": 140,
+      "policyCount": 139,
       "policies": [
         {
           "id": "257954d9-4adf-410b-9751-3bb22fe9c180",
@@ -35023,13 +35112,6 @@
         {
           "id": "9ba29e83-863d-4fec-81d0-16dd87067cc3",
           "referenceId": "containerregistry-registries",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "ec51b91e-e03d-4435-b6e7-dcaffe6ba5c0",
-          "referenceId": "customproviders-resourceproviders",
           "groupNames": [
             null
           ]
@@ -35791,9 +35873,9 @@
       "displayName": "Enable allLogs category group resource logging for supported resources to Log Analytics",
       "description": "Resource logs should be enabled to track activities and events that take place on your resources and give you visibility and insights into any changes that occur. This initiative deploys diagnostic setting using the allLogs category group to route logs to an Event Hub for all supported resources",
       "category": "Monitoring",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
-      "policyCount": 140,
+      "policyCount": 139,
       "policies": [
         {
           "id": "1bd91eae-4429-4f23-b780-8c9622e023e3",
@@ -36015,13 +36097,6 @@
         {
           "id": "56288eb2-4350-461d-9ece-2bb242269dce",
           "referenceId": "containerregistry-registries",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "65a1573e-cc90-412b-8db2-ba60731b0ea6",
-          "referenceId": "customproviders-resourceproviders",
           "groupNames": [
             null
           ]
@@ -36783,9 +36858,9 @@
       "displayName": "Enable allLogs category group resource logging for supported resources to storage",
       "description": "Resource logs should be enabled to track activities and events that take place on your resources and give you visibility and insights into any changes that occur. This initiative deploys diagnostic setting using the allLogs category group to route logs to storage for all supported resources.",
       "category": "Monitoring",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
-      "policyCount": 140,
+      "policyCount": 139,
       "policies": [
         {
           "id": "9c79e60b-99f2-49f3-b08c-630d269bddc1",
@@ -37007,13 +37082,6 @@
         {
           "id": "106cd3bd-50a1-466c-869f-f9c2d310477b",
           "referenceId": "containerregistry-registries",
-          "groupNames": [
-            null
-          ]
-        },
-        {
-          "id": "7646801f-46d5-48d0-9e18-efb884944f3e",
-          "referenceId": "customproviders-resourceproviders",
           "groupNames": [
             null
           ]
