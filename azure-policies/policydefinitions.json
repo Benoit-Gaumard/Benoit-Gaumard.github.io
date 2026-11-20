@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-19T15:26:30.456Z",
+  "generatedAt": "2026-11-20T15:02:24.787Z",
   "source": "Get-AzPolicyDefinition (Azure PowerShell, live tenant scan via the scan-benoit-gaumard.io app)",
-  "totalPolicies": 2926,
-  "totalCategories": 101,
+  "totalPolicies": 2928,
+  "totalCategories": 102,
   "policies": [
     {
       "name": "b4d66858-c922-44e3-9566-5cdb7a7be744",
@@ -4724,6 +4724,17 @@
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/b51aacd8-e77a-4ac9-b6a5-26149b091e89"
     },
     {
+      "name": "6ba69446-e019-4750-a1be-c3f05871b99b",
+      "displayName": "[Preview]: Azure HorizonDB clusters should use private endpoints",
+      "description": "Private endpoints enable private connectivity to Azure HorizonDB clusters from a virtual network using Azure Private Link. An approved connection is required for private access; public network access must be disabled separately to restrict access to private endpoints.",
+      "category": "HorizonDB",
+      "effect": "AuditIfNotExists",
+      "mode": "Indexed",
+      "version": "1.0.0-preview",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6ba69446-e019-4750-a1be-c3f05871b99b"
+    },
+    {
       "name": "93fc07ef-f4b9-418a-9190-6e2628e72856",
       "displayName": "[Preview]: Azure IoT Hub disaster recovery secondary locations should use allowed locations",
       "description": "Audit Azure IoT hubs when their Microsoft-managed disaster recovery secondary location is outside the list of allowed locations. This policy does not evaluate the hub's primary location.",
@@ -7678,7 +7689,7 @@
       "category": "App Service",
       "effect": "Audit",
       "mode": "Indexed",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/25255ddf-ef4f-4283-975a-5590ad111bba"
     },
@@ -27580,6 +27591,17 @@
       "version": "1.1.0",
       "policyType": "BuiltIn",
       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/7ded6497-815d-6506-242b-e043e0273928"
+    },
+    {
+      "name": "f241cc0d-68e6-413b-8235-f7490ef17294",
+      "displayName": "Playwright Workspaces should use virtual network injection",
+      "description": "Require Playwright Workspaces to specify a subnet for virtual network injection. This enables cloud-hosted browsers to access applications on private networks and allows network traffic to be controlled through the virtual network. The subnet cannot be changed after workspace creation; existing workspaces without a subnet must be recreated to comply.",
+      "category": "Playwright Workspaces",
+      "effect": "Audit",
+      "mode": "Indexed",
+      "version": "1.0.0",
+      "policyType": "BuiltIn",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/f241cc0d-68e6-413b-8235-f7490ef17294"
     },
     {
       "name": "a43d5475-c569-45ce-a268-28fa79f4e87a",
